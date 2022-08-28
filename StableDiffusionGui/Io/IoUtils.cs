@@ -1,4 +1,5 @@
-﻿using StableDiffusionGui.MiscUtils;
+﻿using StableDiffusionGui.Main;
+using StableDiffusionGui.MiscUtils;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,6 +15,12 @@ namespace StableDiffusionGui.Io
 {
     internal class IoUtils
     {
+        public static Image GetImage(string path)
+        {
+            using (FileStream stream = new FileStream(path, FileMode.Open, FileAccess.Read))
+                return Image.FromStream(stream);
+        }
+
         public static string[] ReadLines(string path)
         {
             List<string> lines = new List<string>();
@@ -117,7 +124,7 @@ namespace StableDiffusionGui.Io
             }
             catch (Exception e)
             {
-                // Logger.Log("DeleteContentsOfDir Error: " + e.Message, true);
+                Logger.Log("DeleteContentsOfDir Error: " + e.Message, true);
                 return false;
             }
         }
@@ -182,7 +189,7 @@ namespace StableDiffusionGui.Io
             catch (Exception e)
             {
                 if (showLog)
-                    // Logger.Log($"Failed to move '{source}' to '{target}' (Overwrite: {overwrite}): {e.Message}, !showLog");
+                    Logger.Log($"Failed to move '{source}' to '{target}' (Overwrite: {overwrite}): {e.Message}, !showLog");
 
                 return false;
             }
@@ -201,7 +208,7 @@ namespace StableDiffusionGui.Io
             }
             catch (Exception e)
             {
-                // Logger.Log($"Failed to move '{source}' to '{target}' (Overwrite: {overwrite}): {e.Message}", !showLog);
+                Logger.Log($"Failed to move '{source}' to '{target}' (Overwrite: {overwrite}): {e.Message}", !showLog);
                 return false;
             }
 
@@ -296,7 +303,7 @@ namespace StableDiffusionGui.Io
             }
             catch (Exception e)
             {
-                // Logger.Log($"TryDeleteIfExistsAsync Move Exception: {e.Message} [{retries} retries left]", true);
+                Logger.Log($"TryDeleteIfExistsAsync Move Exception: {e.Message} [{retries} retries left]", true);
 
                 if (retries > 0)
                 {
@@ -328,7 +335,7 @@ namespace StableDiffusionGui.Io
             }
             catch (Exception e)
             {
-                // Logger.Log($"TryDeleteIfExists: Error trying to delete {path}: {e.Message}", true);
+                Logger.Log($"TryDeleteIfExists: Error trying to delete {path}: {e.Message}", true);
                 return false;
             }
         }
@@ -336,7 +343,7 @@ namespace StableDiffusionGui.Io
         public static bool DeleteIfExists(string path, bool log = false)		// Returns true if the file/dir exists
         {
             if (log)
-                // Logger.Log($"DeleteIfExists({path})", true);
+                Logger.Log($"DeleteIfExists({path})", true);
 
             if (!IsPathDirectory(path) && File.Exists(path))
             {
@@ -373,7 +380,7 @@ namespace StableDiffusionGui.Io
             }
             catch (Exception e)
             {
-                // Logger.Log($"RenameExistingFile: Failed to rename '{path}': {e.Message}", true);
+                Logger.Log($"RenameExistingFile: Failed to rename '{path}': {e.Message}", true);
             }
         }
 
@@ -396,7 +403,7 @@ namespace StableDiffusionGui.Io
             }
             catch (Exception e)
             {
-                // Logger.Log($"RenameExistingFolder: Failed to rename '{path}': {e.Message}", true);
+                Logger.Log($"RenameExistingFolder: Failed to rename '{path}': {e.Message}", true);
             }
         }
 
@@ -419,7 +426,7 @@ namespace StableDiffusionGui.Io
             }
             catch (Exception e)
             {
-                // Logger.Log($"Failed to rename '{path}' to '{newName}': {e.Message}", true);
+                Logger.Log($"Failed to rename '{path}' to '{newName}': {e.Message}", true);
                 return false;
             }
         }
@@ -484,7 +491,7 @@ namespace StableDiffusionGui.Io
             }
             catch (Exception e)
             {
-                // Logger.Log($"Failed to copy {file} to {targetFolder}: {e.Message}");
+                Logger.Log($"Failed to copy {file} to {targetFolder}: {e.Message}");
                 return false;
             }
         }
@@ -503,7 +510,7 @@ namespace StableDiffusionGui.Io
             }
             catch (Exception e)
             {
-                // Logger.Log($"Failed to move {file} to {targetFolder}: {e.Message}");
+                Logger.Log($"Failed to move {file} to {targetFolder}: {e.Message}");
                 return false;
             }
         }
@@ -549,8 +556,8 @@ namespace StableDiffusionGui.Io
                 }
                 catch (Exception e)
                 {
-                    //if (!noLog)
-                        // Logger.Log($"Failed to zero-pad {file} => {targetFilename}: {e.Message}", true);
+                    if (!noLog)
+                        Logger.Log($"Failed to zero-pad {file} => {targetFilename}: {e.Message}", true);
                 }
             }
         }
@@ -590,7 +597,7 @@ namespace StableDiffusionGui.Io
             }
             catch (Exception e)
             {
-                // Logger.Log($"Failed to create file at '{path}': {e.Message}", true);
+                Logger.Log($"Failed to create file at '{path}': {e.Message}", true);
                 return false;
             }
         }
@@ -624,7 +631,7 @@ namespace StableDiffusionGui.Io
             }
             catch (Exception e)
             {
-                // Logger.Log($"GetDirSize Error: {e.Message}\n{e.StackTrace}", true);
+                Logger.Log($"GetDirSize Error: {e.Message}\n{e.StackTrace}", true);
             }
 
             return size;
@@ -662,7 +669,7 @@ namespace StableDiffusionGui.Io
             }
             catch (Exception e)
             {
-                // Logger.Log($"OverwriteWithText failed for '{path}': {e.Message}", true);
+                Logger.Log($"OverwriteWithText failed for '{path}': {e.Message}", true);
             }
         }
 
@@ -686,7 +693,7 @@ namespace StableDiffusionGui.Io
             }
             catch (Exception e)
             {
-                // Logger.Log("Error trying to get disk space: " + e.Message, true);
+                Logger.Log("Error trying to get disk space: " + e.Message, true);
             }
 
             return 0;

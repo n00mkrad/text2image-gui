@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StableDiffusionGui.Main;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -79,7 +80,7 @@ namespace StableDiffusionGui.MiscUtils
             }
             catch (Exception e)
             {
-                // Logger.Log($"TimestampToSecs({timestamp}) Exception: {e.Message}", true);
+                Logger.Log($"TimestampToSecs({timestamp}) Exception: {e.Message}", true);
                 return 0;
             }
         }
@@ -108,7 +109,7 @@ namespace StableDiffusionGui.MiscUtils
             }
             catch (Exception e)
             {
-                // Logger.Log($"MsFromTimeStamp({timestamp}) Exception: {e.Message}", true);
+                Logger.Log($"MsFromTimeStamp({timestamp}) Exception: {e.Message}", true);
                 return 0;
             }
         }

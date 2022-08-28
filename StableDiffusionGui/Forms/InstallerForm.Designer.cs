@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(InstallerForm));
             this.installBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
@@ -51,7 +52,9 @@
             this.ClientSize = new System.Drawing.Size(384, 261);
             this.Controls.Add(this.installBtn);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "InstallerForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SD Installer";
             this.Load += new System.EventHandler(this.InstallerForm_Load);
             this.ResumeLayout(false);

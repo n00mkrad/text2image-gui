@@ -33,5 +33,26 @@ namespace StableDiffusionGui.Io
             Directory.CreateDirectory(path);
             return path;
         }
+
+        public static string GetSessionsPath()
+        {
+            string path = Path.Combine(GetDataPath(), "sessions");
+            Directory.CreateDirectory(path);
+            return path;
+        }
+
+        public static string GetLogPath(bool noSession = false)
+        {
+            string path = Path.Combine(GetDataPath(), "logs", (noSession ? "" : sessionTimestamp));
+            Directory.CreateDirectory(path);
+            return path;
+        }
+
+        public static string GetSessionDataPath()
+        {
+            string path = Path.Combine(GetSessionsPath(), sessionTimestamp);
+            Directory.CreateDirectory(path);
+            return path;
+        }
     }
 }
