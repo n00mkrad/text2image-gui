@@ -15,8 +15,6 @@ namespace StableDiffusionGui.Ui
 
         public static void SetImages(string imagesDir, bool show, int amount = -1, string pattern = "*.png", bool recursive = false)
         {
-            System.Windows.Forms.Clipboard.SetText(imagesDir);
-
             var imgPaths = IoUtils.GetFileInfosSorted(imagesDir, recursive, pattern).OrderBy(x => x.CreationTime).Reverse().ToList(); // Find images and sort by date, newest to oldest
 
             if (amount > 0)

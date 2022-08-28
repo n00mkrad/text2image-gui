@@ -245,6 +245,8 @@ namespace StableDiffusionGui.IO
                 return WriteDefault(keyStr, "");
             }
 
+            if (key == Key.sliderResW) return WriteDefault(key, "5");
+            if (key == Key.sliderResH) return WriteDefault(key, "5");
             if (key == Key.sliderSteps) return WriteDefault(key, "7");
             if (key == Key.sliderScale) return WriteDefault(key, "16");
             if (key == Key.upDownIterations) return WriteDefault(key, "4");
@@ -266,6 +268,8 @@ namespace StableDiffusionGui.IO
 
         public enum Key
         {
+            sliderResW,
+            sliderResH,
             sliderSteps,
             sliderScale,
             upDownIterations,

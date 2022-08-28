@@ -325,8 +325,6 @@ namespace StableDiffusionGui.Io
         {
             try
             {
-                System.Windows.Forms.Clipboard.SetText($"Deleting: {path}");
-
                 if (path == null)
                     return false;
 

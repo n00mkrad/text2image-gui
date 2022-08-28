@@ -132,7 +132,7 @@ namespace StableDiffusionGui.Os
 
         public static bool ShowHiddenCmd()
         {
-            return true;
+            return false;
             // return Config.GetInt(Config.Key.cmdDebugMode) > 0;
         }
 

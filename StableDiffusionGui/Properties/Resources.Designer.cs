@@ -63,6 +63,16 @@ namespace StableDiffusionGui.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap baseline_folder_open_white_48dp {
+            get {
+                object obj = ResourceManager.GetObject("baseline_folder_open_white_48dp", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap discordNew {
             get {
                 object obj = ResourceManager.GetObject("discordNew", resourceCulture);

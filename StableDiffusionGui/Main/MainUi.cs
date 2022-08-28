@@ -8,7 +8,10 @@ namespace StableDiffusionGui.Main
 {
     internal class MainUi
     {
-        public static int CurrentSteps = 30;
-        public static float CurrentScale = 8.5f;
+        public static int CurrentSteps;
+        public static float CurrentScale;
+
+        public static int CurrentResW;
+        public static int CurrentResH;
     }
 }

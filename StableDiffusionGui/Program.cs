@@ -12,6 +12,7 @@ namespace StableDiffusionGui
 {
     internal static class Program
     {
+        public static bool Busy;
         public static MainForm MainForm;
 
         /// <summary>

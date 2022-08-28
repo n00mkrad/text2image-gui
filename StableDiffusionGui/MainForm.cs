@@ -14,6 +14,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Microsoft.WindowsAPICodePack.Taskbar;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace StableDiffusionGui
 {
@@ -48,6 +50,8 @@ namespace StableDiffusionGui
             ConfigParser.LoadGuiElement(upDownIterations);
             ConfigParser.LoadGuiElement(sliderSteps); sliderSteps_Scroll(null, null);
             ConfigParser.LoadGuiElement(sliderScale); sliderScale_Scroll(null, null);
+            ConfigParser.LoadGuiElement(sliderResW); sliderResW_Scroll(null, null);
+            ConfigParser.LoadGuiElement(sliderResH); sliderResH_Scroll(null, null);
         }
 
         private void SaveUiElements()
@@ -55,6 +59,8 @@ namespace StableDiffusionGui
             ConfigParser.SaveGuiElement(upDownIterations);
             ConfigParser.SaveGuiElement(sliderSteps);
             ConfigParser.SaveGuiElement(sliderScale);
+            ConfigParser.SaveGuiElement(sliderResW);
+            ConfigParser.SaveGuiElement(sliderResH);
         }
 
         private void installerBtn_Click(object sender, EventArgs e)
@@ -64,12 +70,58 @@ namespace StableDiffusionGui
 
         private void runBtn_Click(object sender, EventArgs e)
         {
-            TextToImage.RunStableDiffusion(textboxPrompt.Text, (int)upDownIterations.Value, MainUi.CurrentSteps, MainUi.CurrentScale, new Size(512, 512), Path.Combine(Paths.GetExeDir(), "out"));
+            try
+            {
+                List<float> scales = new List<float> { MainUi.CurrentScale };
+                scales.AddRange(textboxExtraScales.Text.Replace(" ", "").Split(",").Select(x => x.GetFloat()).Where(x => x > 0.05f));
+
+                TextToImage.TtiSettings settings = new TextToImage.TtiSettings
+                {
+                    Implementation = TextToImage.Implementation.StableDiffusion,
+                    Prompts = new string[] { textboxPrompt.Text },
+                    Iterations = (int)upDownIterations.Value,
+                    OutPath = Path.Combine(Paths.GetExeDir(), "out"),
+                    Params = new Dictionary<string, string>
+                    {
+                        { "steps", MainUi.CurrentSteps.ToString() },
+                        { "scales", String.Join(",", scales.Select(x => x.ToStringDot())) },
+                        { "res", $"{MainUi.CurrentResW}x{MainUi.CurrentResH}" },
+                        { "seed", upDownSeed.Value < 0 ? (new Random().Next(0, 2000000000)).ToString() : ((int)upDownSeed.Value).ToString() },
+                    },
+                };
+
+                TextToImage.RunTti(settings);
+            }
+            catch (Exception ex)
+            {
+                Logger.Log($"{ex.Message}\n{ex.StackTrace}");
+            }
         }
 
-        public void ShowImages (List<Image> imgs)
+        public void SetWorking(bool state, bool allowCancel = true)
         {
+            Logger.Log($"SetWorking({state})", true);
+            SetProgress(-1);
+            runBtn.Text = state ? "Cancel" : "Generate!";
+            Control[] controlsToDisable = new Control[] { };
+            Control[] controlsToHide = new Control[] { };
+            progressCircle.Visible = state;
 
+            foreach (Control c in controlsToDisable)
+                c.Enabled = !state;
+
+            foreach (Control c in controlsToHide)
+                c.Visible = !state;
+
+            Program.Busy = state;
+        }
+
+        public void SetProgress(int percent)
+        {
+            percent = percent.Clamp(0, 100);
+            TaskbarManager.Instance.SetProgressValue(percent, 100);
+            progressBar.Value = percent;
+            progressBar.Refresh();
         }
 
         private void btnPrevImg_Click(object sender, EventArgs e)
@@ -94,6 +146,40 @@ namespace StableDiffusionGui
             float scale = sliderScale.Value / 2f;
             MainUi.CurrentScale = scale;
             scaleLabel.Text = scale.ToString();
+        }
+
+        private void sliderResW_Scroll(object sender, ScrollEventArgs e)
+        {
+            int px = sliderResW.Value * 64;
+            MainUi.CurrentResW = px;
+            labelResW.Text = px.ToString();
+        }
+
+        private void sliderResH_Scroll(object sender, ScrollEventArgs e)
+        {
+            int px = sliderResH.Value * 64;
+            MainUi.CurrentResH = px;
+            labelResH.Text = px.ToString();
+        }
+
+        private void btnOpenOutFolder_Click(object sender, EventArgs e)
+        {
+            Process.Start("explorer", Path.Combine(Paths.GetExeDir(), "out"));
+        }
+
+        private void paypalBtn_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://www.paypal.com/paypalme/nmkd/10");
+        }
+
+        private void patreonBtn_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://patreon.com/n00mkrad");
+        }
+
+        private void discordBtn_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://discord.gg/eJHD2NSJRe");
         }
     }
 }
