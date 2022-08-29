@@ -131,7 +131,12 @@ namespace StableDiffusionGui.Main
                 var split = line.Split("images generated in ");
                 _currentImgCount += split[0].GetInt();
                 Program.MainForm.SetProgress((int)Math.Round(((float)(_currentImgCount+1) / _currentTargetImgCount) * 100f));
-                Logger.Log($"Generated {split[0].GetInt()} image in {split[1]} ({_currentImgCount}/{_currentTargetImgCount})", false, Logger.LastUiLine.Contains("Generated"));
+
+                int lastMsPerImg = $"{split[1].Remove(".").Remove("s")}0".GetInt();
+                int remainingMs = (_currentTargetImgCount - _currentImgCount) * lastMsPerImg;
+
+                Logger.Log($"Generated {split[0].GetInt()} image in {split[1]} ({_currentImgCount}/{_currentTargetImgCount}) - " +
+                    $"{(_currentImgCount > 1 && remainingMs > 1000 ? $"ETA: {FormatUtils.Time(remainingMs)}" : "")}", false, Logger.LastUiLine.Contains("Generated"));
                 ImagePreview.SetImages(_currentOutPath, true, _currentImgCount);
             }
         }
