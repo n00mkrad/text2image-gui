@@ -19,6 +19,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Text.RegularExpressions;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using StableDiffusionGui.Installation;
+using System.Drawing.Printing;
 
 namespace StableDiffusionGui
 {
@@ -120,7 +121,26 @@ namespace StableDiffusionGui
                     CleanPrompt();
 
                     List<float> scales = new List<float> { MainUi.CurrentScale };
-                    scales.AddRange(textboxExtraScales.Text.Replace(" ", "").Split(",").Select(x => x.GetFloat()).Where(x => x > 0.05f));
+
+                    if(textboxExtraScales.Text.MatchesWildcard("* > * *"))
+                    {
+                        var splitMinMax = textboxExtraScales.Text.Trim().Split('>');
+                        float min = splitMinMax[0].GetFloat();
+                        float max = splitMinMax[1].Trim().Split(' ').First().GetFloat();
+                        float step = splitMinMax.Last().Split(' ').Last().GetFloat();
+
+                        List<float> incrementScales = new List<float>();
+
+                        for(float f = min; f < (max + 0.01f); f += step)
+                            incrementScales.Add(f);
+
+                        if(incrementScales.Count > 0)
+                            scales = incrementScales; // Replace list, don't use the regular scale slider at all in this mode
+                    }
+                    else
+                    {
+                        scales.AddRange(textboxExtraScales.Text.Replace(" ", "").Split(",").Select(x => x.GetFloat()).Where(x => x > 0.05f));
+                    }
 
                     TextToImage.TtiSettings settings = new TextToImage.TtiSettings
                     {
@@ -131,7 +151,7 @@ namespace StableDiffusionGui
                         Params = new Dictionary<string, string>
                         {
                             { "steps", MainUi.CurrentSteps.ToString() },
-                            { "scales", String.Join(",", scales.Select(x => x.ToStringDot())) },
+                            { "scales", String.Join(",", scales.Select(x => x.ToStringDot("0.0000"))) },
                             { "res", $"{MainUi.CurrentResW}x{MainUi.CurrentResH}" },
                             { "seed", upDownSeed.Value < 0 ? (new Random().Next(0, 2000000000)).ToString() : ((int)upDownSeed.Value).ToString() },
                             { "sampler", comboxSampler.Text.Trim() },

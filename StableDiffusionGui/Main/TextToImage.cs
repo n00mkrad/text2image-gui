@@ -114,7 +114,7 @@ namespace StableDiffusionGui.Main
 
             File.WriteAllText(promptFilePath, promptFileContent);
 
-            Logger.Log($"Preparing to run Stable Diffusion - {iterations} Iterations, {steps} Steps, Scales {string.Join(", ", scales.Select(x => x.ToStringDot()))}, {res.Width}x{res.Height}, Starting Seed: {seed}");
+            Logger.Log($"Preparing to run Stable Diffusion - {iterations} Iterations, {steps} Steps, Scales {(scales.Length < 10 ? string.Join(", ", scales.Select(x => x.ToStringDot())) : $"({scales.Length})")}, {res.Width}x{res.Height}, Starting Seed: {seed}");
             Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} with {iterations} iteration{(iterations != 1 ? "s" : "")} each and {scales.Length} scale{(scales.Length != 1 ? "s" : "")} each = {prompts.Length * iterations * scales.Length} images total.");
 
             Process dream = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());

@@ -182,48 +182,58 @@ namespace StableDiffusionGui.MiscUtils
 
         public static string GetExportFilename (string filePath, string parentDir, string suffix, string ext, int pathLimit, bool includePrompt, bool includeSeed, bool includeScale, bool includeSampler)
         {
-            var now = DateTime.Now;
-            string timestamp = $"{now.Year}-{now.Month}-{now.Day}-{now.Hour}-{now.Minute}-{now.Second}";
-
-            int pathBudget = pathLimit - parentDir.Length - timestamp.Length - suffix.Length - 4;
-
-            var meta = IoUtils.GetImageMetadata(filePath);
-
-            string infoStr = "";
-
-
-            string seed = $"-{meta.Seed}";
-
-            if (includeSeed && (pathBudget - seed.Length > 0))
+            try
             {
-                pathBudget -= seed.Length;
-                infoStr += seed;
+                ext = ext.Remove(".");
+
+                var now = DateTime.Now;
+                string timestamp = $"{now.Year}-{now.Month}-{now.Day}-{now.Hour}-{now.Minute}-{now.Second}";
+
+                int pathBudget = pathLimit - parentDir.Length - timestamp.Length - suffix.Length - 4;
+
+                var meta = IoUtils.GetImageMetadata(filePath);
+
+                string infoStr = "";
+
+
+                string seed = $"-{meta.Seed}";
+
+                if (includeSeed && (pathBudget - seed.Length > 0))
+                {
+                    pathBudget -= seed.Length;
+                    infoStr += seed;
+                }
+
+                string scale = $"-scale{meta.Scale.ToStringDot("0.00")}";
+
+                if (includeScale && (pathBudget - scale.Length > 0))
+                {
+                    pathBudget -= scale.Length;
+                    infoStr += scale;
+                }
+
+                string sampler = $"-{meta.Sampler}";
+
+                if (includeSampler && (pathBudget - sampler.Length > 0))
+                {
+                    pathBudget -= sampler.Length;
+                    infoStr += sampler;
+                }
+
+                if (includePrompt)
+                {
+                    string cleanPrompt = new Regex(@"[^a-zA-Z0-9 -!,.()]").Replace(meta.Prompt, "_").Trunc(pathBudget - 1, false).Replace(" ", "_");
+                    return Path.Combine(parentDir, $"{timestamp}-{cleanPrompt}{infoStr}{suffix}") + $".{ext}";
+                }
+                else
+                {
+                    return Path.Combine(parentDir, $"{timestamp}{infoStr}{suffix}") + $".{ext}";
+                }
             }
-
-            string scale = $"-scale{meta.Scale.ToStringDot().Trunc(5, false)}";
-
-            if (includeScale && (pathBudget - scale.Length > 0))
+            catch(Exception ex)
             {
-                pathBudget -= scale.Length;
-                infoStr += scale;
-            }
-
-            string sampler = $"-{meta.Sampler}";
-
-            if (includeSampler && (pathBudget - sampler.Length > 0))
-            {
-                pathBudget -= sampler.Length;
-                infoStr += sampler;
-            }
-
-            if (includePrompt)
-            {
-                string cleanPrompt = new Regex(@"[^a-zA-Z0-9 -!,.()]").Replace(meta.Prompt, "_").Trunc(pathBudget - 1, false).Replace(" ", "_");
-                return Path.ChangeExtension(Path.Combine(parentDir, $"{timestamp}-{cleanPrompt}{infoStr}{suffix}"), ext);
-            }
-            else
-            {
-                return Path.ChangeExtension(Path.Combine(parentDir, $"{timestamp}{infoStr}{suffix}"), ext);
+                Logger.Log($"GetExportFilename Error: {ex.Message}\n{ex.StackTrace}");
+                return "";
             }
         }
     }
