@@ -21,7 +21,7 @@ namespace StableDiffusionGui
 {
     public partial class MainForm : Form
     {
-        public Cyotek.Windows.Forms.ImageBox ImgBoxOutput { get { return resultImgBox; } }
+        public Cyotek.Windows.Forms.ImageBox ImgBoxOutput { get { return imgBoxOutput; } }
         public Label OutputImgLabel { get { return outputImgLabel; } }
 
         public bool IsInFocus() { return (ActiveForm == this); }
@@ -180,6 +180,27 @@ namespace StableDiffusionGui
         private void discordBtn_Click(object sender, EventArgs e)
         {
             Process.Start("https://discord.gg/eJHD2NSJRe");
+        }
+
+        private void openFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start(ImagePreview.CurrentImagePath);
+        }
+
+        private void openOutputFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("explorer", $@"/select, {ImagePreview.CurrentImagePath.Wrap()}");
+        }
+
+        private void copyImageToClipboardToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetDataObject(imgBoxOutput.Image);
+        }
+
+        private void btnImgShare_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(ImagePreview.CurrentImagePath) && File.Exists(ImagePreview.CurrentImagePath))
+                menuStripOutputImg.Show(Cursor.Position);
         }
     }
 }

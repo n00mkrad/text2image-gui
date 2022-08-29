@@ -10,6 +10,8 @@ namespace StableDiffusionGui.Ui
 {
     internal class ImagePreview
     {
+        public static string CurrentImagePath { get { return _currentImages.Length > 0 ? _currentImages[_currIndex] : ""; } }
+
         private static string[] _currentImages = new string[0];
         private static int _currIndex = -1;
 
