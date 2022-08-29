@@ -1,4 +1,5 @@
 ﻿using HTAlt;
+using MetadataExtractor.Formats.Photoshop;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
@@ -22,6 +23,7 @@ namespace StableDiffusionGui.Main
         private static int _currentImgCount;
         private static int _currentTargetImgCount;
         private static string _currentOutPath;
+        private static DateTime _startTime;
 
         public class TtiSettings
         {
@@ -32,24 +34,69 @@ namespace StableDiffusionGui.Main
             public Dictionary<string, string> Params { get; set; } = new Dictionary<string, string>();
         }
 
-        public static async Task RunTti(TtiSettings s)
+        public static void Start (string outPath)
         {
             Program.MainForm.SetWorking(true);
 
+            _startTime = DateTime.Now;
+            _currentOutPath = outPath;
+
+            _currentImgCount = 0;
+            _currentTargetImgCount = 0;
+        }
+
+        public static void Finish()
+        {
+            ImagePreview.SetImages(_currentOutPath, true, _currentTargetImgCount);
+
+            PostProcess(_currentOutPath, true, _currentTargetImgCount);
+
+            Logger.Log($"Done!");
+            Program.MainForm.SetWorking(false);
+        }
+
+        private static readonly int _maxPathLength = 256;
+
+        public static void PostProcess(string imagesDir, bool show, int amount = -1, string pattern = "*.png", bool recursive = false)
+        {
+            try
+            {
+                var images = IoUtils.GetFileInfosSorted(imagesDir, recursive, pattern).Where(x => x.CreationTime > _startTime).OrderBy(x => x.CreationTime).Reverse().ToList(); // Find images and sort by date, newest to oldest
+
+                if (amount > 0)
+                    images = images.Take(amount).ToList();
+
+                List<string> renamedImgPaths = new List<string>();
+
+                for (int i = 0; i < images.Count; i++)
+                {
+                    var img = images[i];
+                    string renamedPath = FormatUtils.GetExportFilename(img.FullName, imagesDir, $"-{i + 1}", pattern.Remove("*").Split('.').Last(), _maxPathLength, true, true, true, true);
+                    img.MoveTo(renamedPath);
+                    renamedImgPaths.Add(renamedPath);
+                }
+
+                ImagePreview.SetImages(renamedImgPaths, show);
+            }
+            catch(Exception ex)
+            {
+                Logger.Log($"Image post-processing error:\n{ex.Message}");
+                Logger.Log($"{ex.StackTrace}", true);
+            }
+        }
+
+        public static async Task RunTti(TtiSettings s)
+        {
             if (s.Implementation == Implementation.StableDiffusion)
                 await RunStableDiffusion(s.Prompts, s.Iterations, s.Params["steps"].GetInt(), s.Params["scales"].Replace(" ", "").Split(",").Select(x => x.GetFloat()).ToArray(), s.Params["seed"].GetInt(), s.Params["sampler"], FormatUtils.ParseSize(s.Params["res"]), s.OutPath);
-
-            Program.MainForm.SetWorking(false);
         }
 
         public static async Task RunStableDiffusion(string[] prompts, int iterations, int steps, float[] scales, int seed, string sampler, Size res, string outPath)
         {
-            _currentOutPath = outPath;
+            Start(outPath);
+            
             string promptFilePath = Path.Combine(Paths.GetSessionDataPath(), "prompts.txt");
             string promptFileContent = "";
-
-            _currentImgCount = 0;
-            _currentTargetImgCount = 0;
 
             foreach (string prompt in prompts)
             {
@@ -94,8 +141,7 @@ namespace StableDiffusionGui.Main
 
             while (!dream.HasExited) await Task.Delay(1);
 
-            ImagePreview.SetImages(outPath, true, _currentTargetImgCount);
-            Logger.Log($"Done");
+            Finish();
         }
 
         public static async Task RunStableDiffusionCli (string outPath)
