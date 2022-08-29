@@ -55,7 +55,7 @@ namespace StableDiffusionGui.Main
             Program.MainForm.SetWorking(false);
         }
 
-        private static readonly int _maxPathLength = 256;
+        private static readonly int _maxPathLength = 255;
 
         public static void PostProcess(string imagesDir, bool show, int amount = -1, string pattern = "*.png", bool recursive = false)
         {

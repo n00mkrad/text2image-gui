@@ -200,7 +200,7 @@ namespace StableDiffusionGui.MiscUtils
                 infoStr += seed;
             }
 
-            string scale = $"-scale{meta.Scale.ToStringDot()}";
+            string scale = $"-scale{meta.Scale.ToStringDot().Trunc(5, false)}";
 
             if (includeScale && (pathBudget - scale.Length > 0))
             {
