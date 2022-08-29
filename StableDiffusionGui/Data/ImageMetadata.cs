@@ -52,7 +52,7 @@ namespace StableDiffusionGui.Data
                     if (s.StartsWith("-C"))
                         Scale = s.Remove(0, 2).GetFloat();
 
-                    if (s.StartsWith("-m"))
+                    if (s.StartsWith("-A"))
                         Sampler = s.Remove(0, 2);
 
                     if (s.StartsWith("-S"))

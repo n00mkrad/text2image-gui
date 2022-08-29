@@ -85,7 +85,10 @@ namespace StableDiffusionGui.Io
 
         public static void LoadComboxIndex(ComboBox comboBox)
         {
-            comboBox.SelectedIndex = Config.GetInt(comboBox.Name);
+            if (comboBox.Items.Count == 0)
+                return;
+
+            comboBox.SelectedIndex = Config.GetInt(comboBox.Name).Clamp(0, comboBox.Items.Count - 1);
         }
     }
 }

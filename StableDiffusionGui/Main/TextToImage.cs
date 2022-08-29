@@ -37,18 +37,17 @@ namespace StableDiffusionGui.Main
             Program.MainForm.SetWorking(true);
 
             if (s.Implementation == Implementation.StableDiffusion)
-                await RunStableDiffusion(s.Prompts, s.Iterations, s.Params["steps"].GetInt(), s.Params["scales"].Replace(" ", "").Split(",").Select(x => x.GetFloat()).ToArray(), s.Params["seed"].GetInt(), FormatUtils.ParseSize(s.Params["res"]), s.OutPath);
+                await RunStableDiffusion(s.Prompts, s.Iterations, s.Params["steps"].GetInt(), s.Params["scales"].Replace(" ", "").Split(",").Select(x => x.GetFloat()).ToArray(), s.Params["seed"].GetInt(), s.Params["sampler"], FormatUtils.ParseSize(s.Params["res"]), s.OutPath);
 
             Program.MainForm.SetWorking(false);
         }
 
-        public static async Task RunStableDiffusion(string[] prompts, int iterations, int steps, float[] scales, int seed, Size res, string outPath)
+        public static async Task RunStableDiffusion(string[] prompts, int iterations, int steps, float[] scales, int seed, string sampler, Size res, string outPath)
         {
             _currentOutPath = outPath;
             string promptFilePath = Path.Combine(Paths.GetSessionDataPath(), "prompts.txt");
-
-            //string promptFileContent = $"{prompt} -n {iterations} -s {steps} -C {scale.ToStringDot()} -W {res.Width} -H {res.Height}";
             string promptFileContent = "";
+
             _currentImgCount = 0;
             _currentTargetImgCount = 0;
 
@@ -58,7 +57,7 @@ namespace StableDiffusionGui.Main
                 {
                     foreach(float scale in scales)
                     {
-                        promptFileContent += $"{prompt} -n {1} -s {steps} -C {scale.ToStringDot()} -W {res.Width} -H {res.Height} -S {seed}\n";
+                        promptFileContent += $"{prompt} -n {1} -s {steps} -C {scale.ToStringDot()} -A {sampler} -W {res.Width} -H {res.Height} -S {seed}\n";
                         _currentTargetImgCount++;
                     }
 
@@ -129,9 +128,9 @@ namespace StableDiffusionGui.Main
                 Program.MainForm.SetProgress((int)Math.Round(((float)1 / _currentTargetImgCount) * 100f));
             }
 
-            if (line.Contains("images generated in"))
+            if (line.Contains("image(s) generated in "))
             {
-                var split = line.Split("images generated in ");
+                var split = line.Split("image(s) generated in ");
                 _currentImgCount += split[0].GetInt();
                 Program.MainForm.SetProgress((int)Math.Round(((float)(_currentImgCount+1) / _currentTargetImgCount) * 100f));
 

@@ -65,6 +65,7 @@ namespace StableDiffusionGui
             ConfigParser.LoadGuiElement(sliderScale); sliderScale_Scroll(null, null);
             ConfigParser.LoadGuiElement(sliderResW); sliderResW_Scroll(null, null);
             ConfigParser.LoadGuiElement(sliderResH); sliderResH_Scroll(null, null);
+            ConfigParser.LoadComboxIndex(comboxSampler);
         }
 
         private void SaveUiElements()
@@ -74,6 +75,7 @@ namespace StableDiffusionGui
             ConfigParser.SaveGuiElement(sliderScale);
             ConfigParser.SaveGuiElement(sliderResW);
             ConfigParser.SaveGuiElement(sliderResH);
+            ConfigParser.SaveComboxIndex(comboxSampler);
         }
 
         private void installerBtn_Click(object sender, EventArgs e)
@@ -127,12 +129,13 @@ namespace StableDiffusionGui
                         Iterations = (int)upDownIterations.Value,
                         OutPath = Path.Combine(Paths.GetExeDir(), "out"),
                         Params = new Dictionary<string, string>
-                    {
-                        { "steps", MainUi.CurrentSteps.ToString() },
-                        { "scales", String.Join(",", scales.Select(x => x.ToStringDot())) },
-                        { "res", $"{MainUi.CurrentResW}x{MainUi.CurrentResH}" },
-                        { "seed", upDownSeed.Value < 0 ? (new Random().Next(0, 2000000000)).ToString() : ((int)upDownSeed.Value).ToString() },
-                    },
+                        {
+                            { "steps", MainUi.CurrentSteps.ToString() },
+                            { "scales", String.Join(",", scales.Select(x => x.ToStringDot())) },
+                            { "res", $"{MainUi.CurrentResW}x{MainUi.CurrentResH}" },
+                            { "seed", upDownSeed.Value < 0 ? (new Random().Next(0, 2000000000)).ToString() : ((int)upDownSeed.Value).ToString() },
+                            { "sampler", comboxSampler.Text.Trim() },
+                        },
                     };
 
                     TextToImage.RunTti(settings);

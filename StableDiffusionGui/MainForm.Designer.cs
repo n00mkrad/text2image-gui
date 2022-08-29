@@ -76,6 +76,8 @@
             this.patreonBtn = new System.Windows.Forms.Button();
             this.paypalBtn = new System.Windows.Forms.Button();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.label7 = new System.Windows.Forms.Label();
+            this.comboxSampler = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
             this.tableLayoutPanel6.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -762,12 +764,47 @@
             this.paypalBtn.UseVisualStyleBackColor = false;
             this.paypalBtn.Click += new System.EventHandler(this.paypalBtn_Click);
             // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.ForeColor = System.Drawing.Color.White;
+            this.label7.Location = new System.Drawing.Point(17, 245);
+            this.label7.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(45, 13);
+            this.label7.TabIndex = 104;
+            this.label7.Text = "Sampler";
+            // 
+            // comboxSampler
+            // 
+            this.comboxSampler.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.comboxSampler.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboxSampler.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboxSampler.ForeColor = System.Drawing.Color.White;
+            this.comboxSampler.FormattingEnabled = true;
+            this.comboxSampler.Items.AddRange(new object[] {
+            "k_euler_a",
+            "k_euler",
+            "k_lms",
+            "ddim",
+            "plms",
+            "k_heun",
+            "k_dpm_2",
+            "k_dpm_2_a"});
+            this.comboxSampler.Location = new System.Drawing.Point(545, 242);
+            this.comboxSampler.Name = "comboxSampler";
+            this.comboxSampler.Size = new System.Drawing.Size(100, 21);
+            this.comboxSampler.TabIndex = 105;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.ClientSize = new System.Drawing.Size(1184, 671);
+            this.Controls.Add(this.comboxSampler);
+            this.Controls.Add(this.label7);
             this.Controls.Add(this.cliButton);
             this.Controls.Add(this.btnImgShare);
             this.Controls.Add(this.textboxExtraScales);
@@ -871,6 +908,8 @@
         private System.Windows.Forms.ToolStripMenuItem copySeedToClipboardToolStripMenuItem;
         private System.Windows.Forms.Button cliButton;
         private System.Windows.Forms.ToolTip toolTip;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.ComboBox comboxSampler;
     }
 }
 
