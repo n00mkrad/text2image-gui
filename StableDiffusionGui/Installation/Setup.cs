@@ -1,4 +1,5 @@
 ﻿using StableDiffusionGui.Io;
+using StableDiffusionGui.Main;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,37 +17,44 @@ namespace StableDiffusionGui.Installation
 
         public static async Task Install (string repoCommit = "")
         {
-            await Cleanup();
+            try
+            {
+                await Cleanup();
 
-            string batPath = GetDataSubPath("install.bat");
-            string repoPath = GetDataSubPath("repo");
+                string batPath = GetDataSubPath("install.bat");
+                string repoPath = GetDataSubPath("repo");
 
-            string[] subDirs = new string[] { "mc", "git/bin" };
+                string[] subDirs = new string[] { "mc", "git/bin" };
 
-            List<string> l = new List<string>();
+                List<string> l = new List<string>();
 
-            l.Add("@echo off");
-            l.Add($"");
-            l.Add($"SET PATH={string.Join(";", subDirs.Select(x => GetDataSubPath(x)))};%PATH%");
-            l.Add($"");
-            l.Add($"cd /D {Paths.GetDataPath().Wrap()}");
-            l.Add($"");
-            l.Add($"CALL mc/condabin/conda.bat activate base");
-            l.Add($"");
-            l.Add($"git clone https://github.com/{GitFile} repo");
-            l.Add($"cd repo");
-            if(!string.IsNullOrWhiteSpace(repoCommit))
-                l.Add($"git checkout {repoCommit}");
-            l.Add($"");
-            l.Add($"install.cmd");
-            l.Add($"");
-            l.Add($"cd ..");
-            l.Add($"");
-            l.Add($"pause");
+                l.Add("@echo off");
+                l.Add($"");
+                l.Add($"SET PATH={string.Join(";", subDirs.Select(x => GetDataSubPath(x)))};%PATH%");
+                l.Add($"");
+                l.Add($"cd /D {Paths.GetDataPath().Wrap()}");
+                l.Add($"");
+                l.Add($"CALL mc/condabin/conda.bat activate base");
+                l.Add($"");
+                l.Add($"git clone https://github.com/{GitFile} repo");
+                l.Add($"cd repo");
+                if (!string.IsNullOrWhiteSpace(repoCommit))
+                    l.Add($"git checkout {repoCommit}");
+                l.Add($"");
+                l.Add($"install.cmd");
+                l.Add($"");
+                l.Add($"cd ..");
+                l.Add($"");
+                l.Add($"pause");
 
-            File.WriteAllLines(batPath, l);
+                File.WriteAllLines(batPath, l);
 
-            Process.Start(batPath);
+                Process.Start(batPath);
+            }
+            catch(Exception ex)
+            {
+                Logger.Log($"Install error: {ex.Message}\n{ex.StackTrace}");
+            }   
         }
 
         public static async Task Cleanup ()
