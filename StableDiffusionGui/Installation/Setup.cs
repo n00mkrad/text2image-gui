@@ -42,10 +42,7 @@ namespace StableDiffusionGui.Installation
                 l.Add($"");
                 l.Add($"CALL mc/condabin/conda.bat activate base");
                 l.Add($"");
-                //l.Add($"git clone https://github.com/{GitFile} repo");
                 l.Add($"cd repo");
-                if (!string.IsNullOrWhiteSpace(repoCommit))
-                    l.Add($"git checkout {repoCommit}");
                 l.Add($"");
                 l.Add($"install.cmd");
                 l.Add($"");
@@ -70,7 +67,7 @@ namespace StableDiffusionGui.Installation
             }   
         }
 
-        private static void Clone (string url, string dir, string commit = "")
+        private static void Clone (string url, string dir, string commit = "264fc4374312793538caa8d97139fcb35ebfd416")
         {
             string path = Repository.Clone(url, dir, new CloneOptions () { BranchName = "main" });
 

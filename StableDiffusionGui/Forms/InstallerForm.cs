@@ -39,8 +39,6 @@ namespace StableDiffusionGui.Forms
 
         public void UpdateStatus ()
         {
-            Logger.Log("UpdateStatus");
-
             for (int i = 0; i < checkedListBoxStatus.Items.Count; i++)
             {
                 string text = checkedListBoxStatus.Items[i].ToString().ToLower();

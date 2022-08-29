@@ -71,10 +71,11 @@
             this.btnPrevImg = new System.Windows.Forms.Button();
             this.btnNextImg = new System.Windows.Forms.Button();
             this.installerBtn = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.separator = new System.Windows.Forms.Button();
             this.discordBtn = new System.Windows.Forms.Button();
             this.patreonBtn = new System.Windows.Forms.Button();
             this.paypalBtn = new System.Windows.Forms.Button();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
             this.tableLayoutPanel6.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -93,7 +94,7 @@
             this.runBtn.Location = new System.Drawing.Point(663, 598);
             this.runBtn.Name = "runBtn";
             this.runBtn.Size = new System.Drawing.Size(100, 40);
-            this.runBtn.TabIndex = 1;
+            this.runBtn.TabIndex = 100;
             this.runBtn.Text = "Generate!";
             this.runBtn.UseVisualStyleBackColor = false;
             this.runBtn.Click += new System.EventHandler(this.runBtn_Click);
@@ -121,6 +122,7 @@
             this.logBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.logBox.Size = new System.Drawing.Size(633, 83);
             this.logBox.TabIndex = 78;
+            this.logBox.TabStop = false;
             // 
             // imgBoxOutput
             // 
@@ -134,6 +136,7 @@
             this.imgBoxOutput.Name = "imgBoxOutput";
             this.imgBoxOutput.Size = new System.Drawing.Size(514, 514);
             this.imgBoxOutput.TabIndex = 79;
+            this.imgBoxOutput.TabStop = false;
             this.imgBoxOutput.Text = "The generated images will be shown here.";
             this.imgBoxOutput.Click += new System.EventHandler(this.imgBoxOutput_Click);
             // 
@@ -168,7 +171,7 @@
             this.textboxPrompt.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxPrompt.Name = "textboxPrompt";
             this.textboxPrompt.Size = new System.Drawing.Size(400, 20);
-            this.textboxPrompt.TabIndex = 84;
+            this.textboxPrompt.TabIndex = 0;
             // 
             // label1
             // 
@@ -199,7 +202,7 @@
             0});
             this.upDownIterations.Name = "upDownIterations";
             this.upDownIterations.Size = new System.Drawing.Size(100, 20);
-            this.upDownIterations.TabIndex = 86;
+            this.upDownIterations.TabIndex = 2;
             this.upDownIterations.Value = new decimal(new int[] {
             4,
             0,
@@ -364,7 +367,7 @@
             -2147483648});
             this.upDownSeed.Name = "upDownSeed";
             this.upDownSeed.Size = new System.Drawing.Size(100, 20);
-            this.upDownSeed.TabIndex = 93;
+            this.upDownSeed.TabIndex = 4;
             this.upDownSeed.Value = new decimal(new int[] {
             1,
             0,
@@ -542,6 +545,7 @@
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(509, 15);
             this.progressBar.TabIndex = 100;
+            this.progressBar.TabStop = false;
             // 
             // textboxExtraScales
             // 
@@ -552,7 +556,7 @@
             this.textboxExtraScales.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxExtraScales.Name = "textboxExtraScales";
             this.textboxExtraScales.Size = new System.Drawing.Size(100, 20);
-            this.textboxExtraScales.TabIndex = 101;
+            this.textboxExtraScales.TabIndex = 3;
             // 
             // menuStripOutputImg
             // 
@@ -604,6 +608,8 @@
             this.cliButton.Name = "cliButton";
             this.cliButton.Size = new System.Drawing.Size(40, 40);
             this.cliButton.TabIndex = 103;
+            this.cliButton.TabStop = false;
+            this.toolTip.SetToolTip(this.cliButton, "Open dream.py Command Line Interface");
             this.cliButton.UseVisualStyleBackColor = false;
             this.cliButton.Click += new System.EventHandler(this.cliButton_Click);
             // 
@@ -620,6 +626,8 @@
             this.btnImgShare.Name = "btnImgShare";
             this.btnImgShare.Size = new System.Drawing.Size(40, 40);
             this.btnImgShare.TabIndex = 102;
+            this.btnImgShare.TabStop = false;
+            this.toolTip.SetToolTip(this.btnImgShare, "Share or export image");
             this.btnImgShare.UseVisualStyleBackColor = false;
             this.btnImgShare.Click += new System.EventHandler(this.btnImgShare_Click);
             // 
@@ -635,6 +643,8 @@
             this.btnOpenOutFolder.Name = "btnOpenOutFolder";
             this.btnOpenOutFolder.Size = new System.Drawing.Size(40, 40);
             this.btnOpenOutFolder.TabIndex = 94;
+            this.btnOpenOutFolder.TabStop = false;
+            this.toolTip.SetToolTip(this.btnOpenOutFolder, "Open output folder");
             this.btnOpenOutFolder.UseVisualStyleBackColor = false;
             this.btnOpenOutFolder.Click += new System.EventHandler(this.btnOpenOutFolder_Click);
             // 
@@ -650,6 +660,8 @@
             this.btnPrevImg.Name = "btnPrevImg";
             this.btnPrevImg.Size = new System.Drawing.Size(40, 40);
             this.btnPrevImg.TabIndex = 82;
+            this.btnPrevImg.TabStop = false;
+            this.toolTip.SetToolTip(this.btnPrevImg, "Previous image");
             this.btnPrevImg.UseVisualStyleBackColor = false;
             this.btnPrevImg.Click += new System.EventHandler(this.btnPrevImg_Click);
             // 
@@ -665,6 +677,8 @@
             this.btnNextImg.Name = "btnNextImg";
             this.btnNextImg.Size = new System.Drawing.Size(40, 40);
             this.btnNextImg.TabIndex = 80;
+            this.btnNextImg.TabStop = false;
+            this.toolTip.SetToolTip(this.btnNextImg, "Next image");
             this.btnNextImg.UseVisualStyleBackColor = false;
             this.btnNextImg.Click += new System.EventHandler(this.btnNextImg_Click);
             // 
@@ -680,22 +694,25 @@
             this.installerBtn.Name = "installerBtn";
             this.installerBtn.Size = new System.Drawing.Size(40, 40);
             this.installerBtn.TabIndex = 76;
+            this.installerBtn.TabStop = false;
+            this.toolTip.SetToolTip(this.installerBtn, "Open Installer");
             this.installerBtn.UseVisualStyleBackColor = false;
             this.installerBtn.Click += new System.EventHandler(this.installerBtn_Click);
             // 
-            // button1
+            // separator
             // 
-            this.button1.BackColor = System.Drawing.Color.Transparent;
-            this.button1.BackgroundImage = global::StableDiffusionGui.Properties.Resources.separatorTest1;
-            this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.button1.Location = new System.Drawing.Point(1040, 9);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(40, 40);
-            this.button1.TabIndex = 75;
-            this.button1.UseVisualStyleBackColor = false;
+            this.separator.BackColor = System.Drawing.Color.Transparent;
+            this.separator.BackgroundImage = global::StableDiffusionGui.Properties.Resources.separatorTest1;
+            this.separator.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.separator.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.separator.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.separator.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            this.separator.Location = new System.Drawing.Point(1040, 9);
+            this.separator.Name = "separator";
+            this.separator.Size = new System.Drawing.Size(40, 40);
+            this.separator.TabIndex = 75;
+            this.separator.TabStop = false;
+            this.separator.UseVisualStyleBackColor = false;
             // 
             // discordBtn
             // 
@@ -709,6 +726,7 @@
             this.discordBtn.Name = "discordBtn";
             this.discordBtn.Size = new System.Drawing.Size(40, 40);
             this.discordBtn.TabIndex = 74;
+            this.discordBtn.TabStop = false;
             this.discordBtn.UseVisualStyleBackColor = false;
             this.discordBtn.Click += new System.EventHandler(this.discordBtn_Click);
             // 
@@ -724,6 +742,7 @@
             this.patreonBtn.Name = "patreonBtn";
             this.patreonBtn.Size = new System.Drawing.Size(40, 40);
             this.patreonBtn.TabIndex = 73;
+            this.patreonBtn.TabStop = false;
             this.patreonBtn.UseVisualStyleBackColor = false;
             this.patreonBtn.Click += new System.EventHandler(this.patreonBtn_Click);
             // 
@@ -739,6 +758,7 @@
             this.paypalBtn.Name = "paypalBtn";
             this.paypalBtn.Size = new System.Drawing.Size(40, 40);
             this.paypalBtn.TabIndex = 72;
+            this.paypalBtn.TabStop = false;
             this.paypalBtn.UseVisualStyleBackColor = false;
             this.paypalBtn.Click += new System.EventHandler(this.paypalBtn_Click);
             // 
@@ -774,7 +794,7 @@
             this.Controls.Add(this.imgBoxOutput);
             this.Controls.Add(this.logBox);
             this.Controls.Add(this.installerBtn);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.separator);
             this.Controls.Add(this.discordBtn);
             this.Controls.Add(this.patreonBtn);
             this.Controls.Add(this.paypalBtn);
@@ -842,7 +862,7 @@
         private CircularProgressBar.CircularProgressBar progressCircle;
         private HTAlt.WinForms.HTProgressBar progressBar;
         private System.Windows.Forms.TextBox textboxExtraScales;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button separator;
         private System.Windows.Forms.Button btnImgShare;
         private System.Windows.Forms.ContextMenuStrip menuStripOutputImg;
         private System.Windows.Forms.ToolStripMenuItem openFileToolStripMenuItem;
@@ -850,6 +870,7 @@
         private System.Windows.Forms.ToolStripMenuItem copyImageToClipboardToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem copySeedToClipboardToolStripMenuItem;
         private System.Windows.Forms.Button cliButton;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }
 

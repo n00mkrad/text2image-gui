@@ -9,6 +9,8 @@ namespace StableDiffusionGui.Installation
 {
     internal class InstallationStatus
     {
+        public static bool IsInstalled { get { return HasConda() && HasSdRepo() && HasSdEnv() && HasSdModel(); } }
+
         public static bool HasConda ()
         {
             string minicondaScriptsPath = Path.Combine(Paths.GetDataPath(), "mc", "Scripts");

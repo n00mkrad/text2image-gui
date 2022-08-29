@@ -18,6 +18,7 @@ using Microsoft.WindowsAPICodePack.Taskbar;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Text.RegularExpressions;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using StableDiffusionGui.Installation;
 
 namespace StableDiffusionGui
 {
@@ -50,7 +51,11 @@ namespace StableDiffusionGui
 
         private void MainForm_Shown(object sender, EventArgs e)
         {
-
+            if (!InstallationStatus.IsInstalled)
+            {
+                UiUtils.ShowMessageBox("No complete installation of the Stable Diffusion files was found.\n\nThe GUI will now open the installer. Please press \"Install\" in the next window to install all required files.");
+                installerBtn_Click(null, null);
+            }
         }
 
         private void LoadUiElements()
@@ -81,8 +86,27 @@ namespace StableDiffusionGui
             textboxPrompt.Text = new Regex(@"[^a-zA-Z0-9 -!,.:()\-]").Replace(textboxPrompt.Text, "");
         }
 
+
+        public bool IsInstalledWithWarning(bool showInstaller = true)
+        {
+            if (!InstallationStatus.IsInstalled)
+            {
+                UiUtils.ShowMessageBox("A valid installation is required.");
+
+                if (showInstaller)
+                    installerBtn_Click(null, null);
+
+                return false;
+            }
+
+            return true;
+        }
+
         private void runBtn_Click(object sender, EventArgs e)
         {
+            if (!IsInstalledWithWarning())
+                return;
+
             try
             {
                 if (Program.Busy)
@@ -227,6 +251,9 @@ namespace StableDiffusionGui
 
         private void cliButton_Click(object sender, EventArgs e)
         {
+            if (!IsInstalledWithWarning())
+                return;
+
             TextToImage.RunStableDiffusionCli(Path.Combine(Paths.GetExeDir(), "out"));
         }
 
