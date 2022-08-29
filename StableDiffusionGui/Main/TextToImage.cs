@@ -61,10 +61,12 @@ namespace StableDiffusionGui.Main
         {
             try
             {
-                var images = IoUtils.GetFileInfosSorted(imagesDir, recursive, pattern).Where(x => x.CreationTime > _startTime).OrderBy(x => x.CreationTime).Reverse().ToList(); // Find images and sort by date, newest to oldest
+                var images = IoUtils.GetFileInfosSorted(imagesDir, recursive, pattern).Where(x => x.CreationTime > _startTime).OrderBy(x => x.CreationTime).ToList(); // Find images and sort by date, newest to oldest
 
-                if (amount > 0)
-                    images = images.Take(amount).ToList();
+                Logger.Log($"Found {images.Count} images created after start time.", true);
+
+                //if (amount > 0)
+                //    images = images.Take(amount).ToList();
 
                 List<string> renamedImgPaths = new List<string>();
 
@@ -88,10 +90,10 @@ namespace StableDiffusionGui.Main
         public static async Task RunTti(TtiSettings s)
         {
             if (s.Implementation == Implementation.StableDiffusion)
-                await RunStableDiffusion(s.Prompts, s.Iterations, s.Params["steps"].GetInt(), s.Params["scales"].Replace(" ", "").Split(",").Select(x => x.GetFloat()).ToArray(), s.Params["seed"].GetInt(), s.Params["sampler"], FormatUtils.ParseSize(s.Params["res"]), s.OutPath);
+                await RunStableDiffusion(s.Prompts, s.Iterations, s.Params["steps"].GetInt(), s.Params["scales"].Replace(" ", "").Split(",").Select(x => x.GetFloat()).ToArray(), s.Params["seed"].GetLong(), s.Params["sampler"], FormatUtils.ParseSize(s.Params["res"]), s.OutPath);
         }
 
-        public static async Task RunStableDiffusion(string[] prompts, int iterations, int steps, float[] scales, int seed, string sampler, Size res, string outPath)
+        public static async Task RunStableDiffusion(string[] prompts, int iterations, int steps, float[] scales, long seed, string sampler, Size res, string outPath)
         {
             Start(outPath);
             

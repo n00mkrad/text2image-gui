@@ -358,8 +358,8 @@
             this.upDownSeed.ForeColor = System.Drawing.Color.White;
             this.upDownSeed.Location = new System.Drawing.Point(545, 183);
             this.upDownSeed.Maximum = new decimal(new int[] {
-            2000000000,
-            0,
+            1410065408,
+            2,
             0,
             0});
             this.upDownSeed.Minimum = new decimal(new int[] {

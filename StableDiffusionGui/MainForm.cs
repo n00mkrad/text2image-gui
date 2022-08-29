@@ -153,7 +153,7 @@ namespace StableDiffusionGui
                             { "steps", MainUi.CurrentSteps.ToString() },
                             { "scales", String.Join(",", scales.Select(x => x.ToStringDot("0.0000"))) },
                             { "res", $"{MainUi.CurrentResW}x{MainUi.CurrentResH}" },
-                            { "seed", upDownSeed.Value < 0 ? (new Random().Next(0, 2000000000)).ToString() : ((int)upDownSeed.Value).ToString() },
+                            { "seed", upDownSeed.Value < 0 ? (new Random().Next(0, Int32.MaxValue)).ToString() : ((long)upDownSeed.Value).ToString() },
                             { "sampler", comboxSampler.Text.Trim() },
                         },
                     };

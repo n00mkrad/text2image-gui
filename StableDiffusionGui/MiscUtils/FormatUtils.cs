@@ -223,11 +223,11 @@ namespace StableDiffusionGui.MiscUtils
                 if (includePrompt)
                 {
                     string cleanPrompt = new Regex(@"[^a-zA-Z0-9 -!,.()]").Replace(meta.Prompt, "_").Trunc(pathBudget - 1, false).Replace(" ", "_");
-                    return Path.Combine(parentDir, $"{timestamp}-{cleanPrompt}{infoStr}{suffix}") + $".{ext}";
+                    return Path.Combine(parentDir, $"{timestamp}{suffix}-{cleanPrompt}{infoStr}") + $".{ext}";
                 }
                 else
                 {
-                    return Path.Combine(parentDir, $"{timestamp}{infoStr}{suffix}") + $".{ext}";
+                    return Path.Combine(parentDir, $"{timestamp}{suffix}{infoStr}{suffix}") + $".{ext}";
                 }
             }
             catch(Exception ex)

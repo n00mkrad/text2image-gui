@@ -16,7 +16,7 @@ namespace StableDiffusionGui.Data
         public Size GeneratedResolution { get; set; }
         public float Scale { get; set; }
         public string Sampler { get; set; }
-        public int Seed { get; set; }
+        public long Seed { get; set; }
 
         public ImageMetadata() { }
 
@@ -56,7 +56,7 @@ namespace StableDiffusionGui.Data
                         Sampler = s.Remove(0, 2);
 
                     if (s.StartsWith("-S"))
-                        Seed = s.Remove(0, 2).GetInt();
+                        Seed = s.Remove(0, 2).GetLong();
                 }
             }
             catch(Exception ex)
