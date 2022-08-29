@@ -16,6 +16,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.WindowsAPICodePack.Taskbar;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Text.RegularExpressions;
+using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace StableDiffusionGui
 {
@@ -23,6 +25,7 @@ namespace StableDiffusionGui
     {
         public Cyotek.Windows.Forms.ImageBox ImgBoxOutput { get { return imgBoxOutput; } }
         public Label OutputImgLabel { get { return outputImgLabel; } }
+        public System.Windows.Forms.Button BtnImgShare { get { return btnImgShare; } }
 
         public bool IsInFocus() { return (ActiveForm == this); }
 
@@ -68,10 +71,17 @@ namespace StableDiffusionGui
             new InstallerForm().ShowDialog();
         }
 
+        public void CleanPrompt()
+        {
+            textboxPrompt.Text = new Regex(@"[^a-zA-Z0-9 -!,.:\-]").Replace(textboxPrompt.Text, "");
+        }
+
         private void runBtn_Click(object sender, EventArgs e)
         {
             try
             {
+                CleanPrompt();
+
                 List<float> scales = new List<float> { MainUi.CurrentScale };
                 scales.AddRange(textboxExtraScales.Text.Replace(" ", "").Split(",").Select(x => x.GetFloat()).Where(x => x > 0.05f));
 
@@ -211,6 +221,12 @@ namespace StableDiffusionGui
         private void copySeedToClipboardToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Clipboard.SetText(ImagePreview.CurrentImageMetadata.Seed.ToString());
+        }
+
+        private void imgBoxOutput_Click(object sender, EventArgs e)
+        {
+            if (((MouseEventArgs)e).Button == MouseButtons.Right)
+                btnImgShare_Click(null, null);
         }
     }
 }

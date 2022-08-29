@@ -9,6 +9,7 @@ namespace StableDiffusionGui.Data
     internal class ImageMetadata
     {
         public string Path { get; set; }
+        public string ParsedText { get; set; }
         public string Prompt { get; set; }
         public int Steps { get; set; }
         public int BatchSize { get; set; }
@@ -22,6 +23,7 @@ namespace StableDiffusionGui.Data
         public ImageMetadata(string path, string dreamCli)
         {
             Path = path;
+            ParsedText = dreamCli;
 
             try
             {

@@ -135,6 +135,7 @@
             this.imgBoxOutput.Size = new System.Drawing.Size(514, 514);
             this.imgBoxOutput.TabIndex = 79;
             this.imgBoxOutput.Text = "The generated images will be shown here.";
+            this.imgBoxOutput.Click += new System.EventHandler(this.imgBoxOutput_Click);
             // 
             // btnNextImg
             // 
@@ -591,7 +592,7 @@
             this.copyImageToClipboardToolStripMenuItem,
             this.copySeedToClipboardToolStripMenuItem});
             this.menuStripOutputImg.Name = "menuStripOutputImg";
-            this.menuStripOutputImg.Size = new System.Drawing.Size(208, 114);
+            this.menuStripOutputImg.Size = new System.Drawing.Size(208, 92);
             // 
             // openFileToolStripMenuItem
             // 
@@ -644,10 +645,10 @@
             this.btnImgShare.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnImgShare.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnImgShare.ForeColor = System.Drawing.Color.White;
-            this.btnImgShare.Location = new System.Drawing.Point(1136, 540);
+            this.btnImgShare.Location = new System.Drawing.Point(1037, 598);
             this.btnImgShare.Margin = new System.Windows.Forms.Padding(6);
             this.btnImgShare.Name = "btnImgShare";
-            this.btnImgShare.Size = new System.Drawing.Size(30, 30);
+            this.btnImgShare.Size = new System.Drawing.Size(40, 40);
             this.btnImgShare.TabIndex = 102;
             this.btnImgShare.UseVisualStyleBackColor = false;
             this.btnImgShare.Click += new System.EventHandler(this.btnImgShare_Click);
@@ -660,7 +661,7 @@
             this.btnOpenOutFolder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnOpenOutFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnOpenOutFolder.ForeColor = System.Drawing.Color.White;
-            this.btnOpenOutFolder.Location = new System.Drawing.Point(1040, 598);
+            this.btnOpenOutFolder.Location = new System.Drawing.Point(988, 598);
             this.btnOpenOutFolder.Name = "btnOpenOutFolder";
             this.btnOpenOutFolder.Size = new System.Drawing.Size(40, 40);
             this.btnOpenOutFolder.TabIndex = 94;
