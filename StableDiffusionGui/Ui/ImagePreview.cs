@@ -39,6 +39,7 @@ namespace StableDiffusionGui.Ui
 
             Program.MainForm.ImgBoxOutput.Text = "";
             Program.MainForm.ImgBoxOutput.Image = IoUtils.GetImage(_currentImages[_currIndex]);
+            Program.MainForm.ImgBoxOutput.ZoomToFit();
             Program.MainForm.OutputImgLabel.Text = $"Showing image {_currIndex+1}/{_currentImages.Length}";
         }
 

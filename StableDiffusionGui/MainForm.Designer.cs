@@ -119,6 +119,7 @@
             this.resultImgBox.ForeColor = System.Drawing.Color.White;
             this.resultImgBox.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
             this.resultImgBox.GridColorAlternate = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            this.resultImgBox.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
             this.resultImgBox.Location = new System.Drawing.Point(658, 62);
             this.resultImgBox.Margin = new System.Windows.Forms.Padding(10);
             this.resultImgBox.Name = "resultImgBox";
@@ -645,7 +646,7 @@
             this.textboxExtraScales.Location = new System.Drawing.Point(557, 152);
             this.textboxExtraScales.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxExtraScales.Name = "textboxExtraScales";
-            this.textboxExtraScales.Size = new System.Drawing.Size(88, 21);
+            this.textboxExtraScales.Size = new System.Drawing.Size(88, 20);
             this.textboxExtraScales.TabIndex = 101;
             // 
             // button1
