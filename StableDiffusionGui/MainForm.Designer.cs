@@ -62,6 +62,12 @@
             this.progressCircle = new CircularProgressBar.CircularProgressBar();
             this.progressBar = new HTAlt.WinForms.HTProgressBar();
             this.textboxExtraScales = new System.Windows.Forms.TextBox();
+            this.menuStripOutputImg = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.openFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openOutputFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyImageToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copySeedToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cliButton = new System.Windows.Forms.Button();
             this.btnImgShare = new System.Windows.Forms.Button();
             this.btnOpenOutFolder = new System.Windows.Forms.Button();
             this.installerBtn = new System.Windows.Forms.Button();
@@ -69,10 +75,6 @@
             this.discordBtn = new System.Windows.Forms.Button();
             this.patreonBtn = new System.Windows.Forms.Button();
             this.paypalBtn = new System.Windows.Forms.Button();
-            this.menuStripOutputImg = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.openFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openOutputFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.copyImageToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
             this.tableLayoutPanel6.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -581,6 +583,59 @@
             this.textboxExtraScales.Size = new System.Drawing.Size(100, 20);
             this.textboxExtraScales.TabIndex = 101;
             // 
+            // menuStripOutputImg
+            // 
+            this.menuStripOutputImg.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openFileToolStripMenuItem,
+            this.openOutputFolderToolStripMenuItem,
+            this.copyImageToClipboardToolStripMenuItem,
+            this.copySeedToClipboardToolStripMenuItem});
+            this.menuStripOutputImg.Name = "menuStripOutputImg";
+            this.menuStripOutputImg.Size = new System.Drawing.Size(208, 114);
+            // 
+            // openFileToolStripMenuItem
+            // 
+            this.openFileToolStripMenuItem.Name = "openFileToolStripMenuItem";
+            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
+            this.openFileToolStripMenuItem.Text = "Open File";
+            this.openFileToolStripMenuItem.Click += new System.EventHandler(this.openFileToolStripMenuItem_Click);
+            // 
+            // openOutputFolderToolStripMenuItem
+            // 
+            this.openOutputFolderToolStripMenuItem.Name = "openOutputFolderToolStripMenuItem";
+            this.openOutputFolderToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
+            this.openOutputFolderToolStripMenuItem.Text = "Open Output Folder";
+            this.openOutputFolderToolStripMenuItem.Click += new System.EventHandler(this.openOutputFolderToolStripMenuItem_Click);
+            // 
+            // copyImageToClipboardToolStripMenuItem
+            // 
+            this.copyImageToClipboardToolStripMenuItem.Name = "copyImageToClipboardToolStripMenuItem";
+            this.copyImageToClipboardToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
+            this.copyImageToClipboardToolStripMenuItem.Text = "Copy Image to Clipboard";
+            this.copyImageToClipboardToolStripMenuItem.Click += new System.EventHandler(this.copyImageToClipboardToolStripMenuItem_Click);
+            // 
+            // copySeedToClipboardToolStripMenuItem
+            // 
+            this.copySeedToClipboardToolStripMenuItem.Name = "copySeedToClipboardToolStripMenuItem";
+            this.copySeedToClipboardToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
+            this.copySeedToClipboardToolStripMenuItem.Text = "Copy Seed to Clipboard";
+            this.copySeedToClipboardToolStripMenuItem.Click += new System.EventHandler(this.copySeedToClipboardToolStripMenuItem_Click);
+            // 
+            // cliButton
+            // 
+            this.cliButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.cliButton.BackgroundImage = global::StableDiffusionGui.Properties.Resources.cliIcon;
+            this.cliButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.cliButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cliButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cliButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.cliButton.Location = new System.Drawing.Point(1086, 9);
+            this.cliButton.Name = "cliButton";
+            this.cliButton.Size = new System.Drawing.Size(40, 40);
+            this.cliButton.TabIndex = 103;
+            this.cliButton.UseVisualStyleBackColor = false;
+            this.cliButton.Click += new System.EventHandler(this.cliButton_Click);
+            // 
             // btnImgShare
             // 
             this.btnImgShare.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
@@ -635,7 +690,7 @@
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.button1.Location = new System.Drawing.Point(1086, 9);
+            this.button1.Location = new System.Drawing.Point(1040, 9);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(40, 40);
             this.button1.TabIndex = 75;
@@ -649,7 +704,7 @@
             this.discordBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.discordBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.discordBtn.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.discordBtn.Location = new System.Drawing.Point(1040, 9);
+            this.discordBtn.Location = new System.Drawing.Point(994, 9);
             this.discordBtn.Name = "discordBtn";
             this.discordBtn.Size = new System.Drawing.Size(40, 40);
             this.discordBtn.TabIndex = 74;
@@ -664,7 +719,7 @@
             this.patreonBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.patreonBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.patreonBtn.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.patreonBtn.Location = new System.Drawing.Point(994, 9);
+            this.patreonBtn.Location = new System.Drawing.Point(948, 9);
             this.patreonBtn.Name = "patreonBtn";
             this.patreonBtn.Size = new System.Drawing.Size(40, 40);
             this.patreonBtn.TabIndex = 73;
@@ -679,42 +734,12 @@
             this.paypalBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.paypalBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.paypalBtn.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.paypalBtn.Location = new System.Drawing.Point(948, 9);
+            this.paypalBtn.Location = new System.Drawing.Point(902, 9);
             this.paypalBtn.Name = "paypalBtn";
             this.paypalBtn.Size = new System.Drawing.Size(40, 40);
             this.paypalBtn.TabIndex = 72;
             this.paypalBtn.UseVisualStyleBackColor = false;
             this.paypalBtn.Click += new System.EventHandler(this.paypalBtn_Click);
-            // 
-            // menuStripOutputImg
-            // 
-            this.menuStripOutputImg.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.openFileToolStripMenuItem,
-            this.openOutputFolderToolStripMenuItem,
-            this.copyImageToClipboardToolStripMenuItem});
-            this.menuStripOutputImg.Name = "menuStripOutputImg";
-            this.menuStripOutputImg.Size = new System.Drawing.Size(208, 70);
-            // 
-            // openFileToolStripMenuItem
-            // 
-            this.openFileToolStripMenuItem.Name = "openFileToolStripMenuItem";
-            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
-            this.openFileToolStripMenuItem.Text = "Open File";
-            this.openFileToolStripMenuItem.Click += new System.EventHandler(this.openFileToolStripMenuItem_Click);
-            // 
-            // openOutputFolderToolStripMenuItem
-            // 
-            this.openOutputFolderToolStripMenuItem.Name = "openOutputFolderToolStripMenuItem";
-            this.openOutputFolderToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
-            this.openOutputFolderToolStripMenuItem.Text = "Open Output Folder";
-            this.openOutputFolderToolStripMenuItem.Click += new System.EventHandler(this.openOutputFolderToolStripMenuItem_Click);
-            // 
-            // copyImageToClipboardToolStripMenuItem
-            // 
-            this.copyImageToClipboardToolStripMenuItem.Name = "copyImageToClipboardToolStripMenuItem";
-            this.copyImageToClipboardToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
-            this.copyImageToClipboardToolStripMenuItem.Text = "Copy Image to Clipboard";
-            this.copyImageToClipboardToolStripMenuItem.Click += new System.EventHandler(this.copyImageToClipboardToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -722,6 +747,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.ClientSize = new System.Drawing.Size(1184, 671);
+            this.Controls.Add(this.cliButton);
             this.Controls.Add(this.btnImgShare);
             this.Controls.Add(this.textboxExtraScales);
             this.Controls.Add(this.progressBar);
@@ -820,6 +846,8 @@
         private System.Windows.Forms.ToolStripMenuItem openFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openOutputFolderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem copyImageToClipboardToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem copySeedToClipboardToolStripMenuItem;
+        private System.Windows.Forms.Button cliButton;
     }
 }
 

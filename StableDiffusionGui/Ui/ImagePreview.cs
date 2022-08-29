@@ -1,4 +1,5 @@
-﻿using StableDiffusionGui.Io;
+﻿using StableDiffusionGui.Data;
+using StableDiffusionGui.Io;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -11,6 +12,7 @@ namespace StableDiffusionGui.Ui
     internal class ImagePreview
     {
         public static string CurrentImagePath { get { return _currentImages.Length > 0 ? _currentImages[_currIndex] : ""; } }
+        public static ImageMetadata CurrentImageMetadata { get { return IoUtils.GetImageMetadata(CurrentImagePath); } }
 
         private static string[] _currentImages = new string[0];
         private static int _currIndex = -1;
@@ -42,7 +44,11 @@ namespace StableDiffusionGui.Ui
             Program.MainForm.ImgBoxOutput.Text = "";
             Program.MainForm.ImgBoxOutput.Image = IoUtils.GetImage(_currentImages[_currIndex]);
             Program.MainForm.ImgBoxOutput.ZoomToFit();
-            Program.MainForm.OutputImgLabel.Text = $"Showing image {_currIndex+1}/{_currentImages.Length}";
+
+            ImageMetadata meta = CurrentImageMetadata;
+
+            Program.MainForm.OutputImgLabel.Text = $"Showing Image {_currIndex+1}/{_currentImages.Length} - " +
+                $"Seed {meta.Seed} - Scale {meta.Scale} - {meta.GeneratedResolution.Width}x{meta.GeneratedResolution.Height}";
         }
 
         public static void Move(bool previous = false)

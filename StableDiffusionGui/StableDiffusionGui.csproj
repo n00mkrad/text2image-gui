@@ -50,6 +50,9 @@
     <Reference Include="HTAlt.WinForms, Version=0.1.7.4, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\HTAlt.WinForms.0.1.7.5\lib\net461\HTAlt.WinForms.dll</HintPath>
     </Reference>
+    <Reference Include="MetadataExtractor, Version=2.7.2.0, Culture=neutral, PublicKeyToken=b66b5ccaf776c301, processorArchitecture=MSIL">
+      <HintPath>packages\MetadataExtractor.2.7.2\lib\net45\MetadataExtractor.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\WindowsAPICodePack-Core.1.1.1\lib\Microsoft.WindowsAPICodePack.dll</HintPath>
@@ -81,8 +84,12 @@
     <Reference Include="WinFormAnimation, Version=1.6.0.4, Culture=neutral, PublicKeyToken=310fd07b25df79b3, processorArchitecture=MSIL">
       <HintPath>packages\WinFormAnimation.1.6.0.4\lib\net40\WinFormAnimation.dll</HintPath>
     </Reference>
+    <Reference Include="XmpCore, Version=6.1.10.1, Culture=neutral, PublicKeyToken=961f4f366277b80e, processorArchitecture=MSIL">
+      <HintPath>packages\XmpCore.6.1.10.1\lib\net35\XmpCore.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\ImageMetadata.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Extensions\UiControlExtensions.cs" />
     <Compile Include="Forms\InstallerForm.cs">
@@ -157,6 +164,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon1.ico" />
+    <None Include="Resources\cliIcon.png" />
     <None Include="Resources\shareIco.png" />
     <None Include="Resources\baseline_folder_open_white_48dp.png" />
   </ItemGroup>

@@ -202,5 +202,15 @@ namespace StableDiffusionGui
             if (!string.IsNullOrWhiteSpace(ImagePreview.CurrentImagePath) && File.Exists(ImagePreview.CurrentImagePath))
                 menuStripOutputImg.Show(Cursor.Position);
         }
+
+        private void cliButton_Click(object sender, EventArgs e)
+        {
+            TextToImage.RunStableDiffusionCli(Path.Combine(Paths.GetExeDir(), "out"));
+        }
+
+        private void copySeedToClipboardToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(ImagePreview.CurrentImageMetadata.Seed.ToString());
+        }
     }
 }

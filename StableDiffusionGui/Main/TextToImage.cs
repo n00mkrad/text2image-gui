@@ -12,7 +12,6 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using static System.Windows.Forms.AxHost;
 
 namespace StableDiffusionGui.Main
 {
@@ -98,6 +97,16 @@ namespace StableDiffusionGui.Main
 
             ImagePreview.SetImages(outPath, true, _currentTargetImgCount);
             Logger.Log($"Done");
+        }
+
+        public static async Task RunStableDiffusionCli (string outPath)
+        {
+            Process dream = OsUtils.NewProcess(false);
+
+            dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && call \"{Paths.GetDataPath()}\\mc\\Scripts\\activate.bat\" ldo && " +
+                $"python \"{Paths.GetDataPath()}/repo/scripts/dream.py\" -o {outPath.Wrap()}";
+
+            dream.Start();
         }
 
         static void LogOutput(string line, bool stdErr = false)
