@@ -48,7 +48,7 @@ namespace StableDiffusionGui.Ui
             ImageMetadata meta = CurrentImageMetadata;
 
             Program.MainForm.OutputImgLabel.Text = $"Showing Image {_currIndex+1}/{_currentImages.Length} - " +
-                $"Seed {meta.Seed} - Scale {meta.Scale} - {meta.GeneratedResolution.Width}x{meta.GeneratedResolution.Height}";
+                $"Seed {meta.Seed} - Scale {meta.Scale} - {meta.GeneratedResolution.Width}x{meta.GeneratedResolution.Height} - Sampler {meta.Sampler}";
         }
 
         public static void Move(bool previous = false)

@@ -122,7 +122,7 @@ namespace StableDiffusionGui.Main
             //lastLogName = ai.LogFilename;
             Logger.Log(line, true, false, "sd");
 
-            if (line.Contains("Initialization done!"))
+            if (line.Contains("Setting Sampler"))
             {
                 Logger.Log("Generating...");
                 Program.MainForm.SetProgress((int)Math.Round(((float)1 / _currentTargetImgCount) * 100f));
