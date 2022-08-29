@@ -707,12 +707,19 @@ namespace StableDiffusionGui.Io
 
         public static ImageMetadata GetImageMetadata (string path, string keword = "Dream: ")
         {
-            IEnumerable<MetadataExtractor.Directory> directories = MetadataExtractor.ImageMetadataReader.ReadMetadata(path);
+            try
+            {
+                IEnumerable<MetadataExtractor.Directory> directories = MetadataExtractor.ImageMetadataReader.ReadMetadata(path);
 
-            MetadataExtractor.Directory pngTextDir = directories.Where(x => x.Name.ToLower() == "png-text").FirstOrDefault();
-            MetadataExtractor.Tag dreamTag = pngTextDir.Tags.Where(x => x.Description.Contains(keword)).FirstOrDefault();
+                MetadataExtractor.Directory pngTextDir = directories.Where(x => x.Name.ToLower() == "png-text").FirstOrDefault();
+                MetadataExtractor.Tag dreamTag = pngTextDir.Tags.Where(x => x.Description.Contains(keword)).FirstOrDefault();
 
-            return new ImageMetadata(path, dreamTag.Description.Split(keword).Last());
+                return new ImageMetadata(path, dreamTag.Description.Split(keword).Last());
+            }
+            catch(Exception ex)
+            {
+                return new ImageMetadata();
+            }
         }
     }
 }

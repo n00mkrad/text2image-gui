@@ -270,5 +270,15 @@ namespace StableDiffusionGui
             if (((MouseEventArgs)e).Button == MouseButtons.Right)
                 btnImgShare_Click(null, null);
         }
+
+        private void MainForm_DragEnter(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.Copy;
+        }
+
+        private void MainForm_DragDrop(object sender, DragEventArgs e)
+        {
+            MainUi.HandleDroppedFiles((string[])e.Data.GetData(DataFormats.FileDrop));
+        }
     }
 }
