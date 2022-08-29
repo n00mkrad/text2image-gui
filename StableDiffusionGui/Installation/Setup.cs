@@ -1,4 +1,5 @@
-﻿using StableDiffusionGui.Io;
+﻿using LibGit2Sharp;
+using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static System.Windows.Forms.LinkLabel;
 
 namespace StableDiffusionGui.Installation
 {
@@ -19,10 +19,16 @@ namespace StableDiffusionGui.Installation
         {
             try
             {
+                Logger.Log("Removing existing SD files...");
                 await Cleanup();
+                Logger.Log("Done.");
 
                 string batPath = GetDataSubPath("install.bat");
                 string repoPath = GetDataSubPath("repo");
+
+                Logger.Log("Cloning repository...");
+                Clone($"https://github.com/{GitFile}", repoPath);
+                Logger.Log("Done.");
 
                 string[] subDirs = new string[] { "mc", "git/bin" };
 
@@ -36,7 +42,7 @@ namespace StableDiffusionGui.Installation
                 l.Add($"");
                 l.Add($"CALL mc/condabin/conda.bat activate base");
                 l.Add($"");
-                l.Add($"git clone https://github.com/{GitFile} repo");
+                //l.Add($"git clone https://github.com/{GitFile} repo");
                 l.Add($"cd repo");
                 if (!string.IsNullOrWhiteSpace(repoCommit))
                     l.Add($"git checkout {repoCommit}");
@@ -49,7 +55,14 @@ namespace StableDiffusionGui.Installation
 
                 File.WriteAllLines(batPath, l);
 
-                Process.Start(batPath);
+                Logger.Log("Running installation script...");
+
+                Process p = Process.Start(batPath);
+
+                while (!p.HasExited)
+                    await Task.Delay(100);
+
+                Logger.Log("Finished.");
             }
             catch(Exception ex)
             {
@@ -57,10 +70,31 @@ namespace StableDiffusionGui.Installation
             }   
         }
 
+        private static void Clone (string url, string dir, string commit = "")
+        {
+            string path = Repository.Clone(url, dir, new CloneOptions () { BranchName = "main" });
+
+            if (!string.IsNullOrWhiteSpace(commit))
+            {
+                using (var localRepo = new Repository(dir))
+                {
+                    var localCommit = localRepo.Lookup<Commit>(commit);
+                    Commands.Checkout(localRepo, localCommit);
+                }
+            }
+
+            Logger.Log($"Done.");
+        }
+
         public static async Task Cleanup ()
         {
             await IoUtils.TryDeleteIfExistsAsync(GetDataSubPath("repo"));
             await IoUtils.TryDeleteIfExistsAsync(GetDataSubPath("ldo"));
+        }
+
+        public static async Task RemoveEnv()
+        {
+            await IoUtils.TryDeleteIfExistsAsync(Path.Combine(Paths.GetDataPath(), "mc", "envs", "ldo"));
         }
 
         private static string GetDataSubPath (string dir)

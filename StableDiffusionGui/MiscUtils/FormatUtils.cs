@@ -28,14 +28,9 @@ namespace StableDiffusionGui.MiscUtils
             }
         }
 
-        public static string Time(long milliseconds)
+        public static string Time(long milliseconds, bool allowMs = true)
         {
-            double secs = (milliseconds / 1000f);
-            if (milliseconds <= 1000)
-            {
-                return milliseconds + "ms";
-            }
-            return secs.ToString("0.00") + "s";
+            return Time(TimeSpan.FromMilliseconds(milliseconds), allowMs);
         }
 
         public static string Time(TimeSpan span, bool allowMs = true)

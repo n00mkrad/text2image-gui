@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="packages\LibGit2Sharp.NativeBinaries.2.0.306\build\net46\LibGit2Sharp.NativeBinaries.props" Condition="Exists('packages\LibGit2Sharp.NativeBinaries.2.0.306\build\net46\LibGit2Sharp.NativeBinaries.props')" />
   <Import Project="packages\Costura.Fody.5.7.0\build\Costura.Fody.props" Condition="Exists('packages\Costura.Fody.5.7.0\build\Costura.Fody.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -57,6 +58,9 @@
     <Reference Include="HTAlt.WinForms, Version=0.1.7.4, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\HTAlt.WinForms.0.1.7.5\lib\net461\HTAlt.WinForms.dll</HintPath>
     </Reference>
+    <Reference Include="LibGit2Sharp, Version=0.26.0.0, Culture=neutral, PublicKeyToken=7cbde695407f0333, processorArchitecture=MSIL">
+      <HintPath>packages\LibGit2Sharp.0.26.2\lib\net46\LibGit2Sharp.dll</HintPath>
+    </Reference>
     <Reference Include="MetadataExtractor, Version=2.7.2.0, Culture=neutral, PublicKeyToken=b66b5ccaf776c301, processorArchitecture=MSIL">
       <HintPath>packages\MetadataExtractor.2.7.2\lib\net45\MetadataExtractor.dll</HintPath>
     </Reference>
@@ -105,6 +109,7 @@
     <Compile Include="Forms\InstallerForm.Designer.cs">
       <DependentUpon>InstallerForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Installation\InstallationStatus.cs" />
     <Compile Include="Installation\Setup.cs" />
     <Compile Include="Io\Config.cs" />
     <Compile Include="Io\ConfigParser.cs" />
@@ -171,6 +176,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon1.ico" />
+    <None Include="Resources\forwardArrowIcon.png" />
+    <None Include="Resources\backArrowIcon.png" />
     <None Include="Resources\cliIcon.png" />
     <None Include="Resources\shareIco.png" />
     <None Include="Resources\baseline_folder_open_white_48dp.png" />
@@ -185,6 +192,7 @@
     <Error Condition="!Exists('packages\Fody.6.6.3\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Fody.6.6.3\build\Fody.targets'))" />
     <Error Condition="!Exists('packages\Costura.Fody.5.7.0\build\Costura.Fody.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Costura.Fody.5.7.0\build\Costura.Fody.props'))" />
     <Error Condition="!Exists('packages\Costura.Fody.5.7.0\build\Costura.Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Costura.Fody.5.7.0\build\Costura.Fody.targets'))" />
+    <Error Condition="!Exists('packages\LibGit2Sharp.NativeBinaries.2.0.306\build\net46\LibGit2Sharp.NativeBinaries.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\LibGit2Sharp.NativeBinaries.2.0.306\build\net46\LibGit2Sharp.NativeBinaries.props'))" />
   </Target>
   <Import Project="packages\Fody.6.6.3\build\Fody.targets" Condition="Exists('packages\Fody.6.6.3\build\Fody.targets')" />
   <Import Project="packages\Costura.Fody.5.7.0\build\Costura.Fody.targets" Condition="Exists('packages\Costura.Fody.5.7.0\build\Costura.Fody.targets')" />

@@ -48,6 +48,11 @@ namespace StableDiffusionGui
             Program.Cleanup();
         }
 
+        private void MainForm_Shown(object sender, EventArgs e)
+        {
+
+        }
+
         private void LoadUiElements()
         {
             ConfigParser.LoadGuiElement(upDownIterations);
@@ -73,34 +78,41 @@ namespace StableDiffusionGui
 
         public void CleanPrompt()
         {
-            textboxPrompt.Text = new Regex(@"[^a-zA-Z0-9 -!,.:\-]").Replace(textboxPrompt.Text, "");
+            textboxPrompt.Text = new Regex(@"[^a-zA-Z0-9 -!,.:()\-]").Replace(textboxPrompt.Text, "");
         }
 
         private void runBtn_Click(object sender, EventArgs e)
         {
             try
             {
-                CleanPrompt();
-
-                List<float> scales = new List<float> { MainUi.CurrentScale };
-                scales.AddRange(textboxExtraScales.Text.Replace(" ", "").Split(",").Select(x => x.GetFloat()).Where(x => x > 0.05f));
-
-                TextToImage.TtiSettings settings = new TextToImage.TtiSettings
+                if (Program.Busy)
                 {
-                    Implementation = TextToImage.Implementation.StableDiffusion,
-                    Prompts = new string[] { textboxPrompt.Text },
-                    Iterations = (int)upDownIterations.Value,
-                    OutPath = Path.Combine(Paths.GetExeDir(), "out"),
-                    Params = new Dictionary<string, string>
+                    // cancel...
+                }
+                else
+                {
+                    CleanPrompt();
+
+                    List<float> scales = new List<float> { MainUi.CurrentScale };
+                    scales.AddRange(textboxExtraScales.Text.Replace(" ", "").Split(",").Select(x => x.GetFloat()).Where(x => x > 0.05f));
+
+                    TextToImage.TtiSettings settings = new TextToImage.TtiSettings
+                    {
+                        Implementation = TextToImage.Implementation.StableDiffusion,
+                        Prompts = new string[] { textboxPrompt.Text },
+                        Iterations = (int)upDownIterations.Value,
+                        OutPath = Path.Combine(Paths.GetExeDir(), "out"),
+                        Params = new Dictionary<string, string>
                     {
                         { "steps", MainUi.CurrentSteps.ToString() },
                         { "scales", String.Join(",", scales.Select(x => x.ToStringDot())) },
                         { "res", $"{MainUi.CurrentResW}x{MainUi.CurrentResH}" },
                         { "seed", upDownSeed.Value < 0 ? (new Random().Next(0, 2000000000)).ToString() : ((int)upDownSeed.Value).ToString() },
                     },
-                };
+                    };
 
-                TextToImage.RunTti(settings);
+                    TextToImage.RunTti(settings);
+                }
             }
             catch (Exception ex)
             {

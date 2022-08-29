@@ -1,4 +1,5 @@
 ﻿using StableDiffusionGui.Installation;
+using StableDiffusionGui.Main;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -25,9 +26,48 @@ namespace StableDiffusionGui.Forms
 
         private async void installBtn_Click(object sender, EventArgs e)
         {
-            installBtn.Enabled = false;
+            this.Enabled = false;
             await Setup.Install();
-            installBtn.Enabled = true;
+            UpdateStatus();
+            this.Enabled = true;
+        }
+
+        private void InstallerForm_Shown(object sender, EventArgs e)
+        {
+            UpdateStatus();
+        }
+
+        public void UpdateStatus ()
+        {
+            Logger.Log("UpdateStatus");
+
+            for (int i = 0; i < checkedListBoxStatus.Items.Count; i++)
+            {
+                string text = checkedListBoxStatus.Items[i].ToString().ToLower();
+
+                if (text.Contains("miniconda"))
+                    checkedListBoxStatus.SetItemChecked(i, InstallationStatus.HasConda());
+
+                if (text.Contains("repository"))
+                    checkedListBoxStatus.SetItemChecked(i, InstallationStatus.HasSdRepo());
+
+                if (text.Contains("env"))
+                    checkedListBoxStatus.SetItemChecked(i, InstallationStatus.HasSdEnv());
+
+                if (text.Contains("model"))
+                    checkedListBoxStatus.SetItemChecked(i, InstallationStatus.HasSdModel());
+            }
+        }
+
+        private async void btnUninstall_Click(object sender, EventArgs e)
+        {
+            this.Enabled = false;
+            Logger.Log("Uninstalling...");
+            await Setup.Cleanup();
+            await Setup.RemoveEnv();
+            UpdateStatus();
+            Logger.Log("Done.");
+            this.Enabled = true;
         }
     }
 }

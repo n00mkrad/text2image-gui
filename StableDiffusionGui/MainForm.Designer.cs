@@ -34,9 +34,7 @@
             this.titleLabel = new System.Windows.Forms.Label();
             this.logBox = new System.Windows.Forms.TextBox();
             this.imgBoxOutput = new Cyotek.Windows.Forms.ImageBox();
-            this.btnNextImg = new System.Windows.Forms.Button();
             this.outputImgLabel = new System.Windows.Forms.Label();
-            this.btnPrevImg = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.textboxPrompt = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -70,6 +68,8 @@
             this.cliButton = new System.Windows.Forms.Button();
             this.btnImgShare = new System.Windows.Forms.Button();
             this.btnOpenOutFolder = new System.Windows.Forms.Button();
+            this.btnPrevImg = new System.Windows.Forms.Button();
+            this.btnNextImg = new System.Windows.Forms.Button();
             this.installerBtn = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.discordBtn = new System.Windows.Forms.Button();
@@ -103,7 +103,7 @@
             this.titleLabel.AutoSize = true;
             this.titleLabel.Font = new System.Drawing.Font("Yu Gothic UI", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.titleLabel.ForeColor = System.Drawing.Color.White;
-            this.titleLabel.Location = new System.Drawing.Point(12, 9);
+            this.titleLabel.Location = new System.Drawing.Point(11, 9);
             this.titleLabel.Margin = new System.Windows.Forms.Padding(3, 0, 3, 10);
             this.titleLabel.Name = "titleLabel";
             this.titleLabel.Size = new System.Drawing.Size(367, 40);
@@ -137,21 +137,6 @@
             this.imgBoxOutput.Text = "The generated images will be shown here.";
             this.imgBoxOutput.Click += new System.EventHandler(this.imgBoxOutput_Click);
             // 
-            // btnNextImg
-            // 
-            this.btnNextImg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnNextImg.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnNextImg.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnNextImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnNextImg.ForeColor = System.Drawing.Color.White;
-            this.btnNextImg.Location = new System.Drawing.Point(1132, 598);
-            this.btnNextImg.Name = "btnNextImg";
-            this.btnNextImg.Size = new System.Drawing.Size(40, 40);
-            this.btnNextImg.TabIndex = 80;
-            this.btnNextImg.Text = ">";
-            this.btnNextImg.UseVisualStyleBackColor = false;
-            this.btnNextImg.Click += new System.EventHandler(this.btnNextImg_Click);
-            // 
             // outputImgLabel
             // 
             this.outputImgLabel.AutoSize = true;
@@ -161,21 +146,6 @@
             this.outputImgLabel.Size = new System.Drawing.Size(133, 13);
             this.outputImgLabel.TabIndex = 81;
             this.outputImgLabel.Text = "No output images to show.";
-            // 
-            // btnPrevImg
-            // 
-            this.btnPrevImg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnPrevImg.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnPrevImg.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnPrevImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnPrevImg.ForeColor = System.Drawing.Color.White;
-            this.btnPrevImg.Location = new System.Drawing.Point(1086, 598);
-            this.btnPrevImg.Name = "btnPrevImg";
-            this.btnPrevImg.Size = new System.Drawing.Size(40, 40);
-            this.btnPrevImg.TabIndex = 82;
-            this.btnPrevImg.Text = "<";
-            this.btnPrevImg.UseVisualStyleBackColor = false;
-            this.btnPrevImg.Click += new System.EventHandler(this.btnPrevImg_Click);
             // 
             // label2
             // 
@@ -541,7 +511,7 @@
             this.progressCircle.InnerColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.progressCircle.InnerMargin = 2;
             this.progressCircle.InnerWidth = -1;
-            this.progressCircle.Location = new System.Drawing.Point(385, 9);
+            this.progressCircle.Location = new System.Drawing.Point(384, 9);
             this.progressCircle.MarqueeAnimationSpeed = 2000;
             this.progressCircle.Name = "progressCircle";
             this.progressCircle.OuterColor = System.Drawing.Color.Gray;
@@ -644,8 +614,8 @@
             this.btnImgShare.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnImgShare.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnImgShare.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnImgShare.ForeColor = System.Drawing.Color.White;
-            this.btnImgShare.Location = new System.Drawing.Point(1037, 598);
+            this.btnImgShare.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnImgShare.Location = new System.Drawing.Point(1040, 598);
             this.btnImgShare.Margin = new System.Windows.Forms.Padding(6);
             this.btnImgShare.Name = "btnImgShare";
             this.btnImgShare.Size = new System.Drawing.Size(40, 40);
@@ -660,13 +630,43 @@
             this.btnOpenOutFolder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnOpenOutFolder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnOpenOutFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnOpenOutFolder.ForeColor = System.Drawing.Color.White;
-            this.btnOpenOutFolder.Location = new System.Drawing.Point(988, 598);
+            this.btnOpenOutFolder.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnOpenOutFolder.Location = new System.Drawing.Point(994, 598);
             this.btnOpenOutFolder.Name = "btnOpenOutFolder";
             this.btnOpenOutFolder.Size = new System.Drawing.Size(40, 40);
             this.btnOpenOutFolder.TabIndex = 94;
             this.btnOpenOutFolder.UseVisualStyleBackColor = false;
             this.btnOpenOutFolder.Click += new System.EventHandler(this.btnOpenOutFolder_Click);
+            // 
+            // btnPrevImg
+            // 
+            this.btnPrevImg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnPrevImg.BackgroundImage = global::StableDiffusionGui.Properties.Resources.backArrowIcon;
+            this.btnPrevImg.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnPrevImg.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnPrevImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnPrevImg.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnPrevImg.Location = new System.Drawing.Point(1086, 598);
+            this.btnPrevImg.Name = "btnPrevImg";
+            this.btnPrevImg.Size = new System.Drawing.Size(40, 40);
+            this.btnPrevImg.TabIndex = 82;
+            this.btnPrevImg.UseVisualStyleBackColor = false;
+            this.btnPrevImg.Click += new System.EventHandler(this.btnPrevImg_Click);
+            // 
+            // btnNextImg
+            // 
+            this.btnNextImg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnNextImg.BackgroundImage = global::StableDiffusionGui.Properties.Resources.forwardArrowIcon;
+            this.btnNextImg.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnNextImg.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnNextImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnNextImg.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnNextImg.Location = new System.Drawing.Point(1132, 598);
+            this.btnNextImg.Name = "btnNextImg";
+            this.btnNextImg.Size = new System.Drawing.Size(40, 40);
+            this.btnNextImg.TabIndex = 80;
+            this.btnNextImg.UseVisualStyleBackColor = false;
+            this.btnNextImg.Click += new System.EventHandler(this.btnNextImg_Click);
             // 
             // installerBtn
             // 
@@ -787,6 +787,7 @@
             this.Text = "Stable Diffusion GUI";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
+            this.Shown += new System.EventHandler(this.MainForm_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).EndInit();
             this.tableLayoutPanel6.ResumeLayout(false);
             this.tableLayoutPanel6.PerformLayout();

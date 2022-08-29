@@ -101,6 +101,9 @@ namespace StableDiffusionGui.Main
 
         public static async Task RunStableDiffusionCli (string outPath)
         {
+            if (Program.Busy)
+                return;
+
             Process dream = OsUtils.NewProcess(false);
 
             dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && call \"{Paths.GetDataPath()}\\mc\\Scripts\\activate.bat\" ldo && " +
@@ -135,8 +138,8 @@ namespace StableDiffusionGui.Main
                 int lastMsPerImg = $"{split[1].Remove(".").Remove("s")}0".GetInt();
                 int remainingMs = (_currentTargetImgCount - _currentImgCount) * lastMsPerImg;
 
-                Logger.Log($"Generated {split[0].GetInt()} image in {split[1]} ({_currentImgCount}/{_currentTargetImgCount}) - " +
-                    $"{(_currentImgCount > 1 && remainingMs > 1000 ? $"ETA: {FormatUtils.Time(remainingMs)}" : "")}", false, Logger.LastUiLine.Contains("Generated"));
+                Logger.Log($"Generated {split[0].GetInt()} image in {split[1]} ({_currentImgCount}/{_currentTargetImgCount})" +
+                    $"{(_currentImgCount > 1 && remainingMs > 1000 ? $" - ETA: {FormatUtils.Time(remainingMs, false)}" : "")}", false, Logger.LastUiLine.Contains("Generated"));
                 ImagePreview.SetImages(_currentOutPath, true, _currentImgCount);
             }
         }

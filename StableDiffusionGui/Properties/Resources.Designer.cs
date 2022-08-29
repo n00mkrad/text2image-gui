@@ -63,6 +63,16 @@ namespace StableDiffusionGui.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap backArrowIcon {
+            get {
+                object obj = ResourceManager.GetObject("backArrowIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap baseline_folder_open_white_48dp {
             get {
                 object obj = ResourceManager.GetObject("baseline_folder_open_white_48dp", resourceCulture);
@@ -86,6 +96,16 @@ namespace StableDiffusionGui.Properties {
         internal static System.Drawing.Bitmap discordNew {
             get {
                 object obj = ResourceManager.GetObject("discordNew", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap forwardArrowIcon {
+            get {
+                object obj = ResourceManager.GetObject("forwardArrowIcon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
