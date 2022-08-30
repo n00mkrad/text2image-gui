@@ -65,7 +65,7 @@ namespace StableDiffusionGui.Main
             }
         }
 
-        public static async Task RunStableDiffusion(string[] prompts, string initImg, float initStrength, int iterations, int steps, float[] scales, long seed, string sampler, Size res, string outPath)
+        public static async Task RunStableDiffusion(string[] prompts, string initImg, string embedding, float initStrength, int iterations, int steps, float[] scales, long seed, string sampler, Size res, string outPath)
         {
             Start(outPath);
 
@@ -87,14 +87,23 @@ namespace StableDiffusionGui.Main
 
             File.WriteAllText(promptFilePath, promptFileContent);
 
-            Logger.Log($"Preparing to run Stable Diffusion - {iterations} Iterations, {steps} Steps, Scales {(scales.Length < 10 ? string.Join(", ", scales.Select(x => x.ToStringDot())) : $"({scales.Length})")}, {res.Width}x{res.Height}, Starting Seed: {seed}");
+            Logger.Log($"Preparing to run Stable Diffusion - {iterations} Iterations, {steps} Steps, Scales {(scales.Length < 4 ? string.Join(", ", scales.Select(x => x.ToStringDot())) : $"{scales.First()}->{scales.Last()}")}, {res.Width}x{res.Height}, Starting Seed: {seed}");
+
+            if (!string.IsNullOrWhiteSpace(embedding))
+            {
+                if (!File.Exists(embedding))
+                    embedding = "";
+                else
+                    Logger.Log($"Using fine-tuned model: {Path.GetFileName(embedding)}");
+            }
+
             Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} with {iterations} iteration{(iterations != 1 ? "s" : "")} each and {scales.Length} scale{(scales.Length != 1 ? "s" : "")} each = {prompts.Length * iterations * scales.Length} images total.");
 
             Process dream = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
             TextToImage.CurrentTask.Processes.Add(dream);
 
             dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && call \"{Paths.GetDataPath()}\\mc\\Scripts\\activate.bat\" ldo && " +
-                $"python \"{Paths.GetDataPath()}/repo/scripts/dream.py\" -o {outPath.Wrap()} --from_file={promptFilePath.Wrap()}";
+                $"python \"{Paths.GetDataPath()}/repo/scripts/dream.py\" -o {outPath.Wrap()} --from_file={promptFilePath.Wrap()} {(!string.IsNullOrWhiteSpace(embedding) ? $"--embedding_path {embedding.Wrap()}" : "")}";
 
             Logger.Log("cmd.exe " + dream.StartInfo.Arguments, true);
 

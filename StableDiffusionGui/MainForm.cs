@@ -103,7 +103,7 @@ namespace StableDiffusionGui
 
         public void CleanPrompt()
         {
-            textboxPrompt.Text = new Regex(@"[^a-zA-Z0-9 -!,.:()\-]").Replace(textboxPrompt.Text, "");
+            textboxPrompt.Text = new Regex(@"[^a-zA-Z0-9 -!*,.:()\-]").Replace(textboxPrompt.Text, "");
 
             if (upDownSeed.Text == "")
                 upDownSeed.Value = -1;
@@ -127,6 +127,7 @@ namespace StableDiffusionGui
 
         private void runBtn_Click(object sender, EventArgs e)
         {
+            Logger.ClearLogBox();
             TextToImage.Canceled = false;
 
             if (!IsInstalledWithWarning())
@@ -163,6 +164,7 @@ namespace StableDiffusionGui
                             { "sampler", comboxSampler.Text.Trim() },
                             { "initImg", textboxInitImgPath.Text.Trim() },
                             { "initStrength", (1f - MainUi.CurrentInitStrength).ToStringDot("0.0000") },
+                            { "embedding", MainUi.CurrentEmbeddingPath },
                         },
                     };
 

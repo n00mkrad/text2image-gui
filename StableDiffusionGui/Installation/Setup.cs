@@ -102,7 +102,7 @@ namespace StableDiffusionGui.Installation
                 await Task.Delay(100);
         }
 
-        private static void Clone (string url, string dir, string commit = "")
+        private static void Clone (string url, string dir, string commit = "be5b9d04948f49da2ec0d2cec197004279867b2c")
         {
             string path = Repository.Clone(url, dir, new CloneOptions () { BranchName = "main" });
 

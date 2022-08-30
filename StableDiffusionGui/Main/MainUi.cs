@@ -20,29 +20,41 @@ namespace StableDiffusionGui.Main
 
         public static float CurrentInitStrength;
 
+        public static string CurrentEmbeddingPath;
+
+        private static readonly string[] validInitImgExtensions = new string[] { ".png", ".jpeg", ".jpg", ".jfif", ".bmp" };
+
         public static void HandleDroppedFiles(string[] paths)
         {
-            foreach(string path in paths)
+            foreach (string path in paths.Where(x => Path.GetExtension(x) == ".png"))
             {
-                if (path.EndsWith(".png"))
-                {
-                    ImageMetadata meta = IoUtils.GetImageMetadata(path);
+                ImageMetadata meta = IoUtils.GetImageMetadata(path);
 
-                    if(!string.IsNullOrWhiteSpace(meta.Prompt))
-                        Logger.Log($"Found metadata in {Path.GetFileName(path)}:\n{meta.ParsedText}");
-                }
+                if (!string.IsNullOrWhiteSpace(meta.Prompt))
+                    Logger.Log($"Found metadata in {Path.GetFileName(path)}:\n{meta.ParsedText}");
             }
 
-            if(paths.Length == 1)
+            if (paths.Length == 1)
             {
-                DialogResult dialogResult = UiUtils.ShowMessageBox($"Do you want to load this image as an initialization image?", "Load as init image?", MessageBoxButtons.YesNo);
+                if (validInitImgExtensions.Contains(paths[0])) // Ask to use as init img
+                {
+                    DialogResult dialogResult = UiUtils.ShowMessageBox($"Do you want to load this image as an initialization image?", $"Dropped {Path.GetFileName(paths[0]).Trunc(40)}", MessageBoxButtons.YesNo);
 
-                if (dialogResult == DialogResult.Yes)
-                    Program.MainForm.TextboxInitImgPath.Text = paths[0];
+                    if (dialogResult == DialogResult.Yes)
+                        Program.MainForm.TextboxInitImgPath.Text = paths[0];
+                }
+
+                if (Path.GetExtension(paths[0]) == ".pt") // Ask to use as embedding (finetuned model)
+                {
+                    DialogResult dialogResult = UiUtils.ShowMessageBox($"Do you want to load this embedding?", $"Dropped {Path.GetFileName(paths[0]).Trunc(40)}", MessageBoxButtons.YesNo);
+
+                    if (dialogResult == DialogResult.Yes)
+                        CurrentEmbeddingPath = paths[0];
+                }
             }
         }
 
-        public static List<float> GetScales (string customScalesText)
+        public static List<float> GetScales(string customScalesText)
         {
             List<float> scales = new List<float> { CurrentScale };
 
