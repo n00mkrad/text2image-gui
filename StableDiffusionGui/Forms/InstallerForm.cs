@@ -74,5 +74,10 @@ namespace StableDiffusionGui.Forms
             Logger.Log("Done.");
             this.Enabled = true;
         }
+
+        private void btnPatch_Click(object sender, EventArgs e)
+        {
+            Setup.Patch();
+        }
     }
 }

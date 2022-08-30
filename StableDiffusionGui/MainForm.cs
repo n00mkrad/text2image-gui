@@ -324,28 +324,35 @@ namespace StableDiffusionGui
 
         private void btnInitImgBrowse_Click(object sender, EventArgs e)
         {
+            if (File.Exists(textboxInitImgPath.Text.Trim()))
+            {
+                textboxInitImgPath.Text = "";
+                return;
+            }
+
             CommonOpenFileDialog dialog = new CommonOpenFileDialog { InitialDirectory = textboxInitImgPath.Text.Trim().GetParentDirOfFile(), IsFolderPicker = false };
 
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
-                MainUi.HandleDroppedFiles(new string[] { dialog.FileName });
+                Program.MainForm.TextboxInitImgPath.Text = dialog.FileName;
 
-            UpdateInitImgUi();
-        }
-
-        private void btnInitImgClear_Click(object sender, EventArgs e)
-        {
-            textboxInitImgPath.Text = "";
             UpdateInitImgUi();
         }
 
         public void UpdateInitImgUi ()
         {
-            panelInitImgStrength.Visible = File.Exists(textboxInitImgPath.Text.Trim());
+            bool fileExists = File.Exists(textboxInitImgPath.Text.Trim());
+            panelInitImgStrength.Visible = fileExists;
+            btnInitImgBrowse.Text = fileExists ? "Clear" : "Browse";
         }
 
         private void textboxInitImgPath_TextChanged(object sender, EventArgs e)
         {
             UpdateInitImgUi();
+        }
+
+        private void btnDebug_Click(object sender, EventArgs e)
+        {
+            Process.Start("explorer", Paths.GetLogPath().Wrap());
         }
     }
 }

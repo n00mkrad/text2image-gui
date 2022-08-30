@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace StableDiffusionGui.Installation
 {
@@ -59,12 +60,33 @@ namespace StableDiffusionGui.Installation
                 while (!p.HasExited)
                     await Task.Delay(100);
 
+                Patch();
+
                 Logger.Log("Finished.");
             }
             catch(Exception ex)
             {
                 Logger.Log($"Install error: {ex.Message}\n{ex.StackTrace}");
             }   
+        }
+
+        public static void Patch ()
+        {
+            try
+            {
+                string modulesPyPath = Path.Combine(Paths.GetDataPath(), "repo", "ldm", "modules", "encoders", "modules.py");
+
+                string patchedText = File.ReadAllText(modulesPyPath).Replace("local_files_only=True", "local_files_only=False");
+                File.WriteAllText(modulesPyPath, patchedText);
+
+                Logger.Log("Successfully patched modules.py.");
+            }
+            catch(Exception ex)
+            {
+                Logger.Log($"Failed to patch modules.py: {ex.Message}");
+                Logger.Log(ex.StackTrace, true);
+            }
+
         }
 
         private static void Clone (string url, string dir, string commit = "5e5c021b54afff73209f14deb8a09dde0205dcad")
