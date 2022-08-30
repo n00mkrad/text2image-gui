@@ -55,6 +55,13 @@ namespace StableDiffusionGui.Forms
                 if (text.Contains("model"))
                     checkedListBoxStatus.SetItemChecked(i, InstallationStatus.HasSdModel());
             }
+
+            if (checkedListBoxStatus.CheckedItems.Count == checkedListBoxStatus.Items.Count) // all checked
+                btnInstall.Text = "Re-Install";
+            else
+                btnInstall.Text = "Install";
+
+            btnUninstall.Enabled = checkedListBoxStatus.CheckedItems.Count > 1;
         }
 
         private async void btnUninstall_Click(object sender, EventArgs e)
