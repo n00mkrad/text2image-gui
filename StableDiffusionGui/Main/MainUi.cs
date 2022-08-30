@@ -61,14 +61,22 @@ namespace StableDiffusionGui.Main
             if (customScalesText.MatchesWildcard("* > * : *"))
             {
                 var splitMinMax = customScalesText.Trim().Split('>');
-                float min = splitMinMax[0].GetFloat();
-                float max = splitMinMax[1].Trim().GetFloat();
+                float valFrom = splitMinMax[0].GetFloat();
+                float valTo = splitMinMax[1].Trim().GetFloat();
                 float step = customScalesText.Split(':').Last().GetFloat();
 
                 List<float> incrementScales = new List<float>();
 
-                for (float f = min; f < (max + 0.01f); f += step)
-                    incrementScales.Add(f);
+                if (valFrom < valTo)
+                {
+                    for (float f = valFrom; f < (valTo + 0.01f); f += step)
+                        incrementScales.Add(1f - f);
+                }
+                else
+                {
+                    for (float f = valFrom; f >= (valTo - 0.01f); f -= step)
+                        incrementScales.Add(1f - f);
+                }
 
                 if (incrementScales.Count > 0)
                     scales = incrementScales; // Replace list, don't use the regular scale slider at all in this mode
@@ -88,14 +96,22 @@ namespace StableDiffusionGui.Main
             if (customStrengthsText.MatchesWildcard("* > * : *"))
             {
                 var splitMinMax = customStrengthsText.Trim().Split(':')[0].Split('>');
-                float min = splitMinMax[0].GetFloat();
-                float max = splitMinMax[1].Trim().GetFloat();
+                float valFrom = splitMinMax[0].GetFloat();
+                float valTo = splitMinMax[1].Trim().GetFloat();
                 float step = customStrengthsText.Split(':').Last().GetFloat();
 
                 List<float> incrementStrengths = new List<float>();
 
-                for (float f = min; f < (max + 0.01f); f += step)
-                    incrementStrengths.Add(1f - f);
+                if(valFrom < valTo)
+                {
+                    for (float f = valFrom; f < (valTo + 0.01f); f += step)
+                        incrementStrengths.Add(1f - f);
+                }
+                else
+                {
+                    for (float f = valFrom; f >= (valTo - 0.01f); f -= step)
+                        incrementStrengths.Add(1f - f);
+                }
 
                 if (incrementStrengths.Count > 0)
                     strengths = incrementStrengths; // Replace list, don't use the regular scale slider at all in this mode

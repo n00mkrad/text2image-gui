@@ -103,7 +103,7 @@ namespace StableDiffusionGui.Main
                     Logger.Log($"Using fine-tuned model: {Path.GetFileName(embedding)}");
             }
 
-            string strengths = File.Exists(initImg) ? $" and {initStrengths.Length} strengths" : "";
+            string strengths = File.Exists(initImg) ? $" and {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
             Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} with {iterations} iteration{(iterations != 1 ? "s" : "")} each and {scales.Length} scale{(scales.Length != 1 ? "s" : "")}{strengths} each = {TextToImage.CurrentTask.TargetImgCount} images total.");
 
             Process dream = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
