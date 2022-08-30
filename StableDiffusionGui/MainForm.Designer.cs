@@ -82,6 +82,12 @@
             this.panel12 = new System.Windows.Forms.Panel();
             this.panel11 = new System.Windows.Forms.Panel();
             this.panel10 = new System.Windows.Forms.Panel();
+            this.panelSampler = new System.Windows.Forms.Panel();
+            this.panelRes = new System.Windows.Forms.Panel();
+            this.panelSeed = new System.Windows.Forms.Panel();
+            this.panelScale = new System.Windows.Forms.Panel();
+            this.panelSteps = new System.Windows.Forms.Panel();
+            this.panelIterations = new System.Windows.Forms.Panel();
             this.panelInitImgStrength = new System.Windows.Forms.Panel();
             this.label11 = new System.Windows.Forms.Label();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
@@ -92,12 +98,6 @@
             this.btnInitImgBrowse = new HTAlt.WinForms.HTButton();
             this.textboxInitImgPath = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
-            this.panelSampler = new System.Windows.Forms.Panel();
-            this.panelRes = new System.Windows.Forms.Panel();
-            this.panelSeed = new System.Windows.Forms.Panel();
-            this.panelScale = new System.Windows.Forms.Panel();
-            this.panelSteps = new System.Windows.Forms.Panel();
-            this.panelIterations = new System.Windows.Forms.Panel();
             this.panelPrompt = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
             this.tableLayoutPanel6.SuspendLayout();
@@ -107,15 +107,15 @@
             this.tableLayoutPanel3.SuspendLayout();
             this.menuStripOutputImg.SuspendLayout();
             this.panel1.SuspendLayout();
-            this.panelInitImgStrength.SuspendLayout();
-            this.tableLayoutPanel4.SuspendLayout();
-            this.panelInitImg.SuspendLayout();
             this.panelSampler.SuspendLayout();
             this.panelRes.SuspendLayout();
             this.panelSeed.SuspendLayout();
             this.panelScale.SuspendLayout();
             this.panelSteps.SuspendLayout();
             this.panelIterations.SuspendLayout();
+            this.panelInitImgStrength.SuspendLayout();
+            this.tableLayoutPanel4.SuspendLayout();
+            this.panelInitImg.SuspendLayout();
             this.panelPrompt.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -207,6 +207,7 @@
             this.textboxPrompt.Name = "textboxPrompt";
             this.textboxPrompt.Size = new System.Drawing.Size(400, 20);
             this.textboxPrompt.TabIndex = 0;
+            this.toolTip.SetToolTip(this.textboxPrompt, "Text prompt. The AI will try to generate an image matching this description.");
             // 
             // label1
             // 
@@ -238,6 +239,8 @@
             this.upDownIterations.Name = "upDownIterations";
             this.upDownIterations.Size = new System.Drawing.Size(100, 20);
             this.upDownIterations.TabIndex = 2;
+            this.toolTip.SetToolTip(this.upDownIterations, "Amount of images to create for the entered promt.\r\nThe seed will be incremented b" +
+        "y 1 for each image after the first.");
             this.upDownIterations.Value = new decimal(new int[] {
             4,
             0,
@@ -281,6 +284,8 @@
             this.sliderSteps.TabIndex = 4;
             this.sliderSteps.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
             this.sliderSteps.ThumbSize = new System.Drawing.Size(14, 14);
+            this.toolTip.SetToolTip(this.sliderSteps, "Higher can create more detail and sometimes higher quality images, but more steps" +
+        " take more time.");
             this.sliderSteps.Value = 20;
             this.sliderSteps.Scroll += new System.Windows.Forms.ScrollEventHandler(this.sliderSteps_Scroll);
             // 
@@ -357,6 +362,8 @@
             this.sliderScale.TabIndex = 4;
             this.sliderScale.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
             this.sliderScale.ThumbSize = new System.Drawing.Size(14, 14);
+            this.toolTip.SetToolTip(this.sliderScale, "Higher tries to match your prompt better, but can get chaotic. 7-12 is a safe ran" +
+        "ger for most things.");
             this.sliderScale.Value = 20;
             this.sliderScale.Scroll += new System.Windows.Forms.ScrollEventHandler(this.sliderScale_Scroll);
             // 
@@ -403,6 +410,8 @@
             this.upDownSeed.Name = "upDownSeed";
             this.upDownSeed.Size = new System.Drawing.Size(100, 20);
             this.upDownSeed.TabIndex = 4;
+            this.toolTip.SetToolTip(this.upDownSeed, "Set this to a specific value to reproduce the same image.\r\nImportant: Resolution " +
+        "and sampler need to be identical as well.");
             this.upDownSeed.Value = new decimal(new int[] {
             1,
             0,
@@ -592,6 +601,7 @@
             this.textboxExtraScales.Name = "textboxExtraScales";
             this.textboxExtraScales.Size = new System.Drawing.Size(100, 20);
             this.textboxExtraScales.TabIndex = 3;
+            this.toolTip.SetToolTip(this.textboxExtraScales, resources.GetString("textboxExtraScales.ToolTip"));
             // 
             // menuStripOutputImg
             // 
@@ -762,6 +772,7 @@
             this.discordBtn.Size = new System.Drawing.Size(40, 40);
             this.discordBtn.TabIndex = 74;
             this.discordBtn.TabStop = false;
+            this.toolTip.SetToolTip(this.discordBtn, "Chat on Discord");
             this.discordBtn.UseVisualStyleBackColor = false;
             this.discordBtn.Click += new System.EventHandler(this.discordBtn_Click);
             // 
@@ -778,6 +789,7 @@
             this.patreonBtn.Size = new System.Drawing.Size(40, 40);
             this.patreonBtn.TabIndex = 73;
             this.patreonBtn.TabStop = false;
+            this.toolTip.SetToolTip(this.patreonBtn, "Support me on Patreon");
             this.patreonBtn.UseVisualStyleBackColor = false;
             this.patreonBtn.Click += new System.EventHandler(this.patreonBtn_Click);
             // 
@@ -794,6 +806,7 @@
             this.paypalBtn.Size = new System.Drawing.Size(40, 40);
             this.paypalBtn.TabIndex = 72;
             this.paypalBtn.TabStop = false;
+            this.toolTip.SetToolTip(this.paypalBtn, "Donate one-time via PayPal");
             this.paypalBtn.UseVisualStyleBackColor = false;
             this.paypalBtn.Click += new System.EventHandler(this.paypalBtn_Click);
             // 
@@ -829,6 +842,7 @@
             this.comboxSampler.Name = "comboxSampler";
             this.comboxSampler.Size = new System.Drawing.Size(100, 21);
             this.comboxSampler.TabIndex = 105;
+            this.toolTip.SetToolTip(this.comboxSampler, "Changes how the image is sampled.\r\nk_euler_a works very well at low step counts.");
             // 
             // panel1
             // 
@@ -872,156 +886,6 @@
             this.panel10.Name = "panel10";
             this.panel10.Size = new System.Drawing.Size(633, 35);
             this.panel10.TabIndex = 9;
-            // 
-            // panelInitImgStrength
-            // 
-            this.panelInitImgStrength.Controls.Add(this.label11);
-            this.panelInitImgStrength.Controls.Add(this.tableLayoutPanel4);
-            this.panelInitImgStrength.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelInitImgStrength.Location = new System.Drawing.Point(0, 70);
-            this.panelInitImgStrength.Name = "panelInitImgStrength";
-            this.panelInitImgStrength.Size = new System.Drawing.Size(633, 35);
-            this.panelInitImgStrength.TabIndex = 8;
-            this.panelInitImgStrength.Visible = false;
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.ForeColor = System.Drawing.Color.White;
-            this.label11.Location = new System.Drawing.Point(5, 10);
-            this.label11.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(149, 13);
-            this.label11.TabIndex = 90;
-            this.label11.Text = "Init Image Strength (Influence)";
-            // 
-            // tableLayoutPanel4
-            // 
-            this.tableLayoutPanel4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel4.ColumnCount = 2;
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 45F));
-            this.tableLayoutPanel4.Controls.Add(this.sliderInitStrength, 0, 0);
-            this.tableLayoutPanel4.Controls.Add(this.labelInitStrength, 1, 0);
-            this.tableLayoutPanel4.Location = new System.Drawing.Point(233, 6);
-            this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(6);
-            this.tableLayoutPanel4.Name = "tableLayoutPanel4";
-            this.tableLayoutPanel4.RowCount = 1;
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 21F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(400, 21);
-            this.tableLayoutPanel4.TabIndex = 89;
-            // 
-            // sliderInitStrength
-            // 
-            this.sliderInitStrength.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.sliderInitStrength.BorderRoundRectSize = new System.Drawing.Size(12, 12);
-            this.sliderInitStrength.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.sliderInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
-            this.sliderInitStrength.ForeColor = System.Drawing.Color.Black;
-            this.sliderInitStrength.LargeChange = ((uint)(2u));
-            this.sliderInitStrength.Location = new System.Drawing.Point(0, 0);
-            this.sliderInitStrength.Margin = new System.Windows.Forms.Padding(0);
-            this.sliderInitStrength.Maximum = 40;
-            this.sliderInitStrength.Minimum = 1;
-            this.sliderInitStrength.Name = "sliderInitStrength";
-            this.sliderInitStrength.OverlayColor = System.Drawing.Color.White;
-            this.sliderInitStrength.Size = new System.Drawing.Size(355, 21);
-            this.sliderInitStrength.SmallChange = ((uint)(1u));
-            this.sliderInitStrength.TabIndex = 4;
-            this.sliderInitStrength.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
-            this.sliderInitStrength.ThumbSize = new System.Drawing.Size(14, 14);
-            this.sliderInitStrength.Value = 1;
-            this.sliderInitStrength.Scroll += new System.Windows.Forms.ScrollEventHandler(this.sliderInitStrength_Scroll);
-            // 
-            // labelInitStrength
-            // 
-            this.labelInitStrength.AutoSize = true;
-            this.labelInitStrength.Dock = System.Windows.Forms.DockStyle.Right;
-            this.labelInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelInitStrength.ForeColor = System.Drawing.Color.Silver;
-            this.labelInitStrength.Location = new System.Drawing.Point(362, 0);
-            this.labelInitStrength.Name = "labelInitStrength";
-            this.labelInitStrength.Size = new System.Drawing.Size(35, 21);
-            this.labelInitStrength.TabIndex = 5;
-            this.labelInitStrength.Text = "1000";
-            this.labelInitStrength.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // panelInitImg
-            // 
-            this.panelInitImg.Controls.Add(this.btnInitImgClear);
-            this.panelInitImg.Controls.Add(this.btnInitImgBrowse);
-            this.panelInitImg.Controls.Add(this.textboxInitImgPath);
-            this.panelInitImg.Controls.Add(this.label8);
-            this.panelInitImg.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelInitImg.Location = new System.Drawing.Point(0, 35);
-            this.panelInitImg.Name = "panelInitImg";
-            this.panelInitImg.Size = new System.Drawing.Size(633, 35);
-            this.panelInitImg.TabIndex = 7;
-            // 
-            // btnInitImgClear
-            // 
-            this.btnInitImgClear.AutoColor = true;
-            this.btnInitImgClear.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.btnInitImgClear.ButtonImage = null;
-            this.btnInitImgClear.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
-            this.btnInitImgClear.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(124)))), ((int)(((byte)(124)))), ((int)(((byte)(124)))));
-            this.btnInitImgClear.DrawImage = false;
-            this.btnInitImgClear.ForeColor = System.Drawing.Color.White;
-            this.btnInitImgClear.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(104)))), ((int)(((byte)(104)))), ((int)(((byte)(104)))));
-            this.btnInitImgClear.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
-            this.btnInitImgClear.Location = new System.Drawing.Point(558, 7);
-            this.btnInitImgClear.Name = "btnInitImgClear";
-            this.btnInitImgClear.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(84)))), ((int)(((byte)(84)))), ((int)(((byte)(84)))));
-            this.btnInitImgClear.Size = new System.Drawing.Size(75, 21);
-            this.btnInitImgClear.TabIndex = 87;
-            this.btnInitImgClear.Text = "Clear";
-            this.btnInitImgClear.Click += new System.EventHandler(this.btnInitImgClear_Click);
-            // 
-            // btnInitImgBrowse
-            // 
-            this.btnInitImgBrowse.AutoColor = true;
-            this.btnInitImgBrowse.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.btnInitImgBrowse.ButtonImage = null;
-            this.btnInitImgBrowse.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
-            this.btnInitImgBrowse.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(124)))), ((int)(((byte)(124)))), ((int)(((byte)(124)))));
-            this.btnInitImgBrowse.DrawImage = false;
-            this.btnInitImgBrowse.ForeColor = System.Drawing.Color.White;
-            this.btnInitImgBrowse.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(104)))), ((int)(((byte)(104)))), ((int)(((byte)(104)))));
-            this.btnInitImgBrowse.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
-            this.btnInitImgBrowse.Location = new System.Drawing.Point(477, 7);
-            this.btnInitImgBrowse.Name = "btnInitImgBrowse";
-            this.btnInitImgBrowse.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(84)))), ((int)(((byte)(84)))), ((int)(((byte)(84)))));
-            this.btnInitImgBrowse.Size = new System.Drawing.Size(75, 21);
-            this.btnInitImgBrowse.TabIndex = 86;
-            this.btnInitImgBrowse.Text = "Browse";
-            this.btnInitImgBrowse.Click += new System.EventHandler(this.btnInitImgBrowse_Click);
-            // 
-            // textboxInitImgPath
-            // 
-            this.textboxInitImgPath.AllowDrop = true;
-            this.textboxInitImgPath.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.textboxInitImgPath.ForeColor = System.Drawing.Color.White;
-            this.textboxInitImgPath.Location = new System.Drawing.Point(233, 7);
-            this.textboxInitImgPath.MinimumSize = new System.Drawing.Size(4, 21);
-            this.textboxInitImgPath.Name = "textboxInitImgPath";
-            this.textboxInitImgPath.Size = new System.Drawing.Size(238, 20);
-            this.textboxInitImgPath.TabIndex = 85;
-            this.textboxInitImgPath.TextChanged += new System.EventHandler(this.textboxInitImgPath_TextChanged);
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.ForeColor = System.Drawing.Color.White;
-            this.label8.Location = new System.Drawing.Point(5, 10);
-            this.label8.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(141, 13);
-            this.label8.TabIndex = 84;
-            this.label8.Text = "Initialization Image (Optional)";
             // 
             // panelSampler
             // 
@@ -1086,6 +950,160 @@
             this.panelIterations.Size = new System.Drawing.Size(633, 35);
             this.panelIterations.TabIndex = 1;
             // 
+            // panelInitImgStrength
+            // 
+            this.panelInitImgStrength.Controls.Add(this.label11);
+            this.panelInitImgStrength.Controls.Add(this.tableLayoutPanel4);
+            this.panelInitImgStrength.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelInitImgStrength.Location = new System.Drawing.Point(0, 70);
+            this.panelInitImgStrength.Name = "panelInitImgStrength";
+            this.panelInitImgStrength.Size = new System.Drawing.Size(633, 35);
+            this.panelInitImgStrength.TabIndex = 8;
+            this.panelInitImgStrength.Visible = false;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.ForeColor = System.Drawing.Color.White;
+            this.label11.Location = new System.Drawing.Point(5, 10);
+            this.label11.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(149, 13);
+            this.label11.TabIndex = 90;
+            this.label11.Text = "Init Image Strength (Influence)";
+            // 
+            // tableLayoutPanel4
+            // 
+            this.tableLayoutPanel4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel4.ColumnCount = 2;
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 45F));
+            this.tableLayoutPanel4.Controls.Add(this.sliderInitStrength, 0, 0);
+            this.tableLayoutPanel4.Controls.Add(this.labelInitStrength, 1, 0);
+            this.tableLayoutPanel4.Location = new System.Drawing.Point(233, 6);
+            this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(6);
+            this.tableLayoutPanel4.Name = "tableLayoutPanel4";
+            this.tableLayoutPanel4.RowCount = 1;
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 21F));
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(400, 21);
+            this.tableLayoutPanel4.TabIndex = 89;
+            // 
+            // sliderInitStrength
+            // 
+            this.sliderInitStrength.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            this.sliderInitStrength.BorderRoundRectSize = new System.Drawing.Size(12, 12);
+            this.sliderInitStrength.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sliderInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
+            this.sliderInitStrength.ForeColor = System.Drawing.Color.Black;
+            this.sliderInitStrength.LargeChange = ((uint)(2u));
+            this.sliderInitStrength.Location = new System.Drawing.Point(0, 0);
+            this.sliderInitStrength.Margin = new System.Windows.Forms.Padding(0);
+            this.sliderInitStrength.Maximum = 40;
+            this.sliderInitStrength.Minimum = 1;
+            this.sliderInitStrength.Name = "sliderInitStrength";
+            this.sliderInitStrength.OverlayColor = System.Drawing.Color.White;
+            this.sliderInitStrength.Size = new System.Drawing.Size(355, 21);
+            this.sliderInitStrength.SmallChange = ((uint)(1u));
+            this.sliderInitStrength.TabIndex = 4;
+            this.sliderInitStrength.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
+            this.sliderInitStrength.ThumbSize = new System.Drawing.Size(14, 14);
+            this.toolTip.SetToolTip(this.sliderInitStrength, "Lower value: Result looks more like your text prompt\r\nHigher value: Result looks " +
+        "more like your init image");
+            this.sliderInitStrength.Value = 1;
+            this.sliderInitStrength.Scroll += new System.Windows.Forms.ScrollEventHandler(this.sliderInitStrength_Scroll);
+            // 
+            // labelInitStrength
+            // 
+            this.labelInitStrength.AutoSize = true;
+            this.labelInitStrength.Dock = System.Windows.Forms.DockStyle.Right;
+            this.labelInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelInitStrength.ForeColor = System.Drawing.Color.Silver;
+            this.labelInitStrength.Location = new System.Drawing.Point(362, 0);
+            this.labelInitStrength.Name = "labelInitStrength";
+            this.labelInitStrength.Size = new System.Drawing.Size(35, 21);
+            this.labelInitStrength.TabIndex = 5;
+            this.labelInitStrength.Text = "1000";
+            this.labelInitStrength.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // panelInitImg
+            // 
+            this.panelInitImg.Controls.Add(this.btnInitImgClear);
+            this.panelInitImg.Controls.Add(this.btnInitImgBrowse);
+            this.panelInitImg.Controls.Add(this.textboxInitImgPath);
+            this.panelInitImg.Controls.Add(this.label8);
+            this.panelInitImg.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelInitImg.Location = new System.Drawing.Point(0, 35);
+            this.panelInitImg.Name = "panelInitImg";
+            this.panelInitImg.Size = new System.Drawing.Size(633, 35);
+            this.panelInitImg.TabIndex = 7;
+            // 
+            // btnInitImgClear
+            // 
+            this.btnInitImgClear.AutoColor = true;
+            this.btnInitImgClear.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnInitImgClear.ButtonImage = null;
+            this.btnInitImgClear.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
+            this.btnInitImgClear.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(124)))), ((int)(((byte)(124)))), ((int)(((byte)(124)))));
+            this.btnInitImgClear.DrawImage = false;
+            this.btnInitImgClear.ForeColor = System.Drawing.Color.White;
+            this.btnInitImgClear.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(104)))), ((int)(((byte)(104)))), ((int)(((byte)(104)))));
+            this.btnInitImgClear.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
+            this.btnInitImgClear.Location = new System.Drawing.Point(558, 7);
+            this.btnInitImgClear.Name = "btnInitImgClear";
+            this.btnInitImgClear.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(84)))), ((int)(((byte)(84)))), ((int)(((byte)(84)))));
+            this.btnInitImgClear.Size = new System.Drawing.Size(75, 21);
+            this.btnInitImgClear.TabIndex = 87;
+            this.btnInitImgClear.TabStop = false;
+            this.btnInitImgClear.Text = "Clear";
+            this.btnInitImgClear.Click += new System.EventHandler(this.btnInitImgClear_Click);
+            // 
+            // btnInitImgBrowse
+            // 
+            this.btnInitImgBrowse.AutoColor = true;
+            this.btnInitImgBrowse.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnInitImgBrowse.ButtonImage = null;
+            this.btnInitImgBrowse.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
+            this.btnInitImgBrowse.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(124)))), ((int)(((byte)(124)))), ((int)(((byte)(124)))));
+            this.btnInitImgBrowse.DrawImage = false;
+            this.btnInitImgBrowse.ForeColor = System.Drawing.Color.White;
+            this.btnInitImgBrowse.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(104)))), ((int)(((byte)(104)))), ((int)(((byte)(104)))));
+            this.btnInitImgBrowse.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
+            this.btnInitImgBrowse.Location = new System.Drawing.Point(477, 7);
+            this.btnInitImgBrowse.Name = "btnInitImgBrowse";
+            this.btnInitImgBrowse.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(84)))), ((int)(((byte)(84)))), ((int)(((byte)(84)))));
+            this.btnInitImgBrowse.Size = new System.Drawing.Size(75, 21);
+            this.btnInitImgBrowse.TabIndex = 1;
+            this.btnInitImgBrowse.TabStop = false;
+            this.btnInitImgBrowse.Text = "Browse";
+            this.btnInitImgBrowse.Click += new System.EventHandler(this.btnInitImgBrowse_Click);
+            // 
+            // textboxInitImgPath
+            // 
+            this.textboxInitImgPath.AllowDrop = true;
+            this.textboxInitImgPath.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textboxInitImgPath.ForeColor = System.Drawing.Color.White;
+            this.textboxInitImgPath.Location = new System.Drawing.Point(233, 7);
+            this.textboxInitImgPath.MinimumSize = new System.Drawing.Size(4, 21);
+            this.textboxInitImgPath.Name = "textboxInitImgPath";
+            this.textboxInitImgPath.Size = new System.Drawing.Size(238, 20);
+            this.textboxInitImgPath.TabIndex = 1;
+            this.textboxInitImgPath.TextChanged += new System.EventHandler(this.textboxInitImgPath_TextChanged);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.ForeColor = System.Drawing.Color.White;
+            this.label8.Location = new System.Drawing.Point(5, 10);
+            this.label8.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(141, 13);
+            this.label8.TabIndex = 84;
+            this.label8.Text = "Initialization Image (Optional)";
+            // 
             // panelPrompt
             // 
             this.panelPrompt.Controls.Add(this.label2);
@@ -1144,12 +1162,6 @@
             this.tableLayoutPanel3.PerformLayout();
             this.menuStripOutputImg.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
-            this.panelInitImgStrength.ResumeLayout(false);
-            this.panelInitImgStrength.PerformLayout();
-            this.tableLayoutPanel4.ResumeLayout(false);
-            this.tableLayoutPanel4.PerformLayout();
-            this.panelInitImg.ResumeLayout(false);
-            this.panelInitImg.PerformLayout();
             this.panelSampler.ResumeLayout(false);
             this.panelSampler.PerformLayout();
             this.panelRes.ResumeLayout(false);
@@ -1162,6 +1174,12 @@
             this.panelSteps.PerformLayout();
             this.panelIterations.ResumeLayout(false);
             this.panelIterations.PerformLayout();
+            this.panelInitImgStrength.ResumeLayout(false);
+            this.panelInitImgStrength.PerformLayout();
+            this.tableLayoutPanel4.ResumeLayout(false);
+            this.tableLayoutPanel4.PerformLayout();
+            this.panelInitImg.ResumeLayout(false);
+            this.panelInitImg.PerformLayout();
             this.panelPrompt.ResumeLayout(false);
             this.panelPrompt.PerformLayout();
             this.ResumeLayout(false);

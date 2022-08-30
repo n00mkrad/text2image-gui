@@ -61,6 +61,10 @@ namespace StableDiffusionGui
                 "- The resolution settings is very VRAM-heavy. I do not recommend going above 512x512 unless you have 12+ GB VRAM.\n\n" +
                 "Last but not least, this GUI includes tooltips, so if you're not sure what a button or other control does, hover over it with your cursor and an info message will pop up.\n\nHave fun!", UiUtils.MessageType.Warning, Nmkoder.Forms.MessageForm.FontSize.Big);
             }
+            else
+            {
+                
+            }
             
             if (!InstallationStatus.IsInstalled)
             {
