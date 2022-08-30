@@ -115,7 +115,7 @@ namespace StableDiffusionGui
             {
                 if (Program.Busy)
                 {
-                    // cancel...
+                    TextToImage.Cancel();
                 }
                 else
                 {
@@ -153,6 +153,7 @@ namespace StableDiffusionGui
             Logger.Log($"SetWorking({state})", true);
             SetProgress(-1);
             runBtn.Text = state ? "Cancel" : "Generate!";
+            runBtn.ForeColor = state ? Color.IndianRed : Color.White;
             Control[] controlsToDisable = new Control[] { };
             Control[] controlsToHide = new Control[] { };
             progressCircle.Visible = state;

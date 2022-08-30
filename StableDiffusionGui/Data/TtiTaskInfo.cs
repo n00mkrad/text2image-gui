@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,5 +13,6 @@ namespace StableDiffusionGui.Data
         public int TargetImgCount { get; set; }
         public string OutPath { get; set; } = "";
         public DateTime StartTime { get; set; } = new DateTime();
+        public List<Process> Processes { get; set; } = new List<Process>();
     }
 }

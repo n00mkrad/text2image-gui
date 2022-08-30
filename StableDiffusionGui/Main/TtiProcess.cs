@@ -18,12 +18,7 @@ namespace StableDiffusionGui.Main
         public static void Start(string outPath)
         {
             Program.MainForm.SetWorking(true);
-
-            TextToImage.CurrentTask.StartTime = DateTime.Now;
-            TextToImage.CurrentTask.OutPath = outPath;
-
-            TextToImage.CurrentTask.ImgCount = 0;
-            TextToImage.CurrentTask.TargetImgCount = 0;
+            TextToImage.CurrentTask = new Data.TtiTaskInfo { StartTime = DateTime.Now, OutPath = outPath };
         }
 
         public static void Finish()
@@ -95,6 +90,7 @@ namespace StableDiffusionGui.Main
             Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} with {iterations} iteration{(iterations != 1 ? "s" : "")} each and {scales.Length} scale{(scales.Length != 1 ? "s" : "")} each = {prompts.Length * iterations * scales.Length} images total.");
 
             Process dream = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
+            TextToImage.CurrentTask.Processes.Add(dream);
 
             dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && call \"{Paths.GetDataPath()}\\mc\\Scripts\\activate.bat\" ldo && " +
                 $"python \"{Paths.GetDataPath()}/repo/scripts/dream.py\" -o {outPath.Wrap()} --from_file={promptFilePath.Wrap()}";
@@ -163,6 +159,21 @@ namespace StableDiffusionGui.Main
                 Logger.Log($"Generated {split[0].GetInt()} image in {split[1]} ({TextToImage.CurrentTask.ImgCount}/{TextToImage.CurrentTask.TargetImgCount})" +
                     $"{(TextToImage.CurrentTask.ImgCount > 1 && remainingMs > 1000 ? $" - ETA: {FormatUtils.Time(remainingMs, false)}" : "")}", false, Logger.LastUiLine.Contains("Generated"));
                 ImagePreview.SetImages(TextToImage.CurrentTask.OutPath, true, TextToImage.CurrentTask.ImgCount);
+            }
+        }
+
+        public static void Kill()
+        {
+            foreach(var process in TextToImage.CurrentTask.Processes.Where(x => x != null && !x.HasExited))
+            {
+                try
+                {
+                    OsUtils.KillProcessTree(process.Id);
+                }
+                catch (Exception e)
+                {
+                    Logger.Log($"Failed to kill process tree: {e.Message}", true);
+                }
             }
         }
     }
