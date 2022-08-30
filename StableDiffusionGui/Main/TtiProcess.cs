@@ -49,7 +49,8 @@ namespace StableDiffusionGui.Main
                 for (int i = 0; i < images.Count; i++)
                 {
                     var img = images[i];
-                    string renamedPath = FormatUtils.GetExportFilename(img.FullName, imagesDir, $"-{i + 1}", pattern.Remove("*").Split('.').Last(), _maxPathLength, true, true, true, true);
+                    string number = $"-{(i + 1).ToString().PadLeft(images.Count.ToString().Length, '0')}";
+                    string renamedPath = FormatUtils.GetExportFilename(img.FullName, imagesDir, number, pattern.Remove("*").Split('.').Last(), _maxPathLength, true, true, true, true);
                     img.MoveTo(renamedPath);
                     renamedImgPaths.Add(renamedPath);
                 }

@@ -76,8 +76,9 @@
             this.patreonBtn = new System.Windows.Forms.Button();
             this.paypalBtn = new System.Windows.Forms.Button();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.label7 = new System.Windows.Forms.Label();
             this.comboxSampler = new System.Windows.Forms.ComboBox();
+            this.sliderInitStrength = new HTAlt.WinForms.HTSlider();
+            this.label7 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel12 = new System.Windows.Forms.Panel();
             this.panel11 = new System.Windows.Forms.Panel();
@@ -91,7 +92,6 @@
             this.panelInitImgStrength = new System.Windows.Forms.Panel();
             this.label11 = new System.Windows.Forms.Label();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
-            this.sliderInitStrength = new HTAlt.WinForms.HTSlider();
             this.labelInitStrength = new System.Windows.Forms.Label();
             this.panelInitImg = new System.Windows.Forms.Panel();
             this.btnInitImgClear = new HTAlt.WinForms.HTButton();
@@ -810,18 +810,6 @@
             this.paypalBtn.UseVisualStyleBackColor = false;
             this.paypalBtn.Click += new System.EventHandler(this.paypalBtn_Click);
             // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.ForeColor = System.Drawing.Color.White;
-            this.label7.Location = new System.Drawing.Point(5, 10);
-            this.label7.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(45, 13);
-            this.label7.TabIndex = 104;
-            this.label7.Text = "Sampler";
-            // 
             // comboxSampler
             // 
             this.comboxSampler.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
@@ -843,6 +831,42 @@
             this.comboxSampler.Size = new System.Drawing.Size(100, 21);
             this.comboxSampler.TabIndex = 105;
             this.toolTip.SetToolTip(this.comboxSampler, "Changes how the image is sampled.\r\nk_euler_a works very well at low step counts.");
+            // 
+            // sliderInitStrength
+            // 
+            this.sliderInitStrength.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            this.sliderInitStrength.BorderRoundRectSize = new System.Drawing.Size(12, 12);
+            this.sliderInitStrength.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sliderInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
+            this.sliderInitStrength.ForeColor = System.Drawing.Color.Black;
+            this.sliderInitStrength.LargeChange = ((uint)(2u));
+            this.sliderInitStrength.Location = new System.Drawing.Point(0, 0);
+            this.sliderInitStrength.Margin = new System.Windows.Forms.Padding(0);
+            this.sliderInitStrength.Maximum = 40;
+            this.sliderInitStrength.Minimum = 1;
+            this.sliderInitStrength.Name = "sliderInitStrength";
+            this.sliderInitStrength.OverlayColor = System.Drawing.Color.White;
+            this.sliderInitStrength.Size = new System.Drawing.Size(355, 21);
+            this.sliderInitStrength.SmallChange = ((uint)(1u));
+            this.sliderInitStrength.TabIndex = 4;
+            this.sliderInitStrength.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
+            this.sliderInitStrength.ThumbSize = new System.Drawing.Size(14, 14);
+            this.toolTip.SetToolTip(this.sliderInitStrength, "Lower value: Result looks more like your text prompt\r\nHigher value: Result looks " +
+        "more like your init image");
+            this.sliderInitStrength.Value = 1;
+            this.sliderInitStrength.Scroll += new System.Windows.Forms.ScrollEventHandler(this.sliderInitStrength_Scroll);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.ForeColor = System.Drawing.Color.White;
+            this.label7.Location = new System.Drawing.Point(5, 10);
+            this.label7.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(45, 13);
+            this.label7.TabIndex = 104;
+            this.label7.Text = "Sampler";
             // 
             // panel1
             // 
@@ -991,30 +1015,6 @@
             this.tableLayoutPanel4.Size = new System.Drawing.Size(400, 21);
             this.tableLayoutPanel4.TabIndex = 89;
             // 
-            // sliderInitStrength
-            // 
-            this.sliderInitStrength.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.sliderInitStrength.BorderRoundRectSize = new System.Drawing.Size(12, 12);
-            this.sliderInitStrength.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.sliderInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
-            this.sliderInitStrength.ForeColor = System.Drawing.Color.Black;
-            this.sliderInitStrength.LargeChange = ((uint)(2u));
-            this.sliderInitStrength.Location = new System.Drawing.Point(0, 0);
-            this.sliderInitStrength.Margin = new System.Windows.Forms.Padding(0);
-            this.sliderInitStrength.Maximum = 40;
-            this.sliderInitStrength.Minimum = 1;
-            this.sliderInitStrength.Name = "sliderInitStrength";
-            this.sliderInitStrength.OverlayColor = System.Drawing.Color.White;
-            this.sliderInitStrength.Size = new System.Drawing.Size(355, 21);
-            this.sliderInitStrength.SmallChange = ((uint)(1u));
-            this.sliderInitStrength.TabIndex = 4;
-            this.sliderInitStrength.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
-            this.sliderInitStrength.ThumbSize = new System.Drawing.Size(14, 14);
-            this.toolTip.SetToolTip(this.sliderInitStrength, "Lower value: Result looks more like your text prompt\r\nHigher value: Result looks " +
-        "more like your init image");
-            this.sliderInitStrength.Value = 1;
-            this.sliderInitStrength.Scroll += new System.Windows.Forms.ScrollEventHandler(this.sliderInitStrength_Scroll);
-            // 
             // labelInitStrength
             // 
             this.labelInitStrength.AutoSize = true;
@@ -1090,6 +1090,7 @@
             this.textboxInitImgPath.Name = "textboxInitImgPath";
             this.textboxInitImgPath.Size = new System.Drawing.Size(238, 20);
             this.textboxInitImgPath.TabIndex = 1;
+            this.toolTip.SetToolTip(this.textboxInitImgPath, "Use an image as a generation guide in addition to your text prompt.");
             this.textboxInitImgPath.TextChanged += new System.EventHandler(this.textboxInitImgPath_TextChanged);
             // 
             // label8
