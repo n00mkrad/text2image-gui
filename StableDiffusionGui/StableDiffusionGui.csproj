@@ -98,10 +98,12 @@
     <Reference Include="XmpCore, Version=6.1.10.1, Culture=neutral, PublicKeyToken=961f4f366277b80e, processorArchitecture=MSIL">
       <HintPath>packages\XmpCore.6.1.10.1\lib\net35\XmpCore.dll</HintPath>
     </Reference>
-	<Reference Include="System.Management.Automation" />
+    <Reference Include="System.Management.Automation" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\ImageMetadata.cs" />
+    <Compile Include="Data\TtiSettings.cs" />
+    <Compile Include="Data\TtiTaskInfo.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Extensions\UiControlExtensions.cs" />
     <Compile Include="Forms\InstallerForm.cs">
@@ -131,6 +133,7 @@
     <Compile Include="Main\Logger.cs" />
     <Compile Include="Main\MainUi.cs" />
     <Compile Include="Main\TextToImage.cs" />
+    <Compile Include="Main\TtiProcess.cs" />
     <Compile Include="MiscUtils\FormatUtils.cs" />
     <Compile Include="Os\OsUtils.cs" />
     <Compile Include="Program.cs" />

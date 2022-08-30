@@ -39,7 +39,10 @@ namespace StableDiffusionGui.Ui
         public static void Show ()
         {
             if (_currIndex < 0 || _currIndex >= _currentImages.Length)
+            {
+                Clear();
                 return;
+            }
 
             Program.MainForm.ImgBoxOutput.Text = "";
             Program.MainForm.ImgBoxOutput.Image = IoUtils.GetImage(_currentImages[_currIndex]);
@@ -49,6 +52,13 @@ namespace StableDiffusionGui.Ui
 
             Program.MainForm.OutputImgLabel.Text = $"Showing Image {_currIndex+1}/{_currentImages.Length} - " +
                 $"Seed {meta.Seed} - Scale {meta.Scale} - {meta.GeneratedResolution.Width}x{meta.GeneratedResolution.Height} - Sampler {meta.Sampler}";
+        }
+
+        public static void Clear ()
+        {
+            Program.MainForm.ImgBoxOutput.Text = "";
+            Program.MainForm.ImgBoxOutput.Image = null;
+            Program.MainForm.OutputImgLabel.Text = "No images to show.";
         }
 
         public static void Move(bool previous = false)
