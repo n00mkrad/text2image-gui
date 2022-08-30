@@ -65,9 +65,10 @@ namespace StableDiffusionGui.Main
             }
         }
 
-        public static async Task RunStableDiffusion(string[] prompts, string initImg, string embedding, float initStrength, int iterations, int steps, float[] scales, long seed, string sampler, Size res, string outPath)
+        public static async Task RunStableDiffusion(string[] prompts, string initImg, string embedding, float[] initStrengths, int iterations, int steps, float[] scales, long seed, string sampler, Size res, string outPath)
         {
             Start(outPath);
+            long startSeed = seed;
 
             string promptFilePath = Path.Combine(Paths.GetSessionDataPath(), "prompts.txt");
             string promptFileContent = "";
@@ -78,16 +79,21 @@ namespace StableDiffusionGui.Main
                 {
                     foreach (float scale in scales)
                     {
-                        string init = File.Exists(initImg) ? $"--init_img {initImg.Wrap()} --strength {initStrength.ToStringDot("0.0000")}" : "";
-                        promptFileContent += $"{prompt} {init} -n {1} -s {steps} -C {scale.ToStringDot()} -A {sampler} -W {res.Width} -H {res.Height} -S {seed + i}\n";
-                        TextToImage.CurrentTask.TargetImgCount++;
+                        foreach (float strength in initStrengths)
+                        {
+                            string init = File.Exists(initImg) ? $"--init_img {initImg.Wrap()} --strength {strength.ToStringDot("0.0000")}" : "";
+                            promptFileContent += $"{prompt} {init} -n {1} -s {steps} -C {scale.ToStringDot()} -A {sampler} -W {res.Width} -H {res.Height} -S {seed}\n";
+                            TextToImage.CurrentTask.TargetImgCount++;
+                        }
                     }
+
+                    seed++;
                 }
             }
 
             File.WriteAllText(promptFilePath, promptFileContent);
 
-            Logger.Log($"Preparing to run Stable Diffusion - {iterations} Iterations, {steps} Steps, Scales {(scales.Length < 4 ? string.Join(", ", scales.Select(x => x.ToStringDot())) : $"{scales.First()}->{scales.Last()}")}, {res.Width}x{res.Height}, Starting Seed: {seed}");
+            Logger.Log($"Preparing to run Stable Diffusion - {iterations} Iterations, {steps} Steps, Scales {(scales.Length < 4 ? string.Join(", ", scales.Select(x => x.ToStringDot())) : $"{scales.First()}->{scales.Last()}")}, {res.Width}x{res.Height}, Starting Seed: {startSeed}");
 
             if (!string.IsNullOrWhiteSpace(embedding))
             {
@@ -97,7 +103,8 @@ namespace StableDiffusionGui.Main
                     Logger.Log($"Using fine-tuned model: {Path.GetFileName(embedding)}");
             }
 
-            Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} with {iterations} iteration{(iterations != 1 ? "s" : "")} each and {scales.Length} scale{(scales.Length != 1 ? "s" : "")} each = {prompts.Length * iterations * scales.Length} images total.");
+            string strengths = File.Exists(initImg) ? $" and {initStrengths.Length} strengths" : "";
+            Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} with {iterations} iteration{(iterations != 1 ? "s" : "")} each and {scales.Length} scale{(scales.Length != 1 ? "s" : "")}{strengths} each = {TextToImage.CurrentTask.TargetImgCount} images total.");
 
             Process dream = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
             TextToImage.CurrentTask.Processes.Add(dream);
@@ -132,12 +139,13 @@ namespace StableDiffusionGui.Main
             if (Program.Busy)
                 return;
 
-            Process dream = OsUtils.NewProcess(false);
+            string batPath = Path.Combine(Paths.GetSessionDataPath(), "dream.bat");
 
-            dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && call \"{Paths.GetDataPath()}\\mc\\Scripts\\activate.bat\" ldo && " +
+            string batText = $"@echo off\n title Dream.py CLI && cd /D {Paths.GetDataPath().Wrap()} && call \"{Paths.GetDataPath()}\\mc\\Scripts\\activate.bat\" ldo && " +
                 $"python \"{Paths.GetDataPath()}/repo/scripts/dream.py\" -o {outPath.Wrap()} {(Config.GetBool("checkboxFullPrecision") ? "--full_precision" : "")}";
 
-            dream.Start();
+            File.WriteAllText(batPath, batText);
+            Process.Start(batPath);
         }
 
         static void LogOutput(string line, bool stdErr = false)

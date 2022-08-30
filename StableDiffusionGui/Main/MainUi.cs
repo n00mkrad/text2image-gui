@@ -36,7 +36,7 @@ namespace StableDiffusionGui.Main
 
             if (paths.Length == 1)
             {
-                if (validInitImgExtensions.Contains(paths[0])) // Ask to use as init img
+                if (validInitImgExtensions.Contains(Path.GetExtension(paths[0]))) // Ask to use as init img
                 {
                     DialogResult dialogResult = UiUtils.ShowMessageBox($"Do you want to load this image as an initialization image?", $"Dropped {Path.GetFileName(paths[0]).Trunc(40)}", MessageBoxButtons.YesNo);
 
@@ -58,12 +58,12 @@ namespace StableDiffusionGui.Main
         {
             List<float> scales = new List<float> { CurrentScale };
 
-            if (customScalesText.MatchesWildcard("* > * *"))
+            if (customScalesText.MatchesWildcard("* > * : *"))
             {
                 var splitMinMax = customScalesText.Trim().Split('>');
                 float min = splitMinMax[0].GetFloat();
-                float max = splitMinMax[1].Trim().Split(' ').First().GetFloat();
-                float step = splitMinMax.Last().Split(' ').Last().GetFloat();
+                float max = splitMinMax[1].Trim().GetFloat();
+                float step = customScalesText.Split(':').Last().GetFloat();
 
                 List<float> incrementScales = new List<float>();
 
@@ -79,6 +79,33 @@ namespace StableDiffusionGui.Main
             }
 
             return scales;
+        }
+
+        public static List<float> GetInitStrengths(string customStrengthsText)
+        {
+            List<float> strengths = new List<float> { 1f - CurrentInitStrength };
+
+            if (customStrengthsText.MatchesWildcard("* > * : *"))
+            {
+                var splitMinMax = customStrengthsText.Trim().Split(':')[0].Split('>');
+                float min = splitMinMax[0].GetFloat();
+                float max = splitMinMax[1].Trim().GetFloat();
+                float step = customStrengthsText.Split(':').Last().GetFloat();
+
+                List<float> incrementStrengths = new List<float>();
+
+                for (float f = min; f < (max + 0.01f); f += step)
+                    incrementStrengths.Add(1f - f);
+
+                if (incrementStrengths.Count > 0)
+                    strengths = incrementStrengths; // Replace list, don't use the regular scale slider at all in this mode
+            }
+            else
+            {
+                strengths.AddRange(customStrengthsText.Replace(" ", "").Split(",").Select(x => x.GetFloat()).Where(x => x > 0.05f));
+            }
+
+            return strengths;
         }
     }
 }

@@ -127,18 +127,6 @@ namespace StableDiffusionGui
 
         private void runBtn_Click(object sender, EventArgs e)
         {
-            Logger.ClearLogBox();
-            TextToImage.Canceled = false;
-
-            if (!IsInstalledWithWarning())
-                return;
-
-            if (string.IsNullOrWhiteSpace(textboxPrompt.Text))
-                TextToImage.Cancel("No prompt was entered.");
-
-            if (TextToImage.Canceled)
-                return;
-
             try
             {
                 if (Program.Busy)
@@ -147,6 +135,18 @@ namespace StableDiffusionGui
                 }
                 else
                 {
+                    TextToImage.Canceled = false;
+
+                    if (!IsInstalledWithWarning())
+                        return;
+
+                    if (string.IsNullOrWhiteSpace(textboxPrompt.Text))
+                        TextToImage.Cancel("No prompt was entered.");
+
+                    if (TextToImage.Canceled)
+                        return;
+
+                    Logger.ClearLogBox();
                     CleanPrompt();
 
                     TtiSettings settings = new TtiSettings
@@ -163,7 +163,7 @@ namespace StableDiffusionGui
                             { "seed", upDownSeed.Value < 0 ? (new Random().Next(0, Int32.MaxValue)).ToString() : ((long)upDownSeed.Value).ToString() },
                             { "sampler", comboxSampler.Text.Trim() },
                             { "initImg", textboxInitImgPath.Text.Trim() },
-                            { "initStrength", (1f - MainUi.CurrentInitStrength).ToStringDot("0.0000") },
+                            { "initStrengths", String.Join(",", MainUi.GetInitStrengths(textboxExtraInitStrengths.Text).Select(x => x.ToStringDot("0.0000"))) },
                             { "embedding", MainUi.CurrentEmbeddingPath },
                         },
                     };
