@@ -245,11 +245,11 @@ namespace StableDiffusionGui.IO
                 return WriteDefault(keyStr, "");
             }
 
+            if (key == Key.sliderInitStrength) return WriteDefault(key, "10");
             if (key == Key.sliderResW) return WriteDefault(key, "5");
             if (key == Key.sliderResH) return WriteDefault(key, "5");
             if (key == Key.sliderSteps) return WriteDefault(key, "7");
             if (key == Key.sliderScale) return WriteDefault(key, "16");
-            if (key == Key.upDownIterations) return WriteDefault(key, "4");
             if (key == Key.upDownIterations) return WriteDefault(key, "4");
 
             return WriteDefault(key, "");
@@ -270,6 +270,7 @@ namespace StableDiffusionGui.IO
         public enum Key
         {
             comboxSampler,
+            sliderInitStrength,
             sliderResW,
             sliderResH,
             sliderSteps,

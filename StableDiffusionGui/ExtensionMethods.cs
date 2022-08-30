@@ -116,9 +116,16 @@ namespace StableDiffusionGui
             return s;
         }
 
-        public static string GetParentDir(this string path)
+        public static string GetParentDirOfFile(this string path)
         {
-            return Directory.GetParent(path).FullName;
+            try
+            {
+                return new FileInfo(path).Directory.FullName;
+            }
+            catch (Exception ex)
+            {
+                return path;
+            }
         }
 
         public static int RoundToInt(this float f)

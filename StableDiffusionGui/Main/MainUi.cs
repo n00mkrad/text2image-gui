@@ -1,9 +1,12 @@
 ﻿using StableDiffusionGui.Data;
 using StableDiffusionGui.Io;
+using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace StableDiffusionGui.Main
 {
@@ -15,6 +18,8 @@ namespace StableDiffusionGui.Main
         public static int CurrentResW;
         public static int CurrentResH;
 
+        public static float CurrentInitStrength;
+
         public static void HandleDroppedFiles(string[] paths)
         {
             foreach(string path in paths)
@@ -24,8 +29,16 @@ namespace StableDiffusionGui.Main
                     ImageMetadata meta = IoUtils.GetImageMetadata(path);
 
                     if(!string.IsNullOrWhiteSpace(meta.Prompt))
-                        Logger.Log(meta.ParsedText);
+                        Logger.Log($"Found metadata in {Path.GetFileName(path)}:\n{meta.ParsedText}");
                 }
+            }
+
+            if(paths.Length == 1)
+            {
+                DialogResult dialogResult = UiUtils.ShowMessageBox($"Do you want to load this image as an initialization image?", "Load as init image?", MessageBoxButtons.YesNo);
+
+                if (dialogResult == DialogResult.Yes)
+                    Program.MainForm.TextboxInitImgPath.Text = paths[0];
             }
         }
 

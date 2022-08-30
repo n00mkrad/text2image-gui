@@ -451,7 +451,7 @@ namespace StableDiffusionGui.Io
             try
             {
                 string ext = Path.GetExtension(path);
-                return Path.Combine(path.GetParentDir(), $"{Path.GetFileNameWithoutExtension(path)}{suffix}{ext}");
+                return Path.Combine(path.GetParentDirOfFile(), $"{Path.GetFileNameWithoutExtension(path)}{suffix}{ext}");
             }
             catch
             {
@@ -712,14 +712,19 @@ namespace StableDiffusionGui.Io
                 IEnumerable<MetadataExtractor.Directory> directories = MetadataExtractor.ImageMetadataReader.ReadMetadata(path);
 
                 MetadataExtractor.Directory pngTextDir = directories.Where(x => x.Name.ToLower() == "png-text").FirstOrDefault();
-                MetadataExtractor.Tag dreamTag = pngTextDir.Tags.Where(x => x.Description.Contains(keword)).FirstOrDefault();
 
-                return new ImageMetadata(path, dreamTag.Description.Split(keword).Last());
+                if (pngTextDir != null)
+                {
+                    MetadataExtractor.Tag dreamTag = pngTextDir.Tags.Where(x => x.Description.Contains(keword)).FirstOrDefault();
+                    return new ImageMetadata(path, dreamTag.Description.Split(keword).Last());
+                }
             }
             catch(Exception ex)
             {
-                return new ImageMetadata();
+                
             }
+
+            return new ImageMetadata();
         }
     }
 }

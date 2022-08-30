@@ -19,8 +19,8 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Text.RegularExpressions;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using StableDiffusionGui.Installation;
-using System.Drawing.Printing;
 using StableDiffusionGui.Data;
+using TextBox = System.Windows.Forms.TextBox;
 
 namespace StableDiffusionGui
 {
@@ -29,6 +29,7 @@ namespace StableDiffusionGui
         public Cyotek.Windows.Forms.ImageBox ImgBoxOutput { get { return imgBoxOutput; } }
         public Label OutputImgLabel { get { return outputImgLabel; } }
         public System.Windows.Forms.Button BtnImgShare { get { return btnImgShare; } }
+        public TextBox TextboxInitImgPath { get { return textboxInitImgPath; } }
 
         public bool IsInFocus() { return (ActiveForm == this); }
 
@@ -68,6 +69,7 @@ namespace StableDiffusionGui
             ConfigParser.LoadGuiElement(sliderResW); sliderResW_Scroll(null, null);
             ConfigParser.LoadGuiElement(sliderResH); sliderResH_Scroll(null, null);
             ConfigParser.LoadComboxIndex(comboxSampler);
+            ConfigParser.LoadGuiElement(sliderInitStrength); sliderInitStrength_Scroll(null, null);
         }
 
         private void SaveUiElements()
@@ -78,6 +80,7 @@ namespace StableDiffusionGui
             ConfigParser.SaveGuiElement(sliderResW);
             ConfigParser.SaveGuiElement(sliderResH);
             ConfigParser.SaveComboxIndex(comboxSampler);
+            ConfigParser.SaveGuiElement(sliderInitStrength);
         }
 
         private void installerBtn_Click(object sender, EventArgs e)
@@ -121,8 +124,6 @@ namespace StableDiffusionGui
                 {
                     CleanPrompt();
 
-                    
-
                     TtiSettings settings = new TtiSettings
                     {
                         Implementation = Implementation.StableDiffusion,
@@ -136,6 +137,8 @@ namespace StableDiffusionGui
                             { "res", $"{MainUi.CurrentResW}x{MainUi.CurrentResH}" },
                             { "seed", upDownSeed.Value < 0 ? (new Random().Next(0, Int32.MaxValue)).ToString() : ((long)upDownSeed.Value).ToString() },
                             { "sampler", comboxSampler.Text.Trim() },
+                            { "initImg", textboxInitImgPath.Text.Trim() },
+                            { "initStrength", (1f - MainUi.CurrentInitStrength).ToStringDot("0.0000") },
                         },
                     };
 
@@ -185,6 +188,8 @@ namespace StableDiffusionGui
             ImagePreview.Move(false);
         }
 
+        #region Sliders
+
         private void sliderSteps_Scroll(object sender, ScrollEventArgs e)
         {
             int steps = sliderSteps.Value * 5;
@@ -213,10 +218,21 @@ namespace StableDiffusionGui
             labelResH.Text = px.ToString();
         }
 
+        private void sliderInitStrength_Scroll(object sender, ScrollEventArgs e)
+        {
+            float strength = sliderInitStrength.Value / 40f;
+            MainUi.CurrentInitStrength = strength;
+            labelInitStrength.Text = strength.ToString("0.000");
+        }
+
+        #endregion
+
         private void btnOpenOutFolder_Click(object sender, EventArgs e)
         {
             Process.Start("explorer", Path.Combine(Paths.GetExeDir(), "out"));
         }
+
+        #region Link Buttons
 
         private void paypalBtn_Click(object sender, EventArgs e)
         {
@@ -233,6 +249,10 @@ namespace StableDiffusionGui
             Process.Start("https://discord.gg/eJHD2NSJRe");
         }
 
+        #endregion
+
+        #region Output Image Menu Strip
+
         private void openFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Process.Start(ImagePreview.CurrentImagePath);
@@ -248,6 +268,13 @@ namespace StableDiffusionGui
             Clipboard.SetDataObject(imgBoxOutput.Image);
         }
 
+        private void copySeedToClipboardToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(ImagePreview.CurrentImageMetadata.Seed.ToString());
+        }
+
+        #endregion
+
         private void btnImgShare_Click(object sender, EventArgs e)
         {
             if (!string.IsNullOrWhiteSpace(ImagePreview.CurrentImagePath) && File.Exists(ImagePreview.CurrentImagePath))
@@ -262,16 +289,13 @@ namespace StableDiffusionGui
             TtiProcess.RunStableDiffusionCli(Path.Combine(Paths.GetExeDir(), "out"));
         }
 
-        private void copySeedToClipboardToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Clipboard.SetText(ImagePreview.CurrentImageMetadata.Seed.ToString());
-        }
-
         private void imgBoxOutput_Click(object sender, EventArgs e)
         {
             if (((MouseEventArgs)e).Button == MouseButtons.Right)
                 btnImgShare_Click(null, null);
         }
+
+        #region Drag N Drop
 
         private void MainForm_DragEnter(object sender, DragEventArgs e)
         {
@@ -281,6 +305,34 @@ namespace StableDiffusionGui
         private void MainForm_DragDrop(object sender, DragEventArgs e)
         {
             MainUi.HandleDroppedFiles((string[])e.Data.GetData(DataFormats.FileDrop));
+        }
+
+        #endregion
+
+        private void btnInitImgBrowse_Click(object sender, EventArgs e)
+        {
+            CommonOpenFileDialog dialog = new CommonOpenFileDialog { InitialDirectory = textboxInitImgPath.Text.Trim().GetParentDirOfFile(), IsFolderPicker = false };
+
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+                MainUi.HandleDroppedFiles(new string[] { dialog.FileName });
+
+            UpdateInitImgUi();
+        }
+
+        private void btnInitImgClear_Click(object sender, EventArgs e)
+        {
+            textboxInitImgPath.Text = "";
+            UpdateInitImgUi();
+        }
+
+        public void UpdateInitImgUi ()
+        {
+            panelInitImgStrength.Visible = File.Exists(textboxInitImgPath.Text.Trim());
+        }
+
+        private void textboxInitImgPath_TextChanged(object sender, EventArgs e)
+        {
+            UpdateInitImgUi();
         }
     }
 }

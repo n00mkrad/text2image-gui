@@ -67,7 +67,7 @@ namespace StableDiffusionGui.Installation
             }   
         }
 
-        private static void Clone (string url, string dir, string commit = "")
+        private static void Clone (string url, string dir, string commit = "5e5c021b54afff73209f14deb8a09dde0205dcad")
         {
             string path = Repository.Clone(url, dir, new CloneOptions () { BranchName = "main" });
 

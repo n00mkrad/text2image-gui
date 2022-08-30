@@ -63,7 +63,7 @@ namespace StableDiffusionGui.Main
             }
         }
 
-        public static async Task RunStableDiffusion(string[] prompts, int iterations, int steps, float[] scales, long seed, string sampler, Size res, string outPath)
+        public static async Task RunStableDiffusion(string[] prompts, string initImg, float initStrength, int iterations, int steps, float[] scales, long seed, string sampler, Size res, string outPath)
         {
             Start(outPath);
 
@@ -76,7 +76,8 @@ namespace StableDiffusionGui.Main
                 {
                     foreach (float scale in scales)
                     {
-                        promptFileContent += $"{prompt} -n {1} -s {steps} -C {scale.ToStringDot()} -A {sampler} -W {res.Width} -H {res.Height} -S {seed}\n";
+                        string init = File.Exists(initImg) ? $"--init_img {initImg.Wrap()} --strength {initStrength.ToStringDot("0.0000")}" : "";
+                        promptFileContent += $"{prompt} {init} -n {1} -s {steps} -C {scale.ToStringDot()} -A {sampler} -W {res.Width} -H {res.Height} -S {seed}\n";
                         TextToImage.CurrentTask.TargetImgCount++;
                     }
 
