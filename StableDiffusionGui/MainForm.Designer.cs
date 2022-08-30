@@ -124,10 +124,11 @@
             this.runBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.runBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
             this.runBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.runBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.25F);
             this.runBtn.ForeColor = System.Drawing.Color.White;
             this.runBtn.Location = new System.Drawing.Point(663, 598);
             this.runBtn.Name = "runBtn";
-            this.runBtn.Size = new System.Drawing.Size(100, 40);
+            this.runBtn.Size = new System.Drawing.Size(150, 40);
             this.runBtn.TabIndex = 100;
             this.runBtn.Text = "Generate!";
             this.runBtn.UseVisualStyleBackColor = false;

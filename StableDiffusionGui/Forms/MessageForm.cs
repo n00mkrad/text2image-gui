@@ -1,4 +1,5 @@
 ﻿using StableDiffusionGui;
+using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,11 +14,15 @@ namespace Nmkoder.Forms
 {
     public partial class MessageForm : Form
     {
+        public enum FontSize { Normal, Big, VeryBig };
+
         private string _text = "";
         private string _title = "";
         private MessageBoxButtons _btns;
 
         private bool _dialogResultSet = false;
+
+        public FontSize MsgFontSize = FontSize.Normal;
 
         public MessageForm(string text, string title, MessageBoxButtons buttons = MessageBoxButtons.OK)
         {
@@ -30,6 +35,11 @@ namespace Nmkoder.Forms
 
         private void MessageForm_Load(object sender, EventArgs e)
         {
+            if (MsgFontSize == FontSize.Big)
+                textLabel.Font = new Font(textLabel.Font.Name, (textLabel.Font.SizeInPoints + 2f));
+            else if (MsgFontSize == FontSize.VeryBig)
+                textLabel.Font = new Font(textLabel.Font.Name, (textLabel.Font.SizeInPoints + 4f));
+
             Text = _title;
             textLabel.Text = _text;
 
