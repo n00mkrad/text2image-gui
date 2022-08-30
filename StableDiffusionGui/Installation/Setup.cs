@@ -94,7 +94,7 @@ namespace StableDiffusionGui.Installation
         {
             Process p = OsUtils.NewProcess(false);
 
-            p.StartInfo.Arguments = $"/C curl \"https://drive.yerf.org/wl/?id=EBfTrmcCCUAGaQBXVIj5lJmEhjoP1tgl&mode=grid&download=1\" -o {Path.Combine(Paths.GetDataPath(), "repo")}/model.ckpt";
+            p.StartInfo.Arguments = $"/C curl \"https://dl.nmkd-hz.de/tti/sd/models/1.4/model.ckpt\" -o {Path.Combine(Paths.GetDataPath(), "repo")}/model.ckpt";
 
             p.Start();
 
@@ -102,7 +102,7 @@ namespace StableDiffusionGui.Installation
                 await Task.Delay(100);
         }
 
-        private static void Clone (string url, string dir, string commit = "be5b9d04948f49da2ec0d2cec197004279867b2c")
+        private static void Clone (string url, string dir, string commit = "f77e0a545e28a11206b19f47af0af5c971491fa0")
         {
             string path = Repository.Clone(url, dir, new CloneOptions () { BranchName = "main" });
 
