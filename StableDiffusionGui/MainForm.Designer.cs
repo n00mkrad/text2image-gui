@@ -942,6 +942,7 @@
             this.btnSettings.TabStop = false;
             this.toolTip.SetToolTip(this.btnSettings, "Open Settings");
             this.btnSettings.UseVisualStyleBackColor = false;
+            this.btnSettings.Click += new System.EventHandler(this.btnSettings_Click);
             // 
             // btnDebug
             // 

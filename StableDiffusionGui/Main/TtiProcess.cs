@@ -1,4 +1,5 @@
 ﻿using StableDiffusionGui.Io;
+using StableDiffusionGui.IO;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
@@ -78,11 +79,9 @@ namespace StableDiffusionGui.Main
                     foreach (float scale in scales)
                     {
                         string init = File.Exists(initImg) ? $"--init_img {initImg.Wrap()} --strength {initStrength.ToStringDot("0.0000")}" : "";
-                        promptFileContent += $"{prompt} {init} -n {1} -s {steps} -C {scale.ToStringDot()} -A {sampler} -W {res.Width} -H {res.Height} -S {seed}\n";
+                        promptFileContent += $"{prompt} {init} -n {1} -s {steps} -C {scale.ToStringDot()} -A {sampler} -W {res.Width} -H {res.Height} -S {seed + i}\n";
                         TextToImage.CurrentTask.TargetImgCount++;
                     }
-
-                    seed++;
                 }
             }
 
@@ -127,7 +126,7 @@ namespace StableDiffusionGui.Main
             Process dream = OsUtils.NewProcess(false);
 
             dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && call \"{Paths.GetDataPath()}\\mc\\Scripts\\activate.bat\" ldo && " +
-                $"python \"{Paths.GetDataPath()}/repo/scripts/dream.py\" -o {outPath.Wrap()}";
+                $"python \"{Paths.GetDataPath()}/repo/scripts/dream.py\" -o {outPath.Wrap()} {(Config.GetBool("checkboxFullPrecision") ? "--full_precision" : "")}";
 
             dream.Start();
         }
@@ -166,15 +165,18 @@ namespace StableDiffusionGui.Main
 
         public static void Kill()
         {
-            foreach(var process in TextToImage.CurrentTask.Processes.Where(x => x != null && !x.HasExited))
+            if (TextToImage.CurrentTask != null)
             {
-                try
+                foreach (var process in TextToImage.CurrentTask.Processes.Where(x => x != null && !x.HasExited))
                 {
-                    OsUtils.KillProcessTree(process.Id);
-                }
-                catch (Exception e)
-                {
-                    Logger.Log($"Failed to kill process tree: {e.Message}", true);
+                    try
+                    {
+                        OsUtils.KillProcessTree(process.Id);
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.Log($"Failed to kill process tree: {e.Message}", true);
+                    }
                 }
             }
         }

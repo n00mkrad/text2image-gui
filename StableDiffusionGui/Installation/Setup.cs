@@ -1,6 +1,7 @@
 ﻿using LibGit2Sharp;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
+using StableDiffusionGui.Os;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -89,7 +90,19 @@ namespace StableDiffusionGui.Installation
 
         }
 
-        private static void Clone (string url, string dir, string commit = "5e5c021b54afff73209f14deb8a09dde0205dcad")
+        public static async Task RedownloadModelFile ()
+        {
+            Process p = OsUtils.NewProcess(false);
+
+            p.StartInfo.Arguments = $"/C curl \"https://drive.yerf.org/wl/?id=EBfTrmcCCUAGaQBXVIj5lJmEhjoP1tgl&mode=grid&download=1\" -o {Path.Combine(Paths.GetDataPath(), "repo")}/model.ckpt";
+
+            p.Start();
+
+            while (!p.HasExited)
+                await Task.Delay(100);
+        }
+
+        private static void Clone (string url, string dir, string commit = "")
         {
             string path = Repository.Clone(url, dir, new CloneOptions () { BranchName = "main" });
 

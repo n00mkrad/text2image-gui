@@ -104,6 +104,9 @@ namespace StableDiffusionGui
         public void CleanPrompt()
         {
             textboxPrompt.Text = new Regex(@"[^a-zA-Z0-9 -!,.:()\-]").Replace(textboxPrompt.Text, "");
+
+            if (upDownSeed.Text == "")
+                upDownSeed.Value = -1;
         }
 
 
@@ -124,7 +127,15 @@ namespace StableDiffusionGui
 
         private void runBtn_Click(object sender, EventArgs e)
         {
+            TextToImage.Canceled = false;
+
             if (!IsInstalledWithWarning())
+                return;
+
+            if (string.IsNullOrWhiteSpace(textboxPrompt.Text))
+                TextToImage.Cancel("No prompt was entered.");
+
+            if (TextToImage.Canceled)
                 return;
 
             try
@@ -353,6 +364,11 @@ namespace StableDiffusionGui
         private void btnDebug_Click(object sender, EventArgs e)
         {
             Process.Start("explorer", Paths.GetLogPath().Wrap());
+        }
+
+        private void btnSettings_Click(object sender, EventArgs e)
+        {
+            new SettingsForm().ShowDialog();
         }
     }
 }

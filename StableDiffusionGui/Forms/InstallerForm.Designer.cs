@@ -137,6 +137,7 @@
             this.btnRedownloadModel.TabIndex = 2;
             this.btnRedownloadModel.TabStop = false;
             this.btnRedownloadModel.Text = "Redownload Model File";
+            this.btnRedownloadModel.Click += new System.EventHandler(this.btnRedownloadModel_Click);
             // 
             // btnPatch
             // 
