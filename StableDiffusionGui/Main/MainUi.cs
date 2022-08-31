@@ -86,12 +86,12 @@ namespace StableDiffusionGui.Main
                 if (valFrom < valTo)
                 {
                     for (float f = valFrom; f < (valTo + 0.01f); f += step)
-                        incrementScales.Add(1f - f);
+                        incrementScales.Add(f);
                 }
                 else
                 {
                     for (float f = valFrom; f >= (valTo - 0.01f); f -= step)
-                        incrementScales.Add(1f - f);
+                        incrementScales.Add(f);
                 }
 
                 if (incrementScales.Count > 0)
