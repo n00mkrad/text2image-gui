@@ -89,7 +89,7 @@ namespace StableDiffusionGui.Installation
                 else
                 {
                     Logger.Log("Finished - Not all packages could be installed. Installation log was copied to clipboard.");
-                    Clipboard.SetText(Logger.GetSessionLog("installer"));
+                    OsUtils.SetClipboard(Logger.GetSessionLog("installer"));
                 }
             }
             catch(Exception ex)

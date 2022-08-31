@@ -283,5 +283,33 @@ namespace StableDiffusionGui.Os
 
             return string.Join(", ", gpus);
         }
+
+        public static bool SetClipboard (object data)
+        {
+            try
+            {
+                Clipboard.SetDataObject(data);
+                return true;
+            }
+            catch(Exception ex)
+            {
+                Logger.Log($"Error setting clipboard data: {ex.Message}");
+                return false;
+            }
+        }
+
+        public static bool SetClipboard(string text)
+        {
+            try
+            {
+                Clipboard.SetText(text);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Logger.Log($"Error setting clipboard text: {ex.Message}");
+                return false;
+            }
+        }
     }
 }

@@ -21,6 +21,7 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 using StableDiffusionGui.Installation;
 using StableDiffusionGui.Data;
 using TextBox = System.Windows.Forms.TextBox;
+using StableDiffusionGui.Os;
 
 namespace StableDiffusionGui
 {
@@ -290,12 +291,12 @@ namespace StableDiffusionGui
 
         private void copyImageToClipboardToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Clipboard.SetDataObject(imgBoxOutput.Image);
+            OsUtils.SetClipboard(imgBoxOutput.Image);
         }
 
         private void copySeedToClipboardToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Clipboard.SetText(ImagePreview.CurrentImageMetadata.Seed.ToString());
+            OsUtils.SetClipboard(ImagePreview.CurrentImageMetadata.Seed.ToString());
         }
 
         private void useAsInitImageToolStripMenuItem_Click(object sender, EventArgs e)
