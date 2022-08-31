@@ -130,7 +130,7 @@ namespace StableDiffusionGui.Installation
         public static async Task DownloadModelFile (bool force = false)
         {
             string mdlPath = Path.Combine(Paths.GetDataPath(), "model.ckpt");
-            var filesize = new FileInfo(mdlPath).Length;
+            var filesize = File.Exists(mdlPath) ? new FileInfo(mdlPath).Length : 0;
 
             if(filesize == 4265380512 && !force)
             {
