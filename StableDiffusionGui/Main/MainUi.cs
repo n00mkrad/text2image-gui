@@ -76,7 +76,7 @@ namespace StableDiffusionGui.Main
 
             if (customScalesText.MatchesWildcard("* > * : *"))
             {
-                var splitMinMax = customScalesText.Trim().Split('>');
+                var splitMinMax = customScalesText.Trim().Split(':')[0].Split('>');
                 float valFrom = splitMinMax[0].GetFloat();
                 float valTo = splitMinMax[1].Trim().GetFloat();
                 float step = customScalesText.Split(':').Last().GetFloat();
