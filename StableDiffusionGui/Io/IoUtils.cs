@@ -1,6 +1,7 @@
 ﻿using StableDiffusionGui.Data;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
+using StableDiffusionGui.Properties;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -19,8 +20,16 @@ namespace StableDiffusionGui.Io
     {
         public static Image GetImage(string path)
         {
-            using (FileStream stream = new FileStream(path, FileMode.Open, FileAccess.Read))
-                return Image.FromStream(stream);
+            try
+            {
+                using (FileStream stream = new FileStream(path, FileMode.Open, FileAccess.Read))
+                    return Image.FromStream(stream);
+            }
+            catch(Exception ex)
+            {
+                Logger.Log($"Failed to load image from {path}: {ex.Message}", true);
+                return Resources.imgNotFound;
+            }
         }
 
         public static string[] ReadLines(string path)

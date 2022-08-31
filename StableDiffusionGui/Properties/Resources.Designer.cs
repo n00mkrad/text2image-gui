@@ -133,6 +133,16 @@ namespace StableDiffusionGui.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap imgNotFound {
+            get {
+                object obj = ResourceManager.GetObject("imgNotFound", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap installIcon {
             get {
                 object obj = ResourceManager.GetObject("installIcon", resourceCulture);

@@ -298,6 +298,17 @@ namespace StableDiffusionGui
             Clipboard.SetText(ImagePreview.CurrentImageMetadata.Seed.ToString());
         }
 
+        private void useAsInitImageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Program.Busy)
+            {
+                UiUtils.ShowMessageBox("Please wait until the generation has finished.");
+                return;
+            }
+
+            MainUi.HandleDroppedFiles(new string[] { ImagePreview.CurrentImagePath });
+        }
+
         #endregion
 
         private void btnImgShare_Click(object sender, EventArgs e)
@@ -376,20 +387,22 @@ namespace StableDiffusionGui
 
             if (!string.IsNullOrWhiteSpace(MainUi.CurrentInitImgPath) && !string.IsNullOrWhiteSpace(MainUi.CurrentEmbeddingPath))
             {
-                labelPromptInfo.Text = $"With {Path.GetFileName(MainUi.CurrentInitImgPath).Trunc(20)} and {Path.GetFileName(MainUi.CurrentEmbeddingPath).Trunc(20)}";
+                labelPromptInfo.Text = $"With {Path.GetFileName(MainUi.CurrentInitImgPath).Trunc(28)}\nWith {Path.GetFileName(MainUi.CurrentEmbeddingPath).Trunc(28)}";
             }
             else if (!string.IsNullOrWhiteSpace(MainUi.CurrentInitImgPath))
             {
-                labelPromptInfo.Text = $"With {Path.GetFileName(MainUi.CurrentInitImgPath).Trunc(40)}";
+                labelPromptInfo.Text = $"With {Path.GetFileName(MainUi.CurrentInitImgPath).Trunc(28)}";
             }
             else if (!string.IsNullOrWhiteSpace(MainUi.CurrentEmbeddingPath))
             {
-                labelPromptInfo.Text = $"With {Path.GetFileName(MainUi.CurrentEmbeddingPath).Trunc(40)}";
+                labelPromptInfo.Text = $"With {Path.GetFileName(MainUi.CurrentEmbeddingPath).Trunc(28)}";
             }
             else
             {
                 labelPromptInfo.Text = "";
             }
+
+            labelPromptInfo.Location = labelPromptInfo.Text.Contains("\n") ? new Point(5, 25) : new Point(5, 32);
         }
 
         private void textboxInitImgPath_TextChanged(object sender, EventArgs e)
