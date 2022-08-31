@@ -271,7 +271,7 @@ namespace StableDiffusionGui
 
         private void discordBtn_Click(object sender, EventArgs e)
         {
-            Process.Start("https://discord.gg/ypQ4BWCj");
+            Process.Start("https://discord.gg/fZwWSnV5WA");
         }
 
         #endregion
