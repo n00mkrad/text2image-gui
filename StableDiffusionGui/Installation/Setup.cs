@@ -1,4 +1,5 @@
 ﻿using LibGit2Sharp;
+using Microsoft.VisualBasic.Logging;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
@@ -22,6 +23,8 @@ namespace StableDiffusionGui.Installation
         {
             try
             {
+                Program.MainForm.SetWorking(true);
+
                 Logger.Log("Removing existing SD files...");
                 await Cleanup();
                 Logger.Log("Done.");
@@ -49,29 +52,60 @@ namespace StableDiffusionGui.Installation
                 l.Add($"");
                 l.Add($"install.cmd");
                 l.Add($"");
-                l.Add($"cd ..");
-                l.Add($"");
                 l.Add($"pause");
 
                 File.WriteAllLines(batPath, l);
 
                 Logger.Log("Running installation script...");
 
-                Process p = Process.Start(batPath);
+                Process p = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd(), batPath);
 
-                while (!p.HasExited)
-                    await Task.Delay(100);
+                if (!OsUtils.ShowHiddenCmd())
+                {
+                    p.OutputDataReceived += (sender, line) => { HandleInstallScriptOutput(line.Data, false); };
+                    p.ErrorDataReceived += (sender, line) => { HandleInstallScriptOutput(line.Data, true); };
+                }
+
+                p.Start();
+
+                if (!OsUtils.ShowHiddenCmd())
+                {
+                    p.BeginOutputReadLine();
+                    p.BeginErrorReadLine();
+                }
+
+                while (!p.HasExited) await Task.Delay(1);
 
                 Patch();
 
+                RemoveGitFiles(repoPath);
+
                 await DownloadModelFile();
 
-                Logger.Log("Finished.");
+                if (InstallationStatus.IsInstalled)
+                {
+                    Logger.Log("Finished. Everything is installed.");
+                }
+                else
+                {
+                    Logger.Log("Finished - Not all packages could be installed. Installation log was copied to clipboard.");
+                    Clipboard.SetText(Logger.GetSessionLog("installer"));
+                }
             }
             catch(Exception ex)
             {
                 Logger.Log($"Install error: {ex.Message}\n{ex.StackTrace}");
-            }   
+            }
+
+            Program.MainForm.SetWorking(false);
+        }
+
+        private static void HandleInstallScriptOutput (string log, bool stderr)
+        {
+            if (string.IsNullOrWhiteSpace(log))
+                return;
+
+            Logger.Log($"[{(stderr ? "E" : "O")}] {log.Remove("PRINTME ")}", !log.Contains("PRINTME "), false, "installation");
         }
 
         public static void Patch ()
@@ -104,6 +138,7 @@ namespace StableDiffusionGui.Installation
                 return;
             }
 
+            IoUtils.TryDeleteIfExists(mdlPath);
             Logger.Log("Downloading model file...");
 
             Process p = OsUtils.NewProcess(false);
@@ -116,7 +151,7 @@ namespace StableDiffusionGui.Installation
             Logger.Log($"Model file downloaded ({FormatUtils.Bytes(new FileInfo(mdlPath).Length)}).");
         }
 
-        private static void Clone (string url, string dir, string commit = "014e60d0f221794a365eca672d1e086ace8bfdee" /* f77e0a545e28a11206b19f47af0af5c971491fa0 */)
+        private static void Clone (string url, string dir, string commit = "" /* f77e0a545e28a11206b19f47af0af5c971491fa0 */)
         {
             string path = Repository.Clone(url, dir, new CloneOptions () { BranchName = "main" });
 
@@ -132,8 +167,24 @@ namespace StableDiffusionGui.Installation
             Logger.Log($"Done.");
         }
 
+        public static void RemoveGitFiles (string rootPath)
+        {
+            foreach(string dir in Directory.GetDirectories(rootPath, ".git", SearchOption.AllDirectories))
+            {
+                new DirectoryInfo(dir).Attributes = FileAttributes.Normal;
+                IoUtils.SetAttributes(dir, FileAttributes.Normal);
+                IoUtils.TryDeleteIfExists(dir);
+            }
+
+            string tamingPath = Path.Combine(rootPath, "src", "taming-transformers");
+            IoUtils.SetAttributes(tamingPath, FileAttributes.Normal);
+            IoUtils.GetFilesSorted(tamingPath, true, "*.jpg").ToList().ForEach(x => IoUtils.TryDeleteIfExists(x));
+            IoUtils.GetFilesSorted(tamingPath, true, "*.png").ToList().ForEach(x => IoUtils.TryDeleteIfExists(x));
+        }
+
         public static async Task Cleanup ()
         {
+            IoUtils.SetAttributes(GetDataSubPath("repo"), FileAttributes.Normal);
             await IoUtils.TryDeleteIfExistsAsync(GetDataSubPath("repo"));
             await IoUtils.TryDeleteIfExistsAsync(GetDataSubPath("ldo"));
         }

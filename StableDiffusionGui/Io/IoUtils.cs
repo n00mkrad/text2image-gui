@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Management.Automation;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -727,6 +728,11 @@ namespace StableDiffusionGui.Io
             }
 
             return new ImageMetadata();
+        }
+
+        public static void SetAttributes(string rootDir, FileAttributes newAttributes, bool recursive = true)
+        {
+            GetFileInfosSorted(rootDir, recursive).ToList().ForEach(x => x.Attributes = newAttributes);
         }
     }
 }
