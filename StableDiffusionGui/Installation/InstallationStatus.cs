@@ -48,7 +48,7 @@ namespace StableDiffusionGui.Installation
 
         public static bool HasSdModel ()
         {
-            string mdlPath = Path.Combine(Paths.GetDataPath(), "repo", "model.ckpt");
+            string mdlPath = Path.Combine(Paths.GetDataPath(), "model.ckpt");
             return File.Exists(mdlPath);
         }
     }

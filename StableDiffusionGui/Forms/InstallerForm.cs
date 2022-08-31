@@ -83,7 +83,7 @@ namespace StableDiffusionGui.Forms
         private async void btnRedownloadModel_Click(object sender, EventArgs e)
         {
             this.Enabled = false;
-            await Setup.RedownloadModelFile();
+            await Setup.DownloadModelFile();
             this.Enabled = true;
         }
     }

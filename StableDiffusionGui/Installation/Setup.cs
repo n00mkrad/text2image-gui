@@ -1,6 +1,7 @@
 ﻿using LibGit2Sharp;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
+using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using System;
 using System.Collections.Generic;
@@ -63,6 +64,8 @@ namespace StableDiffusionGui.Installation
 
                 Patch();
 
+                await DownloadModelFile();
+
                 Logger.Log("Finished.");
             }
             catch(Exception ex)
@@ -90,19 +93,30 @@ namespace StableDiffusionGui.Installation
 
         }
 
-        public static async Task RedownloadModelFile ()
+        public static async Task DownloadModelFile (bool force = false)
         {
+            string mdlPath = Path.Combine(Paths.GetDataPath(), "model.ckpt");
+            var filesize = new FileInfo(mdlPath).Length;
+
+            if(filesize == 4265380512 && !force)
+            {
+                Logger.Log($"Model file already exists ({FormatUtils.Bytes(filesize)}), won't redownload.");
+                return;
+            }
+
+            Logger.Log("Downloading model file...");
+
             Process p = OsUtils.NewProcess(false);
-
-            p.StartInfo.Arguments = $"/C curl \"https://dl.nmkd-hz.de/tti/sd/models/1.4/model.ckpt\" -o {Path.Combine(Paths.GetDataPath(), "repo")}/model.ckpt";
-
+            p.StartInfo.Arguments = $"/C curl \"https://dl.nmkd-hz.de/tti/sd/models/1.4/model.ckpt\" -o {mdlPath.Wrap()}";
             p.Start();
 
             while (!p.HasExited)
                 await Task.Delay(100);
+
+            Logger.Log($"Model file downloaded ({FormatUtils.Bytes(new FileInfo(mdlPath).Length)}).");
         }
 
-        private static void Clone (string url, string dir, string commit = "f77e0a545e28a11206b19f47af0af5c971491fa0")
+        private static void Clone (string url, string dir, string commit = "014e60d0f221794a365eca672d1e086ace8bfdee" /* f77e0a545e28a11206b19f47af0af5c971491fa0 */)
         {
             string path = Repository.Clone(url, dir, new CloneOptions () { BranchName = "main" });
 

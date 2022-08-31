@@ -716,7 +716,9 @@ namespace StableDiffusionGui.Io
                 if (pngTextDir != null)
                 {
                     MetadataExtractor.Tag dreamTag = pngTextDir.Tags.Where(x => x.Description.Contains(keword)).FirstOrDefault();
-                    return new ImageMetadata(path, dreamTag.Description.Split(keword).Last());
+
+                    if(dreamTag != null)
+                        return new ImageMetadata(path, dreamTag.Description.Split(keword).Last());
                 }
             }
             catch(Exception ex)

@@ -17,7 +17,8 @@ namespace StableDiffusionGui.Ui
         private static string[] _currentImages = new string[0];
         private static int _currIndex = -1;
 
-        public static void SetImages(string imagesDir, bool show, int amount = -1, string pattern = "*.png", bool recursive = false)
+        /// <returns> The amount of images shown </returns>
+        public static int SetImages(string imagesDir, bool show, int amount = -1, string pattern = "*.png", bool recursive = false)
         {
             var imgPaths = IoUtils.GetFileInfosSorted(imagesDir, recursive, pattern).OrderBy(x => x.CreationTime).Reverse().ToList(); // Find images and sort by date, newest to oldest
 
@@ -25,6 +26,8 @@ namespace StableDiffusionGui.Ui
                 imgPaths = imgPaths.Take(amount).ToList();
 
             SetImages(imgPaths.Select(x => x.FullName).ToList(), show);
+
+            return imgPaths.Count;
         }
 
         public static void SetImages(List<string> imagePaths, bool show)

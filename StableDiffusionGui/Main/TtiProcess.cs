@@ -24,11 +24,15 @@ namespace StableDiffusionGui.Main
 
         public static void Finish()
         {
-            ImagePreview.SetImages(TextToImage.CurrentTask.OutPath, true, TextToImage.CurrentTask.TargetImgCount);
+            int imgCount = ImagePreview.SetImages(TextToImage.CurrentTask.OutPath, true, TextToImage.CurrentTask.TargetImgCount);
 
             PostProcess(TextToImage.CurrentTask.OutPath, true, TextToImage.CurrentTask.TargetImgCount);
 
-            Logger.Log($"Done!");
+            if(imgCount > 0)
+                Logger.Log($"Done!");
+            else
+                Logger.Log($"No images generated.");
+
             Program.MainForm.SetWorking(false);
         }
 
@@ -68,6 +72,10 @@ namespace StableDiffusionGui.Main
         public static async Task RunStableDiffusion(string[] prompts, string initImg, string embedding, float[] initStrengths, int iterations, int steps, float[] scales, long seed, string sampler, Size res, string outPath)
         {
             Start(outPath);
+
+            if (File.Exists(initImg))
+                initImg = TtiUtils.ResizeInitImg(initImg, res, true);
+
             long startSeed = seed;
 
             string promptFilePath = Path.Combine(Paths.GetSessionDataPath(), "prompts.txt");

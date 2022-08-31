@@ -160,6 +160,7 @@
     <Compile Include="Main\MainUi.cs" />
     <Compile Include="Main\TextToImage.cs" />
     <Compile Include="Main\TtiProcess.cs" />
+    <Compile Include="Main\TtiUtils.cs" />
     <Compile Include="MiscUtils\FormatUtils.cs" />
     <Compile Include="Os\OsUtils.cs" />
     <Compile Include="Program.cs" />
