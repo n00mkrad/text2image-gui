@@ -573,8 +573,16 @@ namespace StableDiffusionGui.Io
 
         public static string[] GetFilesSorted(string path, bool recursive = false, string pattern = "*")
         {
-            SearchOption opt = recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
-            return Directory.GetFiles(path, pattern, opt).OrderBy(x => Path.GetFileName(x)).ToArray();
+            try
+            {
+                SearchOption opt = recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
+                return Directory.GetFiles(path, pattern, opt).OrderBy(x => Path.GetFileName(x)).ToArray();
+            }
+            catch (Exception ex)
+            {
+                Logger.Log($"GetFilesSorted error: {ex.Message}", true);
+                return new string[0];
+            }
         }
 
         public static string[] GetFilesSorted(string path, string pattern = "*")
@@ -589,9 +597,17 @@ namespace StableDiffusionGui.Io
 
         public static FileInfo[] GetFileInfosSorted(string path, bool recursive = false, string pattern = "*")
         {
-            SearchOption opt = recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
-            DirectoryInfo dir = new DirectoryInfo(path);
-            return dir.GetFiles(pattern, opt).OrderBy(x => x.Name).ToArray();
+            try
+            {
+                SearchOption opt = recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
+                DirectoryInfo dir = new DirectoryInfo(path);
+                return dir.GetFiles(pattern, opt).OrderBy(x => x.Name).ToArray();
+            }
+            catch(Exception ex)
+            {
+                Logger.Log($"GetFileInfosSorted error: {ex.Message}", true);
+                return new FileInfo[0];
+            }
         }
 
         public static bool CreateFileIfNotExists(string path)
