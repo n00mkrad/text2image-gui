@@ -142,7 +142,7 @@ namespace StableDiffusionGui.Installation
             Logger.Log("Downloading model file...");
 
             Process p = OsUtils.NewProcess(false);
-            p.StartInfo.Arguments = $"/C curl \"https://dl.nmkd-hz.de/tti/sd/models/1.4/model.ckpt\" -o {mdlPath.Wrap()}";
+            p.StartInfo.Arguments = $"/C curl \"https://www.googleapis.com/storage/v1/b/aai-blog-files/o/sd-v1-4.ckpt?alt=media\" -o {mdlPath.Wrap()}";
             p.Start();
 
             while (!p.HasExited)
@@ -153,18 +153,26 @@ namespace StableDiffusionGui.Installation
 
         private static void Clone (string url, string dir, string commit = "" /* f77e0a545e28a11206b19f47af0af5c971491fa0 */)
         {
-            string path = Repository.Clone(url, dir, new CloneOptions () { BranchName = "main" });
-
-            if (!string.IsNullOrWhiteSpace(commit))
+            try
             {
-                using (var localRepo = new Repository(dir))
-                {
-                    var localCommit = localRepo.Lookup<Commit>(commit);
-                    Commands.Checkout(localRepo, localCommit);
-                }
-            }
+                string path = Repository.Clone(url, dir, new CloneOptions() { BranchName = "main" });
 
-            Logger.Log($"Done.");
+                if (!string.IsNullOrWhiteSpace(commit))
+                {
+                    using (var localRepo = new Repository(dir))
+                    {
+                        var localCommit = localRepo.Lookup<Commit>(commit);
+                        Commands.Checkout(localRepo, localCommit);
+                    }
+                }
+
+                Logger.Log($"Done clonging repository.");
+            }
+            catch (Exception ex)
+            {
+                Logger.Log($"Failed to clone repository: {ex.Message}");
+                Logger.Log($"{ex.StackTrace}", true);
+            }
         }
 
         public static void RemoveGitFiles (string rootPath)
