@@ -18,9 +18,23 @@ namespace StableDiffusionGui.Main
         public static int CurrentResW;
         public static int CurrentResH;
 
-        public static float CurrentInitStrength;
+        private static string _currentInitImgPath;
+        public static string CurrentInitImgPath {
+            get => _currentInitImgPath;
+            set {
+                _currentInitImgPath = value;
+                Logger.Log(string.IsNullOrWhiteSpace(value) ? "Cleared init image." : $"Now using initialization image {Path.GetFileName(value).Wrap()}.");
+            } }
+        
+        public static float CurrentInitImgStrength;
 
-        public static string CurrentEmbeddingPath;
+        private static string _currentEmbeddingPath;
+        public static string CurrentEmbeddingPath {
+            get => _currentEmbeddingPath;
+            set {
+                _currentEmbeddingPath = value;
+                Logger.Log(string.IsNullOrWhiteSpace(value) ? "Cleared embedding." : $"Now using fine-tuned embedding {Path.GetFileName(value).Wrap()}.");
+            } }
 
         private static readonly string[] validInitImgExtensions = new string[] { ".png", ".jpeg", ".jpg", ".jfif", ".bmp" };
 
@@ -41,7 +55,7 @@ namespace StableDiffusionGui.Main
                     DialogResult dialogResult = UiUtils.ShowMessageBox($"Do you want to load this image as an initialization image?", $"Dropped {Path.GetFileName(paths[0]).Trunc(40)}", MessageBoxButtons.YesNo);
 
                     if (dialogResult == DialogResult.Yes)
-                        Program.MainForm.TextboxInitImgPath.Text = paths[0];
+                        CurrentInitImgPath = paths[0];
                 }
 
                 if (Path.GetExtension(paths[0]) == ".pt") // Ask to use as embedding (finetuned model)
@@ -51,6 +65,8 @@ namespace StableDiffusionGui.Main
                     if (dialogResult == DialogResult.Yes)
                         CurrentEmbeddingPath = paths[0];
                 }
+
+                Program.MainForm.UpdateInitImgAndEmbeddingUi();
             }
         }
 
@@ -91,7 +107,7 @@ namespace StableDiffusionGui.Main
 
         public static List<float> GetInitStrengths(string customStrengthsText)
         {
-            List<float> strengths = new List<float> { 1f - CurrentInitStrength };
+            List<float> strengths = new List<float> { 1f - CurrentInitImgStrength };
 
             if (customStrengthsText.MatchesWildcard("* > * : *"))
             {

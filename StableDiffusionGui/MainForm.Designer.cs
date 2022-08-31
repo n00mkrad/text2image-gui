@@ -68,7 +68,6 @@
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.comboxSampler = new System.Windows.Forms.ComboBox();
             this.sliderInitStrength = new HTAlt.WinForms.HTSlider();
-            this.textboxInitImgPath = new System.Windows.Forms.TextBox();
             this.btnSettings = new System.Windows.Forms.Button();
             this.btnDebug = new System.Windows.Forms.Button();
             this.cliButton = new System.Windows.Forms.Button();
@@ -80,6 +79,7 @@
             this.discordBtn = new System.Windows.Forms.Button();
             this.patreonBtn = new System.Windows.Forms.Button();
             this.paypalBtn = new System.Windows.Forms.Button();
+            this.textboxExtraInitStrengths = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel12 = new System.Windows.Forms.Panel();
@@ -95,12 +95,11 @@
             this.label11 = new System.Windows.Forms.Label();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.labelInitStrength = new System.Windows.Forms.Label();
-            this.panelInitImg = new System.Windows.Forms.Panel();
             this.btnInitImgBrowse = new HTAlt.WinForms.HTButton();
-            this.label8 = new System.Windows.Forms.Label();
             this.panelPrompt = new System.Windows.Forms.Panel();
             this.separator = new System.Windows.Forms.Button();
-            this.textboxExtraInitStrengths = new System.Windows.Forms.TextBox();
+            this.btnEmbeddingBrowse = new HTAlt.WinForms.HTButton();
+            this.labelPromptInfo = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
             this.tableLayoutPanel6.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -117,7 +116,6 @@
             this.panelIterations.SuspendLayout();
             this.panelInitImgStrength.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
-            this.panelInitImg.SuspendLayout();
             this.panelPrompt.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -206,8 +204,9 @@
             this.textboxPrompt.ForeColor = System.Drawing.Color.White;
             this.textboxPrompt.Location = new System.Drawing.Point(233, 7);
             this.textboxPrompt.MinimumSize = new System.Drawing.Size(4, 21);
+            this.textboxPrompt.Multiline = true;
             this.textboxPrompt.Name = "textboxPrompt";
-            this.textboxPrompt.Size = new System.Drawing.Size(400, 20);
+            this.textboxPrompt.Size = new System.Drawing.Size(291, 40);
             this.textboxPrompt.TabIndex = 0;
             this.toolTip.SetToolTip(this.textboxPrompt, "Text prompt. The AI will try to generate an image matching this description.");
             // 
@@ -689,19 +688,6 @@
             this.sliderInitStrength.Value = 1;
             this.sliderInitStrength.Scroll += new System.Windows.Forms.ScrollEventHandler(this.sliderInitStrength_Scroll);
             // 
-            // textboxInitImgPath
-            // 
-            this.textboxInitImgPath.AllowDrop = true;
-            this.textboxInitImgPath.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.textboxInitImgPath.ForeColor = System.Drawing.Color.White;
-            this.textboxInitImgPath.Location = new System.Drawing.Point(233, 7);
-            this.textboxInitImgPath.MinimumSize = new System.Drawing.Size(4, 21);
-            this.textboxInitImgPath.Name = "textboxInitImgPath";
-            this.textboxInitImgPath.Size = new System.Drawing.Size(321, 20);
-            this.textboxInitImgPath.TabIndex = 1;
-            this.toolTip.SetToolTip(this.textboxInitImgPath, "Use an image as a generation guide in addition to your text prompt.");
-            this.textboxInitImgPath.TextChanged += new System.EventHandler(this.textboxInitImgPath_TextChanged);
-            // 
             // btnSettings
             // 
             this.btnSettings.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
@@ -890,6 +876,18 @@
             this.paypalBtn.UseVisualStyleBackColor = false;
             this.paypalBtn.Click += new System.EventHandler(this.paypalBtn_Click);
             // 
+            // textboxExtraInitStrengths
+            // 
+            this.textboxExtraInitStrengths.AllowDrop = true;
+            this.textboxExtraInitStrengths.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textboxExtraInitStrengths.ForeColor = System.Drawing.Color.White;
+            this.textboxExtraInitStrengths.Location = new System.Drawing.Point(533, 7);
+            this.textboxExtraInitStrengths.MinimumSize = new System.Drawing.Size(4, 21);
+            this.textboxExtraInitStrengths.Name = "textboxExtraInitStrengths";
+            this.textboxExtraInitStrengths.Size = new System.Drawing.Size(100, 20);
+            this.textboxExtraInitStrengths.TabIndex = 91;
+            this.toolTip.SetToolTip(this.textboxExtraInitStrengths, resources.GetString("textboxExtraInitStrengths.ToolTip"));
+            // 
             // label7
             // 
             this.label7.AutoSize = true;
@@ -914,7 +912,6 @@
             this.panel1.Controls.Add(this.panelSteps);
             this.panel1.Controls.Add(this.panelIterations);
             this.panel1.Controls.Add(this.panelInitImgStrength);
-            this.panel1.Controls.Add(this.panelInitImg);
             this.panel1.Controls.Add(this.panelPrompt);
             this.panel1.Location = new System.Drawing.Point(12, 62);
             this.panel1.Name = "panel1";
@@ -924,7 +921,7 @@
             // panel12
             // 
             this.panel12.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel12.Location = new System.Drawing.Point(0, 385);
+            this.panel12.Location = new System.Drawing.Point(0, 370);
             this.panel12.Name = "panel12";
             this.panel12.Size = new System.Drawing.Size(633, 35);
             this.panel12.TabIndex = 11;
@@ -932,7 +929,7 @@
             // panel11
             // 
             this.panel11.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel11.Location = new System.Drawing.Point(0, 350);
+            this.panel11.Location = new System.Drawing.Point(0, 335);
             this.panel11.Name = "panel11";
             this.panel11.Size = new System.Drawing.Size(633, 35);
             this.panel11.TabIndex = 10;
@@ -940,7 +937,7 @@
             // panel10
             // 
             this.panel10.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel10.Location = new System.Drawing.Point(0, 315);
+            this.panel10.Location = new System.Drawing.Point(0, 300);
             this.panel10.Name = "panel10";
             this.panel10.Size = new System.Drawing.Size(633, 35);
             this.panel10.TabIndex = 9;
@@ -950,7 +947,7 @@
             this.panelSampler.Controls.Add(this.label7);
             this.panelSampler.Controls.Add(this.comboxSampler);
             this.panelSampler.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSampler.Location = new System.Drawing.Point(0, 280);
+            this.panelSampler.Location = new System.Drawing.Point(0, 265);
             this.panelSampler.Name = "panelSampler";
             this.panelSampler.Size = new System.Drawing.Size(633, 35);
             this.panelSampler.TabIndex = 6;
@@ -962,7 +959,7 @@
             this.panelRes.Controls.Add(this.tableLayoutPanel3);
             this.panelRes.Controls.Add(this.label9);
             this.panelRes.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelRes.Location = new System.Drawing.Point(0, 245);
+            this.panelRes.Location = new System.Drawing.Point(0, 230);
             this.panelRes.Name = "panelRes";
             this.panelRes.Size = new System.Drawing.Size(633, 35);
             this.panelRes.TabIndex = 5;
@@ -972,7 +969,7 @@
             this.panelSeed.Controls.Add(this.label5);
             this.panelSeed.Controls.Add(this.upDownSeed);
             this.panelSeed.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSeed.Location = new System.Drawing.Point(0, 210);
+            this.panelSeed.Location = new System.Drawing.Point(0, 195);
             this.panelSeed.Name = "panelSeed";
             this.panelSeed.Size = new System.Drawing.Size(633, 35);
             this.panelSeed.TabIndex = 4;
@@ -983,7 +980,7 @@
             this.panelScale.Controls.Add(this.tableLayoutPanel1);
             this.panelScale.Controls.Add(this.textboxExtraScales);
             this.panelScale.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelScale.Location = new System.Drawing.Point(0, 175);
+            this.panelScale.Location = new System.Drawing.Point(0, 160);
             this.panelScale.Name = "panelScale";
             this.panelScale.Size = new System.Drawing.Size(633, 35);
             this.panelScale.TabIndex = 3;
@@ -993,7 +990,7 @@
             this.panelSteps.Controls.Add(this.label3);
             this.panelSteps.Controls.Add(this.tableLayoutPanel6);
             this.panelSteps.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSteps.Location = new System.Drawing.Point(0, 140);
+            this.panelSteps.Location = new System.Drawing.Point(0, 125);
             this.panelSteps.Name = "panelSteps";
             this.panelSteps.Size = new System.Drawing.Size(633, 35);
             this.panelSteps.TabIndex = 2;
@@ -1003,7 +1000,7 @@
             this.panelIterations.Controls.Add(this.label1);
             this.panelIterations.Controls.Add(this.upDownIterations);
             this.panelIterations.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelIterations.Location = new System.Drawing.Point(0, 105);
+            this.panelIterations.Location = new System.Drawing.Point(0, 90);
             this.panelIterations.Name = "panelIterations";
             this.panelIterations.Size = new System.Drawing.Size(633, 35);
             this.panelIterations.TabIndex = 1;
@@ -1014,7 +1011,7 @@
             this.panelInitImgStrength.Controls.Add(this.label11);
             this.panelInitImgStrength.Controls.Add(this.tableLayoutPanel4);
             this.panelInitImgStrength.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelInitImgStrength.Location = new System.Drawing.Point(0, 70);
+            this.panelInitImgStrength.Location = new System.Drawing.Point(0, 55);
             this.panelInitImgStrength.Name = "panelInitImgStrength";
             this.panelInitImgStrength.Size = new System.Drawing.Size(633, 35);
             this.panelInitImgStrength.TabIndex = 8;
@@ -1063,17 +1060,6 @@
             this.labelInitStrength.Text = "1000";
             this.labelInitStrength.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // panelInitImg
-            // 
-            this.panelInitImg.Controls.Add(this.btnInitImgBrowse);
-            this.panelInitImg.Controls.Add(this.textboxInitImgPath);
-            this.panelInitImg.Controls.Add(this.label8);
-            this.panelInitImg.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelInitImg.Location = new System.Drawing.Point(0, 35);
-            this.panelInitImg.Name = "panelInitImg";
-            this.panelInitImg.Size = new System.Drawing.Size(633, 35);
-            this.panelInitImg.TabIndex = 7;
-            // 
             // btnInitImgBrowse
             // 
             this.btnInitImgBrowse.AutoColor = true;
@@ -1085,36 +1071,27 @@
             this.btnInitImgBrowse.ForeColor = System.Drawing.Color.White;
             this.btnInitImgBrowse.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
             this.btnInitImgBrowse.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
-            this.btnInitImgBrowse.Location = new System.Drawing.Point(560, 7);
+            this.btnInitImgBrowse.Location = new System.Drawing.Point(533, 7);
             this.btnInitImgBrowse.Name = "btnInitImgBrowse";
             this.btnInitImgBrowse.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
-            this.btnInitImgBrowse.Size = new System.Drawing.Size(70, 21);
+            this.btnInitImgBrowse.Size = new System.Drawing.Size(97, 18);
             this.btnInitImgBrowse.TabIndex = 1;
             this.btnInitImgBrowse.TabStop = false;
-            this.btnInitImgBrowse.Text = "Browse";
+            this.btnInitImgBrowse.Text = "Load Image";
             this.btnInitImgBrowse.Click += new System.EventHandler(this.btnInitImgBrowse_Click);
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.ForeColor = System.Drawing.Color.White;
-            this.label8.Location = new System.Drawing.Point(5, 10);
-            this.label8.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(141, 13);
-            this.label8.TabIndex = 84;
-            this.label8.Text = "Initialization Image (Optional)";
             // 
             // panelPrompt
             // 
+            this.panelPrompt.Controls.Add(this.labelPromptInfo);
+            this.panelPrompt.Controls.Add(this.btnEmbeddingBrowse);
+            this.panelPrompt.Controls.Add(this.btnInitImgBrowse);
             this.panelPrompt.Controls.Add(this.label2);
             this.panelPrompt.Controls.Add(this.textboxPrompt);
             this.panelPrompt.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelPrompt.Location = new System.Drawing.Point(0, 0);
             this.panelPrompt.Margin = new System.Windows.Forms.Padding(0);
             this.panelPrompt.Name = "panelPrompt";
-            this.panelPrompt.Size = new System.Drawing.Size(633, 35);
+            this.panelPrompt.Size = new System.Drawing.Size(633, 55);
             this.panelPrompt.TabIndex = 0;
             // 
             // separator
@@ -1132,17 +1109,36 @@
             this.separator.TabStop = false;
             this.separator.UseVisualStyleBackColor = false;
             // 
-            // textboxExtraInitStrengths
+            // btnEmbeddingBrowse
             // 
-            this.textboxExtraInitStrengths.AllowDrop = true;
-            this.textboxExtraInitStrengths.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.textboxExtraInitStrengths.ForeColor = System.Drawing.Color.White;
-            this.textboxExtraInitStrengths.Location = new System.Drawing.Point(533, 7);
-            this.textboxExtraInitStrengths.MinimumSize = new System.Drawing.Size(4, 21);
-            this.textboxExtraInitStrengths.Name = "textboxExtraInitStrengths";
-            this.textboxExtraInitStrengths.Size = new System.Drawing.Size(100, 21);
-            this.textboxExtraInitStrengths.TabIndex = 91;
-            this.toolTip.SetToolTip(this.textboxExtraInitStrengths, resources.GetString("textboxExtraInitStrengths.ToolTip"));
+            this.btnEmbeddingBrowse.AutoColor = true;
+            this.btnEmbeddingBrowse.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnEmbeddingBrowse.ButtonImage = null;
+            this.btnEmbeddingBrowse.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
+            this.btnEmbeddingBrowse.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
+            this.btnEmbeddingBrowse.DrawImage = false;
+            this.btnEmbeddingBrowse.ForeColor = System.Drawing.Color.White;
+            this.btnEmbeddingBrowse.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
+            this.btnEmbeddingBrowse.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
+            this.btnEmbeddingBrowse.Location = new System.Drawing.Point(533, 29);
+            this.btnEmbeddingBrowse.Name = "btnEmbeddingBrowse";
+            this.btnEmbeddingBrowse.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+            this.btnEmbeddingBrowse.Size = new System.Drawing.Size(97, 18);
+            this.btnEmbeddingBrowse.TabIndex = 84;
+            this.btnEmbeddingBrowse.TabStop = false;
+            this.btnEmbeddingBrowse.Text = "Load Embedding";
+            this.btnEmbeddingBrowse.Click += new System.EventHandler(this.btnEmbeddingBrowse_Click);
+            // 
+            // labelPromptInfo
+            // 
+            this.labelPromptInfo.AutoSize = true;
+            this.labelPromptInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelPromptInfo.ForeColor = System.Drawing.Color.Silver;
+            this.labelPromptInfo.Location = new System.Drawing.Point(5, 32);
+            this.labelPromptInfo.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.labelPromptInfo.Name = "labelPromptInfo";
+            this.labelPromptInfo.Size = new System.Drawing.Size(0, 13);
+            this.labelPromptInfo.TabIndex = 85;
             // 
             // MainForm
             // 
@@ -1209,8 +1205,6 @@
             this.panelInitImgStrength.PerformLayout();
             this.tableLayoutPanel4.ResumeLayout(false);
             this.tableLayoutPanel4.PerformLayout();
-            this.panelInitImg.ResumeLayout(false);
-            this.panelInitImg.PerformLayout();
             this.panelPrompt.ResumeLayout(false);
             this.panelPrompt.PerformLayout();
             this.ResumeLayout(false);
@@ -1271,7 +1265,6 @@
         private System.Windows.Forms.Panel panelSteps;
         private System.Windows.Forms.Panel panelIterations;
         private System.Windows.Forms.Panel panelPrompt;
-        private System.Windows.Forms.Panel panelInitImg;
         private System.Windows.Forms.Panel panelSampler;
         private System.Windows.Forms.Panel panelRes;
         private System.Windows.Forms.Panel panelSeed;
@@ -1281,8 +1274,6 @@
         private System.Windows.Forms.Panel panel10;
         private System.Windows.Forms.Panel panelInitImgStrength;
         private HTAlt.WinForms.HTButton btnInitImgBrowse;
-        private System.Windows.Forms.TextBox textboxInitImgPath;
-        private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         private HTAlt.WinForms.HTSlider sliderInitStrength;
@@ -1290,6 +1281,8 @@
         private System.Windows.Forms.Button btnDebug;
         private System.Windows.Forms.Button btnSettings;
         private System.Windows.Forms.TextBox textboxExtraInitStrengths;
+        private HTAlt.WinForms.HTButton btnEmbeddingBrowse;
+        private System.Windows.Forms.Label labelPromptInfo;
     }
 }
 

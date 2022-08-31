@@ -29,7 +29,6 @@ namespace StableDiffusionGui
         public Cyotek.Windows.Forms.ImageBox ImgBoxOutput { get { return imgBoxOutput; } }
         public Label OutputImgLabel { get { return outputImgLabel; } }
         public System.Windows.Forms.Button BtnImgShare { get { return btnImgShare; } }
-        public TextBox TextboxInitImgPath { get { return textboxInitImgPath; } }
 
         public bool IsInFocus() { return (ActiveForm == this); }
 
@@ -162,7 +161,7 @@ namespace StableDiffusionGui
                             { "res", $"{MainUi.CurrentResW}x{MainUi.CurrentResH}" },
                             { "seed", upDownSeed.Value < 0 ? (new Random().Next(0, Int32.MaxValue)).ToString() : ((long)upDownSeed.Value).ToString() },
                             { "sampler", comboxSampler.Text.Trim() },
-                            { "initImg", textboxInitImgPath.Text.Trim() },
+                            { "initImg", MainUi.CurrentInitImgPath },
                             { "initStrengths", String.Join(",", MainUi.GetInitStrengths(textboxExtraInitStrengths.Text).Select(x => x.ToStringDot("0.0000"))) },
                             { "embedding", MainUi.CurrentEmbeddingPath },
                         },
@@ -247,7 +246,7 @@ namespace StableDiffusionGui
         private void sliderInitStrength_Scroll(object sender, ScrollEventArgs e)
         {
             float strength = sliderInitStrength.Value / 40f;
-            MainUi.CurrentInitStrength = strength;
+            MainUi.CurrentInitImgStrength = strength;
             labelInitStrength.Text = strength.ToString("0.000");
         }
 
@@ -335,33 +334,87 @@ namespace StableDiffusionGui
 
         #endregion
 
+        #region Init Img and Embedding
+
         private void btnInitImgBrowse_Click(object sender, EventArgs e)
         {
-            if (File.Exists(textboxInitImgPath.Text.Trim()))
+            if (!string.IsNullOrWhiteSpace(MainUi.CurrentInitImgPath))
             {
-                textboxInitImgPath.Text = "";
-                return;
+                MainUi.CurrentInitImgPath = "";
+            }
+            else
+            {
+                CommonOpenFileDialog dialog = new CommonOpenFileDialog { InitialDirectory = MainUi.CurrentInitImgPath.GetParentDirOfFile(), IsFolderPicker = false };
+
+                if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+                    MainUi.CurrentInitImgPath = dialog.FileName;
             }
 
-            CommonOpenFileDialog dialog = new CommonOpenFileDialog { InitialDirectory = textboxInitImgPath.Text.Trim().GetParentDirOfFile(), IsFolderPicker = false };
-
-            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
-                Program.MainForm.TextboxInitImgPath.Text = dialog.FileName;
-
-            UpdateInitImgUi();
+            UpdateInitImgAndEmbeddingUi();
         }
 
-        public void UpdateInitImgUi ()
+        public void UpdateInitImgAndEmbeddingUi ()
         {
-            bool fileExists = File.Exists(textboxInitImgPath.Text.Trim());
-            panelInitImgStrength.Visible = fileExists;
-            btnInitImgBrowse.Text = fileExists ? "Clear" : "Browse";
+            if (!string.IsNullOrWhiteSpace(MainUi.CurrentInitImgPath) && !File.Exists(MainUi.CurrentInitImgPath))
+            {
+                MainUi.CurrentInitImgPath = "";
+                Logger.Log($"Init image was cleared because the file no longer exists.");
+            }
+
+            if (!string.IsNullOrWhiteSpace(MainUi.CurrentEmbeddingPath) && !File.Exists(MainUi.CurrentEmbeddingPath))
+            {
+                MainUi.CurrentEmbeddingPath = "";
+                Logger.Log($"Embedding was cleared because the file no longer exists.");
+            }
+
+            bool imgExists = File.Exists(MainUi.CurrentInitImgPath);
+            panelInitImgStrength.Visible = imgExists;
+            btnInitImgBrowse.Text = imgExists ? "Clear Image" : "Load Image";
+
+            bool embeddingExists = File.Exists(MainUi.CurrentEmbeddingPath);
+            btnEmbeddingBrowse.Text = embeddingExists ? "Clear Embedding" : "Load Embedding";
+
+            if (!string.IsNullOrWhiteSpace(MainUi.CurrentInitImgPath) && !string.IsNullOrWhiteSpace(MainUi.CurrentEmbeddingPath))
+            {
+                labelPromptInfo.Text = $"With {Path.GetFileName(MainUi.CurrentInitImgPath).Trunc(20)} and {Path.GetFileName(MainUi.CurrentEmbeddingPath).Trunc(20)}";
+            }
+            else if (!string.IsNullOrWhiteSpace(MainUi.CurrentInitImgPath))
+            {
+                labelPromptInfo.Text = $"With {Path.GetFileName(MainUi.CurrentInitImgPath).Trunc(40)}";
+            }
+            else if (!string.IsNullOrWhiteSpace(MainUi.CurrentEmbeddingPath))
+            {
+                labelPromptInfo.Text = $"With {Path.GetFileName(MainUi.CurrentEmbeddingPath).Trunc(40)}";
+            }
+            else
+            {
+                labelPromptInfo.Text = "";
+            }
         }
 
         private void textboxInitImgPath_TextChanged(object sender, EventArgs e)
         {
-            UpdateInitImgUi();
+            UpdateInitImgAndEmbeddingUi();
         }
+
+        private void btnEmbeddingBrowse_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(MainUi.CurrentEmbeddingPath))
+            {
+                MainUi.CurrentEmbeddingPath = "";
+            }
+            else
+            {
+                CommonOpenFileDialog dialog = new CommonOpenFileDialog { InitialDirectory = MainUi.CurrentEmbeddingPath.GetParentDirOfFile(), IsFolderPicker = false };
+
+                if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+                    MainUi.CurrentEmbeddingPath = dialog.FileName;
+            }
+
+            UpdateInitImgAndEmbeddingUi();
+        }
+
+        #endregion
 
         private void btnDebug_Click(object sender, EventArgs e)
         {
