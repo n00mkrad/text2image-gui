@@ -56,6 +56,11 @@ namespace StableDiffusionGui
         {
             if (!Debugger.IsAttached)
             {
+                int pathLength = Paths.GetExeDir().Length;
+
+                if (pathLength > 70)
+                    UiUtils.ShowMessageBox($"You are running the program from this path:\n\n{Paths.GetExeDir()}\n\nIt's very long ({pathLength} characters), this can cause problems.\nPlease move the program to a shorter path or continue at your own risk.");
+
                 UiUtils.ShowMessageBox("READ THIS FIRST!\n\nThis software is still in development and may contain bugs.\n\nImportant:\n" +
                 "- You MUST have a recent (GTX 10 series or newer) Nvidia graphics card to use this.\n" +
                 "- You need as much VRAM (graphics card memory) as possible. IF YOU HAVE LESS THAN 8 GB, use this at your own risk, it might not work at all!!\n" +
@@ -64,7 +69,7 @@ namespace StableDiffusionGui
             }
             else
             {
-                
+                Logger.Log("Debugger is attached.");
             }
             
             if (!InstallationStatus.IsInstalled)
