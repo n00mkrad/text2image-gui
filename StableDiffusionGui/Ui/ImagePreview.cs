@@ -64,7 +64,7 @@ namespace StableDiffusionGui.Ui
             if (!meta.GeneratedResolution.IsEmpty)
                 infos.Add($"{meta.GeneratedResolution.Width}x{meta.GeneratedResolution.Height}");
 
-            if (meta.InitStrength >= 0)
+            if (meta.InitStrength > 0.0001f)
                 infos.Add($"Strength {meta.InitStrength.ToStringDot()}");
 
             if (meta.Sampler != "?")
