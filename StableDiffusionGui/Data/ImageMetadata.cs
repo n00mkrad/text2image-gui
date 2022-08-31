@@ -1,6 +1,5 @@
 ﻿using StableDiffusionGui.Main;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 
@@ -14,9 +13,11 @@ namespace StableDiffusionGui.Data
         public int Steps { get; set; }
         public int BatchSize { get; set; }
         public Size GeneratedResolution { get; set; }
-        public float Scale { get; set; }
-        public string Sampler { get; set; }
-        public long Seed { get; set; }
+        public float Scale { get; set; } = -1;
+        public string Sampler { get; set; } = "?";
+        public long Seed { get; set; } = -1;
+        public string InitImgName { get; set; }
+        public float InitStrength { get; set; }
 
         public ImageMetadata() { }
 
@@ -30,10 +31,9 @@ namespace StableDiffusionGui.Data
                 var split = dreamCli.Split("\"");
 
                 Prompt = split[1].Remove("\"").Trim();
+                GeneratedResolution = new Size();
 
                 var parameters = split.Last().Split(" ").Select(x => x.Trim()).ToList();
-
-                GeneratedResolution = new Size();
 
                 foreach (string s in parameters)
                 {
@@ -57,6 +57,12 @@ namespace StableDiffusionGui.Data
 
                     if (s.StartsWith("-S"))
                         Seed = s.Remove(0, 2).GetLong();
+
+                    if (s.StartsWith("-f"))
+                        InitStrength = s.Remove(0, 2).GetFloat();
+
+                    if (s.StartsWith("-IF"))
+                        InitImgName = s.Remove(0, 3);
                 }
             }
             catch(Exception ex)

@@ -53,8 +53,24 @@ namespace StableDiffusionGui.Ui
 
             ImageMetadata meta = CurrentImageMetadata;
 
-            Program.MainForm.OutputImgLabel.Text = $"Showing Image {_currIndex+1}/{_currentImages.Length} - " +
-                $"Seed {meta.Seed} - Scale {meta.Scale} - {meta.GeneratedResolution.Width}x{meta.GeneratedResolution.Height} - Sampler {meta.Sampler}";
+            List<string> infos = new List<string>();
+
+            if(meta.Seed >= 0)
+                infos.Add($"Seed {meta.Seed}");
+
+            if (meta.Scale >= 0)
+                infos.Add($"Scale {meta.Scale.ToStringDot()}");
+
+            if (!meta.GeneratedResolution.IsEmpty)
+                infos.Add($"{meta.GeneratedResolution.Width}x{meta.GeneratedResolution.Height}");
+
+            if (meta.InitStrength >= 0)
+                infos.Add($"Strength {meta.InitStrength.ToStringDot()}");
+
+            if (meta.Sampler != "?")
+                infos.Add($"{meta.Sampler}");
+
+            Program.MainForm.OutputImgLabel.Text = $"Showing Image {_currIndex+1}/{_currentImages.Length} {(infos.Count > 0 ? $" - {string.Join(" - ", infos)}" : "")}";
         }
 
         public static void Clear ()
