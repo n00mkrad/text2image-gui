@@ -59,7 +59,8 @@ namespace StableDiffusionGui
                 int pathLength = Paths.GetExeDir().Length;
 
                 if (pathLength > 70)
-                    UiUtils.ShowMessageBox($"You are running the program from this path:\n\n{Paths.GetExeDir()}\n\nIt's very long ({pathLength} characters), this can cause problems.\nPlease move the program to a shorter path or continue at your own risk.");
+                    UiUtils.ShowMessageBox($"You are running the program from this path:\n\n{Paths.GetExeDir()}\n\nIt's very long ({pathLength} characters), this can cause problems.\n" +
+                        $"Please move the program to a shorter path or continue at your own risk.", UiUtils.MessageType.Warning, Nmkoder.Forms.MessageForm.FontSize.Big);
 
                 UiUtils.ShowMessageBox("READ THIS FIRST!\n\nThis software is still in development and may contain bugs.\n\nImportant:\n" +
                 "- You MUST have a recent (GTX 10 series or newer) Nvidia graphics card to use this.\n" +
@@ -408,7 +409,7 @@ namespace StableDiffusionGui
                 labelPromptInfo.Text = "";
             }
 
-            labelPromptInfo.Location = labelPromptInfo.Text.Contains("\n") ? new Point(5, 25) : new Point(5, 32);
+            //labelPromptInfo.Location = labelPromptInfo.Text.Contains("\n") ? new Point(5, 29) : new Point(5, 32);
         }
 
         private void textboxInitImgPath_TextChanged(object sender, EventArgs e)
