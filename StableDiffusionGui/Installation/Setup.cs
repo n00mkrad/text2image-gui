@@ -105,7 +105,7 @@ namespace StableDiffusionGui.Installation
             if (string.IsNullOrWhiteSpace(log))
                 return;
 
-            Logger.Log($"[{(stderr ? "E" : "O")}] {log.Remove("PRINTME ")}", !log.Contains("PRINTME "), false, "installation");
+            Logger.Log($"[{(stderr ? "E" : "O")}] {log.Remove("PRINTME ").Remove("[O]").Remove("[E]")}", !log.Contains("PRINTME "), false, "installation");
         }
 
         public static void Patch ()
@@ -151,7 +151,7 @@ namespace StableDiffusionGui.Installation
             Logger.Log($"Model file downloaded ({FormatUtils.Bytes(new FileInfo(mdlPath).Length)}).");
         }
 
-        private static void Clone (string url, string dir, string commit = "" /* f77e0a545e28a11206b19f47af0af5c971491fa0 */)
+        private static void Clone (string url, string dir, string commit = "3287fa0e6ed27ffb1fe7bd7f54183449f5d087f3" /* f77e0a545e28a11206b19f47af0af5c971491fa0 */)
         {
             try
             {
