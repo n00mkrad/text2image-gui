@@ -51,10 +51,16 @@ namespace StableDiffusionGui
         {
             if (!Debugger.IsAttached)
             {
-                int pathLength = Paths.GetExeDir().Length;
+                string dir = Paths.GetExeDir();
 
-                if (pathLength > 70)
-                    UiUtils.ShowMessageBox($"You are running the program from this path:\n\n{Paths.GetExeDir()}\n\nIt's very long ({pathLength} characters), this can cause problems.\n" +
+                if(dir.ToLower().Replace("\\", "/").MatchesWildcard("*/users/*/onedrive/*"))
+                {
+                    UiUtils.ShowMessageBox($"Running this program out of the OneDrive folder is not supported. Please move it to a local drive and try again.", UiUtils.MessageType.Error, Nmkoder.Forms.MessageForm.FontSize.Big);
+                    Application.Exit();
+                }
+
+                if (dir.Length > 70)
+                    UiUtils.ShowMessageBox($"You are running the program from this path:\n\n{Paths.GetExeDir()}\n\nIt's very long ({dir.Length} characters), this can cause problems.\n" +
                         $"Please move the program to a shorter path or continue at your own risk.", UiUtils.MessageType.Warning, Nmkoder.Forms.MessageForm.FontSize.Big);
 
                 UiUtils.ShowMessageBox("READ THIS FIRST!\n\nThis software is still in development and may contain bugs.\n\nImportant:\n" +
