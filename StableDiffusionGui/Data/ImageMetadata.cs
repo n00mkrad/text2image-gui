@@ -59,7 +59,7 @@ namespace StableDiffusionGui.Data
                         Seed = s.Remove(0, 2).GetLong();
 
                     if (s.StartsWith("-f"))
-                        InitStrength = s.Remove(0, 2).GetFloat();
+                        InitStrength = 1f - s.Remove(0, 2).GetFloat();
 
                     if (s.StartsWith("-IF"))
                         InitImgName = s.Remove(0, 3);
