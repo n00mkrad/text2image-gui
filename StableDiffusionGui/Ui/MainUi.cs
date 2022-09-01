@@ -150,7 +150,7 @@ namespace StableDiffusionGui.Ui
             }
             else
             {
-                strengths.AddRange(customStrengthsText.Replace(" ", "").Split(",").Select(x => 1f - x.GetFloat()).Where(x => x > 0.05f));
+                strengths.AddRange(customStrengthsText.Replace(" ", "").Split(",").Select(x => x.GetFloat()).Where(x => x > 0.05f).Select(x => 1f - x));
             }
 
             return strengths;
