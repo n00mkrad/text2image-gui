@@ -6,7 +6,7 @@ using static StableDiffusionGui.Main.TextToImage;
 
 namespace StableDiffusionGui.Data
 {
-    public enum Implementation { StableDiffusion }
+    public enum Implementation { StableDiffusion, StableDiffusionOptimized }
 
     public class TtiSettings
     {

@@ -79,6 +79,8 @@ namespace StableDiffusionGui
                 UiUtils.ShowMessageBox("No complete installation of the Stable Diffusion files was found.\n\nThe GUI will n open the installer.\nPlease press \"Install\" in the next window to install all required files.");
                 installerBtn_Click(null, null);
             }
+
+            RefreshAfterSettingsChanged();
         }
 
         private void LoadUiElements()
@@ -101,6 +103,19 @@ namespace StableDiffusionGui
             ConfigParser.SaveGuiElement(sliderResH);
             ConfigParser.SaveComboxIndex(comboxSampler);
             ConfigParser.SaveGuiElement(sliderInitStrength);
+        }
+
+        public void RefreshAfterSettingsChanged ()
+        {
+            bool opt = Config.GetBool("checkboxOptimizedSd");
+
+            comboxSampler.Enabled = !opt;
+            textboxExtraScales.Enabled = !opt;
+            textboxExtraInitStrengths.Enabled = !opt;
+            btnPostProc.Visible = !opt;
+
+            if (opt)
+                Logger.Log($"Using low-memory code. This disables many features. Only keep this option enabled if your GPU has less than 8 GB of memory.");
         }
 
         private void installerBtn_Click(object sender, EventArgs e)
@@ -158,7 +173,7 @@ namespace StableDiffusionGui
 
                     TtiSettings settings = new TtiSettings
                     {
-                        Implementation = Implementation.StableDiffusion,
+                        Implementation = Config.GetBool("checkboxOptimizedSd") ? Implementation.StableDiffusionOptimized : Implementation.StableDiffusion,
                         Prompts = new string[] { textboxPrompt.Text },
                         Iterations = (int)upDownIterations.Value,
                         OurDir = Path.Combine(Paths.GetExeDir(), "out"),

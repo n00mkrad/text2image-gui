@@ -20,16 +20,19 @@ namespace StableDiffusionGui.Forms
         private void SettingsForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             SaveSettings();
+            Program.MainForm.RefreshAfterSettingsChanged();
         }
 
         void LoadSettings()
         {
+            ConfigParser.LoadGuiElement(checkboxOptimizedSd);
             ConfigParser.LoadGuiElement(checkboxFullPrecision);
             ConfigParser.LoadGuiElement(checkboxFolderPerPrompt);
         }
 
         void SaveSettings()
         {
+            ConfigParser.SaveGuiElement(checkboxOptimizedSd);
             ConfigParser.SaveGuiElement(checkboxFullPrecision);
             ConfigParser.SaveGuiElement(checkboxFolderPerPrompt);
         }

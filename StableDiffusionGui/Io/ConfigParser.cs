@@ -1,4 +1,4 @@
-﻿using StableDiffusionGui.IO;
+﻿using StableDiffusionGui.Io;
 using System;
 using System.Collections.Generic;
 using System.Linq;

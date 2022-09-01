@@ -1,5 +1,4 @@
 ﻿using LibGit2Sharp;
-using Microsoft.VisualBasic.Logging;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
@@ -9,7 +8,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -153,7 +151,7 @@ namespace StableDiffusionGui.Installation
 
         #region Git
 
-        private static void Clone (string url, string dir, string commit = "1404d8e98cd9038e2cd3e33b177e9b995b42bc3a" /* 3287fa0e6ed27ffb1fe7bd7f54183449f5d087f3 */)
+        private static void Clone (string url, string dir, string commit = "c629cd25edc7a600623e64992f05bef216380d65" /* 1404d8e98cd9038e2cd3e33b177e9b995b42bc3a */)
         {
             try
             {

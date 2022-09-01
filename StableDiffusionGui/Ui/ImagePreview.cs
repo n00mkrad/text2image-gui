@@ -67,7 +67,7 @@ namespace StableDiffusionGui.Ui
             if (meta.InitStrength > 0.0001f)
                 infos.Add($"Strength {meta.InitStrength.ToStringDot()}");
 
-            if (meta.Sampler != "?")
+            if (!string.IsNullOrWhiteSpace(meta.Sampler))
                 infos.Add($"{meta.Sampler}");
 
             Program.MainForm.OutputImgLabel.Text = $"Showing Image {_currIndex+1}/{_currentImages.Length} {(infos.Count > 0 ? $" - {string.Join(" - ", infos)}" : "")}";

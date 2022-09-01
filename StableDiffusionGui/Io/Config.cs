@@ -1,6 +1,5 @@
 ﻿using StableDiffusionGui.Forms;
 using Newtonsoft.Json;
-using StableDiffusionGui.Io;
 using StableDiffusionGui;
 using System;
 using System.Collections.Generic;
@@ -10,7 +9,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using StableDiffusionGui.Main;
 
-namespace StableDiffusionGui.IO
+namespace StableDiffusionGui.Io
 {
     class Config
     {

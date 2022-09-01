@@ -1,5 +1,5 @@
 ﻿using StableDiffusionGui.Io;
-using StableDiffusionGui.IO;
+using StableDiffusionGui.Io;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
@@ -73,7 +73,7 @@ namespace StableDiffusionGui.Main
                         string prompt = IoUtils.GetImageMetadata(img.FullName).Prompt;
                         int pathBudget = 255 - img.Directory.FullName.Length - 65;
                         string unixTimestamp = ((long)(DateTime.Now - new DateTime(1970, 1, 1)).TotalMilliseconds).ToString();
-                        string dirName = string.IsNullOrWhiteSpace(prompt) ? $"unknn_prompt_{unixTimestamp}" : FormatUtils.SanitizePromptFilename(prompt, pathBudget);
+                        string dirName = string.IsNullOrWhiteSpace(prompt) ? $"unknown_prompt_{unixTimestamp}" : FormatUtils.SanitizePromptFilename(prompt, pathBudget);
                         imageDirMap[img.FullName] = Directory.CreateDirectory(Path.Combine(TextToImage.CurrentTask.OutPath, dirName)).FullName;
                     }
                 }
@@ -211,7 +211,7 @@ namespace StableDiffusionGui.Main
             foreach (string prompt in prompts)
             {
                 promptFileContent += $"{prompt}\n";
-                TextToImage.CurrentTask.TargetImgCount++;
+                TextToImage.CurrentTask.TargetImgCount += iterations;
             }
 
             File.WriteAllText(promptFilePath, promptFileContent);
@@ -226,7 +226,7 @@ namespace StableDiffusionGui.Main
             string prec = $"{(Config.GetBool("checkboxFullPrecision") ? "full" : "autocast")}";
 
             dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && call \"{Paths.GetDataPath()}\\mc\\Scripts\\activate.bat\" ldo && " +
-                $"python \"{Paths.GetDataPath()}/repo/optimizedSD/optimized_txt2img.py\" --outdir {outPath.Wrap()} --from_file={promptFilePath.Wrap()} --n_iter {iterations}" +
+                $"python \"{Paths.GetDataPath()}/repo/optimizedSD/optimized_txt2img.py\" --outdir {outPath.Wrap()} --from-file {promptFilePath.Wrap()} --n_iter {iterations} " +
                 $"--ddim_steps {steps} --W {res.Width} --H {res.Height} --scale {scale.ToStringDot("0.0000")} --seed {seed} --precision {prec}";
 
             Logger.Log("cmd.exe " + dream.StartInfo.Arguments, true);
@@ -276,33 +276,73 @@ namespace StableDiffusionGui.Main
             //lastLogName = ai.LogFilename;
             Logger.Log(line, true, false, "sd");
 
-            bool replace = Logger.LastUiLine.Contains("...") || Logger.LastUiLine.MatchesWildcard("*Generated*image*in*");
+            bool ellipsis = Logger.LastUiLine.Contains("...");
 
-            if (line.Contains("Setting Sampler"))
+            if (TextToImage.LastTaskSettings != null && TextToImage.LastTaskSettings.Implementation == Data.Implementation.StableDiffusion)
             {
-                Logger.Log("Generating...");
-                Program.MainForm.SetProgress((int)Math.Round(((float)1 / TextToImage.CurrentTask.TargetImgCount) * 100f));
+                bool replace = ellipsis || Logger.LastUiLine.MatchesWildcard("*Generated*image*in*");
+
+                if (line.Contains("Setting Sampler"))
+                {
+                    Logger.Log("Generating...");
+                    Program.MainForm.SetProgress((int)Math.Round(((float)1 / TextToImage.CurrentTask.TargetImgCount) * 100f));
+                }
+
+                if (line.Contains("image(s) generated in "))
+                {
+                    var split = line.Split("image(s) generated in ");
+                    TextToImage.CurrentTask.ImgCount += split[0].GetInt();
+                    Program.MainForm.SetProgress((int)Math.Round(((float)(TextToImage.CurrentTask.ImgCount + 1) / TextToImage.CurrentTask.TargetImgCount) * 100f));
+
+                    int lastMsPerImg = $"{split[1].Remove(".").Remove("s")}0".GetInt();
+                    int remainingMs = (TextToImage.CurrentTask.TargetImgCount - TextToImage.CurrentTask.ImgCount) * lastMsPerImg;
+
+                    string lastLine = Logger.LastUiLine;
+
+                    Logger.Log($"Generated {split[0].GetInt()} image in {split[1]} ({TextToImage.CurrentTask.ImgCount}/{TextToImage.CurrentTask.TargetImgCount})" +
+                        $"{(TextToImage.CurrentTask.ImgCount > 1 && remainingMs > 1000 ? $" - ETA: {FormatUtils.Time(remainingMs, false)}" : "")}", false, replace || Logger.LastUiLine.MatchesWildcard("*Generated*image*in*"));
+                    ImagePreview.SetImages(TextToImage.CurrentTask.OutPath, true, TextToImage.CurrentTask.ImgCount);
+                }
             }
 
-            if (line.Contains("image(s) generated in "))
+            if (TextToImage.LastTaskSettings != null && TextToImage.LastTaskSettings.Implementation == Data.Implementation.StableDiffusionOptimized)
             {
-                var split = line.Split("image(s) generated in ");
-                TextToImage.CurrentTask.ImgCount += split[0].GetInt();
-                Program.MainForm.SetProgress((int)Math.Round(((float)(TextToImage.CurrentTask.ImgCount + 1) / TextToImage.CurrentTask.TargetImgCount) * 100f));
+                bool replace = ellipsis || Logger.LastUiLine.MatchesWildcard("*Generated*image*in*");
 
-                int lastMsPerImg = $"{split[1].Remove(".").Remove("s")}0".GetInt();
-                int remainingMs = (TextToImage.CurrentTask.TargetImgCount - TextToImage.CurrentTask.ImgCount) * lastMsPerImg;
+                if (line.Contains("reading prompts from"))
+                {
+                    Logger.Log("Generating...");
+                    Program.MainForm.SetProgress((int)Math.Round(((float)1 / TextToImage.CurrentTask.TargetImgCount) * 100f));
+                }
 
-                string lastLine = Logger.LastUiLine;
+                if (line.Contains("Decoding image: "))
+                {
+                    int percent = line.Split("Decoding image: ")[1].Split('#')[0].GetInt();
 
-                Logger.Log($"Generated {split[0].GetInt()} image in {split[1]} ({TextToImage.CurrentTask.ImgCount}/{TextToImage.CurrentTask.TargetImgCount})" +
-                    $"{(TextToImage.CurrentTask.ImgCount > 1 && remainingMs > 1000 ? $" - ETA: {FormatUtils.Time(remainingMs, false)}" : "")}", false, replace);
-                ImagePreview.SetImages(TextToImage.CurrentTask.OutPath, true, TextToImage.CurrentTask.ImgCount);
+                    if(percent > 0 && percent <= 100)
+                        Logger.Log($"Generating... {percent}%", false, replace);
+                }
+
+                if (line.MatchesWildcard("*data: 100%*<00:00,*it*]"))
+                {
+                    TextToImage.CurrentTask.ImgCount += 1;
+                    Program.MainForm.SetProgress((int)Math.Round(((float)(TextToImage.CurrentTask.ImgCount + 1) / TextToImage.CurrentTask.TargetImgCount) * 100f));
+
+                    int lastMsPerImg = line.EndsWith("it/s]") ? (1000000f / (line.Split("00:00, ").Last().Remove(".").Remove("s") + "0").GetInt()).RoundToInt() : (line.Split("00:00, ").Last().Remove(".").Remove("s") + "0").GetInt();
+                    int remainingMs = (TextToImage.CurrentTask.TargetImgCount - TextToImage.CurrentTask.ImgCount) * lastMsPerImg;
+
+                    string lastLine = Logger.LastUiLine;
+
+                    Logger.Log($"Generated 1 image in {FormatUtils.Time(lastMsPerImg, false)} ({TextToImage.CurrentTask.ImgCount}/{TextToImage.CurrentTask.TargetImgCount})" +
+                        $"{(TextToImage.CurrentTask.ImgCount > 1 && remainingMs > 1000 ? $" - ETA: {FormatUtils.Time(remainingMs, false)}" : "")}", false, replace || Logger.LastUiLine.MatchesWildcard("Generated*image*"));
+                    ImagePreview.SetImages(TextToImage.CurrentTask.OutPath, true, TextToImage.CurrentTask.ImgCount);
+                }
             }
+
 
             if (line.MatchesWildcard("*%|*/*[*B/s]*") && !line.ToLower().Contains("it/s") && !line.ToLower().Contains("s/it"))
             {
-                Logger.Log($"Downloading required files... {line.Trunc(80)}", false, replace);
+                Logger.Log($"Downloading required files... {line.Trunc(80)}", false, ellipsis);
             }
 
             //if (line.Contains("Generating: 100%"))
@@ -355,7 +395,7 @@ namespace StableDiffusionGui.Main
             if (!_hasErrored && line.ToLower().Contains("0 image(s) generated in"))
             {
                 _hasErrored = true;
-                UiUtils.ShowMessageBox($"An unknn error occured. Check the log for details:!\n\n{lastLogLines}", UiUtils.MessageType.Error);
+                UiUtils.ShowMessageBox($"An unknown error occured. Check the log for details:!\n\n{lastLogLines}", UiUtils.MessageType.Error);
             }
 
             if (_hasErrored)

@@ -14,7 +14,7 @@ namespace StableDiffusionGui.Data
         public int BatchSize { get; set; }
         public Size GeneratedResolution { get; set; }
         public float Scale { get; set; } = -1;
-        public string Sampler { get; set; } = "?";
+        public string Sampler { get; set; } = "";
         public long Seed { get; set; } = -1;
         public string InitImgName { get; set; }
         public float InitStrength { get; set; }
