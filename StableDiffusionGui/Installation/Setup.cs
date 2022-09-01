@@ -45,8 +45,6 @@ namespace StableDiffusionGui.Installation
                 l.Add($"");
                 l.Add($"cd /D {Paths.GetDataPath().Wrap()}");
                 l.Add($"");
-                l.Add($"CALL mc/condabin/conda.bat activate base");
-                l.Add($"");
                 l.Add($"cd repo");
                 l.Add($"");
                 l.Add($"install.cmd");
