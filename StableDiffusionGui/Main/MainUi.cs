@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -68,6 +69,20 @@ namespace StableDiffusionGui.Main
 
                 Program.MainForm.UpdateInitImgAndEmbeddingUi();
             }
+        }
+
+        public static string SanitizePrompt (string prompt)
+        {
+            prompt = new Regex(@"[^a-zA-Z0-9 -!*,.:()\-]").Replace(prompt, "");
+            prompt = prompt.Replace(" -", " ");
+
+            while (prompt.StartsWith("-"))
+                prompt = prompt.Substring(1);
+            
+            while (prompt.EndsWith("-"))
+                prompt = prompt.Remove(prompt.Length - 1);
+
+            return prompt;
         }
 
         public static List<float> GetScales(string customScalesText)

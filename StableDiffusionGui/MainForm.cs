@@ -109,7 +109,7 @@ namespace StableDiffusionGui
 
         public void CleanPrompt()
         {
-            textboxPrompt.Text = new Regex(@"[^a-zA-Z0-9 -!*,.:()\-]").Replace(textboxPrompt.Text, "");
+            textboxPrompt.Text = MainUi.SanitizePrompt(textboxPrompt.Text);
 
             if (upDownSeed.Text == "")
                 upDownSeed.Value = -1;
@@ -408,8 +408,6 @@ namespace StableDiffusionGui
             {
                 labelPromptInfo.Text = "";
             }
-
-            //labelPromptInfo.Location = labelPromptInfo.Text.Contains("\n") ? new Point(5, 29) : new Point(5, 32);
         }
 
         private void textboxInitImgPath_TextChanged(object sender, EventArgs e)

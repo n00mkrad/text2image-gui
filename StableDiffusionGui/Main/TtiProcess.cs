@@ -16,9 +16,12 @@ namespace StableDiffusionGui.Main
 {
     internal class TtiProcess
     {
+        private static bool _hasErrored = false;
+
         public static void Start(string outPath)
         {
             Program.MainForm.SetWorking(true);
+            _hasErrored = false;
             TextToImage.CurrentTask = new Data.TtiTaskInfo { StartTime = DateTime.Now, OutPath = outPath };
         }
 
@@ -186,6 +189,41 @@ namespace StableDiffusionGui.Main
                     $"{(TextToImage.CurrentTask.ImgCount > 1 && remainingMs > 1000 ? $" - ETA: {FormatUtils.Time(remainingMs, false)}" : "")}", false, Logger.LastUiLine.Contains("Generated"));
                 ImagePreview.SetImages(TextToImage.CurrentTask.OutPath, true, TextToImage.CurrentTask.ImgCount);
             }
+
+            string lastLogLines = string.Join("\n", Logger.GetSessionLogLastLines("sd", 6).Select(x => $"[{x.Split("]: [").Skip(1).FirstOrDefault()}"));
+
+            if (!_hasErrored && (line.Contains("RuntimeError") || line.Contains("ImportError") || line.Contains("OSError")))
+            {
+                _hasErrored = true;
+                UiUtils.ShowMessageBox($"Python Error:\n\n{lastLogLines}", UiUtils.MessageType.Error);
+            }
+
+            if (!_hasErrored && line.Contains("usage: "))
+            {
+                _hasErrored = true;
+                UiUtils.ShowMessageBox($"Invalid CLI syntax.", UiUtils.MessageType.Error);
+            }
+
+            if (!_hasErrored && line.ToLower().Contains("cuda out of memory"))
+            {
+                _hasErrored = true;
+                UiUtils.ShowMessageBox($"Your GPU ran out of VRAM! Try a lower resolution.\n\n{line}", UiUtils.MessageType.Error);
+            }
+
+            if (!_hasErrored && line.ToLower().Contains("illegal memory access"))
+            {
+                _hasErrored = true;
+                UiUtils.ShowMessageBox($"Your GPU appears to be unstable! If you have an overclock enabled, please disable it!\n\n{line}", UiUtils.MessageType.Error);
+            }
+
+            if (!_hasErrored && line.ToLower().Contains("0 image(s) generated in"))
+            {
+                _hasErrored = true;
+                UiUtils.ShowMessageBox($"An unknown error occured. Check the log for details:!\n\n{lastLogLines}", UiUtils.MessageType.Error);
+            }
+
+            if (_hasErrored)
+                TextToImage.Cancel();
         }
 
         public static void Kill()
