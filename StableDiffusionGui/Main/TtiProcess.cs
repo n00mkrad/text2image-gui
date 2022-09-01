@@ -84,6 +84,17 @@ namespace StableDiffusionGui.Main
             string promptFilePath = Path.Combine(Paths.GetSessionDataPath(), "prompts.txt");
             string promptFileContent = "";
 
+            string upscaling = "";
+            int upscaleSetting = Config.GetInt("comboxUpscale");
+
+            if (upscaleSetting == 1)
+                upscaling = "-U 2";
+            else if (upscaleSetting == 2)
+                upscaling = "-U 4";
+
+            float gfpganSetting = Config.GetFloat("sliderGfpgan");
+            string gfpgan = gfpganSetting > 0.01f ? $"-G {gfpganSetting.ToStringDot("0.00")}" : "";
+
             foreach (string prompt in prompts)
             {
                 for (int i = 0; i < iterations; i++)
@@ -93,7 +104,7 @@ namespace StableDiffusionGui.Main
                         foreach (float strength in initStrengths)
                         {
                             string init = File.Exists(initImg) ? $"--init_img {initImg.Wrap()} --strength {strength.ToStringDot("0.0000")}" : "";
-                            promptFileContent += $"{prompt} {init} -n {1} -s {steps} -C {scale.ToStringDot()} -A {sampler} -W {res.Width} -H {res.Height} -S {seed}\n";
+                            promptFileContent += $"{prompt} {init} -n {1} -s {steps} -C {scale.ToStringDot()} -A {sampler} -W {res.Width} -H {res.Height} -S {seed} {upscaling} {gfpgan}\n";
                             TextToImage.CurrentTask.TargetImgCount++;
                         }
                     }
@@ -121,7 +132,9 @@ namespace StableDiffusionGui.Main
             TextToImage.CurrentTask.Processes.Add(dream);
 
             dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && call \"{Paths.GetDataPath()}\\mc\\Scripts\\activate.bat\" ldo && " +
-                $"python \"{Paths.GetDataPath()}/repo/scripts/dream.py\" -o {outPath.Wrap()} --from_file={promptFilePath.Wrap()} {(!string.IsNullOrWhiteSpace(embedding) ? $"--embedding_path {embedding.Wrap()}" : "")}";
+                $"python \"{Paths.GetDataPath()}/repo/scripts/dream.py\" -o {outPath.Wrap()} " +
+                $"--from_file={promptFilePath.Wrap()} " +
+                $"{(!string.IsNullOrWhiteSpace(embedding) ? $"--embedding_path {embedding.Wrap()}" : "")}";
 
             Logger.Log("cmd.exe " + dream.StartInfo.Arguments, true);
 
@@ -170,6 +183,8 @@ namespace StableDiffusionGui.Main
             //lastLogName = ai.LogFilename;
             Logger.Log(line, true, false, "sd");
 
+            bool replace = Logger.LastUiLine.Contains("...") || Logger.LastUiLine.MatchesWildcard("*Generated*image*in*");
+
             if (line.Contains("Setting Sampler"))
             {
                 Logger.Log("Generating...");
@@ -185,10 +200,32 @@ namespace StableDiffusionGui.Main
                 int lastMsPerImg = $"{split[1].Remove(".").Remove("s")}0".GetInt();
                 int remainingMs = (TextToImage.CurrentTask.TargetImgCount - TextToImage.CurrentTask.ImgCount) * lastMsPerImg;
 
+                string lastLine = Logger.LastUiLine;
+
                 Logger.Log($"Generated {split[0].GetInt()} image in {split[1]} ({TextToImage.CurrentTask.ImgCount}/{TextToImage.CurrentTask.TargetImgCount})" +
-                    $"{(TextToImage.CurrentTask.ImgCount > 1 && remainingMs > 1000 ? $" - ETA: {FormatUtils.Time(remainingMs, false)}" : "")}", false, Logger.LastUiLine.Contains("Generated"));
+                    $"{(TextToImage.CurrentTask.ImgCount > 1 && remainingMs > 1000 ? $" - ETA: {FormatUtils.Time(remainingMs, false)}" : "")}", false, replace);
                 ImagePreview.SetImages(TextToImage.CurrentTask.OutPath, true, TextToImage.CurrentTask.ImgCount);
             }
+
+            if (line.MatchesWildcard("*%|*/*[*B/s]*") && !line.ToLower().Contains("it/s") && !line.ToLower().Contains("s/it"))
+            {
+                Logger.Log($"Downloading required files... {line.Trunc(80)}", false, replace);
+            }
+
+            if (line.Contains("Generating: 100%"))
+            {
+                Logger.Log($"Post-processing...", false, replace);
+            }
+
+            // if (line.Contains("Restoring Faces"))
+            // {
+            //     Logger.Log($"Restoring faces...", false, replace);
+            // }
+            // 
+            // if (line.MatchesWildcard("*Tile */*"))
+            // {
+            //     Logger.Log($"Upscaling...", false, replace);
+            // }
 
             string lastLogLines = string.Join("\n", Logger.GetSessionLogLastLines("sd", 6).Select(x => $"[{x.Split("]: [").Skip(1).FirstOrDefault()}"));
 

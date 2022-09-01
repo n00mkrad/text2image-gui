@@ -80,7 +80,7 @@ namespace StableDiffusionGui.Io
 
         public static void LoadGuiElement(HTAlt.WinForms.HTSlider slider)
         {
-            slider.Value = Config.GetInt(slider.Name);
+            slider.Value = Config.GetInt(slider.Name).Clamp(slider.Minimum, slider.Maximum);
         }
 
         public static void LoadComboxIndex(ComboBox comboBox)

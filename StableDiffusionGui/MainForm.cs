@@ -443,5 +443,10 @@ namespace StableDiffusionGui
         {
             new SettingsForm().ShowDialog();
         }
+
+        private void btnPostProc_Click(object sender, EventArgs e)
+        {
+            new PostProcSettingsForm().ShowDialog();
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using StableDiffusionGui.Data;
 using StableDiffusionGui.Io;
+using StableDiffusionGui.Main;
 using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace StableDiffusionGui.Main
+namespace StableDiffusionGui.Ui
 {
     internal class MainUi
     {
