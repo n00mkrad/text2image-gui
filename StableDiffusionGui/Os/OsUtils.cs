@@ -288,6 +288,9 @@ namespace StableDiffusionGui.Os
         {
             try
             {
+                if (data == null)
+                    return false;
+
                 Clipboard.SetDataObject(data);
                 return true;
             }
@@ -302,6 +305,9 @@ namespace StableDiffusionGui.Os
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(text))
+                    return false;
+
                 Clipboard.SetText(text);
                 return true;
             }
