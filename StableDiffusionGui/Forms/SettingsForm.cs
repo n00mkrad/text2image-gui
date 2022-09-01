@@ -31,11 +31,13 @@ namespace StableDiffusionGui.Forms
         void LoadSettings()
         {
             ConfigParser.LoadGuiElement(checkboxFullPrecision);
+            ConfigParser.LoadGuiElement(checkboxFolderPerPrompt);
         }
 
         void SaveSettings()
         {
             ConfigParser.SaveGuiElement(checkboxFullPrecision);
+            ConfigParser.SaveGuiElement(checkboxFolderPerPrompt);
         }
     }
 }

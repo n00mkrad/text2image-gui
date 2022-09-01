@@ -46,10 +46,14 @@
             this.label2 = new System.Windows.Forms.Label();
             this.panel11 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
+            this.checkboxFolderPerPrompt = new System.Windows.Forms.CheckBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel3.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
+            this.panel10.SuspendLayout();
+            this.panel9.SuspendLayout();
             this.panel2.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel8.SuspendLayout();
@@ -146,6 +150,7 @@
             // 
             // panel10
             // 
+            this.panel10.Controls.Add(this.checkboxFolderPerPrompt);
             this.panel10.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel10.Location = new System.Drawing.Point(307, 3);
             this.panel10.Name = "panel10";
@@ -154,6 +159,7 @@
             // 
             // panel9
             // 
+            this.panel9.Controls.Add(this.label3);
             this.panel9.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel9.Location = new System.Drawing.Point(3, 3);
             this.panel9.Name = "panel9";
@@ -242,12 +248,34 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "General";
             // 
+            // checkboxFolderPerPrompt
+            // 
+            this.checkboxFolderPerPrompt.AutoSize = true;
+            this.checkboxFolderPerPrompt.ForeColor = System.Drawing.Color.White;
+            this.checkboxFolderPerPrompt.Location = new System.Drawing.Point(5, 9);
+            this.checkboxFolderPerPrompt.Name = "checkboxFolderPerPrompt";
+            this.checkboxFolderPerPrompt.Size = new System.Drawing.Size(15, 14);
+            this.checkboxFolderPerPrompt.TabIndex = 111;
+            this.checkboxFolderPerPrompt.UseVisualStyleBackColor = true;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.ForeColor = System.Drawing.Color.White;
+            this.label3.Location = new System.Drawing.Point(5, 10);
+            this.label3.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(178, 13);
+            this.label3.TabIndex = 85;
+            this.label3.Text = "Create A Subfolder For Each Prompt";
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.ClientSize = new System.Drawing.Size(784, 601);
+            this.ClientSize = new System.Drawing.Size(784, 501);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.titleLabel);
             this.ForeColor = System.Drawing.Color.White;
@@ -263,6 +291,10 @@
             this.panel4.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
+            this.panel10.ResumeLayout(false);
+            this.panel10.PerformLayout();
+            this.panel9.ResumeLayout(false);
+            this.panel9.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.panel8.ResumeLayout(false);
@@ -296,5 +328,7 @@
         private System.Windows.Forms.Panel panel9;
         private System.Windows.Forms.Panel panel8;
         private System.Windows.Forms.CheckBox checkboxFullPrecision;
+        private System.Windows.Forms.CheckBox checkboxFolderPerPrompt;
+        private System.Windows.Forms.Label label3;
     }
 }

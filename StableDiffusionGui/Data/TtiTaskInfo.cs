@@ -12,6 +12,7 @@ namespace StableDiffusionGui.Data
         public int ImgCount { get; set; }
         public int TargetImgCount { get; set; }
         public string OutPath { get; set; } = "";
+        public bool SubfoldersPerPrompt { get; set; } = false;
         public DateTime StartTime { get; set; } = new DateTime();
         public List<Process> Processes { get; set; } = new List<Process>();
     }

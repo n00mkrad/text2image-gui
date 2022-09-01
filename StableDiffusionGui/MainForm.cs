@@ -5,18 +5,13 @@ using StableDiffusionGui.Main;
 using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.WindowsAPICodePack.Taskbar;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using System.Text.RegularExpressions;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using StableDiffusionGui.Installation;
 using StableDiffusionGui.Data;
@@ -75,7 +70,7 @@ namespace StableDiffusionGui
             
             if (!InstallationStatus.IsInstalled)
             {
-                UiUtils.ShowMessageBox("No complete installation of the Stable Diffusion files was found.\n\nThe GUI will now open the installer.\nPlease press \"Install\" in the next window to install all required files.");
+                UiUtils.ShowMessageBox("No complete installation of the Stable Diffusion files was found.\n\nThe GUI will n open the installer.\nPlease press \"Install\" in the next window to install all required files.");
                 installerBtn_Click(null, null);
             }
         }
@@ -160,7 +155,7 @@ namespace StableDiffusionGui
                         Implementation = Implementation.StableDiffusion,
                         Prompts = new string[] { textboxPrompt.Text },
                         Iterations = (int)upDownIterations.Value,
-                        OutPath = Path.Combine(Paths.GetExeDir(), "out"),
+                        OurDir = Path.Combine(Paths.GetExeDir(), "out"),
                         Params = new Dictionary<string, string>
                         {
                             { "steps", MainUi.CurrentSteps.ToString() },

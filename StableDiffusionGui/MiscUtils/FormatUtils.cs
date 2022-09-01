@@ -185,8 +185,8 @@ namespace StableDiffusionGui.MiscUtils
             {
                 ext = ext.Remove(".");
 
-                var now = DateTime.Now;
-                string timestamp = $"{now.Year}-{now.Month}-{now.Day}-{now.Hour}-{now.Minute}-{now.Second}";
+                var n = DateTime.Now;
+                string timestamp = $"{n.Year}-{n.Month.ToString().PadLeft(2, '0')}-{n.Day.ToString().PadLeft(2, '0')}-{n.Hour.ToString().PadLeft(2, '0')}-{n.Minute.ToString().PadLeft(2, '0')}-{n.Second.ToString().PadLeft(2, '0')}";
 
                 int pathBudget = pathLimit - parentDir.Length - timestamp.Length - suffix.Length - 4;
 
@@ -221,8 +221,7 @@ namespace StableDiffusionGui.MiscUtils
 
                 if (includePrompt)
                 {
-                    string cleanPrompt = new Regex(@"[^a-zA-Z0-9 -!,.()]").Replace(meta.Prompt, "_").Trunc(pathBudget - 1, false).Replace(" ", "_");
-                    return Path.Combine(parentDir, $"{timestamp}{suffix}-{cleanPrompt}{infoStr}") + $".{ext}";
+                    return Path.Combine(parentDir, $"{timestamp}{suffix}-{SanitizePromptFilename(meta.Prompt, pathBudget)}{infoStr}") + $".{ext}";
                 }
                 else
                 {
@@ -234,6 +233,11 @@ namespace StableDiffusionGui.MiscUtils
                 Logger.Log($"GetExportFilename Error: {ex.Message}\n{ex.StackTrace}");
                 return "";
             }
+        }
+
+        public static string SanitizePromptFilename (string prompt, int pathBudget = 64)
+        {
+            return new Regex(@"[^a-zA-Z0-9 -!,.()]").Replace(prompt, "_").Trunc(pathBudget - 1, false).Replace(" ", "_");
         }
     }
 }

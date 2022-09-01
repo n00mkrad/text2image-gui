@@ -22,7 +22,13 @@ namespace StableDiffusionGui.Main
         {
             Program.MainForm.SetWorking(true);
             _hasErrored = false;
-            TextToImage.CurrentTask = new Data.TtiTaskInfo { StartTime = DateTime.Now, OutPath = outPath };
+
+            TextToImage.CurrentTask = new Data.TtiTaskInfo
+            {
+                StartTime = DateTime.Now,
+                OutPath = outPath,
+                SubfoldersPerPrompt = Config.GetBool("checkboxFolderPerPrompt"),
+            };
         }
 
         public static void Finish()
@@ -52,13 +58,30 @@ namespace StableDiffusionGui.Main
                 //if (amount > 0)
                 //    images = images.Take(amount).ToList();
 
+                bool sub = TextToImage.CurrentTask.SubfoldersPerPrompt;
+                Dictionary<string, string> imageDirMap = new Dictionary<string, string>();
+
+                if (sub)
+                {
+                    foreach(var img in images)
+                    {
+                        string prompt = IoUtils.GetImageMetadata(img.FullName).Prompt;
+                        int pathBudget = 255 - img.Directory.FullName.Length - 65;
+                        string unixTimestamp = ((long)(DateTime.Now - new DateTime(1970, 1, 1)).TotalMilliseconds).ToString();
+                        string dirName = string.IsNullOrWhiteSpace(prompt) ? $"unknn_prompt_{unixTimestamp}" : FormatUtils.SanitizePromptFilename(prompt, pathBudget);
+                        imageDirMap[img.FullName] = Directory.CreateDirectory(Path.Combine(TextToImage.CurrentTask.OutPath, dirName)).FullName;
+                    }
+                }
+
                 List<string> renamedImgPaths = new List<string>();
 
                 for (int i = 0; i < images.Count; i++)
                 {
                     var img = images[i];
                     string number = $"-{(i + 1).ToString().PadLeft(images.Count.ToString().Length, '0')}";
-                    string renamedPath = FormatUtils.GetExportFilename(img.FullName, imagesDir, number, pattern.Remove("*").Split('.').Last(), _maxPathLength, true, true, true, true);
+
+                    string renamedPath = FormatUtils.GetExportFilename(img.FullName, sub ? imageDirMap[img.FullName] : imagesDir, number, pattern.Remove("*").Split('.').Last(), _maxPathLength, !sub, true, true, true);
+                    Logger.Log($"move {img.FullName} => {renamedPath}", true);
                     img.MoveTo(renamedPath);
                     renamedImgPaths.Add(renamedPath);
                 }
@@ -212,10 +235,10 @@ namespace StableDiffusionGui.Main
                 Logger.Log($"Downloading required files... {line.Trunc(80)}", false, replace);
             }
 
-            if (line.Contains("Generating: 100%"))
-            {
-                Logger.Log($"Post-processing...", false, replace);
-            }
+            //if (line.Contains("Generating: 100%"))
+            //{
+            //    Logger.Log($"Post-processing...", false, replace);
+            //}
 
             // if (line.Contains("Restoring Faces"))
             // {
@@ -256,7 +279,7 @@ namespace StableDiffusionGui.Main
             if (!_hasErrored && line.ToLower().Contains("0 image(s) generated in"))
             {
                 _hasErrored = true;
-                UiUtils.ShowMessageBox($"An unknown error occured. Check the log for details:!\n\n{lastLogLines}", UiUtils.MessageType.Error);
+                UiUtils.ShowMessageBox($"An unknn error occured. Check the log for details:!\n\n{lastLogLines}", UiUtils.MessageType.Error);
             }
 
             if (_hasErrored)
