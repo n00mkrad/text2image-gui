@@ -38,9 +38,14 @@ namespace StableDiffusionGui.Main
             PostProcess(TextToImage.CurrentTask.OutPath, true, TextToImage.CurrentTask.TargetImgCount);
 
             if(imgCount > 0)
+            {
                 Logger.Log($"Done!");
+            }
             else
-                Logger.Log($"No images generated.");
+            {
+                bool logCopySuccess = OsUtils.SetClipboard(Logger.GetSessionLog("sd"));
+                Logger.Log($"No images generated. {(logCopySuccess ? "Log was copied to clipboard." : "")}");
+            }
 
             Program.MainForm.SetWorking(false);
         }
@@ -154,10 +159,75 @@ namespace StableDiffusionGui.Main
             Process dream = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
             TextToImage.CurrentTask.Processes.Add(dream);
 
+            string prec = $"{(Config.GetBool("checkboxFullPrecision") ? "-F" : "")}";
+
             dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && call \"{Paths.GetDataPath()}\\mc\\Scripts\\activate.bat\" ldo && " +
-                $"python \"{Paths.GetDataPath()}/repo/scripts/dream.py\" -o {outPath.Wrap()} " +
-                $"--from_file={promptFilePath.Wrap()} " +
+                $"python \"{Paths.GetDataPath()}/repo/scripts/dream.py\" -o {outPath.Wrap()} --from_file={promptFilePath.Wrap()} {prec}" +
                 $"{(!string.IsNullOrWhiteSpace(embedding) ? $"--embedding_path {embedding.Wrap()}" : "")}";
+
+            Logger.Log("cmd.exe " + dream.StartInfo.Arguments, true);
+
+            if (!OsUtils.ShowHiddenCmd())
+            {
+                dream.OutputDataReceived += (sender, line) => { LogOutput(line.Data); };
+                dream.ErrorDataReceived += (sender, line) => { LogOutput(line.Data, true); };
+            }
+
+            Logger.Log("Loading...");
+            dream.Start();
+
+            if (!OsUtils.ShowHiddenCmd())
+            {
+                dream.BeginOutputReadLine();
+                dream.BeginErrorReadLine();
+            }
+
+            while (!dream.HasExited) await Task.Delay(1);
+
+            Finish();
+        }
+
+        public static async Task RunStableDiffusionOptimized(string[] prompts, string initImg, float initStrengths, int iterations, int steps, float scale, long seed, Size res, string outPath)
+        {
+            Start(outPath);
+
+            if (File.Exists(initImg))
+                initImg = TtiUtils.ResizeInitImg(initImg, res, true);
+
+            string promptFilePath = Path.Combine(Paths.GetSessionDataPath(), "prompts.txt");
+            string promptFileContent = "";
+
+            // string upscaling = "";
+            // int upscaleSetting = Config.GetInt("comboxUpscale");
+            // 
+            // if (upscaleSetting == 1)
+            //     upscaling = "-U 2";
+            // else if (upscaleSetting == 2)
+            //     upscaling = "-U 4";
+            // 
+            // float gfpganSetting = Config.GetFloat("sliderGfpgan");
+            // string gfpgan = gfpganSetting > 0.01f ? $"-G {gfpganSetting.ToStringDot("0.00")}" : "";
+
+            foreach (string prompt in prompts)
+            {
+                promptFileContent += $"{prompt}\n";
+                TextToImage.CurrentTask.TargetImgCount++;
+            }
+
+            File.WriteAllText(promptFilePath, promptFileContent);
+
+            Logger.Log($"Preparing to run Optimized Stable Diffusion - {iterations} Iterations, {steps} Steps, Scale {scale}, {res.Width}x{res.Height}, Starting Seed: {seed}");
+
+            Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} with {iterations} iteration{(iterations != 1 ? "s" : "")} each = {TextToImage.CurrentTask.TargetImgCount} images total.");
+
+            Process dream = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
+            TextToImage.CurrentTask.Processes.Add(dream);
+
+            string prec = $"{(Config.GetBool("checkboxFullPrecision") ? "full" : "autocast")}";
+
+            dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && call \"{Paths.GetDataPath()}\\mc\\Scripts\\activate.bat\" ldo && " +
+                $"python \"{Paths.GetDataPath()}/repo/optimizedSD/optimized_txt2img.py\" --outdir {outPath.Wrap()} --from_file={promptFilePath.Wrap()} --n_iter {iterations}" +
+                $"--ddim_steps {steps} --W {res.Width} --H {res.Height} --scale {scale.ToStringDot("0.0000")} --seed {seed} --precision {prec}";
 
             Logger.Log("cmd.exe " + dream.StartInfo.Arguments, true);
 
@@ -256,6 +326,12 @@ namespace StableDiffusionGui.Main
             {
                 _hasErrored = true;
                 UiUtils.ShowMessageBox($"Python Error:\n\n{lastLogLines}", UiUtils.MessageType.Error);
+            }
+
+            if (!_hasErrored && (line.Contains("PytorchStreamReader failed reading zip archive") || line.Contains("UnpicklingError")))
+            {
+                _hasErrored = true;
+                UiUtils.ShowMessageBox($"Your model file seems to be damaged or incomplete!\n\n{lastLogLines}", UiUtils.MessageType.Error);
             }
 
             if (!_hasErrored && line.Contains("usage: "))
