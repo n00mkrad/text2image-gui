@@ -149,8 +149,8 @@ namespace StableDiffusionGui.Main
 
             string batPath = Path.Combine(Paths.GetSessionDataPath(), "dream.bat");
 
-            string batText = $"@echo off\n title Dream.py CLI && cd /D {Paths.GetDataPath().Wrap()} && call \"{Paths.GetDataPath()}\\mc\\Scripts\\activate.bat\" ldo && " +
-                $"python \"{Paths.GetDataPath()}/repo/scripts/dream.py\" -o {outPath.Wrap()} {(Config.GetBool("checkboxFullPrecision") ? "--full_precision" : "")}";
+            string batText = $"@echo off\n title Dream.py CLI && cd /D {Paths.GetDataPath().Wrap()} && call \"mc\\Scripts\\activate.bat\" \"mc/envs/ldo\" && " +
+                $"python \"repo/scripts/dream.py\" -o {outPath.Wrap()} {(Config.GetBool("checkboxFullPrecision") ? "--full_precision" : "")}";
 
             File.WriteAllText(batPath, batText);
             Process.Start(batPath);

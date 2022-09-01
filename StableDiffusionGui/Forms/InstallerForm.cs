@@ -54,6 +54,9 @@ namespace StableDiffusionGui.Forms
 
                 if (text.Contains("model"))
                     checkedListBoxStatus.SetItemChecked(i, InstallationStatus.HasSdModel());
+
+                if (text.Contains("upscalers"))
+                    checkedListBoxStatus.SetItemChecked(i, InstallationStatus.HasSdUpscalers());
             }
 
             if (checkedListBoxStatus.CheckedItems.Count == checkedListBoxStatus.Items.Count) // all checked
@@ -77,13 +80,14 @@ namespace StableDiffusionGui.Forms
 
         private void btnPatch_Click(object sender, EventArgs e)
         {
-            Setup.Patch();
+            //Setup.Patch();
+            Setup.InstallUpscalers();
         }
 
         private async void btnRedownloadModel_Click(object sender, EventArgs e)
         {
             this.Enabled = false;
-            await Setup.DownloadModelFile(true);
+            await Setup.DownloadSdModelFile(true);
             this.Enabled = true;
         }
     }

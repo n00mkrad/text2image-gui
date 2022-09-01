@@ -51,5 +51,17 @@ namespace StableDiffusionGui.Installation
             string mdlPath = Path.Combine(Paths.GetDataPath(), "model.ckpt");
             return File.Exists(mdlPath);
         }
+
+        public static bool HasSdUpscalers()
+        {
+            string esrganPath = Path.Combine(Paths.GetDataPath(), "repo", "src", "realesrgan");
+            bool hasEsrgan = Directory.Exists(esrganPath);
+
+            string gfpPath = Path.Combine(Paths.GetDataPath(), "repo", "GFPGAN");
+            string gfpMdlPath = Path.Combine(Paths.GetDataPath(), "repo", "GFPGAN", "model.pth");
+            bool hasGfp = Directory.Exists(gfpPath) && File.Exists(gfpMdlPath);
+
+            return hasEsrgan && hasGfp;
+        }
     }
 }

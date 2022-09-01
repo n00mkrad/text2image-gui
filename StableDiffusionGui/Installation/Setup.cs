@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -77,10 +78,9 @@ namespace StableDiffusionGui.Installation
                 while (!p.HasExited) await Task.Delay(1);
 
                 Patch();
-
+                await InstallUpscalers();
                 RemoveGitFiles(repoPath);
-
-                await DownloadModelFile();
+                await DownloadSdModelFile();
 
                 if (InstallationStatus.IsInstalled)
                 {
@@ -127,7 +127,7 @@ namespace StableDiffusionGui.Installation
 
         }
 
-        public static async Task DownloadModelFile (bool force = false)
+        public static async Task DownloadSdModelFile (bool force = false)
         {
             string mdlPath = Path.Combine(Paths.GetDataPath(), "model.ckpt");
             var filesize = File.Exists(mdlPath) ? new FileInfo(mdlPath).Length : 0;
@@ -151,7 +151,9 @@ namespace StableDiffusionGui.Installation
             Logger.Log($"Model file downloaded ({FormatUtils.Bytes(new FileInfo(mdlPath).Length)}).");
         }
 
-        private static void Clone (string url, string dir, string commit = "3287fa0e6ed27ffb1fe7bd7f54183449f5d087f3" /* f77e0a545e28a11206b19f47af0af5c971491fa0 */)
+        #region Git
+
+        private static void Clone (string url, string dir, string commit = "1404d8e98cd9038e2cd3e33b177e9b995b42bc3a" /* 3287fa0e6ed27ffb1fe7bd7f54183449f5d087f3 */)
         {
             try
             {
@@ -166,7 +168,7 @@ namespace StableDiffusionGui.Installation
                     }
                 }
 
-                Logger.Log($"Done clonging repository.");
+                Logger.Log($"Done cloning repository.");
             }
             catch (Exception ex)
             {
@@ -190,6 +192,63 @@ namespace StableDiffusionGui.Installation
             IoUtils.GetFilesSorted(tamingPath, true, "*.png").ToList().ForEach(x => IoUtils.TryDeleteIfExists(x));
         }
 
+        #endregion
+
+        #region Upscaling Models
+
+        public static async Task InstallUpscalers (bool force = false, bool print = true)
+        {
+            try
+            {
+                if (print)
+                    Logger.Log("Installing RealESRGAN...");
+
+                string batPath = Path.Combine(GetDataSubPath("repo"), "install-upscalers.cmd");
+                Process installBat = OsUtils.NewProcess(false, batPath);
+                installBat.Start();
+
+                while (!installBat.HasExited)
+                    await Task.Delay(100);
+
+                if (print)
+                    Logger.Log("Installing GFPGAN...");
+
+                string gfpganPath = Path.Combine(GetDataSubPath("repo"), "GFPGAN");
+                Repository.Clone(@"https://github.com/TencentARC/GFPGAN.git", gfpganPath, new CloneOptions() { BranchName = "master" });
+
+                using (var localRepo = new Repository(gfpganPath))
+                {
+                    var localCommit = localRepo.Lookup<Commit>("3e27784b1b4eb008d06c04dbbaf6bdde34c4da84");
+                    Commands.Checkout(localRepo, localCommit);
+                }
+
+                if (print)
+                    Logger.Log("Downloading GFPGAN model file...");
+
+                string gfpGanMdlPath = Path.Combine(gfpganPath, "model.pth");
+
+                IoUtils.TryDeleteIfExists(gfpGanMdlPath);
+
+                Process gfpMdlDl = OsUtils.NewProcess(false);
+                gfpMdlDl.StartInfo.Arguments = $"/C curl -L \"https://github.com/TencentARC/GFPGAN/releases/download/v1.3.0/GFPGANv1.3.pth\" -o {gfpGanMdlPath.Wrap()}";
+                gfpMdlDl.Start();
+
+                while (!gfpMdlDl.HasExited)
+                    await Task.Delay(100);
+
+                Logger.Log($"Downloaded and installed RealESRGAN and GFPGAN.");
+            }
+            catch (Exception ex)
+            {
+                Logger.Log($"Failed to install upscalers: {ex.Message}");
+                Logger.Log($"{ex.StackTrace}", true);
+            }
+        }
+
+        #endregion
+
+        #region Uninstall
+
         public static async Task Cleanup ()
         {
             IoUtils.SetAttributes(GetDataSubPath("repo"), FileAttributes.Normal);
@@ -201,6 +260,8 @@ namespace StableDiffusionGui.Installation
         {
             await IoUtils.TryDeleteIfExistsAsync(Path.Combine(Paths.GetDataPath(), "mc", "envs", "ldo"));
         }
+
+        #endregion
 
         private static string GetDataSubPath (string dir)
         {
