@@ -124,7 +124,7 @@
     <value>Here you can enter additional scales to run per image.
 
 Basic Syntax:
-10,12,24
+10,12,14
 will run your chosen scale as well as scale 10, 12 and 14.
 
 Incremental Syntax:
@@ -135,15 +135,15 @@ will run scales 10 to 14 with steps of 0.5.</value>
     <value>17, 17</value>
   </metadata>
   <data name="textboxExtraInitStrengths.ToolTip" xml:space="preserve">
-    <value>Here you can enter additional scales to run per image.
+    <value>Here you can enter additional strength values to run per image.
 
 Basic Syntax:
-10,12,24
-will run your chosen scale as well as scale 10, 12 and 14.
+0.2,0.4,0.6
+will run your chosen scale as well as scale 0.2, 0.4 and 0.6.
 
 Incremental Syntax:
-10 &gt; 14 : 0.5
-will run scales 10 to 14 with steps of 0.5.</value>
+0.2 &gt; 0.6 : 0.1
+will run scales 0.2 to 0.6 with steps of 0.1.</value>
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
