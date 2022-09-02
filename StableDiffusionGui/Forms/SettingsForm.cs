@@ -29,14 +29,21 @@ namespace StableDiffusionGui.Forms
             ConfigParser.LoadGuiElement(checkboxFullPrecision);
             ConfigParser.LoadGuiElement(checkboxFolderPerPrompt);
             ConfigParser.LoadGuiElement(checkboxAdvancedMode);
+            ConfigParser.LoadGuiElement(checkboxPromptInFilename);
         }
 
         void SaveSettings()
         {
             ConfigParser.SaveGuiElement(checkboxOptimizedSd);
             ConfigParser.SaveGuiElement(checkboxFullPrecision);
-            ConfigParser.LoadGuiElement(checkboxFolderPerPrompt);
+            ConfigParser.SaveGuiElement(checkboxFolderPerPrompt);
             ConfigParser.SaveGuiElement(checkboxAdvancedMode);
+            ConfigParser.SaveGuiElement(checkboxPromptInFilename);
+        }
+
+        private void checkboxFolderPerPrompt_CheckedChanged(object sender, EventArgs e)
+        {
+            panelPromptInFilename.Visible = !checkboxFolderPerPrompt.Checked;
         }
     }
 }
