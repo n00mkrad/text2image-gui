@@ -372,6 +372,9 @@ namespace StableDiffusionGui
 
         private void btnInitImgBrowse_Click(object sender, EventArgs e)
         {
+            if (Program.Busy)
+                return;
+
             if (!string.IsNullOrWhiteSpace(MainUi.CurrentInitImgPath))
             {
                 MainUi.CurrentInitImgPath = "";
@@ -433,6 +436,9 @@ namespace StableDiffusionGui
 
         private void btnEmbeddingBrowse_Click(object sender, EventArgs e)
         {
+            if (Program.Busy)
+                return;
+
             if (!string.IsNullOrWhiteSpace(MainUi.CurrentEmbeddingPath))
             {
                 MainUi.CurrentEmbeddingPath = "";

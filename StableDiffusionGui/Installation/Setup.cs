@@ -32,7 +32,7 @@ namespace StableDiffusionGui.Installation
                 string repoPath = GetDataSubPath("repo");
 
                 Logger.Log("Cloning repository...");
-                Clone($"https://github.com/{GitFile}", repoPath);
+                CloneSdRepo($"https://github.com/{GitFile}", repoPath);
                 Logger.Log("Done.");
 
                 string[] subDirs = new string[] { "mc", "git/bin" };
@@ -149,7 +149,7 @@ namespace StableDiffusionGui.Installation
 
         #region Git
 
-        private static void Clone (string url, string dir, string commit = "c629cd25edc7a600623e64992f05bef216380d65" /* 1404d8e98cd9038e2cd3e33b177e9b995b42bc3a */)
+        private static void CloneSdRepo (string url, string dir, string commit = "" /* 1404d8e98cd9038e2cd3e33b177e9b995b42bc3a */)
         {
             try
             {

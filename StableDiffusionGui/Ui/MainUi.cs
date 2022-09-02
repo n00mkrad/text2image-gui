@@ -42,6 +42,9 @@ namespace StableDiffusionGui.Ui
 
         public static void HandleDroppedFiles(string[] paths)
         {
+            if (Program.Busy)
+                return;
+
             foreach (string path in paths.Where(x => Path.GetExtension(x) == ".png"))
             {
                 ImageMetadata meta = IoUtils.GetImageMetadata(path);
