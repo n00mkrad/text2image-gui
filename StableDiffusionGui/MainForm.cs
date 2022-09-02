@@ -384,7 +384,12 @@ namespace StableDiffusionGui
                 CommonOpenFileDialog dialog = new CommonOpenFileDialog { InitialDirectory = MainUi.CurrentInitImgPath.GetParentDirOfFile(), IsFolderPicker = false };
 
                 if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
-                    MainUi.CurrentInitImgPath = dialog.FileName;
+                {
+                    if (MainUi.ValidInitImgExtensions.Contains(Path.GetExtension(dialog.FileName)))
+                        MainUi.CurrentInitImgPath = dialog.FileName;
+                    else
+                        UiUtils.ShowMessageBox("Invalid file type.");
+                }
             }
 
             UpdateInitImgAndEmbeddingUi();
@@ -448,7 +453,12 @@ namespace StableDiffusionGui
                 CommonOpenFileDialog dialog = new CommonOpenFileDialog { InitialDirectory = MainUi.CurrentEmbeddingPath.GetParentDirOfFile(), IsFolderPicker = false };
 
                 if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
-                    MainUi.CurrentEmbeddingPath = dialog.FileName;
+                {
+                    if (MainUi.ValidInitEmbeddingExtensions.Contains(Path.GetExtension(dialog.FileName)))
+                        MainUi.CurrentEmbeddingPath = dialog.FileName;
+                    else
+                        UiUtils.ShowMessageBox("Invalid file type.");
+                }
             }
 
             UpdateInitImgAndEmbeddingUi();
