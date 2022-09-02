@@ -28,13 +28,15 @@ namespace StableDiffusionGui.Forms
             ConfigParser.LoadGuiElement(checkboxOptimizedSd);
             ConfigParser.LoadGuiElement(checkboxFullPrecision);
             ConfigParser.LoadGuiElement(checkboxFolderPerPrompt);
+            ConfigParser.LoadGuiElement(checkboxAdvancedMode);
         }
 
         void SaveSettings()
         {
             ConfigParser.SaveGuiElement(checkboxOptimizedSd);
             ConfigParser.SaveGuiElement(checkboxFullPrecision);
-            ConfigParser.SaveGuiElement(checkboxFolderPerPrompt);
+            ConfigParser.LoadGuiElement(checkboxFolderPerPrompt);
+            ConfigParser.SaveGuiElement(checkboxAdvancedMode);
         }
     }
 }

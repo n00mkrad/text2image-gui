@@ -20,8 +20,17 @@ namespace StableDiffusionGui.Main
 
         public static async Task RunTti(TtiSettings s)
         {
-            if(s != null)
+            if (s == null)
+                return;
+
                 LastTaskSettings = s;
+            s.Prompts = s.Prompts.Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
+
+            if (!s.Prompts.Any())
+            {
+                Logger.Log($"No prompts to run!");
+                return;
+            }
 
             if (s.Implementation == Implementation.StableDiffusion)
                 await TtiProcess.RunStableDiffusion(s.Prompts, s.Params["initImg"], s.Params["embedding"], s.Params["initStrengths"].Replace(" ", "").Split(",").Select(x => x.GetFloat()).ToArray(),
