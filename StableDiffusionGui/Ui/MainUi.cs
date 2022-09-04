@@ -93,16 +93,27 @@ namespace StableDiffusionGui.Ui
                 float valTo = splitMinMax[1].Trim().GetFloat();
                 float step = Math.Abs(customScalesText.Split(':').Last().GetFloat());
                 
-                if (valFrom > valTo) 
-                    (valFrom, valTo) = (valTo, valFrom);
+                int stepCount = 1 + (int)((valTo - valFrom) / step);
+                if (stepCount < 0)
+                {
+                    // align signs
+                    stepCount *= -1;
+                    step *= -1;
+                }
 
                 return new List<float>(
-                    from x in Enumerable.Range(0, 1 + (int)((valTo - valFrom) / step))
+                    from x in Enumerable.Range(0,stepCount)
                     select valFrom + x * step);
             }
             List<float> scales = new List<float> { CurrentScale };
-            scales.AddRange(customScalesText.Replace(" ", "").Split(",").Select(x => x.GetFloat()));
-            
+            foreach (string s in customScalesText.Split(","))
+            {
+                float f = 0;
+                if (float.TryParse(s, out f))
+                {
+                    scales.Add(f);
+                }
+            }
             return scales;
         }
 
