@@ -80,12 +80,20 @@ namespace StableDiffusionGui.Ui
         {
             prompt = new Regex(@"[^a-zA-Z0-9 -!*,.:()\-]").Replace(prompt, "");
             prompt = prompt.Replace(" -", " ");
-            return prompt.Trim('-');
+
+            while (prompt.StartsWith("-"))
+                prompt = prompt.Substring(1);
+            
+            while (prompt.EndsWith("-"))
+                prompt = prompt.Remove(prompt.Length - 1);
+
+            return prompt;
         }
 
         public static List<float> GetScales(string customScalesText)
         {
-   
+            List<float> scales = new List<float> { CurrentScale };
+
             if (customScalesText.MatchesWildcard("* > * : *"))
             {
                 var splitMinMax = customScalesText.Trim().Split(':')[0].Split('>');
@@ -120,7 +128,8 @@ namespace StableDiffusionGui.Ui
 
         public static List<float> GetInitStrengths(string customStrengthsText)
         {
-  
+            List<float> strengths = new List<float> { 1f - CurrentInitImgStrength };
+
             if (customStrengthsText.MatchesWildcard("* > * : *"))
             {
                 var splitMinMax = customStrengthsText.Trim().Split(':')[0].Split('>');
