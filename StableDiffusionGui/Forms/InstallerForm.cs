@@ -43,7 +43,7 @@ namespace StableDiffusionGui.Forms
             {
                 string text = checkedListBoxStatus.Items[i].ToString().ToLower();
 
-                if (text.Contains("miniconda"))
+                if (text.Contains("conda"))
                     checkedListBoxStatus.SetItemChecked(i, InstallationStatus.HasConda());
 
                 if (text.Contains("repository"))
@@ -78,16 +78,27 @@ namespace StableDiffusionGui.Forms
             this.Enabled = true;
         }
 
-        private void btnPatch_Click(object sender, EventArgs e)
+        private void btnClone_Click(object sender, EventArgs e)
         {
-            //Setup.Patch();
-            Setup.InstallUpscalers();
+            this.Enabled = false;
+            Setup.CloneSdRepo();
+            UpdateStatus();
+            this.Enabled = true;
         }
 
         private async void btnRedownloadModel_Click(object sender, EventArgs e)
         {
             this.Enabled = false;
             await Setup.DownloadSdModelFile(true);
+            UpdateStatus();
+            this.Enabled = true;
+        }
+
+        private async void btnInstallUpscalers_Click(object sender, EventArgs e)
+        {
+            this.Enabled = false;
+            await Setup.InstallUpscalers();
+            UpdateStatus();
             this.Enabled = true;
         }
     }

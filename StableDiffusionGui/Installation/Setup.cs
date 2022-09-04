@@ -32,7 +32,7 @@ namespace StableDiffusionGui.Installation
                 string repoPath = GetDataSubPath("repo");
 
                 Logger.Log("Cloning repository...");
-                CloneSdRepo($"https://github.com/{GitFile}", repoPath);
+                CloneSdRepo();
                 Logger.Log("Done.");
 
                 string[] subDirs = new string[] { "mb", "git/bin" };
@@ -105,7 +105,7 @@ namespace StableDiffusionGui.Installation
 
         public static async Task DownloadSdModelFile (bool force = false)
         {
-            string mdlPath = Path.Combine(Paths.GetDataPath(), "model.ckpt");
+            string mdlPath = Path.Combine(Paths.GetModelsPath(), "stable-diffusion-1.4.ckpt");
             var filesize = File.Exists(mdlPath) ? new FileInfo(mdlPath).Length : 0;
 
             if(filesize == 4265380512 && !force)
@@ -129,10 +129,17 @@ namespace StableDiffusionGui.Installation
 
         #region Git
 
-        private static void CloneSdRepo (string url, string dir, string commit = "" /* 1404d8e98cd9038e2cd3e33b177e9b995b42bc3a */)
+        public static void CloneSdRepo ()
+        {
+            CloneSdRepo($"https://github.com/{GitFile}", GetDataSubPath("repo"));
+        }
+
+        public static void CloneSdRepo (string url, string dir, string commit = "" /* 1404d8e98cd9038e2cd3e33b177e9b995b42bc3a */)
         {
             try
             {
+                Directory.Delete(dir, true);
+
                 string path = Repository.Clone(url, dir, new CloneOptions() { BranchName = "main" });
 
                 if (!string.IsNullOrWhiteSpace(commit))
@@ -190,6 +197,8 @@ namespace StableDiffusionGui.Installation
                     Logger.Log("Installing GFPGAN...");
 
                 string gfpganPath = Path.Combine(GetDataSubPath("repo"), "GFPGAN");
+                IoUtils.SetAttributes(gfpganPath, FileAttributes.Normal);
+                Directory.Delete(gfpganPath, true);
                 Repository.Clone(@"https://github.com/TencentARC/GFPGAN.git", gfpganPath, new CloneOptions() { BranchName = "master" });
 
                 using (var localRepo = new Repository(gfpganPath))

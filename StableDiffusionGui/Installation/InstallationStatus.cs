@@ -53,7 +53,7 @@ namespace StableDiffusionGui.Installation
 
         public static bool HasSdUpscalers()
         {
-            string esrganPath = Path.Combine(Paths.GetDataPath(), "repo", "src", "realesrgan");
+            string esrganPath = Path.Combine(Paths.GetDataPath(), "mb", "envs", "ldo", "Lib", "site-packages", "basicsr");
             bool hasEsrgan = Directory.Exists(esrganPath);
 
             string gfpPath = Path.Combine(Paths.GetDataPath(), "repo", "GFPGAN");
