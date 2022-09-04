@@ -44,7 +44,6 @@ namespace StableDiffusionGui
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             SaveUiElements();
-            Program.Cleanup();
         }
 
         private void MainForm_Shown(object sender, EventArgs e)

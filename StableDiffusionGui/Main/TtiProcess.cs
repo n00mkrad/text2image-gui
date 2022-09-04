@@ -18,91 +18,35 @@ namespace StableDiffusionGui.Main
     {
         private static bool _hasErrored = false;
 
-        public static void Start(string outPath)
+        public static void Start()
         {
-            Program.MainForm.SetWorking(true);
             _hasErrored = false;
-
-            TextToImage.CurrentTask = new Data.TtiTaskInfo
-            {
-                StartTime = DateTime.Now,
-                OutPath = outPath,
-                SubfoldersPerPrompt = Config.GetBool("checkboxFolderPerPrompt"),
-            };
         }
 
         public static void Finish()
         {
-            int imgCount = ImagePreview.SetImages(TextToImage.CurrentTask.OutPath, true, TextToImage.CurrentTask.TargetImgCount);
+            return; // TODO: Remove this?
 
-            PostProcess(TextToImage.CurrentTask.OutPath, true, TextToImage.CurrentTask.TargetImgCount);
+            //int imgCount = ImagePreview.SetImages(TextToImage.CurrentTask.OutPath, true, TextToImage.CurrentTask.TargetImgCount);
 
-            if(imgCount > 0)
-            {
-                Logger.Log($"Done!");
-            }
-            else
-            {
-                bool logCopySuccess = OsUtils.SetClipboard(Logger.GetSessionLog("sd"));
-                Logger.Log($"No images generated. {(logCopySuccess ? "Log was copied to clipboard." : "")}");
-            }
+            //PostProcess(TextToImage.CurrentTask.OutPath, true, TextToImage.CurrentTask.TargetImgCount);
 
-            Program.MainForm.SetWorking(false);
-        }
-
-        private static readonly int _maxPathLength = 255;
-
-        public static void PostProcess(string imagesDir, bool show, int amount = -1, string pattern = "*.png", bool recursive = false)
-        {
-            try
-            {
-                var images = IoUtils.GetFileInfosSorted(imagesDir, recursive, pattern).Where(x => x.CreationTime > TextToImage.CurrentTask.StartTime).OrderBy(x => x.CreationTime).ToList(); // Find images and sort by date, newest to oldest
-
-                Logger.Log($"Found {images.Count} images created after start time.", true);
-
-                //if (amount > 0)
-                //    images = images.Take(amount).ToList();
-
-                bool sub = TextToImage.CurrentTask.SubfoldersPerPrompt;
-                Dictionary<string, string> imageDirMap = new Dictionary<string, string>();
-
-                if (sub)
-                {
-                    foreach(var img in images)
-                    {
-                        string prompt = IoUtils.GetImageMetadata(img.FullName).Prompt;
-                        int pathBudget = 255 - img.Directory.FullName.Length - 65;
-                        string unixTimestamp = ((long)(DateTime.Now - new DateTime(1970, 1, 1)).TotalMilliseconds).ToString();
-                        string dirName = string.IsNullOrWhiteSpace(prompt) ? $"unknown_prompt_{unixTimestamp}" : FormatUtils.SanitizePromptFilename(prompt, pathBudget);
-                        imageDirMap[img.FullName] = Directory.CreateDirectory(Path.Combine(TextToImage.CurrentTask.OutPath, dirName)).FullName;
-                    }
-                }
-
-                List<string> renamedImgPaths = new List<string>();
-
-                for (int i = 0; i < images.Count; i++)
-                {
-                    var img = images[i];
-                    string number = $"-{(i + 1).ToString().PadLeft(images.Count.ToString().Length, '0')}";
-
-                    bool inclPrompt = !sub && Config.GetBool("checkboxPromptInFilename");
-                    string renamedPath = FormatUtils.GetExportFilename(img.FullName, sub ? imageDirMap[img.FullName] : imagesDir, number, pattern.Remove("*").Split('.').Last(), _maxPathLength, inclPrompt, true, true, true);
-                    img.MoveTo(renamedPath);
-                    renamedImgPaths.Add(renamedPath);
-                }
-
-                ImagePreview.SetImages(renamedImgPaths, show);
-            }
-            catch (Exception ex)
-            {
-                Logger.Log($"Image post-processing error:\n{ex.Message}");
-                Logger.Log($"{ex.StackTrace}", true);
-            }
+            //if(imgCount > 0)
+            //{
+            //    Logger.Log($"Done!");
+            //}
+            //else
+            //{
+            //    bool logCopySuccess = OsUtils.SetClipboard(Logger.GetSessionLog("sd"));
+            //    Logger.Log($"No images generated. {(logCopySuccess ? "Log was copied to clipboard." : "")}");
+            //}
+            //
+            //Program.MainForm.SetWorking(false);
         }
 
         public static async Task RunStableDiffusion(string[] prompts, string initImg, string embedding, float[] initStrengths, int iterations, int steps, float[] scales, long seed, string sampler, Size res, string outPath)
         {
-            Start(outPath);
+            // Start(outPath);
 
             if (File.Exists(initImg))
                 initImg = TtiUtils.ResizeInitImg(initImg, res, true);
@@ -189,7 +133,7 @@ namespace StableDiffusionGui.Main
 
         public static async Task RunStableDiffusionOptimized(string[] prompts, string initImg, float initStrengths, int iterations, int steps, float scale, long seed, Size res, string outPath)
         {
-            Start(outPath);
+            // Start(outPath);
 
             if (File.Exists(initImg))
                 initImg = TtiUtils.ResizeInitImg(initImg, res, true);
@@ -301,7 +245,7 @@ namespace StableDiffusionGui.Main
 
                     Logger.Log($"Generated {split[0].GetInt()} image in {split[1]} ({TextToImage.CurrentTask.ImgCount}/{TextToImage.CurrentTask.TargetImgCount})" +
                         $"{(TextToImage.CurrentTask.ImgCount > 1 && remainingMs > 1000 ? $" - ETA: {FormatUtils.Time(remainingMs, false)}" : "")}", false, replace || Logger.LastUiLine.MatchesWildcard("*Generated*image*in*"));
-                    ImagePreview.SetImages(TextToImage.CurrentTask.OutPath, true, TextToImage.CurrentTask.ImgCount);
+                    // ImagePreview.SetImages(TextToImage.CurrentTask.OutPath, true, TextToImage.CurrentTask.ImgCount);
                 }
             }
 
@@ -335,7 +279,7 @@ namespace StableDiffusionGui.Main
 
                     Logger.Log($"Generated 1 image in {FormatUtils.Time(lastMsPerImg, false)} ({TextToImage.CurrentTask.ImgCount}/{TextToImage.CurrentTask.TargetImgCount})" +
                         $"{(TextToImage.CurrentTask.ImgCount > 1 && remainingMs > 1000 ? $" - ETA: {FormatUtils.Time(remainingMs, false)}" : "")}", false, replace || Logger.LastUiLine.MatchesWildcard("Generated*image*"));
-                    ImagePreview.SetImages(TextToImage.CurrentTask.OutPath, true, TextToImage.CurrentTask.ImgCount);
+                    // ImagePreview.SetImages(TextToImage.CurrentTask.OutPath, true, TextToImage.CurrentTask.ImgCount);
                 }
             }
 

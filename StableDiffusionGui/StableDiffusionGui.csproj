@@ -165,6 +165,7 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Main\Logger.cs" />
+    <Compile Include="Main\PostProcess.cs" />
     <Compile Include="Ui\MainUi.cs" />
     <Compile Include="Main\TextToImage.cs" />
     <Compile Include="Main\TtiProcess.cs" />

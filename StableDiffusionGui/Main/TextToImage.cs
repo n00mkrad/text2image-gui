@@ -5,10 +5,12 @@ using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace StableDiffusionGui.Main
 {
@@ -28,17 +30,53 @@ namespace StableDiffusionGui.Main
 
             if (!s.Prompts.Any())
             {
-                Logger.Log($"No prompts to run!");
+                Logger.Log($"No valid prompts to run!");
                 return;
             }
 
+            CurrentTask = new TtiTaskInfo
+            {
+                StartTime = DateTime.Now,
+                OutPath = s.OurDir,
+                SubfoldersPerPrompt = Config.GetBool("checkboxFolderPerPrompt"),
+            };
+
+            Program.MainForm.SetWorking(true);
+
+            string tempOutDir = Path.Combine(Paths.GetSessionDataPath(), "out");
+            Directory.CreateDirectory(tempOutDir);
+
+            List<Task> tasks = new List<Task>();
+
             if (s.Implementation == Implementation.StableDiffusion)
-                await TtiProcess.RunStableDiffusion(s.Prompts, s.Params["initImg"], s.Params["embedding"], s.Params["initStrengths"].Replace(" ", "").Split(",").Select(x => x.GetFloat()).ToArray(),
-                    s.Iterations, s.Params["steps"].GetInt(), s.Params["scales"].Replace(" ", "").Split(",").Select(x => x.GetFloat()).ToArray(), s.Params["seed"].GetLong(), s.Params["sampler"], FormatUtils.ParseSize(s.Params["res"]), s.OurDir);
+                tasks.Add(TtiProcess.RunStableDiffusion(s.Prompts, s.Params["initImg"], s.Params["embedding"], s.Params["initStrengths"].Replace(" ", "").Split(",").Select(x => x.GetFloat()).ToArray(),
+                    s.Iterations, s.Params["steps"].GetInt(), s.Params["scales"].Replace(" ", "").Split(",").Select(x => x.GetFloat()).ToArray(), s.Params["seed"].GetLong(), s.Params["sampler"], FormatUtils.ParseSize(s.Params["res"]), tempOutDir));
 
             if (s.Implementation == Implementation.StableDiffusionOptimized)
-                await TtiProcess.RunStableDiffusionOptimized(s.Prompts, s.Params["initImg"], s.Params["initStrengths"].Replace(" ", "").Split(",").First().GetFloat(), s.Iterations,
-                    s.Params["steps"].GetInt(), s.Params["scales"].Replace(" ", "").Split(",")[0].GetFloat(), s.Params["seed"].GetLong(), FormatUtils.ParseSize(s.Params["res"]), s.OurDir);
+                tasks.Add(TtiProcess.RunStableDiffusionOptimized(s.Prompts, s.Params["initImg"], s.Params["initStrengths"].Replace(" ", "").Split(",").First().GetFloat(), s.Iterations,
+                    s.Params["steps"].GetInt(), s.Params["scales"].Replace(" ", "").Split(",")[0].GetFloat(), s.Params["seed"].GetLong(), FormatUtils.ParseSize(s.Params["res"]), tempOutDir));
+
+            tasks.Add(PostProcess.PostProcLoop(tempOutDir, true));
+
+            await Task.WhenAll(tasks);
+            Done();
+        }
+
+        public static void Done ()
+        {
+            int imgCount = CurrentTask.ImgCount; // ImagePreview.SetImages(CurrentTask.OutPath, true, CurrentTask.TargetImgCount);
+
+            if (imgCount > 0)
+            {
+                Logger.Log($"Done!");
+            }
+            else
+            {
+                bool logCopySuccess = OsUtils.SetClipboard(Logger.GetSessionLog("sd"));
+                Logger.Log($"No images generated. {(logCopySuccess ? "Log was copied to clipboard." : "")}");
+            }
+
+            Program.MainForm.SetWorking(false);
         }
 
         public static void Cancel (string reason = "", bool showMsgBox = true)

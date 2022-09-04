@@ -605,7 +605,7 @@ namespace StableDiffusionGui.Io
             }
             catch(Exception ex)
             {
-                Logger.Log($"GetFileInfosSorted error: {ex.Message}", true);
+                Logger.Log($"GetFileInfosSorted error: {ex.Message}");
                 return new FileInfo[0];
             }
         }
