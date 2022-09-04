@@ -116,12 +116,12 @@ namespace StableDiffusionGui.Main
             int upscaleSetting = Config.GetInt("comboxUpscale");
 
             if (upscaleSetting == 1)
-                upscaling = "-U 2";
+                upscaling = "-U=2";
             else if (upscaleSetting == 2)
-                upscaling = "-U 4";
+                upscaling = "-U=4";
 
             float gfpganSetting = Config.GetFloat("sliderGfpgan");
-            string gfpgan = gfpganSetting > 0.01f ? $"-G {gfpganSetting.ToStringDot("0.00")}" : "";
+            string gfpgan = gfpganSetting > 0.01f ? $"-G={gfpganSetting.ToStringDot("0.00")}" : "";
 
             foreach (string prompt in prompts)
             {
@@ -132,7 +132,7 @@ namespace StableDiffusionGui.Main
                         foreach (float strength in initStrengths)
                         {
                             string init = File.Exists(initImg) ? $"--init_img {initImg.Wrap()} --strength {strength.ToStringDot("0.0000")}" : "";
-                            promptFileContent += $"{prompt} {init} -n {1} -s {steps} -C {scale.ToStringDot()} -A {sampler} -W {res.Width} -H {res.Height} -S {seed} {upscaling} {gfpgan}\n";
+                            promptFileContent += $"{prompt} {init} -n=1 -s={steps} -C={scale.ToStringDot()} -A={sampler} -W={res.Width} -= {res.Height} -S={seed} {upscaling} {gfpgan}\n";
                             TextToImage.CurrentTask.TargetImgCount++;
                         }
                     }
@@ -226,8 +226,8 @@ namespace StableDiffusionGui.Main
             string prec = $"{(Config.GetBool("checkboxFullPrecision") ? "full" : "autocast")}";
 
             dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && call \"{Paths.GetDataPath()}\\mc\\Scripts\\activate.bat\" ldo && " +
-                $"python \"{Paths.GetDataPath()}/repo/optimizedSD/optimized_txt2img.py\" --outdir {outPath.Wrap()} --from-file {promptFilePath.Wrap()} --n_iter {iterations} " +
-                $"--ddim_steps {steps} --W {res.Width} --H {res.Height} --scale {scale.ToStringDot("0.0000")} --seed {seed} --precision {prec}";
+                $"python \"{Paths.GetDataPath()}/repo/optimizedSD/optimized_txt2img.py\" --outdir={outPath.Wrap()} --from-file={promptFilePath.Wrap()} --n_iter={iterations} " +
+                $"--ddim_steps={steps} --W={res.Width} --H={res.Height} --scale={scale.ToStringDot("0.0000")} --seed={seed} --precision={prec}";
 
             Logger.Log("cmd.exe " + dream.StartInfo.Arguments, true);
 
