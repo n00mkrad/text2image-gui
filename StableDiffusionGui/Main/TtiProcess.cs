@@ -132,7 +132,7 @@ namespace StableDiffusionGui.Main
                         foreach (float strength in initStrengths)
                         {
                             string init = File.Exists(initImg) ? $"--init_img {initImg.Wrap()} --strength {strength.ToStringDot("0.0000")}" : "";
-                            promptFileContent += $"{prompt} {init} -n=1 -s={steps} -C={scale.ToStringDot()} -A={sampler} -W={res.Width} -= {res.Height} -S={seed} {upscaling} {gfpgan}\n";
+                            promptFileContent += $"{prompt} {init} -n=1 -s={steps} -C={scale.ToStringDot()} -A={sampler} -W={res.Width} -H={res.Height} -S={seed} {upscaling} {gfpgan}\n";
                             TextToImage.CurrentTask.TargetImgCount++;
                         }
                     }
