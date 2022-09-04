@@ -80,14 +80,7 @@ namespace StableDiffusionGui.Ui
         {
             prompt = new Regex(@"[^a-zA-Z0-9 -!*,.:()\-]").Replace(prompt, "");
             prompt = prompt.Replace(" -", " ");
-
-            while (prompt.StartsWith("-"))
-                prompt = prompt.Substring(1);
-            
-            while (prompt.EndsWith("-"))
-                prompt = prompt.Remove(prompt.Length - 1);
-
-            return prompt;
+            return prompt.Trim('-');
         }
 
         public static List<float> GetScales(string customScalesText)
