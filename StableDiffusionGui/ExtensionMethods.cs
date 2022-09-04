@@ -17,9 +17,9 @@ namespace StableDiffusionGui
         public static string TrimNumbers(this string s, bool allowDotComma = false)
         {
             if (!allowDotComma)
-                s = Regex.Replace(s, "[^-0-9]", "");
+                s = Regex.Replace(s, "[^0-9]", "");
             else
-                s = Regex.Replace(s, "[^-.,0-9]", "");
+                s = Regex.Replace(s, "[^.,0-9]", "");
             return s.Trim();
         }
 
@@ -97,7 +97,7 @@ namespace StableDiffusionGui
 
         public static float GetFloat(this string str)
         {
-            if (string.IsNullOrWhiteSpace(str))
+            if (str.Length < 1 || str == null)
                 return 0f;
 
             string num = str.TrimNumbers(true).Replace(",", ".");
