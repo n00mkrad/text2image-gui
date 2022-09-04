@@ -58,7 +58,7 @@ namespace StableDiffusionGui.Main
                         {
                             string number = $"-{(totalImages+1).ToString().PadLeft(TextToImage.CurrentTask.TargetImgCount.ToString().Length, '0')}";
                             bool inclPrompt = !sub && Config.GetBool("checkboxPromptInFilename");
-                            string renamedPath = FormatUtils.GetExportFilename(img.FullName, DirForImage(img, imagesDir, sub), number, "png", _maxPathLength, inclPrompt, true, true, true);
+                            string renamedPath = FormatUtils.GetExportFilename(img.FullName, DirForImage(img, sub), number, "png", _maxPathLength, inclPrompt, true, true, true);
                             img.MoveTo(renamedPath);
                             renamedImgPaths.Add(renamedPath);
                             totalImages++;
@@ -87,11 +87,11 @@ namespace StableDiffusionGui.Main
             Logger.Log("PostProcLoop end.", true);
         }
 
-        private static string DirForImage(FileInfo img, string imagesDir, bool subfoldersPerPrompt)
+        private static string DirForImage(FileInfo img, bool subfoldersPerPrompt)
         {
             if (!subfoldersPerPrompt)
             {
-                return imagesDir;
+                return TextToImage.CurrentTask.OutPath;
             }
             string prompt = IoUtils.GetImageMetadata(img.FullName).Prompt;
             int pathBudget = 255 - img.Directory.FullName.Length - 65;
@@ -99,7 +99,7 @@ namespace StableDiffusionGui.Main
             string dirName = string.IsNullOrWhiteSpace(prompt)
                 ? $"unknown_prompt_{unixTimestamp}"
                 : FormatUtils.SanitizePromptFilename(prompt, pathBudget);
-            return Directory.CreateDirectory(Path.Combine(imagesDir, dirName)).FullName;
+            return Directory.CreateDirectory(Path.Combine(TextToImage.CurrentTask.OutPath, dirName)).FullName;
         }
     }
 }
