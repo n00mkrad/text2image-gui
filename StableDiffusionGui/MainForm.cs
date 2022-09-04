@@ -121,6 +121,7 @@ namespace StableDiffusionGui
             upDownIterations.Maximum = !adv ? 1000 : 10000;
             sliderSteps.Maximum = !adv ? 30 : 100;
             sliderScale.Maximum = !adv ? 50 : 100;
+            sliderScale.Minimum = !adv ? 0 : -100;
             sliderResW.Maximum = !adv ? 16 : 24;
             sliderResH.Maximum = !adv ? 16 : 24;
         }

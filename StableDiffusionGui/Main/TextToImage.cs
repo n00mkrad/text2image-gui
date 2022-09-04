@@ -25,7 +25,7 @@ namespace StableDiffusionGui.Main
             if (s == null)
                 return;
 
-                LastTaskSettings = s;
+            LastTaskSettings = s;
             s.Prompts = s.Prompts.Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
 
             if (!s.Prompts.Any())
