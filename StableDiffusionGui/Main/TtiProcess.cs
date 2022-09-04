@@ -106,7 +106,7 @@ namespace StableDiffusionGui.Main
             string prec = $"{(Config.GetBool("checkboxFullPrecision") ? "-F" : "")}";
 
             dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && call \"{Paths.GetDataPath()}\\mb\\Scripts\\activate.bat\" ldo && " +
-                $"python \"{Paths.GetDataPath()}/repo/scripts/dream.py\" -o {outPath.Wrap()} --from_file={promptFilePath.Wrap()} {prec}" +
+                $"python \"{Paths.GetDataPath()}/repo/scripts/dream.py\" --model stable-diffusion-1.4 -o {outPath.Wrap()} --from_file={promptFilePath.Wrap()} {prec}" +
                 $"{(!string.IsNullOrWhiteSpace(embedding) ? $"--embedding_path {embedding.Wrap()}" : "")}";
 
             Logger.Log("cmd.exe " + dream.StartInfo.Arguments, true);
@@ -170,7 +170,7 @@ namespace StableDiffusionGui.Main
             string prec = $"{(Config.GetBool("checkboxFullPrecision") ? "full" : "autocast")}";
 
             dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && call \"{Paths.GetDataPath()}\\mb\\Scripts\\activate.bat\" ldo && " +
-                $"python \"{Paths.GetDataPath()}/repo/optimizedSD/optimized_txt2img.py\" --outdir {outPath.Wrap()} --from-file {promptFilePath.Wrap()} --n_iter {iterations} " +
+                $"python \"{Paths.GetDataPath()}/repo/optimizedSD/optimized_txt2img.py\" --model stable-diffusion-1.4 --outdir {outPath.Wrap()} --from-file {promptFilePath.Wrap()} --n_iter {iterations} " +
                 $"--ddim_steps {steps} --W {res.Width} --H {res.Height} --scale {scale.ToStringDot("0.0000")} --seed {seed} --precision {prec}";
 
             Logger.Log("cmd.exe " + dream.StartInfo.Arguments, true);

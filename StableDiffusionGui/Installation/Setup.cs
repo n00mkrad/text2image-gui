@@ -73,7 +73,6 @@ namespace StableDiffusionGui.Installation
 
                 while (!p.HasExited) await Task.Delay(1);
 
-                Patch();
                 await InstallUpscalers();
                 RemoveGitFiles(repoPath);
                 await DownloadSdModelFile();
@@ -102,25 +101,6 @@ namespace StableDiffusionGui.Installation
                 return;
 
             Logger.Log($"[{(stderr ? "E" : "O")}] {log.Remove("PRINTME ").Remove("[O]").Remove("[E]")}", !log.Contains("PRINTME "), false, "installation");
-        }
-
-        public static void Patch ()
-        {
-            try
-            {
-                string modulesPyPath = Path.Combine(Paths.GetDataPath(), "repo", "ldm", "modules", "encoders", "modules.py");
-
-                string patchedText = File.ReadAllText(modulesPyPath).Replace("local_files_only=True", "local_files_only=False");
-                File.WriteAllText(modulesPyPath, patchedText);
-
-                Logger.Log("Successfully patched modules.py.");
-            }
-            catch(Exception ex)
-            {
-                Logger.Log($"Failed to patch modules.py: {ex.Message}");
-                Logger.Log(ex.StackTrace, true);
-            }
-
         }
 
         public static async Task DownloadSdModelFile (bool force = false)

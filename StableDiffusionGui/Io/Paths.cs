@@ -48,6 +48,13 @@ namespace StableDiffusionGui.Io
             return path;
         }
 
+        public static string GetModelsPath()
+        {
+            string path = Path.Combine(GetDataPath(), "models");
+            Directory.CreateDirectory(path);
+            return path;
+        }
+
         public static string GetSessionDataPath()
         {
             string path = Path.Combine(GetSessionsPath(), sessionTimestamp);

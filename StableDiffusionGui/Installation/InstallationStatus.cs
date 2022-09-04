@@ -48,8 +48,7 @@ namespace StableDiffusionGui.Installation
 
         public static bool HasSdModel ()
         {
-            string mdlPath = Path.Combine(Paths.GetDataPath(), "model.ckpt");
-            return File.Exists(mdlPath);
+            return IoUtils.GetAmountOfFiles(Paths.GetModelsPath(), false, "*.ckpt") > 0;
         }
 
         public static bool HasSdUpscalers()
