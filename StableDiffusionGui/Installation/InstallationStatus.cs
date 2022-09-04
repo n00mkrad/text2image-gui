@@ -13,10 +13,10 @@ namespace StableDiffusionGui.Installation
 
         public static bool HasConda ()
         {
-            string minicondaScriptsPath = Path.Combine(Paths.GetDataPath(), "mc", "Scripts");
+            string minicondaScriptsPath = Path.Combine(Paths.GetDataPath(), "mb", "Scripts");
             bool hasBat = IoUtils.GetAmountOfFiles(minicondaScriptsPath, false, "*.bat") > 0;
 
-            string minicondaExePath = Path.Combine(Paths.GetDataPath(), "mc", "_conda.exe");
+            string minicondaExePath = Path.Combine(Paths.GetDataPath(), "mb", "_conda.exe");
             bool hasExe = File.Exists(minicondaExePath);
 
             return hasBat && hasExe;
@@ -34,13 +34,13 @@ namespace StableDiffusionGui.Installation
 
         public static bool HasSdEnv()
         {
-            string pyExePath = Path.Combine(Paths.GetDataPath(), "mc", "envs", "ldo", "python.exe");
+            string pyExePath = Path.Combine(Paths.GetDataPath(), "mb", "envs", "ldo", "python.exe");
             bool hasPyExe = File.Exists(pyExePath);
 
-            string torchPath = Path.Combine(Paths.GetDataPath(), "mc", "envs", "ldo", "Lib", "site-packages", "torch");
+            string torchPath = Path.Combine(Paths.GetDataPath(), "mb", "envs", "ldo", "Lib", "site-packages", "torch");
             bool hasTorch = Directory.Exists(torchPath);
 
-            string binPath = Path.Combine(Paths.GetDataPath(), "mc", "envs", "ldo", "Library", "bin");
+            string binPath = Path.Combine(Paths.GetDataPath(), "mb", "envs", "ldo", "Library", "bin");
             bool hasBin = Directory.Exists(binPath);
 
             return hasPyExe && hasTorch && hasBin;

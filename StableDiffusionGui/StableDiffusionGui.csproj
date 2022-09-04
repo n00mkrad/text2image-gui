@@ -179,9 +179,11 @@
     <Compile Include="Ui\UiUtils.cs" />
     <EmbeddedResource Include="Forms\InstallerForm.resx">
       <DependentUpon>InstallerForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MessageForm.resx">
       <DependentUpon>MessageForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\PostProcSettingsForm.resx">
       <DependentUpon>PostProcSettingsForm.cs</DependentUpon>

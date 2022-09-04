@@ -35,7 +35,7 @@ namespace StableDiffusionGui.Installation
                 CloneSdRepo($"https://github.com/{GitFile}", repoPath);
                 Logger.Log("Done.");
 
-                string[] subDirs = new string[] { "mc", "git/bin" };
+                string[] subDirs = new string[] { "mb", "git/bin" };
 
                 List<string> l = new List<string>();
 
@@ -254,7 +254,7 @@ namespace StableDiffusionGui.Installation
 
         public static async Task RemoveEnv()
         {
-            await IoUtils.TryDeleteIfExistsAsync(Path.Combine(Paths.GetDataPath(), "mc", "envs", "ldo"));
+            await IoUtils.TryDeleteIfExistsAsync(Path.Combine(Paths.GetDataPath(), "mb", "envs", "ldo"));
         }
 
         #endregion

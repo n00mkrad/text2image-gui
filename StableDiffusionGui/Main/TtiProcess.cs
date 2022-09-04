@@ -105,7 +105,7 @@ namespace StableDiffusionGui.Main
 
             string prec = $"{(Config.GetBool("checkboxFullPrecision") ? "-F" : "")}";
 
-            dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && call \"{Paths.GetDataPath()}\\mc\\Scripts\\activate.bat\" ldo && " +
+            dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && call \"{Paths.GetDataPath()}\\mb\\Scripts\\activate.bat\" ldo && " +
                 $"python \"{Paths.GetDataPath()}/repo/scripts/dream.py\" -o {outPath.Wrap()} --from_file={promptFilePath.Wrap()} {prec}" +
                 $"{(!string.IsNullOrWhiteSpace(embedding) ? $"--embedding_path {embedding.Wrap()}" : "")}";
 
@@ -169,7 +169,7 @@ namespace StableDiffusionGui.Main
 
             string prec = $"{(Config.GetBool("checkboxFullPrecision") ? "full" : "autocast")}";
 
-            dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && call \"{Paths.GetDataPath()}\\mc\\Scripts\\activate.bat\" ldo && " +
+            dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && call \"{Paths.GetDataPath()}\\mb\\Scripts\\activate.bat\" ldo && " +
                 $"python \"{Paths.GetDataPath()}/repo/optimizedSD/optimized_txt2img.py\" --outdir {outPath.Wrap()} --from-file {promptFilePath.Wrap()} --n_iter {iterations} " +
                 $"--ddim_steps {steps} --W {res.Width} --H {res.Height} --scale {scale.ToStringDot("0.0000")} --seed {seed} --precision {prec}";
 
@@ -202,7 +202,7 @@ namespace StableDiffusionGui.Main
 
             string batPath = Path.Combine(Paths.GetSessionDataPath(), "dream.bat");
 
-            string batText = $"@echo off\n title Dream.py CLI && cd /D {Paths.GetDataPath().Wrap()} && call \"mc\\Scripts\\activate.bat\" \"mc/envs/ldo\" && " +
+            string batText = $"@echo off\n title Dream.py CLI && cd /D {Paths.GetDataPath().Wrap()} && call \"mb\\Scripts\\activate.bat\" \"mb/envs/ldo\" && " +
                 $"python \"repo/scripts/dream.py\" -o {outPath.Wrap()} {(Config.GetBool("checkboxFullPrecision") ? "--full_precision" : "")}";
 
             File.WriteAllText(batPath, batText);

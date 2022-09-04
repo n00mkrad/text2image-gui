@@ -19,7 +19,7 @@ namespace StableDiffusionGui.Ui
             if (type == MessageType.Warning) icon = MessageBoxIcon.Warning;
             else if (type == MessageType.Error) icon = MessageBoxIcon.Error;
 
-            MessageForm form = new MessageForm(text, $"SD GUI - {type}");
+            MessageForm form = new MessageForm(text, $"{type}");
             form.MsgFontSize = fontSize;
             form.ShowDialog();
             return DialogResult.OK;
