@@ -93,13 +93,14 @@ namespace StableDiffusionGui.Ui
                 float valTo = splitMinMax[1].Trim().GetFloat();
                 float step = Math.Abs(customScalesText.Split(':').Last().GetFloat());
                 
-                int stepCount = 1 + (int)((valTo - valFrom) / step);
+                int stepCount = (int)((valTo - valFrom) / step);
                 if (stepCount < 0)
                 {
                     // align signs
                     stepCount *= -1;
                     step *= -1;
                 }
+                stepCount += 1;  // include both endpoints
 
                 return new List<float>(
                     from x in Enumerable.Range(0,stepCount)
@@ -127,13 +128,15 @@ namespace StableDiffusionGui.Ui
                 float valTo = splitMinMax[1].Trim().GetFloat();
                 float step = customStrengthsText.Split(':').Last().GetFloat();
                 
-                int stepCount = 1 + (int)((valTo - valFrom) / step);
+                int stepCount = (int)((valTo - valFrom) / step);
                 if (stepCount < 0)
                 {
                     // align signs
                     stepCount *= -1;
                     step *= -1;
                 }
+
+                stepCount += 1; // include both endpoints
 
                 return new List<float>(
                     from x in Enumerable.Range(0, stepCount)
