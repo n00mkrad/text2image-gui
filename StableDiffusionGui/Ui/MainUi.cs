@@ -80,35 +80,55 @@ namespace StableDiffusionGui.Ui
         {
             prompt = new Regex(@"[^a-zA-Z0-9 -!*,.:()\-]").Replace(prompt, "");
             prompt = prompt.Replace(" -", " ");
-            return prompt.Trim('-');
+
+            while (prompt.StartsWith("-"))
+                prompt = prompt.Substring(1);
+            
+            while (prompt.EndsWith("-"))
+                prompt = prompt.Remove(prompt.Length - 1);
+
+            return prompt;
         }
 
         public static List<float> GetScales(string customScalesText)
         {
-   
+            List<float> scales = new List<float> { CurrentScale };
+
             if (customScalesText.MatchesWildcard("* > * : *"))
             {
                 var splitMinMax = customScalesText.Trim().Split(':')[0].Split('>');
                 float valFrom = splitMinMax[0].GetFloat();
                 float valTo = splitMinMax[1].Trim().GetFloat();
-                float step = Math.Abs(customScalesText.Split(':').Last().GetFloat());
-                
-                if (valFrom > valTo) 
-                    (valFrom, valTo) = (valTo, valFrom);
+                float step = customScalesText.Split(':').Last().GetFloat();
 
-                return new List<float>(
-                    from x in Enumerable.Range(0, 1 + (int)((valTo - valFrom) / step))
-                    select valFrom + x * step);
+                List<float> incrementScales = new List<float>();
+
+                if (valFrom < valTo)
+                {
+                    for (float f = valFrom; f < (valTo + 0.01f); f += step)
+                        incrementScales.Add(f);
+                }
+                else
+                {
+                    for (float f = valFrom; f >= (valTo - 0.01f); f -= step)
+                        incrementScales.Add(f);
+                }
+
+                if (incrementScales.Count > 0)
+                    scales = incrementScales; // Replace list, don't use the regular scale slider at all in this mode
             }
-            List<float> scales = new List<float> { CurrentScale };
-            scales.AddRange(customScalesText.Replace(" ", "").Split(",").Select(x => x.GetFloat()));
-            
+            else
+            {
+                scales.AddRange(customScalesText.Replace(" ", "").Split(",").Select(x => x.GetFloat()).Where(x => x > 0.05f));
+            }
+
             return scales;
         }
 
         public static List<float> GetInitStrengths(string customStrengthsText)
         {
-  
+            List<float> strengths = new List<float> { 1f - CurrentInitImgStrength };
+
             if (customStrengthsText.MatchesWildcard("* > * : *"))
             {
                 var splitMinMax = customStrengthsText.Trim().Split(':')[0].Split('>');
@@ -118,16 +138,25 @@ namespace StableDiffusionGui.Ui
 
                 List<float> incrementStrengths = new List<float>();
 
-                if (valFrom > valTo) 
-                    (valFrom, valTo) = (valTo, valFrom);
+                if(valFrom < valTo)
+                {
+                    for (float f = valFrom; f < (valTo + 0.01f); f += step)
+                        incrementStrengths.Add(1f - f);
+                }
+                else
+                {
+                    for (float f = valFrom; f >= (valTo - 0.01f); f -= step)
+                        incrementStrengths.Add(1f - f);
+                }
 
-                return new List<float>(
-                    from x in Enumerable.Range(0, 1 + (int)((valTo - valFrom) / step))
-                    select 1f - ( valFrom + x * step));
-            } 
-            
-            List<float> strengths = new List<float> { 1f - CurrentInitImgStrength };
-            strengths.AddRange(customStrengthsText.Replace(" ", "").Split(",").Select(x => x.GetFloat()).Where(x => x > 0.05f).Select(x => 1f - x));
+                if (incrementStrengths.Count > 0)
+                    strengths = incrementStrengths; // Replace list, don't use the regular scale slider at all in this mode
+            }
+            else
+            {
+                strengths.AddRange(customStrengthsText.Replace(" ", "").Split(",").Select(x => x.GetFloat()).Where(x => x > 0.05f).Select(x => 1f - x));
+            }
+
             return strengths;
         }
     }
