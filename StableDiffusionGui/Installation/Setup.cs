@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Media.Animation;
 
 namespace StableDiffusionGui.Installation
 {
@@ -138,7 +139,8 @@ namespace StableDiffusionGui.Installation
         {
             try
             {
-                Directory.Delete(dir, true);
+                if(Directory.Exists(dir))
+                    Directory.Delete(dir, true);
 
                 string path = Repository.Clone(url, dir, new CloneOptions() { BranchName = "main" });
 
@@ -198,7 +200,10 @@ namespace StableDiffusionGui.Installation
 
                 string gfpganPath = Path.Combine(GetDataSubPath("repo"), "GFPGAN");
                 IoUtils.SetAttributes(gfpganPath, FileAttributes.Normal);
-                Directory.Delete(gfpganPath, true);
+
+                if (Directory.Exists(gfpganPath))
+                    Directory.Delete(gfpganPath, true);
+
                 Repository.Clone(@"https://github.com/TencentARC/GFPGAN.git", gfpganPath, new CloneOptions() { BranchName = "master" });
 
                 using (var localRepo = new Repository(gfpganPath))

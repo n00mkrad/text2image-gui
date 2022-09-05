@@ -102,6 +102,8 @@
             this.btnEmbeddingBrowse = new HTAlt.WinForms.HTButton();
             this.btnInitImgBrowse = new HTAlt.WinForms.HTButton();
             this.separator = new System.Windows.Forms.Button();
+            this.label8 = new System.Windows.Forms.Label();
+            this.checkboxSeamless = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
             this.tableLayoutPanel6.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -110,6 +112,7 @@
             this.tableLayoutPanel3.SuspendLayout();
             this.menuStripOutputImg.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.panel10.SuspendLayout();
             this.panelSampler.SuspendLayout();
             this.panelRes.SuspendLayout();
             this.panelSeed.SuspendLayout();
@@ -963,6 +966,8 @@
             // 
             // panel10
             // 
+            this.panel10.Controls.Add(this.checkboxSeamless);
+            this.panel10.Controls.Add(this.label8);
             this.panel10.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel10.Location = new System.Drawing.Point(0, 310);
             this.panel10.Name = "panel10";
@@ -1167,6 +1172,28 @@
             this.separator.TabStop = false;
             this.separator.UseVisualStyleBackColor = false;
             // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.ForeColor = System.Drawing.Color.White;
+            this.label8.Location = new System.Drawing.Point(5, 10);
+            this.label8.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(136, 13);
+            this.label8.TabIndex = 105;
+            this.label8.Text = "Generate Seamless Images";
+            // 
+            // checkboxSeamless
+            // 
+            this.checkboxSeamless.AutoSize = true;
+            this.checkboxSeamless.ForeColor = System.Drawing.Color.White;
+            this.checkboxSeamless.Location = new System.Drawing.Point(233, 9);
+            this.checkboxSeamless.Name = "checkboxSeamless";
+            this.checkboxSeamless.Size = new System.Drawing.Size(15, 14);
+            this.checkboxSeamless.TabIndex = 106;
+            this.checkboxSeamless.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AllowDrop = true;
@@ -1218,6 +1245,8 @@
             this.tableLayoutPanel3.PerformLayout();
             this.menuStripOutputImg.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
+            this.panel10.ResumeLayout(false);
+            this.panel10.PerformLayout();
             this.panelSampler.ResumeLayout(false);
             this.panelSampler.PerformLayout();
             this.panelRes.ResumeLayout(false);
@@ -1314,6 +1343,8 @@
         private System.Windows.Forms.Label labelPromptInfo;
         private System.Windows.Forms.ToolStripMenuItem useAsInitImageToolStripMenuItem;
         private System.Windows.Forms.Button btnPostProc;
+        private System.Windows.Forms.CheckBox checkboxSeamless;
+        private System.Windows.Forms.Label label8;
     }
 }
 

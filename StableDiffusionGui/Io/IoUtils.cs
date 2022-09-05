@@ -575,6 +575,9 @@ namespace StableDiffusionGui.Io
         {
             try
             {
+                if(path == null || !Directory.Exists(path))
+                    return new string[0];
+
                 SearchOption opt = recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
                 return Directory.GetFiles(path, pattern, opt).OrderBy(x => Path.GetFileName(x)).ToArray();
             }
@@ -599,6 +602,10 @@ namespace StableDiffusionGui.Io
         {
             try
             {
+                if (path == null || !Directory.Exists(path))
+                    return new FileInfo[0];
+
+
                 SearchOption opt = recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
                 DirectoryInfo dir = new DirectoryInfo(path);
                 return dir.GetFiles(pattern, opt).OrderBy(x => x.Name).ToArray();
@@ -755,9 +762,17 @@ namespace StableDiffusionGui.Io
             return new ImageMetadata();
         }
 
-        public static void SetAttributes(string rootDir, FileAttributes newAttributes, bool recursive = true)
+        public static bool SetAttributes(string rootDir, FileAttributes newAttributes, bool recursive = true)
         {
-            GetFileInfosSorted(rootDir, recursive).ToList().ForEach(x => x.Attributes = newAttributes);
+            try
+            {
+                GetFileInfosSorted(rootDir, recursive).ToList().ForEach(x => x.Attributes = newAttributes);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
     }
 }

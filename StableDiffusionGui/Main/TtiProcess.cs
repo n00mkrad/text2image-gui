@@ -44,7 +44,7 @@ namespace StableDiffusionGui.Main
             //Program.MainForm.SetWorking(false);
         }
 
-        public static async Task RunStableDiffusion(string[] prompts, string initImg, string embedding, float[] initStrengths, int iterations, int steps, float[] scales, long seed, string sampler, Size res, string outPath)
+        public static async Task RunStableDiffusion(string[] prompts, string initImg, string embedding, float[] initStrengths, int iterations, int steps, float[] scales, long seed, string sampler, Size res, bool seamless, string outPath)
         {
             // Start(outPath);
 
@@ -76,7 +76,7 @@ namespace StableDiffusionGui.Main
                         foreach (float strength in initStrengths)
                         {
                             string init = File.Exists(initImg) ? $"--init_img {initImg.Wrap()} --strength {strength.ToStringDot("0.0000")}" : "";
-                            promptFileContent += $"{prompt} {init} -n {1} -s {steps} -C {scale.ToStringDot()} -A {sampler} -W {res.Width} -H {res.Height} -S {seed} {upscaling} {gfpgan}\n";
+                            promptFileContent += $"{prompt} {init} -n {1} -s {steps} -C {scale.ToStringDot()} -A {sampler} -W {res.Width} -H {res.Height} -S {seed} {upscaling} {gfpgan} {(seamless ? "--seamless" : "")}\n";
                             TextToImage.CurrentTask.TargetImgCount++;
                         }
                     }
@@ -203,7 +203,7 @@ namespace StableDiffusionGui.Main
             string batPath = Path.Combine(Paths.GetSessionDataPath(), "dream.bat");
 
             string batText = $"@echo off\n title Dream.py CLI && cd /D {Paths.GetDataPath().Wrap()} && call \"mb\\Scripts\\activate.bat\" \"mb/envs/ldo\" && " +
-                $"python \"repo/scripts/dream.py\" -o {outPath.Wrap()} {(Config.GetBool("checkboxFullPrecision") ? "--full_precision" : "")}";
+                $"python \"repo/scripts/dream.py\" --model stable-diffusion-1.4 -o {outPath.Wrap()} {(Config.GetBool("checkboxFullPrecision") ? "--full_precision" : "")}";
 
             File.WriteAllText(batPath, batText);
             Process.Start(batPath);

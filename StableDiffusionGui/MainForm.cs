@@ -195,6 +195,7 @@ namespace StableDiffusionGui
                             { "initImg", MainUi.CurrentInitImgPath },
                             { "initStrengths", String.Join(",", MainUi.GetInitStrengths(textboxExtraInitStrengths.Text).Select(x => x.ToStringDot("0.0000"))) },
                             { "embedding", MainUi.CurrentEmbeddingPath },
+                            { "seamless", checkboxSeamless.Checked.ToString() },
                         },
                     };
 
