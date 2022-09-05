@@ -246,8 +246,8 @@ namespace StableDiffusionGui.Io
 
             if (key == Key.checkboxMultiPromptsSameSeed) return WriteDefault(key, "True");
             if (key == Key.sliderInitStrength) return WriteDefault(key, "10");
-            if (key == Key.sliderResW) return WriteDefault(key, "7");
-            if (key == Key.sliderResH) return WriteDefault(key, "7");
+            if (key == Key.sliderResW) return WriteDefault(key, "8");
+            if (key == Key.sliderResH) return WriteDefault(key, "8");
             if (key == Key.sliderSteps) return WriteDefault(key, "6");
             if (key == Key.sliderScale) return WriteDefault(key, "16");
             if (key == Key.textboxOutPath) return WriteDefault(key, Path.Combine(Paths.GetExeDir(), "Images"));
