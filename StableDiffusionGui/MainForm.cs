@@ -112,6 +112,7 @@ namespace StableDiffusionGui
             textboxExtraScales.Enabled = !opt;
             textboxExtraInitStrengths.Enabled = !opt;
             btnPostProc.Visible = !opt;
+            panelSeamless.Visible = !opt;
 
 
             if (opt)
