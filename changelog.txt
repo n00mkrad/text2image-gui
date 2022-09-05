@@ -1,0 +1,17 @@
+SD GUI 1.3.0 Changelog:
+- Added option to use low-VRAM code, only needs around 3.3 GB VRAM for 512x512 images
+- Added optional AI post-processing: RealESRGAN upscaling and GFPGAN face restoration
+- Added option to generate seamless (tileable) images
+- Added fullscreen image preview (click on image to open), click into it for 2x2/3x3 tiling (if seamless mode is enabled)
+- Added option to save images to a subfolder per prompt
+- Added option to disable prompt in filename
+- User can now run multiple prompts at once (one prompt per line, not counting word wrap)
+- Added option to use the same seed for each prompt when running multiple
+- Added option to change image output folder
+- Added warnings if the program is running from a long or problematic (e.g. OneDrive) path
+- Improved installer, python files are now included and should no longer conflict with system conda
+- Error messages are now shown for common errors
+- Fixed full-precision option not actually enabling full-precision
+- Fixed DPI scaling breaking
+- General logging and UX improvements
+- UI improvements
