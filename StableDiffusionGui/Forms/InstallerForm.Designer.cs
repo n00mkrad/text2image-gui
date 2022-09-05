@@ -73,10 +73,10 @@
             this.checkedListBoxStatus.FormattingEnabled = true;
             this.checkedListBoxStatus.Items.AddRange(new object[] {
             "Conda (Included)",
+            "Python Environment (Included)",
             "Stable Diffusion Repository",
-            "Python Environment",
             "Stable Diffusion 1.4 Model File",
-            "Upscalers (Optional)"});
+            "Upscalers"});
             this.checkedListBoxStatus.Location = new System.Drawing.Point(12, 75);
             this.checkedListBoxStatus.Name = "checkedListBoxStatus";
             this.checkedListBoxStatus.SelectionMode = System.Windows.Forms.SelectionMode.None;
@@ -179,7 +179,7 @@
             this.btnInstallUpscalers.Size = new System.Drawing.Size(138, 21);
             this.btnInstallUpscalers.TabIndex = 4;
             this.btnInstallUpscalers.TabStop = false;
-            this.btnInstallUpscalers.Text = "Install Upscalers";
+            this.btnInstallUpscalers.Text = "Re-Install Upscalers";
             this.btnInstallUpscalers.Click += new System.EventHandler(this.btnInstallUpscalers_Click);
             // 
             // InstallerForm

@@ -11,12 +11,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Media.Animation;
 
 namespace StableDiffusionGui.Installation
 {
     internal class Setup
     {
+        public static readonly string LogFilename = "installation";
         public static readonly string GitFile = "n00mkrad/stable-diffusion-cust.git";
 
         public static async Task Install (string repoCommit = "")
@@ -32,9 +32,7 @@ namespace StableDiffusionGui.Installation
                 string batPath = GetDataSubPath("install.bat");
                 string repoPath = GetDataSubPath("repo");
 
-                Logger.Log("Cloning repository...");
-                CloneSdRepo();
-                Logger.Log("Done.");
+                await CloneSdRepo();
 
                 string[] subDirs = new string[] { "mb", "git/bin" };
 
@@ -78,6 +76,8 @@ namespace StableDiffusionGui.Installation
                 RemoveGitFiles(repoPath);
                 await DownloadSdModelFile();
 
+                await Task.Delay(500);
+
                 if (InstallationStatus.IsInstalled)
                 {
                     Logger.Log("Finished. Everything is installed.");
@@ -101,7 +101,15 @@ namespace StableDiffusionGui.Installation
             if (string.IsNullOrWhiteSpace(log))
                 return;
 
-            Logger.Log($"[{(stderr ? "E" : "O")}] {log.Remove("PRINTME ").Remove("[O]").Remove("[E]")}", !log.Contains("PRINTME "), false, "installation");
+            log = log.Trim();
+
+            Logger.Log($"{log.Remove("PRINTME ")}", !log.Contains("PRINTME "), false, LogFilename);
+
+            if(log.EndsWith("%") && log.Contains(" | "))
+            {
+                var split = log.Split(" | ");
+                Logger.Log($"Installing {split.First().Trim()} ({split.Last().Trim()})", false, Logger.LastUiLine.EndsWith("%)"));
+            }
         }
 
         public static async Task DownloadSdModelFile (bool force = false)
@@ -118,31 +126,41 @@ namespace StableDiffusionGui.Installation
             IoUtils.TryDeleteIfExists(mdlPath);
             Logger.Log("Downloading model file...");
 
-            Process p = OsUtils.NewProcess(false);
+            Process p = OsUtils.NewProcess(true);
+            p.ErrorDataReceived += (sender, line) => { try { Logger.Log($"Downloading... ({line.Data.Trim().Split(' ')[0]}%)", false, Logger.LastUiLine.EndsWith("%)"), LogFilename); } catch { } };
             p.StartInfo.Arguments = $"/C curl \"https://www.googleapis.com/storage/v1/b/aai-blog-files/o/sd-v1-4.ckpt?alt=media\" -o {mdlPath.Wrap()}";
             p.Start();
+            p.BeginErrorReadLine();
 
             while (!p.HasExited)
-                await Task.Delay(100);
+                await Task.Delay(1);
 
             Logger.Log($"Model file downloaded ({FormatUtils.Bytes(new FileInfo(mdlPath).Length)}).");
         }
 
         #region Git
 
-        public static void CloneSdRepo ()
+        public static async Task CloneSdRepo ()
         {
-            CloneSdRepo($"https://github.com/{GitFile}", GetDataSubPath("repo"));
+            await CloneSdRepo($"https://github.com/{GitFile}", GetDataSubPath("repo"));
         }
 
-        public static void CloneSdRepo (string url, string dir, string commit = "" /* 1404d8e98cd9038e2cd3e33b177e9b995b42bc3a */)
+        public static async Task CloneSdRepo (string url, string dir, string commit = "" /* 1404d8e98cd9038e2cd3e33b177e9b995b42bc3a */)
         {
             try
             {
-                if(Directory.Exists(dir))
-                    Directory.Delete(dir, true);
+                Logger.Log("Cloning repository...");
 
-                string path = Repository.Clone(url, dir, new CloneOptions() { BranchName = "main" });
+                if (Directory.Exists(dir))
+                {
+                    IoUtils.SetAttributes(dir, FileAttributes.Normal);
+                    Directory.Delete(dir, true);
+                }
+                    
+                Task t = Task.Run(() => { Repository.Clone(url, dir, new CloneOptions() { BranchName = "main" }); });
+
+                while (!t.IsCompleted)
+                    await Task.Delay(1);
 
                 if (!string.IsNullOrWhiteSpace(commit))
                 {
@@ -189,11 +207,15 @@ namespace StableDiffusionGui.Installation
                     Logger.Log("Installing RealESRGAN...");
 
                 string batPath = Path.Combine(GetDataSubPath("repo"), "install-upscalers.cmd");
-                Process installBat = OsUtils.NewProcess(false, batPath);
-                installBat.Start();
+                Process procInstallRealEsrgan = OsUtils.NewProcess(true, batPath);
+                procInstallRealEsrgan.OutputDataReceived += (sender, line) => { Logger.Log($"{line.Data}", true, false, LogFilename); };
+                procInstallRealEsrgan.ErrorDataReceived += (sender, line) => { Logger.Log($"{line.Data}", true, false, LogFilename); };
+                procInstallRealEsrgan.Start();
+                procInstallRealEsrgan.BeginOutputReadLine();
+                procInstallRealEsrgan.BeginErrorReadLine();
 
-                while (!installBat.HasExited)
-                    await Task.Delay(100);
+                while (!procInstallRealEsrgan.HasExited)
+                    await Task.Delay(1);
 
                 if (print)
                     Logger.Log("Installing GFPGAN...");
@@ -204,7 +226,10 @@ namespace StableDiffusionGui.Installation
                 if (Directory.Exists(gfpganPath))
                     Directory.Delete(gfpganPath, true);
 
-                Repository.Clone(@"https://github.com/TencentARC/GFPGAN.git", gfpganPath, new CloneOptions() { BranchName = "master" });
+                Task t = Task.Run(() => { Repository.Clone(@"https://github.com/TencentARC/GFPGAN.git", gfpganPath, new CloneOptions() { BranchName = "master" }); });
+
+                while (!t.IsCompleted)
+                    await Task.Delay(1);               
 
                 using (var localRepo = new Repository(gfpganPath))
                 {
@@ -219,14 +244,18 @@ namespace StableDiffusionGui.Installation
 
                 IoUtils.TryDeleteIfExists(gfpGanMdlPath);
 
-                Process gfpMdlDl = OsUtils.NewProcess(false);
-                gfpMdlDl.StartInfo.Arguments = $"/C curl -L \"https://github.com/TencentARC/GFPGAN/releases/download/v1.3.0/GFPGANv1.3.pth\" -o {gfpGanMdlPath.Wrap()}";
-                gfpMdlDl.Start();
+                Process procGfpganDl = OsUtils.NewProcess(true);
+                procGfpganDl.ErrorDataReceived += (sender, line) => { try { Logger.Log($"Downloading... ({line.Data.Trim().Split(' ')[0]}%)", false, Logger.LastUiLine.EndsWith("%)"), LogFilename); } catch { } };
+                procGfpganDl.StartInfo.Arguments = $"/C curl -L \"https://github.com/TencentARC/GFPGAN/releases/download/v1.3.0/GFPGANv1.3.pth\" -o {gfpGanMdlPath.Wrap()}";
+                procGfpganDl.Start();
+                procGfpganDl.BeginErrorReadLine();
 
-                while (!gfpMdlDl.HasExited)
-                    await Task.Delay(100);
+                while (!procGfpganDl.HasExited)
+                    await Task.Delay(1);
 
-                Logger.Log($"Downloaded and installed RealESRGAN and GFPGAN.");
+                await Task.Delay(100);
+
+                Logger.Log($"Downloaded and installed RealESRGAN and GFPGAN.", false, Logger.LastUiLine.EndsWith("%)"));
             }
             catch (Exception ex)
             {

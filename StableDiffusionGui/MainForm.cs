@@ -75,7 +75,7 @@ namespace StableDiffusionGui
             
             if (!InstallationStatus.IsInstalled)
             {
-                UiUtils.ShowMessageBox("No complete installation of the Stable Diffusion files was found.\n\nThe GUI will n open the installer.\nPlease press \"Install\" in the next window to install all required files.");
+                UiUtils.ShowMessageBox("No complete installation of the Stable Diffusion files was found.\n\nThe GUI will now open the installer.\nPlease press \"Install\" in the next window to install all required files.");
                 installerBtn_Click(null, null);
             }
 

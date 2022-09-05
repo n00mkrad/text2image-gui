@@ -541,6 +541,7 @@ namespace StableDiffusionGui.Io
         public static void ZeroPadDir(string path, string ext, int targetLength, bool recursive = false)
         {
             FileInfo[] files;
+
             if (recursive)
                 files = new DirectoryInfo(path).GetFiles($"*.{ext}", SearchOption.AllDirectories);
             else

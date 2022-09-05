@@ -28,6 +28,7 @@ namespace StableDiffusionGui.Forms
         {
             this.Enabled = false;
             await Setup.Install();
+            BringToFront();
             UpdateStatus();
             this.Enabled = true;
         }
@@ -46,11 +47,11 @@ namespace StableDiffusionGui.Forms
                 if (text.Contains("conda"))
                     checkedListBoxStatus.SetItemChecked(i, InstallationStatus.HasConda());
 
-                if (text.Contains("repository"))
-                    checkedListBoxStatus.SetItemChecked(i, InstallationStatus.HasSdRepo());
-
                 if (text.Contains("env"))
                     checkedListBoxStatus.SetItemChecked(i, InstallationStatus.HasSdEnv());
+
+                if (text.Contains("repository"))
+                    checkedListBoxStatus.SetItemChecked(i, InstallationStatus.HasSdRepo());
 
                 if (text.Contains("model"))
                     checkedListBoxStatus.SetItemChecked(i, InstallationStatus.HasSdModel());
@@ -78,11 +79,13 @@ namespace StableDiffusionGui.Forms
             this.Enabled = true;
         }
 
-        private void btnClone_Click(object sender, EventArgs e)
+        private async void btnClone_Click(object sender, EventArgs e)
         {
             this.Enabled = false;
-            Setup.CloneSdRepo();
+            Program.MainForm.SetWorking(true);
+            await Setup.CloneSdRepo();
             UpdateStatus();
+            Program.MainForm.SetWorking(false);
             this.Enabled = true;
         }
 
