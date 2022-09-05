@@ -360,7 +360,19 @@ namespace StableDiffusionGui
         private void imgBoxOutput_Click(object sender, EventArgs e)
         {
             if (((MouseEventArgs)e).Button == MouseButtons.Right)
+            {
                 btnImgShare_Click(null, null);
+            }
+            else
+            {
+                if(imgBoxOutput.Image != null)
+                {
+                    var bigPreviewForm = new BigPreviewForm();
+                    bigPreviewForm.EnableTiling = checkboxSeamless.Checked;
+                    bigPreviewForm.Show();
+                    bigPreviewForm.SetImage(imgBoxOutput.Image);
+                }
+            }
         }
 
         #region Drag N Drop
