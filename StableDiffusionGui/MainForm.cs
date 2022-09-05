@@ -185,7 +185,7 @@ namespace StableDiffusionGui
                         Implementation = Config.GetBool("checkboxOptimizedSd") ? Implementation.StableDiffusionOptimized : Implementation.StableDiffusion,
                         Prompts = textboxPrompt.Text.SplitIntoLines(),
                         Iterations = (int)upDownIterations.Value,
-                        OurDir = Path.Combine(Paths.GetExeDir(), "out"),
+                        OurDir = Config.Get(Config.Key.textboxOutPath),
                         Params = new Dictionary<string, string>
                         {
                             { "steps", MainUi.CurrentSteps.ToString() },
@@ -287,7 +287,7 @@ namespace StableDiffusionGui
 
         private void btnOpenOutFolder_Click(object sender, EventArgs e)
         {
-            Process.Start("explorer", Path.Combine(Paths.GetExeDir(), "out"));
+            Process.Start("explorer", Config.Get(Config.Key.textboxOutPath));
         }
 
         #region Link Buttons
@@ -355,7 +355,7 @@ namespace StableDiffusionGui
             if (!IsInstalledWithWarning())
                 return;
 
-            TtiProcess.RunStableDiffusionCli(Path.Combine(Paths.GetExeDir(), "out"));
+            TtiProcess.RunStableDiffusionCli(Config.Get(Config.Key.textboxOutPath));
         }
 
         private void imgBoxOutput_Click(object sender, EventArgs e)

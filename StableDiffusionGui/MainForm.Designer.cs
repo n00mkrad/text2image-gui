@@ -1180,9 +1180,9 @@
             this.label8.Location = new System.Drawing.Point(5, 10);
             this.label8.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(136, 13);
+            this.label8.Size = new System.Drawing.Size(182, 13);
             this.label8.TabIndex = 105;
-            this.label8.Text = "Generate Seamless Images";
+            this.label8.Text = "Generate Seamless (Tileable) Images";
             // 
             // checkboxSeamless
             // 

@@ -13,8 +13,6 @@ namespace StableDiffusionGui.Main
 {
     internal class PostProcess
     {
-        //public static string TempOutPath { get { return Path.Combine(Paths.GetSessionDataPath(), "out"); } }
-
         private static readonly int _maxPathLength = 255;
         private static List<string> outImgs;
 

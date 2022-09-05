@@ -250,6 +250,7 @@ namespace StableDiffusionGui.Io
             if (key == Key.sliderResH) return WriteDefault(key, "7");
             if (key == Key.sliderSteps) return WriteDefault(key, "6");
             if (key == Key.sliderScale) return WriteDefault(key, "16");
+            if (key == Key.textboxOutPath) return WriteDefault(key, Path.Combine(Paths.GetExeDir(), "Images"));
             if (key == Key.upDownIterations) return WriteDefault(key, "5");
 
             return WriteDefault(key, "");
@@ -276,6 +277,7 @@ namespace StableDiffusionGui.Io
             sliderResH,
             sliderSteps,
             sliderScale,
+            textboxOutPath,
             upDownIterations,
         }
     }
