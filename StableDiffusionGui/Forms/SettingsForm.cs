@@ -29,6 +29,7 @@ namespace StableDiffusionGui.Forms
             ConfigParser.LoadGuiElement(checkboxFullPrecision);
             ConfigParser.LoadGuiElement(checkboxFolderPerPrompt);
             ConfigParser.LoadGuiElement(checkboxAdvancedMode);
+            ConfigParser.LoadGuiElement(checkboxMultiPromptsSameSeed);
             ConfigParser.LoadGuiElement(checkboxPromptInFilename);
         }
 
@@ -38,6 +39,7 @@ namespace StableDiffusionGui.Forms
             ConfigParser.SaveGuiElement(checkboxFullPrecision);
             ConfigParser.SaveGuiElement(checkboxFolderPerPrompt);
             ConfigParser.SaveGuiElement(checkboxAdvancedMode);
+            ConfigParser.SaveGuiElement(checkboxMultiPromptsSameSeed);
             ConfigParser.SaveGuiElement(checkboxPromptInFilename);
         }
 

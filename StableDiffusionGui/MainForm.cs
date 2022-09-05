@@ -113,13 +113,14 @@ namespace StableDiffusionGui
             textboxExtraInitStrengths.Enabled = !opt;
             btnPostProc.Visible = !opt;
 
+
             if (opt)
                 Logger.Log($"Using low-memory code. This disables many features. Only keep this option enabled if your GPU has less than 8 GB of memory.");
 
             bool adv = Config.GetBool("checkboxAdvancedMode");
 
             upDownIterations.Maximum = !adv ? 1000 : 10000;
-            sliderSteps.Maximum = !adv ? 30 : 100;
+            sliderSteps.Maximum = !adv ? 24 : 100;
             sliderScale.Maximum = !adv ? 50 : 100;
             sliderResW.Maximum = !adv ? 16 : 24;
             sliderResH.Maximum = !adv ? 16 : 24;

@@ -145,7 +145,7 @@ namespace StableDiffusionGui.Installation
             await CloneSdRepo($"https://github.com/{GitFile}", GetDataSubPath("repo"));
         }
 
-        public static async Task CloneSdRepo (string url, string dir, string commit = "" /* 1404d8e98cd9038e2cd3e33b177e9b995b42bc3a */)
+        public static async Task CloneSdRepo (string url, string dir, string commit = "588320a9693d2f6d2ed688e4f4b57a0a60a7c569" /* 588320a9693d2f6d2ed688e4f4b57a0a60a7c569 */)
         {
             try
             {
@@ -245,7 +245,7 @@ namespace StableDiffusionGui.Installation
                 IoUtils.TryDeleteIfExists(gfpGanMdlPath);
 
                 Process procGfpganDl = OsUtils.NewProcess(true);
-                procGfpganDl.ErrorDataReceived += (sender, line) => { try { Logger.Log($"Downloading... ({line.Data.Trim().Split(' ')[0]}%)", false, Logger.LastUiLine.EndsWith("%)"), LogFilename); } catch { } };
+                procGfpganDl.ErrorDataReceived += (sender, line) => { try { Logger.Log($"Downloading... ({line.Data.Trim().Split(' ')[0].GetInt()}%)", false, Logger.LastUiLine.EndsWith("%)"), LogFilename); } catch { } };
                 procGfpganDl.StartInfo.Arguments = $"/C curl -L \"https://github.com/TencentARC/GFPGAN/releases/download/v1.3.0/GFPGANv1.3.pth\" -o {gfpGanMdlPath.Wrap()}";
                 procGfpganDl.Start();
                 procGfpganDl.BeginErrorReadLine();

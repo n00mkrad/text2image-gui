@@ -83,6 +83,9 @@ namespace StableDiffusionGui.Main
 
                     seed++;
                 }
+
+                if (Config.GetBool(Config.Key.checkboxMultiPromptsSameSeed))
+                    seed = startSeed;
             }
 
             File.WriteAllText(promptFilePath, promptFileContent);
