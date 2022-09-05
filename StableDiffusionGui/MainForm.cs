@@ -186,7 +186,7 @@ namespace StableDiffusionGui
                         Implementation = Config.GetBool("checkboxOptimizedSd") ? Implementation.StableDiffusionOptimized : Implementation.StableDiffusion,
                         Prompts = textboxPrompt.Text.SplitIntoLines(),
                         Iterations = (int)upDownIterations.Value,
-                        OurDir = Config.Get(Config.Key.textboxOutPath),
+                        OutDir = Config.Get(Config.Key.textboxOutPath),
                         Params = new Dictionary<string, string>
                         {
                             { "steps", MainUi.CurrentSteps.ToString() },

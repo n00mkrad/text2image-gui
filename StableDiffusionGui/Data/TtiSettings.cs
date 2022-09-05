@@ -13,7 +13,7 @@ namespace StableDiffusionGui.Data
         public Implementation Implementation { get; set; } = Implementation.StableDiffusion;
         public string[] Prompts { get; set; } = new string[] { "" };
         public int Iterations { get; set; } = 1;
-        public string OurDir { get; set; } = "";
+        public string OutDir { get; set; } = "";
         public Dictionary<string, string> Params { get; set; } = new Dictionary<string, string>();
     }
 }

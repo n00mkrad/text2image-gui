@@ -37,7 +37,7 @@ namespace StableDiffusionGui.Main
             CurrentTask = new TtiTaskInfo
             {
                 StartTime = DateTime.Now,
-                OutPath = s.OurDir,
+                OutPath = s.OutDir,
                 SubfoldersPerPrompt = Config.GetBool("checkboxFolderPerPrompt"),
             };
 
@@ -45,6 +45,7 @@ namespace StableDiffusionGui.Main
 
             string tempOutDir = Path.Combine(Paths.GetSessionDataPath(), "out");
             Directory.CreateDirectory(tempOutDir);
+            Directory.CreateDirectory(s.OutDir);
 
             List<Task> tasks = new List<Task>();
 
