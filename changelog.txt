@@ -9,7 +9,7 @@ SD GUI 1.3.0 Changelog:
 - Added option to use the same seed for each prompt when running multiple prompts
 - Added option to change image output folder
 - Added warnings if the program is running from a long or problematic (e.g. OneDrive) path
-- Slightly reduced VRAM usage
+- Slightly reduced VRAM usage across both implementations (fast/optimized)
 - Improved installer, python files are now included and should no longer conflict with system conda
 - Error messages are now shown for common errors
 - Fixed full-precision option not actually enabling full-precision
