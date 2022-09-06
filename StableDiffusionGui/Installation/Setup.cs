@@ -24,18 +24,17 @@ namespace StableDiffusionGui.Installation
             try
             {
                 Program.MainForm.SetWorking(true);
-                string repoPath = GetDataSubPath("repo");
 
                 if (force || !InstallationStatus.HasSdRepo())
                     await CloneSdRepo();
 
                 if (force || !InstallationStatus.HasSdEnv())
-                    await SetupPythonEnv(repoPath);
+                    await SetupPythonEnv();
 
                 if (force || !InstallationStatus.HasSdUpscalers())
                     await InstallUpscalers();
 
-                RemoveGitFiles(repoPath);
+                RemoveGitFiles(GetDataSubPath("repo"));
 
                 if (force || !InstallationStatus.HasSdModel())
                     await DownloadSdModelFile();
@@ -60,8 +59,9 @@ namespace StableDiffusionGui.Installation
             Program.MainForm.SetWorking(false);
         }
 
-        private static async Task SetupPythonEnv(string repoPath)
+        public static async Task SetupPythonEnv()
         {
+            string repoPath = GetDataSubPath("repo");
             string batPath = Path.Combine(repoPath, "install.bat");
 
             List<string> l = new List<string>();

@@ -84,6 +84,7 @@ namespace StableDiffusionGui.Forms
             this.Enabled = false;
             Program.MainForm.SetWorking(true);
             await Setup.CloneSdRepo();
+            await Setup.SetupPythonEnv();
             UpdateStatus();
             Program.MainForm.SetWorking(false);
             this.Enabled = true;
