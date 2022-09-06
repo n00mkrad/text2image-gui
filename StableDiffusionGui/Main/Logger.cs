@@ -19,7 +19,7 @@ namespace StableDiffusionGui.Main
         public const string DefaultLogName = "sessionlog";
         public static long Id;
 
-        private static Dictionary<string, string> sessionLogs = new Dictionary<string, string>();
+        public static Dictionary<string, string> SessionLogs = new Dictionary<string, string>();
         private static string _lastUi = "";
         public static string LastUiLine { get { return _lastUi; } }
         private static string _lastLog = "";
@@ -115,7 +115,7 @@ namespace StableDiffusionGui.Main
             try
             {
                 string appendStr = noLineBreak ? $" {logStr}" : $"{Environment.NewLine}[{Id.ToString().PadLeft(8, '0')}] [{time}]: {logStr}";
-                sessionLogs[filename] = (sessionLogs.ContainsKey(filename) ? sessionLogs[filename] : "") + appendStr;
+                SessionLogs[filename] = (SessionLogs.ContainsKey(filename) ? SessionLogs[filename] : "") + appendStr;
                 File.AppendAllText(_file, appendStr);
                 Id++;
             }
@@ -130,8 +130,8 @@ namespace StableDiffusionGui.Main
             if (!filename.Contains(".txt"))
                 filename = Path.ChangeExtension(filename, "txt");
 
-            if (sessionLogs.ContainsKey(filename))
-                return sessionLogs[filename];
+            if (SessionLogs.ContainsKey(filename))
+                return SessionLogs[filename];
             else
                 return "";
         }

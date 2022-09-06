@@ -17,6 +17,7 @@ using StableDiffusionGui.Installation;
 using StableDiffusionGui.Data;
 using TextBox = System.Windows.Forms.TextBox;
 using StableDiffusionGui.Os;
+using Microsoft.VisualBasic.Logging;
 
 namespace StableDiffusionGui
 {
@@ -495,7 +496,17 @@ namespace StableDiffusionGui
 
         private void btnDebug_Click(object sender, EventArgs e)
         {
-            Process.Start("explorer", Paths.GetLogPath().Wrap());
+            menuStripLogs.Items.Clear();
+            var openLogs = menuStripLogs.Items.Add($"Open Logs Folder");
+            openLogs.Click += (s, ea) => { Process.Start("explorer", Paths.GetLogPath().Wrap()); };
+
+            foreach (var log in Logger.SessionLogs)
+            {
+                ToolStripItem newItem = menuStripLogs.Items.Add($"Copy {log.Key}");
+                newItem.Click += (s, ea) => { OsUtils.SetClipboard(Logger.SessionLogs[log.Key]); Logger.Log($"Copied {log.Key} to clipboard."); };
+            }
+
+            menuStripLogs.Show(Cursor.Position);
         }
 
         private void btnSettings_Click(object sender, EventArgs e)

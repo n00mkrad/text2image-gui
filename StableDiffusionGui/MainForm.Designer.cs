@@ -92,6 +92,8 @@
             this.panelSampler = new System.Windows.Forms.Panel();
             this.panelRes = new System.Windows.Forms.Panel();
             this.panelSeed = new System.Windows.Forms.Panel();
+            this.btnSeedResetToRandom = new HTAlt.WinForms.HTButton();
+            this.btnSeedLastUsed = new HTAlt.WinForms.HTButton();
             this.panelScale = new System.Windows.Forms.Panel();
             this.panelSteps = new System.Windows.Forms.Panel();
             this.panelIterations = new System.Windows.Forms.Panel();
@@ -104,8 +106,7 @@
             this.btnEmbeddingBrowse = new HTAlt.WinForms.HTButton();
             this.btnInitImgBrowse = new HTAlt.WinForms.HTButton();
             this.separator = new System.Windows.Forms.Button();
-            this.btnSeedLastUsed = new HTAlt.WinForms.HTButton();
-            this.btnSeedResetToRandom = new HTAlt.WinForms.HTButton();
+            this.menuStripLogs = new System.Windows.Forms.ContextMenuStrip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
             this.tableLayoutPanel6.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -1033,6 +1034,46 @@
             this.panelSeed.Size = new System.Drawing.Size(633, 35);
             this.panelSeed.TabIndex = 4;
             // 
+            // btnSeedResetToRandom
+            // 
+            this.btnSeedResetToRandom.AutoColor = true;
+            this.btnSeedResetToRandom.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnSeedResetToRandom.ButtonImage = null;
+            this.btnSeedResetToRandom.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
+            this.btnSeedResetToRandom.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
+            this.btnSeedResetToRandom.DrawImage = false;
+            this.btnSeedResetToRandom.ForeColor = System.Drawing.Color.White;
+            this.btnSeedResetToRandom.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
+            this.btnSeedResetToRandom.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
+            this.btnSeedResetToRandom.Location = new System.Drawing.Point(465, 6);
+            this.btnSeedResetToRandom.Name = "btnSeedResetToRandom";
+            this.btnSeedResetToRandom.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+            this.btnSeedResetToRandom.Size = new System.Drawing.Size(120, 23);
+            this.btnSeedResetToRandom.TabIndex = 107;
+            this.btnSeedResetToRandom.TabStop = false;
+            this.btnSeedResetToRandom.Text = "Reset";
+            this.btnSeedResetToRandom.Visible = false;
+            // 
+            // btnSeedLastUsed
+            // 
+            this.btnSeedLastUsed.AutoColor = true;
+            this.btnSeedLastUsed.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnSeedLastUsed.ButtonImage = null;
+            this.btnSeedLastUsed.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
+            this.btnSeedLastUsed.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
+            this.btnSeedLastUsed.DrawImage = false;
+            this.btnSeedLastUsed.ForeColor = System.Drawing.Color.White;
+            this.btnSeedLastUsed.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
+            this.btnSeedLastUsed.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
+            this.btnSeedLastUsed.Location = new System.Drawing.Point(339, 6);
+            this.btnSeedLastUsed.Name = "btnSeedLastUsed";
+            this.btnSeedLastUsed.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+            this.btnSeedLastUsed.Size = new System.Drawing.Size(120, 23);
+            this.btnSeedLastUsed.TabIndex = 106;
+            this.btnSeedLastUsed.TabStop = false;
+            this.btnSeedLastUsed.Text = "Use Last Used Seed";
+            this.btnSeedLastUsed.Visible = false;
+            // 
             // panelScale
             // 
             this.panelScale.Controls.Add(this.label4);
@@ -1199,45 +1240,10 @@
             this.separator.TabStop = false;
             this.separator.UseVisualStyleBackColor = false;
             // 
-            // btnSeedLastUsed
+            // menuStripLogs
             // 
-            this.btnSeedLastUsed.AutoColor = true;
-            this.btnSeedLastUsed.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnSeedLastUsed.ButtonImage = null;
-            this.btnSeedLastUsed.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
-            this.btnSeedLastUsed.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
-            this.btnSeedLastUsed.DrawImage = false;
-            this.btnSeedLastUsed.ForeColor = System.Drawing.Color.White;
-            this.btnSeedLastUsed.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
-            this.btnSeedLastUsed.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
-            this.btnSeedLastUsed.Location = new System.Drawing.Point(339, 6);
-            this.btnSeedLastUsed.Name = "btnSeedLastUsed";
-            this.btnSeedLastUsed.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
-            this.btnSeedLastUsed.Size = new System.Drawing.Size(120, 23);
-            this.btnSeedLastUsed.TabIndex = 106;
-            this.btnSeedLastUsed.TabStop = false;
-            this.btnSeedLastUsed.Text = "Use Last Used Seed";
-            this.btnSeedLastUsed.Visible = false;
-            // 
-            // btnSeedResetToRandom
-            // 
-            this.btnSeedResetToRandom.AutoColor = true;
-            this.btnSeedResetToRandom.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnSeedResetToRandom.ButtonImage = null;
-            this.btnSeedResetToRandom.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
-            this.btnSeedResetToRandom.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
-            this.btnSeedResetToRandom.DrawImage = false;
-            this.btnSeedResetToRandom.ForeColor = System.Drawing.Color.White;
-            this.btnSeedResetToRandom.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
-            this.btnSeedResetToRandom.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
-            this.btnSeedResetToRandom.Location = new System.Drawing.Point(465, 6);
-            this.btnSeedResetToRandom.Name = "btnSeedResetToRandom";
-            this.btnSeedResetToRandom.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
-            this.btnSeedResetToRandom.Size = new System.Drawing.Size(120, 23);
-            this.btnSeedResetToRandom.TabIndex = 107;
-            this.btnSeedResetToRandom.TabStop = false;
-            this.btnSeedResetToRandom.Text = "Reset";
-            this.btnSeedResetToRandom.Visible = false;
+            this.menuStripLogs.Name = "menuStripLogs";
+            this.menuStripLogs.Size = new System.Drawing.Size(181, 26);
             // 
             // MainForm
             // 
@@ -1392,6 +1398,7 @@
         private System.Windows.Forms.Label label8;
         private HTAlt.WinForms.HTButton btnSeedLastUsed;
         private HTAlt.WinForms.HTButton btnSeedResetToRandom;
+        private System.Windows.Forms.ContextMenuStrip menuStripLogs;
     }
 }
 
