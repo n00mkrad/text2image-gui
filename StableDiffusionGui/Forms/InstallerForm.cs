@@ -27,7 +27,7 @@ namespace StableDiffusionGui.Forms
         private async void installBtn_Click(object sender, EventArgs e)
         {
             this.Enabled = false;
-            await Setup.Install();
+            await Setup.Install(InstallationStatus.IsInstalled);
             BringToFront();
             UpdateStatus();
             this.Enabled = true;

@@ -25,11 +25,9 @@ namespace StableDiffusionGui.Installation
         public static bool HasSdRepo ()
         {
             string repoPath = Path.Combine(Paths.GetDataPath(), "repo");
-
             bool hasDreamScript = File.Exists(Path.Combine(repoPath, "scripts", "dream.py"));
-            bool hasInstallScript = File.Exists(Path.Combine(repoPath, "install.cmd"));
 
-            return hasDreamScript && hasInstallScript;
+            return hasDreamScript;
         }
 
         public static bool HasSdEnv()
@@ -56,8 +54,8 @@ namespace StableDiffusionGui.Installation
             string esrganPath = Path.Combine(Paths.GetDataPath(), "mb", "envs", "ldo", "Lib", "site-packages", "basicsr");
             bool hasEsrgan = Directory.Exists(esrganPath);
 
-            string gfpPath = Path.Combine(Paths.GetDataPath(), "repo", "GFPGAN");
-            string gfpMdlPath = Path.Combine(Paths.GetDataPath(), "repo", "GFPGAN", "model.pth");
+            string gfpPath = Path.Combine(Paths.GetDataPath(), "GFPGAN");
+            string gfpMdlPath = Path.Combine(Paths.GetDataPath(), "GFPGAN", "model.pth");
             bool hasGfp = Directory.Exists(gfpPath) && File.Exists(gfpMdlPath);
 
             return hasEsrgan && hasGfp;

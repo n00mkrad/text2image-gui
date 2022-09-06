@@ -237,6 +237,9 @@ namespace StableDiffusionGui.MiscUtils
 
         public static string SanitizePromptFilename (string prompt, int pathBudget = 64)
         {
+            if (string.IsNullOrWhiteSpace(prompt))
+                return "";
+
             return new Regex(@"[^a-zA-Z0-9 -!,.()]").Replace(prompt, "_").Trunc(pathBudget - 1, false).Replace(" ", "_");
         }
     }

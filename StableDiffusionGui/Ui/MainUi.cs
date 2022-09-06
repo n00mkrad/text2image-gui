@@ -38,7 +38,7 @@ namespace StableDiffusionGui.Ui
                 Logger.Log(string.IsNullOrWhiteSpace(value) ? "Cleared embedding." : $"Now using fine-tuned embedding {Path.GetFileName(value).Wrap()}.");
             } }
 
-        public static readonly string[] ValidInitImgExtensions = new string[] { ".png", ".jpeg", ".jpg", ".jfif", ".bmp" };
+        public static readonly string[] ValidInitImgExtensions = new string[] { ".png", ".jpeg", ".jpg", ".jfif", ".bmp", ".webp" };
         public static readonly string[] ValidInitEmbeddingExtensions = new string[] { ".pt" };
 
         public static void HandleDroppedFiles(string[] paths)
@@ -56,7 +56,7 @@ namespace StableDiffusionGui.Ui
 
             if (paths.Length == 1)
             {
-                if (ValidInitImgExtensions.Contains(Path.GetExtension(paths[0]))) // Ask to use as init img
+                if (ValidInitImgExtensions.Contains(Path.GetExtension(paths[0]).ToLower())) // Ask to use as init img
                 {
                     DialogResult dialogResult = UiUtils.ShowMessageBox($"Do you want to load this image as an initialization image?", $"Dropped {Path.GetFileName(paths[0]).Trunc(40)}", MessageBoxButtons.YesNo);
 
@@ -64,7 +64,7 @@ namespace StableDiffusionGui.Ui
                         CurrentInitImgPath = paths[0];
                 }
 
-                if (ValidInitEmbeddingExtensions.Contains(Path.GetExtension(paths[0]))) // Ask to use as embedding (finetuned model)
+                if (ValidInitEmbeddingExtensions.Contains(Path.GetExtension(paths[0]).ToLower())) // Ask to use as embedding (finetuned model)
                 {
                     DialogResult dialogResult = UiUtils.ShowMessageBox($"Do you want to load this embedding?", $"Dropped {Path.GetFileName(paths[0]).Trunc(40)}", MessageBoxButtons.YesNo);
 

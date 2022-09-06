@@ -59,9 +59,9 @@ namespace StableDiffusionGui.Main
                         {
                             var img = images[i];
                             string number = $"-{(TextToImage.CurrentTask.ImgCount).ToString().PadLeft(TextToImage.CurrentTask.TargetImgCount.ToString().Length, '0')}";
-
                             bool inclPrompt = !sub && Config.GetBool("checkboxPromptInFilename");
                             string renamedPath = FormatUtils.GetExportFilename(img.FullName, sub ? imageDirMap[img.FullName] : TextToImage.CurrentTask.OutPath, number, "png", _maxPathLength, inclPrompt, true, true, true);
+                            Logger.Log($"PostProcessing: Trying to move {img.Name} => {renamedPath}", true);
                             img.MoveTo(renamedPath);
                             renamedImgPaths.Add(renamedPath);
                         }

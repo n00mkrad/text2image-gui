@@ -48,6 +48,8 @@ namespace StableDiffusionGui
 
         private void MainForm_Shown(object sender, EventArgs e)
         {
+            upDownSeed.Text = "";
+
             if (!Debugger.IsAttached)
             {
                 string dir = Paths.GetExeDir();
@@ -408,7 +410,7 @@ namespace StableDiffusionGui
 
                 if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
                 {
-                    if (MainUi.ValidInitImgExtensions.Contains(Path.GetExtension(dialog.FileName)))
+                    if (MainUi.ValidInitImgExtensions.Contains(Path.GetExtension(dialog.FileName).ToLower()))
                         MainUi.CurrentInitImgPath = dialog.FileName;
                     else
                         UiUtils.ShowMessageBox("Invalid file type.");
@@ -477,7 +479,7 @@ namespace StableDiffusionGui
 
                 if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
                 {
-                    if (MainUi.ValidInitEmbeddingExtensions.Contains(Path.GetExtension(dialog.FileName)))
+                    if (MainUi.ValidInitEmbeddingExtensions.Contains(Path.GetExtension(dialog.FileName.ToLower())))
                         MainUi.CurrentEmbeddingPath = dialog.FileName;
                     else
                         UiUtils.ShowMessageBox("Invalid file type.");
