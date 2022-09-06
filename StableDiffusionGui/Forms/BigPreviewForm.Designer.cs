@@ -28,9 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BigPreviewForm));
             this.picBox = new System.Windows.Forms.PictureBox();
+            this.menuStripOptions = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.copyImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.picBox)).BeginInit();
+            this.menuStripOptions.SuspendLayout();
             this.SuspendLayout();
             // 
             // picBox
@@ -44,6 +48,20 @@
             this.picBox.TabIndex = 0;
             this.picBox.TabStop = false;
             this.picBox.Click += new System.EventHandler(this.picBox_Click);
+            // 
+            // menuStripOptions
+            // 
+            this.menuStripOptions.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.copyImageToolStripMenuItem});
+            this.menuStripOptions.Name = "menuStripOptions";
+            this.menuStripOptions.Size = new System.Drawing.Size(181, 48);
+            // 
+            // copyImageToolStripMenuItem
+            // 
+            this.copyImageToolStripMenuItem.Name = "copyImageToolStripMenuItem";
+            this.copyImageToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.copyImageToolStripMenuItem.Text = "Copy Image";
+            this.copyImageToolStripMenuItem.Click += new System.EventHandler(this.copyImageToolStripMenuItem_Click);
             // 
             // BigPreviewForm
             // 
@@ -59,6 +77,7 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.BigPreviewForm_FormClosing);
             this.Load += new System.EventHandler(this.BigPreviewForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.picBox)).EndInit();
+            this.menuStripOptions.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -66,5 +85,7 @@
         #endregion
 
         private System.Windows.Forms.PictureBox picBox;
+        private System.Windows.Forms.ContextMenuStrip menuStripOptions;
+        private System.Windows.Forms.ToolStripMenuItem copyImageToolStripMenuItem;
     }
 }
