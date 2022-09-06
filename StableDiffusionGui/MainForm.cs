@@ -183,6 +183,8 @@ namespace StableDiffusionGui
                     Logger.ClearLogBox();
                     CleanPrompt();
 
+                    UpdateInitImgAndEmbeddingUi();
+
                     TtiSettings settings = new TtiSettings
                     {
                         Implementation = Config.GetBool("checkboxOptimizedSd") ? Implementation.StableDiffusionOptimized : Implementation.StableDiffusion,
