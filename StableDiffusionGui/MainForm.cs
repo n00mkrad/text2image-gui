@@ -49,6 +49,10 @@ namespace StableDiffusionGui
 
         private void MainForm_Shown(object sender, EventArgs e)
         {
+            Logger.Log("Validating installation...");
+            Setup.FixHardcodedPaths();
+            Logger.Log("Validated installation.", false, Logger.LastUiLine.EndsWith("..."));
+
             upDownSeed.Text = "";
 
             if (!Debugger.IsAttached)
@@ -68,7 +72,7 @@ namespace StableDiffusionGui
                 UiUtils.ShowMessageBox("READ THIS FIRST!\n\nThis software is still in development and may contain bugs.\n\nImportant:\n" +
                 "- You MUST have a recent (GTX 10 series or newer) Nvidia graphics card to use this.\n" +
                 "- You need as much VRAM (graphics card memory) as possible. IF YOU HAVE LESS THAN 8 GB, use this at your own risk, it might not work at all!!\n" +
-                "- The resolution settings is very VRAM-heavy. I do not recommend going above 512x512 unless you have 12+ GB VRAM.\n\n" +
+                "- The resolution settings is very VRAM-heavy. I do not recommend going above 512x512 unless you have 8+ GB VRAM.\n\n" +
                 "Last but not least, this GUI includes tooltips, so if you're not sure what a button or other control does, hover over it with your cursor and an info message will pop up.\n\nHave fun!", UiUtils.MessageType.Warning, Nmkoder.Forms.MessageForm.FontSize.Big);
             }
             else

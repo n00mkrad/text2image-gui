@@ -106,17 +106,6 @@ namespace StableDiffusionGui.Installation
             while (!p.HasExited) await Task.Delay(1);
         }
 
-        private static string GetTemporaryPathVariable(IEnumerable<string> additionalPaths)
-        {
-            var paths = Environment.GetEnvironmentVariable("PATH").Split(';');
-            List<string> newPaths = new List<string>();
-
-            newPaths.AddRange(additionalPaths);
-            newPaths.AddRange(paths.Where(x => x.ToLower().Replace("\\", "/").StartsWith("c:/windows")).ToList());
-            
-            return String.Join(";", newPaths) + ";";
-        }
-
         private static void HandleInstallScriptOutput(string log, bool stderr)
         {
             if (string.IsNullOrWhiteSpace(log))
@@ -332,9 +321,60 @@ namespace StableDiffusionGui.Installation
 
         #endregion
 
+        #region Utils
+
+        public static async Task FixHardcodedPaths()
+        {
+            string parentDir = Path.Combine(GetDataSubPath("mb"), "envs", "ldo", "Lib", "site-packages");
+            var eggLinks = IoUtils.GetFileInfosSorted(parentDir, false, "*.egg-link");
+
+            List<string> easyInstallPaths = new List<string>();
+
+            foreach (FileInfo eggLink in eggLinks)
+            {
+                string nameNoExt = Path.GetFileNameWithoutExtension(eggLink.FullName);
+
+                if (nameNoExt == "latent-diffusion")
+                {
+                    string path = Path.Combine(GetDataSubPath("repo"));
+                    File.WriteAllText(eggLink.FullName, path + "\n.");
+                    easyInstallPaths.Add(path);
+                }
+                else
+                {
+                    string path = Path.Combine(GetDataSubPath("repo"), "src", nameNoExt);
+                    File.WriteAllText(eggLink.FullName, path + "\n.");
+                    easyInstallPaths.Add(path);
+                }
+
+                Logger.Log($"Fixed egg {eggLink.FullName}.", true);
+            }
+
+            var easyInstallPth = Path.Combine(parentDir, "easy-install.pth");
+
+            if (File.Exists(easyInstallPth))
+            {
+                File.WriteAllLines(easyInstallPth, easyInstallPaths.ToArray());
+                Logger.Log($"Fixed easy-install.pth.", true);
+            }
+        }
+
+        private static string GetTemporaryPathVariable(IEnumerable<string> additionalPaths)
+        {
+            var paths = Environment.GetEnvironmentVariable("PATH").Split(';');
+            List<string> newPaths = new List<string>();
+
+            newPaths.AddRange(additionalPaths);
+            newPaths.AddRange(paths.Where(x => x.ToLower().Replace("\\", "/").StartsWith("c:/windows")).ToList());
+
+            return String.Join(";", newPaths) + ";";
+        }
+
         private static string GetDataSubPath(string dir)
         {
             return Path.Combine(Paths.GetDataPath(), dir);
         }
+
+        #endregion
     }
 }
