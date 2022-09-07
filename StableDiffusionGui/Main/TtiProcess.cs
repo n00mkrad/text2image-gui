@@ -158,14 +158,9 @@ namespace StableDiffusionGui.Main
             // 
             // float gfpganSetting = Config.GetFloat("sliderGfpgan");
             // string gfpgan = gfpganSetting > 0.01f ? $"-G {gfpganSetting.ToStringDot("0.00")}" : "";
-
-            foreach (string prompt in prompts)
-            {
-                promptFileContent += $"{prompt}\n";
-                TextToImage.CurrentTask.TargetImgCount += iterations;
-            }
-
-            File.WriteAllText(promptFilePath, promptFileContent);
+            
+            TextToImage.CurrentTask.TargetImgCount += iterations * prompts.Length;
+            File.WriteAllText(promptFilePath, String.Join("\n", prompts));
 
             Logger.Log($"Preparing to run Optimized Stable Diffusion - {iterations} Iterations, {steps} Steps, Scale {scale}, {res.Width}x{res.Height}, Starting Seed: {seed}");
 
