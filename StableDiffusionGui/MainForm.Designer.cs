@@ -735,12 +735,12 @@
             this.btnPostProc.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnPostProc.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnPostProc.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnPostProc.Location = new System.Drawing.Point(948, 598);
+            this.btnPostProc.Location = new System.Drawing.Point(948, 9);
             this.btnPostProc.Name = "btnPostProc";
             this.btnPostProc.Size = new System.Drawing.Size(40, 40);
             this.btnPostProc.TabIndex = 109;
             this.btnPostProc.TabStop = false;
-            this.toolTip.SetToolTip(this.btnPostProc, "Post Processing settings");
+            this.toolTip.SetToolTip(this.btnPostProc, "Post Processing Settings");
             this.btnPostProc.UseVisualStyleBackColor = false;
             this.btnPostProc.Click += new System.EventHandler(this.btnPostProc_Click);
             // 
@@ -774,7 +774,7 @@
             this.btnDebug.Size = new System.Drawing.Size(40, 40);
             this.btnDebug.TabIndex = 107;
             this.btnDebug.TabStop = false;
-            this.toolTip.SetToolTip(this.btnDebug, "Open Log Folder");
+            this.toolTip.SetToolTip(this.btnDebug, "Logs...");
             this.btnDebug.UseVisualStyleBackColor = false;
             this.btnDebug.Click += new System.EventHandler(this.btnDebug_Click);
             // 
@@ -791,7 +791,7 @@
             this.cliButton.Size = new System.Drawing.Size(40, 40);
             this.cliButton.TabIndex = 103;
             this.cliButton.TabStop = false;
-            this.toolTip.SetToolTip(this.cliButton, "Open dream.py Command Line Interface");
+            this.toolTip.SetToolTip(this.cliButton, "Open Dream.py Command Line Interface");
             this.cliButton.UseVisualStyleBackColor = false;
             this.cliButton.Click += new System.EventHandler(this.cliButton_Click);
             // 
@@ -886,10 +886,11 @@
             this.discordBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
             this.discordBtn.BackgroundImage = global::StableDiffusionGui.Properties.Resources.discordNew;
             this.discordBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.discordBtn.Enabled = false;
             this.discordBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.discordBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.discordBtn.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.discordBtn.Location = new System.Drawing.Point(902, 9);
+            this.discordBtn.Location = new System.Drawing.Point(856, 9);
             this.discordBtn.Name = "discordBtn";
             this.discordBtn.Size = new System.Drawing.Size(40, 40);
             this.discordBtn.TabIndex = 74;
@@ -903,10 +904,11 @@
             this.patreonBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
             this.patreonBtn.BackgroundImage = global::StableDiffusionGui.Properties.Resources.patreon256pxColored;
             this.patreonBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.patreonBtn.Enabled = false;
             this.patreonBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.patreonBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.patreonBtn.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.patreonBtn.Location = new System.Drawing.Point(856, 9);
+            this.patreonBtn.Location = new System.Drawing.Point(810, 9);
             this.patreonBtn.Name = "patreonBtn";
             this.patreonBtn.Size = new System.Drawing.Size(40, 40);
             this.patreonBtn.TabIndex = 73;
@@ -920,10 +922,11 @@
             this.paypalBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
             this.paypalBtn.BackgroundImage = global::StableDiffusionGui.Properties.Resources.paypal256px;
             this.paypalBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.paypalBtn.Enabled = false;
             this.paypalBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.paypalBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.paypalBtn.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.paypalBtn.Location = new System.Drawing.Point(810, 9);
+            this.paypalBtn.Location = new System.Drawing.Point(764, 9);
             this.paypalBtn.Name = "paypalBtn";
             this.paypalBtn.Size = new System.Drawing.Size(40, 40);
             this.paypalBtn.TabIndex = 72;
@@ -1232,10 +1235,11 @@
             this.separator.BackColor = System.Drawing.Color.Transparent;
             this.separator.BackgroundImage = global::StableDiffusionGui.Properties.Resources.separatorTest1;
             this.separator.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.separator.Enabled = false;
             this.separator.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.separator.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.separator.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.separator.Location = new System.Drawing.Point(948, 9);
+            this.separator.Location = new System.Drawing.Point(902, 9);
             this.separator.Name = "separator";
             this.separator.Size = new System.Drawing.Size(40, 40);
             this.separator.TabIndex = 75;
