@@ -8,6 +8,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Xml;
 using StableDiffusionGui.Main;
+using System.Linq;
 
 namespace StableDiffusionGui.Io
 {
@@ -252,6 +253,7 @@ namespace StableDiffusionGui.Io
             if (key == Key.sliderScale) return WriteDefault(key, "16");
             if (key == Key.textboxOutPath) return WriteDefault(key, Path.Combine(Paths.GetExeDir(), "Images"));
             if (key == Key.upDownIterations) return WriteDefault(key, "5");
+            if (key == Key.comboxSdModel) return WriteDefault(key, IoUtils.GetFileInfosSorted(Paths.GetModelsPath(), true, "*.ckpt").Select(x => x.Name).FirstOrDefault());
 
             return WriteDefault(key, "");
         }
@@ -279,6 +281,7 @@ namespace StableDiffusionGui.Io
             sliderScale,
             textboxOutPath,
             upDownIterations,
+            comboxSdModel,
         }
     }
 }
