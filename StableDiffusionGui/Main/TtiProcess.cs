@@ -46,7 +46,8 @@ namespace StableDiffusionGui.Main
 
         public static async Task RunStableDiffusion(string[] prompts, string initImg, string embedding, float[] initStrengths, int iterations, int steps, float[] scales, long seed, string sampler, Size res, bool seamless, string outPath)
         {
-            // Start(outPath);
+            if (!CheckIfSdModelExists())
+                return;
 
             if (File.Exists(initImg))
                 initImg = TtiUtils.ResizeInitImg(initImg, res, true);
@@ -113,7 +114,7 @@ namespace StableDiffusionGui.Main
             string prec = $"{(Config.GetBool("checkboxFullPrecision") ? "-F" : "")}";
 
             dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && call \"{Paths.GetDataPath()}\\mb\\Scripts\\activate.bat\" ldo && " +
-                $"python \"{Paths.GetDataPath()}/repo/scripts/dream.py\" --model stable-diffusion-1.4 -o {outPath.Wrap()} --from_file={promptFilePath.Wrap()} {prec}" +
+                $"python \"{Paths.GetDataPath()}/repo/scripts/dream.py\" --model {GetSdModel()} -o {outPath.Wrap()} --from_file={promptFilePath.Wrap()} {prec}" +
                 $"{(!string.IsNullOrWhiteSpace(embedding) ? $"--embedding_path {embedding.Wrap()}" : "")}";
 
             Logger.Log("cmd.exe " + dream.StartInfo.Arguments, true);
@@ -140,7 +141,8 @@ namespace StableDiffusionGui.Main
 
         public static async Task RunStableDiffusionOptimized(string[] prompts, string initImg, float initStrength, int iterations, int steps, float scale, long seed, Size res, string outPath)
         {
-            // Start(outPath);
+            if (!CheckIfSdModelExists())
+                return;
 
             if (File.Exists(initImg))
                 initImg = TtiUtils.ResizeInitImg(initImg, res, true);
@@ -179,7 +181,7 @@ namespace StableDiffusionGui.Main
             bool initImgExists = File.Exists(initImg);
 
             dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && call \"{Paths.GetDataPath()}\\mb\\Scripts\\activate.bat\" ldo && " +
-                $"python \"{Paths.GetDataPath()}/repo/optimizedSD/optimized_{(initImgExists ? "img" : "txt")}2img.py\" --model stable-diffusion-1.4 --outdir {outPath.Wrap()} --from-file {promptFilePath.Wrap()} --n_iter {iterations} " +
+                $"python \"{Paths.GetDataPath()}/repo/optimizedSD/optimized_{(initImgExists ? "img" : "txt")}2img.py\" --model {GetSdModel()} --outdir {outPath.Wrap()} --from-file {promptFilePath.Wrap()} --n_iter {iterations} " +
                 $"--ddim_steps {steps} --W {res.Width} --H {res.Height} --scale {scale.ToStringDot("0.0000")} --seed {seed} --precision {prec} {(initImgExists ? $"--init-img {initImg.Wrap()} --strength {initStrength.ToStringDot("0.0000")}" : "")}";
 
             Logger.Log("cmd.exe " + dream.StartInfo.Arguments, true);
@@ -209,13 +211,33 @@ namespace StableDiffusionGui.Main
             if (Program.Busy)
                 return;
 
+            if (!CheckIfSdModelExists())
+                return;
+
             string batPath = Path.Combine(Paths.GetSessionDataPath(), "dream.bat");
 
             string batText = $"@echo off\n title Dream.py CLI && cd /D {Paths.GetDataPath().Wrap()} && call \"mb\\Scripts\\activate.bat\" \"mb/envs/ldo\" && " +
-                $"python \"repo/scripts/dream.py\" --model stable-diffusion-1.4 -o {outPath.Wrap()} {(Config.GetBool("checkboxFullPrecision") ? "--full_precision" : "")}";
+                $"python \"repo/scripts/dream.py\" --model {GetSdModel()} -o {outPath.Wrap()} {(Config.GetBool("checkboxFullPrecision") ? "--full_precision" : "")}";
 
             File.WriteAllText(batPath, batText);
             Process.Start(batPath);
+        }
+
+        private static bool CheckIfSdModelExists()
+        {
+            if (!File.Exists(Path.Combine(Paths.GetModelsPath(), GetSdModel(true))))
+            {
+                TextToImage.Cancel($"Stable Diffusion model file not found at saved path:\n{Config.Get(Config.Key.comboxSdModel)}");
+                return false;
+            }
+
+            return true;
+        }
+
+        private static string GetSdModel (bool withExtension = false)
+        {
+            string filename = Config.Get(Config.Key.comboxSdModel);
+            return withExtension ? filename : Path.GetFileNameWithoutExtension(filename);
         }
 
         static void LogOutput(string line, bool stdErr = false)
