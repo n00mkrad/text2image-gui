@@ -47,6 +47,7 @@ namespace StableDiffusionGui.Main
         public static async Task RunStableDiffusion(string[] prompts, string initImg, string embedding, float[] initStrengths, int iterations, int steps, float[] scales, long seed, string sampler, Size res, bool seamless, string outPath)
         {
             // Start(outPath);
+            _hasErrored = false;
 
             if (File.Exists(initImg))
                 initImg = TtiUtils.ResizeInitImg(initImg, res, true);
@@ -141,7 +142,8 @@ namespace StableDiffusionGui.Main
         public static async Task RunStableDiffusionOptimized(string[] prompts, string initImg, float initStrengths, int iterations, int steps, float scale, long seed, Size res, string outPath)
         {
             // Start(outPath);
-
+            _hasErrored = false;
+            
             if (File.Exists(initImg))
                 initImg = TtiUtils.ResizeInitImg(initImg, res, true);
 
