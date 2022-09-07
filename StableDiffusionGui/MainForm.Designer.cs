@@ -83,6 +83,8 @@
             this.discordBtn = new System.Windows.Forms.Button();
             this.patreonBtn = new System.Windows.Forms.Button();
             this.paypalBtn = new System.Windows.Forms.Button();
+            this.btnEmbeddingBrowse = new HTAlt.WinForms.HTButton();
+            this.btnInitImgBrowse = new HTAlt.WinForms.HTButton();
             this.label7 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel12 = new System.Windows.Forms.Panel();
@@ -103,8 +105,6 @@
             this.labelInitStrength = new System.Windows.Forms.Label();
             this.panelPrompt = new System.Windows.Forms.Panel();
             this.labelPromptInfo = new System.Windows.Forms.Label();
-            this.btnEmbeddingBrowse = new HTAlt.WinForms.HTButton();
-            this.btnInitImgBrowse = new HTAlt.WinForms.HTButton();
             this.separator = new System.Windows.Forms.Button();
             this.menuStripLogs = new System.Windows.Forms.ContextMenuStrip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
@@ -932,6 +932,48 @@
             this.paypalBtn.UseVisualStyleBackColor = false;
             this.paypalBtn.Click += new System.EventHandler(this.paypalBtn_Click);
             // 
+            // btnEmbeddingBrowse
+            // 
+            this.btnEmbeddingBrowse.AutoColor = true;
+            this.btnEmbeddingBrowse.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnEmbeddingBrowse.ButtonImage = null;
+            this.btnEmbeddingBrowse.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
+            this.btnEmbeddingBrowse.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
+            this.btnEmbeddingBrowse.DrawImage = false;
+            this.btnEmbeddingBrowse.ForeColor = System.Drawing.Color.White;
+            this.btnEmbeddingBrowse.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
+            this.btnEmbeddingBrowse.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
+            this.btnEmbeddingBrowse.Location = new System.Drawing.Point(533, 36);
+            this.btnEmbeddingBrowse.Name = "btnEmbeddingBrowse";
+            this.btnEmbeddingBrowse.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+            this.btnEmbeddingBrowse.Size = new System.Drawing.Size(97, 23);
+            this.btnEmbeddingBrowse.TabIndex = 84;
+            this.btnEmbeddingBrowse.TabStop = false;
+            this.btnEmbeddingBrowse.Text = "Load Concept";
+            this.toolTip.SetToolTip(this.btnEmbeddingBrowse, "Load a concept trained using Textual Inversion");
+            this.btnEmbeddingBrowse.Click += new System.EventHandler(this.btnEmbeddingBrowse_Click);
+            // 
+            // btnInitImgBrowse
+            // 
+            this.btnInitImgBrowse.AutoColor = true;
+            this.btnInitImgBrowse.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnInitImgBrowse.ButtonImage = null;
+            this.btnInitImgBrowse.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
+            this.btnInitImgBrowse.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
+            this.btnInitImgBrowse.DrawImage = false;
+            this.btnInitImgBrowse.ForeColor = System.Drawing.Color.White;
+            this.btnInitImgBrowse.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
+            this.btnInitImgBrowse.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
+            this.btnInitImgBrowse.Location = new System.Drawing.Point(533, 7);
+            this.btnInitImgBrowse.Name = "btnInitImgBrowse";
+            this.btnInitImgBrowse.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+            this.btnInitImgBrowse.Size = new System.Drawing.Size(97, 23);
+            this.btnInitImgBrowse.TabIndex = 1;
+            this.btnInitImgBrowse.TabStop = false;
+            this.btnInitImgBrowse.Text = "Load Image";
+            this.toolTip.SetToolTip(this.btnInitImgBrowse, "Load initialization image");
+            this.btnInitImgBrowse.Click += new System.EventHandler(this.btnInitImgBrowse_Click);
+            // 
             // label7
             // 
             this.label7.AutoSize = true;
@@ -1185,46 +1227,6 @@
             this.labelPromptInfo.Size = new System.Drawing.Size(0, 13);
             this.labelPromptInfo.TabIndex = 85;
             // 
-            // btnEmbeddingBrowse
-            // 
-            this.btnEmbeddingBrowse.AutoColor = true;
-            this.btnEmbeddingBrowse.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnEmbeddingBrowse.ButtonImage = null;
-            this.btnEmbeddingBrowse.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
-            this.btnEmbeddingBrowse.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
-            this.btnEmbeddingBrowse.DrawImage = false;
-            this.btnEmbeddingBrowse.ForeColor = System.Drawing.Color.White;
-            this.btnEmbeddingBrowse.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
-            this.btnEmbeddingBrowse.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
-            this.btnEmbeddingBrowse.Location = new System.Drawing.Point(533, 36);
-            this.btnEmbeddingBrowse.Name = "btnEmbeddingBrowse";
-            this.btnEmbeddingBrowse.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
-            this.btnEmbeddingBrowse.Size = new System.Drawing.Size(97, 23);
-            this.btnEmbeddingBrowse.TabIndex = 84;
-            this.btnEmbeddingBrowse.TabStop = false;
-            this.btnEmbeddingBrowse.Text = "Load Embedding";
-            this.btnEmbeddingBrowse.Click += new System.EventHandler(this.btnEmbeddingBrowse_Click);
-            // 
-            // btnInitImgBrowse
-            // 
-            this.btnInitImgBrowse.AutoColor = true;
-            this.btnInitImgBrowse.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnInitImgBrowse.ButtonImage = null;
-            this.btnInitImgBrowse.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
-            this.btnInitImgBrowse.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
-            this.btnInitImgBrowse.DrawImage = false;
-            this.btnInitImgBrowse.ForeColor = System.Drawing.Color.White;
-            this.btnInitImgBrowse.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
-            this.btnInitImgBrowse.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
-            this.btnInitImgBrowse.Location = new System.Drawing.Point(533, 7);
-            this.btnInitImgBrowse.Name = "btnInitImgBrowse";
-            this.btnInitImgBrowse.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
-            this.btnInitImgBrowse.Size = new System.Drawing.Size(97, 23);
-            this.btnInitImgBrowse.TabIndex = 1;
-            this.btnInitImgBrowse.TabStop = false;
-            this.btnInitImgBrowse.Text = "Load Image";
-            this.btnInitImgBrowse.Click += new System.EventHandler(this.btnInitImgBrowse_Click);
-            // 
             // separator
             // 
             this.separator.BackColor = System.Drawing.Color.Transparent;
@@ -1243,7 +1245,7 @@
             // menuStripLogs
             // 
             this.menuStripLogs.Name = "menuStripLogs";
-            this.menuStripLogs.Size = new System.Drawing.Size(181, 26);
+            this.menuStripLogs.Size = new System.Drawing.Size(61, 4);
             // 
             // MainForm
             // 

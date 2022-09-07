@@ -104,6 +104,8 @@ namespace StableDiffusionGui.Installation
             }
 
             while (!p.HasExited) await Task.Delay(1);
+
+            Logger.Log("Done.");
         }
 
         private static void HandleInstallScriptOutput(string log, bool stderr)
@@ -323,7 +325,7 @@ namespace StableDiffusionGui.Installation
 
         #region Utils
 
-        public static async Task FixHardcodedPaths()
+        public static void FixHardcodedPaths()
         {
             string parentDir = Path.Combine(GetDataSubPath("mb"), "envs", "ldo", "Lib", "site-packages");
             var eggLinks = IoUtils.GetFileInfosSorted(parentDir, false, "*.egg-link");

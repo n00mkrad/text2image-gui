@@ -138,7 +138,7 @@ namespace StableDiffusionGui.Main
             Finish();
         }
 
-        public static async Task RunStableDiffusionOptimized(string[] prompts, string initImg, float initStrengths, int iterations, int steps, float scale, long seed, Size res, string outPath)
+        public static async Task RunStableDiffusionOptimized(string[] prompts, string initImg, float initStrength, int iterations, int steps, float scale, long seed, Size res, string outPath)
         {
             // Start(outPath);
 
@@ -176,9 +176,11 @@ namespace StableDiffusionGui.Main
 
             string prec = $"{(Config.GetBool("checkboxFullPrecision") ? "full" : "autocast")}";
 
+            bool initImgExists = File.Exists(initImg);
+
             dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && call \"{Paths.GetDataPath()}\\mb\\Scripts\\activate.bat\" ldo && " +
-                $"python \"{Paths.GetDataPath()}/repo/optimizedSD/optimized_txt2img.py\" --model stable-diffusion-1.4 --outdir {outPath.Wrap()} --from-file {promptFilePath.Wrap()} --n_iter {iterations} " +
-                $"--ddim_steps {steps} --W {res.Width} --H {res.Height} --scale {scale.ToStringDot("0.0000")} --seed {seed} --precision {prec}";
+                $"python \"{Paths.GetDataPath()}/repo/optimizedSD/optimized_{(initImgExists ? "img" : "txt")}2img.py\" --model stable-diffusion-1.4 --outdir {outPath.Wrap()} --from-file {promptFilePath.Wrap()} --n_iter {iterations} " +
+                $"--ddim_steps {steps} --W {res.Width} --H {res.Height} --scale {scale.ToStringDot("0.0000")} --seed {seed} --precision {prec} {(initImgExists ? $"--init-img {initImg.Wrap()} --strength {initStrength.ToStringDot("0.0000")}" : "")}";
 
             Logger.Log("cmd.exe " + dream.StartInfo.Arguments, true);
 
