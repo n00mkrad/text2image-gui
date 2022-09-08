@@ -24,23 +24,7 @@ namespace StableDiffusionGui.Main
 
         public static void Finish()
         {
-            return; // TODO: Remove this?
-
-            //int imgCount = ImagePreview.SetImages(TextToImage.CurrentTask.OutPath, true, TextToImage.CurrentTask.TargetImgCount);
-
-            //PostProcess(TextToImage.CurrentTask.OutPath, true, TextToImage.CurrentTask.TargetImgCount);
-
-            //if(imgCount > 0)
-            //{
-            //    Logger.Log($"Done!");
-            //}
-            //else
-            //{
-            //    bool logCopySuccess = OsUtils.SetClipboard(Logger.GetSessionLog("sd"));
-            //    Logger.Log($"No images generated. {(logCopySuccess ? "Log was copied to clipboard." : "")}");
-            //}
-            //
-            //Program.MainForm.SetWorking(false);
+            return;
         }
 
         public static async Task RunStableDiffusion(string[] prompts, string initImg, string embedding, float[] initStrengths, int iterations, int steps, float[] scales, long seed, string sampler, Size res, bool seamless, string outPath)
@@ -126,6 +110,7 @@ namespace StableDiffusionGui.Main
                 dream.ErrorDataReceived += (sender, line) => { LogOutput(line.Data, true); };
             }
 
+            Start();
             Logger.Log("Loading...");
             dream.Start();
 
@@ -188,6 +173,7 @@ namespace StableDiffusionGui.Main
                 dream.ErrorDataReceived += (sender, line) => { LogOutput(line.Data, true); };
             }
 
+            Start();
             Logger.Log("Loading...");
             dream.Start();
 
