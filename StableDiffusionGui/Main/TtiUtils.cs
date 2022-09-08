@@ -1,4 +1,5 @@
 ﻿using StableDiffusionGui.Io;
+using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -45,6 +46,21 @@ namespace StableDiffusionGui.Main
                 $"    height: 512\n";
 
             File.WriteAllText(Path.Combine(Paths.GetDataPath(), "repo", "configs", "models.yaml"), text);
+        }
+
+        public static void WarnIfPromptLong (List<string> prompts)
+        {
+            string prompt = prompts.OrderByDescending(s => s.Length).First();
+
+            char[] delimiters = new char[] { ' ', '\r', '\n' };
+            int words = prompt.Split(delimiters, StringSplitOptions.RemoveEmptyEntries).Length;
+
+            int thresh = 70;
+
+            if(words > thresh)
+            {
+                UiUtils.ShowMessageBox($"{(prompts.Count > 1 ? "One of your prompts" : "Your prompt")} is very long (>{thresh} words).\nThe AI might ignore parts of your prompt. Shorten the prompt to avoid this.");
+            }
         }
     }
 }

@@ -34,6 +34,8 @@ namespace StableDiffusionGui.Main
                 return;
             }
 
+            TtiUtils.WarnIfPromptLong(s.Prompts.ToList());
+
             CurrentTask = new TtiTaskInfo
             {
                 StartTime = DateTime.Now,
