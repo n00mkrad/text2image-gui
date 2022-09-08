@@ -94,7 +94,7 @@ namespace StableDiffusionGui.Main
                     seed = startSeed;
             }
 
-            File.WriteAllText(promptFilePath, String.Join("\n", promptFileLines));
+            File.WriteAllLines(promptFilePath, promptFileLines);
 
             Logger.Log($"Preparing to run Stable Diffusion - {iterations} Iterations, {steps} Steps, Scales {(scales.Length < 4 ? string.Join(", ", scales.Select(x => x.ToStringDot())) : $"{scales.First()}->{scales.Last()}")}, {res.Width}x{res.Height}, Starting Seed: {startSeed}");
 
@@ -163,7 +163,7 @@ namespace StableDiffusionGui.Main
             // string gfpgan = gfpganSetting > 0.01f ? $"-G {gfpganSetting.ToStringDot("0.00")}" : "";
             
             TextToImage.CurrentTask.TargetImgCount += iterations * prompts.Length;
-            File.WriteAllText(promptFilePath, String.Join("\n", prompts));
+            File.WriteAllLines(promptFilePath, prompts);
 
             Logger.Log($"Preparing to run Optimized Stable Diffusion - {iterations} Iterations, {steps} Steps, Scale {scale}, {res.Width}x{res.Height}, Starting Seed: {seed}");
 
