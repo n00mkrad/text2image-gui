@@ -118,7 +118,6 @@ namespace StableDiffusionGui
             comboxSampler.Enabled = !opt;
             textboxExtraScales.Enabled = !opt;
             textboxExtraInitStrengths.Enabled = !opt;
-            btnPostProc.Visible = !opt;
             panelSeamless.Visible = !opt;
 
 
@@ -529,6 +528,12 @@ namespace StableDiffusionGui
 
         private void btnPostProc_Click(object sender, EventArgs e)
         {
+            if (Config.GetBool("checkboxOptimizedSd"))
+            {
+                UiUtils.ShowMessageBox("Post-Processing is not available when Low Memory Mode is enabled.");
+                return;
+            }
+
             new PostProcSettingsForm().ShowDialog();
         }
     }
