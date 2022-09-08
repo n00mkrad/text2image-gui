@@ -78,7 +78,7 @@ namespace StableDiffusionGui.Ui
 
         public static string SanitizePrompt (string prompt)
         {
-            prompt = new Regex(@"[^a-zA-Z0-9 -!*,.:()\-]").Replace(prompt, "");
+            prompt = new Regex(@"[^a-zA-Z0-9 -!*,.:()_\-]").Replace(prompt, "");
             prompt = prompt.Replace(" -", " ");
 
             while (prompt.StartsWith("-"))
