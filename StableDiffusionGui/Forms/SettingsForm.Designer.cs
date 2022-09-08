@@ -31,6 +31,7 @@
             this.titleLabel = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel21 = new System.Windows.Forms.Panel();
+            this.panel15 = new System.Windows.Forms.Panel();
             this.panelAdvancedMode = new System.Windows.Forms.Panel();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.panel16 = new System.Windows.Forms.Panel();
@@ -66,6 +67,13 @@
             this.label9 = new System.Windows.Forms.Label();
             this.panel5 = new System.Windows.Forms.Panel();
             this.label5 = new System.Windows.Forms.Label();
+            this.panelSdModel = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
+            this.panel25 = new System.Windows.Forms.Panel();
+            this.comboxSdModel = new System.Windows.Forms.ComboBox();
+            this.btnOpenModelsFolder = new HTAlt.WinForms.HTButton();
+            this.panel26 = new System.Windows.Forms.Panel();
+            this.label10 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.panel8 = new System.Windows.Forms.Panel();
@@ -80,14 +88,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.panel11 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
-            this.panel15 = new System.Windows.Forms.Panel();
-            this.panelSdModel = new System.Windows.Forms.Panel();
-            this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
-            this.panel25 = new System.Windows.Forms.Panel();
-            this.panel26 = new System.Windows.Forms.Panel();
-            this.label10 = new System.Windows.Forms.Label();
-            this.btnOpenModelsFolder = new HTAlt.WinForms.HTButton();
-            this.comboxSdModel = new System.Windows.Forms.ComboBox();
             this.panel1.SuspendLayout();
             this.panel21.SuspendLayout();
             this.panelAdvancedMode.SuspendLayout();
@@ -113,6 +113,10 @@
             this.panel23.SuspendLayout();
             this.panel24.SuspendLayout();
             this.panel5.SuspendLayout();
+            this.panelSdModel.SuspendLayout();
+            this.tableLayoutPanel8.SuspendLayout();
+            this.panel25.SuspendLayout();
+            this.panel26.SuspendLayout();
             this.panel2.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel8.SuspendLayout();
@@ -122,10 +126,6 @@
             this.panel12.SuspendLayout();
             this.panel13.SuspendLayout();
             this.panel11.SuspendLayout();
-            this.panelSdModel.SuspendLayout();
-            this.tableLayoutPanel8.SuspendLayout();
-            this.panel25.SuspendLayout();
-            this.panel26.SuspendLayout();
             this.SuspendLayout();
             // 
             // titleLabel
@@ -169,6 +169,14 @@
             this.panel21.Name = "panel21";
             this.panel21.Size = new System.Drawing.Size(760, 35);
             this.panel21.TabIndex = 19;
+            // 
+            // panel15
+            // 
+            this.panel15.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel15.Location = new System.Drawing.Point(0, 0);
+            this.panel15.Name = "panel15";
+            this.panel15.Size = new System.Drawing.Size(760, 35);
+            this.panel15.TabIndex = 19;
             // 
             // panelAdvancedMode
             // 
@@ -551,6 +559,102 @@
             this.label5.TabIndex = 1;
             this.label5.Text = "Application Settings";
             // 
+            // panelSdModel
+            // 
+            this.panelSdModel.Controls.Add(this.tableLayoutPanel8);
+            this.panelSdModel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelSdModel.Location = new System.Drawing.Point(0, 105);
+            this.panelSdModel.Name = "panelSdModel";
+            this.panelSdModel.Size = new System.Drawing.Size(760, 35);
+            this.panelSdModel.TabIndex = 20;
+            // 
+            // tableLayoutPanel8
+            // 
+            this.tableLayoutPanel8.ColumnCount = 2;
+            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel8.Controls.Add(this.panel25, 0, 0);
+            this.tableLayoutPanel8.Controls.Add(this.panel26, 0, 0);
+            this.tableLayoutPanel8.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel8.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel8.Name = "tableLayoutPanel8";
+            this.tableLayoutPanel8.RowCount = 1;
+            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel8.Size = new System.Drawing.Size(760, 35);
+            this.tableLayoutPanel8.TabIndex = 1;
+            // 
+            // panel25
+            // 
+            this.panel25.Controls.Add(this.comboxSdModel);
+            this.panel25.Controls.Add(this.btnOpenModelsFolder);
+            this.panel25.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel25.Location = new System.Drawing.Point(383, 3);
+            this.panel25.Name = "panel25";
+            this.panel25.Size = new System.Drawing.Size(374, 29);
+            this.panel25.TabIndex = 88;
+            // 
+            // comboxSdModel
+            // 
+            this.comboxSdModel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.comboxSdModel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboxSdModel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboxSdModel.ForeColor = System.Drawing.Color.White;
+            this.comboxSdModel.FormattingEnabled = true;
+            this.comboxSdModel.Items.AddRange(new object[] {
+            "k_euler_a",
+            "k_euler",
+            "k_lms",
+            "ddim",
+            "plms",
+            "k_heun",
+            "k_dpm_2",
+            "k_dpm_2_a"});
+            this.comboxSdModel.Location = new System.Drawing.Point(0, 4);
+            this.comboxSdModel.Name = "comboxSdModel";
+            this.comboxSdModel.Size = new System.Drawing.Size(290, 21);
+            this.comboxSdModel.TabIndex = 106;
+            // 
+            // btnOpenModelsFolder
+            // 
+            this.btnOpenModelsFolder.AutoColor = true;
+            this.btnOpenModelsFolder.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnOpenModelsFolder.ButtonImage = null;
+            this.btnOpenModelsFolder.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
+            this.btnOpenModelsFolder.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
+            this.btnOpenModelsFolder.DrawImage = false;
+            this.btnOpenModelsFolder.ForeColor = System.Drawing.Color.White;
+            this.btnOpenModelsFolder.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
+            this.btnOpenModelsFolder.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
+            this.btnOpenModelsFolder.Location = new System.Drawing.Point(296, 2);
+            this.btnOpenModelsFolder.Name = "btnOpenModelsFolder";
+            this.btnOpenModelsFolder.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+            this.btnOpenModelsFolder.Size = new System.Drawing.Size(75, 23);
+            this.btnOpenModelsFolder.TabIndex = 4;
+            this.btnOpenModelsFolder.TabStop = false;
+            this.btnOpenModelsFolder.Text = "Open Folder";
+            this.btnOpenModelsFolder.Click += new System.EventHandler(this.btnOpenModelsFolder_Click);
+            // 
+            // panel26
+            // 
+            this.panel26.Controls.Add(this.label10);
+            this.panel26.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel26.Location = new System.Drawing.Point(3, 3);
+            this.panel26.Name = "panel26";
+            this.panel26.Size = new System.Drawing.Size(374, 29);
+            this.panel26.TabIndex = 87;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.ForeColor = System.Drawing.Color.White;
+            this.label10.Location = new System.Drawing.Point(5, 8);
+            this.label10.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(132, 13);
+            this.label10.TabIndex = 85;
+            this.label10.Text = "Stable Diffusion Model File";
+            // 
             // panel2
             // 
             this.panel2.Controls.Add(this.tableLayoutPanel1);
@@ -610,9 +714,9 @@
             this.label2.Location = new System.Drawing.Point(5, 8);
             this.label2.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(239, 13);
+            this.label2.Size = new System.Drawing.Size(300, 13);
             this.label2.TabIndex = 84;
-            this.label2.Text = "Use Full Precision (VRAM-heavy, Mostly Useless)";
+            this.label2.Text = "Use Full Precision (VRAM-heavy, may fix GTX 16-series cards)";
             // 
             // panel4
             // 
@@ -696,110 +800,6 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Stable Diffusion Settings";
             // 
-            // panel15
-            // 
-            this.panel15.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel15.Location = new System.Drawing.Point(0, 0);
-            this.panel15.Name = "panel15";
-            this.panel15.Size = new System.Drawing.Size(760, 35);
-            this.panel15.TabIndex = 19;
-            // 
-            // panelSdModel
-            // 
-            this.panelSdModel.Controls.Add(this.tableLayoutPanel8);
-            this.panelSdModel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSdModel.Location = new System.Drawing.Point(0, 105);
-            this.panelSdModel.Name = "panelSdModel";
-            this.panelSdModel.Size = new System.Drawing.Size(760, 35);
-            this.panelSdModel.TabIndex = 20;
-            // 
-            // tableLayoutPanel8
-            // 
-            this.tableLayoutPanel8.ColumnCount = 2;
-            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel8.Controls.Add(this.panel25, 0, 0);
-            this.tableLayoutPanel8.Controls.Add(this.panel26, 0, 0);
-            this.tableLayoutPanel8.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel8.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel8.Name = "tableLayoutPanel8";
-            this.tableLayoutPanel8.RowCount = 1;
-            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel8.Size = new System.Drawing.Size(760, 35);
-            this.tableLayoutPanel8.TabIndex = 1;
-            // 
-            // panel25
-            // 
-            this.panel25.Controls.Add(this.comboxSdModel);
-            this.panel25.Controls.Add(this.btnOpenModelsFolder);
-            this.panel25.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel25.Location = new System.Drawing.Point(383, 3);
-            this.panel25.Name = "panel25";
-            this.panel25.Size = new System.Drawing.Size(374, 29);
-            this.panel25.TabIndex = 88;
-            // 
-            // panel26
-            // 
-            this.panel26.Controls.Add(this.label10);
-            this.panel26.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel26.Location = new System.Drawing.Point(3, 3);
-            this.panel26.Name = "panel26";
-            this.panel26.Size = new System.Drawing.Size(374, 29);
-            this.panel26.TabIndex = 87;
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.ForeColor = System.Drawing.Color.White;
-            this.label10.Location = new System.Drawing.Point(5, 8);
-            this.label10.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(132, 13);
-            this.label10.TabIndex = 85;
-            this.label10.Text = "Stable Diffusion Model File";
-            // 
-            // btnOpenModelsFolder
-            // 
-            this.btnOpenModelsFolder.AutoColor = true;
-            this.btnOpenModelsFolder.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnOpenModelsFolder.ButtonImage = null;
-            this.btnOpenModelsFolder.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
-            this.btnOpenModelsFolder.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
-            this.btnOpenModelsFolder.DrawImage = false;
-            this.btnOpenModelsFolder.ForeColor = System.Drawing.Color.White;
-            this.btnOpenModelsFolder.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
-            this.btnOpenModelsFolder.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
-            this.btnOpenModelsFolder.Location = new System.Drawing.Point(296, 2);
-            this.btnOpenModelsFolder.Name = "btnOpenModelsFolder";
-            this.btnOpenModelsFolder.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
-            this.btnOpenModelsFolder.Size = new System.Drawing.Size(75, 23);
-            this.btnOpenModelsFolder.TabIndex = 4;
-            this.btnOpenModelsFolder.TabStop = false;
-            this.btnOpenModelsFolder.Text = "Open Folder";
-            this.btnOpenModelsFolder.Click += new System.EventHandler(this.btnOpenModelsFolder_Click);
-            // 
-            // comboxSdModel
-            // 
-            this.comboxSdModel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.comboxSdModel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboxSdModel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.comboxSdModel.ForeColor = System.Drawing.Color.White;
-            this.comboxSdModel.FormattingEnabled = true;
-            this.comboxSdModel.Items.AddRange(new object[] {
-            "k_euler_a",
-            "k_euler",
-            "k_lms",
-            "ddim",
-            "plms",
-            "k_heun",
-            "k_dpm_2",
-            "k_dpm_2_a"});
-            this.comboxSdModel.Location = new System.Drawing.Point(0, 4);
-            this.comboxSdModel.Name = "comboxSdModel";
-            this.comboxSdModel.Size = new System.Drawing.Size(290, 21);
-            this.comboxSdModel.TabIndex = 106;
-            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -853,6 +853,11 @@
             this.panel24.PerformLayout();
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
+            this.panelSdModel.ResumeLayout(false);
+            this.tableLayoutPanel8.ResumeLayout(false);
+            this.panel25.ResumeLayout(false);
+            this.panel26.ResumeLayout(false);
+            this.panel26.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.panel8.ResumeLayout(false);
@@ -867,11 +872,6 @@
             this.panel13.PerformLayout();
             this.panel11.ResumeLayout(false);
             this.panel11.PerformLayout();
-            this.panelSdModel.ResumeLayout(false);
-            this.tableLayoutPanel8.ResumeLayout(false);
-            this.panel25.ResumeLayout(false);
-            this.panel26.ResumeLayout(false);
-            this.panel26.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -8,9 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace StableDiffusionGui.Installation
 {
@@ -25,11 +23,11 @@ namespace StableDiffusionGui.Installation
             {
                 Program.MainForm.SetWorking(true);
 
-                if (force || !InstallationStatus.HasSdRepo())
+                if (force || !InstallationStatus.HasSdRepo() || !InstallationStatus.HasSdEnv())
                     await CloneSdRepo();
 
-                if (force || !InstallationStatus.HasSdEnv())
-                    await SetupPythonEnv();
+                // if (force || !InstallationStatus.HasSdEnv())
+                //     await SetupPythonEnv();
 
                 if (force || !InstallationStatus.HasSdUpscalers())
                     await InstallUpscalers();
@@ -193,6 +191,8 @@ namespace StableDiffusionGui.Installation
                 Logger.Log($"Failed to clone repository: {ex.Message}");
                 Logger.Log($"{ex.StackTrace}", true);
             }
+
+            await Setup.SetupPythonEnv();
         }
 
         public static void RemoveGitFiles(string rootPath)
