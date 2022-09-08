@@ -29,13 +29,13 @@ namespace StableDiffusionGui.Installation
                 // if (force || !InstallationStatus.HasSdEnv())
                 //     await SetupPythonEnv();
 
+                if (force || !InstallationStatus.HasSdModel())
+                    await DownloadSdModelFile();
+
                 if (force || !InstallationStatus.HasSdUpscalers())
                     await InstallUpscalers();
 
                 RemoveGitFiles(GetDataSubPath("repo"));
-
-                if (force || !InstallationStatus.HasSdModel())
-                    await DownloadSdModelFile();
 
                 await Task.Delay(500);
 
@@ -158,7 +158,7 @@ namespace StableDiffusionGui.Installation
             await CloneSdRepo($"https://github.com/{GitFile}", GetDataSubPath("repo"));
         }
 
-        public static async Task CloneSdRepo(string url, string dir, string commit = "" /* 588320a9693d2f6d2ed688e4f4b57a0a60a7c569 */)
+        public static async Task CloneSdRepo(string url, string dir, string commit = "e1d3c005f427c071880d003d3b4f27df3a613ed9" /* 588320a9693d2f6d2ed688e4f4b57a0a60a7c569 */)
         {
             try
             {
@@ -197,17 +197,21 @@ namespace StableDiffusionGui.Installation
 
         public static void RemoveGitFiles(string rootPath)
         {
-            foreach (string dir in Directory.GetDirectories(rootPath, ".git", SearchOption.AllDirectories))
+            List<string> dirs = new List<string>();
+
+            dirs.AddRange(Directory.GetDirectories(rootPath, ".git", SearchOption.AllDirectories));
+
+            foreach (string dir in dirs)
             {
                 new DirectoryInfo(dir).Attributes = FileAttributes.Normal;
                 IoUtils.SetAttributes(dir, FileAttributes.Normal);
                 IoUtils.TryDeleteIfExists(dir);
             }
 
-            string tamingPath = Path.Combine(rootPath, "src", "taming-transformers");
-            IoUtils.SetAttributes(tamingPath, FileAttributes.Normal);
-            IoUtils.GetFilesSorted(tamingPath, true, "*.jpg").ToList().ForEach(x => IoUtils.TryDeleteIfExists(x));
-            IoUtils.GetFilesSorted(tamingPath, true, "*.png").ToList().ForEach(x => IoUtils.TryDeleteIfExists(x));
+            string srcPath = Path.Combine(rootPath, "src");
+            IoUtils.SetAttributes(srcPath, FileAttributes.Normal);
+            IoUtils.GetFilesSorted(srcPath, true, "*.jpg").ToList().ForEach(x => IoUtils.TryDeleteIfExists(x));
+            IoUtils.GetFilesSorted(srcPath, true, "*.png").ToList().ForEach(x => IoUtils.TryDeleteIfExists(x));
         }
 
         #endregion

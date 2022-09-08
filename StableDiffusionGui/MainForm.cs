@@ -496,6 +496,9 @@ namespace StableDiffusionGui
                         MainUi.CurrentEmbeddingPath = dialog.FileName;
                     else
                         UiUtils.ShowMessageBox("Invalid file type.");
+
+                    if (Path.GetExtension(dialog.FileName.ToLower()) == ".bin")
+                        Logger.Log(".bin embeddings are not yet supported!");
                 }
             }
 
