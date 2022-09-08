@@ -89,5 +89,11 @@ namespace StableDiffusionGui.Forms
         {
             OsUtils.SetClipboard(picBox.Image);
         }
+
+        private void BigPreviewForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.Escape)
+                Close();
+        }
     }
 }

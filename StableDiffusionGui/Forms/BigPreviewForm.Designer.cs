@@ -54,12 +54,12 @@
             this.menuStripOptions.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.copyImageToolStripMenuItem});
             this.menuStripOptions.Name = "menuStripOptions";
-            this.menuStripOptions.Size = new System.Drawing.Size(181, 48);
+            this.menuStripOptions.Size = new System.Drawing.Size(139, 26);
             // 
             // copyImageToolStripMenuItem
             // 
             this.copyImageToolStripMenuItem.Name = "copyImageToolStripMenuItem";
-            this.copyImageToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.copyImageToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.copyImageToolStripMenuItem.Text = "Copy Image";
             this.copyImageToolStripMenuItem.Click += new System.EventHandler(this.copyImageToolStripMenuItem_Click);
             // 
@@ -72,10 +72,12 @@
             this.Controls.Add(this.picBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.Name = "BigPreviewForm";
             this.Text = "Image";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.BigPreviewForm_FormClosing);
             this.Load += new System.EventHandler(this.BigPreviewForm_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.BigPreviewForm_KeyDown);
             ((System.ComponentModel.ISupportInitialize)(this.picBox)).EndInit();
             this.menuStripOptions.ResumeLayout(false);
             this.ResumeLayout(false);
