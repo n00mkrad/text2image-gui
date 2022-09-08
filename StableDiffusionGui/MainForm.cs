@@ -476,6 +476,12 @@ namespace StableDiffusionGui
             if (Program.Busy)
                 return;
 
+            if (Config.GetBool("checkboxOptimizedSd"))
+            {
+                Logger.Log("Not supported in Low Memory Mode.");
+                return;
+            }
+
             if (!string.IsNullOrWhiteSpace(MainUi.CurrentEmbeddingPath))
             {
                 MainUi.CurrentEmbeddingPath = "";
