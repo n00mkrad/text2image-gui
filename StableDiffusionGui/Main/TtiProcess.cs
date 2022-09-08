@@ -56,7 +56,7 @@ namespace StableDiffusionGui.Main
             long startSeed = seed;
 
             string promptFilePath = Path.Combine(Paths.GetSessionDataPath(), "prompts.txt");
-            string promptFileContent = "";
+            List<string> promptFileLines = new List<string>();
 
             string upscaling = "";
             int upscaleSetting = Config.GetInt("comboxUpscale");
@@ -79,7 +79,7 @@ namespace StableDiffusionGui.Main
                         {
                             bool initImgExists = File.Exists(initImg);
                             string init = initImgExists ? $"--init_img {initImg.Wrap()} --strength {strength.ToStringDot("0.0000")}" : "";
-                            promptFileContent += $"{prompt} {init} -n {1} -s {steps} -C {scale.ToStringDot()} -A {sampler} -W {res.Width} -H {res.Height} -S {seed} {upscaling} {gfpgan} {(seamless ? "--seamless" : "")}\n";
+                            promptFileLines.Add($"{prompt} {init} -n {1} -s {steps} -C {scale.ToStringDot()} -A {sampler} -W {res.Width} -H {res.Height} -S {seed} {upscaling} {gfpgan} {(seamless ? "--seamless" : "")}");
                             TextToImage.CurrentTask.TargetImgCount++;
 
                             if (!initImgExists)
@@ -94,7 +94,7 @@ namespace StableDiffusionGui.Main
                     seed = startSeed;
             }
 
-            File.WriteAllText(promptFilePath, promptFileContent);
+            File.WriteAllText(promptFilePath, String.Join("\n", promptFileLines));
 
             Logger.Log($"Preparing to run Stable Diffusion - {iterations} Iterations, {steps} Steps, Scales {(scales.Length < 4 ? string.Join(", ", scales.Select(x => x.ToStringDot())) : $"{scales.First()}->{scales.Last()}")}, {res.Width}x{res.Height}, Starting Seed: {startSeed}");
 
@@ -161,14 +161,9 @@ namespace StableDiffusionGui.Main
             // 
             // float gfpganSetting = Config.GetFloat("sliderGfpgan");
             // string gfpgan = gfpganSetting > 0.01f ? $"-G {gfpganSetting.ToStringDot("0.00")}" : "";
-
-            foreach (string prompt in prompts)
-            {
-                promptFileContent += $"{prompt}\n";
-                TextToImage.CurrentTask.TargetImgCount += iterations;
-            }
-
-            File.WriteAllText(promptFilePath, promptFileContent);
+            
+            TextToImage.CurrentTask.TargetImgCount += iterations * prompts.Length;
+            File.WriteAllText(promptFilePath, String.Join("\n", prompts));
 
             Logger.Log($"Preparing to run Optimized Stable Diffusion - {iterations} Iterations, {steps} Steps, Scale {scale}, {res.Width}x{res.Height}, Starting Seed: {seed}");
 
