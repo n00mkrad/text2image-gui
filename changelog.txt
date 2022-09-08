@@ -1,7 +1,17 @@
 SD GUI 1.3.1 Changelog:
+- Init image (img2img) now works with Low Memory Mode
+- Log button now has options to copy each log directly
+- Added Stable Diffusion model selection in Settings
+- Added a right-click menu to the full-screen image viewer window with "Copy Image" option
+- Added warning if prompt might be too long for CLIP (>70 words)
 - Installation should no longer conflict with system Python/Conda installations
 - Installer will no longer re-install Python environment by default (if it already exists)
+- Fixed output folder not being created if it does not exist
+- Fixed file type check (for init image, embeddings) being case-sensitive
 - Fixed uppercase file extensions not being accepted for init images or embeddings
+- Fixed original image always being saved in addition to upscaled image
+- VRAM usage optimizations
+- Other minor bug fixes
 
 SD GUI 1.3.0 Changelog:
 - Added option to use low-VRAM code, only needs around 3.3 GB VRAM for 512x512 images
