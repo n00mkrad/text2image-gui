@@ -35,5 +35,16 @@ namespace StableDiffusionGui.Main
                 return bmp;
             }
         }
+
+        public static void WriteModelsYaml (string mdlName)
+        {
+            string text = $"{mdlName}:\n" +
+                $"    config: configs/stable-diffusion/v1-inference.yaml\n" +
+                $"    weights: ../models/{mdlName}.ckpt\n" +
+                $"    width: 512\n" +
+                $"    height: 512\n";
+
+            File.WriteAllText(Path.Combine(Paths.GetDataPath(), "repo", "configs", "models.yaml"), text);
+        }
     }
 }

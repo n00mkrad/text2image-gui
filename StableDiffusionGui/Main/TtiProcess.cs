@@ -1,5 +1,4 @@
 ﻿using StableDiffusionGui.Io;
-using StableDiffusionGui.Io;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
@@ -51,6 +50,8 @@ namespace StableDiffusionGui.Main
 
             if (File.Exists(initImg))
                 initImg = TtiUtils.ResizeInitImg(initImg, res, true);
+
+            TtiUtils.WriteModelsYaml(GetSdModel());
 
             long startSeed = seed;
 
