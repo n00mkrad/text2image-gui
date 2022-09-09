@@ -144,7 +144,10 @@ namespace StableDiffusionGui
             textboxPrompt.Text = string.Join(Environment.NewLine, lines.Select(x => MainUi.SanitizePrompt(x)).Where(x => !string.IsNullOrWhiteSpace(x)));
 
             if (upDownSeed.Text == "")
+            {
                 upDownSeed.Value = -1;
+                upDownSeed.Text = "";
+            }
         }
 
 
