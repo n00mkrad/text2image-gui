@@ -162,8 +162,9 @@ namespace StableDiffusionGui.Main
             bool initImgExists = File.Exists(initImg);
 
             dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && call \"{Paths.GetDataPath()}\\mb\\Scripts\\activate.bat\" ldo && " +
-                $"python \"{Paths.GetDataPath()}/repo/optimizedSD/optimized_{(initImgExists ? "img" : "txt")}2img.py\" --model {GetSdModel()} --outdir {outPath.Wrap()} --from-file {promptFilePath.Wrap()} --n_iter {iterations} " +
-                $"--ddim_steps {steps} --W {res.Width} --H {res.Height} --scale {scale.ToStringDot("0.0000")} --seed {seed} --precision {prec} {(initImgExists ? $"--init-img {initImg.Wrap()} --strength {initStrength.ToStringDot("0.0000")}" : "")}";
+                $"python \"{Paths.GetDataPath()}/repo/optimizedSD/optimized_{(initImgExists ? "img" : "txt")}2img.py\" --model {GetSdModel()} --outdir {outPath.Wrap()} --from-file {promptFilePath.Wrap()} " +
+                $"--n_iter {iterations} --ddim_steps {steps} --W {res.Width} --H {res.Height} --scale {scale.ToStringDot("0.0000")} --seed {seed} --precision {prec} " +
+                $"{(initImgExists ? $"--init-img {initImg.Wrap()} --strength {initStrength.ToStringDot("0.0000")}" : "")} {(Config.GetBool(Config.Key.lowMemTurbo) ? "--turbo" : "")}";
 
             Logger.Log("cmd.exe " + dream.StartInfo.Arguments, true);
 
@@ -258,7 +259,6 @@ namespace StableDiffusionGui.Main
 
                     Logger.Log($"Generated {split[0].GetInt()} image in {split[1]} ({TextToImage.CurrentTask.ImgCount}/{TextToImage.CurrentTask.TargetImgCount})" +
                         $"{(TextToImage.CurrentTask.ImgCount > 1 && remainingMs > 1000 ? $" - ETA: {FormatUtils.Time(remainingMs, false)}" : "")}", false, replace || Logger.LastUiLine.MatchesWildcard("*Generated*image*in*"));
-                    // ImagePreview.SetImages(TextToImage.CurrentTask.OutPath, true, TextToImage.CurrentTask.ImgCount);
                 }
             }
 
@@ -292,7 +292,6 @@ namespace StableDiffusionGui.Main
 
                     Logger.Log($"Generated 1 image in {FormatUtils.Time(lastMsPerImg, false)} ({TextToImage.CurrentTask.ImgCount}/{TextToImage.CurrentTask.TargetImgCount})" +
                         $"{(TextToImage.CurrentTask.ImgCount > 1 && remainingMs > 1000 ? $" - ETA: {FormatUtils.Time(remainingMs, false)}" : "")}", false, replace || Logger.LastUiLine.MatchesWildcard("Generated*image*"));
-                    // ImagePreview.SetImages(TextToImage.CurrentTask.OutPath, true, TextToImage.CurrentTask.ImgCount);
                 }
             }
 
@@ -301,21 +300,6 @@ namespace StableDiffusionGui.Main
             {
                 Logger.Log($"Downloading required files... {line.Trunc(80)}", false, ellipsis);
             }
-
-            //if (line.Contains("Generating: 100%"))
-            //{
-            //    Logger.Log($"Post-processing...", false, replace);
-            //}
-
-            // if (line.Contains("Restoring Faces"))
-            // {
-            //     Logger.Log($"Restoring faces...", false, replace);
-            // }
-            // 
-            // if (line.MatchesWildcard("*Tile */*"))
-            // {
-            //     Logger.Log($"Upscaling...", false, replace);
-            // }
 
             string lastLogLines = string.Join("\n", Logger.GetSessionLogLastLines("sd", 6).Select(x => $"[{x.Split("]: [").Skip(1).FirstOrDefault()}"));
 

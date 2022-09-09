@@ -282,6 +282,7 @@ namespace StableDiffusionGui.Io
             textboxOutPath,
             upDownIterations,
             comboxSdModel,
+            lowMemTurbo,
         }
     }
 }
