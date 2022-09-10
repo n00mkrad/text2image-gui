@@ -99,7 +99,7 @@ namespace StableDiffusionGui.Main
             string prec = $"{(Config.GetBool("checkboxFullPrecision") ? "-F" : "")}";
 
             dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && call \"{Paths.GetDataPath()}\\mb\\Scripts\\activate.bat\" ldo && " +
-                $"python \"{Paths.GetDataPath()}/repo/scripts/dream.py\" --model {GetSdModel()} -o {outPath.Wrap()} --from_file={promptFilePath.Wrap()} {prec}" +
+                $"python \"{Paths.GetDataPath()}/repo/scripts/dream.py\" --model {GetSdModel()} -o {outPath.Wrap()} --from_file={promptFilePath.Wrap()} {prec} " +
                 $"{(!string.IsNullOrWhiteSpace(embedding) ? $"--embedding_path {embedding.Wrap()}" : "")}";
 
             Logger.Log("cmd.exe " + dream.StartInfo.Arguments, true);
@@ -246,6 +246,19 @@ namespace StableDiffusionGui.Main
                     Program.MainForm.SetProgress((int)Math.Round(((float)1 / TextToImage.CurrentTask.TargetImgCount) * 100f));
                 }
 
+                if (line.MatchesWildcard("step */*"))
+                {
+                    int[] stepsCurrentTarget = line.Split("step ")[1].Split('/').Select(x => x.GetInt()).ToArray();
+
+                    int percent = (((float)stepsCurrentTarget[0] / stepsCurrentTarget[1]) * 100f).RoundToInt();
+
+                    if (percent > 0 && percent <= 100)
+                    {
+                        //Logger.Log($"Generating... {percent}%", false, replace);
+                        Program.MainForm.SetProgressImg(percent);
+                    }
+                }
+
                 if (line.Contains("image(s) generated in "))
                 {
                     var split = line.Split("image(s) generated in ");
@@ -277,7 +290,10 @@ namespace StableDiffusionGui.Main
                     int percent = line.Split("Decoding image: ")[1].Split('#')[0].GetInt();
 
                     if(percent > 0 && percent <= 100)
-                        Logger.Log($"Generating... {percent}%", false, replace);
+                    {
+                        //Logger.Log($"Generating... {percent}%", false, replace);
+                        Program.MainForm.SetProgressImg(percent);
+                    }
                 }
 
                 if (line.MatchesWildcard("*data: 100%*<00:00,*it*]"))

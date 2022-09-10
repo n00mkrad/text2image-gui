@@ -245,6 +245,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon1.ico" />
+    <None Include="Resources\downArrowIcon.png" />
+    <None Include="Resources\upArrowIcon.png" />
     <None Include="Resources\baseline_auto_fix_high_white_48dp.png" />
     <None Include="Resources\imgNotFound.png" />
     <None Include="Resources\baseline_settings_white_48dp.png" />

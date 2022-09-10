@@ -18,6 +18,8 @@ using StableDiffusionGui.Data;
 using TextBox = System.Windows.Forms.TextBox;
 using StableDiffusionGui.Os;
 using Microsoft.VisualBasic.Logging;
+using System.Reflection;
+using StableDiffusionGui.Properties;
 
 namespace StableDiffusionGui
 {
@@ -237,6 +239,11 @@ namespace StableDiffusionGui
             foreach (Control c in controlsToHide)
                 c.Visible = !state;
 
+            if (!state)
+                SetProgressImg(0);
+
+            progressBarImg.Visible = state;
+
             Program.Busy = state;
         }
 
@@ -246,6 +253,14 @@ namespace StableDiffusionGui
             TaskbarManager.Instance.SetProgressValue(percent, 100);
             progressBar.Value = percent;
             progressBar.Refresh();
+        }
+
+        public void SetProgressImg(int percent)
+        {
+            percent = percent.Clamp(0, 100);
+            TaskbarManager.Instance.SetProgressValue(percent, 100);
+            progressBarImg.Value = percent;
+            progressBarImg.Refresh();
         }
 
         private void btnPrevImg_Click(object sender, EventArgs e)
@@ -538,6 +553,20 @@ namespace StableDiffusionGui
             }
 
             new PostProcSettingsForm().ShowDialog();
+        }
+
+        private void btnExpandPromptField_Click(object sender, EventArgs e)
+        {
+            if(panelPrompt.Height == 65)
+            {
+                btnExpandPromptField.BackgroundImage = Resources.upArrowIcon;
+                panelPrompt.Height = 130;
+            }
+            else
+            {
+                btnExpandPromptField.BackgroundImage = Resources.downArrowIcon;
+                panelPrompt.Height = 65;
+            }
         }
     }
 }

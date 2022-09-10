@@ -133,6 +133,16 @@ namespace StableDiffusionGui.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap downArrowIcon {
+            get {
+                object obj = ResourceManager.GetObject("downArrowIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap forwardArrowIcon {
             get {
                 object obj = ResourceManager.GetObject("forwardArrowIcon", resourceCulture);
@@ -196,6 +206,16 @@ namespace StableDiffusionGui.Properties {
         internal static System.Drawing.Bitmap shareIco {
             get {
                 object obj = ResourceManager.GetObject("shareIco", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap upArrowIcon {
+            get {
+                object obj = ResourceManager.GetObject("upArrowIcon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
