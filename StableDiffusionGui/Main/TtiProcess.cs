@@ -197,6 +197,8 @@ namespace StableDiffusionGui.Main
             if (!CheckIfSdModelExists())
                 return;
 
+            TtiUtils.WriteModelsYaml(GetSdModel());
+
             string batPath = Path.Combine(Paths.GetSessionDataPath(), "dream.bat");
 
             string batText = $"@echo off\n title Dream.py CLI && cd /D {Paths.GetDataPath().Wrap()} && call \"mb\\Scripts\\activate.bat\" \"mb/envs/ldo\" && " +
