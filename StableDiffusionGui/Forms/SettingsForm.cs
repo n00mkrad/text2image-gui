@@ -23,8 +23,7 @@ namespace StableDiffusionGui.Forms
         private void SettingsForm_Load(object sender, EventArgs e)
         {
             _ready = false;
-            comboxSdModel.Items.Clear();
-            IoUtils.GetFileInfosSorted(Paths.GetModelsPath(), true, "*.ckpt").ToList().ForEach(x => comboxSdModel.Items.Add(x.Name));
+            LoadModels();
             LoadSettings();
             Task.Run(() => LoadGpus());
         }
@@ -39,6 +38,12 @@ namespace StableDiffusionGui.Forms
 
             SaveSettings();
             Program.MainForm.RefreshAfterSettingsChanged();
+        }
+
+        private void LoadModels ()
+        {
+            comboxSdModel.Items.Clear();
+            IoUtils.GetFileInfosSorted(Paths.GetModelsPath(), true, "*.ckpt").ToList().ForEach(x => comboxSdModel.Items.Add(x.Name));
         }
 
         private async Task LoadGpus()
@@ -70,6 +75,7 @@ namespace StableDiffusionGui.Forms
             ConfigParser.LoadGuiElement(textboxOutPath);
             ConfigParser.LoadGuiElement(comboxSdModel);
             // ConfigParser.LoadComboxIndex(comboxCudaDevice);
+            ConfigParser.LoadComboxIndex(comboxNotify);
         }
 
         void SaveSettings()
@@ -83,6 +89,7 @@ namespace StableDiffusionGui.Forms
             ConfigParser.SaveGuiElement(textboxOutPath);
             ConfigParser.SaveGuiElement(comboxSdModel);
             ConfigParser.SaveComboxIndex(comboxCudaDevice);
+            ConfigParser.SaveComboxIndex(comboxNotify);
         }
 
         private void checkboxFolderPerPrompt_CheckedChanged(object sender, EventArgs e)

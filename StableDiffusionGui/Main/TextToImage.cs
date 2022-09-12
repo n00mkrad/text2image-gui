@@ -69,6 +69,8 @@ namespace StableDiffusionGui.Main
             Done();
         }
 
+        public enum NotifyMode { None, Ping, Notification, Both }
+
         public static void Done()
         {
             int imgCount = CurrentTask.ImgCount; // ImagePreview.SetImages(CurrentTask.OutPath, true, CurrentTask.TargetImgCount);
@@ -84,6 +86,14 @@ namespace StableDiffusionGui.Main
             }
 
             Program.MainForm.SetWorking(false);
+
+            NotifyMode notifyMode = (NotifyMode)Config.GetInt("comboxNotify");
+
+            if (notifyMode == NotifyMode.Both || notifyMode == NotifyMode.Ping)
+                OsUtils.PlayPingSound(true);
+
+            if (notifyMode == NotifyMode.Both || notifyMode == NotifyMode.Notification)
+                OsUtils.ShowNotification("Stable Diffusion GUI", $"Image generation has finished.\nGenerated {imgCount} images.");
         }
 
         public static void Cancel(string reason = "", bool showMsgBox = true)

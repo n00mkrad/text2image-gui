@@ -9,6 +9,7 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Tulpep.NotificationWindow;
 
 namespace StableDiffusionGui.Os
 {
@@ -237,51 +238,27 @@ namespace StableDiffusionGui.Os
             Application.SetSuspendState(PowerState.Suspend, true, true);
         }
 
-        // public static void ShowNotification(string title, string text)
-        // {
-        //     var popupNotifier = new PopupNotifier { TitleText = title, ContentText = text, IsRightToLeft = false };
-        //     popupNotifier.BodyColor = System.Drawing.ColorTranslator.FromHtml("#323232");
-        //     popupNotifier.ContentColor = System.Drawing.Color.White;
-        //     popupNotifier.TitleColor = System.Drawing.Color.LightGray;
-        //     popupNotifier.GradientPower = 0;
-        //     popupNotifier.Popup();
-        // }
-        // 
-        // public static void ShowNotificationIfInBackground(string title, string text)
-        // {
-        //     if (Program.MainForm.IsInFocus())
-        //         return;
-        // 
-        //     ShowNotification(title, text);
-        // }
-
-        public static string GetGpus()
+        public static void ShowNotification(string title, string text, bool onlyIfWindowIsInBackground = false)
         {
-            ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_VideoController");
+            if (onlyIfWindowIsInBackground && Program.MainForm.IsInFocus())
+                return;
 
-            List<string> gpus = new List<string>();
+            var popupNotifier = new PopupNotifier { TitleText = title, ContentText = text, IsRightToLeft = false };
+            popupNotifier.BodyColor = System.Drawing.ColorTranslator.FromHtml("#323232");
+            popupNotifier.ContentColor = System.Drawing.Color.White;
+            popupNotifier.TitleColor = System.Drawing.Color.LightGray;
+            popupNotifier.GradientPower = 0;
+            popupNotifier.AnimationInterval = 5;
+            popupNotifier.Popup();
+        }
 
-            foreach (ManagementObject mo in searcher.Get())
-            {
-                foreach (PropertyData property in mo.Properties)
-                {
-                    if (property.Name == "Description")
-                    {
-                        string gpuName = property.Value.ToString();
+        public static void PlayPingSound (bool onlyIfWindowIsInBackground = false)
+        {
+            if (onlyIfWindowIsInBackground && Program.MainForm.IsInFocus())
+                return;
 
-                        if (!gpuName.ToLower().Contains("microsoft"))   // To ignore pseudo-GPUs like on vServers, RDP sessions, etc. (e.g. "Microsoft Basic Display Adapter")
-                        {
-                            gpus.Add(gpuName);
-                            Logger.Log($"[GetGpus] Found GPU: {property.Value}", true);
-                        }
-                    }
-                }
-                //string gpuName = queryObj["Name"].ToString();
-                //gpus.Add(gpuName);
-                //Logger.Log($"[GetGpus] Found GPU: {gpuName}", true);
-            }
-
-            return string.Join(", ", gpus);
+            System.IO.Stream stream = Properties.Resources.notify;
+            new System.Media.SoundPlayer(stream).Play();
         }
 
         public static bool SetClipboard (object data)
