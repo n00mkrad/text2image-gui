@@ -100,7 +100,7 @@ namespace StableDiffusionGui.Main
 
             dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && call \"{Paths.GetDataPath()}\\mb\\Scripts\\activate.bat\" ldo && " +
                 $"python \"{Paths.GetDataPath()}/repo/scripts/dream.py\" --model {GetSdModel()} -o {outPath.Wrap()} --from_file={promptFilePath.Wrap()} {prec} " +
-                $"{(!string.IsNullOrWhiteSpace(embedding) ? $"--embedding_path {embedding.Wrap()}" : "")} --device {TtiUtils.GetCudaDevice()}";
+                $"{(!string.IsNullOrWhiteSpace(embedding) ? $"--embedding_path {embedding.Wrap()}" : "")} --device {TtiUtils.GetCudaDevice()} --print_steps";
 
             Logger.Log("cmd.exe " + dream.StartInfo.Arguments, true);
 

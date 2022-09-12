@@ -50,6 +50,7 @@ namespace StableDiffusionGui
             CheckForIllegalCrossThreadCalls = false;
             Logger.Textbox = logBox;
             LoadUiElements();
+            PromptHistory.Load();
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -605,6 +606,13 @@ namespace StableDiffusionGui
         {
             upDownSeed.Value = -1;
             upDownSeed.Text = "";
+        }
+
+        private void btnPromptHistory_Click(object sender, EventArgs e)
+        {
+            var historyForm = new PromptListForm();
+            historyForm.PromptListMode = PromptListForm.ListMode.History;
+            historyForm.ShowDialog();
         }
     }
 }

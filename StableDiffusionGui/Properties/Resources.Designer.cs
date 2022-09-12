@@ -123,6 +123,16 @@ namespace StableDiffusionGui.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap deleteBtn {
+            get {
+                object obj = ResourceManager.GetObject("deleteBtn", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap discordNew {
             get {
                 object obj = ResourceManager.GetObject("discordNew", resourceCulture);
@@ -146,6 +156,16 @@ namespace StableDiffusionGui.Properties {
         internal static System.Drawing.Bitmap forwardArrowIcon {
             get {
                 object obj = ResourceManager.GetObject("forwardArrowIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap historyIcon {
+            get {
+                object obj = ResourceManager.GetObject("historyIcon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -195,6 +215,16 @@ namespace StableDiffusionGui.Properties {
         internal static System.Drawing.Bitmap paypal256px {
             get {
                 object obj = ResourceManager.GetObject("paypal256px", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap queueIcon {
+            get {
+                object obj = ResourceManager.GetObject("queueIcon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

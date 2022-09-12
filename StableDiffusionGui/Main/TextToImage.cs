@@ -49,6 +49,8 @@ namespace StableDiffusionGui.Main
 
             Program.MainForm.SetWorking(true);
 
+            PromptHistory.Add(s);
+
             string tempOutDir = Path.Combine(Paths.GetSessionDataPath(), "out");
             Directory.CreateDirectory(tempOutDir);
             Directory.CreateDirectory(s.OutDir);

@@ -155,6 +155,12 @@
     <Compile Include="Forms\PostProcSettingsForm.Designer.cs">
       <DependentUpon>PostProcSettingsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\PromptListForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\PromptListForm.Designer.cs">
+      <DependentUpon>PromptListForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\SettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -175,6 +181,7 @@
     </Compile>
     <Compile Include="Main\Logger.cs" />
     <Compile Include="Main\PostProcess.cs" />
+    <Compile Include="Main\PromptHistory.cs" />
     <Compile Include="Os\GpuUtils.cs" />
     <Compile Include="Ui\MainUi.cs" />
     <Compile Include="Main\TextToImage.cs" />
@@ -200,6 +207,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\PostProcSettingsForm.resx">
       <DependentUpon>PostProcSettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\PromptListForm.resx">
+      <DependentUpon>PromptListForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
@@ -249,6 +259,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon1.ico" />
+    <None Include="Resources\deleteBtn.png" />
+    <None Include="Resources\queueIcon.png" />
+    <None Include="Resources\historyIcon.png" />
     <None Include="Resources\notify.wav" />
     <None Include="Resources\downArrowIcon.png" />
     <None Include="Resources\upArrowIcon.png" />
