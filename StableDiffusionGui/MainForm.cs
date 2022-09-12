@@ -97,12 +97,12 @@ namespace StableDiffusionGui
         private async Task SetGpusInWindowTitle ()
         {
             var gpus = await GpuUtils.GetCudaGpus();
-            string s = "";
+            List<string> strings = new List<string>();
 
             foreach (var g in gpus)
-                s += $"{g.Key} ({g.Value})";
+                strings.Add($"{g.Key} ({g.Value})");
 
-            Text = $"{Text} - CUDA GPUs: {s}";
+            Text = $"{Text} - CUDA GPUs: {string.Join(", ", strings)}";
         }
 
         private void LoadUiElements()
