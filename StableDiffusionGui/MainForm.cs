@@ -22,11 +22,17 @@ using System.Reflection;
 using StableDiffusionGui.Properties;
 using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace StableDiffusionGui
 {
     public partial class MainForm : Form
     {
+        [Flags]
+        public enum EXECUTION_STATE : uint { ES_AWAYMODE_REQUIRED = 0x00000040, ES_CONTINUOUS = 0x80000000, ES_DISPLAY_REQUIRED = 0x00000002, ES_SYSTEM_REQUIRED = 0x00000001 }
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        static extern EXECUTION_STATE SetThreadExecutionState(EXECUTION_STATE esFlags); // This should prevent Windows from going to sleep
+
         public Cyotek.Windows.Forms.ImageBox ImgBoxOutput { get { return imgBoxOutput; } }
         public Label OutputImgLabel { get { return outputImgLabel; } }
         public System.Windows.Forms.Button BtnImgShare { get { return btnImgShare; } }
