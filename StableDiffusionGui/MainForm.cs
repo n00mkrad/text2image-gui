@@ -20,6 +20,8 @@ using StableDiffusionGui.Os;
 using Microsoft.VisualBasic.Logging;
 using System.Reflection;
 using StableDiffusionGui.Properties;
+using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
 
 namespace StableDiffusionGui
 {
@@ -89,6 +91,18 @@ namespace StableDiffusionGui
             }
 
             RefreshAfterSettingsChanged();
+            Task.Run(() => SetGpusInWindowTitle());
+        }
+
+        private async Task SetGpusInWindowTitle ()
+        {
+            var gpus = await GpuUtils.GetCudaGpus();
+            string s = "";
+
+            foreach (var g in gpus)
+                s += $"{g.Key} ({g.Value})";
+
+            Text = $"{Text} - CUDA GPUs: {s}";
         }
 
         private void LoadUiElements()
@@ -574,6 +588,17 @@ namespace StableDiffusionGui
                 btnExpandPromptField.BackgroundImage = Resources.downArrowIcon;
                 panelPrompt.Height = 65;
             }
+        }
+
+        private void btnSeedUsePrevious_Click(object sender, EventArgs e)
+        {
+            upDownSeed.Value = TextToImage.PreviousSeed;
+        }
+
+        private void btnSeedResetToRandom_Click(object sender, EventArgs e)
+        {
+            upDownSeed.Value = -1;
+            upDownSeed.Text = "";
         }
     }
 }

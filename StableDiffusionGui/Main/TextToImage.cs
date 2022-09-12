@@ -18,6 +18,7 @@ namespace StableDiffusionGui.Main
     {
         public static TtiTaskInfo CurrentTask { get; set; } = null;
         public static TtiSettings LastTaskSettings { get; set; } = null;
+        public static long PreviousSeed = -1;
         public static bool Canceled = false;
 
         public static async Task RunTti(TtiSettings s)
@@ -25,7 +26,10 @@ namespace StableDiffusionGui.Main
             if (s == null)
                 return;
 
-                LastTaskSettings = s;
+            if (s.Params.ContainsKey("seed"))
+                PreviousSeed = s.Params["seed"].GetLong();
+
+            LastTaskSettings = s;
             s.Prompts = s.Prompts.Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
 
             if (!s.Prompts.Any())
@@ -65,7 +69,7 @@ namespace StableDiffusionGui.Main
             Done();
         }
 
-        public static void Done ()
+        public static void Done()
         {
             int imgCount = CurrentTask.ImgCount; // ImagePreview.SetImages(CurrentTask.OutPath, true, CurrentTask.TargetImgCount);
 
@@ -82,7 +86,7 @@ namespace StableDiffusionGui.Main
             Program.MainForm.SetWorking(false);
         }
 
-        public static void Cancel (string reason = "", bool showMsgBox = true)
+        public static void Cancel(string reason = "", bool showMsgBox = true)
         {
             Canceled = true;
             Program.MainForm.SetProgress(0);
