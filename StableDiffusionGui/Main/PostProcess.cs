@@ -1,12 +1,10 @@
-﻿using Microsoft.VisualBasic;
-using StableDiffusionGui.Io;
+﻿using StableDiffusionGui.Io;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace StableDiffusionGui.Main
@@ -27,7 +25,8 @@ namespace StableDiffusionGui.Main
                 {
                     var files = IoUtils.GetFileInfosSorted(imagesDir, false, "*.png");
 
-                    bool procRunning = TextToImage.CurrentTask.Processes.Where(x => x != null && !x.HasExited).Any();
+                    //bool procRunning = TextToImage.CurrentTask.Processes.Where(x => x != null && !x.HasExited).Any();
+                    bool procRunning = IoUtils.GetAmountOfFiles(Paths.GetSessionDataPath(), false, "prompts.txt") == 1;
 
                     if (!procRunning && !files.Any())
                         break;

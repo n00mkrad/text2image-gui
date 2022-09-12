@@ -8,13 +8,14 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace StableDiffusionGui.Main
 {
     internal class TtiProcess
     {
+        private static Process _dreamPy;
+        public static bool IsDreamPyRunning { get { return _dreamPy != null && !_dreamPy.HasExited; } }
         private static bool _hasErrored = false;
 
         public static void Start()
@@ -80,47 +81,51 @@ namespace StableDiffusionGui.Main
 
             File.WriteAllLines(promptFilePath, promptFileLines);
 
-            Logger.Log($"Preparing to run Stable Diffusion - {iterations} Iterations, {steps} Steps, Scales {(scales.Length < 4 ? string.Join(", ", scales.Select(x => x.ToStringDot())) : $"{scales.First()}->{scales.Last()}")}, {res.Width}x{res.Height}, Starting Seed: {startSeed}");
+            Logger.Log($"Running Stable Diffusion - {iterations} Iterations, {steps} Steps, Scales {(scales.Length < 4 ? string.Join(", ", scales.Select(x => x.ToStringDot())) : $"{scales.First()}->{scales.Last()}")}, {res.Width}x{res.Height}, Starting Seed: {startSeed}");
 
-            if (!string.IsNullOrWhiteSpace(embedding))
+            if (!IsDreamPyRunning)
             {
-                if (!File.Exists(embedding))
-                    embedding = "";
-                else
-                    Logger.Log($"Using learned concept: {Path.GetFileName(embedding)}");
+                if (!string.IsNullOrWhiteSpace(embedding))
+                {
+                    if (!File.Exists(embedding))
+                        embedding = "";
+                    else
+                        Logger.Log($"Using learned concept: {Path.GetFileName(embedding)}");
+                }
+
+                string strengths = File.Exists(initImg) ? $" and {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
+                Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} with {iterations} iteration{(iterations != 1 ? "s" : "")} each and {scales.Length} scale{(scales.Length != 1 ? "s" : "")}{strengths} each = {TextToImage.CurrentTask.TargetImgCount} images total.");
+
+                Process dream = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
+                TextToImage.CurrentTask.Processes.Add(dream);
+
+                string prec = $"{(Config.GetBool("checkboxFullPrecision") ? "-F" : "")}";
+
+                dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && call \"{Paths.GetDataPath()}\\mb\\Scripts\\activate.bat\" ldo && " +
+                    $"python \"{Paths.GetDataPath()}/repo/scripts/dream.py\" --model {GetSdModel()} -o {outPath.Wrap()} --from_file_loop={promptFilePath.Wrap()} {prec} " +
+                    $"{(!string.IsNullOrWhiteSpace(embedding) ? $"--embedding_path {embedding.Wrap()}" : "")} --device {TtiUtils.GetCudaDevice()} --print_steps ";
+
+                Logger.Log("cmd.exe " + dream.StartInfo.Arguments, true);
+
+                if (!OsUtils.ShowHiddenCmd())
+                {
+                    dream.OutputDataReceived += (sender, line) => { LogOutput(line.Data); };
+                    dream.ErrorDataReceived += (sender, line) => { LogOutput(line.Data, true); };
+                }
+
+                Start();
+                Logger.Log("Loading...");
+                _dreamPy = dream;
+                dream.Start();
+
+                if (!OsUtils.ShowHiddenCmd())
+                {
+                    dream.BeginOutputReadLine();
+                    dream.BeginErrorReadLine();
+                }
+
+                // while (!dream.HasExited) await Task.Delay(1);
             }
-
-            string strengths = File.Exists(initImg) ? $" and {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
-            Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} with {iterations} iteration{(iterations != 1 ? "s" : "")} each and {scales.Length} scale{(scales.Length != 1 ? "s" : "")}{strengths} each = {TextToImage.CurrentTask.TargetImgCount} images total.");
-
-            Process dream = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
-            TextToImage.CurrentTask.Processes.Add(dream);
-
-            string prec = $"{(Config.GetBool("checkboxFullPrecision") ? "-F" : "")}";
-
-            dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && call \"{Paths.GetDataPath()}\\mb\\Scripts\\activate.bat\" ldo && " +
-                $"python \"{Paths.GetDataPath()}/repo/scripts/dream.py\" --model {GetSdModel()} -o {outPath.Wrap()} --from_file={promptFilePath.Wrap()} {prec} " +
-                $"{(!string.IsNullOrWhiteSpace(embedding) ? $"--embedding_path {embedding.Wrap()}" : "")} --device {TtiUtils.GetCudaDevice()} --print_steps";
-
-            Logger.Log("cmd.exe " + dream.StartInfo.Arguments, true);
-
-            if (!OsUtils.ShowHiddenCmd())
-            {
-                dream.OutputDataReceived += (sender, line) => { LogOutput(line.Data); };
-                dream.ErrorDataReceived += (sender, line) => { LogOutput(line.Data, true); };
-            }
-
-            Start();
-            Logger.Log("Loading...");
-            dream.Start();
-
-            if (!OsUtils.ShowHiddenCmd())
-            {
-                dream.BeginOutputReadLine();
-                dream.BeginErrorReadLine();
-            }
-
-            while (!dream.HasExited) await Task.Delay(1);
 
             Finish();
         }
