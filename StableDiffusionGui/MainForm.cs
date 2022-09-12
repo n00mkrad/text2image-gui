@@ -142,6 +142,12 @@ namespace StableDiffusionGui
 
         public void CleanPrompt()
         {
+            if (File.Exists(MainUi.CurrentEmbeddingPath))
+            {
+                string conceptName = Path.GetFileNameWithoutExtension(MainUi.CurrentEmbeddingPath);
+                textboxPrompt.Text = textboxPrompt.Text.Replace("*", $"<{conceptName.Trim()}>");
+            }
+
             var lines = textboxPrompt.Text.SplitIntoLines();
             textboxPrompt.Text = string.Join(Environment.NewLine, lines.Select(x => MainUi.SanitizePrompt(x)).Where(x => !string.IsNullOrWhiteSpace(x)));
 
@@ -321,7 +327,7 @@ namespace StableDiffusionGui
 
         private void paypalBtn_Click(object sender, EventArgs e)
         {
-            Process.Start("https://www.paypal.com/paypalme/nmkd/10");
+            Process.Start("https://www.paypal.com/paypalme/nmkd/8");
         }
 
         private void patreonBtn_Click(object sender, EventArgs e)
@@ -463,7 +469,7 @@ namespace StableDiffusionGui
             btnInitImgBrowse.Text = imgExists ? "Clear Image" : "Load Image";
 
             bool embeddingExists = File.Exists(MainUi.CurrentEmbeddingPath);
-            btnEmbeddingBrowse.Text = embeddingExists ? "Clear Embedding" : "Load Embedding";
+            btnEmbeddingBrowse.Text = embeddingExists ? "Clear Concept" : "Load Concept";
 
             if (!string.IsNullOrWhiteSpace(MainUi.CurrentInitImgPath) && !string.IsNullOrWhiteSpace(MainUi.CurrentEmbeddingPath))
             {
@@ -505,7 +511,11 @@ namespace StableDiffusionGui
             }
             else
             {
-                CommonOpenFileDialog dialog = new CommonOpenFileDialog { InitialDirectory = MainUi.CurrentEmbeddingPath.GetParentDirOfFile(), IsFolderPicker = false };
+                string initDir = File.Exists(MainUi.CurrentEmbeddingPath) ? MainUi.CurrentEmbeddingPath.GetParentDirOfFile() : Path.Combine(Paths.GetExeDir(), "ExampleConcepts");
+
+                Logger.Log(initDir);
+
+                CommonOpenFileDialog dialog = new CommonOpenFileDialog { InitialDirectory = initDir, IsFolderPicker = false };
 
                 if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
                 {
@@ -513,9 +523,6 @@ namespace StableDiffusionGui
                         MainUi.CurrentEmbeddingPath = dialog.FileName;
                     else
                         UiUtils.ShowMessageBox("Invalid file type.");
-
-                    if (Path.GetExtension(dialog.FileName.ToLower()) == ".bin")
-                        Logger.Log(".bin embeddings are not yet supported!");
                 }
             }
 

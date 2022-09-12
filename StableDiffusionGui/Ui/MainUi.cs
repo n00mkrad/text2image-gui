@@ -35,11 +35,11 @@ namespace StableDiffusionGui.Ui
             get => _currentEmbeddingPath;
             set {
                 _currentEmbeddingPath = value;
-                Logger.Log(string.IsNullOrWhiteSpace(value) ? "Cleared embedding." : $"Now using fine-tuned embedding {Path.GetFileName(value).Wrap()}.");
+                Logger.Log(string.IsNullOrWhiteSpace(value) ? "Cleared concept." : $"Now using learned concept {Path.GetFileName(value).Wrap()}.");
             } }
 
         public static readonly string[] ValidInitImgExtensions = new string[] { ".png", ".jpeg", ".jpg", ".jfif", ".bmp", ".webp" };
-        public static readonly string[] ValidInitEmbeddingExtensions = new string[] { ".pt" };
+        public static readonly string[] ValidInitEmbeddingExtensions = new string[] { ".pt", ".bin" };
 
         public static void HandleDroppedFiles(string[] paths)
         {
@@ -66,7 +66,7 @@ namespace StableDiffusionGui.Ui
 
                 if (ValidInitEmbeddingExtensions.Contains(Path.GetExtension(paths[0]).ToLower())) // Ask to use as embedding (finetuned model)
                 {
-                    DialogResult dialogResult = UiUtils.ShowMessageBox($"Do you want to load this embedding?", $"Dropped {Path.GetFileName(paths[0]).Trunc(40)}", MessageBoxButtons.YesNo);
+                    DialogResult dialogResult = UiUtils.ShowMessageBox($"Do you want to load this concept?", $"Dropped {Path.GetFileName(paths[0]).Trunc(40)}", MessageBoxButtons.YesNo);
 
                     if (dialogResult == DialogResult.Yes)
                         CurrentEmbeddingPath = paths[0];
@@ -78,7 +78,7 @@ namespace StableDiffusionGui.Ui
 
         public static string SanitizePrompt (string prompt)
         {
-            prompt = new Regex(@"[^a-zA-Z0-9 -!*,.:()_\-]").Replace(prompt, "");
+            //prompt = new Regex(@"[^a-zA-Z0-9 -!*,.:()_\-]").Replace(prompt, "");
             prompt = prompt.Replace(" -", " ");
 
             while (prompt.StartsWith("-"))

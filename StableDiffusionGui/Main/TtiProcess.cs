@@ -87,7 +87,7 @@ namespace StableDiffusionGui.Main
                 if (!File.Exists(embedding))
                     embedding = "";
                 else
-                    Logger.Log($"Using fine-tuned model: {Path.GetFileName(embedding)}");
+                    Logger.Log($"Using learned concept: {Path.GetFileName(embedding)}");
             }
 
             string strengths = File.Exists(initImg) ? $" and {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
@@ -317,6 +317,14 @@ namespace StableDiffusionGui.Main
             if (line.MatchesWildcard("*%|*/*[*B/s]*") && !line.ToLower().Contains("it/s") && !line.ToLower().Contains("s/it"))
             {
                 Logger.Log($"Downloading required files... {line.Trunc(80)}", false, ellipsis);
+            }
+
+            if (line.MatchesWildcard("Added terms: *, *"))
+            {
+                if(line.MatchesWildcard("*, <*>"))
+                    Logger.Log($"Concept keyword: {line.Split("Added terms: *, ").LastOrDefault()}", false, ellipsis);
+                else
+                    Logger.Log($"Concept keyword: <{line.Split("Added terms: *, ").LastOrDefault()}>", false, ellipsis);
             }
 
             string lastLogLines = string.Join("\n", Logger.GetSessionLogLastLines("sd", 6));
