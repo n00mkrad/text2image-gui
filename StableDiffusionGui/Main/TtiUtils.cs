@@ -62,5 +62,15 @@ namespace StableDiffusionGui.Main
                 UiUtils.ShowMessageBox($"{(prompts.Count > 1 ? "One of your prompts" : "Your prompt")} is very long (>{thresh} words).\nThe AI might ignore parts of your prompt. Shorten the prompt to avoid this.");
             }
         }
+
+        public static string GetCudaDevice ()
+        {
+            int opt = Config.GetInt(Config.Key.comboxCudaDevice);
+
+            if (opt == 0)
+                return "cpu";
+            else
+                return $"cuda:{opt-1}";
+        }
     }
 }

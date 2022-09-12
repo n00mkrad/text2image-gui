@@ -88,6 +88,12 @@
             this.label4 = new System.Windows.Forms.Label();
             this.panel11 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
+            this.panelCudaDevice = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel9 = new System.Windows.Forms.TableLayoutPanel();
+            this.panel27 = new System.Windows.Forms.Panel();
+            this.comboxCudaDevice = new System.Windows.Forms.ComboBox();
+            this.panel28 = new System.Windows.Forms.Panel();
+            this.label11 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel21.SuspendLayout();
             this.panelAdvancedMode.SuspendLayout();
@@ -126,6 +132,10 @@
             this.panel12.SuspendLayout();
             this.panel13.SuspendLayout();
             this.panel11.SuspendLayout();
+            this.panelCudaDevice.SuspendLayout();
+            this.tableLayoutPanel9.SuspendLayout();
+            this.panel27.SuspendLayout();
+            this.panel28.SuspendLayout();
             this.SuspendLayout();
             // 
             // titleLabel
@@ -152,20 +162,21 @@
             this.panel1.Controls.Add(this.panelPromptSubfolders);
             this.panel1.Controls.Add(this.panelOutPath);
             this.panel1.Controls.Add(this.panel5);
+            this.panel1.Controls.Add(this.panelCudaDevice);
             this.panel1.Controls.Add(this.panelSdModel);
             this.panel1.Controls.Add(this.panel2);
             this.panel1.Controls.Add(this.panel4);
             this.panel1.Controls.Add(this.panel11);
             this.panel1.Location = new System.Drawing.Point(12, 62);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(760, 367);
+            this.panel1.Size = new System.Drawing.Size(760, 427);
             this.panel1.TabIndex = 14;
             // 
             // panel21
             // 
             this.panel21.Controls.Add(this.panel15);
             this.panel21.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel21.Location = new System.Drawing.Point(0, 350);
+            this.panel21.Location = new System.Drawing.Point(0, 385);
             this.panel21.Name = "panel21";
             this.panel21.Size = new System.Drawing.Size(760, 35);
             this.panel21.TabIndex = 19;
@@ -182,7 +193,7 @@
             // 
             this.panelAdvancedMode.Controls.Add(this.tableLayoutPanel4);
             this.panelAdvancedMode.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelAdvancedMode.Location = new System.Drawing.Point(0, 315);
+            this.panelAdvancedMode.Location = new System.Drawing.Point(0, 350);
             this.panelAdvancedMode.Name = "panelAdvancedMode";
             this.panelAdvancedMode.Size = new System.Drawing.Size(760, 35);
             this.panelAdvancedMode.TabIndex = 15;
@@ -246,7 +257,7 @@
             // 
             this.panelMultiPromptsSameSeed.Controls.Add(this.panel18);
             this.panelMultiPromptsSameSeed.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelMultiPromptsSameSeed.Location = new System.Drawing.Point(0, 280);
+            this.panelMultiPromptsSameSeed.Location = new System.Drawing.Point(0, 315);
             this.panelMultiPromptsSameSeed.Name = "panelMultiPromptsSameSeed";
             this.panelMultiPromptsSameSeed.Size = new System.Drawing.Size(760, 35);
             this.panelMultiPromptsSameSeed.TabIndex = 17;
@@ -328,7 +339,7 @@
             // 
             this.panelPromptInFilename.Controls.Add(this.tableLayoutPanel5);
             this.panelPromptInFilename.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelPromptInFilename.Location = new System.Drawing.Point(0, 245);
+            this.panelPromptInFilename.Location = new System.Drawing.Point(0, 280);
             this.panelPromptInFilename.Name = "panelPromptInFilename";
             this.panelPromptInFilename.Size = new System.Drawing.Size(760, 35);
             this.panelPromptInFilename.TabIndex = 16;
@@ -392,7 +403,7 @@
             // 
             this.panelPromptSubfolders.Controls.Add(this.tableLayoutPanel2);
             this.panelPromptSubfolders.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelPromptSubfolders.Location = new System.Drawing.Point(0, 210);
+            this.panelPromptSubfolders.Location = new System.Drawing.Point(0, 245);
             this.panelPromptSubfolders.Name = "panelPromptSubfolders";
             this.panelPromptSubfolders.Size = new System.Drawing.Size(760, 35);
             this.panelPromptSubfolders.TabIndex = 12;
@@ -457,7 +468,7 @@
             // 
             this.panelOutPath.Controls.Add(this.tableLayoutPanel7);
             this.panelOutPath.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelOutPath.Location = new System.Drawing.Point(0, 175);
+            this.panelOutPath.Location = new System.Drawing.Point(0, 210);
             this.panelOutPath.Name = "panelOutPath";
             this.panelOutPath.Size = new System.Drawing.Size(760, 35);
             this.panelOutPath.TabIndex = 13;
@@ -544,7 +555,7 @@
             // 
             this.panel5.Controls.Add(this.label5);
             this.panel5.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel5.Location = new System.Drawing.Point(0, 140);
+            this.panel5.Location = new System.Drawing.Point(0, 175);
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(760, 35);
             this.panel5.TabIndex = 14;
@@ -800,12 +811,78 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Stable Diffusion Settings";
             // 
+            // panelCudaDevice
+            // 
+            this.panelCudaDevice.Controls.Add(this.tableLayoutPanel9);
+            this.panelCudaDevice.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelCudaDevice.Location = new System.Drawing.Point(0, 140);
+            this.panelCudaDevice.Name = "panelCudaDevice";
+            this.panelCudaDevice.Size = new System.Drawing.Size(760, 35);
+            this.panelCudaDevice.TabIndex = 21;
+            // 
+            // tableLayoutPanel9
+            // 
+            this.tableLayoutPanel9.ColumnCount = 2;
+            this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel9.Controls.Add(this.panel27, 0, 0);
+            this.tableLayoutPanel9.Controls.Add(this.panel28, 0, 0);
+            this.tableLayoutPanel9.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel9.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel9.Name = "tableLayoutPanel9";
+            this.tableLayoutPanel9.RowCount = 1;
+            this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel9.Size = new System.Drawing.Size(760, 35);
+            this.tableLayoutPanel9.TabIndex = 1;
+            // 
+            // panel27
+            // 
+            this.panel27.Controls.Add(this.comboxCudaDevice);
+            this.panel27.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel27.Location = new System.Drawing.Point(383, 3);
+            this.panel27.Name = "panel27";
+            this.panel27.Size = new System.Drawing.Size(374, 29);
+            this.panel27.TabIndex = 88;
+            // 
+            // comboxCudaDevice
+            // 
+            this.comboxCudaDevice.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.comboxCudaDevice.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboxCudaDevice.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboxCudaDevice.ForeColor = System.Drawing.Color.White;
+            this.comboxCudaDevice.FormattingEnabled = true;
+            this.comboxCudaDevice.Location = new System.Drawing.Point(0, 4);
+            this.comboxCudaDevice.Name = "comboxCudaDevice";
+            this.comboxCudaDevice.Size = new System.Drawing.Size(371, 21);
+            this.comboxCudaDevice.TabIndex = 106;
+            // 
+            // panel28
+            // 
+            this.panel28.Controls.Add(this.label11);
+            this.panel28.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel28.Location = new System.Drawing.Point(3, 3);
+            this.panel28.Name = "panel28";
+            this.panel28.Size = new System.Drawing.Size(374, 29);
+            this.panel28.TabIndex = 87;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.ForeColor = System.Drawing.Color.White;
+            this.label11.Location = new System.Drawing.Point(5, 8);
+            this.label11.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(74, 13);
+            this.label11.TabIndex = 85;
+            this.label11.Text = "CUDA Device";
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.ClientSize = new System.Drawing.Size(784, 441);
+            this.ClientSize = new System.Drawing.Size(784, 501);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.titleLabel);
             this.ForeColor = System.Drawing.Color.White;
@@ -872,6 +949,11 @@
             this.panel13.PerformLayout();
             this.panel11.ResumeLayout(false);
             this.panel11.PerformLayout();
+            this.panelCudaDevice.ResumeLayout(false);
+            this.tableLayoutPanel9.ResumeLayout(false);
+            this.panel27.ResumeLayout(false);
+            this.panel28.ResumeLayout(false);
+            this.panel28.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -939,5 +1021,11 @@
         private System.Windows.Forms.Label label10;
         private HTAlt.WinForms.HTButton btnOpenModelsFolder;
         private System.Windows.Forms.ComboBox comboxSdModel;
+        private System.Windows.Forms.Panel panelCudaDevice;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel9;
+        private System.Windows.Forms.Panel panel27;
+        private System.Windows.Forms.ComboBox comboxCudaDevice;
+        private System.Windows.Forms.Panel panel28;
+        private System.Windows.Forms.Label label11;
     }
 }

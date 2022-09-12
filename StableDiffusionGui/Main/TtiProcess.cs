@@ -100,7 +100,7 @@ namespace StableDiffusionGui.Main
 
             dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && call \"{Paths.GetDataPath()}\\mb\\Scripts\\activate.bat\" ldo && " +
                 $"python \"{Paths.GetDataPath()}/repo/scripts/dream.py\" --model {GetSdModel()} -o {outPath.Wrap()} --from_file={promptFilePath.Wrap()} {prec} " +
-                $"{(!string.IsNullOrWhiteSpace(embedding) ? $"--embedding_path {embedding.Wrap()}" : "")}";
+                $"{(!string.IsNullOrWhiteSpace(embedding) ? $"--embedding_path {embedding.Wrap()}" : "")} --device {TtiUtils.GetCudaDevice()}";
 
             Logger.Log("cmd.exe " + dream.StartInfo.Arguments, true);
 
@@ -164,7 +164,8 @@ namespace StableDiffusionGui.Main
             dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && call \"{Paths.GetDataPath()}\\mb\\Scripts\\activate.bat\" ldo && " +
                 $"python \"{Paths.GetDataPath()}/repo/optimizedSD/optimized_{(initImgExists ? "img" : "txt")}2img.py\" --model {GetSdModel()} --outdir {outPath.Wrap()} --from-file {promptFilePath.Wrap()} " +
                 $"--n_iter {iterations} --ddim_steps {steps} --W {res.Width} --H {res.Height} --scale {scale.ToStringDot("0.0000")} --seed {seed} --precision {prec} " +
-                $"{(initImgExists ? $"--init-img {initImg.Wrap()} --strength {initStrength.ToStringDot("0.0000")}" : "")} {(Config.GetBool(Config.Key.lowMemTurbo) ? "--turbo" : "")}";
+                $"{(initImgExists ? $"--init-img {initImg.Wrap()} --strength {initStrength.ToStringDot("0.0000")}" : "")} {(Config.GetBool(Config.Key.lowMemTurbo) ? "--turbo" : "")} " +
+                $"--device {TtiUtils.GetCudaDevice()}";
 
             Logger.Log("cmd.exe " + dream.StartInfo.Arguments, true);
 
@@ -202,7 +203,8 @@ namespace StableDiffusionGui.Main
             string batPath = Path.Combine(Paths.GetSessionDataPath(), "dream.bat");
 
             string batText = $"@echo off\n title Dream.py CLI && cd /D {Paths.GetDataPath().Wrap()} && call \"mb\\Scripts\\activate.bat\" \"mb/envs/ldo\" && " +
-                $"python \"repo/scripts/dream.py\" --model {GetSdModel()} -o {outPath.Wrap()} {(Config.GetBool("checkboxFullPrecision") ? "--full_precision" : "")}";
+                $"python \"repo/scripts/dream.py\" --model {GetSdModel()} -o {outPath.Wrap()} {(Config.GetBool("checkboxFullPrecision") ? "--full_precision" : "")} " +
+                $"--device {TtiUtils.GetCudaDevice()}";
 
             File.WriteAllText(batPath, batText);
             Process.Start(batPath);
