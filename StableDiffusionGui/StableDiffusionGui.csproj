@@ -181,7 +181,7 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Main\Logger.cs" />
-    <Compile Include="Main\PostProcess.cs" />
+    <Compile Include="Main\ImageExport.cs" />
     <Compile Include="Main\PromptHistory.cs" />
     <Compile Include="Main\TtiProcessOutputHandler.cs" />
     <Compile Include="MiscUtils\NmkdStopwatch.cs" />

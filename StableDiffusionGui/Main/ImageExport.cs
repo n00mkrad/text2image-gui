@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace StableDiffusionGui.Main
 {
-    internal class PostProcess
+    internal class ImageExport
     {
         private static readonly int _maxPathLength = 255;
         private static List<string> outImgs;
 
-        public static async Task PostProcLoop(string imagesDir, bool show)
+        public static async Task ExportLoop(string imagesDir, bool show)
         {
             await Task.Delay(1000);
             outImgs = new List<string>();
@@ -59,7 +59,7 @@ namespace StableDiffusionGui.Main
                             string number = $"-{(TextToImage.CurrentTask.ImgCount).ToString().PadLeft(TextToImage.CurrentTask.TargetImgCount.ToString().Length, '0')}";
                             bool inclPrompt = !sub && Config.GetBool("checkboxPromptInFilename");
                             string renamedPath = FormatUtils.GetExportFilename(img.FullName, sub ? imageDirMap[img.FullName] : TextToImage.CurrentTask.OutPath, number, "png", _maxPathLength, inclPrompt, true, true, true);
-                            Logger.Log($"PostProcessing: Trying to move {img.Name} => {renamedPath}", true);
+                            Logger.Log($"ImageExport: Trying to move {img.Name} => {renamedPath}", true);
                             img.MoveTo(renamedPath);
                             renamedImgPaths.Add(renamedPath);
                         }
@@ -78,13 +78,13 @@ namespace StableDiffusionGui.Main
                 }
                 catch (Exception ex)
                 {
-                    Logger.Log($"Image post-processing error:\n{ex.Message}");
+                    Logger.Log($"Image export error:\n{ex.Message}");
                     Logger.Log($"{ex.StackTrace}", true);
                     break;
                 }
             }
 
-            Logger.Log("PostProcLoop end.", true);
+            Logger.Log("ExportLoop end.", true);
         }
 
     }
