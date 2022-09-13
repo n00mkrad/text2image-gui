@@ -11,6 +11,16 @@ namespace StableDiffusionGui.Os
 {
     internal class GpuUtils
     {
+        public static Dictionary<string, int> CachedGpus = new Dictionary<string, int>();
+
+        public static async Task<Dictionary<string, int>> GetCudaGpusCached()
+        {
+            if (CachedGpus.Count > 0)
+                return CachedGpus;
+            else
+                return await GetCudaGpus();
+        }
+
         public static async Task<Dictionary<string, int>> GetCudaGpus()
         {
             string scriptPath = Path.Combine(Paths.GetDataPath(), "repo", "check_gpus.py");
@@ -41,10 +51,11 @@ namespace StableDiffusionGui.Os
             {
                 string l = line.Trim();
 
-                if (l.MatchesWildcard("GPU * => *"))
+                if (l.MatchesWildcard("* => *"))
                     gpus.Add(l.Split(" => ")[1], l.Split(" => ")[0].GetInt());
             }
 
+            CachedGpus = gpus;
             return gpus;
         }
     }

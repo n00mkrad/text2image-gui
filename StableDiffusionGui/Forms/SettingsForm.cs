@@ -52,9 +52,10 @@ namespace StableDiffusionGui.Forms
             comboxCudaDevice.Items.Add("Loading...");
             comboxCudaDevice.SelectedIndex = 0;
 
-            var gpus = await GpuUtils.GetCudaGpus();
+            var gpus = await GpuUtils.GetCudaGpusCached();
 
             comboxCudaDevice.Items.Clear();
+            comboxCudaDevice.Items.Add("Automatic");
             comboxCudaDevice.Items.Add("CPU (Experimental, may not work at all)");
 
             foreach (var g in gpus)

@@ -13,7 +13,7 @@ namespace StableDiffusionGui.Main
     internal class TtiUtils
     {
         /// <returns> Path to resized image </returns>
-        public static string ResizeInitImg (string path, Size targetSize, bool print)
+        public static string ResizeInitImg(string path, Size targetSize, bool print)
         {
             string outPath = Path.Combine(Paths.GetSessionDataPath(), "init.png");
             Image resized = ResizeImage(IoUtils.GetImage(path), targetSize.Width, targetSize.Height);
@@ -25,7 +25,7 @@ namespace StableDiffusionGui.Main
             return outPath;
         }
 
-        private static Image ResizeImage (Image image, int w, int h)
+        private static Image ResizeImage(Image image, int w, int h)
         {
             Bitmap bmp = new Bitmap(w, h);
 
@@ -37,7 +37,7 @@ namespace StableDiffusionGui.Main
             }
         }
 
-        public static void WriteModelsYaml (string mdlName)
+        public static void WriteModelsYaml(string mdlName)
         {
             string text = $"{mdlName}:\n" +
                 $"    config: configs/stable-diffusion/v1-inference.yaml\n" +
@@ -48,7 +48,7 @@ namespace StableDiffusionGui.Main
             File.WriteAllText(Path.Combine(Paths.GetDataPath(), "repo", "configs", "models.yaml"), text);
         }
 
-        public static void WarnIfPromptLong (List<string> prompts)
+        public static void WarnIfPromptLong(List<string> prompts)
         {
             string prompt = prompts.OrderByDescending(s => s.Length).First();
 
@@ -57,20 +57,22 @@ namespace StableDiffusionGui.Main
 
             int thresh = 70;
 
-            if(words > thresh)
+            if (words > thresh)
             {
                 UiUtils.ShowMessageBox($"{(prompts.Count > 1 ? "One of your prompts" : "Your prompt")} is very long (>{thresh} words).\nThe AI might ignore parts of your prompt. Shorten the prompt to avoid this.");
             }
         }
 
-        public static string GetCudaDevice ()
+        public static string GetCudaDevice(string arg)
         {
             int opt = Config.GetInt(Config.Key.comboxCudaDevice);
 
             if (opt == 0)
-                return "cpu";
+                return "";
+            else if (opt == 1)
+                return $"{arg} cpu";
             else
-                return $"cuda:{opt-1}";
+                return $"{arg} cuda:{opt - 2}";
         }
     }
 }

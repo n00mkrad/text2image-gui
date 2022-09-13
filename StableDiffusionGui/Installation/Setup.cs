@@ -186,14 +186,14 @@ namespace StableDiffusionGui.Installation
                 }
 
                 Logger.Log($"Done cloning repository.");
+
+                await SetupPythonEnv();
             }
             catch (Exception ex)
             {
                 Logger.Log($"Failed to clone repository: {ex.Message}");
                 Logger.Log($"{ex.StackTrace}", true);
             }
-
-            await Setup.SetupPythonEnv();
         }
 
         public static void RemoveGitFiles(string rootPath)
