@@ -138,14 +138,10 @@ namespace StableDiffusionGui
         {
             bool opt = Config.GetBool("checkboxOptimizedSd");
 
-            comboxSampler.Enabled = !opt;
             textboxExtraScales.Enabled = !opt;
             textboxExtraInitStrengths.Enabled = !opt;
-            panelSeamless.Visible = !opt;
-
-
-            if (opt)
-                Logger.Log($"Using low-memory code. This disables many features. Only keep this option enabled if your GPU has less than 8 GB of memory.");
+            panelSampler.Visible = !opt; // Disable sampler selection when using optimizedSD
+            panelSeamless.Visible = !opt; // Disable seamless option when using optimizedSD
 
             bool adv = Config.GetBool("checkboxAdvancedMode");
 

@@ -714,8 +714,8 @@
             this.sliderInitStrength.TabIndex = 4;
             this.sliderInitStrength.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
             this.sliderInitStrength.ThumbSize = new System.Drawing.Size(14, 14);
-            this.toolTip.SetToolTip(this.sliderInitStrength, "Lower value: Result looks more like your text prompt\r\nHigher value: Result looks " +
-        "more like your init image");
+            this.toolTip.SetToolTip(this.sliderInitStrength, "Lower Value: Result Looks More Like Your Text Prompt\r\nHigher Value: Result Looks " +
+        "More Like Your Image");
             this.sliderInitStrength.Value = 2;
             this.sliderInitStrength.Scroll += new System.Windows.Forms.ScrollEventHandler(this.sliderInitStrength_Scroll);
             // 

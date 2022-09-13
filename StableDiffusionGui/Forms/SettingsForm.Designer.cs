@@ -903,6 +903,7 @@
             this.checkboxOptimizedSd.Size = new System.Drawing.Size(15, 14);
             this.checkboxOptimizedSd.TabIndex = 86;
             this.checkboxOptimizedSd.UseVisualStyleBackColor = true;
+            this.checkboxOptimizedSd.CheckedChanged += new System.EventHandler(this.checkboxOptimizedSd_CheckedChanged);
             // 
             // panel13
             // 
