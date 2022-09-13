@@ -182,6 +182,7 @@
     <Compile Include="Main\Logger.cs" />
     <Compile Include="Main\PostProcess.cs" />
     <Compile Include="Main\PromptHistory.cs" />
+    <Compile Include="Main\TtiProcessOutputHandler.cs" />
     <Compile Include="MiscUtils\NmkdStopwatch.cs" />
     <Compile Include="Os\GpuUtils.cs" />
     <Compile Include="Os\ProcessManager.cs" />
