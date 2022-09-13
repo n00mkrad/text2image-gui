@@ -398,7 +398,7 @@
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(352, 13);
             this.label8.TabIndex = 85;
-            this.label8.Text = "When Running Multiple Promtps, Use Same Starting Seed for All of Them";
+            this.label8.Text = "When Running Multiple Prompts, Use Same Starting Seed for All of Them";
             // 
             // panelPromptInFilename
             // 

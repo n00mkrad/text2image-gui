@@ -35,7 +35,6 @@ namespace StableDiffusionGui
 
         public Cyotek.Windows.Forms.ImageBox ImgBoxOutput { get { return imgBoxOutput; } }
         public Label OutputImgLabel { get { return outputImgLabel; } }
-        public System.Windows.Forms.Button BtnImgShare { get { return btnImgShare; } }
 
         public bool IsInFocus() { return (ActiveForm == this); }
 
@@ -416,12 +415,6 @@ namespace StableDiffusionGui
 
         #endregion
 
-        private void btnImgShare_Click(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrWhiteSpace(ImagePreview.CurrentImagePath) && File.Exists(ImagePreview.CurrentImagePath))
-                menuStripOutputImg.Show(Cursor.Position);
-        }
-
         private void cliButton_Click(object sender, EventArgs e)
         {
             if (!IsInstalledWithWarning())
@@ -434,7 +427,8 @@ namespace StableDiffusionGui
         {
             if (((MouseEventArgs)e).Button == MouseButtons.Right)
             {
-                btnImgShare_Click(null, null);
+                if (!string.IsNullOrWhiteSpace(ImagePreview.CurrentImagePath) && File.Exists(ImagePreview.CurrentImagePath))
+                    menuStripOutputImg.Show(Cursor.Position);
             }
             else
             {
@@ -526,11 +520,6 @@ namespace StableDiffusionGui
             {
                 labelPromptInfo.Text = "";
             }
-        }
-
-        private void textboxInitImgPath_TextChanged(object sender, EventArgs e)
-        {
-            UpdateInitImgAndEmbeddingUi();
         }
 
         private void btnEmbeddingBrowse_Click(object sender, EventArgs e)

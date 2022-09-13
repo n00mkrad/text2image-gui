@@ -79,7 +79,6 @@
             this.btnSettings = new System.Windows.Forms.Button();
             this.btnDebug = new System.Windows.Forms.Button();
             this.cliButton = new System.Windows.Forms.Button();
-            this.btnImgShare = new System.Windows.Forms.Button();
             this.btnOpenOutFolder = new System.Windows.Forms.Button();
             this.btnPrevImg = new System.Windows.Forms.Button();
             this.btnNextImg = new System.Windows.Forms.Button();
@@ -87,6 +86,9 @@
             this.discordBtn = new System.Windows.Forms.Button();
             this.patreonBtn = new System.Windows.Forms.Button();
             this.paypalBtn = new System.Windows.Forms.Button();
+            this.btnSeedResetToRandom = new HTAlt.WinForms.HTButton();
+            this.btnSeedUsePrevious = new HTAlt.WinForms.HTButton();
+            this.btnExpandPromptField = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel12 = new System.Windows.Forms.Panel();
@@ -96,8 +98,6 @@
             this.panelSampler = new System.Windows.Forms.Panel();
             this.panelRes = new System.Windows.Forms.Panel();
             this.panelSeed = new System.Windows.Forms.Panel();
-            this.btnSeedResetToRandom = new HTAlt.WinForms.HTButton();
-            this.btnSeedUsePrevious = new HTAlt.WinForms.HTButton();
             this.panelScale = new System.Windows.Forms.Panel();
             this.panelSteps = new System.Windows.Forms.Panel();
             this.panelIterations = new System.Windows.Forms.Panel();
@@ -106,7 +106,6 @@
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.labelInitStrength = new System.Windows.Forms.Label();
             this.panelPrompt = new System.Windows.Forms.Panel();
-            this.btnExpandPromptField = new System.Windows.Forms.Button();
             this.labelPromptInfo = new System.Windows.Forms.Label();
             this.menuStripLogs = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.progressBarImg = new HTAlt.WinForms.HTProgressBar();
@@ -885,24 +884,6 @@
             this.cliButton.UseVisualStyleBackColor = false;
             this.cliButton.Click += new System.EventHandler(this.cliButton_Click);
             // 
-            // btnImgShare
-            // 
-            this.btnImgShare.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnImgShare.BackgroundImage = global::StableDiffusionGui.Properties.Resources.shareIco;
-            this.btnImgShare.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnImgShare.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnImgShare.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnImgShare.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnImgShare.Location = new System.Drawing.Point(1040, 598);
-            this.btnImgShare.Margin = new System.Windows.Forms.Padding(6);
-            this.btnImgShare.Name = "btnImgShare";
-            this.btnImgShare.Size = new System.Drawing.Size(40, 40);
-            this.btnImgShare.TabIndex = 102;
-            this.btnImgShare.TabStop = false;
-            this.toolTip.SetToolTip(this.btnImgShare, "Image Menu");
-            this.btnImgShare.UseVisualStyleBackColor = false;
-            this.btnImgShare.Click += new System.EventHandler(this.btnImgShare_Click);
-            // 
             // btnOpenOutFolder
             // 
             this.btnOpenOutFolder.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
@@ -911,7 +892,7 @@
             this.btnOpenOutFolder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnOpenOutFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnOpenOutFolder.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnOpenOutFolder.Location = new System.Drawing.Point(994, 598);
+            this.btnOpenOutFolder.Location = new System.Drawing.Point(1040, 598);
             this.btnOpenOutFolder.Name = "btnOpenOutFolder";
             this.btnOpenOutFolder.Size = new System.Drawing.Size(40, 40);
             this.btnOpenOutFolder.TabIndex = 94;
@@ -1022,6 +1003,66 @@
             this.paypalBtn.UseVisualStyleBackColor = false;
             this.paypalBtn.Click += new System.EventHandler(this.paypalBtn_Click);
             // 
+            // btnSeedResetToRandom
+            // 
+            this.btnSeedResetToRandom.AutoColor = true;
+            this.btnSeedResetToRandom.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnSeedResetToRandom.ButtonImage = null;
+            this.btnSeedResetToRandom.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
+            this.btnSeedResetToRandom.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
+            this.btnSeedResetToRandom.DrawImage = false;
+            this.btnSeedResetToRandom.ForeColor = System.Drawing.Color.White;
+            this.btnSeedResetToRandom.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
+            this.btnSeedResetToRandom.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
+            this.btnSeedResetToRandom.Location = new System.Drawing.Point(445, 6);
+            this.btnSeedResetToRandom.Name = "btnSeedResetToRandom";
+            this.btnSeedResetToRandom.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+            this.btnSeedResetToRandom.Size = new System.Drawing.Size(79, 23);
+            this.btnSeedResetToRandom.TabIndex = 107;
+            this.btnSeedResetToRandom.TabStop = false;
+            this.btnSeedResetToRandom.Text = "Reset";
+            this.toolTip.SetToolTip(this.btnSeedResetToRandom, "Reset to Random Seed");
+            this.btnSeedResetToRandom.Click += new System.EventHandler(this.btnSeedResetToRandom_Click);
+            // 
+            // btnSeedUsePrevious
+            // 
+            this.btnSeedUsePrevious.AutoColor = true;
+            this.btnSeedUsePrevious.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnSeedUsePrevious.ButtonImage = null;
+            this.btnSeedUsePrevious.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
+            this.btnSeedUsePrevious.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
+            this.btnSeedUsePrevious.DrawImage = false;
+            this.btnSeedUsePrevious.ForeColor = System.Drawing.Color.White;
+            this.btnSeedUsePrevious.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
+            this.btnSeedUsePrevious.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
+            this.btnSeedUsePrevious.Location = new System.Drawing.Point(339, 6);
+            this.btnSeedUsePrevious.Name = "btnSeedUsePrevious";
+            this.btnSeedUsePrevious.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+            this.btnSeedUsePrevious.Size = new System.Drawing.Size(100, 23);
+            this.btnSeedUsePrevious.TabIndex = 106;
+            this.btnSeedUsePrevious.TabStop = false;
+            this.btnSeedUsePrevious.Text = "Use Previous";
+            this.toolTip.SetToolTip(this.btnSeedUsePrevious, "Use Same Seed as Previous Run");
+            this.btnSeedUsePrevious.Click += new System.EventHandler(this.btnSeedUsePrevious_Click);
+            // 
+            // btnExpandPromptField
+            // 
+            this.btnExpandPromptField.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.btnExpandPromptField.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnExpandPromptField.BackgroundImage = global::StableDiffusionGui.Properties.Resources.downArrowIcon;
+            this.btnExpandPromptField.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnExpandPromptField.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnExpandPromptField.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnExpandPromptField.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnExpandPromptField.Location = new System.Drawing.Point(207, 7);
+            this.btnExpandPromptField.Name = "btnExpandPromptField";
+            this.btnExpandPromptField.Size = new System.Drawing.Size(20, 20);
+            this.btnExpandPromptField.TabIndex = 86;
+            this.btnExpandPromptField.TabStop = false;
+            this.toolTip.SetToolTip(this.btnExpandPromptField, "Expand/Collapse Prompt Field");
+            this.btnExpandPromptField.UseVisualStyleBackColor = false;
+            this.btnExpandPromptField.Click += new System.EventHandler(this.btnExpandPromptField_Click);
+            // 
             // label7
             // 
             this.label7.AutoSize = true;
@@ -1124,48 +1165,6 @@
             this.panelSeed.Size = new System.Drawing.Size(633, 35);
             this.panelSeed.TabIndex = 4;
             // 
-            // btnSeedResetToRandom
-            // 
-            this.btnSeedResetToRandom.AutoColor = true;
-            this.btnSeedResetToRandom.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnSeedResetToRandom.ButtonImage = null;
-            this.btnSeedResetToRandom.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
-            this.btnSeedResetToRandom.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
-            this.btnSeedResetToRandom.DrawImage = false;
-            this.btnSeedResetToRandom.ForeColor = System.Drawing.Color.White;
-            this.btnSeedResetToRandom.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
-            this.btnSeedResetToRandom.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
-            this.btnSeedResetToRandom.Location = new System.Drawing.Point(445, 6);
-            this.btnSeedResetToRandom.Name = "btnSeedResetToRandom";
-            this.btnSeedResetToRandom.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
-            this.btnSeedResetToRandom.Size = new System.Drawing.Size(79, 23);
-            this.btnSeedResetToRandom.TabIndex = 107;
-            this.btnSeedResetToRandom.TabStop = false;
-            this.btnSeedResetToRandom.Text = "Reset";
-            this.toolTip.SetToolTip(this.btnSeedResetToRandom, "Reset to Random Seed");
-            this.btnSeedResetToRandom.Click += new System.EventHandler(this.btnSeedResetToRandom_Click);
-            // 
-            // btnSeedUsePrevious
-            // 
-            this.btnSeedUsePrevious.AutoColor = true;
-            this.btnSeedUsePrevious.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnSeedUsePrevious.ButtonImage = null;
-            this.btnSeedUsePrevious.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
-            this.btnSeedUsePrevious.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
-            this.btnSeedUsePrevious.DrawImage = false;
-            this.btnSeedUsePrevious.ForeColor = System.Drawing.Color.White;
-            this.btnSeedUsePrevious.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
-            this.btnSeedUsePrevious.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
-            this.btnSeedUsePrevious.Location = new System.Drawing.Point(339, 6);
-            this.btnSeedUsePrevious.Name = "btnSeedUsePrevious";
-            this.btnSeedUsePrevious.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
-            this.btnSeedUsePrevious.Size = new System.Drawing.Size(100, 23);
-            this.btnSeedUsePrevious.TabIndex = 106;
-            this.btnSeedUsePrevious.TabStop = false;
-            this.btnSeedUsePrevious.Text = "Use Previous";
-            this.toolTip.SetToolTip(this.btnSeedUsePrevious, "Use Same Seed as Previous Run");
-            this.btnSeedUsePrevious.Click += new System.EventHandler(this.btnSeedUsePrevious_Click);
-            // 
             // panelScale
             // 
             this.panelScale.Controls.Add(this.label4);
@@ -1267,24 +1266,6 @@
             this.panelPrompt.Size = new System.Drawing.Size(633, 65);
             this.panelPrompt.TabIndex = 0;
             // 
-            // btnExpandPromptField
-            // 
-            this.btnExpandPromptField.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.btnExpandPromptField.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnExpandPromptField.BackgroundImage = global::StableDiffusionGui.Properties.Resources.downArrowIcon;
-            this.btnExpandPromptField.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnExpandPromptField.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnExpandPromptField.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnExpandPromptField.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnExpandPromptField.Location = new System.Drawing.Point(207, 7);
-            this.btnExpandPromptField.Name = "btnExpandPromptField";
-            this.btnExpandPromptField.Size = new System.Drawing.Size(20, 20);
-            this.btnExpandPromptField.TabIndex = 86;
-            this.btnExpandPromptField.TabStop = false;
-            this.toolTip.SetToolTip(this.btnExpandPromptField, "Expand/Collapse Prompt Field");
-            this.btnExpandPromptField.UseVisualStyleBackColor = false;
-            this.btnExpandPromptField.Click += new System.EventHandler(this.btnExpandPromptField_Click);
-            // 
             // labelPromptInfo
             // 
             this.labelPromptInfo.AutoSize = true;
@@ -1342,7 +1323,6 @@
             this.Controls.Add(this.btnDebug);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.cliButton);
-            this.Controls.Add(this.btnImgShare);
             this.Controls.Add(this.progressBar);
             this.Controls.Add(this.progressCircle);
             this.Controls.Add(this.btnOpenOutFolder);
@@ -1445,7 +1425,6 @@
         private HTAlt.WinForms.HTProgressBar progressBar;
         private System.Windows.Forms.TextBox textboxExtraScales;
         private System.Windows.Forms.Button separator;
-        private System.Windows.Forms.Button btnImgShare;
         private System.Windows.Forms.ContextMenuStrip menuStripOutputImg;
         private System.Windows.Forms.ToolStripMenuItem openFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openOutputFolderToolStripMenuItem;
