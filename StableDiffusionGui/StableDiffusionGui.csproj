@@ -126,6 +126,7 @@
     <Reference Include="System.Management.Automation" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\Gpu.cs" />
     <Compile Include="Data\ImageMetadata.cs" />
     <Compile Include="Data\TtiSettings.cs" />
     <Compile Include="Data\TtiTaskInfo.cs" />

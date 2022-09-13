@@ -332,37 +332,47 @@ namespace StableDiffusionGui.Installation
 
         public static void FixHardcodedPaths()
         {
-            string parentDir = Path.Combine(GetDataSubPath("mb"), "envs", "ldo", "Lib", "site-packages");
-            var eggLinks = IoUtils.GetFileInfosSorted(parentDir, false, "*.egg-link");
-
-            List<string> easyInstallPaths = new List<string>();
-
-            foreach (FileInfo eggLink in eggLinks)
+            try
             {
-                string nameNoExt = Path.GetFileNameWithoutExtension(eggLink.FullName);
+                Logger.Log($"Fixing hardcoded paths in python files...", true);
 
-                if (nameNoExt == "latent-diffusion")
+                string parentDir = Path.Combine(GetDataSubPath("mb"), "envs", "ldo", "Lib", "site-packages");
+                var eggLinks = IoUtils.GetFileInfosSorted(parentDir, false, "*.egg-link");
+
+                List<string> easyInstallPaths = new List<string>();
+
+                foreach (FileInfo eggLink in eggLinks)
                 {
-                    string path = Path.Combine(GetDataSubPath("repo"));
-                    File.WriteAllText(eggLink.FullName, path + "\n.");
-                    easyInstallPaths.Add(path);
-                }
-                else
-                {
-                    string path = Path.Combine(GetDataSubPath("repo"), "src", nameNoExt);
-                    File.WriteAllText(eggLink.FullName, path + "\n.");
-                    easyInstallPaths.Add(path);
+                    string nameNoExt = Path.GetFileNameWithoutExtension(eggLink.FullName);
+
+                    if (nameNoExt == "latent-diffusion")
+                    {
+                        string path = Path.Combine(GetDataSubPath("repo"));
+                        File.WriteAllText(eggLink.FullName, path + "\n.");
+                        easyInstallPaths.Add(path);
+                    }
+                    else
+                    {
+                        string path = Path.Combine(GetDataSubPath("repo"), "src", nameNoExt);
+                        File.WriteAllText(eggLink.FullName, path + "\n.");
+                        easyInstallPaths.Add(path);
+                    }
+
+                    Logger.Log($"Fixed egg-link file {eggLink.FullName}.", true);
                 }
 
-                Logger.Log($"Fixed egg {eggLink.FullName}.", true);
+                var easyInstallPth = Path.Combine(parentDir, "easy-install.pth");
+
+                if (File.Exists(easyInstallPth))
+                {
+                    File.WriteAllLines(easyInstallPth, easyInstallPaths.ToArray());
+                    Logger.Log($"Fixed easy-install.pth.", true);
+                }
             }
-
-            var easyInstallPth = Path.Combine(parentDir, "easy-install.pth");
-
-            if (File.Exists(easyInstallPth))
+            catch(Exception ex)
             {
-                File.WriteAllLines(easyInstallPth, easyInstallPaths.ToArray());
-                Logger.Log($"Fixed easy-install.pth.", true);
+                Logger.Log($"Error validating installation: {ex.Message}");
+                Logger.Log($"{ex.StackTrace}", true);
             }
         }
 

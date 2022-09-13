@@ -109,8 +109,8 @@ namespace StableDiffusionGui.Main
                 filename = Path.ChangeExtension(filename, "txt");
 
             _file = Path.Combine(Paths.GetLogPath(), filename);
-            logStr = logStr.Replace(Environment.NewLine, " ").TrimWhitespaces();
-            string time = DateTime.Now.ToString("MM-dd-yyyy HH:mm:ss");
+            //logStr = logStr.Replace(Environment.NewLine, " ").TrimWhitespaces();
+            string time = DT.Now.ToString("MM-dd-yyyy HH:mm:ss");
 
             try
             {

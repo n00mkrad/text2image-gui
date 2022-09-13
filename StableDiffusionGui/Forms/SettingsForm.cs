@@ -59,7 +59,7 @@ namespace StableDiffusionGui.Forms
             comboxCudaDevice.Items.Add("CPU (Experimental, may not work at all)");
 
             foreach (var g in gpus)
-                comboxCudaDevice.Items.Add($"GPU {g.Value} ({g.Key})");
+                comboxCudaDevice.Items.Add($"GPU {g.CudaDeviceId} ({g.FullName} - {g.VramGb} GB)");
 
             ConfigParser.LoadComboxIndex(comboxCudaDevice);
             _ready = true;

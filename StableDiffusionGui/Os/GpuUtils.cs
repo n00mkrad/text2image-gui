@@ -1,6 +1,5 @@
-﻿using StableDiffusionGui.Io;
-using StableDiffusionGui.Main;
-using System;
+﻿using StableDiffusionGui.Data;
+using StableDiffusionGui.Io;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -11,9 +10,9 @@ namespace StableDiffusionGui.Os
 {
     internal class GpuUtils
     {
-        public static Dictionary<string, int> CachedGpus = new Dictionary<string, int>();
+        public static List<Gpu> CachedGpus = new List<Gpu>();
 
-        public static async Task<Dictionary<string, int>> GetCudaGpusCached()
+        public static async Task<List<Gpu>> GetCudaGpusCached()
         {
             if (CachedGpus.Count > 0)
                 return CachedGpus;
@@ -21,13 +20,13 @@ namespace StableDiffusionGui.Os
                 return await GetCudaGpus();
         }
 
-        public static async Task<Dictionary<string, int>> GetCudaGpus()
+        public static async Task<List<Gpu>> GetCudaGpus()
         {
             string scriptPath = Path.Combine(Paths.GetDataPath(), "repo", "check_gpus.py");
             List<string> outLines = new List<string>();
 
             Process p = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
-            p.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} python {scriptPath.Wrap()}";
+            p.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && call \"mb\\Scripts\\activate.bat\" \"mb/envs/ldo\" && python {scriptPath.Wrap()}";
 
             if (!OsUtils.ShowHiddenCmd())
             {
@@ -45,18 +44,8 @@ namespace StableDiffusionGui.Os
 
             while (!p.HasExited) await Task.Delay(1);
 
-            Dictionary<string, int> gpus = new Dictionary<string, int>();
-
-            foreach(string line in outLines)
-            {
-                string l = line.Trim();
-
-                if (l.MatchesWildcard("* => *"))
-                    gpus.Add(l.Split(" => ")[1], l.Split(" => ")[0].GetInt());
-            }
-
-            CachedGpus = gpus;
-            return gpus;
+            CachedGpus = outLines.Where(x => x.MatchesWildcard("* - * - *")).Select(x => new Gpu(x)).ToList();
+            return CachedGpus;
         }
     }
 }

@@ -60,9 +60,8 @@ namespace StableDiffusionGui
 
         private void MainForm_Shown(object sender, EventArgs e)
         {
-            Logger.Log("Validating installation...");
             Setup.FixHardcodedPaths();
-            Logger.Log("Validated installation.", false, Logger.LastUiLine.EndsWith("..."));
+            Task.Run(() => SetGpusInWindowTitle());
 
             upDownSeed.Text = "";
 
@@ -98,7 +97,6 @@ namespace StableDiffusionGui
             }
 
             RefreshAfterSettingsChanged();
-            Task.Run(() => SetGpusInWindowTitle());
         }
 
         private async Task SetGpusInWindowTitle ()
@@ -107,9 +105,10 @@ namespace StableDiffusionGui
             List<string> strings = new List<string>();
 
             foreach (var g in gpus)
-                strings.Add($"{g.Key} ({g.Value})");
+                strings.Add($"{g.FullName} (#{g.CudaDeviceId})");
 
             Text = $"{Text} - CUDA GPUs: {string.Join(", ", strings)}";
+            Logger.Log($"Detected {gpus.Count} CUDA-capable GPU{(gpus.Count != 1 ? "s" : "")}.");
         }
 
         private void LoadUiElements()
