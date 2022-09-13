@@ -25,7 +25,6 @@ namespace StableDiffusionGui.Main
                 {
                     var files = IoUtils.GetFileInfosSorted(imagesDir, false, "*.png");
 
-                    //bool procRunning = TextToImage.CurrentTask.Processes.Where(x => x != null && !x.HasExited).Any();
                     bool procRunning = IoUtils.GetAmountOfFiles(Paths.GetSessionDataPath(), false, "prompts.txt") == 1;
 
                     if (!procRunning && !files.Any())

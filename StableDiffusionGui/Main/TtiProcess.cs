@@ -195,6 +195,8 @@ namespace StableDiffusionGui.Main
 
             while (!dream.HasExited) await Task.Delay(1);
 
+            IoUtils.TryDeleteIfExists(Path.Combine(Paths.GetSessionDataPath(), "prompts.txt"));
+
             Finish();
         }
 
