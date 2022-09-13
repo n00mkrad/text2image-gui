@@ -63,7 +63,7 @@ namespace StableDiffusionGui.Main
 
         public static string GetCudaDevice(string arg)
         {
-            int opt = Config.GetInt(Config.Key.comboxCudaDevice);
+            int opt = Config.GetInt("comboxCudaDevice");
 
             if (opt == 0)
                 return "";
