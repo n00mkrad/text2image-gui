@@ -107,7 +107,7 @@ namespace StableDiffusionGui
             foreach (var g in gpus)
                 strings.Add($"{g.FullName} (#{g.CudaDeviceId})");
 
-            Text = $"{Text} - CUDA GPUs: {string.Join(", ", strings)}";
+            Text = $"{Text} - CUDA GPUs: {(strings.Count > 0 ? string.Join(", ", strings) : "None")}";
             Logger.Log($"Detected {gpus.Count} CUDA-capable GPU{(gpus.Count != 1 ? "s" : "")}.");
         }
 
