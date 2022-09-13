@@ -138,8 +138,9 @@ namespace StableDiffusionGui
         {
             bool opt = Config.GetBool("checkboxOptimizedSd");
 
-            textboxExtraScales.Enabled = !opt;
-            textboxExtraInitStrengths.Enabled = !opt;
+            textboxExtraScales.Visible = !opt;
+            textboxExtraInitStrengths.Visible = !opt;
+            btnEmbeddingBrowse.Visible = !opt; // Disable embedding browse btn when using optimizedSD
             panelSampler.Visible = !opt; // Disable sampler selection when using optimizedSD
             panelSeamless.Visible = !opt; // Disable seamless option when using optimizedSD
 
