@@ -175,7 +175,6 @@ namespace StableDiffusionGui
             }
         }
 
-
         public bool IsInstalledWithWarning(bool showInstaller = true)
         {
             if (!InstallationStatus.IsInstalled)
@@ -189,6 +188,29 @@ namespace StableDiffusionGui
             }
 
             return true;
+        }
+
+        public void LoadTtiSettingsIntoUi(string[] prompts)
+        {
+            textboxPrompt.Text = String.Join(Environment.NewLine, prompts);
+        }
+
+        public void LoadTtiSettingsIntoUi (TtiSettings s)
+        {
+            textboxPrompt.Text = String.Join(Environment.NewLine, s.Prompts);
+            upDownIterations.Value = s.Iterations;
+            sliderSteps.Value = s.Params["steps"].GetInt() / 5; sliderSteps_Scroll(null, null);
+            sliderScale.Value = (s.Params["scales"].Split(",")[0].GetFloat() * 2f).RoundToInt(); sliderScale_Scroll(null, null);
+            sliderResW.Value = s.Params["res"].Split('x')[0].GetInt() / 64; sliderResW_Scroll(null, null);
+            sliderResH.Value = s.Params["res"].Split('x')[1].GetInt() / 64; sliderResH_Scroll(null, null);
+            upDownSeed.Value = s.Params["seed"].GetLong();
+            comboxSampler.Text = s.Params["sampler"];
+            MainUi.CurrentInitImgPath = s.Params["initImg"];
+            sliderInitStrength.Value = (s.Params["initStrengths"].Split(",")[0].GetFloat() * 40f).RoundToInt(); sliderInitStrength_Scroll(null, null);
+            MainUi.CurrentInitImgPath = s.Params["embedding"];
+            checkboxSeamless.Checked = s.Params["seamless"] == true.ToString();
+
+            UpdateInitImgAndEmbeddingUi();
         }
 
         private void runBtn_Click(object sender, EventArgs e)

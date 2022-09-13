@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace StableDiffusionGui.Forms
 {
@@ -54,6 +55,7 @@ namespace StableDiffusionGui.Forms
         private void deleteSelectedToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var reversed = promptListView.Items.Cast<ListViewItem>().Reverse();
+            PromptHistory.Delete(promptListView.CheckedItems.Cast<ListViewItem>().Select(x => (TtiSettings)x.Tag).ToList());
             PromptHistory.Delete(promptListView.SelectedItems.Cast<ListViewItem>().Select(x => (TtiSettings)x.Tag).ToList());
             LoadPromptHistory();
         }
@@ -62,6 +64,37 @@ namespace StableDiffusionGui.Forms
         {
             PromptHistory.DeleteAll();
             LoadPromptHistory();
+        }
+
+        private void promptListView_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void promptListView_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                var focusedItem = promptListView.FocusedItem;
+
+                if (focusedItem != null && focusedItem.Bounds.Contains(e.Location))
+                {
+                    if (PromptListMode == ListMode.History)
+                        menuStripPromptHistory.Show(Cursor.Position);
+                }
+            }
+        }
+
+        private void loadPromptIntoGUIToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TtiSettings s = (TtiSettings)promptListView.FocusedItem.Tag;
+            Program.MainForm.LoadTtiSettingsIntoUi(s.Prompts);
+        }
+
+        private void loadPromptAndSettingsIntoGUIToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TtiSettings s = (TtiSettings)promptListView.FocusedItem.Tag;
+            Program.MainForm.LoadTtiSettingsIntoUi(s);
         }
     }
 }

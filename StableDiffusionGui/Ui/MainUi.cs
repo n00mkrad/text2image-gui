@@ -25,7 +25,7 @@ namespace StableDiffusionGui.Ui
             get => _currentInitImgPath;
             set {
                 _currentInitImgPath = value;
-                Logger.Log(string.IsNullOrWhiteSpace(value) ? "Cleared init image." : $"Now using initialization image {Path.GetFileName(value).Wrap()}.");
+                Logger.Log(string.IsNullOrWhiteSpace(value) ? "" : $"Now using initialization image {Path.GetFileName(value).Wrap()}.");
             } }
         
         public static float CurrentInitImgStrength;
@@ -35,7 +35,7 @@ namespace StableDiffusionGui.Ui
             get => _currentEmbeddingPath;
             set {
                 _currentEmbeddingPath = value;
-                Logger.Log(string.IsNullOrWhiteSpace(value) ? "Cleared concept." : $"Now using learned concept {Path.GetFileName(value).Wrap()}.");
+                Logger.Log(string.IsNullOrWhiteSpace(value) ? "" : $"Now using learned concept {Path.GetFileName(value).Wrap()}.");
             } }
 
         public static readonly string[] ValidInitImgExtensions = new string[] { ".png", ".jpeg", ".jpg", ".jfif", ".bmp", ".webp" };

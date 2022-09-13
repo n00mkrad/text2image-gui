@@ -32,13 +32,17 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PromptListForm));
             this.titleLabel = new System.Windows.Forms.Label();
             this.promptListView = new System.Windows.Forms.ListView();
-            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.btnOpenOutFolder = new System.Windows.Forms.Button();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.menuStripDelete = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.deleteSelectedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuStripPromptHistory = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.loadPromptIntoGUIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadPromptAndSettingsIntoGUIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.menuStripDelete.SuspendLayout();
+            this.menuStripPromptHistory.SuspendLayout();
             this.SuspendLayout();
             // 
             // titleLabel
@@ -49,9 +53,8 @@
             this.titleLabel.Location = new System.Drawing.Point(11, 9);
             this.titleLabel.Margin = new System.Windows.Forms.Padding(3, 0, 3, 10);
             this.titleLabel.Name = "titleLabel";
-            this.titleLabel.Size = new System.Drawing.Size(163, 40);
+            this.titleLabel.Size = new System.Drawing.Size(0, 40);
             this.titleLabel.TabIndex = 12;
-            this.titleLabel.Text = "Prompt List";
             // 
             // promptListView
             // 
@@ -75,10 +78,8 @@
             this.promptListView.TabIndex = 53;
             this.promptListView.UseCompatibleStateImageBehavior = false;
             this.promptListView.View = System.Windows.Forms.View.Details;
-            // 
-            // columnHeader1
-            // 
-            this.columnHeader1.Width = 617;
+            this.promptListView.SelectedIndexChanged += new System.EventHandler(this.promptListView_SelectedIndexChanged);
+            this.promptListView.MouseClick += new System.Windows.Forms.MouseEventHandler(this.promptListView_MouseClick);
             // 
             // btnOpenOutFolder
             // 
@@ -120,6 +121,32 @@
             this.deleteAllToolStripMenuItem.Text = "Delete All";
             this.deleteAllToolStripMenuItem.Click += new System.EventHandler(this.deleteAllToolStripMenuItem_Click);
             // 
+            // menuStripPromptHistory
+            // 
+            this.menuStripPromptHistory.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.loadPromptIntoGUIToolStripMenuItem,
+            this.loadPromptAndSettingsIntoGUIToolStripMenuItem});
+            this.menuStripPromptHistory.Name = "menuStripPromptHistory";
+            this.menuStripPromptHistory.Size = new System.Drawing.Size(260, 48);
+            // 
+            // loadPromptIntoGUIToolStripMenuItem
+            // 
+            this.loadPromptIntoGUIToolStripMenuItem.Name = "loadPromptIntoGUIToolStripMenuItem";
+            this.loadPromptIntoGUIToolStripMenuItem.Size = new System.Drawing.Size(259, 22);
+            this.loadPromptIntoGUIToolStripMenuItem.Text = "Load Prompt Into GUI";
+            this.loadPromptIntoGUIToolStripMenuItem.Click += new System.EventHandler(this.loadPromptIntoGUIToolStripMenuItem_Click);
+            // 
+            // loadPromptAndSettingsIntoGUIToolStripMenuItem
+            // 
+            this.loadPromptAndSettingsIntoGUIToolStripMenuItem.Name = "loadPromptAndSettingsIntoGUIToolStripMenuItem";
+            this.loadPromptAndSettingsIntoGUIToolStripMenuItem.Size = new System.Drawing.Size(259, 22);
+            this.loadPromptAndSettingsIntoGUIToolStripMenuItem.Text = "Load Prompt And Settings Into GUI";
+            this.loadPromptAndSettingsIntoGUIToolStripMenuItem.Click += new System.EventHandler(this.loadPromptAndSettingsIntoGUIToolStripMenuItem_Click);
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Width = 760;
+            // 
             // PromptListForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -131,13 +158,14 @@
             this.Controls.Add(this.titleLabel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximumSize = new System.Drawing.Size(1600, 1000);
-            this.MinimumSize = new System.Drawing.Size(400, 300);
+            this.MaximumSize = new System.Drawing.Size(800, 800);
+            this.MinimumSize = new System.Drawing.Size(800, 300);
             this.Name = "PromptListForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Load += new System.EventHandler(this.PromptListForm_Load);
             this.Shown += new System.EventHandler(this.PromptListForm_Shown);
             this.menuStripDelete.ResumeLayout(false);
+            this.menuStripPromptHistory.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -147,11 +175,14 @@
 
         private System.Windows.Forms.Label titleLabel;
         private System.Windows.Forms.ListView promptListView;
-        private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.Button btnOpenOutFolder;
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.ContextMenuStrip menuStripDelete;
         private System.Windows.Forms.ToolStripMenuItem deleteSelectedToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteAllToolStripMenuItem;
+        private System.Windows.Forms.ContextMenuStrip menuStripPromptHistory;
+        private System.Windows.Forms.ToolStripMenuItem loadPromptIntoGUIToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem loadPromptAndSettingsIntoGUIToolStripMenuItem;
+        private System.Windows.Forms.ColumnHeader columnHeader1;
     }
 }
