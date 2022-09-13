@@ -1,16 +1,13 @@
-﻿using HTAlt.WinForms;
-using StableDiffusionGui.Data;
+﻿using StableDiffusionGui.Data;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace StableDiffusionGui.Main
 {
@@ -75,6 +72,7 @@ namespace StableDiffusionGui.Main
 
         public static void Done()
         {
+            TimeSpan timeTaken = DateTime.Now - CurrentTask.StartTime;
             int imgCount = CurrentTask.ImgCount; // ImagePreview.SetImages(CurrentTask.OutPath, true, CurrentTask.TargetImgCount);
 
             if (imgCount > 0)
@@ -95,7 +93,7 @@ namespace StableDiffusionGui.Main
                 OsUtils.PlayPingSound(true);
 
             if (notifyMode == NotifyMode.Both || notifyMode == NotifyMode.Notification)
-                OsUtils.ShowNotification("Stable Diffusion GUI", $"Image generation has finished.\nGenerated {imgCount} images.");
+                OsUtils.ShowNotification("Stable Diffusion GUI", $"Image generation has finished.\nGenerated {imgCount} images in {FormatUtils.Time(timeTaken, false)}.", true);
         }
 
         public static void Cancel(string reason = "", bool showMsgBox = true)

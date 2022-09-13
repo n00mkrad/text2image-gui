@@ -115,7 +115,7 @@ namespace StableDiffusionGui.Main
 
                 ProcessManager.FindAndKillOrphans("dream.py");
                 Start();
-                Logger.Log("Loading...");
+                Logger.Log("Loading Stable Diffusion...");
                 _dreamPy = dream;
                 dream.Start();
 
@@ -183,7 +183,7 @@ namespace StableDiffusionGui.Main
 
             ProcessManager.FindAndKillOrphans("dream.py");
             Start();
-            Logger.Log("Loading...");
+            Logger.Log("Loading Stable Diffusion...");
             dream.Start();
 
             if (!OsUtils.ShowHiddenCmd())
@@ -253,10 +253,7 @@ namespace StableDiffusionGui.Main
                 bool replace = ellipsis || Logger.LastUiLine.MatchesWildcard("*Generated*image*in*");
 
                 if (line.Contains("Setting Sampler"))
-                {
                     Logger.Log("Generating...");
-                    Program.MainForm.SetProgress((int)Math.Round(((float)1 / TextToImage.CurrentTask.TargetImgCount) * 100f));
-                }
 
                 if (line.MatchesWildcard("step */*"))
                 {
@@ -275,7 +272,7 @@ namespace StableDiffusionGui.Main
                 {
                     var split = line.Split("image(s) generated in ");
                     TextToImage.CurrentTask.ImgCount += split[0].GetInt();
-                    Program.MainForm.SetProgress((int)Math.Round(((float)(TextToImage.CurrentTask.ImgCount + 1) / TextToImage.CurrentTask.TargetImgCount) * 100f));
+                    Program.MainForm.SetProgress((int)Math.Round(((float)TextToImage.CurrentTask.ImgCount / TextToImage.CurrentTask.TargetImgCount) * 100f));
 
                     int lastMsPerImg = $"{split[1].Remove(".").Remove("s")}0".GetInt();
                     int remainingMs = (TextToImage.CurrentTask.TargetImgCount - TextToImage.CurrentTask.ImgCount) * lastMsPerImg;
@@ -292,10 +289,7 @@ namespace StableDiffusionGui.Main
                 bool replace = ellipsis || Logger.LastUiLine.MatchesWildcard("*Generated*image*in*");
 
                 if (line.Contains("reading prompts from"))
-                {
                     Logger.Log("Generating...");
-                    Program.MainForm.SetProgress((int)Math.Round(((float)1 / TextToImage.CurrentTask.TargetImgCount) * 100f));
-                }
 
                 if (line.Contains("Decoding image: "))
                 {
@@ -311,7 +305,7 @@ namespace StableDiffusionGui.Main
                 if (line.MatchesWildcard("*data: 100%*<00:00,*it*]"))
                 {
                     TextToImage.CurrentTask.ImgCount += 1;
-                    Program.MainForm.SetProgress((int)Math.Round(((float)(TextToImage.CurrentTask.ImgCount + 1) / TextToImage.CurrentTask.TargetImgCount) * 100f));
+                    Program.MainForm.SetProgress((int)Math.Round(((float)TextToImage.CurrentTask.ImgCount / TextToImage.CurrentTask.TargetImgCount) * 100f));
 
                     int lastMsPerImg = line.EndsWith("it/s]") ? (1000000f / (line.Split("00:00, ").Last().Remove(".").Remove("s") + "0").GetInt()).RoundToInt() : (line.Split("00:00, ").Last().Remove(".").Remove("s") + "0").GetInt();
                     int remainingMs = (TextToImage.CurrentTask.TargetImgCount - TextToImage.CurrentTask.ImgCount) * lastMsPerImg;
