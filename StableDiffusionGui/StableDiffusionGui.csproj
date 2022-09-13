@@ -183,6 +183,8 @@
     <Compile Include="Main\PostProcess.cs" />
     <Compile Include="Main\PromptHistory.cs" />
     <Compile Include="Os\GpuUtils.cs" />
+    <Compile Include="Os\ProcessManager.cs" />
+    <Compile Include="Os\SdGuiProcess.cs" />
     <Compile Include="Ui\MainUi.cs" />
     <Compile Include="Main\TextToImage.cs" />
     <Compile Include="Main\TtiProcess.cs" />

@@ -1,6 +1,6 @@
 ﻿using StableDiffusionGui.Io;
-using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
+using StableDiffusionGui.Os;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -21,6 +21,8 @@ namespace StableDiffusionGui
         [STAThread]
         static void Main()
         {
+            Application.ApplicationExit += new EventHandler(OnApplicationExit);
+
             Paths.Init();
             Config.Init();
             Cleanup();
@@ -69,6 +71,11 @@ namespace StableDiffusionGui
             {
                 Logger.Log($"Cleanup Error: {e.Message}\n{e.StackTrace}");
             }
+        }
+
+        private static void OnApplicationExit (object sender, EventArgs e)
+        {
+            ProcessManager.FindAndKillOrphans();
         }
 
     }

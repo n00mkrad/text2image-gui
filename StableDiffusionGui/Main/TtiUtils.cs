@@ -58,9 +58,7 @@ namespace StableDiffusionGui.Main
             int thresh = 70;
 
             if (words > thresh)
-            {
                 UiUtils.ShowMessageBox($"{(prompts.Count > 1 ? "One of your prompts" : "Your prompt")} is very long (>{thresh} words).\nThe AI might ignore parts of your prompt. Shorten the prompt to avoid this.");
-            }
         }
 
         public static string GetCudaDevice(string arg)

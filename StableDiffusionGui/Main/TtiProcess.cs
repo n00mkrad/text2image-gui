@@ -113,6 +113,7 @@ namespace StableDiffusionGui.Main
                     dream.ErrorDataReceived += (sender, line) => { LogOutput(line.Data, true); };
                 }
 
+                ProcessManager.FindAndKillOrphans("dream.py");
                 Start();
                 Logger.Log("Loading...");
                 _dreamPy = dream;
@@ -180,6 +181,7 @@ namespace StableDiffusionGui.Main
                 dream.ErrorDataReceived += (sender, line) => { LogOutput(line.Data, true); };
             }
 
+            ProcessManager.FindAndKillOrphans("dream.py");
             Start();
             Logger.Log("Loading...");
             dream.Start();
@@ -212,6 +214,7 @@ namespace StableDiffusionGui.Main
                 $"{TtiUtils.GetCudaDevice("--device")}";
 
             File.WriteAllText(batPath, batText);
+            ProcessManager.FindAndKillOrphans("dream.py");
             Process.Start(batPath);
         }
 
@@ -380,11 +383,12 @@ namespace StableDiffusionGui.Main
         {
             if (TextToImage.CurrentTask != null)
             {
-                foreach (var process in TextToImage.CurrentTask.Processes.Where(x => x != null && !x.HasExited))
+                foreach (var process in TextToImage.CurrentTask.Processes)
                 {
                     try
                     {
-                        OsUtils.KillProcessTree(process.Id);
+                        if(process != null && !process.HasExited)
+                            OsUtils.KillProcessTree(process.Id);
                     }
                     catch (Exception e)
                     {
