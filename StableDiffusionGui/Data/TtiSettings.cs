@@ -48,7 +48,8 @@ namespace StableDiffusionGui.Data
         {
             string init = System.IO.File.Exists(Params["initImg"]) ? $" - With Image" : "";
             string emb = System.IO.File.Exists(Params["embedding"]) ? $" - With Concept" : "";
-            return $"\"{Prompts.FirstOrDefault().Trunc(65)}\" - {Iterations} Images - {Params["steps"]} Steps - Seed {Params["seed"]} - {Params["res"]} - Sampler {Params["sampler"]}{init}{emb}";
+            string extraPrompts = Prompts.Length > 1 ? $" (+{Prompts.Length-1})" : "";
+            return $"\"{Prompts.FirstOrDefault().Trunc(65)}\"{extraPrompts} - {Iterations} Images - {Params["steps"]} Steps - Seed {Params["seed"]} - {Params["res"]} - Sampler {Params["sampler"]}{init}{emb}";
         }
     }
 }
