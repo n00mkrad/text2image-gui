@@ -75,10 +75,27 @@
             this.btnInitImgBrowse = new HTAlt.WinForms.HTButton();
             this.btnSeedResetToRandom = new HTAlt.WinForms.HTButton();
             this.btnSeedUsePrevious = new HTAlt.WinForms.HTButton();
+            this.btnPromptHistory = new System.Windows.Forms.Button();
+            this.btnQueue = new System.Windows.Forms.Button();
+            this.btnPostProc = new System.Windows.Forms.Button();
+            this.btnSettings = new System.Windows.Forms.Button();
+            this.btnDebug = new System.Windows.Forms.Button();
+            this.btnExpandPromptField = new System.Windows.Forms.Button();
+            this.cliButton = new System.Windows.Forms.Button();
+            this.btnOpenOutFolder = new System.Windows.Forms.Button();
+            this.btnPrevImg = new System.Windows.Forms.Button();
+            this.btnNextImg = new System.Windows.Forms.Button();
+            this.installerBtn = new System.Windows.Forms.Button();
+            this.discordBtn = new System.Windows.Forms.Button();
+            this.patreonBtn = new System.Windows.Forms.Button();
+            this.paypalBtn = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel12 = new System.Windows.Forms.Panel();
             this.panel11 = new System.Windows.Forms.Panel();
+            this.panelInpainting = new System.Windows.Forms.Panel();
+            this.checkboxInpainting = new System.Windows.Forms.CheckBox();
+            this.label10 = new System.Windows.Forms.Label();
             this.panelSeamless = new System.Windows.Forms.Panel();
             this.label8 = new System.Windows.Forms.Label();
             this.panelSampler = new System.Windows.Forms.Panel();
@@ -96,24 +113,9 @@
             this.menuStripLogs = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.progressBarImg = new HTAlt.WinForms.HTProgressBar();
             this.menuStripRunQueue = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.generateAllQueuedPromptsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.generateCurrentPromptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.btnPromptHistory = new System.Windows.Forms.Button();
-            this.btnQueue = new System.Windows.Forms.Button();
-            this.btnPostProc = new System.Windows.Forms.Button();
-            this.btnSettings = new System.Windows.Forms.Button();
-            this.btnDebug = new System.Windows.Forms.Button();
-            this.btnExpandPromptField = new System.Windows.Forms.Button();
-            this.cliButton = new System.Windows.Forms.Button();
-            this.btnOpenOutFolder = new System.Windows.Forms.Button();
-            this.btnPrevImg = new System.Windows.Forms.Button();
-            this.btnNextImg = new System.Windows.Forms.Button();
-            this.installerBtn = new System.Windows.Forms.Button();
+            this.generateAllQueuedPromptsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.separator = new System.Windows.Forms.Button();
-            this.discordBtn = new System.Windows.Forms.Button();
-            this.patreonBtn = new System.Windows.Forms.Button();
-            this.paypalBtn = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
             this.tableLayoutPanel6.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -122,6 +124,7 @@
             this.tableLayoutPanel3.SuspendLayout();
             this.menuStripOutputImg.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.panelInpainting.SuspendLayout();
             this.panelSeamless.SuspendLayout();
             this.panelSampler.SuspendLayout();
             this.panelRes.SuspendLayout();
@@ -830,257 +833,6 @@
             this.toolTip.SetToolTip(this.btnSeedUsePrevious, "Use Same Seed as Previous Run");
             this.btnSeedUsePrevious.Click += new System.EventHandler(this.btnSeedUsePrevious_Click);
             // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.ForeColor = System.Drawing.Color.White;
-            this.label7.Location = new System.Drawing.Point(5, 10);
-            this.label7.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(45, 13);
-            this.label7.TabIndex = 104;
-            this.label7.Text = "Sampler";
-            // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.panel12);
-            this.panel1.Controls.Add(this.panel11);
-            this.panel1.Controls.Add(this.panelSeamless);
-            this.panel1.Controls.Add(this.panelSampler);
-            this.panel1.Controls.Add(this.panelRes);
-            this.panel1.Controls.Add(this.panelSeed);
-            this.panel1.Controls.Add(this.panelScale);
-            this.panel1.Controls.Add(this.panelSteps);
-            this.panel1.Controls.Add(this.panelIterations);
-            this.panel1.Controls.Add(this.panelInitImgStrength);
-            this.panel1.Controls.Add(this.panelPrompt);
-            this.panel1.Location = new System.Drawing.Point(12, 62);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(633, 514);
-            this.panel1.TabIndex = 106;
-            // 
-            // panel12
-            // 
-            this.panel12.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel12.Location = new System.Drawing.Point(0, 380);
-            this.panel12.Name = "panel12";
-            this.panel12.Size = new System.Drawing.Size(633, 35);
-            this.panel12.TabIndex = 11;
-            // 
-            // panel11
-            // 
-            this.panel11.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel11.Location = new System.Drawing.Point(0, 345);
-            this.panel11.Name = "panel11";
-            this.panel11.Size = new System.Drawing.Size(633, 35);
-            this.panel11.TabIndex = 10;
-            // 
-            // panelSeamless
-            // 
-            this.panelSeamless.Controls.Add(this.checkboxSeamless);
-            this.panelSeamless.Controls.Add(this.label8);
-            this.panelSeamless.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSeamless.Location = new System.Drawing.Point(0, 310);
-            this.panelSeamless.Name = "panelSeamless";
-            this.panelSeamless.Size = new System.Drawing.Size(633, 35);
-            this.panelSeamless.TabIndex = 9;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.ForeColor = System.Drawing.Color.White;
-            this.label8.Location = new System.Drawing.Point(5, 10);
-            this.label8.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(182, 13);
-            this.label8.TabIndex = 105;
-            this.label8.Text = "Generate Seamless (Tileable) Images";
-            // 
-            // panelSampler
-            // 
-            this.panelSampler.Controls.Add(this.label7);
-            this.panelSampler.Controls.Add(this.comboxSampler);
-            this.panelSampler.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSampler.Location = new System.Drawing.Point(0, 275);
-            this.panelSampler.Name = "panelSampler";
-            this.panelSampler.Size = new System.Drawing.Size(633, 35);
-            this.panelSampler.TabIndex = 6;
-            // 
-            // panelRes
-            // 
-            this.panelRes.Controls.Add(this.label6);
-            this.panelRes.Controls.Add(this.tableLayoutPanel2);
-            this.panelRes.Controls.Add(this.tableLayoutPanel3);
-            this.panelRes.Controls.Add(this.label9);
-            this.panelRes.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelRes.Location = new System.Drawing.Point(0, 240);
-            this.panelRes.Name = "panelRes";
-            this.panelRes.Size = new System.Drawing.Size(633, 35);
-            this.panelRes.TabIndex = 5;
-            // 
-            // panelSeed
-            // 
-            this.panelSeed.Controls.Add(this.btnSeedResetToRandom);
-            this.panelSeed.Controls.Add(this.btnSeedUsePrevious);
-            this.panelSeed.Controls.Add(this.label5);
-            this.panelSeed.Controls.Add(this.upDownSeed);
-            this.panelSeed.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSeed.Location = new System.Drawing.Point(0, 205);
-            this.panelSeed.Name = "panelSeed";
-            this.panelSeed.Size = new System.Drawing.Size(633, 35);
-            this.panelSeed.TabIndex = 4;
-            // 
-            // panelScale
-            // 
-            this.panelScale.Controls.Add(this.label4);
-            this.panelScale.Controls.Add(this.tableLayoutPanel1);
-            this.panelScale.Controls.Add(this.textboxExtraScales);
-            this.panelScale.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelScale.Location = new System.Drawing.Point(0, 170);
-            this.panelScale.Name = "panelScale";
-            this.panelScale.Size = new System.Drawing.Size(633, 35);
-            this.panelScale.TabIndex = 3;
-            // 
-            // panelSteps
-            // 
-            this.panelSteps.Controls.Add(this.label3);
-            this.panelSteps.Controls.Add(this.tableLayoutPanel6);
-            this.panelSteps.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSteps.Location = new System.Drawing.Point(0, 135);
-            this.panelSteps.Name = "panelSteps";
-            this.panelSteps.Size = new System.Drawing.Size(633, 35);
-            this.panelSteps.TabIndex = 2;
-            // 
-            // panelIterations
-            // 
-            this.panelIterations.Controls.Add(this.label1);
-            this.panelIterations.Controls.Add(this.upDownIterations);
-            this.panelIterations.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelIterations.Location = new System.Drawing.Point(0, 100);
-            this.panelIterations.Name = "panelIterations";
-            this.panelIterations.Size = new System.Drawing.Size(633, 35);
-            this.panelIterations.TabIndex = 1;
-            // 
-            // panelInitImgStrength
-            // 
-            this.panelInitImgStrength.Controls.Add(this.textboxExtraInitStrengths);
-            this.panelInitImgStrength.Controls.Add(this.label11);
-            this.panelInitImgStrength.Controls.Add(this.tableLayoutPanel4);
-            this.panelInitImgStrength.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelInitImgStrength.Location = new System.Drawing.Point(0, 65);
-            this.panelInitImgStrength.Name = "panelInitImgStrength";
-            this.panelInitImgStrength.Size = new System.Drawing.Size(633, 35);
-            this.panelInitImgStrength.TabIndex = 8;
-            this.panelInitImgStrength.Visible = false;
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.ForeColor = System.Drawing.Color.White;
-            this.label11.Location = new System.Drawing.Point(5, 10);
-            this.label11.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(149, 13);
-            this.label11.TabIndex = 90;
-            this.label11.Text = "Init Image Strength (Influence)";
-            // 
-            // tableLayoutPanel4
-            // 
-            this.tableLayoutPanel4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel4.ColumnCount = 2;
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 45F));
-            this.tableLayoutPanel4.Controls.Add(this.sliderInitStrength, 0, 0);
-            this.tableLayoutPanel4.Controls.Add(this.labelInitStrength, 1, 0);
-            this.tableLayoutPanel4.Location = new System.Drawing.Point(233, 6);
-            this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(6);
-            this.tableLayoutPanel4.Name = "tableLayoutPanel4";
-            this.tableLayoutPanel4.RowCount = 1;
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 21F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(291, 21);
-            this.tableLayoutPanel4.TabIndex = 89;
-            // 
-            // labelInitStrength
-            // 
-            this.labelInitStrength.AutoSize = true;
-            this.labelInitStrength.Dock = System.Windows.Forms.DockStyle.Right;
-            this.labelInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelInitStrength.ForeColor = System.Drawing.Color.Silver;
-            this.labelInitStrength.Location = new System.Drawing.Point(253, 0);
-            this.labelInitStrength.Name = "labelInitStrength";
-            this.labelInitStrength.Size = new System.Drawing.Size(35, 21);
-            this.labelInitStrength.TabIndex = 5;
-            this.labelInitStrength.Text = "1000";
-            this.labelInitStrength.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // panelPrompt
-            // 
-            this.panelPrompt.Controls.Add(this.btnExpandPromptField);
-            this.panelPrompt.Controls.Add(this.labelPromptInfo);
-            this.panelPrompt.Controls.Add(this.btnEmbeddingBrowse);
-            this.panelPrompt.Controls.Add(this.btnInitImgBrowse);
-            this.panelPrompt.Controls.Add(this.label2);
-            this.panelPrompt.Controls.Add(this.textboxPrompt);
-            this.panelPrompt.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelPrompt.Location = new System.Drawing.Point(0, 0);
-            this.panelPrompt.Margin = new System.Windows.Forms.Padding(0);
-            this.panelPrompt.Name = "panelPrompt";
-            this.panelPrompt.Size = new System.Drawing.Size(633, 65);
-            this.panelPrompt.TabIndex = 0;
-            // 
-            // labelPromptInfo
-            // 
-            this.labelPromptInfo.AutoSize = true;
-            this.labelPromptInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelPromptInfo.ForeColor = System.Drawing.Color.Silver;
-            this.labelPromptInfo.Location = new System.Drawing.Point(5, 29);
-            this.labelPromptInfo.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
-            this.labelPromptInfo.Name = "labelPromptInfo";
-            this.labelPromptInfo.Size = new System.Drawing.Size(0, 13);
-            this.labelPromptInfo.TabIndex = 85;
-            // 
-            // menuStripLogs
-            // 
-            this.menuStripLogs.Name = "menuStripLogs";
-            this.menuStripLogs.Size = new System.Drawing.Size(61, 4);
-            // 
-            // progressBarImg
-            // 
-            this.progressBarImg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.progressBarImg.BorderThickness = 0;
-            this.progressBarImg.Location = new System.Drawing.Point(658, 571);
-            this.progressBarImg.Name = "progressBarImg";
-            this.progressBarImg.Size = new System.Drawing.Size(514, 5);
-            this.progressBarImg.TabIndex = 110;
-            this.progressBarImg.TabStop = false;
-            // 
-            // menuStripRunQueue
-            // 
-            this.menuStripRunQueue.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.generateCurrentPromptToolStripMenuItem,
-            this.generateAllQueuedPromptsToolStripMenuItem});
-            this.menuStripRunQueue.Name = "menuStripRunQueue";
-            this.menuStripRunQueue.Size = new System.Drawing.Size(232, 48);
-            // 
-            // generateAllQueuedPromptsToolStripMenuItem
-            // 
-            this.generateAllQueuedPromptsToolStripMenuItem.Name = "generateAllQueuedPromptsToolStripMenuItem";
-            this.generateAllQueuedPromptsToolStripMenuItem.Size = new System.Drawing.Size(231, 22);
-            this.generateAllQueuedPromptsToolStripMenuItem.Text = "Generate All Queued Prompts";
-            this.generateAllQueuedPromptsToolStripMenuItem.Click += new System.EventHandler(this.generateAllQueuedPromptsToolStripMenuItem_Click);
-            // 
-            // generateCurrentPromptToolStripMenuItem
-            // 
-            this.generateCurrentPromptToolStripMenuItem.Name = "generateCurrentPromptToolStripMenuItem";
-            this.generateCurrentPromptToolStripMenuItem.Size = new System.Drawing.Size(231, 22);
-            this.generateCurrentPromptToolStripMenuItem.Text = "Generate Current Prompt";
-            this.generateCurrentPromptToolStripMenuItem.Click += new System.EventHandler(this.generateCurrentPromptToolStripMenuItem_Click);
-            // 
             // btnPromptHistory
             // 
             this.btnPromptHistory.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
@@ -1269,22 +1021,6 @@
             this.installerBtn.UseVisualStyleBackColor = false;
             this.installerBtn.Click += new System.EventHandler(this.installerBtn_Click);
             // 
-            // separator
-            // 
-            this.separator.BackColor = System.Drawing.Color.Transparent;
-            this.separator.BackgroundImage = global::StableDiffusionGui.Properties.Resources.separatorTest1;
-            this.separator.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.separator.Enabled = false;
-            this.separator.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.separator.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.separator.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.separator.Location = new System.Drawing.Point(902, 9);
-            this.separator.Name = "separator";
-            this.separator.Size = new System.Drawing.Size(40, 40);
-            this.separator.TabIndex = 75;
-            this.separator.TabStop = false;
-            this.separator.UseVisualStyleBackColor = false;
-            // 
             // discordBtn
             // 
             this.discordBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
@@ -1336,22 +1072,305 @@
             this.paypalBtn.UseVisualStyleBackColor = false;
             this.paypalBtn.Click += new System.EventHandler(this.paypalBtn_Click);
             // 
-            // button1
+            // label7
             // 
-            this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.button1.BackgroundImage = global::StableDiffusionGui.Properties.Resources.historyIcon;
-            this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.button1.Location = new System.Drawing.Point(926, 598);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(40, 40);
-            this.button1.TabIndex = 114;
-            this.button1.TabStop = false;
-            this.toolTip.SetToolTip(this.button1, "View Prompt History");
-            this.button1.UseVisualStyleBackColor = false;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.ForeColor = System.Drawing.Color.White;
+            this.label7.Location = new System.Drawing.Point(5, 10);
+            this.label7.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(45, 13);
+            this.label7.TabIndex = 104;
+            this.label7.Text = "Sampler";
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.panel12);
+            this.panel1.Controls.Add(this.panel11);
+            this.panel1.Controls.Add(this.panelSeamless);
+            this.panel1.Controls.Add(this.panelSampler);
+            this.panel1.Controls.Add(this.panelRes);
+            this.panel1.Controls.Add(this.panelSeed);
+            this.panel1.Controls.Add(this.panelScale);
+            this.panel1.Controls.Add(this.panelSteps);
+            this.panel1.Controls.Add(this.panelIterations);
+            this.panel1.Controls.Add(this.panelInpainting);
+            this.panel1.Controls.Add(this.panelInitImgStrength);
+            this.panel1.Controls.Add(this.panelPrompt);
+            this.panel1.Location = new System.Drawing.Point(12, 62);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(633, 514);
+            this.panel1.TabIndex = 106;
+            // 
+            // panel12
+            // 
+            this.panel12.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel12.Location = new System.Drawing.Point(0, 415);
+            this.panel12.Name = "panel12";
+            this.panel12.Size = new System.Drawing.Size(633, 35);
+            this.panel12.TabIndex = 11;
+            // 
+            // panel11
+            // 
+            this.panel11.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel11.Location = new System.Drawing.Point(0, 380);
+            this.panel11.Name = "panel11";
+            this.panel11.Size = new System.Drawing.Size(633, 35);
+            this.panel11.TabIndex = 10;
+            // 
+            // panelInpainting
+            // 
+            this.panelInpainting.Controls.Add(this.checkboxInpainting);
+            this.panelInpainting.Controls.Add(this.label10);
+            this.panelInpainting.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelInpainting.Location = new System.Drawing.Point(0, 100);
+            this.panelInpainting.Name = "panelInpainting";
+            this.panelInpainting.Size = new System.Drawing.Size(633, 35);
+            this.panelInpainting.TabIndex = 12;
+            // 
+            // checkboxInpainting
+            // 
+            this.checkboxInpainting.AutoSize = true;
+            this.checkboxInpainting.ForeColor = System.Drawing.Color.White;
+            this.checkboxInpainting.Location = new System.Drawing.Point(233, 9);
+            this.checkboxInpainting.Name = "checkboxInpainting";
+            this.checkboxInpainting.Size = new System.Drawing.Size(15, 14);
+            this.checkboxInpainting.TabIndex = 106;
+            this.checkboxInpainting.UseVisualStyleBackColor = true;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.ForeColor = System.Drawing.Color.White;
+            this.label10.Location = new System.Drawing.Point(5, 10);
+            this.label10.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(53, 13);
+            this.label10.TabIndex = 105;
+            this.label10.Text = "Inpainting";
+            // 
+            // panelSeamless
+            // 
+            this.panelSeamless.Controls.Add(this.checkboxSeamless);
+            this.panelSeamless.Controls.Add(this.label8);
+            this.panelSeamless.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelSeamless.Location = new System.Drawing.Point(0, 345);
+            this.panelSeamless.Name = "panelSeamless";
+            this.panelSeamless.Size = new System.Drawing.Size(633, 35);
+            this.panelSeamless.TabIndex = 9;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.ForeColor = System.Drawing.Color.White;
+            this.label8.Location = new System.Drawing.Point(5, 10);
+            this.label8.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(182, 13);
+            this.label8.TabIndex = 105;
+            this.label8.Text = "Generate Seamless (Tileable) Images";
+            // 
+            // panelSampler
+            // 
+            this.panelSampler.Controls.Add(this.label7);
+            this.panelSampler.Controls.Add(this.comboxSampler);
+            this.panelSampler.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelSampler.Location = new System.Drawing.Point(0, 310);
+            this.panelSampler.Name = "panelSampler";
+            this.panelSampler.Size = new System.Drawing.Size(633, 35);
+            this.panelSampler.TabIndex = 6;
+            // 
+            // panelRes
+            // 
+            this.panelRes.Controls.Add(this.label6);
+            this.panelRes.Controls.Add(this.tableLayoutPanel2);
+            this.panelRes.Controls.Add(this.tableLayoutPanel3);
+            this.panelRes.Controls.Add(this.label9);
+            this.panelRes.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelRes.Location = new System.Drawing.Point(0, 275);
+            this.panelRes.Name = "panelRes";
+            this.panelRes.Size = new System.Drawing.Size(633, 35);
+            this.panelRes.TabIndex = 5;
+            // 
+            // panelSeed
+            // 
+            this.panelSeed.Controls.Add(this.btnSeedResetToRandom);
+            this.panelSeed.Controls.Add(this.btnSeedUsePrevious);
+            this.panelSeed.Controls.Add(this.label5);
+            this.panelSeed.Controls.Add(this.upDownSeed);
+            this.panelSeed.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelSeed.Location = new System.Drawing.Point(0, 240);
+            this.panelSeed.Name = "panelSeed";
+            this.panelSeed.Size = new System.Drawing.Size(633, 35);
+            this.panelSeed.TabIndex = 4;
+            // 
+            // panelScale
+            // 
+            this.panelScale.Controls.Add(this.label4);
+            this.panelScale.Controls.Add(this.tableLayoutPanel1);
+            this.panelScale.Controls.Add(this.textboxExtraScales);
+            this.panelScale.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelScale.Location = new System.Drawing.Point(0, 205);
+            this.panelScale.Name = "panelScale";
+            this.panelScale.Size = new System.Drawing.Size(633, 35);
+            this.panelScale.TabIndex = 3;
+            // 
+            // panelSteps
+            // 
+            this.panelSteps.Controls.Add(this.label3);
+            this.panelSteps.Controls.Add(this.tableLayoutPanel6);
+            this.panelSteps.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelSteps.Location = new System.Drawing.Point(0, 170);
+            this.panelSteps.Name = "panelSteps";
+            this.panelSteps.Size = new System.Drawing.Size(633, 35);
+            this.panelSteps.TabIndex = 2;
+            // 
+            // panelIterations
+            // 
+            this.panelIterations.Controls.Add(this.label1);
+            this.panelIterations.Controls.Add(this.upDownIterations);
+            this.panelIterations.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelIterations.Location = new System.Drawing.Point(0, 135);
+            this.panelIterations.Name = "panelIterations";
+            this.panelIterations.Size = new System.Drawing.Size(633, 35);
+            this.panelIterations.TabIndex = 1;
+            // 
+            // panelInitImgStrength
+            // 
+            this.panelInitImgStrength.Controls.Add(this.textboxExtraInitStrengths);
+            this.panelInitImgStrength.Controls.Add(this.label11);
+            this.panelInitImgStrength.Controls.Add(this.tableLayoutPanel4);
+            this.panelInitImgStrength.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelInitImgStrength.Location = new System.Drawing.Point(0, 65);
+            this.panelInitImgStrength.Name = "panelInitImgStrength";
+            this.panelInitImgStrength.Size = new System.Drawing.Size(633, 35);
+            this.panelInitImgStrength.TabIndex = 8;
+            this.panelInitImgStrength.Visible = false;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.ForeColor = System.Drawing.Color.White;
+            this.label11.Location = new System.Drawing.Point(5, 10);
+            this.label11.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(149, 13);
+            this.label11.TabIndex = 90;
+            this.label11.Text = "Init Image Strength (Influence)";
+            // 
+            // tableLayoutPanel4
+            // 
+            this.tableLayoutPanel4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel4.ColumnCount = 2;
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 45F));
+            this.tableLayoutPanel4.Controls.Add(this.sliderInitStrength, 0, 0);
+            this.tableLayoutPanel4.Controls.Add(this.labelInitStrength, 1, 0);
+            this.tableLayoutPanel4.Location = new System.Drawing.Point(233, 6);
+            this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(6);
+            this.tableLayoutPanel4.Name = "tableLayoutPanel4";
+            this.tableLayoutPanel4.RowCount = 1;
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 21F));
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(291, 21);
+            this.tableLayoutPanel4.TabIndex = 89;
+            // 
+            // labelInitStrength
+            // 
+            this.labelInitStrength.AutoSize = true;
+            this.labelInitStrength.Dock = System.Windows.Forms.DockStyle.Right;
+            this.labelInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelInitStrength.ForeColor = System.Drawing.Color.Silver;
+            this.labelInitStrength.Location = new System.Drawing.Point(253, 0);
+            this.labelInitStrength.Name = "labelInitStrength";
+            this.labelInitStrength.Size = new System.Drawing.Size(35, 21);
+            this.labelInitStrength.TabIndex = 5;
+            this.labelInitStrength.Text = "1000";
+            this.labelInitStrength.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // panelPrompt
+            // 
+            this.panelPrompt.Controls.Add(this.btnExpandPromptField);
+            this.panelPrompt.Controls.Add(this.labelPromptInfo);
+            this.panelPrompt.Controls.Add(this.btnEmbeddingBrowse);
+            this.panelPrompt.Controls.Add(this.btnInitImgBrowse);
+            this.panelPrompt.Controls.Add(this.label2);
+            this.panelPrompt.Controls.Add(this.textboxPrompt);
+            this.panelPrompt.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelPrompt.Location = new System.Drawing.Point(0, 0);
+            this.panelPrompt.Margin = new System.Windows.Forms.Padding(0);
+            this.panelPrompt.Name = "panelPrompt";
+            this.panelPrompt.Size = new System.Drawing.Size(633, 65);
+            this.panelPrompt.TabIndex = 0;
+            // 
+            // labelPromptInfo
+            // 
+            this.labelPromptInfo.AutoSize = true;
+            this.labelPromptInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelPromptInfo.ForeColor = System.Drawing.Color.Silver;
+            this.labelPromptInfo.Location = new System.Drawing.Point(5, 29);
+            this.labelPromptInfo.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.labelPromptInfo.Name = "labelPromptInfo";
+            this.labelPromptInfo.Size = new System.Drawing.Size(0, 13);
+            this.labelPromptInfo.TabIndex = 85;
+            // 
+            // menuStripLogs
+            // 
+            this.menuStripLogs.Name = "menuStripLogs";
+            this.menuStripLogs.Size = new System.Drawing.Size(61, 4);
+            // 
+            // progressBarImg
+            // 
+            this.progressBarImg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.progressBarImg.BorderThickness = 0;
+            this.progressBarImg.Location = new System.Drawing.Point(658, 571);
+            this.progressBarImg.Name = "progressBarImg";
+            this.progressBarImg.Size = new System.Drawing.Size(514, 5);
+            this.progressBarImg.TabIndex = 110;
+            this.progressBarImg.TabStop = false;
+            // 
+            // menuStripRunQueue
+            // 
+            this.menuStripRunQueue.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.generateCurrentPromptToolStripMenuItem,
+            this.generateAllQueuedPromptsToolStripMenuItem});
+            this.menuStripRunQueue.Name = "menuStripRunQueue";
+            this.menuStripRunQueue.Size = new System.Drawing.Size(232, 48);
+            // 
+            // generateCurrentPromptToolStripMenuItem
+            // 
+            this.generateCurrentPromptToolStripMenuItem.Name = "generateCurrentPromptToolStripMenuItem";
+            this.generateCurrentPromptToolStripMenuItem.Size = new System.Drawing.Size(231, 22);
+            this.generateCurrentPromptToolStripMenuItem.Text = "Generate Current Prompt";
+            this.generateCurrentPromptToolStripMenuItem.Click += new System.EventHandler(this.generateCurrentPromptToolStripMenuItem_Click);
+            // 
+            // generateAllQueuedPromptsToolStripMenuItem
+            // 
+            this.generateAllQueuedPromptsToolStripMenuItem.Name = "generateAllQueuedPromptsToolStripMenuItem";
+            this.generateAllQueuedPromptsToolStripMenuItem.Size = new System.Drawing.Size(231, 22);
+            this.generateAllQueuedPromptsToolStripMenuItem.Text = "Generate All Queued Prompts";
+            this.generateAllQueuedPromptsToolStripMenuItem.Click += new System.EventHandler(this.generateAllQueuedPromptsToolStripMenuItem_Click);
+            // 
+            // separator
+            // 
+            this.separator.BackColor = System.Drawing.Color.Transparent;
+            this.separator.BackgroundImage = global::StableDiffusionGui.Properties.Resources.separatorTest1;
+            this.separator.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.separator.Enabled = false;
+            this.separator.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.separator.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.separator.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            this.separator.Location = new System.Drawing.Point(902, 9);
+            this.separator.Name = "separator";
+            this.separator.Size = new System.Drawing.Size(40, 40);
+            this.separator.TabIndex = 75;
+            this.separator.TabStop = false;
+            this.separator.UseVisualStyleBackColor = false;
             // 
             // MainForm
             // 
@@ -1360,7 +1379,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.ClientSize = new System.Drawing.Size(1184, 671);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.btnPromptHistory);
             this.Controls.Add(this.btnQueue);
             this.Controls.Add(this.progressBarImg);
@@ -1407,6 +1425,8 @@
             this.tableLayoutPanel3.PerformLayout();
             this.menuStripOutputImg.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
+            this.panelInpainting.ResumeLayout(false);
+            this.panelInpainting.PerformLayout();
             this.panelSeamless.ResumeLayout(false);
             this.panelSeamless.PerformLayout();
             this.panelSampler.ResumeLayout(false);
@@ -1517,7 +1537,9 @@
         private System.Windows.Forms.ContextMenuStrip menuStripRunQueue;
         private System.Windows.Forms.ToolStripMenuItem generateCurrentPromptToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem generateAllQueuedPromptsToolStripMenuItem;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Panel panelInpainting;
+        private System.Windows.Forms.CheckBox checkboxInpainting;
+        private System.Windows.Forms.Label label10;
     }
 }
 

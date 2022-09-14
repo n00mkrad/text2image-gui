@@ -233,6 +233,7 @@ namespace StableDiffusionGui
                             { "initStrengths", String.Join(",", MainUi.GetInitStrengths(textboxExtraInitStrengths.Text).Select(x => x.ToStringDot("0.0000"))) },
                             { "embedding", MainUi.CurrentEmbeddingPath },
                             { "seamless", checkboxSeamless.Checked.ToString() },
+                            { "inpainting", checkboxInpainting.Checked ? "masked" : "" },
                         },
             };
 
@@ -537,6 +538,7 @@ namespace StableDiffusionGui
 
             bool imgExists = File.Exists(MainUi.CurrentInitImgPath);
             panelInitImgStrength.Visible = imgExists;
+            panelInpainting.Visible = imgExists;
             panelSampler.Visible = !imgExists; // Disable sampler selection while image is loaded as img2img currently only supports DDIM
             btnInitImgBrowse.Text = imgExists ? "Clear Image" : "Load Image";
 
@@ -676,27 +678,6 @@ namespace StableDiffusionGui
         private void generateAllQueuedPromptsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Run(true);
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            var maskForm = new DrawForm(Resources.monsa);
-            maskForm.ShowDialog();
-
-            if(ImgBoxOutput.Image != null)
-            {
-                MagickImage maskedOverlay = ImgUtils.AlphaMask(ImgUtils.MagickImgFromImage(maskForm.BackgroundImage), ImgUtils.MagickImgFromImage(maskForm.Mask), true);
-
-                Image img = new Bitmap(512, 512);
-
-                using (Graphics gr = Graphics.FromImage(img))
-                {
-                    gr.DrawImage(ImgBoxOutput.Image, new Point(0, 0));
-                    gr.DrawImage(ImgUtils.ImageFromMagickImg(maskedOverlay), new Point(0, 0));
-                }
-
-                //img.Save();
-            }
         }
     }
 }

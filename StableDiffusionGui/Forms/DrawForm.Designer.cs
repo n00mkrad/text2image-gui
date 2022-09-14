@@ -108,7 +108,7 @@
             this.sliderBlur.LargeChange = ((uint)(5u));
             this.sliderBlur.Location = new System.Drawing.Point(100, 7);
             this.sliderBlur.Margin = new System.Windows.Forms.Padding(0);
-            this.sliderBlur.Maximum = 10;
+            this.sliderBlur.Maximum = 12;
             this.sliderBlur.Name = "sliderBlur";
             this.sliderBlur.OverlayColor = System.Drawing.Color.White;
             this.sliderBlur.Size = new System.Drawing.Size(400, 21);
@@ -117,6 +117,7 @@
             this.sliderBlur.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
             this.sliderBlur.ThumbSize = new System.Drawing.Size(14, 14);
             this.sliderBlur.Value = 5;
+            this.sliderBlur.Scroll += new System.Windows.Forms.ScrollEventHandler(this.sliderBlur_Scroll);
             // 
             // label1
             // 
@@ -126,9 +127,9 @@
             this.label1.Location = new System.Drawing.Point(5, 10);
             this.label1.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(25, 13);
+            this.label1.Size = new System.Drawing.Size(54, 13);
             this.label1.TabIndex = 89;
-            this.label1.Text = "Blur";
+            this.label1.Text = "Mask Blur";
             // 
             // panelBrushSize
             // 

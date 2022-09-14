@@ -1,4 +1,5 @@
 ﻿using ImageMagick;
+using StableDiffusionGui.Io;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -39,6 +40,22 @@ namespace StableDiffusionGui.MiscUtils
 
             image.Composite(mask, CompositeOperator.CopyAlpha);
             return image;
+        }
+
+        public static void Overlay (string path, string overlayImg)
+        {
+            Image imgBase = IoUtils.GetImage(path);
+            Image imgOverlay = IoUtils.GetImage(overlayImg);
+
+            Image img = new Bitmap(imgBase.Width, imgBase.Height);
+
+            using (Graphics g = Graphics.FromImage(img))
+            {
+                g.DrawImage(imgBase, new Point(0, 0));
+                g.DrawImage(imgOverlay, new Point(0, 0));
+            }
+
+            img.Save(path);
         }
     }
 }

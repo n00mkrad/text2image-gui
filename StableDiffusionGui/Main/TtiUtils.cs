@@ -1,4 +1,8 @@
-﻿using StableDiffusionGui.Io;
+﻿using ImageMagick;
+using StableDiffusionGui.Forms;
+using StableDiffusionGui.Io;
+using StableDiffusionGui.MiscUtils;
+using StableDiffusionGui.Properties;
 using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
@@ -7,6 +11,8 @@ using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Path = System.IO.Path;
+using Paths = StableDiffusionGui.Io.Paths;
 
 namespace StableDiffusionGui.Main
 {
@@ -35,6 +41,18 @@ namespace StableDiffusionGui.Main
                 g.DrawImage(image, 0, 0, w, h);
                 return bmp;
             }
+        }
+
+        public static void PrepareInpainting (string initImgPath, Size targetSize)
+        {
+            string outPath = Path.Combine(Paths.GetSessionDataPath(), "masked.png");
+
+            Image img = ResizeImage(IoUtils.GetImage(initImgPath), targetSize.Width, targetSize.Height);
+            var maskForm = new DrawForm(img);
+            maskForm.ShowDialog();
+
+            MagickImage maskedOverlay = ImgUtils.AlphaMask(ImgUtils.MagickImgFromImage(maskForm.BackgroundImage), ImgUtils.MagickImgFromImage(maskForm.Mask), true);
+            maskedOverlay.Write(outPath);
         }
 
         public static void WriteModelsYaml(string mdlName)

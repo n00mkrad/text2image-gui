@@ -1,5 +1,6 @@
 ﻿using StableDiffusionGui.Io;
 using StableDiffusionGui.MiscUtils;
+using StableDiffusionGui.Properties;
 using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
@@ -59,6 +60,11 @@ namespace StableDiffusionGui.Main
                             string number = $"-{(TextToImage.CurrentTask.ImgCount).ToString().PadLeft(TextToImage.CurrentTask.TargetImgCount.ToString().Length, '0')}";
                             bool inclPrompt = !sub && Config.GetBool("checkboxPromptInFilename");
                             string renamedPath = FormatUtils.GetExportFilename(img.FullName, sub ? imageDirMap[img.FullName] : TextToImage.CurrentTask.OutDir, number, "png", _maxPathLength, inclPrompt, true, true, true);
+
+                            string maskPath = Path.Combine(Paths.GetSessionDataPath(), "masked.png");
+                            if (File.Exists(maskPath))
+                                ImgUtils.Overlay(img.FullName, maskPath);
+
                             Logger.Log($"ImageExport: Trying to move {img.Name} => {renamedPath}", true);
                             img.MoveTo(renamedPath);
                             renamedImgPaths.Add(renamedPath);

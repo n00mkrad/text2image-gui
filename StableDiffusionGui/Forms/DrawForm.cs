@@ -84,5 +84,10 @@ namespace StableDiffusionGui.Forms
         {
             
         }
+
+        private void sliderBlur_Scroll(object sender, ScrollEventArgs e)
+        {
+            pictBox.Image = new GaussianBlur(_raw).Process(sliderBlur.Value);
+        }
     }
 }
