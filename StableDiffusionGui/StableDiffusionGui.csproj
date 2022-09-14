@@ -81,6 +81,15 @@
     <Reference Include="LibGit2Sharp, Version=0.26.0.0, Culture=neutral, PublicKeyToken=7cbde695407f0333, processorArchitecture=MSIL">
       <HintPath>packages\LibGit2Sharp.0.26.2\lib\net46\LibGit2Sharp.dll</HintPath>
     </Reference>
+    <Reference Include="Magick.NET-Q16-AnyCPU, Version=12.1.0.0, Culture=neutral, PublicKeyToken=2004825badfa91ec, processorArchitecture=MSIL">
+      <HintPath>packages\Magick.NET-Q16-AnyCPU.12.1.0\lib\netstandard20\Magick.NET-Q16-AnyCPU.dll</HintPath>
+    </Reference>
+    <Reference Include="Magick.NET.Core, Version=12.1.0.0, Culture=neutral, PublicKeyToken=2004825badfa91ec, processorArchitecture=MSIL">
+      <HintPath>packages\Magick.NET.Core.12.1.0\lib\netstandard20\Magick.NET.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Magick.NET.SystemDrawing, Version=6.1.0.0, Culture=neutral, PublicKeyToken=2004825badfa91ec, processorArchitecture=MSIL">
+      <HintPath>packages\Magick.NET.SystemDrawing.6.1.0\lib\net462\Magick.NET.SystemDrawing.dll</HintPath>
+    </Reference>
     <Reference Include="MetadataExtractor, Version=2.7.2.0, Culture=neutral, PublicKeyToken=b66b5ccaf776c301, processorArchitecture=MSIL">
       <HintPath>packages\MetadataExtractor.2.7.2\lib\net45\MetadataExtractor.dll</HintPath>
     </Reference>
@@ -138,6 +147,12 @@
     <Compile Include="Forms\BigPreviewForm.Designer.cs">
       <DependentUpon>BigPreviewForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\DrawForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\DrawForm.Designer.cs">
+      <DependentUpon>DrawForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\InstallerForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -184,6 +199,8 @@
     <Compile Include="Main\ImageExport.cs" />
     <Compile Include="Main\PromptHistory.cs" />
     <Compile Include="Main\TtiProcessOutputHandler.cs" />
+    <Compile Include="MiscUtils\GaussianBlur.cs" />
+    <Compile Include="MiscUtils\ImgUtils.cs" />
     <Compile Include="MiscUtils\NmkdStopwatch.cs" />
     <Compile Include="Os\GpuUtils.cs" />
     <Compile Include="Os\ProcessManager.cs" />
@@ -201,6 +218,9 @@
     <Compile Include="Ui\UiUtils.cs" />
     <EmbeddedResource Include="Forms\BigPreviewForm.resx">
       <DependentUpon>BigPreviewForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\DrawForm.resx">
+      <DependentUpon>DrawForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\InstallerForm.resx">
       <DependentUpon>InstallerForm.cs</DependentUpon>
@@ -264,6 +284,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon1.ico" />
+    <None Include="Resources\monsa.png" />
     <None Include="Resources\addToListIcon.png" />
     <None Include="Resources\deleteBtn.png" />
     <None Include="Resources\queueIcon.png" />
@@ -292,7 +313,9 @@
     <Error Condition="!Exists('packages\Costura.Fody.5.7.0\build\Costura.Fody.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Costura.Fody.5.7.0\build\Costura.Fody.props'))" />
     <Error Condition="!Exists('packages\Costura.Fody.5.7.0\build\Costura.Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Costura.Fody.5.7.0\build\Costura.Fody.targets'))" />
     <Error Condition="!Exists('packages\LibGit2Sharp.NativeBinaries.2.0.306\build\net46\LibGit2Sharp.NativeBinaries.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\LibGit2Sharp.NativeBinaries.2.0.306\build\net46\LibGit2Sharp.NativeBinaries.props'))" />
+    <Error Condition="!Exists('packages\Magick.NET-Q16-AnyCPU.12.1.0\build\netstandard20\Magick.NET-Q16-AnyCPU.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Magick.NET-Q16-AnyCPU.12.1.0\build\netstandard20\Magick.NET-Q16-AnyCPU.targets'))" />
   </Target>
   <Import Project="packages\Fody.6.6.3\build\Fody.targets" Condition="Exists('packages\Fody.6.6.3\build\Fody.targets')" />
   <Import Project="packages\Costura.Fody.5.7.0\build\Costura.Fody.targets" Condition="Exists('packages\Costura.Fody.5.7.0\build\Costura.Fody.targets')" />
+  <Import Project="packages\Magick.NET-Q16-AnyCPU.12.1.0\build\netstandard20\Magick.NET-Q16-AnyCPU.targets" Condition="Exists('packages\Magick.NET-Q16-AnyCPU.12.1.0\build\netstandard20\Magick.NET-Q16-AnyCPU.targets')" />
 </Project>

@@ -59,7 +59,8 @@ namespace StableDiffusionGui.Main
 
                 PromptHistory.Add(s);
 
-                Logger.Log($"Running queue entry with {s.Prompts.Length} prompt{(s.Prompts.Length != 1 ? "s" : "")}...");
+                if(batches.Count > 1)
+                    Logger.Log($"Running queue entry with {s.Prompts.Length} prompt{(s.Prompts.Length != 1 ? "s" : "")}...");
 
                 string tempOutDir = Path.Combine(Paths.GetSessionDataPath(), "out");
                 IoUtils.TryDeleteIfExists(tempOutDir);

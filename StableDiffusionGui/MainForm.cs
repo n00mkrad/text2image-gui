@@ -23,6 +23,9 @@ using StableDiffusionGui.Properties;
 using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using ImageMagick;
+using Paths = StableDiffusionGui.Io.Paths;
+using StableDiffusionGui.MiscUtils;
 
 namespace StableDiffusionGui
 {
@@ -673,6 +676,27 @@ namespace StableDiffusionGui
         private void generateAllQueuedPromptsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Run(true);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            var maskForm = new DrawForm(Resources.monsa);
+            maskForm.ShowDialog();
+
+            if(ImgBoxOutput.Image != null)
+            {
+                MagickImage maskedOverlay = ImgUtils.AlphaMask(ImgUtils.MagickImgFromImage(maskForm.BackgroundImage), ImgUtils.MagickImgFromImage(maskForm.Mask), true);
+
+                Image img = new Bitmap(512, 512);
+
+                using (Graphics gr = Graphics.FromImage(img))
+                {
+                    gr.DrawImage(ImgBoxOutput.Image, new Point(0, 0));
+                    gr.DrawImage(ImgUtils.ImageFromMagickImg(maskedOverlay), new Point(0, 0));
+                }
+
+                //img.Save();
+            }
         }
     }
 }
