@@ -110,6 +110,9 @@
             this.menuStripLogs = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.progressBarImg = new HTAlt.WinForms.HTProgressBar();
             this.separator = new System.Windows.Forms.Button();
+            this.menuStripRunQueue = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.generateAllQueuedPromptsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.generateCurrentPromptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
             this.tableLayoutPanel6.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -128,6 +131,7 @@
             this.panelInitImgStrength.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
             this.panelPrompt.SuspendLayout();
+            this.menuStripRunQueue.SuspendLayout();
             this.SuspendLayout();
             // 
             // runBtn
@@ -813,8 +817,9 @@
             this.btnQueue.Size = new System.Drawing.Size(40, 40);
             this.btnQueue.TabIndex = 111;
             this.btnQueue.TabStop = false;
-            this.toolTip.SetToolTip(this.btnQueue, "Add Current Prompts to Queue");
+            this.toolTip.SetToolTip(this.btnQueue, "View Prompt Queue");
             this.btnQueue.UseVisualStyleBackColor = false;
+            this.btnQueue.Click += new System.EventHandler(this.btnQueue_Click);
             // 
             // btnPostProc
             // 
@@ -1308,6 +1313,28 @@
             this.separator.TabStop = false;
             this.separator.UseVisualStyleBackColor = false;
             // 
+            // menuStripRunQueue
+            // 
+            this.menuStripRunQueue.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.generateCurrentPromptToolStripMenuItem,
+            this.generateAllQueuedPromptsToolStripMenuItem});
+            this.menuStripRunQueue.Name = "menuStripRunQueue";
+            this.menuStripRunQueue.Size = new System.Drawing.Size(232, 70);
+            // 
+            // generateAllQueuedPromptsToolStripMenuItem
+            // 
+            this.generateAllQueuedPromptsToolStripMenuItem.Name = "generateAllQueuedPromptsToolStripMenuItem";
+            this.generateAllQueuedPromptsToolStripMenuItem.Size = new System.Drawing.Size(231, 22);
+            this.generateAllQueuedPromptsToolStripMenuItem.Text = "Generate All Queued Prompts";
+            this.generateAllQueuedPromptsToolStripMenuItem.Click += new System.EventHandler(this.generateAllQueuedPromptsToolStripMenuItem_Click);
+            // 
+            // generateCurrentPromptToolStripMenuItem
+            // 
+            this.generateCurrentPromptToolStripMenuItem.Name = "generateCurrentPromptToolStripMenuItem";
+            this.generateCurrentPromptToolStripMenuItem.Size = new System.Drawing.Size(231, 22);
+            this.generateCurrentPromptToolStripMenuItem.Text = "Generate Current Prompt";
+            this.generateCurrentPromptToolStripMenuItem.Click += new System.EventHandler(this.generateCurrentPromptToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AllowDrop = true;
@@ -1381,6 +1408,7 @@
             this.tableLayoutPanel4.PerformLayout();
             this.panelPrompt.ResumeLayout(false);
             this.panelPrompt.PerformLayout();
+            this.menuStripRunQueue.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1467,6 +1495,9 @@
         private System.Windows.Forms.Button btnExpandPromptField;
         private System.Windows.Forms.Button btnQueue;
         private System.Windows.Forms.Button btnPromptHistory;
+        private System.Windows.Forms.ContextMenuStrip menuStripRunQueue;
+        private System.Windows.Forms.ToolStripMenuItem generateCurrentPromptToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem generateAllQueuedPromptsToolStripMenuItem;
     }
 }
 

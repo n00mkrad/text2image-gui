@@ -45,7 +45,7 @@ namespace StableDiffusionGui.Main
                             int pathBudget = 255 - img.Directory.FullName.Length - 65;
                             string unixTimestamp = ((long)(DateTime.Now - new DateTime(1970, 1, 1)).TotalMilliseconds).ToString();
                             string dirName = string.IsNullOrWhiteSpace(prompt) ? $"unknown_prompt_{unixTimestamp}" : FormatUtils.SanitizePromptFilename(prompt, pathBudget);
-                            imageDirMap[img.FullName] = Directory.CreateDirectory(Path.Combine(TextToImage.CurrentTask.OutPath, dirName)).FullName;
+                            imageDirMap[img.FullName] = Directory.CreateDirectory(Path.Combine(TextToImage.CurrentTask.OutDir, dirName)).FullName;
                         }
                     }
 
@@ -58,7 +58,7 @@ namespace StableDiffusionGui.Main
                             var img = images[i];
                             string number = $"-{(TextToImage.CurrentTask.ImgCount).ToString().PadLeft(TextToImage.CurrentTask.TargetImgCount.ToString().Length, '0')}";
                             bool inclPrompt = !sub && Config.GetBool("checkboxPromptInFilename");
-                            string renamedPath = FormatUtils.GetExportFilename(img.FullName, sub ? imageDirMap[img.FullName] : TextToImage.CurrentTask.OutPath, number, "png", _maxPathLength, inclPrompt, true, true, true);
+                            string renamedPath = FormatUtils.GetExportFilename(img.FullName, sub ? imageDirMap[img.FullName] : TextToImage.CurrentTask.OutDir, number, "png", _maxPathLength, inclPrompt, true, true, true);
                             Logger.Log($"ImageExport: Trying to move {img.Name} => {renamedPath}", true);
                             img.MoveTo(renamedPath);
                             renamedImgPaths.Add(renamedPath);

@@ -38,6 +38,8 @@ namespace StableDiffusionGui.Ui
                 Logger.Log(string.IsNullOrWhiteSpace(value) ? "" : $"Now using learned concept {Path.GetFileName(value).Wrap()}.");
             } }
 
+        public static List<TtiSettings> Queue = new List<TtiSettings>();
+
         public static readonly string[] ValidInitImgExtensions = new string[] { ".png", ".jpeg", ".jpg", ".jfif", ".bmp", ".webp" };
         public static readonly string[] ValidInitEmbeddingExtensions = new string[] { ".pt", ".bin" };
 

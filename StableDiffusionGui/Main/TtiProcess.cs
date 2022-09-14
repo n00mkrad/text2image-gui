@@ -48,6 +48,8 @@ namespace StableDiffusionGui.Main
             float gfpganSetting = Config.GetFloat("sliderGfpgan");
             string gfpgan = gfpganSetting > 0.01f ? $"-G {gfpganSetting.ToStringDot("0.00")}" : "";
 
+            int imgs = 0;
+
             foreach (string prompt in prompts)
             {
                 for (int i = 0; i < iterations; i++)
@@ -59,7 +61,7 @@ namespace StableDiffusionGui.Main
                             bool initImgExists = File.Exists(initImg);
                             string init = initImgExists ? $"--init_img {initImg.Wrap()} --strength {strength.ToStringDot("0.0000")}" : "";
                             promptFileLines.Add($"{prompt} {init} -n {1} -s {steps} -C {scale.ToStringDot()} -A {sampler} -W {res.Width} -H {res.Height} -S {seed} {upscaling} {gfpgan} {(seamless ? "--seamless" : "")}");
-                            TextToImage.CurrentTask.TargetImgCount++;
+                            imgs++;
 
                             if (!initImgExists)
                                 break;
@@ -85,7 +87,7 @@ namespace StableDiffusionGui.Main
             string newStartupSettings = $"{mdlArg}{precArg}{embArg}{deviceArg}"; // Check if startup settings match - If not, we need to reload the model
 
             string strengths = File.Exists(initImg) ? $" and {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
-            Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} with {iterations} iteration{(iterations != 1 ? "s" : "")} each and {scales.Length} scale{(scales.Length != 1 ? "s" : "")}{strengths} each = {TextToImage.CurrentTask.TargetImgCount} images total.");
+            Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} with {iterations} iteration{(iterations != 1 ? "s" : "")} each and {scales.Length} scale{(scales.Length != 1 ? "s" : "")}{strengths} each = {imgs} images total.");
 
             if (!IsDreamPyRunning || (IsDreamPyRunning && _lastDreamPyStartupSettings != newStartupSettings))
             {
@@ -141,25 +143,11 @@ namespace StableDiffusionGui.Main
                 initImg = TtiUtils.ResizeInitImg(initImg, res, true);
 
             string promptFilePath = Path.Combine(Paths.GetSessionDataPath(), "prompts.txt");
-            string promptFileContent = "";
-
-            // string upscaling = "";
-            // int upscaleSetting = Config.GetInt("comboxUpscale");
-            // 
-            // if (upscaleSetting == 1)
-            //     upscaling = "-U 2";
-            // else if (upscaleSetting == 2)
-            //     upscaling = "-U 4";
-            // 
-            // float gfpganSetting = Config.GetFloat("sliderGfpgan");
-            // string gfpgan = gfpganSetting > 0.01f ? $"-G {gfpganSetting.ToStringDot("0.00")}" : "";
-            
-            TextToImage.CurrentTask.TargetImgCount += iterations * prompts.Length;
             File.WriteAllLines(promptFilePath, prompts);
 
             Logger.Log($"Preparing to run Optimized Stable Diffusion - {iterations} Iterations, {steps} Steps, Scale {scale}, {res.Width}x{res.Height}, Starting Seed: {seed}");
 
-            Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} with {iterations} iteration{(iterations != 1 ? "s" : "")} each = {TextToImage.CurrentTask.TargetImgCount} images total.");
+            Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} with {iterations} iteration{(iterations != 1 ? "s" : "")} each = {iterations * prompts.Length} images total.");
 
             Process dream = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
             TextToImage.CurrentTask.Processes.Add(dream);

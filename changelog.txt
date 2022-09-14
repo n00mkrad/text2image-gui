@@ -1,11 +1,12 @@
 SD GUI 1.4.0 Changelog:
 - Added support for loading HuggingFace .bin concepts (textual inversion embeddings)
 - Added a progress bar that shows the generation progress of the current image
-- ADded option to play sound and/or show notification when finished
+- Added option to play sound and/or show notification when finished
 - Added button to expand prompt field to 2x height
 - Added proper support for DPI scaling
 - Added option to select CUDA device in Settings
 - Available CUDA GPUs are now listed in window title
+- Stable Diffusion model no longer needs to be reloaded every time a batch of images are generated
 - Windows should not be able to go to sleep while the program runs (untested)
 
 

@@ -1,11 +1,9 @@
 ﻿using Newtonsoft.Json;
 using StableDiffusionGui.Data;
 using StableDiffusionGui.Io;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace StableDiffusionGui.Main
 {
@@ -16,7 +14,7 @@ namespace StableDiffusionGui.Main
         public static void Add(TtiSettings batch)
         {
             foreach (string prompt in batch.Prompts)
-                Prompts.Add(new TtiSettings() { Prompts = new string[] { prompt }, Implementation = batch.Implementation, Iterations = batch.Iterations, OutDir = batch.OutDir, Params = batch.Params });
+                Prompts.Add(new TtiSettings() { Prompts = new string[] { prompt }, Implementation = batch.Implementation, Iterations = batch.Iterations, Params = batch.Params });
 
             Save();
         }

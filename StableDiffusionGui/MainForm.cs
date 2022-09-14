@@ -68,7 +68,7 @@ namespace StableDiffusionGui
             {
                 string dir = Paths.GetExeDir();
 
-                if(dir.ToLower().Replace("\\", "/").MatchesWildcard("*/users/*/onedrive/*"))
+                if (dir.ToLower().Replace("\\", "/").MatchesWildcard("*/users/*/onedrive/*"))
                 {
                     UiUtils.ShowMessageBox($"Running this program out of the OneDrive folder is not supported. Please move it to a local drive and try again.", UiUtils.MessageType.Error, Nmkoder.Forms.MessageForm.FontSize.Big);
                     Application.Exit();
@@ -88,7 +88,7 @@ namespace StableDiffusionGui
             {
                 Logger.Log("Debugger is attached.");
             }
-            
+
             if (!InstallationStatus.IsInstalled)
             {
                 UiUtils.ShowMessageBox("No complete installation of the Stable Diffusion files was found.\n\nThe GUI will now open the installer.\nPlease press \"Install\" in the next window to install all required files.");
@@ -98,7 +98,7 @@ namespace StableDiffusionGui
             RefreshAfterSettingsChanged();
         }
 
-        private async Task SetGpusInWindowTitle ()
+        private async Task SetGpusInWindowTitle()
         {
             var gpus = await GpuUtils.GetCudaGpus();
             List<string> strings = new List<string>();
@@ -132,7 +132,7 @@ namespace StableDiffusionGui
             ConfigParser.SaveGuiElement(sliderInitStrength);
         }
 
-        public void RefreshAfterSettingsChanged ()
+        public void RefreshAfterSettingsChanged()
         {
             bool opt = Config.GetBool("checkboxOptimizedSd");
 
@@ -194,7 +194,7 @@ namespace StableDiffusionGui
             textboxPrompt.Text = String.Join(Environment.NewLine, prompts);
         }
 
-        public void LoadTtiSettingsIntoUi (TtiSettings s)
+        public void LoadTtiSettingsIntoUi(TtiSettings s)
         {
             textboxPrompt.Text = String.Join(Environment.NewLine, s.Prompts);
             upDownIterations.Value = s.Iterations;
@@ -206,45 +206,20 @@ namespace StableDiffusionGui
             comboxSampler.Text = s.Params["sampler"];
             MainUi.CurrentInitImgPath = s.Params["initImg"];
             sliderInitStrength.Value = (s.Params["initStrengths"].Split(",")[0].GetFloat() * 40f).RoundToInt(); sliderInitStrength_Scroll(null, null);
-            MainUi.CurrentInitImgPath = s.Params["embedding"];
+            MainUi.CurrentEmbeddingPath = s.Params["embedding"];
             checkboxSeamless.Checked = s.Params["seamless"] == true.ToString();
 
             UpdateInitImgAndEmbeddingUi();
         }
 
-        private void runBtn_Click(object sender, EventArgs e)
+        public TtiSettings GetCurrentTtiSettings()
         {
-            try
+            TtiSettings settings = new TtiSettings
             {
-                if (Program.Busy)
-                {
-                    TextToImage.Cancel();
-                }
-                else
-                {
-                    TextToImage.Canceled = false;
-
-                    if (!IsInstalledWithWarning())
-                        return;
-
-                    if (string.IsNullOrWhiteSpace(textboxPrompt.Text))
-                        TextToImage.Cancel("No prompt was entered.");
-
-                    if (TextToImage.Canceled)
-                        return;
-
-                    Logger.ClearLogBox();
-                    CleanPrompt();
-
-                    UpdateInitImgAndEmbeddingUi();
-
-                    TtiSettings settings = new TtiSettings
-                    {
-                        Implementation = Config.GetBool("checkboxOptimizedSd") ? Implementation.StableDiffusionOptimized : Implementation.StableDiffusion,
-                        Prompts = textboxPrompt.Text.SplitIntoLines(),
-                        Iterations = (int)upDownIterations.Value,
-                        OutDir = Config.Get(Config.Key.textboxOutPath),
-                        Params = new Dictionary<string, string>
+                Implementation = Config.GetBool("checkboxOptimizedSd") ? Implementation.StableDiffusionOptimized : Implementation.StableDiffusion,
+                Prompts = textboxPrompt.Text.SplitIntoLines(),
+                Iterations = (int)upDownIterations.Value,
+                Params = new Dictionary<string, string>
                         {
                             { "steps", MainUi.CurrentSteps.ToString() },
                             { "scales", String.Join(",", MainUi.GetScales(textboxExtraScales.Text).Select(x => x.ToStringDot("0.0000"))) },
@@ -256,9 +231,69 @@ namespace StableDiffusionGui
                             { "embedding", MainUi.CurrentEmbeddingPath },
                             { "seamless", checkboxSeamless.Checked.ToString() },
                         },
-                    };
+            };
 
-                    TextToImage.RunTti(settings);
+            return settings;
+        }
+
+        private void runBtn_Click(object sender, EventArgs e)
+        {
+            if (Program.Busy)
+            {
+                TextToImage.Cancel();
+                return;
+            }
+
+            if (MainUi.Queue.Count > 0)
+            {
+                generateAllQueuedPromptsToolStripMenuItem.Text = $"Generate Queued Prompts ({MainUi.Queue.Count})";
+                    menuStripRunQueue.Show(Cursor.Position);
+            }
+            else
+            {
+                Run();
+            }
+        }
+
+        public void Run(bool fromQueue = false)
+        {
+            try
+            {
+                if (Program.Busy)
+                {
+                    TextToImage.Cancel();
+                }
+                else
+                {
+                    TextToImage.Canceled = false;
+
+                    if (!IsInstalledWithWarning() || TextToImage.Canceled)
+                        return;
+
+                    Logger.ClearLogBox();
+                    CleanPrompt();
+                    UpdateInitImgAndEmbeddingUi();
+
+                    if (fromQueue)
+                    {
+                        if (MainUi.Queue.Where(x => x != null).Count() < 0)
+                        {
+                            TextToImage.Cancel("Queue is empty.");
+                            return;
+                        }
+
+                        TextToImage.RunTti(MainUi.Queue.AsEnumerable().Reverse().ToList()); // Reverse list to use top entries first
+                    }
+                    else
+                    {
+                        if (string.IsNullOrWhiteSpace(textboxPrompt.Text))
+                        {
+                            TextToImage.Cancel("No prompt was entered.");
+                            return;
+                        }
+
+                        TextToImage.RunTti(GetCurrentTtiSettings());
+                    }
                 }
             }
             catch (Exception ex)
@@ -432,7 +467,7 @@ namespace StableDiffusionGui
             }
             else
             {
-                if(imgBoxOutput.Image != null)
+                if (imgBoxOutput.Image != null)
                 {
                     var bigPreviewForm = new BigPreviewForm();
                     bigPreviewForm.EnableTiling = checkboxSeamless.Checked;
@@ -483,7 +518,7 @@ namespace StableDiffusionGui
             UpdateInitImgAndEmbeddingUi();
         }
 
-        public void UpdateInitImgAndEmbeddingUi ()
+        public void UpdateInitImgAndEmbeddingUi()
         {
             if (!string.IsNullOrWhiteSpace(MainUi.CurrentInitImgPath) && !File.Exists(MainUi.CurrentInitImgPath))
             {
@@ -593,7 +628,7 @@ namespace StableDiffusionGui
 
         private void btnExpandPromptField_Click(object sender, EventArgs e)
         {
-            if(panelPrompt.Height == 65)
+            if (panelPrompt.Height == 65)
             {
                 btnExpandPromptField.BackgroundImage = Resources.upArrowIcon;
                 panelPrompt.Height = 130;
@@ -618,9 +653,26 @@ namespace StableDiffusionGui
 
         private void btnPromptHistory_Click(object sender, EventArgs e)
         {
-            var historyForm = new PromptListForm();
-            historyForm.PromptListMode = PromptListForm.ListMode.History;
-            historyForm.ShowDialog();
+            var form = new PromptListForm();
+            form.PromptListMode = PromptListForm.ListMode.History;
+            form.ShowDialog();
+        }
+
+        private void btnQueue_Click(object sender, EventArgs e)
+        {
+            var form = new PromptListForm();
+            form.PromptListMode = PromptListForm.ListMode.Queue;
+            form.ShowDialog();
+        }
+
+        private void generateCurrentPromptToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Run();
+        }
+
+        private void generateAllQueuedPromptsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Run(true);
         }
     }
 }

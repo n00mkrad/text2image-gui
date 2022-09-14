@@ -18,53 +18,71 @@ namespace StableDiffusionGui.Main
         public static long PreviousSeed = -1;
         public static bool Canceled = false;
 
-        public static async Task RunTti(TtiSettings s)
+        public static async Task RunTti(TtiSettings settings)
         {
-            if (s == null)
+            await RunTti(new List<TtiSettings>() { settings });
+        }
+
+        public static async Task RunTti(List<TtiSettings> batches)
+        {
+            if (batches == null || batches.Count < 1)
                 return;
 
-            if (s.Params.ContainsKey("seed"))
-                PreviousSeed = s.Params["seed"].GetLong();
-
-            LastTaskSettings = s;
-            s.Prompts = s.Prompts.Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
-
-            if (!s.Prompts.Any())
-            {
-                Logger.Log($"No valid prompts to run!");
-                return;
-            }
-
-            TtiUtils.WarnIfPromptLong(s.Prompts.ToList());
+            Program.MainForm.SetWorking(true);
 
             CurrentTask = new TtiTaskInfo
             {
                 StartTime = DateTime.Now,
-                OutPath = s.OutDir,
+                OutDir = Config.Get(Config.Key.textboxOutPath),
                 SubfoldersPerPrompt = Config.GetBool("checkboxFolderPerPrompt"),
+                TargetImgCount = batches.Sum(x => x.GetTargetImgCount()),
             };
 
-            Program.MainForm.SetWorking(true);
+            foreach (TtiSettings s in batches)
+            {
+                if (s == null)
+                    continue;
 
-            PromptHistory.Add(s);
+                if (s.Params.ContainsKey("seed"))
+                    PreviousSeed = s.Params["seed"].GetLong();
 
-            string tempOutDir = Path.Combine(Paths.GetSessionDataPath(), "out");
-            Directory.CreateDirectory(tempOutDir);
-            Directory.CreateDirectory(s.OutDir);
+                LastTaskSettings = s;
+                s.Prompts = s.Prompts.Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
 
-            List<Task> tasks = new List<Task>();
+                if (!s.Prompts.Any())
+                {
+                    Logger.Log($"No valid prompts to run!");
+                    return;
+                }
 
-            if (s.Implementation == Implementation.StableDiffusion)
-                tasks.Add(TtiProcess.RunStableDiffusion(s.Prompts, s.Params["initImg"], s.Params["embedding"], s.Params["initStrengths"].Replace(" ", "").Split(",").Select(x => x.GetFloat()).ToArray(),
-                    s.Iterations, s.Params["steps"].GetInt(), s.Params["scales"].Replace(" ", "").Split(",").Select(x => x.GetFloat()).ToArray(), s.Params["seed"].GetLong(), s.Params["sampler"], FormatUtils.ParseSize(s.Params["res"]), bool.Parse(s.Params["seamless"]), tempOutDir));
+                TtiUtils.WarnIfPromptLong(s.Prompts.ToList());
 
-            if (s.Implementation == Implementation.StableDiffusionOptimized)
-                tasks.Add(TtiProcess.RunStableDiffusionOptimized(s.Prompts, s.Params["initImg"], s.Params["initStrengths"].Replace(" ", "").Split(",").First().GetFloat(), s.Iterations,
-                    s.Params["steps"].GetInt(), s.Params["scales"].Replace(" ", "").Split(",")[0].GetFloat(), s.Params["seed"].GetLong(), FormatUtils.ParseSize(s.Params["res"]), tempOutDir));
+                PromptHistory.Add(s);
 
-            tasks.Add(ImageExport.ExportLoop(tempOutDir, true));
+                Logger.Log($"Running queue entry with {s.GetTargetImgCount()} images...");
 
-            await Task.WhenAll(tasks);
+                string tempOutDir = Path.Combine(Paths.GetSessionDataPath(), "out");
+                IoUtils.TryDeleteIfExists(tempOutDir);
+                Directory.CreateDirectory(tempOutDir);
+                Directory.CreateDirectory(CurrentTask.OutDir);
+
+                List<Task> tasks = new List<Task>();
+
+                if (s.Implementation == Implementation.StableDiffusion)
+                    tasks.Add(TtiProcess.RunStableDiffusion(s.Prompts, s.Params["initImg"], s.Params["embedding"], s.Params["initStrengths"].Replace(" ", "").Split(",").Select(x => x.GetFloat()).ToArray(),
+                        s.Iterations, s.Params["steps"].GetInt(), s.Params["scales"].Replace(" ", "").Split(",").Select(x => x.GetFloat()).ToArray(), s.Params["seed"].GetLong(), s.Params["sampler"], FormatUtils.ParseSize(s.Params["res"]), bool.Parse(s.Params["seamless"]), tempOutDir));
+
+                if (s.Implementation == Implementation.StableDiffusionOptimized)
+                    tasks.Add(TtiProcess.RunStableDiffusionOptimized(s.Prompts, s.Params["initImg"], s.Params["initStrengths"].Replace(" ", "").Split(",").First().GetFloat(), s.Iterations,
+                        s.Params["steps"].GetInt(), s.Params["scales"].Replace(" ", "").Split(",")[0].GetFloat(), s.Params["seed"].GetLong(), FormatUtils.ParseSize(s.Params["res"]), tempOutDir));
+
+                tasks.Add(ImageExport.ExportLoop(tempOutDir, true));
+
+                await Task.WhenAll(tasks);
+
+                MainUi.Queue = MainUi.Queue.Except(new List<TtiSettings> { s }).ToList(); // Remove from queue
+            }
+
             Done();
         }
 
@@ -77,7 +95,7 @@ namespace StableDiffusionGui.Main
 
             if (imgCount > 0)
             {
-                Logger.Log($"Done!");
+                Logger.Log($"Done! Generated {imgCount} images in {FormatUtils.Time(timeTaken, false)}.");
             }
             else
             {

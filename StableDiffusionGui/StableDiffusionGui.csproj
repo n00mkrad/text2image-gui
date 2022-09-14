@@ -264,6 +264,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon1.ico" />
+    <None Include="Resources\addToListIcon.png" />
     <None Include="Resources\deleteBtn.png" />
     <None Include="Resources\queueIcon.png" />
     <None Include="Resources\historyIcon.png" />

@@ -1,8 +1,10 @@
 ﻿using StableDiffusionGui.Data;
 using StableDiffusionGui.Main;
+using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -25,26 +27,36 @@ namespace StableDiffusionGui.Forms
             if (PromptListMode == ListMode.History)
             {
                 Text = "Prompt History";
-                titleLabel.Text = Text;
+                btnAddPromptsToQueue.Visible = false;
             }
 
             if (PromptListMode == ListMode.Queue)
             {
                 Text = "Prompt Queue";
-                titleLabel.Text = Text;
+                btnAddPromptsToQueue.Visible = true;
             }
+
+            titleLabel.Text = Text;
         }
 
         private void PromptListForm_Shown(object sender, EventArgs e)
         {
             if (PromptListMode == ListMode.History)
                 LoadPromptHistory();
+            if (PromptListMode == ListMode.Queue)
+                LoadQueue();
         }
 
         private void LoadPromptHistory()
         {
             promptListView.Items.Clear();
-            promptListView.Items.AddRange(PromptHistory.Prompts.Select(x => new ListViewItem() { Text = $"{x.Prompts.FirstOrDefault()} ({x.Iterations}x)", Tag = x }).Reverse().ToArray());
+            promptListView.Items.AddRange(PromptHistory.Prompts.Select(x => new ListViewItem() { Text = x.ToString(), Tag = x }).Reverse().ToArray());
+        }
+
+        private void LoadQueue()
+        {
+            promptListView.Items.Clear();
+            promptListView.Items.AddRange(MainUi.Queue.Select(x => new ListViewItem() { Text = x.ToString(), Tag = x }).Reverse().ToArray());
         }
 
         private void btnOpenOutFolder_Click(object sender, EventArgs e)
@@ -54,21 +66,34 @@ namespace StableDiffusionGui.Forms
 
         private void deleteSelectedToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var reversed = promptListView.Items.Cast<ListViewItem>().Reverse();
-            PromptHistory.Delete(promptListView.CheckedItems.Cast<ListViewItem>().Select(x => (TtiSettings)x.Tag).ToList());
-            PromptHistory.Delete(promptListView.SelectedItems.Cast<ListViewItem>().Select(x => (TtiSettings)x.Tag).ToList());
-            LoadPromptHistory();
+            if (PromptListMode == ListMode.History)
+            {
+                PromptHistory.Delete(promptListView.CheckedItems.Cast<ListViewItem>().Select(x => (TtiSettings)x.Tag).ToList());
+                PromptHistory.Delete(promptListView.SelectedItems.Cast<ListViewItem>().Select(x => (TtiSettings)x.Tag).ToList());
+                LoadPromptHistory();
+            }
+
+            if (PromptListMode == ListMode.Queue)
+            {
+                MainUi.Queue = MainUi.Queue.Except(promptListView.CheckedItems.Cast<ListViewItem>().Select(x => (TtiSettings)x.Tag).ToList()).ToList();
+                MainUi.Queue = MainUi.Queue.Except(promptListView.SelectedItems.Cast<ListViewItem>().Select(x => (TtiSettings)x.Tag).ToList()).ToList();
+                LoadQueue();
+            }
         }
 
         private void deleteAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            PromptHistory.DeleteAll();
-            LoadPromptHistory();
-        }
+            if (PromptListMode == ListMode.History)
+            {
+                PromptHistory.DeleteAll();
+                LoadPromptHistory();
+            }
 
-        private void promptListView_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
+            if (PromptListMode == ListMode.Queue)
+            {
+                MainUi.Queue.Clear();
+                LoadQueue();
+            }
         }
 
         private void promptListView_MouseClick(object sender, MouseEventArgs e)
@@ -95,6 +120,12 @@ namespace StableDiffusionGui.Forms
         {
             TtiSettings s = (TtiSettings)promptListView.FocusedItem.Tag;
             Program.MainForm.LoadTtiSettingsIntoUi(s);
+        }
+
+        private void btnAddPromptsToQueue_Click(object sender, EventArgs e)
+        {
+            MainUi.Queue.Add(Program.MainForm.GetCurrentTtiSettings());
+            LoadQueue();
         }
     }
 }

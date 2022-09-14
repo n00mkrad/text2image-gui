@@ -32,15 +32,16 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PromptListForm));
             this.titleLabel = new System.Windows.Forms.Label();
             this.promptListView = new System.Windows.Forms.ListView();
-            this.btnOpenOutFolder = new System.Windows.Forms.Button();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.btnAddPromptsToQueue = new System.Windows.Forms.Button();
+            this.btnOpenOutFolder = new System.Windows.Forms.Button();
             this.menuStripDelete = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.deleteSelectedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStripPromptHistory = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.loadPromptIntoGUIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadPromptAndSettingsIntoGUIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.menuStripDelete.SuspendLayout();
             this.menuStripPromptHistory.SuspendLayout();
             this.SuspendLayout();
@@ -74,12 +75,34 @@
             this.promptListView.LabelWrap = false;
             this.promptListView.Location = new System.Drawing.Point(12, 62);
             this.promptListView.Name = "promptListView";
-            this.promptListView.Size = new System.Drawing.Size(760, 287);
+            this.promptListView.Size = new System.Drawing.Size(960, 287);
             this.promptListView.TabIndex = 53;
             this.promptListView.UseCompatibleStateImageBehavior = false;
             this.promptListView.View = System.Windows.Forms.View.Details;
-            this.promptListView.SelectedIndexChanged += new System.EventHandler(this.promptListView_SelectedIndexChanged);
             this.promptListView.MouseClick += new System.Windows.Forms.MouseEventHandler(this.promptListView_MouseClick);
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Width = 930;
+            // 
+            // btnAddPromptsToQueue
+            // 
+            this.btnAddPromptsToQueue.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnAddPromptsToQueue.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnAddPromptsToQueue.BackgroundImage = global::StableDiffusionGui.Properties.Resources.addToListIcon;
+            this.btnAddPromptsToQueue.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnAddPromptsToQueue.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnAddPromptsToQueue.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAddPromptsToQueue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnAddPromptsToQueue.Location = new System.Drawing.Point(886, 9);
+            this.btnAddPromptsToQueue.Name = "btnAddPromptsToQueue";
+            this.btnAddPromptsToQueue.Size = new System.Drawing.Size(40, 40);
+            this.btnAddPromptsToQueue.TabIndex = 96;
+            this.btnAddPromptsToQueue.TabStop = false;
+            this.toolTip.SetToolTip(this.btnAddPromptsToQueue, "Add Current Prompt/Settings to List");
+            this.btnAddPromptsToQueue.UseVisualStyleBackColor = false;
+            this.btnAddPromptsToQueue.Visible = false;
+            this.btnAddPromptsToQueue.Click += new System.EventHandler(this.btnAddPromptsToQueue_Click);
             // 
             // btnOpenOutFolder
             // 
@@ -90,7 +113,7 @@
             this.btnOpenOutFolder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnOpenOutFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnOpenOutFolder.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnOpenOutFolder.Location = new System.Drawing.Point(732, 9);
+            this.btnOpenOutFolder.Location = new System.Drawing.Point(932, 9);
             this.btnOpenOutFolder.Name = "btnOpenOutFolder";
             this.btnOpenOutFolder.Size = new System.Drawing.Size(40, 40);
             this.btnOpenOutFolder.TabIndex = 95;
@@ -143,23 +166,20 @@
             this.loadPromptAndSettingsIntoGUIToolStripMenuItem.Text = "Load Prompt And Settings Into GUI";
             this.loadPromptAndSettingsIntoGUIToolStripMenuItem.Click += new System.EventHandler(this.loadPromptAndSettingsIntoGUIToolStripMenuItem_Click);
             // 
-            // columnHeader1
-            // 
-            this.columnHeader1.Width = 760;
-            // 
             // PromptListForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.ClientSize = new System.Drawing.Size(784, 361);
+            this.ClientSize = new System.Drawing.Size(984, 361);
+            this.Controls.Add(this.btnAddPromptsToQueue);
             this.Controls.Add(this.btnOpenOutFolder);
             this.Controls.Add(this.promptListView);
             this.Controls.Add(this.titleLabel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximumSize = new System.Drawing.Size(800, 800);
-            this.MinimumSize = new System.Drawing.Size(800, 300);
+            this.MaximumSize = new System.Drawing.Size(1000, 800);
+            this.MinimumSize = new System.Drawing.Size(1000, 300);
             this.Name = "PromptListForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Load += new System.EventHandler(this.PromptListForm_Load);
@@ -184,5 +204,6 @@
         private System.Windows.Forms.ToolStripMenuItem loadPromptIntoGUIToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loadPromptAndSettingsIntoGUIToolStripMenuItem;
         private System.Windows.Forms.ColumnHeader columnHeader1;
+        private System.Windows.Forms.Button btnAddPromptsToQueue;
     }
 }
