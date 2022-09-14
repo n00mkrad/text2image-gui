@@ -15,9 +15,9 @@ namespace StableDiffusionGui.Main
         /// <returns> Path to resized image </returns>
         public static string ResizeInitImg(string path, Size targetSize, bool print)
         {
-            string outPath = Path.Combine(Paths.GetSessionDataPath(), "init.png");
+            string outPath = Path.Combine(Paths.GetSessionDataPath(), "init.bmp");
             Image resized = ResizeImage(IoUtils.GetImage(path), targetSize.Width, targetSize.Height);
-            resized.Save(outPath);
+            resized.Save(outPath, System.Drawing.Imaging.ImageFormat.Bmp);
 
             if (print)
                 Logger.Log($"Resized init image to {targetSize.Width}x{targetSize.Height}");
