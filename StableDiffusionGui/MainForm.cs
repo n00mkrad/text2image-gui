@@ -499,6 +499,7 @@ namespace StableDiffusionGui
 
             bool imgExists = File.Exists(MainUi.CurrentInitImgPath);
             panelInitImgStrength.Visible = imgExists;
+            panelSampler.Visible = !imgExists; // Disable sampler selection while image is loaded as img2img currently only supports DDIM
             btnInitImgBrowse.Text = imgExists ? "Clear Image" : "Load Image";
 
             bool embeddingExists = File.Exists(MainUi.CurrentEmbeddingPath);
