@@ -139,7 +139,7 @@ namespace StableDiffusionGui.Installation
 
             Process p = OsUtils.NewProcess(true);
             p.ErrorDataReceived += (sender, line) => { try { Logger.Log($"Downloading... ({line.Data.Trim().Split(' ')[0]}%)", false, Logger.LastUiLine.EndsWith("%)"), LogFilename); } catch { } };
-            p.StartInfo.Arguments = $"/C curl \"https://www.googleapis.com/storage/v1/b/aai-blog-files/o/sd-v1-4.ckpt?alt=media\" -o {mdlPath.Wrap()}";
+            p.StartInfo.Arguments = $"/C curl -k \"https://www.googleapis.com/storage/v1/b/aai-blog-files/o/sd-v1-4.ckpt?alt=media\" -o {mdlPath.Wrap()}";
             p.Start();
             p.BeginErrorReadLine();
 
@@ -292,7 +292,7 @@ namespace StableDiffusionGui.Installation
 
                 Process procGfpganDl = OsUtils.NewProcess(true);
                 procGfpganDl.ErrorDataReceived += (sender, line) => { try { Logger.Log($"Downloading... ({line.Data.Trim().Split(' ')[0].GetInt()}%)", false, Logger.LastUiLine.EndsWith("%)"), LogFilename); } catch { } };
-                procGfpganDl.StartInfo.Arguments = $"/C curl -L \"https://github.com/TencentARC/GFPGAN/releases/download/v1.3.0/GFPGANv1.3.pth\" -o {gfpGanMdlPath.Wrap()}";
+                procGfpganDl.StartInfo.Arguments = $"/C curl -k -L \"https://github.com/TencentARC/GFPGAN/releases/download/v1.3.0/GFPGANv1.3.pth\" -o {gfpGanMdlPath.Wrap()}";
                 procGfpganDl.Start();
                 procGfpganDl.BeginErrorReadLine();
 
