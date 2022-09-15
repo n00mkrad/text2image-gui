@@ -1,6 +1,7 @@
 ﻿using StableDiffusionGui.Data;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
+using StableDiffusionGui.Os;
 using StableDiffusionGui.Properties;
 using System;
 using System.Collections.Generic;
@@ -761,6 +762,17 @@ namespace StableDiffusionGui.Io
             }
 
             return new ImageMetadata();
+        }
+
+        public static void SetImageMetadata (string imgPath, string text, string keyName = "")
+        {
+            text = text.Replace("\"", "\\\""); // Escape quotation marks
+            string scriptPath = Path.Combine(Paths.GetDataPath(), "repo", "addmetadata.py");
+            Process p = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
+            p.StartInfo.Arguments = $"/C cd /D {Paths.GetDataPath().Wrap()} && call \"mb\\Scripts\\activate.bat\" \"mb/envs/ldo\" && " +
+                $"python {scriptPath.Wrap()} -i {imgPath.Wrap()} -t {text.Wrap()} {(string.IsNullOrWhiteSpace(keyName) ? "" : $"-k {keyName}")}";
+            p.Start();
+            p.WaitForExit();
         }
 
         public static bool SetAttributes(string rootDir, FileAttributes newAttributes, bool recursive = true)

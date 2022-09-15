@@ -46,7 +46,7 @@ namespace StableDiffusionGui.Forms
             if (!_mouseDown || _lastPoint == null || ((MouseEventArgs)e).Button != MouseButtons.Left)
                 return;
 
-            if(_raw == null)
+            if (_raw == null)
                 _raw = new Bitmap(pictBox.Width, pictBox.Height);
 
             if (pictBox.Image == null)
@@ -60,7 +60,7 @@ namespace StableDiffusionGui.Forms
                 g.SmoothingMode = SmoothingMode.HighQuality;
             }
 
-            pictBox.Image = new GaussianBlur(_raw).Process(sliderBlur.Value);
+            Blur();
 
             pictBox.Invalidate();
             _lastPoint = e.Location;
@@ -80,14 +80,15 @@ namespace StableDiffusionGui.Forms
             Invalidate();
         }
 
-        private void blurToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            
-        }
-
         private void sliderBlur_Scroll(object sender, ScrollEventArgs e)
         {
-            pictBox.Image = new GaussianBlur(_raw).Process(sliderBlur.Value);
+            Blur();
+        }
+
+        private void Blur()
+        {
+            if (_raw != null)
+                pictBox.Image = new GaussianBlur(_raw).Process(sliderBlur.Value);
         }
     }
 }
