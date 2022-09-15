@@ -25,6 +25,9 @@ namespace StableDiffusionGui.Main
             else
                 IoUtils.TryDeleteIfExists(Path.Combine(Paths.GetSessionDataPath(), "masked.png"));
 
+            if (Canceled)
+                return;
+
             await RunTti(new List<TtiSettings>() { settings });
         }
 

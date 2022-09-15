@@ -28,7 +28,7 @@ namespace StableDiffusionGui.Main
                 return;
 
             if (File.Exists(initImg))
-                initImg = TtiUtils.ResizeInitImg(initImg, res, true);
+                initImg = TtiUtils.ResizeInitImg(initImg, res);
 
             TtiUtils.WriteModelsYaml(GetSdModel());
 
@@ -139,7 +139,7 @@ namespace StableDiffusionGui.Main
                 return;
 
             if (File.Exists(initImg))
-                initImg = TtiUtils.ResizeInitImg(initImg, res, true);
+                initImg = TtiUtils.ResizeInitImg(initImg, res);
 
             string promptFilePath = Path.Combine(Paths.GetSessionDataPath(), "prompts.txt");
             File.WriteAllLines(promptFilePath, prompts);

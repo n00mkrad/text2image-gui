@@ -57,7 +57,7 @@
             this.pictBox.Location = new System.Drawing.Point(0, 0);
             this.pictBox.Margin = new System.Windows.Forms.Padding(0);
             this.pictBox.Name = "pictBox";
-            this.pictBox.Size = new System.Drawing.Size(984, 891);
+            this.pictBox.Size = new System.Drawing.Size(704, 371);
             this.pictBox.TabIndex = 0;
             this.pictBox.TabStop = false;
             this.pictBox.Click += new System.EventHandler(this.pictBox_Click);
@@ -85,10 +85,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panelBlur.Controls.Add(this.sliderBlur);
             this.panelBlur.Controls.Add(this.label1);
-            this.panelBlur.Location = new System.Drawing.Point(0, 891);
+            this.panelBlur.Location = new System.Drawing.Point(0, 371);
             this.panelBlur.Margin = new System.Windows.Forms.Padding(0);
             this.panelBlur.Name = "panelBlur";
-            this.panelBlur.Size = new System.Drawing.Size(986, 35);
+            this.panelBlur.Size = new System.Drawing.Size(706, 35);
             this.panelBlur.TabIndex = 4;
             // 
             // sliderBlur
@@ -101,10 +101,10 @@
             this.sliderBlur.LargeChange = ((uint)(5u));
             this.sliderBlur.Location = new System.Drawing.Point(100, 7);
             this.sliderBlur.Margin = new System.Windows.Forms.Padding(0);
-            this.sliderBlur.Maximum = 12;
+            this.sliderBlur.Maximum = 15;
             this.sliderBlur.Name = "sliderBlur";
             this.sliderBlur.OverlayColor = System.Drawing.Color.White;
-            this.sliderBlur.Size = new System.Drawing.Size(875, 21);
+            this.sliderBlur.Size = new System.Drawing.Size(595, 21);
             this.sliderBlur.SmallChange = ((uint)(1u));
             this.sliderBlur.TabIndex = 4;
             this.sliderBlur.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
@@ -130,10 +130,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panelBrushSize.Controls.Add(this.sliderBrushSize);
             this.panelBrushSize.Controls.Add(this.label3);
-            this.panelBrushSize.Location = new System.Drawing.Point(0, 856);
+            this.panelBrushSize.Location = new System.Drawing.Point(0, 336);
             this.panelBrushSize.Margin = new System.Windows.Forms.Padding(0);
             this.panelBrushSize.Name = "panelBrushSize";
-            this.panelBrushSize.Size = new System.Drawing.Size(986, 35);
+            this.panelBrushSize.Size = new System.Drawing.Size(706, 35);
             this.panelBrushSize.TabIndex = 3;
             // 
             // sliderBrushSize
@@ -146,16 +146,16 @@
             this.sliderBrushSize.LargeChange = ((uint)(5u));
             this.sliderBrushSize.Location = new System.Drawing.Point(100, 7);
             this.sliderBrushSize.Margin = new System.Windows.Forms.Padding(0);
-            this.sliderBrushSize.Maximum = 30;
+            this.sliderBrushSize.Maximum = 35;
             this.sliderBrushSize.Minimum = 5;
             this.sliderBrushSize.Name = "sliderBrushSize";
             this.sliderBrushSize.OverlayColor = System.Drawing.Color.White;
-            this.sliderBrushSize.Size = new System.Drawing.Size(875, 21);
+            this.sliderBrushSize.Size = new System.Drawing.Size(595, 21);
             this.sliderBrushSize.SmallChange = ((uint)(1u));
             this.sliderBrushSize.TabIndex = 4;
             this.sliderBrushSize.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
             this.sliderBrushSize.ThumbSize = new System.Drawing.Size(14, 14);
-            this.sliderBrushSize.Value = 15;
+            this.sliderBrushSize.Value = 20;
             // 
             // label3
             // 
@@ -174,14 +174,15 @@
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.Controls.Add(this.btnOk);
-            this.panel1.Location = new System.Drawing.Point(0, 926);
+            this.panel1.Location = new System.Drawing.Point(0, 406);
             this.panel1.Margin = new System.Windows.Forms.Padding(0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(986, 35);
+            this.panel1.Size = new System.Drawing.Size(706, 35);
             this.panel1.TabIndex = 5;
             // 
             // btnOk
             // 
+            this.btnOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOk.AutoColor = true;
             this.btnOk.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
             this.btnOk.ButtonImage = null;
@@ -191,7 +192,7 @@
             this.btnOk.ForeColor = System.Drawing.Color.White;
             this.btnOk.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
             this.btnOk.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
-            this.btnOk.Location = new System.Drawing.Point(426, 6);
+            this.btnOk.Location = new System.Drawing.Point(618, 5);
             this.btnOk.Name = "btnOk";
             this.btnOk.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
             this.btnOk.Size = new System.Drawing.Size(79, 23);
@@ -205,7 +206,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.ClientSize = new System.Drawing.Size(984, 961);
+            this.ClientSize = new System.Drawing.Size(704, 441);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.panelBlur);
             this.Controls.Add(this.panelBrushSize);

@@ -19,7 +19,7 @@ namespace StableDiffusionGui.Main
     internal class TtiUtils
     {
         /// <returns> Path to resized image </returns>
-        public static string ResizeInitImg(string path, Size targetSize, bool print)
+        public static string ResizeInitImg(string path, Size targetSize, bool print = false)
         {
             string outPath = Path.Combine(Paths.GetSessionDataPath(), "init.bmp");
             Image resized = ImgUtils.ResizeImage(IoUtils.GetImage(path), targetSize.Width, targetSize.Height);
@@ -40,6 +40,12 @@ namespace StableDiffusionGui.Main
                 var maskForm = new DrawForm(img);
                 maskForm.ShowDialog();
                 InpaintUi.CurrentMask = maskForm.Mask;
+            }
+
+            if(InpaintUi.CurrentMask == null)
+            {
+                TextToImage.Cancel("Inpainting is enabled, but no mask was used!");
+                return;
             }
 
             if (InpaintUi.CurrentMask.Size != img.Size)
