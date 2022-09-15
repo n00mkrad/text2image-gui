@@ -9,6 +9,7 @@ SD GUI 1.4.0 Changelog:
 - Stable Diffusion model no longer needs to be reloaded every time a batch of images is generated
 - Available CUDA GPUs are now listed in window title
 - Windows should not be able to go to sleep while the program runs (untested)
+- Updated GFPGAN model to 1.4
 
 
 SD GUI 1.3.1 Changelog:
