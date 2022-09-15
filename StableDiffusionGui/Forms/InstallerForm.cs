@@ -50,7 +50,7 @@ namespace StableDiffusionGui.Forms
                 if (text.Contains("env"))
                     checkedListBoxStatus.SetItemChecked(i, InstallationStatus.HasSdEnv());
 
-                if (text.Contains("repository"))
+                if (text.Contains("code"))
                     checkedListBoxStatus.SetItemChecked(i, InstallationStatus.HasSdRepo());
 
                 if (text.Contains("model"))

@@ -93,9 +93,6 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel12 = new System.Windows.Forms.Panel();
             this.panel11 = new System.Windows.Forms.Panel();
-            this.panelInpainting = new System.Windows.Forms.Panel();
-            this.checkboxInpainting = new System.Windows.Forms.CheckBox();
-            this.label10 = new System.Windows.Forms.Label();
             this.panelSeamless = new System.Windows.Forms.Panel();
             this.label8 = new System.Windows.Forms.Label();
             this.panelSampler = new System.Windows.Forms.Panel();
@@ -104,6 +101,9 @@
             this.panelScale = new System.Windows.Forms.Panel();
             this.panelSteps = new System.Windows.Forms.Panel();
             this.panelIterations = new System.Windows.Forms.Panel();
+            this.panelInpainting = new System.Windows.Forms.Panel();
+            this.checkboxInpainting = new System.Windows.Forms.CheckBox();
+            this.label10 = new System.Windows.Forms.Label();
             this.panelInitImgStrength = new System.Windows.Forms.Panel();
             this.label11 = new System.Windows.Forms.Label();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
@@ -124,7 +124,6 @@
             this.tableLayoutPanel3.SuspendLayout();
             this.menuStripOutputImg.SuspendLayout();
             this.panel1.SuspendLayout();
-            this.panelInpainting.SuspendLayout();
             this.panelSeamless.SuspendLayout();
             this.panelSampler.SuspendLayout();
             this.panelRes.SuspendLayout();
@@ -132,6 +131,7 @@
             this.panelScale.SuspendLayout();
             this.panelSteps.SuspendLayout();
             this.panelIterations.SuspendLayout();
+            this.panelInpainting.SuspendLayout();
             this.panelInitImgStrength.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
             this.panelPrompt.SuspendLayout();
@@ -1119,38 +1119,6 @@
             this.panel11.Size = new System.Drawing.Size(633, 35);
             this.panel11.TabIndex = 10;
             // 
-            // panelInpainting
-            // 
-            this.panelInpainting.Controls.Add(this.checkboxInpainting);
-            this.panelInpainting.Controls.Add(this.label10);
-            this.panelInpainting.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelInpainting.Location = new System.Drawing.Point(0, 100);
-            this.panelInpainting.Name = "panelInpainting";
-            this.panelInpainting.Size = new System.Drawing.Size(633, 35);
-            this.panelInpainting.TabIndex = 12;
-            // 
-            // checkboxInpainting
-            // 
-            this.checkboxInpainting.AutoSize = true;
-            this.checkboxInpainting.ForeColor = System.Drawing.Color.White;
-            this.checkboxInpainting.Location = new System.Drawing.Point(233, 9);
-            this.checkboxInpainting.Name = "checkboxInpainting";
-            this.checkboxInpainting.Size = new System.Drawing.Size(15, 14);
-            this.checkboxInpainting.TabIndex = 106;
-            this.checkboxInpainting.UseVisualStyleBackColor = true;
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.ForeColor = System.Drawing.Color.White;
-            this.label10.Location = new System.Drawing.Point(5, 10);
-            this.label10.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(53, 13);
-            this.label10.TabIndex = 105;
-            this.label10.Text = "Inpainting";
-            // 
             // panelSeamless
             // 
             this.panelSeamless.Controls.Add(this.checkboxSeamless);
@@ -1237,6 +1205,39 @@
             this.panelIterations.Name = "panelIterations";
             this.panelIterations.Size = new System.Drawing.Size(633, 35);
             this.panelIterations.TabIndex = 1;
+            // 
+            // panelInpainting
+            // 
+            this.panelInpainting.Controls.Add(this.checkboxInpainting);
+            this.panelInpainting.Controls.Add(this.label10);
+            this.panelInpainting.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelInpainting.Location = new System.Drawing.Point(0, 100);
+            this.panelInpainting.Name = "panelInpainting";
+            this.panelInpainting.Size = new System.Drawing.Size(633, 35);
+            this.panelInpainting.TabIndex = 12;
+            this.panelInpainting.Visible = false;
+            // 
+            // checkboxInpainting
+            // 
+            this.checkboxInpainting.AutoSize = true;
+            this.checkboxInpainting.ForeColor = System.Drawing.Color.White;
+            this.checkboxInpainting.Location = new System.Drawing.Point(233, 9);
+            this.checkboxInpainting.Name = "checkboxInpainting";
+            this.checkboxInpainting.Size = new System.Drawing.Size(15, 14);
+            this.checkboxInpainting.TabIndex = 106;
+            this.checkboxInpainting.UseVisualStyleBackColor = true;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.ForeColor = System.Drawing.Color.White;
+            this.label10.Location = new System.Drawing.Point(5, 10);
+            this.label10.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(53, 13);
+            this.label10.TabIndex = 105;
+            this.label10.Text = "Inpainting";
             // 
             // panelInitImgStrength
             // 
@@ -1425,8 +1426,6 @@
             this.tableLayoutPanel3.PerformLayout();
             this.menuStripOutputImg.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
-            this.panelInpainting.ResumeLayout(false);
-            this.panelInpainting.PerformLayout();
             this.panelSeamless.ResumeLayout(false);
             this.panelSeamless.PerformLayout();
             this.panelSampler.ResumeLayout(false);
@@ -1441,6 +1440,8 @@
             this.panelSteps.PerformLayout();
             this.panelIterations.ResumeLayout(false);
             this.panelIterations.PerformLayout();
+            this.panelInpainting.ResumeLayout(false);
+            this.panelInpainting.PerformLayout();
             this.panelInitImgStrength.ResumeLayout(false);
             this.panelInitImgStrength.PerformLayout();
             this.tableLayoutPanel4.ResumeLayout(false);

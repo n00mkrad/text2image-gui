@@ -35,9 +35,9 @@
             this.label2 = new System.Windows.Forms.Label();
             this.btnUninstall = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnInstallUpscalers = new HTAlt.WinForms.HTButton();
             this.btnClone = new HTAlt.WinForms.HTButton();
             this.btnRedownloadModel = new HTAlt.WinForms.HTButton();
-            this.btnInstallUpscalers = new HTAlt.WinForms.HTButton();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -74,8 +74,8 @@
             this.checkedListBoxStatus.Items.AddRange(new object[] {
             "Conda (Included)",
             "Python Environment (Included)",
-            "Stable Diffusion Repository",
-            "Stable Diffusion 1.4 Model File",
+            "Stable Diffusion Code",
+            "Stable Diffusion Model File",
             "Upscalers"});
             this.checkedListBoxStatus.Location = new System.Drawing.Point(12, 75);
             this.checkedListBoxStatus.Name = "checkedListBoxStatus";
@@ -122,6 +122,26 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Debug Tools";
             // 
+            // btnInstallUpscalers
+            // 
+            this.btnInstallUpscalers.AutoColor = true;
+            this.btnInstallUpscalers.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnInstallUpscalers.ButtonImage = null;
+            this.btnInstallUpscalers.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
+            this.btnInstallUpscalers.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
+            this.btnInstallUpscalers.DrawImage = false;
+            this.btnInstallUpscalers.ForeColor = System.Drawing.Color.White;
+            this.btnInstallUpscalers.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
+            this.btnInstallUpscalers.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
+            this.btnInstallUpscalers.Location = new System.Drawing.Point(296, 19);
+            this.btnInstallUpscalers.Name = "btnInstallUpscalers";
+            this.btnInstallUpscalers.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+            this.btnInstallUpscalers.Size = new System.Drawing.Size(138, 21);
+            this.btnInstallUpscalers.TabIndex = 4;
+            this.btnInstallUpscalers.TabStop = false;
+            this.btnInstallUpscalers.Text = "Re-Install Upscalers";
+            this.btnInstallUpscalers.Click += new System.EventHandler(this.btnInstallUpscalers_Click);
+            // 
             // btnClone
             // 
             this.btnClone.AutoColor = true;
@@ -139,7 +159,7 @@
             this.btnClone.Size = new System.Drawing.Size(140, 21);
             this.btnClone.TabIndex = 3;
             this.btnClone.TabStop = false;
-            this.btnClone.Text = "Re-Clone Repo";
+            this.btnClone.Text = "Re-Install SD Code";
             this.btnClone.Click += new System.EventHandler(this.btnClone_Click);
             // 
             // btnRedownloadModel
@@ -161,26 +181,6 @@
             this.btnRedownloadModel.TabStop = false;
             this.btnRedownloadModel.Text = "Redownload SD Model";
             this.btnRedownloadModel.Click += new System.EventHandler(this.btnRedownloadModel_Click);
-            // 
-            // btnInstallUpscalers
-            // 
-            this.btnInstallUpscalers.AutoColor = true;
-            this.btnInstallUpscalers.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnInstallUpscalers.ButtonImage = null;
-            this.btnInstallUpscalers.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
-            this.btnInstallUpscalers.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
-            this.btnInstallUpscalers.DrawImage = false;
-            this.btnInstallUpscalers.ForeColor = System.Drawing.Color.White;
-            this.btnInstallUpscalers.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
-            this.btnInstallUpscalers.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
-            this.btnInstallUpscalers.Location = new System.Drawing.Point(296, 19);
-            this.btnInstallUpscalers.Name = "btnInstallUpscalers";
-            this.btnInstallUpscalers.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
-            this.btnInstallUpscalers.Size = new System.Drawing.Size(138, 21);
-            this.btnInstallUpscalers.TabIndex = 4;
-            this.btnInstallUpscalers.TabStop = false;
-            this.btnInstallUpscalers.Text = "Re-Install Upscalers";
-            this.btnInstallUpscalers.Click += new System.EventHandler(this.btnInstallUpscalers_Click);
             // 
             // InstallerForm
             // 

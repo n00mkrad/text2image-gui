@@ -104,6 +104,7 @@ namespace StableDiffusionGui.Installation
 
             while (!p.HasExited) await Task.Delay(1);
 
+            RemoveGitFiles(GetDataSubPath("repo"));
             Logger.Log("Done.");
         }
 
@@ -213,6 +214,8 @@ namespace StableDiffusionGui.Installation
             IoUtils.SetAttributes(srcPath, FileAttributes.Normal);
             IoUtils.GetFilesSorted(srcPath, true, "*.jpg").ToList().ForEach(x => IoUtils.TryDeleteIfExists(x));
             IoUtils.GetFilesSorted(srcPath, true, "*.png").ToList().ForEach(x => IoUtils.TryDeleteIfExists(x));
+            IoUtils.GetFilesSorted(srcPath, true, "*.gif").ToList().ForEach(x => IoUtils.TryDeleteIfExists(x));
+            IoUtils.GetFilesSorted(srcPath, true, "*.ipynb").ToList().ForEach(x => IoUtils.TryDeleteIfExists(x));
         }
 
         #endregion
@@ -223,46 +226,6 @@ namespace StableDiffusionGui.Installation
         {
             try
             {
-                // if (print)
-                //     Logger.Log("Installing RealESRGAN...");
-                // 
-                // string repoPath = Path.Combine(GetDataSubPath("repo"));
-                // string batPath = Path.Combine(repoPath, "install-realesrgan.bat");
-                // 
-                // List<string> l = new List<string>();
-                // 
-                // l.Add($"@echo off");
-                // l.Add($"");
-                // l.Add($"cd {repoPath.Wrap()}");
-                // l.Add($"");
-                // l.Add($"SET CONDA_ROOT_PATH=../mb");
-                // l.Add($"SET CONDA_SCRIPTS_PATH=../mb/Scripts");
-                // l.Add($"");
-                // l.Add($"SET PATH={GetTemporaryPathVariable(new string[] { "../mb", "../mb/Scripts", "../mb/condabin", "../mb/Library/bin" })}");
-                // l.Add($"");
-                // l.Add($"call \"%CONDA_SCRIPTS_PATH%\\activate.bat\" \"%CONDA_ROOT_PATH%\\envs\\ldo\"");
-                // l.Add($"pip install realesrgan");
-                // 
-                // File.WriteAllLines(batPath, l);
-                // 
-                // Process p = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd(), batPath);
-                // 
-                // if (!OsUtils.ShowHiddenCmd())
-                // {
-                //     p.OutputDataReceived += (sender, line) => { HandleInstallScriptOutput(line.Data, false); };
-                //     p.ErrorDataReceived += (sender, line) => { HandleInstallScriptOutput(line.Data, true); };
-                // }
-                // 
-                // p.Start();
-                // 
-                // if (!OsUtils.ShowHiddenCmd())
-                // {
-                //     p.BeginOutputReadLine();
-                //     p.BeginErrorReadLine();
-                // }
-                // 
-                // while (!p.HasExited) await Task.Delay(1);
-
                 if (print)
                     Logger.Log("Installing GFPGAN...");
 
