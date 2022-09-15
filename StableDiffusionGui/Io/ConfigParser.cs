@@ -75,7 +75,7 @@ namespace StableDiffusionGui.Io
 
         public static void LoadGuiElement(NumericUpDown upDown)
         {
-            upDown.Value = Convert.ToDecimal(Config.GetFloat(upDown.Name));
+            upDown.Value = Convert.ToDecimal(Config.GetFloat(upDown.Name).Clamp((float)upDown.Minimum, (float)upDown.Maximum));
         }
 
         public static void LoadGuiElement(HTAlt.WinForms.HTSlider slider)
