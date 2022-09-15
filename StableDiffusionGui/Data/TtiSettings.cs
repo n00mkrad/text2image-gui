@@ -29,7 +29,7 @@ namespace StableDiffusionGui.Data
                             {
                                 count++;
 
-                                if (!string.IsNullOrWhiteSpace(Params["initImg"]))
+                                if (string.IsNullOrWhiteSpace(Params["initImg"]))
                                     break;
                             }
                         }
