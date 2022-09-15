@@ -33,28 +33,31 @@
             this.pictBox = new System.Windows.Forms.PictureBox();
             this.menuStripOptions = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.clearToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.panelBlur = new System.Windows.Forms.Panel();
             this.sliderBlur = new HTAlt.WinForms.HTSlider();
             this.label1 = new System.Windows.Forms.Label();
             this.panelBrushSize = new System.Windows.Forms.Panel();
             this.sliderBrushSize = new HTAlt.WinForms.HTSlider();
             this.label3 = new System.Windows.Forms.Label();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.btnOk = new HTAlt.WinForms.HTButton();
             ((System.ComponentModel.ISupportInitialize)(this.pictBox)).BeginInit();
             this.menuStripOptions.SuspendLayout();
-            this.flowLayoutPanel1.SuspendLayout();
             this.panelBlur.SuspendLayout();
             this.panelBrushSize.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // pictBox
             // 
-            this.pictBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.pictBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.pictBox.Location = new System.Drawing.Point(0, 3);
+            this.pictBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictBox.Location = new System.Drawing.Point(0, 0);
             this.pictBox.Margin = new System.Windows.Forms.Padding(0);
             this.pictBox.Name = "pictBox";
-            this.pictBox.Size = new System.Drawing.Size(509, 512);
+            this.pictBox.Size = new System.Drawing.Size(984, 891);
             this.pictBox.TabIndex = 0;
             this.pictBox.TabStop = false;
             this.pictBox.Click += new System.EventHandler(this.pictBox_Click);
@@ -76,31 +79,21 @@
             this.clearToolStripMenuItem.Text = "Clear";
             this.clearToolStripMenuItem.Click += new System.EventHandler(this.clearToolStripMenuItem_Click);
             // 
-            // flowLayoutPanel1
-            // 
-            this.flowLayoutPanel1.Controls.Add(this.panelBlur);
-            this.flowLayoutPanel1.Controls.Add(this.panelBrushSize);
-            this.flowLayoutPanel1.Controls.Add(this.pictBox);
-            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.BottomUp;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(512, 585);
-            this.flowLayoutPanel1.TabIndex = 2;
-            // 
             // panelBlur
             // 
+            this.panelBlur.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panelBlur.Controls.Add(this.sliderBlur);
             this.panelBlur.Controls.Add(this.label1);
-            this.panelBlur.Location = new System.Drawing.Point(0, 550);
+            this.panelBlur.Location = new System.Drawing.Point(0, 891);
             this.panelBlur.Margin = new System.Windows.Forms.Padding(0);
             this.panelBlur.Name = "panelBlur";
-            this.panelBlur.Size = new System.Drawing.Size(509, 35);
+            this.panelBlur.Size = new System.Drawing.Size(986, 35);
             this.panelBlur.TabIndex = 4;
             // 
             // sliderBlur
             // 
+            this.sliderBlur.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.sliderBlur.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.sliderBlur.BorderRoundRectSize = new System.Drawing.Size(12, 12);
             this.sliderBlur.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
@@ -111,7 +104,7 @@
             this.sliderBlur.Maximum = 12;
             this.sliderBlur.Name = "sliderBlur";
             this.sliderBlur.OverlayColor = System.Drawing.Color.White;
-            this.sliderBlur.Size = new System.Drawing.Size(400, 21);
+            this.sliderBlur.Size = new System.Drawing.Size(875, 21);
             this.sliderBlur.SmallChange = ((uint)(1u));
             this.sliderBlur.TabIndex = 4;
             this.sliderBlur.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
@@ -133,16 +126,19 @@
             // 
             // panelBrushSize
             // 
+            this.panelBrushSize.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panelBrushSize.Controls.Add(this.sliderBrushSize);
             this.panelBrushSize.Controls.Add(this.label3);
-            this.panelBrushSize.Location = new System.Drawing.Point(0, 515);
+            this.panelBrushSize.Location = new System.Drawing.Point(0, 856);
             this.panelBrushSize.Margin = new System.Windows.Forms.Padding(0);
             this.panelBrushSize.Name = "panelBrushSize";
-            this.panelBrushSize.Size = new System.Drawing.Size(509, 35);
+            this.panelBrushSize.Size = new System.Drawing.Size(986, 35);
             this.panelBrushSize.TabIndex = 3;
             // 
             // sliderBrushSize
             // 
+            this.sliderBrushSize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.sliderBrushSize.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.sliderBrushSize.BorderRoundRectSize = new System.Drawing.Size(12, 12);
             this.sliderBrushSize.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
@@ -154,7 +150,7 @@
             this.sliderBrushSize.Minimum = 5;
             this.sliderBrushSize.Name = "sliderBrushSize";
             this.sliderBrushSize.OverlayColor = System.Drawing.Color.White;
-            this.sliderBrushSize.Size = new System.Drawing.Size(400, 21);
+            this.sliderBrushSize.Size = new System.Drawing.Size(875, 21);
             this.sliderBrushSize.SmallChange = ((uint)(1u));
             this.sliderBrushSize.TabIndex = 4;
             this.sliderBrushSize.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
@@ -173,13 +169,47 @@
             this.label3.TabIndex = 89;
             this.label3.Text = "Brush Size";
             // 
+            // panel1
+            // 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.Controls.Add(this.btnOk);
+            this.panel1.Location = new System.Drawing.Point(0, 926);
+            this.panel1.Margin = new System.Windows.Forms.Padding(0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(986, 35);
+            this.panel1.TabIndex = 5;
+            // 
+            // btnOk
+            // 
+            this.btnOk.AutoColor = true;
+            this.btnOk.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnOk.ButtonImage = null;
+            this.btnOk.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
+            this.btnOk.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
+            this.btnOk.DrawImage = false;
+            this.btnOk.ForeColor = System.Drawing.Color.White;
+            this.btnOk.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
+            this.btnOk.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
+            this.btnOk.Location = new System.Drawing.Point(426, 6);
+            this.btnOk.Name = "btnOk";
+            this.btnOk.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+            this.btnOk.Size = new System.Drawing.Size(79, 23);
+            this.btnOk.TabIndex = 109;
+            this.btnOk.TabStop = false;
+            this.btnOk.Text = "OK";
+            this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
+            // 
             // DrawForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.ClientSize = new System.Drawing.Size(512, 585);
-            this.Controls.Add(this.flowLayoutPanel1);
+            this.ClientSize = new System.Drawing.Size(984, 961);
+            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.panelBlur);
+            this.Controls.Add(this.panelBrushSize);
+            this.Controls.Add(this.pictBox);
             this.ForeColor = System.Drawing.Color.White;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -191,11 +221,11 @@
             this.Load += new System.EventHandler(this.DrawForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictBox)).EndInit();
             this.menuStripOptions.ResumeLayout(false);
-            this.flowLayoutPanel1.ResumeLayout(false);
             this.panelBlur.ResumeLayout(false);
             this.panelBlur.PerformLayout();
             this.panelBrushSize.ResumeLayout(false);
             this.panelBrushSize.PerformLayout();
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -205,12 +235,13 @@
         private System.Windows.Forms.PictureBox pictBox;
         private System.Windows.Forms.ContextMenuStrip menuStripOptions;
         private System.Windows.Forms.ToolStripMenuItem clearToolStripMenuItem;
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.Panel panelBrushSize;
         private System.Windows.Forms.Label label3;
         private HTAlt.WinForms.HTSlider sliderBrushSize;
         private System.Windows.Forms.Panel panelBlur;
         private HTAlt.WinForms.HTSlider sliderBlur;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Panel panel1;
+        private HTAlt.WinForms.HTButton btnOk;
     }
 }

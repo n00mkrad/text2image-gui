@@ -1,4 +1,5 @@
 ﻿using StableDiffusionGui.MiscUtils;
+using StableDiffusionGui.Ui;
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -11,15 +12,29 @@ namespace StableDiffusionGui.Forms
         public Image BackgroundImage;
         public Image Mask;
 
-        public DrawForm(Image img)
+        public DrawForm(Image background, Image mask = null)
         {
-            BackgroundImage = img;
+            BackgroundImage = background;
+
+            if(mask != null)
+                _raw = mask as Bitmap;
+
             InitializeComponent();
         }
 
         private void DrawForm_Load(object sender, EventArgs e)
         {
+            Width = BackgroundImage.Width + 16;
+            Height = BackgroundImage.Height + 109;
+            CenterToScreen();
+
+            if (InpaintUi.CurrentBlurValue >= 0)
+                sliderBlur.Value = InpaintUi.CurrentBlurValue;
+            else
+                InpaintUi.CurrentBlurValue = sliderBlur.Value;
+
             pictBox.BackgroundImage = BackgroundImage;
+            Blur();
         }
 
         Point _lastPoint = Point.Empty;
@@ -47,10 +62,10 @@ namespace StableDiffusionGui.Forms
                 return;
 
             if (_raw == null)
-                _raw = new Bitmap(pictBox.Width, pictBox.Height);
+                _raw = new Bitmap(BackgroundImage.Width, BackgroundImage.Height);
 
             if (pictBox.Image == null)
-                pictBox.Image = new Bitmap(pictBox.Width, pictBox.Height);
+                pictBox.Image = new Bitmap(BackgroundImage.Width, BackgroundImage.Height);
 
             int brushSize = sliderBrushSize.Value;
 
@@ -70,7 +85,6 @@ namespace StableDiffusionGui.Forms
         {
             _mouseDown = false;
             _lastPoint = Point.Empty;
-            Mask = pictBox.Image;
         }
 
         private void clearToolStripMenuItem_Click(object sender, EventArgs e)
@@ -82,13 +96,20 @@ namespace StableDiffusionGui.Forms
 
         private void sliderBlur_Scroll(object sender, ScrollEventArgs e)
         {
+            InpaintUi.CurrentBlurValue = sliderBlur.Value;
             Blur();
         }
 
         private void Blur()
         {
             if (_raw != null)
-                pictBox.Image = new GaussianBlur(_raw).Process(sliderBlur.Value);
+                pictBox.Image = new GaussianBlur(_raw).Process(InpaintUi.CurrentBlurValue);
+        }
+
+        private void btnOk_Click(object sender, EventArgs e)
+        {
+            Mask = pictBox.Image;
+            Close();
         }
     }
 }

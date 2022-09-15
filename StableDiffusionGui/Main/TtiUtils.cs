@@ -22,37 +22,31 @@ namespace StableDiffusionGui.Main
         public static string ResizeInitImg(string path, Size targetSize, bool print)
         {
             string outPath = Path.Combine(Paths.GetSessionDataPath(), "init.bmp");
-            Image resized = ResizeImage(IoUtils.GetImage(path), targetSize.Width, targetSize.Height);
+            Image resized = ImgUtils.ResizeImage(IoUtils.GetImage(path), targetSize.Width, targetSize.Height);
             resized.Save(outPath, System.Drawing.Imaging.ImageFormat.Bmp);
 
             if (print)
-                Logger.Log($"Resized init image to {targetSize.Width}x{targetSize.Height}");
+                Logger.Log($"Resized init image to {targetSize.Width}x{targetSize.Height}.");
 
             return outPath;
         }
 
-        private static Image ResizeImage(Image image, int w, int h)
-        {
-            Bitmap bmp = new Bitmap(w, h);
-
-            using (Graphics g = Graphics.FromImage(bmp))
-            {
-                g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                g.DrawImage(image, 0, 0, w, h);
-                return bmp;
-            }
-        }
-
         public static void PrepareInpainting (string initImgPath, Size targetSize)
         {
-            string outPath = Path.Combine(Paths.GetSessionDataPath(), "masked.png");
+            Image img = ImgUtils.ResizeImage(IoUtils.GetImage(initImgPath), targetSize.Width, targetSize.Height);
 
-            Image img = ResizeImage(IoUtils.GetImage(initImgPath), targetSize.Width, targetSize.Height);
-            var maskForm = new DrawForm(img);
-            maskForm.ShowDialog();
+            if(InpaintUi.CurrentMask == null)
+            {
+                var maskForm = new DrawForm(img);
+                maskForm.ShowDialog();
+                InpaintUi.CurrentMask = maskForm.Mask;
+            }
 
-            MagickImage maskedOverlay = ImgUtils.AlphaMask(ImgUtils.MagickImgFromImage(maskForm.BackgroundImage), ImgUtils.MagickImgFromImage(maskForm.Mask), true);
-            maskedOverlay.Write(outPath);
+            if (InpaintUi.CurrentMask.Size != img.Size)
+                InpaintUi.CurrentMask = ImgUtils.ResizeImage(InpaintUi.CurrentMask, img.Size);
+
+            MagickImage maskedOverlay = ImgUtils.AlphaMask(ImgUtils.MagickImgFromImage(img), ImgUtils.MagickImgFromImage(InpaintUi.CurrentMask), true);
+            maskedOverlay.Write(InpaintUi.MaskedImagePath);
         }
 
         public static void WriteModelsYaml(string mdlName)

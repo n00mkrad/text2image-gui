@@ -1,13 +1,9 @@
 ﻿using StableDiffusionGui.Data;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
-using StableDiffusionGui.Ui;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace StableDiffusionGui.Ui
@@ -26,7 +22,8 @@ namespace StableDiffusionGui.Ui
             set {
                 _currentInitImgPath = value;
                 Logger.Log(string.IsNullOrWhiteSpace(value) ? "" : $"Now using initialization image {Path.GetFileName(value).Wrap()}.");
-            } }
+            }
+        }
         
         public static float CurrentInitImgStrength;
 
@@ -36,7 +33,8 @@ namespace StableDiffusionGui.Ui
             set {
                 _currentEmbeddingPath = value;
                 Logger.Log(string.IsNullOrWhiteSpace(value) ? "" : $"Now using learned concept {Path.GetFileName(value).Wrap()}.");
-            } }
+            }
+        }
 
         public static List<TtiSettings> Queue = new List<TtiSettings>();
 

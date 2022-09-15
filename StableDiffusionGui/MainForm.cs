@@ -537,8 +537,8 @@ namespace StableDiffusionGui
             }
 
             bool imgExists = File.Exists(MainUi.CurrentInitImgPath);
-            panelInitImgStrength.Visible = imgExists;
             panelInpainting.Visible = imgExists;
+            panelInitImgStrength.Visible = imgExists;
             panelSampler.Visible = !imgExists; // Disable sampler selection while image is loaded as img2img currently only supports DDIM
             btnInitImgBrowse.Text = imgExists ? "Clear Image" : "Load Image";
 
@@ -678,6 +678,16 @@ namespace StableDiffusionGui
         private void generateAllQueuedPromptsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Run(true);
+        }
+
+        public void UpdateInpaintUi ()
+        {
+            btnResetMask.Visible = InpaintUi.CurrentMask != null;
+        }
+
+        private void btnResetMask_Click(object sender, EventArgs e)
+        {
+            InpaintUi.CurrentMask = null;
         }
     }
 }

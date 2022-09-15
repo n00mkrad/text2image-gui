@@ -92,7 +92,7 @@ namespace StableDiffusionGui.Main
 
         private static void OverlayMaskIfExists(string imgPath, bool copyMetadata = true)
         {
-            string maskPath = Path.Combine(Paths.GetSessionDataPath(), "masked.png");
+            string maskPath = InpaintUi.MaskedImagePath;
 
             if (!File.Exists(maskPath))
                 return;

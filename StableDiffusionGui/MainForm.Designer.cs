@@ -116,6 +116,7 @@
             this.generateCurrentPromptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.generateAllQueuedPromptsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.separator = new System.Windows.Forms.Button();
+            this.btnResetMask = new HTAlt.WinForms.HTButton();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
             this.tableLayoutPanel6.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -1208,6 +1209,7 @@
             // 
             // panelInpainting
             // 
+            this.panelInpainting.Controls.Add(this.btnResetMask);
             this.panelInpainting.Controls.Add(this.checkboxInpainting);
             this.panelInpainting.Controls.Add(this.label10);
             this.panelInpainting.Dock = System.Windows.Forms.DockStyle.Top;
@@ -1235,9 +1237,9 @@
             this.label10.Location = new System.Drawing.Point(5, 10);
             this.label10.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(53, 13);
+            this.label10.Size = new System.Drawing.Size(94, 13);
             this.label10.TabIndex = 105;
-            this.label10.Text = "Inpainting";
+            this.label10.Text = "Masked Inpainting";
             // 
             // panelInitImgStrength
             // 
@@ -1372,6 +1374,28 @@
             this.separator.TabIndex = 75;
             this.separator.TabStop = false;
             this.separator.UseVisualStyleBackColor = false;
+            // 
+            // btnResetMask
+            // 
+            this.btnResetMask.AutoColor = true;
+            this.btnResetMask.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnResetMask.ButtonImage = null;
+            this.btnResetMask.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
+            this.btnResetMask.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
+            this.btnResetMask.DrawImage = false;
+            this.btnResetMask.ForeColor = System.Drawing.Color.White;
+            this.btnResetMask.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
+            this.btnResetMask.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
+            this.btnResetMask.Location = new System.Drawing.Point(254, 6);
+            this.btnResetMask.Name = "btnResetMask";
+            this.btnResetMask.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+            this.btnResetMask.Size = new System.Drawing.Size(79, 23);
+            this.btnResetMask.TabIndex = 108;
+            this.btnResetMask.TabStop = false;
+            this.btnResetMask.Text = "Reset Mask";
+            this.toolTip.SetToolTip(this.btnResetMask, "Reset to Random Seed");
+            this.btnResetMask.Visible = false;
+            this.btnResetMask.Click += new System.EventHandler(this.btnResetMask_Click);
             // 
             // MainForm
             // 
@@ -1541,6 +1565,7 @@
         private System.Windows.Forms.Panel panelInpainting;
         private System.Windows.Forms.CheckBox checkboxInpainting;
         private System.Windows.Forms.Label label10;
+        private HTAlt.WinForms.HTButton btnResetMask;
     }
 }
 

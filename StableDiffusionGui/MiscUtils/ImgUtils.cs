@@ -1,12 +1,9 @@
 ﻿using ImageMagick;
 using StableDiffusionGui.Io;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StableDiffusionGui.MiscUtils
 {
@@ -33,6 +30,23 @@ namespace StableDiffusionGui.MiscUtils
             }
         }
 
+        public static Image ResizeImage(Image image, Size size)
+        {
+            return ResizeImage(image, size.Width, size.Height);
+        }
+
+        public static Image ResizeImage(Image image, int w, int h)
+        {
+            Bitmap bmp = new Bitmap(w, h);
+
+            using (Graphics g = Graphics.FromImage(bmp))
+            {
+                g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                g.DrawImage(image, 0, 0, w, h);
+                return bmp;
+            }
+        }
+
         public static MagickImage AlphaMask (MagickImage image, MagickImage mask, bool invert)
         {
             if(invert)
@@ -42,10 +56,17 @@ namespace StableDiffusionGui.MiscUtils
             return image;
         }
 
-        public static void Overlay (string path, string overlayImg)
+        public static void Overlay (string path, string overlayImg, bool matchSize = true)
         {
             Image imgBase = IoUtils.GetImage(path);
             Image imgOverlay = IoUtils.GetImage(overlayImg);
+            Overlay(imgBase, imgOverlay, matchSize).Save(path);
+        }
+
+        public static Image Overlay(Image imgBase, Image imgOverlay, bool matchSize = true)
+        {
+            if (matchSize && imgOverlay.Size != imgBase.Size)
+                imgOverlay = ResizeImage(imgOverlay, imgBase.Size);
 
             Image img = new Bitmap(imgBase.Width, imgBase.Height);
 
@@ -55,7 +76,7 @@ namespace StableDiffusionGui.MiscUtils
                 g.DrawImage(imgOverlay, new Point(0, 0));
             }
 
-            img.Save(path);
+            return img;
         }
     }
 }
