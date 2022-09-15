@@ -82,9 +82,8 @@ namespace StableDiffusionGui.Main
             string mdlArg = GetSdModel();
             string precArg = $"{(Config.GetBool("checkboxFullPrecision") ? "-F" : "")}";
             string embArg = !string.IsNullOrWhiteSpace(embedding) ? $"--embedding_path {embedding.Wrap()}" : "";
-            string deviceArg = TtiUtils.GetCudaDevice("--device");
 
-            string newStartupSettings = $"{mdlArg}{precArg}{embArg}{deviceArg}"; // Check if startup settings match - If not, we need to reload the model
+            string newStartupSettings = $"{mdlArg}{precArg}{embArg}"; // Check if startup settings match - If not, we need to reload the model
 
             string strengths = File.Exists(initImg) ? $" and {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
             Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} with {iterations} iteration{(iterations != 1 ? "s" : "")} each and {scales.Length} scale{(scales.Length != 1 ? "s" : "")}{strengths} each = {imgs} images total.");
@@ -106,7 +105,7 @@ namespace StableDiffusionGui.Main
 
                 dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && call \"{Paths.GetDataPath()}\\mb\\Scripts\\activate.bat\" ldo && " +
                     $"python \"{Paths.GetDataPath()}/repo/scripts/dream.py\" --model {GetSdModel()} -o {outPath.Wrap()} --from_file_loop={promptFilePath.Wrap()} {precArg} " +
-                    $"{embArg} {deviceArg} --print_steps ";
+                    $"{embArg} --print_steps ";
 
                 Logger.Log("cmd.exe " + dream.StartInfo.Arguments, true);
 
@@ -159,8 +158,7 @@ namespace StableDiffusionGui.Main
             dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && call \"{Paths.GetDataPath()}\\mb\\Scripts\\activate.bat\" ldo && " +
                 $"python \"{Paths.GetDataPath()}/repo/optimizedSD/optimized_{(initImgExists ? "img" : "txt")}2img.py\" --model {GetSdModel()} --outdir {outPath.Wrap()} --from-file {promptFilePath.Wrap()} " +
                 $"--n_iter {iterations} --ddim_steps {steps} --W {res.Width} --H {res.Height} --scale {scale.ToStringDot("0.0000")} --seed {seed} --precision {prec} " +
-                $"{(initImgExists ? $"--init-img {initImg.Wrap()} --strength {initStrength.ToStringDot("0.0000")}" : "")} {(Config.GetBool(Config.Key.lowMemTurbo) ? "--turbo" : "")} " +
-                $"{TtiUtils.GetCudaDevice("--device")}";
+                $"{(initImgExists ? $"--init-img {initImg.Wrap()} --strength {initStrength.ToStringDot("0.0000")}" : "")} {(Config.GetBool(Config.Key.lowMemTurbo) ? "--turbo" : "")} ";
 
             Logger.Log("cmd.exe " + dream.StartInfo.Arguments, true);
 
@@ -201,8 +199,7 @@ namespace StableDiffusionGui.Main
             string batPath = Path.Combine(Paths.GetSessionDataPath(), "dream.bat");
 
             string batText = $"@echo off\n title Dream.py CLI && cd /D {Paths.GetDataPath().Wrap()} && call \"mb\\Scripts\\activate.bat\" \"mb/envs/ldo\" && " +
-                $"python \"repo/scripts/dream.py\" --model {GetSdModel()} -o {outPath.Wrap()} {(Config.GetBool("checkboxFullPrecision") ? "--full_precision" : "")} " +
-                $"{TtiUtils.GetCudaDevice("--device")}";
+                $"python \"repo/scripts/dream.py\" --model {GetSdModel()} -o {outPath.Wrap()} {(Config.GetBool("checkboxFullPrecision") ? "--full_precision" : "")} ";
 
             File.WriteAllText(batPath, batText);
             ProcessManager.FindAndKillOrphans("dream.py");

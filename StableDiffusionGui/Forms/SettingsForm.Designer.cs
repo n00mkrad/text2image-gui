@@ -644,6 +644,7 @@
             this.panelCudaDevice.Name = "panelCudaDevice";
             this.panelCudaDevice.Size = new System.Drawing.Size(760, 35);
             this.panelCudaDevice.TabIndex = 21;
+            this.panelCudaDevice.Visible = false;
             // 
             // tableLayoutPanel9
             // 
