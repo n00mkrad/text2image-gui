@@ -60,7 +60,7 @@ namespace StableDiffusionGui.Main
                 if (!s.Prompts.Any())
                 {
                     Logger.Log($"No valid prompts to run!");
-                    return;
+                    continue;
                 }
 
                 TtiUtils.WarnIfPromptLong(s.Prompts.ToList());

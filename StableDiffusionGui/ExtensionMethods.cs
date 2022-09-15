@@ -179,9 +179,14 @@ namespace StableDiffusionGui
 
         public static string Trunc(this string inStr, int maxChars, bool addEllipsis = true)
         {
+            if (string.IsNullOrWhiteSpace(inStr))
+                return "";
+
             string str = inStr.Length <= maxChars ? inStr : inStr.Substring(0, maxChars);
+
             if (addEllipsis && inStr.Length > maxChars)
                 str += "…";
+
             return str;
         }
 

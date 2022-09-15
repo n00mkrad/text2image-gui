@@ -114,17 +114,24 @@ namespace StableDiffusionGui.Forms
         {
             TtiSettings s = (TtiSettings)promptListView.FocusedItem.Tag;
             Program.MainForm.LoadTtiSettingsIntoUi(s.Prompts);
+            Close();
         }
 
         private void loadPromptAndSettingsIntoGUIToolStripMenuItem_Click(object sender, EventArgs e)
         {
             TtiSettings s = (TtiSettings)promptListView.FocusedItem.Tag;
             Program.MainForm.LoadTtiSettingsIntoUi(s);
+            Close();
         }
 
         private void btnAddPromptsToQueue_Click(object sender, EventArgs e)
         {
-            MainUi.Queue.Add(Program.MainForm.GetCurrentTtiSettings());
+            var settings = Program.MainForm.GetCurrentTtiSettings();
+
+            if (!settings.Prompts.Where(x => !string.IsNullOrWhiteSpace(x)).Any())
+                return;
+
+            MainUi.Queue.Add(settings);
             LoadQueue();
         }
     }

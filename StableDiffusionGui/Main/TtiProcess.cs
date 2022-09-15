@@ -127,7 +127,7 @@ namespace StableDiffusionGui.Main
                     dream.BeginErrorReadLine();
                 }
 
-                // while (!dream.HasExited) await Task.Delay(1);
+                while (!dream.HasExited) await Task.Delay(1);
             }
 
             Finish();

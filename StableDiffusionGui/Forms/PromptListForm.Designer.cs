@@ -75,7 +75,7 @@
             this.promptListView.LabelWrap = false;
             this.promptListView.Location = new System.Drawing.Point(12, 62);
             this.promptListView.Name = "promptListView";
-            this.promptListView.Size = new System.Drawing.Size(960, 287);
+            this.promptListView.Size = new System.Drawing.Size(1060, 287);
             this.promptListView.TabIndex = 53;
             this.promptListView.UseCompatibleStateImageBehavior = false;
             this.promptListView.View = System.Windows.Forms.View.Details;
@@ -83,7 +83,7 @@
             // 
             // columnHeader1
             // 
-            this.columnHeader1.Width = 930;
+            this.columnHeader1.Width = 1030;
             // 
             // btnAddPromptsToQueue
             // 
@@ -94,7 +94,7 @@
             this.btnAddPromptsToQueue.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAddPromptsToQueue.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAddPromptsToQueue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnAddPromptsToQueue.Location = new System.Drawing.Point(886, 9);
+            this.btnAddPromptsToQueue.Location = new System.Drawing.Point(986, 9);
             this.btnAddPromptsToQueue.Name = "btnAddPromptsToQueue";
             this.btnAddPromptsToQueue.Size = new System.Drawing.Size(40, 40);
             this.btnAddPromptsToQueue.TabIndex = 96;
@@ -113,7 +113,7 @@
             this.btnOpenOutFolder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnOpenOutFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnOpenOutFolder.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnOpenOutFolder.Location = new System.Drawing.Point(932, 9);
+            this.btnOpenOutFolder.Location = new System.Drawing.Point(1032, 9);
             this.btnOpenOutFolder.Name = "btnOpenOutFolder";
             this.btnOpenOutFolder.Size = new System.Drawing.Size(40, 40);
             this.btnOpenOutFolder.TabIndex = 95;
@@ -171,15 +171,15 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.ClientSize = new System.Drawing.Size(984, 361);
+            this.ClientSize = new System.Drawing.Size(1084, 361);
             this.Controls.Add(this.btnAddPromptsToQueue);
             this.Controls.Add(this.btnOpenOutFolder);
             this.Controls.Add(this.promptListView);
             this.Controls.Add(this.titleLabel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximumSize = new System.Drawing.Size(1000, 800);
-            this.MinimumSize = new System.Drawing.Size(1000, 300);
+            this.MaximumSize = new System.Drawing.Size(1100, 800);
+            this.MinimumSize = new System.Drawing.Size(1100, 300);
             this.Name = "PromptListForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Load += new System.EventHandler(this.PromptListForm_Load);
