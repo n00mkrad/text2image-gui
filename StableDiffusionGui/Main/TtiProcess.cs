@@ -12,8 +12,8 @@ namespace StableDiffusionGui.Main
 {
     internal class TtiProcess
     {
-        private static Process _dreamPy;
-        public static bool IsDreamPyRunning { get { return _dreamPy != null && !_dreamPy.HasExited; } }
+        public static Process DreamPyParentProcess;
+        public static bool IsDreamPyRunning { get { return DreamPyParentProcess != null && !DreamPyParentProcess.HasExited; } }
 
         public static void Finish()
         {
@@ -118,7 +118,7 @@ namespace StableDiffusionGui.Main
                 ProcessManager.FindAndKillOrphans("dream.py");
                 TtiProcessOutputHandler.Start();
                 Logger.Log("Loading Stable Diffusion...");
-                _dreamPy = dream;
+                DreamPyParentProcess = dream;
                 dream.Start();
 
                 if (!OsUtils.ShowHiddenCmd())
@@ -127,7 +127,7 @@ namespace StableDiffusionGui.Main
                     dream.BeginErrorReadLine();
                 }
 
-                while (!dream.HasExited) await Task.Delay(1);
+                //while (!dream.HasExited) await Task.Delay(1);
             }
 
             Finish();

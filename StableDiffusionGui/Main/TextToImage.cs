@@ -126,10 +126,12 @@ namespace StableDiffusionGui.Main
         public static void Cancel(string reason = "", bool showMsgBox = true)
         {
             Canceled = true;
-            Program.MainForm.SetProgress(0);
-            Program.MainForm.SetWorking(false);
+            //Program.MainForm.SetProgress(0);
+            //Program.MainForm.SetWorking(false);
+            //
+            //TtiProcess.Kill();
 
-            TtiProcess.Kill();
+            TtiUtils.SoftCancelDreamPy();
 
             Logger.LogIfLastLineDoesNotContainMsg("Canceled.");
 

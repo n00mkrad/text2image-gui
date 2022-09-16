@@ -2,6 +2,7 @@
 using StableDiffusionGui.Forms;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.MiscUtils;
+using StableDiffusionGui.Os;
 using StableDiffusionGui.Properties;
 using StableDiffusionGui.Ui;
 using System;
@@ -89,6 +90,16 @@ namespace StableDiffusionGui.Main
                 return $"{arg} cpu";
             else
                 return $"{arg} cuda:{opt - 2}";
+        }
+
+        public static void SoftCancelDreamPy()
+        {
+            IoUtils.TryDeleteIfExists(Path.Combine(Paths.GetSessionDataPath(), "prompts.txt"));
+
+            var childProcesses = OsUtils.GetChildProcesses(TtiProcess.DreamPyParentProcess);
+
+            foreach (System.Diagnostics.Process p in childProcesses)
+                OsUtils.SendCtrlC(p.Id);
         }
     }
 }

@@ -272,6 +272,7 @@ namespace StableDiffusionGui.Io
 
         public enum Key
         {
+            cmdDebugMode,
             checkboxMultiPromptsSameSeed,
             comboxSampler,
             sliderInitStrength,

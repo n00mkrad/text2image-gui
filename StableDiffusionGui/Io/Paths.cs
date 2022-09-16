@@ -61,5 +61,12 @@ namespace StableDiffusionGui.Io
             Directory.CreateDirectory(path);
             return path;
         }
+
+        public static string GetBinPath()
+        {
+            string path = Path.Combine(GetDataPath(), "bin");
+            Directory.CreateDirectory(path);
+            return path;
+        }
     }
 }

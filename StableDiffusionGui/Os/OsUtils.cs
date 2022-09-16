@@ -1,10 +1,13 @@
 ﻿using Microsoft.VisualBasic.Devices;
+using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Management;
+using System.Security.Cryptography;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
@@ -123,7 +126,7 @@ namespace StableDiffusionGui.Os
 
         public static string GetCmdArg()
         {
-            bool stayOpen = false; // Config.GetInt(Config.Key.cmdDebugMode) == 2;
+            bool stayOpen = Config.GetInt(Config.Key.cmdDebugMode) == 2;
 
             if (stayOpen)
                 return "/K";
@@ -133,8 +136,7 @@ namespace StableDiffusionGui.Os
 
         public static bool ShowHiddenCmd()
         {
-            return false;
-            // return Config.GetInt(Config.Key.cmdDebugMode) > 0;
+            return Config.GetInt(Config.Key.cmdDebugMode) > 0;
         }
 
         public static bool HasNonAsciiChars(string str)
@@ -184,12 +186,10 @@ namespace StableDiffusionGui.Os
         public static IEnumerable<Process> GetChildProcesses(Process process)
         {
             List<Process> children = new List<Process>();
-            ManagementObjectSearcher mos = new ManagementObjectSearcher(String.Format("Select * From Win32_Process Where ParentProcessID={0}", process.Id));
+            ManagementObjectSearcher mos = new ManagementObjectSearcher($"Select * From Win32_Process Where ParentProcessID={process.Id}");
 
             foreach (ManagementObject mo in mos.Get())
-            {
                 children.Add(Process.GetProcessById(Convert.ToInt32(mo["ProcessID"])));
-            }
 
             return children;
         }
@@ -293,6 +293,15 @@ namespace StableDiffusionGui.Os
                 Logger.Log($"Error setting clipboard text: {ex.Message}");
                 return false;
             }
+        }
+
+        public static void SendCtrlC (int pid)
+        {
+            string exePath = Path.Combine(Paths.GetBinPath(), "windows-kill.exe");
+            Process p = NewProcess(true, exePath);
+            p.StartInfo.Arguments = $"-SIGINT {pid}";
+            Logger.Log($"windows-kill.exe {p.StartInfo.Arguments}", true);
+            p.Start();
         }
     }
 }
