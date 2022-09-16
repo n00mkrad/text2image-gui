@@ -20,8 +20,7 @@ namespace StableDiffusionGui.Main
 
         public static async Task RunTti(TtiSettings settings)
         {
-            if (settings.Params["inpainting"] == "masked")
-                InpaintingUtils.PrepareInpainting(settings.Params["initImg"], new System.Drawing.Size(settings.Params["res"].Split('x')[0].GetInt(), settings.Params["res"].Split('x')[1].GetInt()));
+            InpaintingUtils.PrepareInpaintingIfEnabled(settings);
 
             if (Canceled)
                 return;

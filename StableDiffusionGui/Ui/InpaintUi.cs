@@ -29,6 +29,20 @@ namespace StableDiffusionGui.Ui
 
         public static int CurrentBlurValue = -1;
 
+        public static bool PrepareInpaintingIfEnabled(TtiSettings settings)
+        {
+            bool img2img = !string.IsNullOrWhiteSpace(settings.Params["initImg"]);
+            bool inpaint = settings.Params["inpainting"] == "masked";
+
+            if (img2img && inpaint)
+            {
+                PrepareInpainting(settings.Params["initImg"], Parser.GetSize(settings.Params["res"]));
+                return true;
+            }
+
+            return false;
+        }
+
         public static void PrepareInpainting(string initImgPath, Size targetSize)
         {
             Image img = ImgUtils.ResizeImage(IoUtils.GetImage(initImgPath), targetSize.Width, targetSize.Height);
