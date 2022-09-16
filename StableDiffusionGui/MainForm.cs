@@ -45,6 +45,7 @@ namespace StableDiffusionGui
         {
             InitializeComponent();
             Program.MainForm = this;
+            pictBoxImgViewer.MouseWheel += PictBoxImgViewer_MouseWheel;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -689,6 +690,11 @@ namespace StableDiffusionGui
         private void btnResetMask_Click(object sender, EventArgs e)
         {
             InpaintingUtils.CurrentMask = null;
+        }
+
+        private void PictBoxImgViewer_MouseWheel(object sender, MouseEventArgs e)
+        {
+            ImagePreview.Move(e.Delta > 0);
         }
     }
 }
