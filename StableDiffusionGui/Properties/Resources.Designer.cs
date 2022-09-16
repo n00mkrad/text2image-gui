@@ -123,6 +123,16 @@ namespace StableDiffusionGui.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap checkerboard {
+            get {
+                object obj = ResourceManager.GetObject("checkerboard", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap cliIcon {
             get {
                 object obj = ResourceManager.GetObject("cliIcon", resourceCulture);
@@ -196,16 +206,6 @@ namespace StableDiffusionGui.Properties {
         internal static System.Drawing.Bitmap installIcon {
             get {
                 object obj = ResourceManager.GetObject("installIcon", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap monsa {
-            get {
-                object obj = ResourceManager.GetObject("monsa", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -36,7 +36,7 @@ namespace StableDiffusionGui
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         static extern EXECUTION_STATE SetThreadExecutionState(EXECUTION_STATE esFlags); // This should prevent Windows from going to sleep
 
-        public Cyotek.Windows.Forms.ImageBox ImgBoxOutput { get { return imgBoxOutput; } }
+        public PictureBox PictBoxImgViewer { get { return pictBoxImgViewer; } }
         public Label OutputImgLabel { get { return outputImgLabel; } }
 
         public bool IsInFocus() { return (ActiveForm == this); }
@@ -434,7 +434,7 @@ namespace StableDiffusionGui
 
         private void copyImageToClipboardToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OsUtils.SetClipboard(imgBoxOutput.Image);
+            OsUtils.SetClipboard(pictBoxImgViewer.Image);
         }
 
         private void copySeedToClipboardToolStripMenuItem_Click(object sender, EventArgs e)
@@ -463,7 +463,7 @@ namespace StableDiffusionGui
             TtiProcess.RunStableDiffusionCli(Config.Get(Config.Key.textboxOutPath));
         }
 
-        private void imgBoxOutput_Click(object sender, EventArgs e)
+        private void pictBoxImgViewer_Click(object sender, EventArgs e)
         {
             if (((MouseEventArgs)e).Button == MouseButtons.Right)
             {
@@ -472,12 +472,12 @@ namespace StableDiffusionGui
             }
             else
             {
-                if (imgBoxOutput.Image != null)
+                if (pictBoxImgViewer.Image != null)
                 {
                     var bigPreviewForm = new BigPreviewForm();
                     bigPreviewForm.EnableTiling = checkboxSeamless.Checked;
                     bigPreviewForm.Show();
-                    bigPreviewForm.SetImage(imgBoxOutput.Image);
+                    bigPreviewForm.SetImage(pictBoxImgViewer.Image);
                 }
             }
         }

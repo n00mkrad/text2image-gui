@@ -69,9 +69,6 @@
     <Reference Include="Costura, Version=5.7.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\Costura.Fody.5.7.0\lib\netstandard1.0\Costura.dll</HintPath>
     </Reference>
-    <Reference Include="Cyotek.Windows.Forms.ImageBox, Version=1.2.0.0, Culture=neutral, PublicKeyToken=58daa28b0b2de221, processorArchitecture=MSIL">
-      <HintPath>packages\CyotekImageBox.1.3.1\lib\net20\Cyotek.Windows.Forms.ImageBox.dll</HintPath>
-    </Reference>
     <Reference Include="HTAlt.Standart, Version=0.1.7.3, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\HTAlt.Standart.0.1.7.5\lib\netstandard2.0\HTAlt.Standart.dll</HintPath>
     </Reference>
@@ -286,6 +283,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon1.ico" />
+    <None Include="Resources\checkerboard1.png" />
+    <None Include="Resources\checkerboard.png" />
     <None Include="Resources\monsa.png" />
     <None Include="Resources\addToListIcon.png" />
     <None Include="Resources\deleteBtn.png" />

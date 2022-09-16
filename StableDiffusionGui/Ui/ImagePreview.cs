@@ -59,9 +59,8 @@ namespace StableDiffusionGui.Ui
                 return;
             }
 
-            Program.MainForm.ImgBoxOutput.Text = "";
-            Program.MainForm.ImgBoxOutput.Image = IoUtils.GetImage(_currentImages[_currIndex]);
-            Program.MainForm.ImgBoxOutput.ZoomToFit();
+            Program.MainForm.PictBoxImgViewer.Text = "";
+            Program.MainForm.PictBoxImgViewer.Image = IoUtils.GetImage(_currentImages[_currIndex]);
 
             ImageMetadata meta = CurrentImageMetadata;
 
@@ -87,8 +86,8 @@ namespace StableDiffusionGui.Ui
 
         public static void Clear ()
         {
-            Program.MainForm.ImgBoxOutput.Text = "";
-            Program.MainForm.ImgBoxOutput.Image = null;
+            Program.MainForm.PictBoxImgViewer.Text = "";
+            Program.MainForm.PictBoxImgViewer.Image = null;
             Program.MainForm.OutputImgLabel.Text = "No images to show.";
         }
 
