@@ -4,11 +4,9 @@ using StableDiffusionGui.Forms;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Windows.Forms;
+using Paths = StableDiffusionGui.Io.Paths;
 
 namespace StableDiffusionGui.Ui
 {
