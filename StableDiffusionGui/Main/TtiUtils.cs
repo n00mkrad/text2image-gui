@@ -32,30 +32,6 @@ namespace StableDiffusionGui.Main
             return outPath;
         }
 
-        public static void PrepareInpainting (string initImgPath, Size targetSize)
-        {
-            Image img = ImgUtils.ResizeImage(IoUtils.GetImage(initImgPath), targetSize.Width, targetSize.Height);
-
-            if(InpaintUi.CurrentMask == null)
-            {
-                var maskForm = new DrawForm(img);
-                maskForm.ShowDialog();
-                InpaintUi.CurrentMask = maskForm.Mask;
-            }
-
-            if(InpaintUi.CurrentMask == null)
-            {
-                TextToImage.Cancel("Inpainting is enabled, but no mask was used!");
-                return;
-            }
-
-            if (InpaintUi.CurrentMask.Size != img.Size)
-                InpaintUi.CurrentMask = ImgUtils.ResizeImage(InpaintUi.CurrentMask, img.Size);
-
-            MagickImage maskedOverlay = ImgUtils.AlphaMask(ImgUtils.MagickImgFromImage(img), ImgUtils.MagickImgFromImage(InpaintUi.CurrentMask), true);
-            maskedOverlay.Write(InpaintUi.MaskedImagePath);
-        }
-
         public static void WriteModelsYaml(string mdlName)
         {
             string text = $"{mdlName}:\n" +

@@ -277,6 +277,7 @@ namespace StableDiffusionGui
                     Logger.ClearLogBox();
                     CleanPrompt();
                     UpdateInitImgAndEmbeddingUi();
+                    InpaintingUtils.DeleteMaskedImage();
 
                     if (fromQueue)
                     {
@@ -682,12 +683,12 @@ namespace StableDiffusionGui
 
         public void UpdateInpaintUi ()
         {
-            btnResetMask.Visible = InpaintUi.CurrentMask != null;
+            btnResetMask.Visible = InpaintingUtils.CurrentMask != null;
         }
 
         private void btnResetMask_Click(object sender, EventArgs e)
         {
-            InpaintUi.CurrentMask = null;
+            InpaintingUtils.CurrentMask = null;
         }
     }
 }

@@ -1,6 +1,9 @@
-﻿using StableDiffusionGui.Data;
+﻿using ImageMagick;
+using StableDiffusionGui.Data;
+using StableDiffusionGui.Forms;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
+using StableDiffusionGui.MiscUtils;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -9,7 +12,7 @@ using System.Windows.Forms;
 
 namespace StableDiffusionGui.Ui
 {
-    internal class InpaintUi
+    internal class InpaintingUtils
     {
         public static string MaskedImagePath { get { return Path.Combine(Paths.GetSessionDataPath(), "masked.png"); } }
 
@@ -25,5 +28,34 @@ namespace StableDiffusionGui.Ui
         }
 
         public static int CurrentBlurValue = -1;
+
+        public static void PrepareInpainting(string initImgPath, Size targetSize)
+        {
+            Image img = ImgUtils.ResizeImage(IoUtils.GetImage(initImgPath), targetSize.Width, targetSize.Height);
+
+            if (CurrentMask == null)
+            {
+                var maskForm = new DrawForm(img);
+                maskForm.ShowDialog();
+                CurrentMask = maskForm.Mask;
+            }
+
+            if (CurrentMask == null)
+            {
+                TextToImage.Cancel("Inpainting is enabled, but no mask was used!");
+                return;
+            }
+
+            if (CurrentMask.Size != img.Size)
+                CurrentMask = ImgUtils.ResizeImage(CurrentMask, img.Size);
+
+            MagickImage maskedOverlay = ImgUtils.AlphaMask(ImgUtils.MagickImgFromImage(img), ImgUtils.MagickImgFromImage(CurrentMask), true);
+            maskedOverlay.Write(MaskedImagePath);
+        }
+
+        public static void DeleteMaskedImage ()
+        {
+            IoUtils.TryDeleteIfExists(MaskedImagePath);
+        }
     }
 }

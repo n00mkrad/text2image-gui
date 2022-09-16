@@ -28,10 +28,10 @@ namespace StableDiffusionGui.Forms
             Height = BackgroundImage.Height + 109;
             CenterToScreen();
 
-            if (InpaintUi.CurrentBlurValue >= 0)
-                sliderBlur.Value = InpaintUi.CurrentBlurValue;
+            if (InpaintingUtils.CurrentBlurValue >= 0)
+                sliderBlur.Value = InpaintingUtils.CurrentBlurValue;
             else
-                InpaintUi.CurrentBlurValue = sliderBlur.Value;
+                InpaintingUtils.CurrentBlurValue = sliderBlur.Value;
 
             pictBox.BackgroundImage = BackgroundImage;
             Blur();
@@ -96,14 +96,14 @@ namespace StableDiffusionGui.Forms
 
         private void sliderBlur_Scroll(object sender, ScrollEventArgs e)
         {
-            InpaintUi.CurrentBlurValue = sliderBlur.Value;
+            InpaintingUtils.CurrentBlurValue = sliderBlur.Value;
             Blur();
         }
 
         private void Blur()
         {
             if (_raw != null)
-                pictBox.Image = new GaussianBlur(_raw).Process(InpaintUi.CurrentBlurValue);
+                pictBox.Image = new GaussianBlur(_raw).Process(InpaintingUtils.CurrentBlurValue);
         }
 
         private void btnOk_Click(object sender, EventArgs e)

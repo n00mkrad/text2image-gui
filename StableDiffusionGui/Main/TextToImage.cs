@@ -21,9 +21,7 @@ namespace StableDiffusionGui.Main
         public static async Task RunTti(TtiSettings settings)
         {
             if (settings.Params["inpainting"] == "masked")
-                TtiUtils.PrepareInpainting(settings.Params["initImg"], new System.Drawing.Size(settings.Params["res"].Split('x')[0].GetInt(), settings.Params["res"].Split('x')[1].GetInt()));
-            else
-                IoUtils.TryDeleteIfExists(Path.Combine(Paths.GetSessionDataPath(), "masked.png"));
+                InpaintingUtils.PrepareInpainting(settings.Params["initImg"], new System.Drawing.Size(settings.Params["res"].Split('x')[0].GetInt(), settings.Params["res"].Split('x')[1].GetInt()));
 
             if (Canceled)
                 return;
