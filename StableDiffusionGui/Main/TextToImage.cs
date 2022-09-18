@@ -132,7 +132,7 @@ namespace StableDiffusionGui.Main
 
             bool forceKill = reason.ToLower().Contains("manually") && Keyboard.Modifiers == ModifierKeys.Shift; // Shift force-kills the process
 
-            if (!forceKill && LastTaskSettings.Implementation == Implementation.StableDiffusion && TtiProcess.IsDreamPyRunning) 
+            if (!forceKill && LastTaskSettings != null && LastTaskSettings.Implementation == Implementation.StableDiffusion && TtiProcess.IsDreamPyRunning) 
             {
                 TtiUtils.SoftCancelDreamPy();
             }

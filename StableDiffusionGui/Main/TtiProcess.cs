@@ -1,4 +1,5 @@
-﻿using StableDiffusionGui.Io;
+﻿using StableDiffusionGui.Forms;
+using StableDiffusionGui.Io;
 using StableDiffusionGui.Os;
 using System;
 using System.Collections.Generic;
@@ -214,7 +215,18 @@ namespace StableDiffusionGui.Main
         {
             if (!File.Exists(Path.Combine(Paths.GetModelsPath(), GetSdModel(true))))
             {
-                TextToImage.Cancel($"Stable Diffusion model file not found at saved path:\n{Config.Get(Config.Key.comboxSdModel)}");
+                string savedModelFileName = Config.Get(Config.Key.comboxSdModel);
+
+                if (string.IsNullOrWhiteSpace(savedModelFileName))
+                {
+                    TextToImage.Cancel($"No Stable Diffusion model file has been set.\nPlease set one in the settings.");
+                    new SettingsForm().ShowDialog();
+                }
+                else
+                {
+                    TextToImage.Cancel($"Stable Diffusion model file {savedModelFileName.Wrap()} not found.\nPossibly it was moved, renamed, or deleted.");
+                }
+                
                 return false;
             }
 

@@ -21,7 +21,7 @@ namespace StableDiffusionGui
         [STAThread]
         static void Main()
         {
-            Application.ApplicationExit += new EventHandler(OnApplicationExit);
+            AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnApplicationExit);
 
             Paths.Init();
             Config.Init();

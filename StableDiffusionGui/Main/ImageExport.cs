@@ -14,22 +14,30 @@ namespace StableDiffusionGui.Main
     {
         private static readonly int _maxPathLength = 255;
         private static readonly int _minimumImageAgeMs = 200;
+        private static readonly int _loopWaitBeforeStartMs = 1000;
         private static readonly int _loopWaitTimeMs = 100;
 
         public static async Task ExportLoop(string imagesDir, bool show)
         {
             Logger.Log("ExportLoop START", true);
             List<string> outImgs = new List<string>();
-            await Task.Delay(1000);
 
-            while (true)
+            for (int i = 0; i < _loopWaitBeforeStartMs; i++)
+            {
+                if (TextToImage.Canceled)
+                    break;
+
+                await Task.Delay(1);
+            }
+
+            while (!TextToImage.Canceled)
             {
                 try
                 {
                     var files = IoUtils.GetFileInfosSorted(imagesDir, false, "*.png");
                     bool procRunning = File.Exists(Path.Combine(Paths.GetSessionDataPath(), "prompts.txt"));
 
-                    if (TextToImage.Canceled || (!procRunning && !files.Any()))
+                    if (!procRunning && !files.Any())
                         break;
 
                     var images = files.Where(x => x.CreationTime > TextToImage.CurrentTask.StartTime).OrderBy(x => x.CreationTime).ToList(); // Find images and sort by date, newest to oldest
