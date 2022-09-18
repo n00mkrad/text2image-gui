@@ -79,6 +79,11 @@ namespace StableDiffusionGui.Main
                     tasks.Add(TtiProcess.RunStableDiffusion(s.Prompts, s.Params["initImg"], s.Params["embedding"], s.Params["initStrengths"].Replace(" ", "").Split(",").Select(x => x.GetFloat()).ToArray(),
                         s.Iterations, s.Params["steps"].GetInt(), s.Params["scales"].Replace(" ", "").Split(",").Select(x => x.GetFloat()).ToArray(), s.Params["seed"].GetLong(), s.Params["sampler"], FormatUtils.ParseSize(s.Params["res"]), bool.Parse(s.Params["seamless"]), tempOutDir));
 
+                // TODO: Implement interactive optimizedSD
+                //if (s.Implementation == Implementation.StableDiffusionOptimized)
+                //    tasks.Add(TtiProcess.RunStableDiffusionOpt(s.Prompts, s.Params["initImg"], s.Params["embedding"], s.Params["initStrengths"].Replace(" ", "").Split(",").Select(x => x.GetFloat()).ToArray(),
+                //        s.Iterations, s.Params["steps"].GetInt(), s.Params["scales"].Replace(" ", "").Split(",").Select(x => x.GetFloat()).ToArray(), s.Params["seed"].GetLong(), s.Params["sampler"], FormatUtils.ParseSize(s.Params["res"]), bool.Parse(s.Params["seamless"]), tempOutDir));
+
                 if (s.Implementation == Implementation.StableDiffusionOptimized)
                     tasks.Add(TtiProcess.RunStableDiffusionOptimized(s.Prompts, s.Params["initImg"], s.Params["initStrengths"].Replace(" ", "").Split(",").First().GetFloat(), s.Iterations,
                         s.Params["steps"].GetInt(), s.Params["scales"].Replace(" ", "").Split(",")[0].GetFloat(), s.Params["seed"].GetLong(), FormatUtils.ParseSize(s.Params["res"]), tempOutDir));

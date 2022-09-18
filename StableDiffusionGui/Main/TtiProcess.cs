@@ -191,6 +191,119 @@ namespace StableDiffusionGui.Main
             Finish();
         }
 
+        public static async Task RunStableDiffusionOpt(string[] prompts, string initImg, string embedding, float[] initStrengths, int iterations, int steps, float[] scales, long seed, string sampler, Size res, bool seamless, string outPath)
+        {
+            // NOTE: Currently not implemented: Embeddings, Samplers, Seamless Mode
+
+            if (!CheckIfSdModelExists())
+                return;
+
+            if (File.Exists(initImg))
+                initImg = TtiUtils.ResizeInitImg(initImg, res);
+
+            long startSeed = seed;
+
+            string promptFilePath = Path.Combine(Paths.GetSessionDataPath(), "prompts.txt");
+            List<string> promptFileLines = new List<string>();
+
+            string upscaling = "";
+            int upscaleSetting = Config.GetInt("comboxUpscale");
+
+            if (upscaleSetting == 1)
+                upscaling = "-U 2";
+            else if (upscaleSetting == 2)
+                upscaling = "-U 4";
+
+            float gfpganSetting = Config.GetFloat("sliderGfpgan");
+            string gfpgan = gfpganSetting > 0.01f ? $"-G {gfpganSetting.ToStringDot("0.00")}" : "";
+
+            int imgs = 0;
+
+            foreach (string prompt in prompts)
+            {
+                for (int i = 0; i < iterations; i++)
+                {
+                    foreach (float scale in scales)
+                    {
+                        foreach (float strength in initStrengths)
+                        {
+                            bool initImgExists = File.Exists(initImg);
+                            string init = initImgExists ? $"--init_img {initImg.Wrap()} --strength {strength.ToStringDot("0.0000")}" : "";
+                            promptFileLines.Add($"{prompt} {init} --ddim_steps {steps} --scale {scale.ToStringDot()} --W {res.Width} --H {res.Height} --seed {seed} {upscaling} {gfpgan}");
+                            imgs++;
+
+                            if (!initImgExists)
+                                break;
+                        }
+                    }
+
+                    seed++;
+                }
+
+                if (Config.GetBool(Config.Key.checkboxMultiPromptsSameSeed))
+                    seed = startSeed;
+            }
+
+            File.WriteAllLines(promptFilePath, promptFileLines);
+
+            Logger.Log($"Running Stable Diffusion - {iterations} Iterations, {steps} Steps, Scales {(scales.Length < 4 ? string.Join(", ", scales.Select(x => x.ToStringDot())) : $"{scales.First()}->{scales.Last()}")}, {res.Width}x{res.Height}, Starting Seed: {startSeed}");
+
+            string mdlArg = GetSdModel();
+            string precArg = $"--precision {(Config.GetBool("checkboxFullPrecision") ? "full" : "autocast")}";
+            string embArg = !string.IsNullOrWhiteSpace(embedding) ? $"--embedding_path {embedding.Wrap()}" : "";
+
+            string newStartupSettings = $"{mdlArg}{precArg}{embArg}"; // Check if startup settings match - If not, we need to reload the model
+
+            string strengths = File.Exists(initImg) ? $" and {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
+            Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} with {iterations} iteration{(iterations != 1 ? "s" : "")} each and {scales.Length} scale{(scales.Length != 1 ? "s" : "")}{strengths} each = {imgs} images total.");
+
+            if (!IsDreamPyRunning || (IsDreamPyRunning && _lastDreamPyStartupSettings != newStartupSettings))
+            {
+                _lastDreamPyStartupSettings = newStartupSettings;
+
+                // if (!string.IsNullOrWhiteSpace(embedding))
+                // {
+                //     if (!File.Exists(embedding))
+                //         embedding = "";
+                //     else
+                //         Logger.Log($"Using learned concept: {Path.GetFileName(embedding)}");
+                // }
+
+                Process dream = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
+                TextToImage.CurrentTask.Processes.Add(dream);
+
+                dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && call \"{Paths.GetDataPath()}\\mb\\Scripts\\activate.bat\" ldo && " +
+                    $"python \"{Paths.GetDataPath()}/repo/optimizedSD/optimized_txt2img_loop.py\" --model {mdlArg} --outdir {outPath.Wrap()} --from_file_loop={promptFilePath.Wrap()} {precArg} ";
+                Logger.Log("cmd.exe " + dream.StartInfo.Arguments, true);
+
+                if (!OsUtils.ShowHiddenCmd())
+                {
+                    dream.OutputDataReceived += (sender, line) => { TtiProcessOutputHandler.LogOutput(line.Data); };
+                    dream.ErrorDataReceived += (sender, line) => { TtiProcessOutputHandler.LogOutput(line.Data, true); };
+                }
+
+                ProcessManager.FindAndKillOrphans("optimized_txt2img_loop.py");
+                TtiProcessOutputHandler.Start();
+                Logger.Log("Loading Stable Diffusion...");
+                DreamPyParentProcess = dream;
+                dream.Start();
+
+                if (!OsUtils.ShowHiddenCmd())
+                {
+                    dream.BeginOutputReadLine();
+                    dream.BeginErrorReadLine();
+                }
+
+                //while (!dream.HasExited) await Task.Delay(1); // We don't wait for it to quit since it keeps running in background.
+            }
+            else
+            {
+                TextToImage.CurrentTask.Processes.Add(DreamPyParentProcess);
+            }
+
+            Finish();
+        }
+
         public static async Task RunStableDiffusionCli(string outPath)
         {
             if (Program.Busy)
