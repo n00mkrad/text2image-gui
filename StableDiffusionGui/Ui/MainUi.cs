@@ -1,7 +1,10 @@
 ﻿using StableDiffusionGui.Data;
+using StableDiffusionGui.Forms;
+using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -40,6 +43,40 @@ namespace StableDiffusionGui.Ui
 
         public static readonly string[] ValidInitImgExtensions = new string[] { ".png", ".jpeg", ".jpg", ".jfif", ".bmp", ".webp" };
         public static readonly string[] ValidInitEmbeddingExtensions = new string[] { ".pt", ".bin" };
+
+        public static void DoStartupChecks ()
+        {
+            if (!Debugger.IsAttached)
+            {
+                string dir = Paths.GetExeDir();
+
+                if (dir.ToLower().Replace("\\", "/").MatchesWildcard("*/users/*/onedrive/*"))
+                {
+                    UiUtils.ShowMessageBox($"Running this program out of the OneDrive folder is not supported. Please move it to a local drive and try again.", UiUtils.MessageType.Error, Nmkoder.Forms.MessageForm.FontSize.Big);
+                    Application.Exit();
+                }
+
+                if (dir.Length > 70)
+                    UiUtils.ShowMessageBox($"You are running the program from this path:\n\n{Paths.GetExeDir()}\n\nIt's very long ({dir.Length} characters), this can cause problems.\n" +
+                        $"Please move the program to a shorter path or continue at your own risk.", UiUtils.MessageType.Warning, Nmkoder.Forms.MessageForm.FontSize.Big);
+
+                UiUtils.ShowMessageBox("READ THIS FIRST!\n\nThis software is still in development and may contain bugs.\n\nImportant:\n" +
+                "- You MUST have a recent (GTX 10 series or newer) Nvidia graphics card to use this.\n" +
+                "- You need as much VRAM (graphics card memory) as possible. IF YOU HAVE LESS THAN 8 GB, use this at your own risk, it might not work at all!!\n" +
+                "- The resolution settings is very VRAM-heavy. I do not recommend going above 512x512 unless you have 8+ GB VRAM.\n\n" +
+                "Last but not least, this GUI includes tooltips, so if you're not sure what a button or other control does, hover over it with your cursor and an info message will pop up.\n\nHave fun!", UiUtils.MessageType.Warning, Nmkoder.Forms.MessageForm.FontSize.Big);
+            }
+            else
+            {
+                Logger.Log("Debugger is attached.");
+            }
+
+            if (!InstallationStatus.IsInstalled)
+            {
+                UiUtils.ShowMessageBox("No complete installation of the Stable Diffusion files was found.\n\nThe GUI will now open the installer.\nPlease press \"Install\" in the next window to install all required files.");
+                new InstallerForm().ShowDialog();
+            }
+        }
 
         public static void HandleDroppedFiles(string[] paths)
         {
