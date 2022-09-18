@@ -1,7 +1,6 @@
 ﻿using StableDiffusionGui.Data;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.MiscUtils;
-using StableDiffusionGui.Properties;
 using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
@@ -14,15 +13,14 @@ namespace StableDiffusionGui.Main
     internal class ImageExport
     {
         private static readonly int _maxPathLength = 255;
-        private static List<string> outImgs;
-
         private static readonly int _minimumImageAgeMs = 200;
         private static readonly int _loopWaitTimeMs = 100;
 
         public static async Task ExportLoop(string imagesDir, bool show)
         {
+            Logger.Log("ExportLoop START", true);
+            List<string> outImgs = new List<string>();
             await Task.Delay(1000);
-            outImgs = new List<string>();
 
             while (true)
             {
@@ -35,7 +33,7 @@ namespace StableDiffusionGui.Main
                         break;
 
                     var images = files.Where(x => x.CreationTime > TextToImage.CurrentTask.StartTime).OrderBy(x => x.CreationTime).ToList(); // Find images and sort by date, newest to oldest
-                    images = images.Where(x => (DateTime.Now - x.LastWriteTime).TotalMilliseconds >= _minimumImageAgeMs).ToList();
+                    images = images.Where(x => (DateTime.Now - x.LastWriteTime).TotalMilliseconds >= _minimumImageAgeMs).ToList(); // Wait a certain time to make sure python is done writing to it
 
                     bool sub = TextToImage.CurrentTask.SubfoldersPerPrompt;
                     Dictionary<string, string> imageDirMap = new Dictionary<string, string>();
@@ -76,7 +74,7 @@ namespace StableDiffusionGui.Main
 
                     outImgs.AddRange(renamedImgPaths);
 
-                    if (outImgs.Count > 0)
+                    if (outImgs.Count > 0 && show)
                         ImagePreview.SetImages(outImgs, ImagePreview.ImgShowMode.ShowLast);
 
                     await Task.Delay(_loopWaitTimeMs);
@@ -89,7 +87,7 @@ namespace StableDiffusionGui.Main
                 }
             }
 
-            Logger.Log("ExportLoop end.", true);
+            Logger.Log("ExportLoop END", true);
         }
 
         private static void OverlayMaskIfExists(string imgPath, bool copyMetadata = true)
