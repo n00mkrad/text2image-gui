@@ -1132,10 +1132,11 @@
             // pictBoxImgViewer
             // 
             this.pictBoxImgViewer.BackgroundImage = global::StableDiffusionGui.Properties.Resources.checkerboard;
-            this.pictBoxImgViewer.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.pictBoxImgViewer.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pictBoxImgViewer.Location = new System.Drawing.Point(654, 62);
             this.pictBoxImgViewer.Name = "pictBoxImgViewer";
             this.pictBoxImgViewer.Size = new System.Drawing.Size(512, 512);
+            this.pictBoxImgViewer.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pictBoxImgViewer.TabIndex = 113;
             this.pictBoxImgViewer.TabStop = false;
             this.pictBoxImgViewer.Click += new System.EventHandler(this.pictBoxImgViewer_Click);

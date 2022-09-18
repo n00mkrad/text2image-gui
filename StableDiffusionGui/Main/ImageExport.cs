@@ -16,6 +16,9 @@ namespace StableDiffusionGui.Main
         private static readonly int _maxPathLength = 255;
         private static List<string> outImgs;
 
+        private static readonly int _minimumImageAgeMs = 200;
+        private static readonly int _loopWaitTimeMs = 100;
+
         public static async Task ExportLoop(string imagesDir, bool show)
         {
             await Task.Delay(1000);
@@ -32,7 +35,7 @@ namespace StableDiffusionGui.Main
                         break;
 
                     var images = files.Where(x => x.CreationTime > TextToImage.CurrentTask.StartTime).OrderBy(x => x.CreationTime).ToList(); // Find images and sort by date, newest to oldest
-                    images = images.Where(x => (DateTime.Now - x.LastWriteTime).TotalMilliseconds > 500).ToList();
+                    images = images.Where(x => (DateTime.Now - x.LastWriteTime).TotalMilliseconds >= _minimumImageAgeMs).ToList();
 
                     bool sub = TextToImage.CurrentTask.SubfoldersPerPrompt;
                     Dictionary<string, string> imageDirMap = new Dictionary<string, string>();
@@ -76,7 +79,7 @@ namespace StableDiffusionGui.Main
                     if (outImgs.Count > 0)
                         ImagePreview.SetImages(outImgs, ImagePreview.ImgShowMode.ShowLast);
 
-                    await Task.Delay(1001);
+                    await Task.Delay(_loopWaitTimeMs);
                 }
                 catch (Exception ex)
                 {

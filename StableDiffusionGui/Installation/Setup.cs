@@ -160,7 +160,7 @@ namespace StableDiffusionGui.Installation
             await CloneSdRepo($"https://github.com/{GitFile}", GetDataSubPath("repo"));
         }
 
-        public static async Task CloneSdRepo(string url, string dir, string commit = "" /* 8eb4ea44fed6a1add1defe1aecc1a4a31e4573ab */)
+        public static async Task CloneSdRepo(string url, string dir, string commit = "9812c28ff41d1e4a828a81ebc5d1803205fb8303" /* 8eb4ea44fed6a1add1defe1aecc1a4a31e4573ab */)
         {
             try
             {
