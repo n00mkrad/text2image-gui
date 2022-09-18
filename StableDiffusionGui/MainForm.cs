@@ -143,7 +143,7 @@ namespace StableDiffusionGui
             textboxExtraScales.Visible = !opt;
             textboxExtraInitStrengths.Visible = !opt;
             btnEmbeddingBrowse.Visible = !opt; // Disable embedding browse btn when using optimizedSD
-            panelSampler.Visible = !opt; // Disable sampler selection when using optimizedSD
+            panelSampler.Visible = !(File.Exists(MainUi.CurrentInitImgPath) || opt); // Disable sampler selection if using optimized mode or using img2img
             panelSeamless.Visible = !opt; // Disable seamless option when using optimizedSD
 
             bool adv = Config.GetBool("checkboxAdvancedMode");
@@ -252,7 +252,7 @@ namespace StableDiffusionGui
             if (MainUi.Queue.Count > 0)
             {
                 generateAllQueuedPromptsToolStripMenuItem.Text = $"Generate Queued Prompts ({MainUi.Queue.Count})";
-                    menuStripRunQueue.Show(Cursor.Position);
+                menuStripRunQueue.Show(Cursor.Position);
             }
             else
             {
@@ -542,7 +542,6 @@ namespace StableDiffusionGui
             bool imgExists = File.Exists(MainUi.CurrentInitImgPath);
             panelInpainting.Visible = imgExists;
             panelInitImgStrength.Visible = imgExists;
-            panelSampler.Visible = !imgExists; // Disable sampler selection while image is loaded as img2img currently only supports DDIM
             btnInitImgBrowse.Text = imgExists ? "Clear Image" : "Load Image";
 
             bool embeddingExists = File.Exists(MainUi.CurrentEmbeddingPath);
@@ -564,6 +563,8 @@ namespace StableDiffusionGui
             {
                 labelPromptInfo.Text = "";
             }
+
+            RefreshAfterSettingsChanged();
         }
 
         private void btnEmbeddingBrowse_Click(object sender, EventArgs e)
@@ -683,7 +684,7 @@ namespace StableDiffusionGui
             Run(true);
         }
 
-        public void UpdateInpaintUi ()
+        public void UpdateInpaintUi()
         {
             btnResetMask.Visible = InpaintingUtils.CurrentMask != null;
         }
