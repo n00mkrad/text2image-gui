@@ -138,7 +138,7 @@ namespace StableDiffusionGui.Main
             Finish();
         }
 
-        public static async Task RunStableDiffusionOptimized(string[] prompts, string initImg, float initStrength, int iterations, int steps, float scale, long seed, Size res, string outPath)
+        public static async Task RunStableDiffusionOptimized(string[] prompts, string initImg, float initStrength, int iterations, int steps, float scale, long seed, string sampler, Size res, string outPath)
         {
             if (!CheckIfSdModelExists())
                 return;
@@ -157,12 +157,13 @@ namespace StableDiffusionGui.Main
             TextToImage.CurrentTask.Processes.Add(dream);
 
             string prec = $"{(Config.GetBool("checkboxFullPrecision") ? "full" : "autocast")}";
+            sampler = "ddim"; // OVERRIDE FOR NOW! //if (sampler.StartsWith("k_")) sampler = sampler.Remove(0, 2); // This script does not use the k_ prefix for k-diffusion samplers, so we remove it
 
             bool initImgExists = File.Exists(initImg);
 
             dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && call \"{Paths.GetDataPath()}\\mb\\Scripts\\activate.bat\" ldo && " +
                 $"python \"{Paths.GetDataPath()}/repo/optimizedSD/optimized_{(initImgExists ? "img" : "txt")}2img.py\" --model {GetSdModel()} --outdir {outPath.Wrap()} --from-file {promptFilePath.Wrap()} " +
-                $"--n_iter {iterations} --ddim_steps {steps} --W {res.Width} --H {res.Height} --scale {scale.ToStringDot("0.0000")} --seed {seed} --precision {prec} " +
+                $"--n_iter {iterations} --ddim_steps {steps} --W {res.Width} --H {res.Height} --scale {scale.ToStringDot("0.0000")} --seed {seed} --sampler {sampler} --precision {prec} " +
                 $"{(initImgExists ? $"--init-img {initImg.Wrap()} --strength {initStrength.ToStringDot("0.0000")}" : "")} {(Config.GetBool(Config.Key.lowMemTurbo) ? "--turbo" : "")} ";
 
             Logger.Log("cmd.exe " + dream.StartInfo.Arguments, true);
