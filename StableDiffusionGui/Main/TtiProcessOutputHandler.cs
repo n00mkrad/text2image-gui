@@ -22,11 +22,10 @@ namespace StableDiffusionGui.Main
             if (string.IsNullOrWhiteSpace(line))
                 return;
 
-            //Stopwatch sw = new Stopwatch();
-            //sw.Restart();
-
-            //lastLogName = ai.LogFilename;
             Logger.Log(line, true, false, "sd");
+
+            if (TextToImage.Canceled)
+                return;
 
             bool ellipsis = Logger.LastUiLine.Contains("...");
 

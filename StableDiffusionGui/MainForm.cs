@@ -245,7 +245,7 @@ namespace StableDiffusionGui
         {
             if (Program.Busy)
             {
-                TextToImage.Cancel();
+                TextToImage.CancelManually();
                 return;
             }
 
@@ -267,12 +267,13 @@ namespace StableDiffusionGui
                 if (Program.Busy)
                 {
                     TextToImage.Cancel();
+                    return;
                 }
                 else
                 {
                     TextToImage.Canceled = false;
 
-                    if (!IsInstalledWithWarning() || TextToImage.Canceled)
+                    if (!IsInstalledWithWarning())
                         return;
 
                     Logger.ClearLogBox();

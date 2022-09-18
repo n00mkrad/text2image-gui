@@ -127,7 +127,11 @@ namespace StableDiffusionGui.Main
                     dream.BeginErrorReadLine();
                 }
 
-                //while (!dream.HasExited) await Task.Delay(1);
+                //while (!dream.HasExited) await Task.Delay(1); // We don't wait for it to quit since it keeps running in background.
+            }
+            else
+            {
+                TextToImage.CurrentTask.Processes.Add(DreamPyParentProcess);
             }
 
             Finish();

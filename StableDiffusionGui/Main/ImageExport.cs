@@ -29,7 +29,7 @@ namespace StableDiffusionGui.Main
                     var files = IoUtils.GetFileInfosSorted(imagesDir, false, "*.png");
                     bool procRunning = File.Exists(Path.Combine(Paths.GetSessionDataPath(), "prompts.txt"));
 
-                    if (!procRunning && !files.Any())
+                    if (TextToImage.Canceled || (!procRunning && !files.Any()))
                         break;
 
                     var images = files.Where(x => x.CreationTime > TextToImage.CurrentTask.StartTime).OrderBy(x => x.CreationTime).ToList(); // Find images and sort by date, newest to oldest

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace StableDiffusionGui.Main
 {
@@ -64,7 +65,7 @@ namespace StableDiffusionGui.Main
 
                 PromptHistory.Add(s);
 
-                if(batches.Count > 1)
+                if (batches.Count > 1)
                     Logger.Log($"Running queue entry with {s.Prompts.Length} prompt{(s.Prompts.Length != 1 ? "s" : "")}...");
 
                 string tempOutDir = Path.Combine(Paths.GetSessionDataPath(), "out");
@@ -120,17 +121,27 @@ namespace StableDiffusionGui.Main
                 OsUtils.ShowNotification("Stable Diffusion GUI", $"Image generation has finished.\nGenerated {imgCount} images in {FormatUtils.Time(timeTaken, false)}.", true);
         }
 
+        public static void CancelManually ()
+        {
+            Cancel("Canceled manually.", false);
+        }
+
         public static void Cancel(string reason = "", bool showMsgBox = true)
         {
             Canceled = true;
-            //Program.MainForm.SetProgress(0);
-            //Program.MainForm.SetWorking(false);
-            //
-            //TtiProcess.Kill();
 
-            TtiUtils.SoftCancelDreamPy();
+            bool forceKill = reason.ToLower().Contains("manually") && Keyboard.Modifiers == ModifierKeys.Shift; // Shift force-kills the process
 
-            Logger.LogIfLastLineDoesNotContainMsg("Canceled.");
+            if (!forceKill && LastTaskSettings.Implementation == Implementation.StableDiffusion && TtiProcess.IsDreamPyRunning) 
+            {
+                TtiUtils.SoftCancelDreamPy();
+            }
+            else
+            {
+                TtiProcess.Kill();
+            }
+
+            Logger.LogIfLastLineDoesNotContainMsg("Canceled."); 
 
             if (!string.IsNullOrWhiteSpace(reason) && showMsgBox)
                 UiUtils.ShowMessageBox($"Canceled:\n\n{reason}");
