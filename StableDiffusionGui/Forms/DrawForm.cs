@@ -12,12 +12,16 @@ namespace StableDiffusionGui.Forms
         public Image BackgroundImage;
         public Image Mask;
 
+        Bitmap _raw;
+
         public DrawForm(Image background, Image mask = null)
         {
             BackgroundImage = background;
 
             if(mask != null)
                 _raw = mask as Bitmap;
+            else
+                _raw = new Bitmap(background.Width, background.Height);
 
             InitializeComponent();
         }
@@ -25,7 +29,7 @@ namespace StableDiffusionGui.Forms
         private void DrawForm_Load(object sender, EventArgs e)
         {
             Width = BackgroundImage.Width + 16;
-            Height = BackgroundImage.Height + 109;
+            Height = BackgroundImage.Height + 144;
             CenterToScreen();
 
             if (InpaintingUtils.CurrentBlurValue >= 0)
@@ -54,15 +58,13 @@ namespace StableDiffusionGui.Forms
             _mouseDown = true;
         }
 
-        Bitmap _raw;
-
         private void pictBox_MouseMove(object sender, MouseEventArgs e)
         {
             if (!_mouseDown || _lastPoint == null || ((MouseEventArgs)e).Button != MouseButtons.Left)
                 return;
 
-            if (_raw == null)
-                _raw = new Bitmap(BackgroundImage.Width, BackgroundImage.Height);
+            //if (_raw == null)
+            //    _raw = new Bitmap(BackgroundImage.Width, BackgroundImage.Height);
 
             if (pictBox.Image == null)
                 pictBox.Image = new Bitmap(BackgroundImage.Width, BackgroundImage.Height);

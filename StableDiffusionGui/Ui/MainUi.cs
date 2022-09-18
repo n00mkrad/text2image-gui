@@ -25,6 +25,11 @@ namespace StableDiffusionGui.Ui
             set {
                 _currentInitImgPath = value;
                 Logger.Log(string.IsNullOrWhiteSpace(value) ? "" : $"Now using initialization image {Path.GetFileName(value).Wrap()}.");
+                if(InpaintingUtils.CurrentMask != null)
+                {
+                    InpaintingUtils.CurrentMask = null;
+                    Logger.Log("Inpainting mask has been cleared.");
+                }
             }
         }
         

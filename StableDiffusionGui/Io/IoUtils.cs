@@ -766,6 +766,9 @@ namespace StableDiffusionGui.Io
 
         public static void SetImageMetadata (string imgPath, string text, string keyName = "")
         {
+            if (string.IsNullOrWhiteSpace(text))
+                return;
+
             text = text.Replace("\"", "\\\""); // Escape quotation marks
             string scriptPath = Path.Combine(Paths.GetDataPath(), "repo", "addmetadata.py");
             Process p = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
