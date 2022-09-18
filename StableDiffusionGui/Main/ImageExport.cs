@@ -15,20 +15,14 @@ namespace StableDiffusionGui.Main
         private static readonly int _maxPathLength = 255;
         private static readonly int _minimumImageAgeMs = 200;
         private static readonly int _loopWaitBeforeStartMs = 1000;
-        private static readonly int _loopWaitTimeMs = 100;
+        private static readonly int _loopWaitTimeMs = 200;
 
         public static async Task ExportLoop(string imagesDir, bool show)
         {
             Logger.Log("ExportLoop START", true);
             List<string> outImgs = new List<string>();
 
-            for (int i = 0; i < _loopWaitBeforeStartMs; i++)
-            {
-                if (TextToImage.Canceled)
-                    break;
-
-                await Task.Delay(1);
-            }
+            await Task.Delay(_loopWaitBeforeStartMs);
 
             while (!TextToImage.Canceled)
             {
