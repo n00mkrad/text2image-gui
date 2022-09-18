@@ -119,15 +119,12 @@ namespace StableDiffusionGui.Os
         public static void FindAndKillOrphans(string filter = "")
         {
             string dataPath = Paths.GetDataPath();
-            List<string> procsWithCli = new List<string>();
 
-            ManagementClass mgmtClass = new ManagementClass("Win32_Process");
-
-            foreach (ManagementObject o in mgmtClass.GetInstances())
+            foreach (ManagementObject obj in new ManagementClass("Win32_Process").GetInstances())
             {
-                string exe = $"{o["ExecutablePath"]}";
-                string cli = $"{o["CommandLine"]}";
-                int pid = $"{o["ProcessId"]}".GetInt();
+                string exe = $"{obj["ExecutablePath"]}";
+                string cli = $"{obj["CommandLine"]}";
+                int pid = $"{obj["ProcessId"]}".GetInt();
 
                 if (string.IsNullOrWhiteSpace(exe) || string.IsNullOrWhiteSpace(cli))
                     continue;
@@ -147,7 +144,7 @@ namespace StableDiffusionGui.Os
                     }
                     catch (Exception ex)
                     {
-                        Logger.Log($"Failed to kill process: {ex.Message}");
+                        Logger.Log($"Failed to kill process ({procWithCli}) (PID {pid}): {ex.Message}");
                     }
                 }
             }
