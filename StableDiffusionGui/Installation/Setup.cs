@@ -127,11 +127,11 @@ namespace StableDiffusionGui.Installation
         public static async Task DownloadSdModelFile(bool force = false)
         {
             string mdlPath = Path.Combine(Paths.GetModelsPath(), "stable-diffusion-1.4.ckpt");
-            var filesize = File.Exists(mdlPath) ? new FileInfo(mdlPath).Length : 0;
+            bool hasModel = IoUtils.GetFileInfosSorted(Paths.GetModelsPath(), false, "*.ckpt").Where(x => x.Length == 4265380512).Any();
 
-            if (filesize == 4265380512 && !force)
+            if (hasModel && !force)
             {
-                Logger.Log($"Model file already exists ({FormatUtils.Bytes(filesize)}), won't redownload.");
+                Logger.Log($"Model file already exists, won't redownload.");
                 return;
             }
 
@@ -160,7 +160,7 @@ namespace StableDiffusionGui.Installation
             await CloneSdRepo($"https://github.com/{GitFile}", GetDataSubPath("repo"));
         }
 
-        public static async Task CloneSdRepo(string url, string dir, string commit = "9812c28ff41d1e4a828a81ebc5d1803205fb8303" /* 8eb4ea44fed6a1add1defe1aecc1a4a31e4573ab */)
+        public static async Task CloneSdRepo(string url, string dir, string commit = "069d7e32ed1f44df3c137409a3fa6a72e843751b")
         {
             try
             {
