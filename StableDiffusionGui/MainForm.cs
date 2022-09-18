@@ -149,21 +149,6 @@ namespace StableDiffusionGui
             }
         }
 
-        public bool IsInstalledWithWarning(bool showInstaller = true)
-        {
-            if (!InstallationStatus.IsInstalled)
-            {
-                UiUtils.ShowMessageBox("A valid installation is required.");
-
-                if (showInstaller)
-                    installerBtn_Click(null, null);
-
-                return false;
-            }
-
-            return true;
-        }
-
         public void LoadTtiSettingsIntoUi(string[] prompts)
         {
             textboxPrompt.Text = String.Join(Environment.NewLine, prompts);
@@ -244,7 +229,7 @@ namespace StableDiffusionGui
                 {
                     TextToImage.Canceled = false;
 
-                    if (!IsInstalledWithWarning())
+                    if (!MainUi.IsInstalledWithWarning())
                         return;
 
                     Logger.ClearLogBox();
@@ -430,7 +415,7 @@ namespace StableDiffusionGui
 
         private void cliButton_Click(object sender, EventArgs e)
         {
-            if (!IsInstalledWithWarning())
+            if (!MainUi.IsInstalledWithWarning())
                 return;
 
             TtiProcess.RunStableDiffusionCli(Config.Get(Config.Key.textboxOutPath));
@@ -446,12 +431,7 @@ namespace StableDiffusionGui
             else
             {
                 if (pictBoxImgViewer.Image != null)
-                {
-                    var bigPreviewForm = new BigPreviewForm();
-                    bigPreviewForm.EnableTiling = checkboxSeamless.Checked;
-                    bigPreviewForm.Show();
-                    bigPreviewForm.SetImage(pictBoxImgViewer.Image);
-                }
+                    new BigPreviewForm(pictBoxImgViewer.Image, true, checkboxSeamless.Checked).Show();
             }
         }
 

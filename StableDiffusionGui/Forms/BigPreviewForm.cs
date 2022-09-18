@@ -10,26 +10,25 @@ namespace StableDiffusionGui.Forms
 {
     public partial class BigPreviewForm : Form
     {
-        public bool Maximize = true;
-        public bool EnableTiling = false;
-
         private Image _img;
+        private bool _maximize = true;
+        private bool _enableTiling = false;
         private int _currentTiling = 1;
 
-        public BigPreviewForm()
+        public BigPreviewForm(Image img, bool maximize = true, bool enableTiling = false)
         {
+            _img = img;
+            _maximize = maximize;
+            _enableTiling = enableTiling;
             InitializeComponent();
         }
 
         private void BigPreviewForm_Load(object sender, EventArgs e)
         {
-            WindowState = FormWindowState.Maximized;
-            Text += $" - Right-click for More Options{(EnableTiling ? $" - Left-click To Cycle Tiling Mode" : "")}";
-        }
+            if(_maximize)
+                WindowState = FormWindowState.Maximized;
 
-        public void SetImage(Image img)
-        {
-            _img = img;
+            Text += $" - Right-click for More Options{(_enableTiling ? $" - Left-click To Cycle Tiling Mode" : "")}";
             picBox.Image = _img;
         }
 
@@ -58,7 +57,7 @@ namespace StableDiffusionGui.Forms
             }
             else
             {
-                if (EnableTiling)
+                if (_enableTiling)
                     CycleTiling();
             }
         }

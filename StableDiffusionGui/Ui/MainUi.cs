@@ -78,6 +78,21 @@ namespace StableDiffusionGui.Ui
             }
         }
 
+        public static bool IsInstalledWithWarning(bool showInstaller = true)
+        {
+            if (!InstallationStatus.IsInstalled)
+            {
+                UiUtils.ShowMessageBox("A valid installation is required.");
+
+                if (showInstaller)
+                    new InstallerForm().ShowDialog();
+
+                return false;
+            }
+
+            return true;
+        }
+
         public static void HandleDroppedFiles(string[] paths)
         {
             if (Program.Busy)
