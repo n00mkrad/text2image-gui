@@ -187,7 +187,7 @@
             this.outputImgLabel.ForeColor = System.Drawing.Color.Silver;
             this.outputImgLabel.Location = new System.Drawing.Point(655, 579);
             this.outputImgLabel.Name = "outputImgLabel";
-            this.outputImgLabel.Size = new System.Drawing.Size(133, 13);
+            this.outputImgLabel.Size = new System.Drawing.Size(100, 13);
             this.outputImgLabel.TabIndex = 81;
             this.outputImgLabel.Text = "No images to show.";
             // 
@@ -1430,7 +1430,7 @@
             this.MaximizeBox = false;
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Stable Diffusion GUI 1.3.1";
+            this.Text = "Stable Diffusion GUI 1.4.0";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.Shown += new System.EventHandler(this.MainForm_Shown);
