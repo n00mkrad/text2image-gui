@@ -74,7 +74,7 @@ namespace StableDiffusionGui.Installation
             l.Add($"SET CONDA_ROOT_PATH=../mb");
             l.Add($"SET CONDA_SCRIPTS_PATH=../mb/Scripts");
             l.Add($"");
-            l.Add($"SET PATH={GetTemporaryPathVariable(new string[] { "../mb", "../mb/Scripts", "../mb/condabin", "../mb/Library/bin" })}");
+            l.Add($"SET PATH={OsUtils.GetTemporaryPathVariable(new string[] { "../mb", "../mb/Scripts", "../mb/condabin", "../mb/Library/bin" })}");
             l.Add($"");
             l.Add($"_conda env create -f environment.yaml -p \"%CONDA_ROOT_PATH%\\envs\\ldo\"");
             l.Add($"_conda env update --file environment.yaml --prune -p \"%CONDA_ROOT_PATH%\\envs\\ldo\"");
@@ -350,17 +350,6 @@ namespace StableDiffusionGui.Installation
                 Logger.Log($"Error validating installation: {ex.Message}");
                 Logger.Log($"{ex.StackTrace}", true);
             }
-        }
-
-        private static string GetTemporaryPathVariable(IEnumerable<string> additionalPaths)
-        {
-            var paths = Environment.GetEnvironmentVariable("PATH").Split(';');
-            List<string> newPaths = new List<string>();
-
-            newPaths.AddRange(additionalPaths);
-            newPaths.AddRange(paths.Where(x => x.ToLower().Replace("\\", "/").StartsWith("c:/windows")).ToList());
-
-            return String.Join(";", newPaths) + ";";
         }
 
         private static string GetDataSubPath(string dir)

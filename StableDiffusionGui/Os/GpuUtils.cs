@@ -1,5 +1,6 @@
 ﻿using StableDiffusionGui.Data;
 using StableDiffusionGui.Io;
+using StableDiffusionGui.Main;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -22,11 +23,10 @@ namespace StableDiffusionGui.Os
 
         public static async Task<List<Gpu>> GetCudaGpus()
         {
-            string scriptPath = Path.Combine(Paths.GetDataPath(), "repo", "check_gpus.py");
             List<string> outLines = new List<string>();
 
             Process p = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
-            p.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && call \"mb\\Scripts\\activate.bat\" \"mb/envs/ldo\" && python {scriptPath.Wrap()}";
+            p.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetPathVariableCmd()} && call activate.bat mb/envs/ldo && python repo/check_gpus.py";
 
             if (!OsUtils.ShowHiddenCmd())
             {

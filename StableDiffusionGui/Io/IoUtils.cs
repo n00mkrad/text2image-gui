@@ -770,10 +770,9 @@ namespace StableDiffusionGui.Io
                 return;
 
             text = text.Replace("\"", "\\\""); // Escape quotation marks
-            string scriptPath = Path.Combine(Paths.GetDataPath(), "repo", "addmetadata.py");
             Process p = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
-            p.StartInfo.Arguments = $"/C cd /D {Paths.GetDataPath().Wrap()} && call \"mb\\Scripts\\activate.bat\" \"mb/envs/ldo\" && " +
-                $"python {scriptPath.Wrap()} -i {imgPath.Wrap()} -t {text.Wrap()} {(string.IsNullOrWhiteSpace(keyName) ? "" : $"-k {keyName}")}";
+            p.StartInfo.Arguments = $"/C cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetPathVariableCmd()} && call activate.bat mb/envs/ldo && " +
+                $"python repo/addmetadata.py -i {imgPath.Wrap()} -t {text.Wrap()} {(string.IsNullOrWhiteSpace(keyName) ? "" : $"-k {keyName}")}";
             p.Start();
             p.WaitForExit();
         }

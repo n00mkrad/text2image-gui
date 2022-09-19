@@ -105,5 +105,10 @@ namespace StableDiffusionGui.Main
             string filename = Config.Get(Config.Key.comboxSdModel);
             return withExtension ? filename : Path.GetFileNameWithoutExtension(filename);
         }
+
+        public static string GetPathVariableCmd (string baseDir = ".")
+        {
+            return $"SET PATH={OsUtils.GetTemporaryPathVariable(new string[] { $"{baseDir}/mb", $"{baseDir}/mb/Scripts", $"{baseDir}/mb/condabin", $"{baseDir}/mb/Library/bin" })}";
+        }
     }
 }

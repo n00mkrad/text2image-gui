@@ -99,8 +99,8 @@ namespace StableDiffusionGui.Main
                 Process dream = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
                 TextToImage.CurrentTask.Processes.Add(dream);
 
-                dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && call \"{Paths.GetDataPath()}\\mb\\Scripts\\activate.bat\" ldo && " +
-                    $"python \"{Paths.GetDataPath()}/repo/scripts/dream.py\" --model {TtiUtils.GetSdModel()} -o {outPath.Wrap()} --from_file_loop={promptFilePath.Wrap()} {precArg} " +
+                dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetPathVariableCmd()} && call activate.bat ldo && " +
+                    $"python repo/scripts/dream.py --model {TtiUtils.GetSdModel()} -o {outPath.Wrap()} --from_file_loop={promptFilePath.Wrap()} {precArg} " +
                     $"{embArg} --print_steps ";
 
                 Logger.Log("cmd.exe " + dream.StartInfo.Arguments, true);
@@ -200,8 +200,8 @@ namespace StableDiffusionGui.Main
                 Process dream = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
                 TextToImage.CurrentTask.Processes.Add(dream);
 
-                dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && call \"{Paths.GetDataPath()}\\mb\\Scripts\\activate.bat\" ldo && " +
-                    $"python \"{Paths.GetDataPath()}/repo/optimizedSD/optimized_txt2img_loop.py\" --model {mdlArg} --outdir {outPath.Wrap()} --from_file_loop={promptFilePath.Wrap()} {precArg} ";
+                dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetPathVariableCmd()} && call activate.bat ldo && " +
+                    $"python repo/optimizedSD/optimized_txt2img_loop.py --model {mdlArg} --outdir {outPath.Wrap()} --from_file_loop={promptFilePath.Wrap()} {precArg} ";
                 Logger.Log("cmd.exe " + dream.StartInfo.Arguments, true);
 
                 if (!OsUtils.ShowHiddenCmd())
@@ -244,8 +244,12 @@ namespace StableDiffusionGui.Main
 
             string batPath = Path.Combine(Paths.GetSessionDataPath(), "dream.bat");
 
-            string batText = $"@echo off\n title Dream.py CLI && cd /D {Paths.GetDataPath().Wrap()} && call \"mb\\Scripts\\activate.bat\" \"mb/envs/ldo\" && " +
-                $"python \"repo/scripts/dream.py\" --model {TtiUtils.GetSdModel()} -o {outPath.Wrap()} {(Config.GetBool("checkboxFullPrecision") ? "--full_precision" : "")} ";
+            string batText = $"@echo off\n" +
+                $"title Dream.py CLI\n" +
+                $"cd /D {Paths.GetDataPath().Wrap()}\n" +
+                $"SET PATH={OsUtils.GetTemporaryPathVariable(new string[] { "./mb", "./mb/Scripts", "./mb/condabin", "./mb/Library/bin" })}\n" +
+                $"call activate.bat mb/envs/ldo\n" +
+                $"python repo/scripts/dream.py --model {TtiUtils.GetSdModel()} -o {outPath.Wrap()} {(Config.GetBool("checkboxFullPrecision") ? "--full_precision" : "")} ";
 
             File.WriteAllText(batPath, batText);
             ProcessManager.FindAndKillOrphans("*repo*.py*");

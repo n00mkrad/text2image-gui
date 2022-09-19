@@ -303,5 +303,16 @@ namespace StableDiffusionGui.Os
             Logger.Log($"windows-kill.exe {p.StartInfo.Arguments}", true);
             p.Start();
         }
+
+        public static string GetTemporaryPathVariable(IEnumerable<string> additionalPaths)
+        {
+            var paths = Environment.GetEnvironmentVariable("PATH").Split(';');
+            List<string> newPaths = new List<string>();
+
+            newPaths.AddRange(additionalPaths);
+            newPaths.AddRange(paths.Where(x => x.ToLower().Replace("\\", "/").StartsWith("c:/windows")).ToList());
+
+            return string.Join(";", newPaths) + ";";
+        }
     }
 }
