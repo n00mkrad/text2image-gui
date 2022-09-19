@@ -9,27 +9,27 @@ namespace StableDiffusionGui.Forms
 {
     public partial class DrawForm : Form
     {
-        public Image BackgroundImage;
+        public Image BackgroundImg;
         public Image Mask;
 
         Bitmap _raw;
 
         public DrawForm(Image background, Image mask = null)
         {
-            BackgroundImage = background;
+            BackgroundImg = background;
 
             if(mask != null)
                 _raw = mask as Bitmap;
             else
-                _raw = new Bitmap(background.Width, background.Height);
+                _raw = new Bitmap(BackgroundImg.Width, BackgroundImg.Height);
 
             InitializeComponent();
         }
 
         private void DrawForm_Load(object sender, EventArgs e)
         {
-            Width = BackgroundImage.Width + 16;
-            Height = BackgroundImage.Height + 144;
+            Width = BackgroundImg.Width + 16;
+            Height = BackgroundImg.Height + 144;
             CenterToScreen();
 
             if (InpaintingUtils.CurrentBlurValue >= 0)
@@ -37,7 +37,7 @@ namespace StableDiffusionGui.Forms
             else
                 InpaintingUtils.CurrentBlurValue = sliderBlur.Value;
 
-            pictBox.BackgroundImage = BackgroundImage;
+            pictBox.BackgroundImage = BackgroundImg;
             Blur();
         }
 
@@ -63,11 +63,8 @@ namespace StableDiffusionGui.Forms
             if (!_mouseDown || _lastPoint == null || ((MouseEventArgs)e).Button != MouseButtons.Left)
                 return;
 
-            //if (_raw == null)
-            //    _raw = new Bitmap(BackgroundImage.Width, BackgroundImage.Height);
-
             if (pictBox.Image == null)
-                pictBox.Image = new Bitmap(BackgroundImage.Width, BackgroundImage.Height);
+                pictBox.Image = new Bitmap(BackgroundImg.Width, BackgroundImg.Height);
 
             int brushSize = sliderBrushSize.Value;
 
@@ -91,7 +88,7 @@ namespace StableDiffusionGui.Forms
 
         private void clearToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _raw = null;
+            _raw = new Bitmap(BackgroundImg.Width, BackgroundImg.Height);
             pictBox.Image = null;
             Invalidate();
         }
