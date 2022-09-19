@@ -160,7 +160,7 @@ namespace StableDiffusionGui.Installation
             await CloneSdRepo($"https://github.com/{GitFile}", GetDataSubPath("repo"));
         }
 
-        public static async Task CloneSdRepo(string url, string dir, string commit = "a804bcc5a99501d7202c1fe30688d6f1a1e57063")
+        public static async Task CloneSdRepo(string url, string dir, string commit = "a52f5076236bc01056a250c897238b973e6981c9")
         {
             try
             {
@@ -312,13 +312,11 @@ namespace StableDiffusionGui.Installation
                     {
                         string path = Path.Combine(GetDataSubPath("repo"));
                         File.WriteAllText(eggLink.FullName, path + "\n.");
-                        easyInstallPaths.Add(path);
                     }
                     else
                     {
                         string path = Path.Combine(GetDataSubPath("repo"), "src", nameNoExt);
                         File.WriteAllText(eggLink.FullName, path + "\n.");
-                        easyInstallPaths.Add(path);
                     }
 
                     Logger.Log($"Fixed egg-link file {eggLink.FullName}.", true);
@@ -328,7 +326,22 @@ namespace StableDiffusionGui.Installation
 
                 if (File.Exists(easyInstallPth))
                 {
-                    File.WriteAllLines(easyInstallPth, easyInstallPaths.ToArray());
+                    var easyInstallLines = File.ReadAllLines(easyInstallPth);
+                    List<string> newLines = new List<string>();
+
+                    string splitText = @"data\repo";
+                    string newBasePath = Paths.GetExeDir().ToLower().Replace("/", @"\");
+
+                    Logger.Log($"easy-install.pth new lines:", true);
+
+                    foreach (string line in easyInstallLines.Select(x => x.ToLower()))
+                    {
+                        var split = line.Split(splitText);
+                        newLines.Add(newBasePath + splitText + split.Last());
+                        Logger.Log(newLines.Last(), true);
+                    }
+
+                    File.WriteAllLines(easyInstallPth, newLines);
                     Logger.Log($"Fixed easy-install.pth.", true);
                 }
             }
