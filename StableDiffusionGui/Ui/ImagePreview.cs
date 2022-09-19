@@ -81,7 +81,7 @@ namespace StableDiffusionGui.Ui
             if (!string.IsNullOrWhiteSpace(meta.Sampler))
                 infos.Add($"{meta.Sampler}");
 
-            Program.MainForm.OutputImgLabel.Text = $"Showing Image {_currIndex+1}/{_currentImages.Length} {(infos.Count > 0 ? $" - {string.Join(" - ", infos)}" : "")}";
+            Program.MainForm.OutputImgLabel.Text = $"Image {_currIndex+1}/{_currentImages.Length} {(infos.Count > 0 ? $" - {string.Join(" - ", infos)}" : "")}";
         }
 
         public static void Clear ()
