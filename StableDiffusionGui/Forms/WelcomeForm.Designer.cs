@@ -85,7 +85,7 @@
             this.panelNews.Location = new System.Drawing.Point(0, 0);
             this.panelNews.Margin = new System.Windows.Forms.Padding(0, 0, 5, 0);
             this.panelNews.Name = "panelNews";
-            this.panelNews.Size = new System.Drawing.Size(669, 461);
+            this.panelNews.Size = new System.Drawing.Size(640, 460);
             this.panelNews.TabIndex = 4;
             // 
             // newsLabel
@@ -120,10 +120,10 @@
             this.panelPatrons.Controls.Add(this.patronsLabel);
             this.panelPatrons.Controls.Add(this.label21);
             this.panelPatrons.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.25F);
-            this.panelPatrons.Location = new System.Drawing.Point(679, 0);
+            this.panelPatrons.Location = new System.Drawing.Point(650, 0);
             this.panelPatrons.Margin = new System.Windows.Forms.Padding(5, 0, 0, 0);
             this.panelPatrons.Name = "panelPatrons";
-            this.panelPatrons.Size = new System.Drawing.Size(284, 461);
+            this.panelPatrons.Size = new System.Drawing.Size(313, 460);
             this.panelPatrons.TabIndex = 5;
             // 
             // patronsLabel
@@ -175,8 +175,8 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 70F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 67F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33F));
             this.tableLayoutPanel1.Controls.Add(this.panelNews, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.panelPatrons, 1, 0);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 62);
@@ -184,11 +184,12 @@
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(963, 461);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(963, 460);
             this.tableLayoutPanel1.TabIndex = 111;
             // 
             // btnItch
             // 
+            this.btnItch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnItch.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
             this.btnItch.BackgroundImage = global::StableDiffusionGui.Properties.Resources.itch2;
             this.btnItch.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
@@ -225,7 +226,9 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
             this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(2000, 1200);
             this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(750, 450);
             this.Name = "WelcomeForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Welcome";
