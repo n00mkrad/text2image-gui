@@ -65,12 +65,10 @@ namespace StableDiffusionGui
         {
             Setup.FixHardcodedPaths();
             Task.Run(() => SetGpusInWindowTitle());
-
             upDownSeed.Text = "";
-
             MainUi.DoStartupChecks();
-
             RefreshAfterSettingsChanged();
+            new WelcomeForm().ShowDialog();
         }
 
         private async Task SetGpusInWindowTitle()

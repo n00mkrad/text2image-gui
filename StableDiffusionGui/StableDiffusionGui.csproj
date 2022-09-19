@@ -180,6 +180,12 @@
     <Compile Include="Forms\SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\WelcomeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\WelcomeForm.Designer.cs">
+      <DependentUpon>WelcomeForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Installation\InstallationStatus.cs" />
     <Compile Include="Installation\Setup.cs" />
     <Compile Include="Io\Config.cs" />
@@ -203,6 +209,7 @@
     <Compile Include="Os\GpuUtils.cs" />
     <Compile Include="Os\ProcessManager.cs" />
     <Compile Include="Os\SdGuiProcess.cs" />
+    <Compile Include="Ui\GetWebInfo.cs" />
     <Compile Include="Ui\InpaintUi.cs" />
     <Compile Include="Ui\MainUi.cs" />
     <Compile Include="Main\TextToImage.cs" />
@@ -237,6 +244,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\WelcomeForm.resx">
+      <DependentUpon>WelcomeForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
