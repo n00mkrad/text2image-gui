@@ -115,7 +115,7 @@ namespace StableDiffusionGui.Forms
         {
             if (_ready && checkboxOptimizedSd.Checked)
                 UiUtils.ShowMessageBox($"Warning: Low Memory Mode disables several features, such as custom samplers or seamless mode.\n" +
-            $"Only keep this option enabled if your GPU has less than 8 GB of memory.");
+            $"Only keep this option enabled if your GPU has less than 6 GB of memory.");
         }
     }
 }
