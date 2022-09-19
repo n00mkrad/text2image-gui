@@ -925,7 +925,7 @@
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(311, 13);
             this.label4.TabIndex = 84;
-            this.label4.Text = "Low Memory Mode (For <8 GB GPUs - Disables Some Features!)";
+            this.label4.Text = "Low Memory Mode (For <6 GB GPUs - Disables Some Features!)";
             // 
             // panel11
             // 

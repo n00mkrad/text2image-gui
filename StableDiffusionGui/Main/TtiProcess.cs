@@ -38,13 +38,8 @@ namespace StableDiffusionGui.Main
             string promptFilePath = Path.Combine(Paths.GetSessionDataPath(), "prompts.txt");
             List<string> promptFileLines = new List<string>();
 
-            string upscaling = "";
             int upscaleSetting = Config.GetInt("comboxUpscale");
-
-            if (upscaleSetting == 1)
-                upscaling = "-U 2";
-            else if (upscaleSetting == 2)
-                upscaling = "-U 4";
+            string upscaling = upscaleSetting == 0 ? "" : $"-U {Math.Pow(2, upscaleSetting)}";
 
             float gfpganSetting = Config.GetFloat("sliderGfpgan");
             string gfpgan = gfpganSetting > 0.01f ? $"-G {gfpganSetting.ToStringDot("0.00")}" : "";
@@ -207,13 +202,8 @@ namespace StableDiffusionGui.Main
             string promptFilePath = Path.Combine(Paths.GetSessionDataPath(), "prompts.txt");
             List<string> promptFileLines = new List<string>();
 
-            string upscaling = "";
             int upscaleSetting = Config.GetInt("comboxUpscale");
-
-            if (upscaleSetting == 1)
-                upscaling = "-U 2";
-            else if (upscaleSetting == 2)
-                upscaling = "-U 4";
+            string upscaling = upscaleSetting == 0 ? "" : $"-U {Math.Pow(2, upscaleSetting)}";
 
             float gfpganSetting = Config.GetFloat("sliderGfpgan");
             string gfpgan = gfpganSetting > 0.01f ? $"-G {gfpganSetting.ToStringDot("0.00")}" : "";
@@ -340,14 +330,14 @@ namespace StableDiffusionGui.Main
                 {
                     TextToImage.Cancel($"Stable Diffusion model file {savedModelFileName.Wrap()} not found.\nPossibly it was moved, renamed, or deleted.");
                 }
-                
+
                 return false;
             }
 
             return true;
         }
 
-        private static string GetSdModel (bool withExtension = false)
+        private static string GetSdModel(bool withExtension = false)
         {
             string filename = Config.Get(Config.Key.comboxSdModel);
             return withExtension ? filename : Path.GetFileNameWithoutExtension(filename);
@@ -361,7 +351,7 @@ namespace StableDiffusionGui.Main
                 {
                     try
                     {
-                        if(process != null && !process.HasExited)
+                        if (process != null && !process.HasExited)
                             OsUtils.KillProcessTree(process.Id);
                     }
                     catch (Exception e)
