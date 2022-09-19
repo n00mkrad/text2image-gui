@@ -15,22 +15,23 @@ namespace StableDiffusionGui.Forms
     public partial class PromptListForm : Form
     {
         public enum ListMode { History, Queue }
-        public ListMode PromptListMode = ListMode.History;
+        private ListMode _promptListMode = ListMode.History;
 
-        public PromptListForm()
+        public PromptListForm(ListMode mode)
         {
+            _promptListMode = mode;
             InitializeComponent();
         }
 
         private void PromptListForm_Load(object sender, EventArgs e)
         {
-            if (PromptListMode == ListMode.History)
+            if (_promptListMode == ListMode.History)
             {
                 Text = "Prompt History";
                 btnAddPromptsToQueue.Visible = false;
             }
 
-            if (PromptListMode == ListMode.Queue)
+            if (_promptListMode == ListMode.Queue)
             {
                 Text = "Prompt Queue";
                 btnAddPromptsToQueue.Visible = true;
@@ -41,9 +42,9 @@ namespace StableDiffusionGui.Forms
 
         private void PromptListForm_Shown(object sender, EventArgs e)
         {
-            if (PromptListMode == ListMode.History)
+            if (_promptListMode == ListMode.History)
                 LoadPromptHistory();
-            if (PromptListMode == ListMode.Queue)
+            if (_promptListMode == ListMode.Queue)
                 LoadQueue();
         }
 
@@ -66,14 +67,14 @@ namespace StableDiffusionGui.Forms
 
         private void deleteSelectedToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (PromptListMode == ListMode.History)
+            if (_promptListMode == ListMode.History)
             {
                 PromptHistory.Delete(promptListView.CheckedItems.Cast<ListViewItem>().Select(x => (TtiSettings)x.Tag).ToList());
                 PromptHistory.Delete(promptListView.SelectedItems.Cast<ListViewItem>().Select(x => (TtiSettings)x.Tag).ToList());
                 LoadPromptHistory();
             }
 
-            if (PromptListMode == ListMode.Queue)
+            if (_promptListMode == ListMode.Queue)
             {
                 MainUi.Queue = MainUi.Queue.Except(promptListView.CheckedItems.Cast<ListViewItem>().Select(x => (TtiSettings)x.Tag).ToList()).ToList();
                 MainUi.Queue = MainUi.Queue.Except(promptListView.SelectedItems.Cast<ListViewItem>().Select(x => (TtiSettings)x.Tag).ToList()).ToList();
@@ -83,13 +84,13 @@ namespace StableDiffusionGui.Forms
 
         private void deleteAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (PromptListMode == ListMode.History)
+            if (_promptListMode == ListMode.History)
             {
                 PromptHistory.DeleteAll();
                 LoadPromptHistory();
             }
 
-            if (PromptListMode == ListMode.Queue)
+            if (_promptListMode == ListMode.Queue)
             {
                 MainUi.Queue.Clear();
                 LoadQueue();
@@ -104,7 +105,7 @@ namespace StableDiffusionGui.Forms
 
                 if (focusedItem != null && focusedItem.Bounds.Contains(e.Location))
                 {
-                    if (PromptListMode == ListMode.History)
+                    if (_promptListMode == ListMode.History)
                         menuStripPromptHistory.Show(Cursor.Position);
                 }
             }

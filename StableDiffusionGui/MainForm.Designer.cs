@@ -189,7 +189,7 @@
             this.outputImgLabel.Name = "outputImgLabel";
             this.outputImgLabel.Size = new System.Drawing.Size(133, 13);
             this.outputImgLabel.TabIndex = 81;
-            this.outputImgLabel.Text = "No output images to show.";
+            this.outputImgLabel.Text = "No images to show.";
             // 
             // label2
             // 

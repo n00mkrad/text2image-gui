@@ -287,20 +287,24 @@ namespace StableDiffusionGui
             Program.Busy = state;
         }
 
-        public void SetProgress(int percent)
+        public void SetProgress(int percent, bool taskbarProgress = true)
         {
             percent = percent.Clamp(0, 100);
-            TaskbarManager.Instance.SetProgressValue(percent, 100);
             progressBar.Value = percent;
             progressBar.Refresh();
+
+            if (taskbarProgress)
+                TaskbarManager.Instance.SetProgressValue(percent, 100);
         }
 
-        public void SetProgressImg(int percent)
+        public void SetProgressImg(int percent, bool taskbarProgress = false)
         {
             percent = percent.Clamp(0, 100);
-            TaskbarManager.Instance.SetProgressValue(percent, 100);
             progressBarImg.Value = percent;
             progressBarImg.Refresh();
+
+            if (taskbarProgress)
+                TaskbarManager.Instance.SetProgressValue(percent, 100);
         }
 
         private void btnPrevImg_Click(object sender, EventArgs e)
@@ -413,7 +417,7 @@ namespace StableDiffusionGui
 
         private void cliButton_Click(object sender, EventArgs e)
         {
-            if (!MainUi.IsInstalledWithWarning())
+            if (Program.Busy || !MainUi.IsInstalledWithWarning())
                 return;
 
             TtiProcess.RunStableDiffusionCli(Config.Get(Config.Key.textboxOutPath));
@@ -607,16 +611,18 @@ namespace StableDiffusionGui
 
         private void btnPromptHistory_Click(object sender, EventArgs e)
         {
-            var form = new PromptListForm();
-            form.PromptListMode = PromptListForm.ListMode.History;
-            form.ShowDialog();
+            if (Program.Busy)
+                return;
+
+            new PromptListForm(PromptListForm.ListMode.History).ShowDialog();
         }
 
         private void btnQueue_Click(object sender, EventArgs e)
         {
-            var form = new PromptListForm();
-            form.PromptListMode = PromptListForm.ListMode.Queue;
-            form.ShowDialog();
+            if (Program.Busy)
+                return;
+
+            new PromptListForm(PromptListForm.ListMode.Queue).ShowDialog();
         }
 
         private void generateCurrentPromptToolStripMenuItem_Click(object sender, EventArgs e)
