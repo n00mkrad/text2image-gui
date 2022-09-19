@@ -562,7 +562,7 @@ namespace StableDiffusionGui
             foreach (var log in Logger.SessionLogs)
             {
                 ToolStripItem newItem = menuStripLogs.Items.Add($"Copy {log.Key}");
-                newItem.Click += (s, ea) => { OsUtils.SetClipboard(Logger.SessionLogs[log.Key]); Logger.Log($"Copied {log.Key} to clipboard."); };
+                newItem.Click += (s, ea) => { OsUtils.SetClipboard(Logger.SessionLogs[log.Key]); };
             }
 
             menuStripLogs.Show(Cursor.Position);
