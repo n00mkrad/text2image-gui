@@ -1,12 +1,17 @@
 SD GUI 1.4.0 Changelog:
+- Stable Diffusion model no longer needs to be reloaded every time new images are generated
+- Added support for mask-based inpainting
 - Added support for loading HuggingFace .bin concepts (textual inversion embeddings)
 - Added prompt queue, allows you to queue up prompts with their settings
 - Added prompt history, allows your to view or load previous prompts
 - Added a progress bar that shows the generation progress of the current image
 - Added option to play sound and/or show notification when finished
+- Added a "Welcome screen" that shows the changelog and patrons
+- Added buttons to use the previous seed or to reset it
 - Added button to expand prompt field to 2x height
 - Added proper support for DPI scaling
-- Stable Diffusion model no longer needs to be reloaded every time a batch of images is generated
+- Post-processing now works with Low Memory Mode
+- Further VRAM optimizations, especially in regular mode
 - Available CUDA GPUs are now listed in window title
 - Windows should not be able to go to sleep while the program runs (untested)
 - Updated GFPGAN model to 1.4
