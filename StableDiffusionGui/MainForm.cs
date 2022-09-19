@@ -68,7 +68,9 @@ namespace StableDiffusionGui
             upDownSeed.Text = "";
             MainUi.DoStartupChecks();
             RefreshAfterSettingsChanged();
-            new WelcomeForm().ShowDialog();
+
+            if (!Debugger.IsAttached)
+                new WelcomeForm().ShowDialog();
         }
 
         private async Task SetGpusInWindowTitle()
