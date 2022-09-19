@@ -79,7 +79,7 @@ namespace StableDiffusionGui.Main
             string precArg = $"{(Config.GetBool("checkboxFullPrecision") ? "-F" : "")}";
             string embArg = !string.IsNullOrWhiteSpace(embedding) ? $"--embedding_path {embedding.Wrap()}" : "";
 
-            string newStartupSettings = $"{mdlArg}{precArg}{embArg}"; // Check if startup settings match - If not, we need to reload the model
+            string newStartupSettings = $"{mdlArg}{precArg}{embArg}"; // Check if startup settings match - If not, we need to restart the process
 
             string strengths = File.Exists(initImg) ? $" and {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
             Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} with {iterations} iteration{(iterations != 1 ? "s" : "")} each and {scales.Length} scale{(scales.Length != 1 ? "s" : "")}{strengths} each = {imgs} images total.");
@@ -241,9 +241,8 @@ namespace StableDiffusionGui.Main
 
             string mdlArg = GetSdModel();
             string precArg = $"--precision {(Config.GetBool("checkboxFullPrecision") ? "full" : "autocast")}";
-            string embArg = !string.IsNullOrWhiteSpace(embedding) ? $"--embedding_path {embedding.Wrap()}" : "";
 
-            string newStartupSettings = $"{mdlArg}{precArg}{embArg}"; // Check if startup settings match - If not, we need to reload the model
+            string newStartupSettings = $"opt{mdlArg}{precArg}"; // Check if startup settings match - If not, we need to restart the process
 
             string strengths = File.Exists(initImg) ? $" and {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
             Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} with {iterations} iteration{(iterations != 1 ? "s" : "")} each and {scales.Length} scale{(scales.Length != 1 ? "s" : "")}{strengths} each = {imgs} images total.");
@@ -251,14 +250,6 @@ namespace StableDiffusionGui.Main
             if (!IsDreamPyRunning || (IsDreamPyRunning && _lastDreamPyStartupSettings != newStartupSettings))
             {
                 _lastDreamPyStartupSettings = newStartupSettings;
-
-                // if (!string.IsNullOrWhiteSpace(embedding))
-                // {
-                //     if (!File.Exists(embedding))
-                //         embedding = "";
-                //     else
-                //         Logger.Log($"Using learned concept: {Path.GetFileName(embedding)}");
-                // }
 
                 Process dream = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
                 TextToImage.CurrentTask.Processes.Add(dream);
