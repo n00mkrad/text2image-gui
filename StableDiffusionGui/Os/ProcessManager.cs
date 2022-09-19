@@ -116,7 +116,7 @@ namespace StableDiffusionGui.Os
             Kill(RunningSubProcesses.Where(x => x.Type == SdGuiProcess.ProcessType.Helper).ToList());
         }
 
-        public static void FindAndKillOrphans(string filter = "")
+        public static void FindAndKillOrphans(string wildcardFilter = "")
         {
             string dataPath = Paths.GetDataPath();
 
@@ -133,8 +133,11 @@ namespace StableDiffusionGui.Os
 
                 if (procWithCli.Contains(dataPath))
                 {
-                    if (!string.IsNullOrWhiteSpace(filter) && !procWithCli.Contains(filter))
+                    if (!string.IsNullOrWhiteSpace(wildcardFilter) && !procWithCli.MatchesWildcard(wildcardFilter))
+                    {
+                        Logger.Log($"Proc does not match wildcard: {procWithCli} (PID {pid})", true);
                         continue;
+                    }
 
                     try
                     {

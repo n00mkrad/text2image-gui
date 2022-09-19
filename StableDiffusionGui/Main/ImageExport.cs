@@ -29,10 +29,13 @@ namespace StableDiffusionGui.Main
                 try
                 {
                     var files = IoUtils.GetFileInfosSorted(imagesDir, false, "*.png");
-                    bool procRunning = File.Exists(Path.Combine(Paths.GetSessionDataPath(), "prompts.txt"));
+                    bool procBusy = IoUtils.GetFileInfosSorted(Paths.GetSessionDataPath(), false, "prompts*.*").Any();
 
-                    if (!procRunning && !files.Any())
+                    if (!procBusy && !files.Any())
+                    {
+                        Logger.Log($"ExportLoop: Breaking. Process running: {procBusy} - Any files exist: {files.Any()}", true);
                         break;
+                    }
 
                     var images = files.Where(x => x.CreationTime > TextToImage.CurrentTask.StartTime).OrderBy(x => x.CreationTime).ToList(); // Find images and sort by date, newest to oldest
                     images = images.Where(x => (DateTime.Now - x.LastWriteTime).TotalMilliseconds >= _minimumImageAgeMs).ToList(); // Wait a certain time to make sure python is done writing to it

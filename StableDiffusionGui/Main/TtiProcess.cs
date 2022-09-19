@@ -111,7 +111,7 @@ namespace StableDiffusionGui.Main
                     dream.ErrorDataReceived += (sender, line) => { TtiProcessOutputHandler.LogOutput(line.Data, true); };
                 }
 
-                ProcessManager.FindAndKillOrphans("dream.py");
+                ProcessManager.FindAndKillOrphans("*repo*.py*");
                 TtiProcessOutputHandler.Start();
                 Logger.Log("Loading Stable Diffusion...");
                 DreamPyParentProcess = dream;
@@ -133,60 +133,6 @@ namespace StableDiffusionGui.Main
             Finish();
         }
 
-        public static async Task RunStableDiffusionOptimized(string[] prompts, string initImg, float initStrength, int iterations, int steps, float scale, long seed, string sampler, Size res, string outPath)
-        {
-            if (!CheckIfSdModelExists())
-                return;
-
-            if (File.Exists(initImg))
-                initImg = TtiUtils.ResizeInitImg(initImg, res);
-
-            string promptFilePath = Path.Combine(Paths.GetSessionDataPath(), "prompts.txt");
-            File.WriteAllLines(promptFilePath, prompts);
-
-            Logger.Log($"Preparing to run Optimized Stable Diffusion - {iterations} Iterations, {steps} Steps, Scale {scale}, {res.Width}x{res.Height}, Starting Seed: {seed}");
-
-            Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} with {iterations} iteration{(iterations != 1 ? "s" : "")} each = {iterations * prompts.Length} images total.");
-
-            Process dream = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
-            TextToImage.CurrentTask.Processes.Add(dream);
-
-            string prec = $"{(Config.GetBool("checkboxFullPrecision") ? "full" : "autocast")}";
-            sampler = "ddim"; // OVERRIDE FOR NOW! //if (sampler.StartsWith("k_")) sampler = sampler.Remove(0, 2); // This script does not use the k_ prefix for k-diffusion samplers, so we remove it
-
-            bool initImgExists = File.Exists(initImg);
-
-            dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && call \"{Paths.GetDataPath()}\\mb\\Scripts\\activate.bat\" ldo && " +
-                $"python \"{Paths.GetDataPath()}/repo/optimizedSD/optimized_{(initImgExists ? "img" : "txt")}2img.py\" --model {GetSdModel()} --outdir {outPath.Wrap()} --from-file {promptFilePath.Wrap()} " +
-                $"--n_iter {iterations} --ddim_steps {steps} --W {res.Width} --H {res.Height} --scale {scale.ToStringDot("0.0000")} --seed {seed} --sampler {sampler} --precision {prec} " +
-                $"{(initImgExists ? $"--init-img {initImg.Wrap()} --strength {initStrength.ToStringDot("0.0000")}" : "")} {(Config.GetBool(Config.Key.lowMemTurbo) ? "--turbo" : "")} ";
-
-            Logger.Log("cmd.exe " + dream.StartInfo.Arguments, true);
-
-            if (!OsUtils.ShowHiddenCmd())
-            {
-                dream.OutputDataReceived += (sender, line) => { TtiProcessOutputHandler.LogOutput(line.Data); };
-                dream.ErrorDataReceived += (sender, line) => { TtiProcessOutputHandler.LogOutput(line.Data, true); };
-            }
-
-            ProcessManager.FindAndKillOrphans("dream.py");
-            TtiProcessOutputHandler.Start();
-            Logger.Log("Loading Stable Diffusion...");
-            dream.Start();
-
-            if (!OsUtils.ShowHiddenCmd())
-            {
-                dream.BeginOutputReadLine();
-                dream.BeginErrorReadLine();
-            }
-
-            while (!dream.HasExited) await Task.Delay(1);
-
-            IoUtils.TryDeleteIfExists(Path.Combine(Paths.GetSessionDataPath(), "prompts.txt"));
-
-            Finish();
-        }
-
         public static async Task RunStableDiffusionOpt(string[] prompts, string initImg, string embedding, float[] initStrengths, int iterations, int steps, float[] scales, long seed, string sampler, Size res, bool seamless, string outPath)
         {
             // NOTE: Currently not implemented: Embeddings, Samplers, Seamless Mode
@@ -199,7 +145,7 @@ namespace StableDiffusionGui.Main
 
             long startSeed = seed;
 
-            string promptFilePath = Path.Combine(Paths.GetSessionDataPath(), "prompts.txt");
+            string promptFilePath = Path.Combine(Paths.GetSessionDataPath(), "prompts-opt.txt");
             List<string> promptFileLines = new List<string>();
 
             int upscaleSetting = Config.GetInt("comboxUpscale");
@@ -264,7 +210,7 @@ namespace StableDiffusionGui.Main
                     dream.ErrorDataReceived += (sender, line) => { TtiProcessOutputHandler.LogOutput(line.Data, true); };
                 }
 
-                ProcessManager.FindAndKillOrphans("optimized_txt2img_loop.py");
+                ProcessManager.FindAndKillOrphans("*repo*.py*");
                 TtiProcessOutputHandler.Start();
                 Logger.Log("Loading Stable Diffusion...");
                 DreamPyParentProcess = dream;
@@ -302,7 +248,7 @@ namespace StableDiffusionGui.Main
                 $"python \"repo/scripts/dream.py\" --model {GetSdModel()} -o {outPath.Wrap()} {(Config.GetBool("checkboxFullPrecision") ? "--full_precision" : "")} ";
 
             File.WriteAllText(batPath, batText);
-            ProcessManager.FindAndKillOrphans("dream.py");
+            ProcessManager.FindAndKillOrphans("*repo*.py*");
             Process.Start(batPath);
         }
 
