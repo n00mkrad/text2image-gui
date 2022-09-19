@@ -76,12 +76,16 @@ namespace StableDiffusionGui
         private async Task SetGpusInWindowTitle()
         {
             var gpus = await GpuUtils.GetCudaGpus();
-            List<string> strings = new List<string>();
+            List<string> gpuNames = gpus.Select(x => x.FullName).ToList();
+            int maxGpusToListInTitle = 2;
 
-            foreach (var g in gpus)
-                strings.Add($"{g.FullName} (#{g.CudaDeviceId})");
+            if(gpuNames.Count < 1)
+                Text = $"{Text} - No CUDA GPUs available.";
+            else if (gpuNames.Count <= maxGpusToListInTitle)
+                Text = $"{Text} - CUDA GPU{(gpuNames.Count != 1 ? "s" : "")}: {string.Join(", ", gpuNames)}";
+            else
+                Text = $"{Text} - CUDA GPUs: {string.Join(", ", gpuNames.Take(maxGpusToListInTitle))} (+{gpuNames.Count - maxGpusToListInTitle})";
 
-            Text = $"{Text} - CUDA GPUs: {(strings.Count > 0 ? string.Join(", ", strings) : "None")}";
             Logger.Log($"Detected {gpus.Count} CUDA-capable GPU{(gpus.Count != 1 ? "s" : "")}.");
         }
 
