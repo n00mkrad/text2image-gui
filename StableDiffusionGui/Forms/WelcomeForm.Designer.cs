@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WelcomeForm));
             this.titleLabel = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -39,6 +40,8 @@
             this.label21 = new System.Windows.Forms.Label();
             this.btnOk = new HTAlt.WinForms.HTButton();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.btnItch = new System.Windows.Forms.Button();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.panel1.SuspendLayout();
             this.panelNews.SuspendLayout();
             this.panelPatrons.SuspendLayout();
@@ -79,10 +82,10 @@
             this.panelNews.Controls.Add(this.newsLabel);
             this.panelNews.Controls.Add(this.label15);
             this.panelNews.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.25F);
-            this.panelNews.Location = new System.Drawing.Point(5, 5);
-            this.panelNews.Margin = new System.Windows.Forms.Padding(5);
+            this.panelNews.Location = new System.Drawing.Point(0, 0);
+            this.panelNews.Margin = new System.Windows.Forms.Padding(0, 0, 5, 0);
             this.panelNews.Name = "panelNews";
-            this.panelNews.Size = new System.Drawing.Size(664, 451);
+            this.panelNews.Size = new System.Drawing.Size(669, 461);
             this.panelNews.TabIndex = 4;
             // 
             // newsLabel
@@ -117,10 +120,10 @@
             this.panelPatrons.Controls.Add(this.patronsLabel);
             this.panelPatrons.Controls.Add(this.label21);
             this.panelPatrons.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.25F);
-            this.panelPatrons.Location = new System.Drawing.Point(679, 5);
-            this.panelPatrons.Margin = new System.Windows.Forms.Padding(5);
+            this.panelPatrons.Location = new System.Drawing.Point(679, 0);
+            this.panelPatrons.Margin = new System.Windows.Forms.Padding(5, 0, 0, 0);
             this.panelPatrons.Name = "panelPatrons";
-            this.panelPatrons.Size = new System.Drawing.Size(279, 451);
+            this.panelPatrons.Size = new System.Drawing.Size(284, 461);
             this.panelPatrons.TabIndex = 5;
             // 
             // patronsLabel
@@ -177,11 +180,36 @@
             this.tableLayoutPanel1.Controls.Add(this.panelNews, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.panelPatrons, 1, 0);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 62);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(963, 461);
             this.tableLayoutPanel1.TabIndex = 111;
+            // 
+            // btnItch
+            // 
+            this.btnItch.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnItch.BackgroundImage = global::StableDiffusionGui.Properties.Resources.itch2;
+            this.btnItch.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnItch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnItch.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnItch.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnItch.Location = new System.Drawing.Point(935, 9);
+            this.btnItch.Name = "btnItch";
+            this.btnItch.Size = new System.Drawing.Size(40, 40);
+            this.btnItch.TabIndex = 112;
+            this.btnItch.TabStop = false;
+            this.toolTip.SetToolTip(this.btnItch, "Open itch.io page");
+            this.btnItch.UseVisualStyleBackColor = false;
+            this.btnItch.Click += new System.EventHandler(this.btnItch_Click);
+            // 
+            // toolTip
+            // 
+            this.toolTip.AutomaticDelay = 200;
+            this.toolTip.AutoPopDelay = 5000;
+            this.toolTip.InitialDelay = 200;
+            this.toolTip.ReshowDelay = 40;
             // 
             // WelcomeForm
             // 
@@ -189,6 +217,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.ClientSize = new System.Drawing.Size(984, 561);
+            this.Controls.Add(this.btnItch);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.titleLabel);
@@ -225,5 +254,7 @@
         private System.Windows.Forms.Label label21;
         private HTAlt.WinForms.HTButton btnOk;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.Button btnItch;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }

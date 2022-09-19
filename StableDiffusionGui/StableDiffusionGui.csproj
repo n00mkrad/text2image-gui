@@ -293,6 +293,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon1.ico" />
+    <None Include="Resources\itch2.png" />
+    <None Include="Resources\itch1.png" />
     <None Include="Resources\mona512x384.png" />
     <None Include="Resources\checkerboard1.png" />
     <None Include="Resources\checkerboard.png" />

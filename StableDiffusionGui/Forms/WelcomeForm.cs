@@ -1,5 +1,6 @@
 ﻿using StableDiffusionGui.Ui;
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -27,6 +28,11 @@ namespace StableDiffusionGui.Forms
         {
             if (e.KeyCode == Keys.Escape || e.KeyCode == Keys.Return)
                 Close();
+        }
+
+        private void btnItch_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://nmkd.itch.io/t2i-gui");
         }
     }
 }
