@@ -25,13 +25,13 @@ namespace StableDiffusionGui.Main
 
         public static async Task RunStableDiffusion(string[] prompts, string initImg, string embedding, float[] initStrengths, int iterations, int steps, float[] scales, long seed, string sampler, Size res, bool seamless, string outPath)
         {
-            if (!CheckIfSdModelExists())
+            if (!TtiUtils.CheckIfSdModelExists())
                 return;
 
             if (File.Exists(initImg))
                 initImg = TtiUtils.ResizeInitImg(initImg, res);
 
-            TtiUtils.WriteModelsYaml(GetSdModel());
+            TtiUtils.WriteModelsYaml(TtiUtils.GetSdModel());
 
             long startSeed = seed;
 
@@ -75,7 +75,7 @@ namespace StableDiffusionGui.Main
 
             Logger.Log($"Running Stable Diffusion - {iterations} Iterations, {steps} Steps, Scales {(scales.Length < 4 ? string.Join(", ", scales.Select(x => x.ToStringDot())) : $"{scales.First()}->{scales.Last()}")}, {res.Width}x{res.Height}, Starting Seed: {startSeed}");
 
-            string mdlArg = GetSdModel();
+            string mdlArg = TtiUtils.GetSdModel();
             string precArg = $"{(Config.GetBool("checkboxFullPrecision") ? "-F" : "")}";
             string embArg = !string.IsNullOrWhiteSpace(embedding) ? $"--embedding_path {embedding.Wrap()}" : "";
 
@@ -100,7 +100,7 @@ namespace StableDiffusionGui.Main
                 TextToImage.CurrentTask.Processes.Add(dream);
 
                 dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && call \"{Paths.GetDataPath()}\\mb\\Scripts\\activate.bat\" ldo && " +
-                    $"python \"{Paths.GetDataPath()}/repo/scripts/dream.py\" --model {GetSdModel()} -o {outPath.Wrap()} --from_file_loop={promptFilePath.Wrap()} {precArg} " +
+                    $"python \"{Paths.GetDataPath()}/repo/scripts/dream.py\" --model {TtiUtils.GetSdModel()} -o {outPath.Wrap()} --from_file_loop={promptFilePath.Wrap()} {precArg} " +
                     $"{embArg} --print_steps ";
 
                 Logger.Log("cmd.exe " + dream.StartInfo.Arguments, true);
@@ -137,7 +137,7 @@ namespace StableDiffusionGui.Main
         {
             // NOTE: Currently not implemented: Embeddings, Samplers, Seamless Mode
 
-            if (!CheckIfSdModelExists())
+            if (!TtiUtils.CheckIfSdModelExists())
                 return;
 
             if (File.Exists(initImg))
@@ -185,7 +185,7 @@ namespace StableDiffusionGui.Main
 
             Logger.Log($"Running Stable Diffusion - {iterations} Iterations, {steps} Steps, Scales {(scales.Length < 4 ? string.Join(", ", scales.Select(x => x.ToStringDot())) : $"{scales.First()}->{scales.Last()}")}, {res.Width}x{res.Height}, Starting Seed: {startSeed}");
 
-            string mdlArg = GetSdModel();
+            string mdlArg = TtiUtils.GetSdModel();
             string precArg = $"--precision {(Config.GetBool("checkboxFullPrecision") ? "full" : "autocast")}";
 
             string newStartupSettings = $"opt{mdlArg}{precArg}"; // Check if startup settings match - If not, we need to restart the process
@@ -237,47 +237,19 @@ namespace StableDiffusionGui.Main
             if (Program.Busy)
                 return;
 
-            if (!CheckIfSdModelExists())
+            if (!TtiUtils.CheckIfSdModelExists())
                 return;
 
-            TtiUtils.WriteModelsYaml(GetSdModel());
+            TtiUtils.WriteModelsYaml(TtiUtils.GetSdModel());
 
             string batPath = Path.Combine(Paths.GetSessionDataPath(), "dream.bat");
 
             string batText = $"@echo off\n title Dream.py CLI && cd /D {Paths.GetDataPath().Wrap()} && call \"mb\\Scripts\\activate.bat\" \"mb/envs/ldo\" && " +
-                $"python \"repo/scripts/dream.py\" --model {GetSdModel()} -o {outPath.Wrap()} {(Config.GetBool("checkboxFullPrecision") ? "--full_precision" : "")} ";
+                $"python \"repo/scripts/dream.py\" --model {TtiUtils.GetSdModel()} -o {outPath.Wrap()} {(Config.GetBool("checkboxFullPrecision") ? "--full_precision" : "")} ";
 
             File.WriteAllText(batPath, batText);
             ProcessManager.FindAndKillOrphans("*repo*.py*");
             Process.Start(batPath);
-        }
-
-        private static bool CheckIfSdModelExists()
-        {
-            if (!File.Exists(Path.Combine(Paths.GetModelsPath(), GetSdModel(true))))
-            {
-                string savedModelFileName = Config.Get(Config.Key.comboxSdModel);
-
-                if (string.IsNullOrWhiteSpace(savedModelFileName))
-                {
-                    TextToImage.Cancel($"No Stable Diffusion model file has been set.\nPlease set one in the settings.");
-                    new SettingsForm().ShowDialog();
-                }
-                else
-                {
-                    TextToImage.Cancel($"Stable Diffusion model file {savedModelFileName.Wrap()} not found.\nPossibly it was moved, renamed, or deleted.");
-                }
-
-                return false;
-            }
-
-            return true;
-        }
-
-        private static string GetSdModel(bool withExtension = false)
-        {
-            string filename = Config.Get(Config.Key.comboxSdModel);
-            return withExtension ? filename : Path.GetFileNameWithoutExtension(filename);
         }
 
         public static void Kill()

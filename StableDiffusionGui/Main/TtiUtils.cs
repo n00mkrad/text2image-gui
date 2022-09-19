@@ -77,5 +77,33 @@ namespace StableDiffusionGui.Main
             foreach (System.Diagnostics.Process p in childProcesses)
                 OsUtils.SendCtrlC(p.Id);
         }
+
+        public static bool CheckIfSdModelExists()
+        {
+            if (!File.Exists(Path.Combine(Paths.GetModelsPath(), GetSdModel(true))))
+            {
+                string savedModelFileName = Config.Get(Config.Key.comboxSdModel);
+
+                if (string.IsNullOrWhiteSpace(savedModelFileName))
+                {
+                    TextToImage.Cancel($"No Stable Diffusion model file has been set.\nPlease set one in the settings.");
+                    new SettingsForm().ShowDialog();
+                }
+                else
+                {
+                    TextToImage.Cancel($"Stable Diffusion model file {savedModelFileName.Wrap()} not found.\nPossibly it was moved, renamed, or deleted.");
+                }
+
+                return false;
+            }
+
+            return true;
+        }
+
+        public static string GetSdModel(bool withExtension = false)
+        {
+            string filename = Config.Get(Config.Key.comboxSdModel);
+            return withExtension ? filename : Path.GetFileNameWithoutExtension(filename);
+        }
     }
 }
