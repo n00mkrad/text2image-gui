@@ -3,7 +3,9 @@ using StableDiffusionGui.Ui;
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Windows;
 using System.Windows.Forms;
+using Point = System.Drawing.Point;
 
 namespace StableDiffusionGui.Forms
 {
@@ -28,8 +30,11 @@ namespace StableDiffusionGui.Forms
 
         private void DrawForm_Load(object sender, EventArgs e)
         {
-            Width = BackgroundImg.Width + 16;
-            Height = BackgroundImg.Height + 144;
+            int scale = (int)(100 * Screen.PrimaryScreen.Bounds.Width / SystemParameters.PrimaryScreenWidth);
+            float scaleFactor = scale / 100f;
+
+            Width = BackgroundImg.Width + (16 * scaleFactor).RoundToInt();
+            Height = BackgroundImg.Height + (144 * scaleFactor).RoundToInt();
             CenterToScreen();
 
             if (InpaintingUtils.CurrentBlurValue >= 0)
@@ -47,9 +52,7 @@ namespace StableDiffusionGui.Forms
         private void pictBox_Click(object sender, EventArgs e)
         {
             if (((MouseEventArgs)e).Button == MouseButtons.Right)
-            {
                 menuStripOptions.Show(Cursor.Position);
-            }
         }
 
         private void pictBox_MouseDown(object sender, MouseEventArgs e)
