@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Management;
-using System.Threading.Tasks;
 
 namespace StableDiffusionGui.Os
 {
@@ -120,36 +119,43 @@ namespace StableDiffusionGui.Os
         {
             string dataPath = Paths.GetDataPath();
 
-            foreach (ManagementObject obj in new ManagementClass("Win32_Process").GetInstances())
+            try
             {
-                string exe = $"{obj["ExecutablePath"]}";
-                string cli = $"{obj["CommandLine"]}";
-                int pid = $"{obj["ProcessId"]}".GetInt();
-
-                if (string.IsNullOrWhiteSpace(exe) || string.IsNullOrWhiteSpace(cli))
-                    continue;
-
-                string procWithCli = $"{exe} {cli}";
-
-                if (procWithCli.Contains(dataPath))
+                foreach (ManagementObject obj in new ManagementClass("Win32_Process").GetInstances())
                 {
-                    if (!string.IsNullOrWhiteSpace(wildcardFilter) && !procWithCli.MatchesWildcard(wildcardFilter))
-                    {
-                        Logger.Log($"Proc does not match wildcard: {procWithCli} (PID {pid})", true);
-                        continue;
-                    }
+                    string exe = $"{obj["ExecutablePath"]}";
+                    string cli = $"{obj["CommandLine"]}";
+                    int pid = $"{obj["ProcessId"]}".GetInt();
 
-                    try
+                    if (string.IsNullOrWhiteSpace(exe) || string.IsNullOrWhiteSpace(cli))
+                        continue;
+
+                    string procWithCli = $"{exe} {cli}";
+
+                    if (procWithCli.Contains(dataPath))
                     {
-                        Logger.Log($"Killing {procWithCli} (PID {pid})", true);
-                        OsUtils.KillProcessTree(pid);
-                        Logger.Log($"Killed successfully.", true);
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.Log($"Failed to kill process ({procWithCli}) (PID {pid}): {ex.Message}");
+                        if (!string.IsNullOrWhiteSpace(wildcardFilter) && !procWithCli.MatchesWildcard(wildcardFilter))
+                        {
+                            Logger.Log($"Proc does not match wildcard: {procWithCli} (PID {pid})", true);
+                            continue;
+                        }
+
+                        try
+                        {
+                            Logger.Log($"Killing {procWithCli} (PID {pid})", true);
+                            OsUtils.KillProcessTree(pid);
+                            Logger.Log($"Killed successfully.", true);
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.Log($"Failed to kill process ({procWithCli}) (PID {pid}): {ex.Message}");
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                Logger.Log($"FindAndKillOrphans Error: {ex.Message}\n{ex.StackTrace}", true);
             }
         }
     }
