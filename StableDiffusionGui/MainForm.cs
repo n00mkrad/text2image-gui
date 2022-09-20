@@ -135,7 +135,7 @@ namespace StableDiffusionGui
 
         public void CleanPrompt()
         {
-            if (File.Exists(MainUi.CurrentEmbeddingPath))
+            if (File.Exists(MainUi.CurrentEmbeddingPath) && Path.GetExtension(MainUi.CurrentEmbeddingPath).ToLower() == ".bin")
             {
                 string conceptName = Path.GetFileNameWithoutExtension(MainUi.CurrentEmbeddingPath);
                 textboxPrompt.Text = textboxPrompt.Text.Replace("*", $"<{conceptName.Trim()}>");
