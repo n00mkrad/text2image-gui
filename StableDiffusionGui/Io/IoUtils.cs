@@ -26,7 +26,7 @@ namespace StableDiffusionGui.Io
                 using (FileStream stream = new FileStream(path, FileMode.Open, FileAccess.Read))
                     return Image.FromStream(stream);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logger.Log($"Failed to load image from {path}: {ex.Message}", true);
                 return Resources.imgNotFound;
@@ -253,35 +253,6 @@ namespace StableDiffusionGui.Io
             }
         }
 
-        public static async Task ReverseRenaming(string basePath, Dictionary<string, string> oldNewMap) // Relative -> absolute paths
-        {
-            Dictionary<string, string> absPaths = oldNewMap.ToDictionary(x => Path.Combine(basePath, x.Key), x => Path.Combine(basePath, x.Value));
-            await ReverseRenaming(absPaths);
-        }
-
-        public static async Task ReverseRenaming(Dictionary<string, string> oldNewMap)  // Takes absolute paths only
-        {
-            if (oldNewMap == null || oldNewMap.Count < 1) return;
-            int counter = 0;
-            int failCount = 0;
-
-            foreach (KeyValuePair<string, string> pair in oldNewMap)
-            {
-                bool success = TryMove(pair.Value, pair.Key);
-
-                if (!success)
-                    failCount++;
-
-                if (failCount >= 100)
-                    break;
-
-                counter++;
-
-                if (counter % 1000 == 0)
-                    await Task.Delay(1);
-            }
-        }
-
         /// <summary>
 		/// Async (background thread) version of TryDeleteIfExists. Safe to run without awaiting.
 		/// </summary>
@@ -441,22 +412,6 @@ namespace StableDiffusionGui.Io
             }
         }
 
-        public static string GetHighestFrameNumPath(string path)
-        {
-            FileInfo highest = null;
-            int highestInt = -1;
-            foreach (FileInfo frame in new DirectoryInfo(path).GetFiles("*.*", SearchOption.TopDirectoryOnly))
-            {
-                int num = frame.Name.GetInt();
-                if (num > highestInt)
-                {
-                    highest = frame;
-                    highestInt = frame.Name.GetInt();
-                }
-            }
-            return highest.FullName;
-        }
-
         public static string FilenameSuffix(string path, string suffix)
         {
             try
@@ -577,7 +532,7 @@ namespace StableDiffusionGui.Io
         {
             try
             {
-                if(path == null || !Directory.Exists(path))
+                if (path == null || !Directory.Exists(path))
                     return new string[0];
 
                 SearchOption opt = recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
@@ -612,7 +567,7 @@ namespace StableDiffusionGui.Io
                 DirectoryInfo dir = new DirectoryInfo(path);
                 return dir.GetFiles(pattern, opt).OrderBy(x => x.Name).ToArray();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logger.Log($"GetFileInfosSorted error: {ex.Message}");
                 return new FileInfo[0];
@@ -740,7 +695,7 @@ namespace StableDiffusionGui.Io
             return exts.Select(x => x).Distinct().ToArray();
         }
 
-        public static ImageMetadata GetImageMetadata (string path, string keword = "Dream: ")
+        public static ImageMetadata GetImageMetadata(string path, string keword = "Dream: ")
         {
             try
             {
@@ -752,19 +707,19 @@ namespace StableDiffusionGui.Io
                 {
                     MetadataExtractor.Tag dreamTag = pngTextDir.Tags.Where(x => x.Description.Contains(keword)).FirstOrDefault();
 
-                    if(dreamTag != null)
+                    if (dreamTag != null)
                         return new ImageMetadata(path, dreamTag.Description.Split(keword).Last());
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                
+
             }
 
             return new ImageMetadata();
         }
 
-        public static void SetImageMetadata (string imgPath, string text, string keyName = "")
+        public static void SetImageMetadata(string imgPath, string text, string keyName = "")
         {
             if (string.IsNullOrWhiteSpace(text))
                 return;
@@ -788,6 +743,31 @@ namespace StableDiffusionGui.Io
             {
                 return false;
             }
+        }
+
+        public static bool IsFileLocked(string filePath)
+        {
+            if (!File.Exists(filePath))
+                return false;
+
+            return IsFileLocked(new FileInfo(filePath));
+        }
+
+        public static bool IsFileLocked(FileInfo file)
+        {
+            try
+            {
+                using (FileStream stream = file.Open(FileMode.Open, FileAccess.Read, FileShare.None))
+                {
+                    stream.Close();
+                }
+            }
+            catch (IOException)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }
