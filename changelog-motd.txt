@@ -15,6 +15,7 @@ SD GUI 1.4.0 Changelog:
 - Available CUDA GPUs are now listed in window title
 - Windows should not be able to go to sleep while the program runs (untested)
 - Updated GFPGAN model to 1.4
+- Fixed a bug where empty "unknown prompt" folders were created
 - Fixed some issues regarding the python environment
 
 
