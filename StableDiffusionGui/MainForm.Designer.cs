@@ -1371,7 +1371,7 @@
             // pictBoxImgViewer
             // 
             this.pictBoxImgViewer.BackgroundImage = global::StableDiffusionGui.Properties.Resources.checkerboard;
-            this.pictBoxImgViewer.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.pictBoxImgViewer.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictBoxImgViewer.Location = new System.Drawing.Point(654, 62);
             this.pictBoxImgViewer.Name = "pictBoxImgViewer";
             this.pictBoxImgViewer.Size = new System.Drawing.Size(512, 512);
