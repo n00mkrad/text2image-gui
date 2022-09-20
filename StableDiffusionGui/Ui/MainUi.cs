@@ -102,7 +102,7 @@ namespace StableDiffusionGui.Ui
                 ImageMetadata meta = IoUtils.GetImageMetadata(path);
 
                 if (!string.IsNullOrWhiteSpace(meta.Prompt))
-                    Logger.Log($"Found metadata in {Path.GetFileName(path)}:\n{meta.ParsedText}");
+                    Logger.Log($"Found metadata in image:\n{meta.ParsedText}");
             }
 
             if (paths.Length == 1)
