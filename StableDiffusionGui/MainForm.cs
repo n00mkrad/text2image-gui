@@ -153,12 +153,12 @@ namespace StableDiffusionGui
 
         public void LoadTtiSettingsIntoUi(string[] prompts)
         {
-            textboxPrompt.Text = String.Join(Environment.NewLine, prompts);
+            textboxPrompt.Text = string.Join(Environment.NewLine, prompts);
         }
 
         public void LoadTtiSettingsIntoUi(TtiSettings s)
         {
-            textboxPrompt.Text = String.Join(Environment.NewLine, s.Prompts);
+            textboxPrompt.Text = string.Join(Environment.NewLine, s.Prompts);
             upDownIterations.Value = s.Iterations;
             sliderSteps.Value = s.Params["steps"].GetInt() / 5; sliderSteps_Scroll(null, null);
             sliderScale.Value = (s.Params["scales"].Split(",")[0].GetFloat() * 2f).RoundToInt(); sliderScale_Scroll(null, null);
@@ -184,12 +184,12 @@ namespace StableDiffusionGui
                 Params = new Dictionary<string, string>
                         {
                             { "steps", MainUi.CurrentSteps.ToString() },
-                            { "scales", String.Join(",", MainUi.GetScales(textboxExtraScales.Text).Select(x => x.ToStringDot("0.0000"))) },
+                            { "scales", string.Join(",", MainUi.GetScales(textboxExtraScales.Text).Select(x => x.ToStringDot("0.0000"))) },
                             { "res", $"{MainUi.CurrentResW}x{MainUi.CurrentResH}" },
                             { "seed", upDownSeed.Value < 0 ? (new Random().Next(0, Int32.MaxValue)).ToString() : ((long)upDownSeed.Value).ToString() },
                             { "sampler", comboxSampler.Text.Trim() },
                             { "initImg", MainUi.CurrentInitImgPath },
-                            { "initStrengths", String.Join(",", MainUi.GetInitStrengths(textboxExtraInitStrengths.Text).Select(x => x.ToStringDot("0.0000"))) },
+                            { "initStrengths", string.Join(",", MainUi.GetInitStrengths(textboxExtraInitStrengths.Text).Select(x => x.ToStringDot("0.0000"))) },
                             { "embedding", MainUi.CurrentEmbeddingPath },
                             { "seamless", checkboxSeamless.Checked.ToString() },
                             { "inpainting", checkboxInpainting.Checked ? "masked" : "" },
