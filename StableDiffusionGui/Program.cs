@@ -2,10 +2,7 @@
 using StableDiffusionGui.Main;
 using StableDiffusionGui.Os;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace StableDiffusionGui
@@ -26,6 +23,7 @@ namespace StableDiffusionGui
             Paths.Init();
             Config.Init();
             Cleanup();
+            ProcessManager.FindAndKillOrphans();
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
