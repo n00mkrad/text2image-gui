@@ -258,51 +258,6 @@ namespace StableDiffusionGui.Main
             Process.Start(batPath);
         }
 
-        public static async Task RunStableDiffusionCliTest(string outPath)
-        {
-            if (Program.Busy)
-                return;
-
-            if (!TtiUtils.CheckIfSdModelExists())
-                return;
-
-            TtiUtils.WriteModelsYaml(TtiUtils.GetSdModel());
-
-            string batPath = Path.Combine(Paths.GetSessionDataPath(), "dream.bat");
-
-            string batText = $"@echo off\n" +
-                $"title Dream.py CLI\n" +
-                $"cd /D {Paths.GetDataPath().Wrap()}\n" +
-                $"SET PATH={OsUtils.GetTemporaryPathVariable(new string[] { "./mb", "./mb/Scripts", "./mb/condabin", "./mb/Library/bin" })}\n" +
-                $"call activate.bat mb/envs/ldo\n" +
-                $"python repo/scripts/dream.py --model {TtiUtils.GetSdModel()} -o {outPath.Wrap()} {ArgsDreamPy.GetPrecisionArg()} {ArgsDreamPy.GetDefaultArgs()}";
-
-            File.WriteAllText(batPath, batText);
-
-            Process dream = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd(), batPath);
-            dream.StartInfo.RedirectStandardInput = true;
-
-            if (!OsUtils.ShowHiddenCmd())
-            {
-                dream.OutputDataReceived += (sender, line) => { Logger.Log($"stdout: {line.Data}"); };
-                dream.ErrorDataReceived += (sender, line) => { Logger.Log($"stderr: {line.Data}"); };
-            }
-
-            Logger.Log("Loading Stable Diffusion...");
-            dream.Start();
-            CurrentStdInWriter = dream.StandardInput;
-
-            if (!OsUtils.ShowHiddenCmd())
-            {
-                dream.BeginOutputReadLine();
-                dream.BeginErrorReadLine();
-            }
-
-            while (!dream.HasExited) await Task.Delay(100);
-
-            Logger.Log("Process has exited.");
-        }
-
         public static bool WriteStdIn(string text, bool submitLine = true)
         {
             try
