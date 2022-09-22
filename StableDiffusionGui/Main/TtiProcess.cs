@@ -1,5 +1,6 @@
 ﻿using StableDiffusionGui.Forms;
 using StableDiffusionGui.Io;
+using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using System;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Management.Automation.Runspaces;
 using System.Threading.Tasks;
 using System.Windows.Interop;
 
@@ -129,9 +131,12 @@ namespace StableDiffusionGui.Main
             else
             {
                 TextToImage.CurrentTask.Processes.Add(DreamPyParentProcess);
+                await WriteStdIn("!reset");
             }
 
-            commands.ForEach(x => WriteStdIn(x));
+            foreach(string command in commands)
+                await WriteStdIn(command);
+
             Finish();
         }
 
@@ -258,7 +263,7 @@ namespace StableDiffusionGui.Main
             Process.Start(batPath);
         }
 
-        public static bool WriteStdIn(string text, bool submitLine = true)
+        public static async Task<bool> WriteStdIn(string text, bool submitLine = true)
         {
             try
             {
@@ -266,9 +271,9 @@ namespace StableDiffusionGui.Main
                     return false;
 
                 if (submitLine)
-                    CurrentStdInWriter.WriteLine(text);
+                    await CurrentStdInWriter.WriteLineAsync(text);
                 else
-                    CurrentStdInWriter.Write(text);
+                    await CurrentStdInWriter.WriteAsync(text);
 
                 return true;
             }
