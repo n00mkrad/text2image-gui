@@ -2,6 +2,7 @@
 using StableDiffusionGui.Io;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -18,6 +19,8 @@ namespace StableDiffusionGui.Ui
 
         private static string[] _currentImages = new string[0];
         private static int _currIndex = -1;
+
+        public static DateTime TimeOfLastImageViewerInteraction;
 
         /// <returns> The amount of images shown </returns>
         public static int SetImages(string imagesDir, ImgShowMode showMode, int amount = -1, string pattern = "*.png", bool recursive = false)
@@ -51,13 +54,16 @@ namespace StableDiffusionGui.Ui
             Show();
         }
 
-        public static void Show ()
+        public static void Show (bool ignoreTimeout = false)
         {
             if (_currIndex < 0 || _currIndex >= _currentImages.Length)
             {
                 Clear();
                 return;
             }
+
+            if (!ignoreTimeout && (DateTime.Now - TimeOfLastImageViewerInteraction).TotalSeconds < 2.0)
+                return;
 
             Program.MainForm.PictBoxImgViewer.Text = "";
             Program.MainForm.PictBoxImgViewer.Image = IoUtils.GetImage(_currentImages[_currIndex]);
@@ -93,6 +99,8 @@ namespace StableDiffusionGui.Ui
 
         public static void Move(bool previous = false)
         {
+            TimeOfLastImageViewerInteraction = DateTime.Now;
+
             if (!previous)
             {
                 _currIndex += 1;
@@ -108,7 +116,7 @@ namespace StableDiffusionGui.Ui
                     _currIndex = _currentImages.Length - 1;
             }
                 
-            Show();
+            Show(true);
         }
     }
 }
