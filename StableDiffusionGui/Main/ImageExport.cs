@@ -29,11 +29,15 @@ namespace StableDiffusionGui.Main
                 try
                 {
                     var files = IoUtils.GetFileInfosSorted(imagesDir, false, "*.png");
-                    bool procBusy = IoUtils.GetFileInfosSorted(Paths.GetSessionDataPath(), false, "prompts*.*").Any();
+                    bool running = IoUtils.GetFileInfosSorted(Paths.GetSessionDataPath(), false, "prompts*.*").Any();
 
-                    if (!procBusy && !files.Any())
+                    // TODO: Adapt for new dream.py implementation
+                    if (TextToImage.LastTaskSettings.Implementation == Implementation.StableDiffusion)
+                        running = TextToImage.CurrentTask.TargetImgCount > 0 && TextToImage.CurrentTask.ImgCount < TextToImage.CurrentTask.TargetImgCount;
+
+                    if (!running && !files.Any())
                     {
-                        Logger.Log($"ExportLoop: Breaking. Process running: {procBusy} - Any files exist: {files.Any()}", true);
+                        Logger.Log($"ExportLoop: Breaking. Process running: {running} - Any files exist: {files.Any()}", true);
                         break;
                     }
 

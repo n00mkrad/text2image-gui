@@ -424,7 +424,10 @@ namespace StableDiffusionGui
             if (Program.Busy || !MainUi.IsInstalledWithWarning())
                 return;
 
-            TtiProcess.RunStableDiffusionCli(Config.Get(Config.Key.textboxOutPath));
+            if(System.Windows.Input.Keyboard.Modifiers == System.Windows.Input.ModifierKeys.Shift)
+                TtiProcess.RunStableDiffusionCliTest(Config.Get(Config.Key.textboxOutPath));
+            else
+                TtiProcess.RunStableDiffusionCli(Config.Get(Config.Key.textboxOutPath));
         }
 
         private void pictBoxImgViewer_Click(object sender, EventArgs e)
@@ -652,6 +655,12 @@ namespace StableDiffusionGui
         private void PictBoxImgViewer_MouseWheel(object sender, MouseEventArgs e)
         {
             ImagePreview.Move(e.Delta > 0);
+        }
+
+        private void textboxCliTest_DoubleClick(object sender, EventArgs e)
+        {
+            TtiProcess.WriteStdIn(textboxCliTest.Text);
+            textboxCliTest.Text = "";
         }
     }
 }

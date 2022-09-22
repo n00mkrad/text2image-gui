@@ -1,6 +1,5 @@
 ﻿using StableDiffusionGui.Extensions;
 using StableDiffusionGui.Io;
-using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -25,14 +24,14 @@ namespace StableDiffusionGui.Main
         private static string _lastLog = "";
         public static string LastLogLine { get { return _lastLog; } }
 
-        public struct LogEntry
+        public struct Entry
         {
             public string logMessage;
             public bool hidden;
             public bool replaceLastLine;
             public string filename;
 
-            public LogEntry(string logMessageArg, bool hiddenArg = false, bool replaceLastLineArg = false, string filenameArg = "")
+            public Entry(string logMessageArg, bool hiddenArg = false, bool replaceLastLineArg = false, string filenameArg = "")
             {
                 logMessage = logMessageArg;
                 hidden = hiddenArg;
@@ -41,23 +40,23 @@ namespace StableDiffusionGui.Main
             }
         }
 
-        private static ConcurrentQueue<LogEntry> logQueue = new ConcurrentQueue<LogEntry>();
+        private static ConcurrentQueue<Entry> logQueue = new ConcurrentQueue<Entry>();
 
         public static void Log(string msg, bool hidden = false, bool replaceLastLine = false, string filename = "")
         {
-            logQueue.Enqueue(new LogEntry(msg, hidden, replaceLastLine, filename));
+            logQueue.Enqueue(new Entry(msg, hidden, replaceLastLine, filename));
             ShowNext();
         }
 
         public static void ShowNext()
         {
-            LogEntry entry;
+            Entry entry;
 
             if (logQueue.TryDequeue(out entry))
                 Show(entry);
         }
 
-        public static void Show(LogEntry entry)
+        public static void Show(Entry entry)
         {
             if (string.IsNullOrWhiteSpace(entry.logMessage))
                 return;

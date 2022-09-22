@@ -8,12 +8,14 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Interop;
 
 namespace StableDiffusionGui.Main
 {
     internal class TtiProcess
     {
         public static Process DreamPyParentProcess;
+        public static StreamWriter CurrentStdInWriter;
         public static bool IsDreamPyRunning { get { return DreamPyParentProcess != null && !DreamPyParentProcess.HasExited; } }
 
         public static void Finish()
@@ -35,8 +37,7 @@ namespace StableDiffusionGui.Main
 
             long startSeed = seed;
 
-            string promptFilePath = Path.Combine(Paths.GetSessionDataPath(), "prompts.txt");
-            List<string> promptFileLines = new List<string>();
+            List<string> commands = new List<string>();
 
             int upscaleSetting = Config.GetInt("comboxUpscale");
             string upscaling = upscaleSetting == 0 ? "" : $"-U {Math.Pow(2, upscaleSetting)}";
@@ -56,7 +57,7 @@ namespace StableDiffusionGui.Main
                         {
                             bool initImgExists = File.Exists(initImg);
                             string init = initImgExists ? $"--init_img {initImg.Wrap()} --strength {strength.ToStringDot("0.0000")}" : "";
-                            promptFileLines.Add($"{prompt} {init} -n {1} -s {steps} -C {scale.ToStringDot()} -A {sampler} -W {res.Width} -H {res.Height} -S {seed} {upscaling} {gfpgan} {(seamless ? "--seamless" : "")}");
+                            commands.Add($"{prompt} {init} -n {1} -s {steps} -C {scale.ToStringDot()} -A {sampler} -W {res.Width} -H {res.Height} -S {seed} {upscaling} {gfpgan} {(seamless ? "--seamless" : "")}");
                             imgs++;
 
                             if (!initImgExists)
@@ -71,13 +72,11 @@ namespace StableDiffusionGui.Main
                     seed = startSeed;
             }
 
-            File.WriteAllLines(promptFilePath, promptFileLines);
-
             Logger.Log($"Running Stable Diffusion - {iterations} Iterations, {steps} Steps, Scales {(scales.Length < 4 ? string.Join(", ", scales.Select(x => x.ToStringDot())) : $"{scales.First()}->{scales.Last()}")}, {res.Width}x{res.Height}, Starting Seed: {startSeed}");
 
             string mdlArg = TtiUtils.GetSdModel();
-            string precArg = $"{(Config.GetBool("checkboxFullPrecision") ? "-F" : "")}";
-            string embArg = !string.IsNullOrWhiteSpace(embedding) ? $"--embedding_path {embedding.Wrap()}" : "";
+            string precArg = ArgsDreamPy.GetPrecisionArg();
+            string embArg = ArgsDreamPy.GetEmbeddingArg(embedding);
 
             string newStartupSettings = $"{mdlArg}{precArg}{embArg}"; // Check if startup settings match - If not, we need to restart the process
 
@@ -99,9 +98,10 @@ namespace StableDiffusionGui.Main
                 Process dream = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
                 TextToImage.CurrentTask.Processes.Add(dream);
 
+                dream.StartInfo.RedirectStandardInput = true;
                 dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetPathVariableCmd()} && call activate.bat ldo && " +
-                    $"python repo/scripts/dream.py --model {TtiUtils.GetSdModel()} -o {outPath.Wrap()} --from_file_loop={promptFilePath.Wrap()} {precArg} " +
-                    $"{embArg} --print_steps ";
+                    $"python repo/scripts/dream.py --model {TtiUtils.GetSdModel()} -o {outPath.Wrap()} {ArgsDreamPy.GetDefaultArgs()} {precArg} " +
+                    $"{embArg} ";
 
                 Logger.Log("cmd.exe " + dream.StartInfo.Arguments, true);
 
@@ -113,9 +113,10 @@ namespace StableDiffusionGui.Main
 
                 ProcessManager.FindAndKillOrphans("*repo*.py*");
                 TtiProcessOutputHandler.Start();
-                Logger.Log("Loading Stable Diffusion...");
+                Logger.Log($"Loading Stable Diffusion ({TtiUtils.GetSdModel()})...");
                 DreamPyParentProcess = dream;
                 dream.Start();
+                CurrentStdInWriter = dream.StandardInput;
 
                 if (!OsUtils.ShowHiddenCmd())
                 {
@@ -130,6 +131,7 @@ namespace StableDiffusionGui.Main
                 TextToImage.CurrentTask.Processes.Add(DreamPyParentProcess);
             }
 
+            commands.ForEach(x => WriteStdIn(x));
             Finish();
         }
 
@@ -249,11 +251,76 @@ namespace StableDiffusionGui.Main
                 $"cd /D {Paths.GetDataPath().Wrap()}\n" +
                 $"SET PATH={OsUtils.GetTemporaryPathVariable(new string[] { "./mb", "./mb/Scripts", "./mb/condabin", "./mb/Library/bin" })}\n" +
                 $"call activate.bat mb/envs/ldo\n" +
-                $"python repo/scripts/dream.py --model {TtiUtils.GetSdModel()} -o {outPath.Wrap()} {(Config.GetBool("checkboxFullPrecision") ? "--full_precision" : "")} ";
+                $"python repo/scripts/dream.py --model {TtiUtils.GetSdModel()} -o {outPath.Wrap()} {ArgsDreamPy.GetPrecisionArg()} {ArgsDreamPy.GetDefaultArgs()}";
 
             File.WriteAllText(batPath, batText);
             ProcessManager.FindAndKillOrphans("*repo*.py*");
             Process.Start(batPath);
+        }
+
+        public static async Task RunStableDiffusionCliTest(string outPath)
+        {
+            if (Program.Busy)
+                return;
+
+            if (!TtiUtils.CheckIfSdModelExists())
+                return;
+
+            TtiUtils.WriteModelsYaml(TtiUtils.GetSdModel());
+
+            string batPath = Path.Combine(Paths.GetSessionDataPath(), "dream.bat");
+
+            string batText = $"@echo off\n" +
+                $"title Dream.py CLI\n" +
+                $"cd /D {Paths.GetDataPath().Wrap()}\n" +
+                $"SET PATH={OsUtils.GetTemporaryPathVariable(new string[] { "./mb", "./mb/Scripts", "./mb/condabin", "./mb/Library/bin" })}\n" +
+                $"call activate.bat mb/envs/ldo\n" +
+                $"python repo/scripts/dream.py --model {TtiUtils.GetSdModel()} -o {outPath.Wrap()} {ArgsDreamPy.GetPrecisionArg()} {ArgsDreamPy.GetDefaultArgs()}";
+
+            File.WriteAllText(batPath, batText);
+
+            Process dream = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd(), batPath);
+            dream.StartInfo.RedirectStandardInput = true;
+
+            if (!OsUtils.ShowHiddenCmd())
+            {
+                dream.OutputDataReceived += (sender, line) => { Logger.Log($"stdout: {line.Data}"); };
+                dream.ErrorDataReceived += (sender, line) => { Logger.Log($"stderr: {line.Data}"); };
+            }
+
+            Logger.Log("Loading Stable Diffusion...");
+            dream.Start();
+            CurrentStdInWriter = dream.StandardInput;
+
+            if (!OsUtils.ShowHiddenCmd())
+            {
+                dream.BeginOutputReadLine();
+                dream.BeginErrorReadLine();
+            }
+
+            while (!dream.HasExited) await Task.Delay(100);
+
+            Logger.Log("Process has exited.");
+        }
+
+        public static bool WriteStdIn(string text, bool submitLine = true)
+        {
+            try
+            {
+                if (CurrentStdInWriter == null)
+                    return false;
+
+                if (submitLine)
+                    CurrentStdInWriter.WriteLine(text);
+                else
+                    CurrentStdInWriter.Write(text);
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public static void Kill()

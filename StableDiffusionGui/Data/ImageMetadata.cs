@@ -33,7 +33,8 @@ namespace StableDiffusionGui.Data
                 Prompt = split[1].Remove("\"").Trim();
                 GeneratedResolution = new Size();
 
-                var parameters = split.Last().Split(" ").Select(x => x.Trim()).ToList();
+                bool newFormat = dreamCli.Contains("-W ") && dreamCli.Contains("-H "); // Check if metadata uses new format with spaces
+                var parameters = newFormat ? split.Last().Split("-").Select(x => $"-{x.Trim()}").ToList() : split.Last().Split(" ").Select(x => x.Trim()).ToList();
 
                 foreach (string s in parameters)
                 {
@@ -53,7 +54,7 @@ namespace StableDiffusionGui.Data
                         Scale = s.Remove(0, 2).GetFloat();
 
                     if (s.StartsWith("-A"))
-                        Sampler = s.Remove(0, 2);
+                        Sampler = s.Remove(0, 2).Trim();
 
                     if (s.StartsWith("-S"))
                         Seed = s.Remove(0, 2).GetLong();
@@ -62,7 +63,7 @@ namespace StableDiffusionGui.Data
                         InitStrength = 1f - s.Remove(0, 2).GetFloat();
 
                     if (s.StartsWith("-IF"))
-                        InitImgName = s.Remove(0, 3);
+                        InitImgName = s.Remove(0, 3).Trim();
                 }
             }
             catch(Exception ex)

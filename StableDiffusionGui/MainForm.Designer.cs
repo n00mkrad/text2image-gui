@@ -117,6 +117,7 @@
             this.generateAllQueuedPromptsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pictBoxImgViewer = new System.Windows.Forms.PictureBox();
             this.separator = new System.Windows.Forms.Button();
+            this.textboxCliTest = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
             this.tableLayoutPanel6.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -125,6 +126,7 @@
             this.tableLayoutPanel3.SuspendLayout();
             this.menuStripOutputImg.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.panel11.SuspendLayout();
             this.panelSeamless.SuspendLayout();
             this.panelSampler.SuspendLayout();
             this.panelRes.SuspendLayout();
@@ -1132,6 +1134,7 @@
             // 
             // panel11
             // 
+            this.panel11.Controls.Add(this.textboxCliTest);
             this.panel11.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel11.Location = new System.Drawing.Point(0, 380);
             this.panel11.Name = "panel11";
@@ -1396,6 +1399,18 @@
             this.separator.TabStop = false;
             this.separator.UseVisualStyleBackColor = false;
             // 
+            // textboxCliTest
+            // 
+            this.textboxCliTest.AllowDrop = true;
+            this.textboxCliTest.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textboxCliTest.ForeColor = System.Drawing.Color.White;
+            this.textboxCliTest.Location = new System.Drawing.Point(233, 8);
+            this.textboxCliTest.MinimumSize = new System.Drawing.Size(4, 21);
+            this.textboxCliTest.Name = "textboxCliTest";
+            this.textboxCliTest.Size = new System.Drawing.Size(291, 21);
+            this.textboxCliTest.TabIndex = 4;
+            this.textboxCliTest.DoubleClick += new System.EventHandler(this.textboxCliTest_DoubleClick);
+            // 
             // MainForm
             // 
             this.AllowDrop = true;
@@ -1449,6 +1464,8 @@
             this.tableLayoutPanel3.PerformLayout();
             this.menuStripOutputImg.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
+            this.panel11.ResumeLayout(false);
+            this.panel11.PerformLayout();
             this.panelSeamless.ResumeLayout(false);
             this.panelSeamless.PerformLayout();
             this.panelSampler.ResumeLayout(false);
@@ -1566,6 +1583,7 @@
         private System.Windows.Forms.Label label10;
         private HTAlt.WinForms.HTButton btnResetMask;
         private System.Windows.Forms.PictureBox pictBoxImgViewer;
+        private System.Windows.Forms.TextBox textboxCliTest;
     }
 }
 
