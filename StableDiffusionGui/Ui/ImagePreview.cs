@@ -35,7 +35,7 @@ namespace StableDiffusionGui.Ui
             return imgPaths.Count;
         }
 
-        public static void SetImages(List<string> imagePaths, ImgShowMode showMode)
+        public static void SetImages(List<string> imagePaths, ImgShowMode showMode, bool ignoreTimeout = false)
         {
             if (Enumerable.SequenceEqual(imagePaths, _currentImages))
                 return;
@@ -45,25 +45,25 @@ namespace StableDiffusionGui.Ui
             if (showMode == ImgShowMode.DontShow)
                 return;
 
-            if (showMode == ImgShowMode.ShowFirst)
-                _currIndex = 0;
+            if (ignoreTimeout || (DateTime.Now - TimeOfLastImageViewerInteraction).TotalSeconds >= 3)
+            {
+                if (showMode == ImgShowMode.ShowFirst)
+                    _currIndex = 0;
 
-            if (showMode == ImgShowMode.ShowLast)
-                _currIndex = _currentImages.Length - 1;
+                if (showMode == ImgShowMode.ShowLast)
+                    _currIndex = _currentImages.Length - 1;
+            }
 
             Show();
         }
 
-        public static void Show (bool ignoreTimeout = false)
+        public static void Show ()
         {
             if (_currIndex < 0 || _currIndex >= _currentImages.Length)
             {
                 Clear();
                 return;
             }
-
-            if (!ignoreTimeout && (DateTime.Now - TimeOfLastImageViewerInteraction).TotalSeconds < 2.0)
-                return;
 
             Program.MainForm.PictBoxImgViewer.Text = "";
             Program.MainForm.PictBoxImgViewer.Image = IoUtils.GetImage(_currentImages[_currIndex]);
@@ -116,7 +116,7 @@ namespace StableDiffusionGui.Ui
                     _currIndex = _currentImages.Length - 1;
             }
                 
-            Show(true);
+            Show();
         }
     }
 }
