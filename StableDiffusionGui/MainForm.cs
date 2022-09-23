@@ -68,9 +68,12 @@ namespace StableDiffusionGui
             upDownSeed.Text = "";
             MainUi.DoStartupChecks();
             RefreshAfterSettingsChanged();
+            UpdateInitImgAndEmbeddingUi();
 
             if (!Debugger.IsAttached)
                 new WelcomeForm().ShowDialog();
+
+            textboxCliTest.Visible = Debugger.IsAttached;
         }
 
         private async Task SetGpusInWindowTitle()
@@ -487,13 +490,13 @@ namespace StableDiffusionGui
             if (!string.IsNullOrWhiteSpace(MainUi.CurrentInitImgPath) && !File.Exists(MainUi.CurrentInitImgPath))
             {
                 MainUi.CurrentInitImgPath = "";
-                Logger.Log($"Init image was cleared because the file no longer exists.");
+                Logger.Log($"Initialization image was cleared because the file no longer exists.");
             }
 
             if (!string.IsNullOrWhiteSpace(MainUi.CurrentEmbeddingPath) && !File.Exists(MainUi.CurrentEmbeddingPath))
             {
                 MainUi.CurrentEmbeddingPath = "";
-                Logger.Log($"Embedding was cleared because the file no longer exists.");
+                Logger.Log($"Concept was cleared because the file no longer exists.");
             }
 
             bool imgExists = File.Exists(MainUi.CurrentInitImgPath);
@@ -504,22 +507,8 @@ namespace StableDiffusionGui
             bool embeddingExists = File.Exists(MainUi.CurrentEmbeddingPath);
             btnEmbeddingBrowse.Text = embeddingExists ? "Clear Concept" : "Load Concept";
 
-            if (!string.IsNullOrWhiteSpace(MainUi.CurrentInitImgPath) && !string.IsNullOrWhiteSpace(MainUi.CurrentEmbeddingPath))
-            {
-                labelPromptInfo.Text = $"With {Path.GetFileName(MainUi.CurrentInitImgPath).Trunc(28)}\nWith {Path.GetFileName(MainUi.CurrentEmbeddingPath).Trunc(28)}";
-            }
-            else if (!string.IsNullOrWhiteSpace(MainUi.CurrentInitImgPath))
-            {
-                labelPromptInfo.Text = $"With {Path.GetFileName(MainUi.CurrentInitImgPath).Trunc(28)}";
-            }
-            else if (!string.IsNullOrWhiteSpace(MainUi.CurrentEmbeddingPath))
-            {
-                labelPromptInfo.Text = $"With {Path.GetFileName(MainUi.CurrentEmbeddingPath).Trunc(28)}";
-            }
-            else
-            {
-                labelPromptInfo.Text = "";
-            }
+            labelCurrentImage.Text = string.IsNullOrWhiteSpace(MainUi.CurrentInitImgPath) ? "No initialization image loaded." : $"Currently using {Path.GetFileName(MainUi.CurrentInitImgPath).Trunc(30)}";
+            labelCurrentConcept.Text = string.IsNullOrWhiteSpace(MainUi.CurrentEmbeddingPath) ? "No trained concept loaded." : $"Currently using {Path.GetFileName(MainUi.CurrentEmbeddingPath).Trunc(30)}";
 
             RefreshAfterSettingsChanged();
         }
@@ -588,17 +577,19 @@ namespace StableDiffusionGui
 
         private void btnExpandPromptField_Click(object sender, EventArgs e)
         {
-            int smallHeight = 65;
+            int smallHeight = 59;
 
-            if (panelPrompt.Height == smallHeight)
+            if (textboxPrompt.Height == smallHeight)
             {
                 btnExpandPromptField.BackgroundImage = Resources.upArrowIcon;
-                panelPrompt.Height = 130;
+                textboxPrompt.Height = 577;
+                pictBoxImgViewer.Visible = false;
             }
             else
             {
                 btnExpandPromptField.BackgroundImage = Resources.downArrowIcon;
-                panelPrompt.Height = smallHeight;
+                textboxPrompt.Height = smallHeight;
+                pictBoxImgViewer.Visible = true;
             }
         }
 

@@ -110,7 +110,6 @@
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.labelInitStrength = new System.Windows.Forms.Label();
             this.panelPrompt = new System.Windows.Forms.Panel();
-            this.labelPromptInfo = new System.Windows.Forms.Label();
             this.menuStripLogs = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.progressBarImg = new HTAlt.WinForms.HTProgressBar();
             this.menuStripRunQueue = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -120,6 +119,8 @@
             this.separator = new System.Windows.Forms.Button();
             this.menuStripAddToQueue = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addCurrentSettingsToQueueToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.labelCurrentImage = new System.Windows.Forms.Label();
+            this.labelCurrentConcept = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
             this.tableLayoutPanel6.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -128,7 +129,6 @@
             this.tableLayoutPanel3.SuspendLayout();
             this.menuStripOutputImg.SuspendLayout();
             this.panel1.SuspendLayout();
-            this.panel11.SuspendLayout();
             this.panelSeamless.SuspendLayout();
             this.panelSampler.SuspendLayout();
             this.panelRes.SuspendLayout();
@@ -152,7 +152,7 @@
             this.runBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.runBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.25F);
             this.runBtn.ForeColor = System.Drawing.Color.White;
-            this.runBtn.Location = new System.Drawing.Point(654, 598);
+            this.runBtn.Location = new System.Drawing.Point(654, 663);
             this.runBtn.Name = "runBtn";
             this.runBtn.Size = new System.Drawing.Size(120, 40);
             this.runBtn.TabIndex = 100;
@@ -175,14 +175,15 @@
             // 
             // logBox
             // 
+            this.logBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.logBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
             this.logBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.logBox.ForeColor = System.Drawing.Color.Silver;
-            this.logBox.Location = new System.Drawing.Point(12, 579);
+            this.logBox.Location = new System.Drawing.Point(12, 645);
             this.logBox.Multiline = true;
             this.logBox.Name = "logBox";
             this.logBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.logBox.Size = new System.Drawing.Size(633, 83);
+            this.logBox.Size = new System.Drawing.Size(633, 82);
             this.logBox.TabIndex = 78;
             this.logBox.TabStop = false;
             // 
@@ -190,7 +191,7 @@
             // 
             this.outputImgLabel.AutoSize = true;
             this.outputImgLabel.ForeColor = System.Drawing.Color.Silver;
-            this.outputImgLabel.Location = new System.Drawing.Point(655, 579);
+            this.outputImgLabel.Location = new System.Drawing.Point(653, 644);
             this.outputImgLabel.Name = "outputImgLabel";
             this.outputImgLabel.Size = new System.Drawing.Size(100, 13);
             this.outputImgLabel.TabIndex = 81;
@@ -204,9 +205,9 @@
             this.label2.Location = new System.Drawing.Point(5, 10);
             this.label2.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(40, 13);
+            this.label2.Size = new System.Drawing.Size(91, 13);
             this.label2.TabIndex = 83;
-            this.label2.Text = "Prompt";
+            this.label2.Text = "Prompt (AI Inputs)";
             // 
             // textboxPrompt
             // 
@@ -216,11 +217,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textboxPrompt.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textboxPrompt.ForeColor = System.Drawing.Color.White;
-            this.textboxPrompt.Location = new System.Drawing.Point(233, 7);
+            this.textboxPrompt.Location = new System.Drawing.Point(654, 62);
             this.textboxPrompt.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxPrompt.Multiline = true;
             this.textboxPrompt.Name = "textboxPrompt";
-            this.textboxPrompt.Size = new System.Drawing.Size(291, 52);
+            this.textboxPrompt.Size = new System.Drawing.Size(512, 59);
             this.textboxPrompt.TabIndex = 0;
             this.toolTip.SetToolTip(this.textboxPrompt, "Text prompt. The AI will try to generate an image matching this description.");
             // 
@@ -598,9 +599,10 @@
             // 
             // progressBar
             // 
+            this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.progressBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.progressBar.BorderThickness = 0;
-            this.progressBar.Location = new System.Drawing.Point(654, 647);
+            this.progressBar.Location = new System.Drawing.Point(654, 712);
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(512, 15);
             this.progressBar.TabIndex = 100;
@@ -751,10 +753,10 @@
             this.btnEmbeddingBrowse.ForeColor = System.Drawing.Color.White;
             this.btnEmbeddingBrowse.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
             this.btnEmbeddingBrowse.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
-            this.btnEmbeddingBrowse.Location = new System.Drawing.Point(533, 36);
+            this.btnEmbeddingBrowse.Location = new System.Drawing.Point(233, 32);
             this.btnEmbeddingBrowse.Name = "btnEmbeddingBrowse";
             this.btnEmbeddingBrowse.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
-            this.btnEmbeddingBrowse.Size = new System.Drawing.Size(97, 23);
+            this.btnEmbeddingBrowse.Size = new System.Drawing.Size(100, 23);
             this.btnEmbeddingBrowse.TabIndex = 84;
             this.btnEmbeddingBrowse.TabStop = false;
             this.btnEmbeddingBrowse.Text = "Load Concept";
@@ -772,10 +774,10 @@
             this.btnInitImgBrowse.ForeColor = System.Drawing.Color.White;
             this.btnInitImgBrowse.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
             this.btnInitImgBrowse.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
-            this.btnInitImgBrowse.Location = new System.Drawing.Point(533, 7);
+            this.btnInitImgBrowse.Location = new System.Drawing.Point(233, 4);
             this.btnInitImgBrowse.Name = "btnInitImgBrowse";
             this.btnInitImgBrowse.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
-            this.btnInitImgBrowse.Size = new System.Drawing.Size(97, 23);
+            this.btnInitImgBrowse.Size = new System.Drawing.Size(100, 23);
             this.btnInitImgBrowse.TabIndex = 1;
             this.btnInitImgBrowse.TabStop = false;
             this.btnInitImgBrowse.Text = "Load Image";
@@ -859,13 +861,14 @@
             // 
             // btnPromptHistory
             // 
+            this.btnPromptHistory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnPromptHistory.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
             this.btnPromptHistory.BackgroundImage = global::StableDiffusionGui.Properties.Resources.historyIcon;
             this.btnPromptHistory.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnPromptHistory.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnPromptHistory.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnPromptHistory.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnPromptHistory.Location = new System.Drawing.Point(826, 598);
+            this.btnPromptHistory.Location = new System.Drawing.Point(826, 663);
             this.btnPromptHistory.Name = "btnPromptHistory";
             this.btnPromptHistory.Size = new System.Drawing.Size(40, 40);
             this.btnPromptHistory.TabIndex = 112;
@@ -876,13 +879,14 @@
             // 
             // btnQueue
             // 
+            this.btnQueue.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnQueue.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
             this.btnQueue.BackgroundImage = global::StableDiffusionGui.Properties.Resources.queueIcon;
             this.btnQueue.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnQueue.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnQueue.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnQueue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnQueue.Location = new System.Drawing.Point(780, 598);
+            this.btnQueue.Location = new System.Drawing.Point(780, 663);
             this.btnQueue.Name = "btnQueue";
             this.btnQueue.Size = new System.Drawing.Size(40, 40);
             this.btnQueue.TabIndex = 111;
@@ -952,9 +956,9 @@
             this.btnExpandPromptField.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnExpandPromptField.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnExpandPromptField.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnExpandPromptField.Location = new System.Drawing.Point(207, 7);
+            this.btnExpandPromptField.Location = new System.Drawing.Point(613, 0);
             this.btnExpandPromptField.Name = "btnExpandPromptField";
-            this.btnExpandPromptField.Size = new System.Drawing.Size(20, 20);
+            this.btnExpandPromptField.Size = new System.Drawing.Size(20, 59);
             this.btnExpandPromptField.TabIndex = 86;
             this.btnExpandPromptField.TabStop = false;
             this.toolTip.SetToolTip(this.btnExpandPromptField, "Expand/Collapse Prompt Field");
@@ -980,13 +984,14 @@
             // 
             // btnOpenOutFolder
             // 
+            this.btnOpenOutFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOpenOutFolder.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
             this.btnOpenOutFolder.BackgroundImage = global::StableDiffusionGui.Properties.Resources.baseline_folder_open_white_48dp;
             this.btnOpenOutFolder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnOpenOutFolder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnOpenOutFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnOpenOutFolder.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnOpenOutFolder.Location = new System.Drawing.Point(1034, 598);
+            this.btnOpenOutFolder.Location = new System.Drawing.Point(1034, 663);
             this.btnOpenOutFolder.Name = "btnOpenOutFolder";
             this.btnOpenOutFolder.Size = new System.Drawing.Size(40, 40);
             this.btnOpenOutFolder.TabIndex = 94;
@@ -997,13 +1002,14 @@
             // 
             // btnPrevImg
             // 
+            this.btnPrevImg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnPrevImg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
             this.btnPrevImg.BackgroundImage = global::StableDiffusionGui.Properties.Resources.backArrowIcon;
             this.btnPrevImg.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnPrevImg.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnPrevImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnPrevImg.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnPrevImg.Location = new System.Drawing.Point(1080, 598);
+            this.btnPrevImg.Location = new System.Drawing.Point(1080, 663);
             this.btnPrevImg.Name = "btnPrevImg";
             this.btnPrevImg.Size = new System.Drawing.Size(40, 40);
             this.btnPrevImg.TabIndex = 82;
@@ -1014,13 +1020,14 @@
             // 
             // btnNextImg
             // 
+            this.btnNextImg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnNextImg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
             this.btnNextImg.BackgroundImage = global::StableDiffusionGui.Properties.Resources.forwardArrowIcon;
             this.btnNextImg.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnNextImg.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnNextImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnNextImg.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnNextImg.Location = new System.Drawing.Point(1126, 598);
+            this.btnNextImg.Location = new System.Drawing.Point(1126, 663);
             this.btnNextImg.Name = "btnNextImg";
             this.btnNextImg.Size = new System.Drawing.Size(40, 40);
             this.btnNextImg.TabIndex = 80;
@@ -1111,6 +1118,7 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.textboxCliTest);
             this.panel1.Controls.Add(this.panel12);
             this.panel1.Controls.Add(this.panel11);
             this.panel1.Controls.Add(this.panelSeamless);
@@ -1122,8 +1130,7 @@
             this.panel1.Controls.Add(this.panelIterations);
             this.panel1.Controls.Add(this.panelInpainting);
             this.panel1.Controls.Add(this.panelInitImgStrength);
-            this.panel1.Controls.Add(this.panelPrompt);
-            this.panel1.Location = new System.Drawing.Point(12, 62);
+            this.panel1.Location = new System.Drawing.Point(12, 127);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(633, 512);
             this.panel1.TabIndex = 106;
@@ -1131,16 +1138,15 @@
             // panel12
             // 
             this.panel12.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel12.Location = new System.Drawing.Point(0, 415);
+            this.panel12.Location = new System.Drawing.Point(0, 350);
             this.panel12.Name = "panel12";
             this.panel12.Size = new System.Drawing.Size(633, 35);
             this.panel12.TabIndex = 11;
             // 
             // panel11
             // 
-            this.panel11.Controls.Add(this.textboxCliTest);
             this.panel11.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel11.Location = new System.Drawing.Point(0, 380);
+            this.panel11.Location = new System.Drawing.Point(0, 315);
             this.panel11.Name = "panel11";
             this.panel11.Size = new System.Drawing.Size(633, 35);
             this.panel11.TabIndex = 10;
@@ -1150,11 +1156,12 @@
             this.textboxCliTest.AllowDrop = true;
             this.textboxCliTest.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textboxCliTest.ForeColor = System.Drawing.Color.White;
-            this.textboxCliTest.Location = new System.Drawing.Point(233, 8);
+            this.textboxCliTest.Location = new System.Drawing.Point(233, 478);
             this.textboxCliTest.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxCliTest.Name = "textboxCliTest";
-            this.textboxCliTest.Size = new System.Drawing.Size(291, 20);
+            this.textboxCliTest.Size = new System.Drawing.Size(397, 21);
             this.textboxCliTest.TabIndex = 4;
+            this.textboxCliTest.Visible = false;
             this.textboxCliTest.DoubleClick += new System.EventHandler(this.textboxCliTest_DoubleClick);
             // 
             // panelSeamless
@@ -1162,7 +1169,7 @@
             this.panelSeamless.Controls.Add(this.checkboxSeamless);
             this.panelSeamless.Controls.Add(this.label8);
             this.panelSeamless.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSeamless.Location = new System.Drawing.Point(0, 345);
+            this.panelSeamless.Location = new System.Drawing.Point(0, 280);
             this.panelSeamless.Name = "panelSeamless";
             this.panelSeamless.Size = new System.Drawing.Size(633, 35);
             this.panelSeamless.TabIndex = 9;
@@ -1184,7 +1191,7 @@
             this.panelSampler.Controls.Add(this.label7);
             this.panelSampler.Controls.Add(this.comboxSampler);
             this.panelSampler.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSampler.Location = new System.Drawing.Point(0, 310);
+            this.panelSampler.Location = new System.Drawing.Point(0, 245);
             this.panelSampler.Name = "panelSampler";
             this.panelSampler.Size = new System.Drawing.Size(633, 35);
             this.panelSampler.TabIndex = 6;
@@ -1196,7 +1203,7 @@
             this.panelRes.Controls.Add(this.tableLayoutPanel3);
             this.panelRes.Controls.Add(this.label9);
             this.panelRes.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelRes.Location = new System.Drawing.Point(0, 275);
+            this.panelRes.Location = new System.Drawing.Point(0, 210);
             this.panelRes.Name = "panelRes";
             this.panelRes.Size = new System.Drawing.Size(633, 35);
             this.panelRes.TabIndex = 5;
@@ -1208,7 +1215,7 @@
             this.panelSeed.Controls.Add(this.label5);
             this.panelSeed.Controls.Add(this.upDownSeed);
             this.panelSeed.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSeed.Location = new System.Drawing.Point(0, 240);
+            this.panelSeed.Location = new System.Drawing.Point(0, 175);
             this.panelSeed.Name = "panelSeed";
             this.panelSeed.Size = new System.Drawing.Size(633, 35);
             this.panelSeed.TabIndex = 4;
@@ -1219,7 +1226,7 @@
             this.panelScale.Controls.Add(this.tableLayoutPanel1);
             this.panelScale.Controls.Add(this.textboxExtraScales);
             this.panelScale.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelScale.Location = new System.Drawing.Point(0, 205);
+            this.panelScale.Location = new System.Drawing.Point(0, 140);
             this.panelScale.Name = "panelScale";
             this.panelScale.Size = new System.Drawing.Size(633, 35);
             this.panelScale.TabIndex = 3;
@@ -1229,7 +1236,7 @@
             this.panelSteps.Controls.Add(this.label3);
             this.panelSteps.Controls.Add(this.tableLayoutPanel6);
             this.panelSteps.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSteps.Location = new System.Drawing.Point(0, 170);
+            this.panelSteps.Location = new System.Drawing.Point(0, 105);
             this.panelSteps.Name = "panelSteps";
             this.panelSteps.Size = new System.Drawing.Size(633, 35);
             this.panelSteps.TabIndex = 2;
@@ -1239,7 +1246,7 @@
             this.panelIterations.Controls.Add(this.label1);
             this.panelIterations.Controls.Add(this.upDownIterations);
             this.panelIterations.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelIterations.Location = new System.Drawing.Point(0, 135);
+            this.panelIterations.Location = new System.Drawing.Point(0, 70);
             this.panelIterations.Name = "panelIterations";
             this.panelIterations.Size = new System.Drawing.Size(633, 35);
             this.panelIterations.TabIndex = 1;
@@ -1250,7 +1257,7 @@
             this.panelInpainting.Controls.Add(this.checkboxInpainting);
             this.panelInpainting.Controls.Add(this.label10);
             this.panelInpainting.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelInpainting.Location = new System.Drawing.Point(0, 100);
+            this.panelInpainting.Location = new System.Drawing.Point(0, 35);
             this.panelInpainting.Name = "panelInpainting";
             this.panelInpainting.Size = new System.Drawing.Size(633, 35);
             this.panelInpainting.TabIndex = 12;
@@ -1274,7 +1281,7 @@
             this.panelInitImgStrength.Controls.Add(this.label11);
             this.panelInitImgStrength.Controls.Add(this.tableLayoutPanel4);
             this.panelInitImgStrength.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelInitImgStrength.Location = new System.Drawing.Point(0, 65);
+            this.panelInitImgStrength.Location = new System.Drawing.Point(0, 0);
             this.panelInitImgStrength.Name = "panelInitImgStrength";
             this.panelInitImgStrength.Size = new System.Drawing.Size(633, 35);
             this.panelInitImgStrength.TabIndex = 8;
@@ -1325,29 +1332,17 @@
             // 
             // panelPrompt
             // 
+            this.panelPrompt.Controls.Add(this.labelCurrentConcept);
+            this.panelPrompt.Controls.Add(this.labelCurrentImage);
             this.panelPrompt.Controls.Add(this.btnExpandPromptField);
-            this.panelPrompt.Controls.Add(this.labelPromptInfo);
             this.panelPrompt.Controls.Add(this.btnEmbeddingBrowse);
             this.panelPrompt.Controls.Add(this.btnInitImgBrowse);
             this.panelPrompt.Controls.Add(this.label2);
-            this.panelPrompt.Controls.Add(this.textboxPrompt);
-            this.panelPrompt.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelPrompt.Location = new System.Drawing.Point(0, 0);
+            this.panelPrompt.Location = new System.Drawing.Point(12, 62);
             this.panelPrompt.Margin = new System.Windows.Forms.Padding(0);
             this.panelPrompt.Name = "panelPrompt";
-            this.panelPrompt.Size = new System.Drawing.Size(633, 65);
+            this.panelPrompt.Size = new System.Drawing.Size(639, 65);
             this.panelPrompt.TabIndex = 0;
-            // 
-            // labelPromptInfo
-            // 
-            this.labelPromptInfo.AutoSize = true;
-            this.labelPromptInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelPromptInfo.ForeColor = System.Drawing.Color.Silver;
-            this.labelPromptInfo.Location = new System.Drawing.Point(5, 29);
-            this.labelPromptInfo.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
-            this.labelPromptInfo.Name = "labelPromptInfo";
-            this.labelPromptInfo.Size = new System.Drawing.Size(0, 13);
-            this.labelPromptInfo.TabIndex = 85;
             // 
             // menuStripLogs
             // 
@@ -1358,7 +1353,7 @@
             // 
             this.progressBarImg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.progressBarImg.BorderThickness = 0;
-            this.progressBarImg.Location = new System.Drawing.Point(654, 569);
+            this.progressBarImg.Location = new System.Drawing.Point(654, 634);
             this.progressBarImg.Name = "progressBarImg";
             this.progressBarImg.Size = new System.Drawing.Size(512, 5);
             this.progressBarImg.TabIndex = 110;
@@ -1391,7 +1386,7 @@
             // 
             this.pictBoxImgViewer.BackgroundImage = global::StableDiffusionGui.Properties.Resources.checkerboard;
             this.pictBoxImgViewer.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictBoxImgViewer.Location = new System.Drawing.Point(654, 62);
+            this.pictBoxImgViewer.Location = new System.Drawing.Point(654, 127);
             this.pictBoxImgViewer.Name = "pictBoxImgViewer";
             this.pictBoxImgViewer.Size = new System.Drawing.Size(512, 512);
             this.pictBoxImgViewer.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -1429,14 +1424,37 @@
             this.addCurrentSettingsToQueueToolStripMenuItem.Text = "Add Current Settings to Queue";
             this.addCurrentSettingsToQueueToolStripMenuItem.Click += new System.EventHandler(this.addCurrentSettingsToQueueToolStripMenuItem_Click);
             // 
+            // labelCurrentImage
+            // 
+            this.labelCurrentImage.AutoSize = true;
+            this.labelCurrentImage.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelCurrentImage.ForeColor = System.Drawing.Color.Silver;
+            this.labelCurrentImage.Location = new System.Drawing.Point(344, 9);
+            this.labelCurrentImage.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.labelCurrentImage.Name = "labelCurrentImage";
+            this.labelCurrentImage.Size = new System.Drawing.Size(0, 13);
+            this.labelCurrentImage.TabIndex = 91;
+            // 
+            // labelCurrentConcept
+            // 
+            this.labelCurrentConcept.AutoSize = true;
+            this.labelCurrentConcept.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelCurrentConcept.ForeColor = System.Drawing.Color.Silver;
+            this.labelCurrentConcept.Location = new System.Drawing.Point(344, 37);
+            this.labelCurrentConcept.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.labelCurrentConcept.Name = "labelCurrentConcept";
+            this.labelCurrentConcept.Size = new System.Drawing.Size(0, 13);
+            this.labelCurrentConcept.TabIndex = 92;
+            // 
             // MainForm
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.ClientSize = new System.Drawing.Size(1178, 669);
+            this.ClientSize = new System.Drawing.Size(1178, 734);
             this.Controls.Add(this.progressBarImg);
+            this.Controls.Add(this.textboxPrompt);
             this.Controls.Add(this.pictBoxImgViewer);
             this.Controls.Add(this.btnPromptHistory);
             this.Controls.Add(this.btnQueue);
@@ -1445,6 +1463,7 @@
             this.Controls.Add(this.btnDebug);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.cliButton);
+            this.Controls.Add(this.panelPrompt);
             this.Controls.Add(this.progressBar);
             this.Controls.Add(this.progressCircle);
             this.Controls.Add(this.btnOpenOutFolder);
@@ -1482,8 +1501,7 @@
             this.tableLayoutPanel3.PerformLayout();
             this.menuStripOutputImg.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
-            this.panel11.ResumeLayout(false);
-            this.panel11.PerformLayout();
+            this.panel1.PerformLayout();
             this.panelSeamless.ResumeLayout(false);
             this.panelSeamless.PerformLayout();
             this.panelSampler.ResumeLayout(false);
@@ -1582,7 +1600,6 @@
         private System.Windows.Forms.Button btnSettings;
         private System.Windows.Forms.TextBox textboxExtraInitStrengths;
         private HTAlt.WinForms.HTButton btnEmbeddingBrowse;
-        private System.Windows.Forms.Label labelPromptInfo;
         private System.Windows.Forms.ToolStripMenuItem useAsInitImageToolStripMenuItem;
         private System.Windows.Forms.Button btnPostProc;
         private System.Windows.Forms.CheckBox checkboxSeamless;
@@ -1605,6 +1622,8 @@
         private System.Windows.Forms.TextBox textboxCliTest;
         private System.Windows.Forms.ContextMenuStrip menuStripAddToQueue;
         private System.Windows.Forms.ToolStripMenuItem addCurrentSettingsToQueueToolStripMenuItem;
+        private System.Windows.Forms.Label labelCurrentConcept;
+        private System.Windows.Forms.Label labelCurrentImage;
     }
 }
 
