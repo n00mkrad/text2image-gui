@@ -615,9 +615,6 @@ namespace StableDiffusionGui
 
         private void btnPromptHistory_Click(object sender, EventArgs e)
         {
-            if (Program.Busy)
-                return;
-
             new PromptListForm(PromptListForm.ListMode.History).ShowDialog();
         }
 

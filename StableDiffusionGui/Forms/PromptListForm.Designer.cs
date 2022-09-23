@@ -42,8 +42,11 @@
             this.menuStripPromptHistory = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.loadPromptIntoGUIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadPromptAndSettingsIntoGUIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.panelEnableHistory = new System.Windows.Forms.Panel();
+            this.checkboxEnableHistory = new System.Windows.Forms.CheckBox();
             this.menuStripDelete.SuspendLayout();
             this.menuStripPromptHistory.SuspendLayout();
+            this.panelEnableHistory.SuspendLayout();
             this.SuspendLayout();
             // 
             // titleLabel
@@ -166,12 +169,34 @@
             this.loadPromptAndSettingsIntoGUIToolStripMenuItem.Text = "Load Prompt And Settings Into GUI";
             this.loadPromptAndSettingsIntoGUIToolStripMenuItem.Click += new System.EventHandler(this.loadPromptAndSettingsIntoGUIToolStripMenuItem_Click);
             // 
+            // panelEnableHistory
+            // 
+            this.panelEnableHistory.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.panelEnableHistory.Controls.Add(this.checkboxEnableHistory);
+            this.panelEnableHistory.Location = new System.Drawing.Point(876, 9);
+            this.panelEnableHistory.Name = "panelEnableHistory";
+            this.panelEnableHistory.Size = new System.Drawing.Size(150, 40);
+            this.panelEnableHistory.TabIndex = 97;
+            this.panelEnableHistory.Visible = false;
+            // 
+            // checkboxEnableHistory
+            // 
+            this.checkboxEnableHistory.AutoSize = true;
+            this.checkboxEnableHistory.ForeColor = System.Drawing.Color.White;
+            this.checkboxEnableHistory.Location = new System.Drawing.Point(13, 13);
+            this.checkboxEnableHistory.Name = "checkboxEnableHistory";
+            this.checkboxEnableHistory.Size = new System.Drawing.Size(130, 17);
+            this.checkboxEnableHistory.TabIndex = 0;
+            this.checkboxEnableHistory.Text = "Enable Prompt History";
+            this.checkboxEnableHistory.UseVisualStyleBackColor = true;
+            // 
             // PromptListForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.ClientSize = new System.Drawing.Size(1084, 361);
+            this.Controls.Add(this.panelEnableHistory);
             this.Controls.Add(this.btnAddPromptsToQueue);
             this.Controls.Add(this.btnOpenOutFolder);
             this.Controls.Add(this.promptListView);
@@ -182,10 +207,13 @@
             this.MinimumSize = new System.Drawing.Size(1100, 300);
             this.Name = "PromptListForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.PromptListForm_FormClosing);
             this.Load += new System.EventHandler(this.PromptListForm_Load);
             this.Shown += new System.EventHandler(this.PromptListForm_Shown);
             this.menuStripDelete.ResumeLayout(false);
             this.menuStripPromptHistory.ResumeLayout(false);
+            this.panelEnableHistory.ResumeLayout(false);
+            this.panelEnableHistory.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -205,5 +233,7 @@
         private System.Windows.Forms.ToolStripMenuItem loadPromptAndSettingsIntoGUIToolStripMenuItem;
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.Button btnAddPromptsToQueue;
+        private System.Windows.Forms.Panel panelEnableHistory;
+        private System.Windows.Forms.CheckBox checkboxEnableHistory;
     }
 }

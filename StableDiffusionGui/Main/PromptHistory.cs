@@ -13,6 +13,9 @@ namespace StableDiffusionGui.Main
 
         public static void Add(TtiSettings batch)
         {
+            if (!Config.GetBool(Config.Key.checkboxEnableHistory))
+                return;
+
             foreach (string prompt in batch.Prompts)
                 Prompts.Add(new TtiSettings() { Prompts = new string[] { prompt }, Implementation = batch.Implementation, Iterations = batch.Iterations, Params = batch.Params });
 

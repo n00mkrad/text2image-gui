@@ -1,4 +1,5 @@
 ﻿using StableDiffusionGui.Data;
+using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.Ui;
 using System;
@@ -29,15 +30,19 @@ namespace StableDiffusionGui.Forms
             {
                 Text = "Prompt History";
                 btnAddPromptsToQueue.Visible = false;
+                panelEnableHistory.Visible = true;
             }
 
             if (_promptListMode == ListMode.Queue)
             {
                 Text = "Prompt Queue";
                 btnAddPromptsToQueue.Visible = true;
+                panelEnableHistory.Visible = false;
             }
 
             titleLabel.Text = Text;
+
+            ConfigParser.LoadGuiElement(checkboxEnableHistory);
         }
 
         private void PromptListForm_Shown(object sender, EventArgs e)
@@ -134,6 +139,11 @@ namespace StableDiffusionGui.Forms
 
             MainUi.Queue.Add(settings);
             LoadQueue();
+        }
+
+        private void PromptListForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            ConfigParser.SaveGuiElement(checkboxEnableHistory);
         }
     }
 }

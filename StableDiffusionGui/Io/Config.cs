@@ -254,6 +254,7 @@ namespace StableDiffusionGui.Io
             if (key == Key.textboxOutPath) return WriteDefault(key, Path.Combine(Paths.GetExeDir(), "Images"));
             if (key == Key.upDownIterations) return WriteDefault(key, "5");
             if (key == Key.comboxSdModel) return WriteDefault(key, IoUtils.GetFileInfosSorted(Paths.GetModelsPath(), true, "*.ckpt").Select(x => x.Name).FirstOrDefault());
+            if (key == Key.checkboxEnableHistory) return WriteDefault(key, true.ToString());
 
             return WriteDefault(key, "");
         }
@@ -284,6 +285,7 @@ namespace StableDiffusionGui.Io
             upDownIterations,
             comboxSdModel,
             lowMemTurbo,
+            checkboxEnableHistory,
         }
     }
 }
