@@ -159,6 +159,23 @@ namespace StableDiffusionGui
                 upDownSeed.Text = "";
         }
 
+        public void LoadMetadataIntoUi (ImageMetadata meta)
+        {
+            textboxPrompt.Text = meta.Prompt;
+            sliderSteps.Value = meta.Steps / 5; sliderSteps_Scroll(null, null);
+            sliderScale.Value = (meta.Scale * 2f).RoundToInt(); sliderScale_Scroll(null, null);
+            sliderResW.Value = meta.GeneratedResolution.Width / 64; sliderResW_Scroll(null, null);
+            sliderResH.Value = meta.GeneratedResolution.Height / 64; sliderResH_Scroll(null, null);
+            upDownSeed.Value = meta.Seed;
+            comboxSampler.Text = meta.Sampler;
+            MainUi.CurrentInitImgPath = meta.InitImgName;
+
+            if (meta.InitStrength > 0f)
+                sliderInitStrength.Value = (meta.InitStrength * 40f).RoundToInt().Clamp(sliderInitStrength.Minimum, sliderInitStrength.Maximum); sliderInitStrength_Scroll(null, null);
+
+            UpdateInitImgAndEmbeddingUi();
+        } 
+
         public void LoadTtiSettingsIntoUi(string[] prompts)
         {
             textboxPrompt.Text = string.Join(Environment.NewLine, prompts);
@@ -178,6 +195,7 @@ namespace StableDiffusionGui
             sliderInitStrength.Value = (s.Params["initStrengths"].Split(",")[0].GetFloat() * 40f).RoundToInt(); sliderInitStrength_Scroll(null, null);
             MainUi.CurrentEmbeddingPath = s.Params["embedding"];
             checkboxSeamless.Checked = s.Params["seamless"] == true.ToString();
+            checkboxInpainting.Checked = s.Params["inpainting"] == "masked";
 
             UpdateInitImgAndEmbeddingUi();
         }

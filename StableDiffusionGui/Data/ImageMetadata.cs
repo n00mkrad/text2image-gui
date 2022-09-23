@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace StableDiffusionGui.Data
 {
-    internal class ImageMetadata
+    public class ImageMetadata
     {
         public string Path { get; set; }
         public string ParsedText { get; set; }

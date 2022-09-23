@@ -151,6 +151,12 @@
     <Compile Include="Forms\DrawForm.Designer.cs">
       <DependentUpon>DrawForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\ImageLoadForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ImageLoadForm.Designer.cs">
+      <DependentUpon>ImageLoadForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\InstallerForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -229,6 +235,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\DrawForm.resx">
       <DependentUpon>DrawForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ImageLoadForm.resx">
+      <DependentUpon>ImageLoadForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\InstallerForm.resx">
       <DependentUpon>InstallerForm.cs</DependentUpon>

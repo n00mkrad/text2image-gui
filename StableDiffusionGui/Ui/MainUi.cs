@@ -3,6 +3,7 @@ using StableDiffusionGui.Forms;
 using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
+using StableDiffusionGui.Os;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -97,22 +98,19 @@ namespace StableDiffusionGui.Ui
             if (Program.Busy)
                 return;
 
-            foreach (string path in paths.Where(x => Path.GetExtension(x) == ".png"))
-            {
-                ImageMetadata meta = IoUtils.GetImageMetadata(path);
-
-                if (!string.IsNullOrWhiteSpace(meta.Prompt))
-                    Logger.Log($"Found metadata in image:\n{meta.ParsedText}");
-            }
-
             if (paths.Length == 1)
             {
                 if (ValidInitImgExtensions.Contains(Path.GetExtension(paths[0]).ToLower())) // Ask to use as init img
                 {
-                    DialogResult dialogResult = UiUtils.ShowMessageBox($"Do you want to load this image as an initialization image?", $"Dropped {Path.GetFileName(paths[0]).Trunc(40)}", MessageBoxButtons.YesNo);
+                    ImageLoadForm imgForm = new ImageLoadForm(paths[0]);
+                    imgForm.ShowDialog();
 
-                    if (dialogResult == DialogResult.Yes)
+                    if (imgForm.Action == ImageLoadForm.ImageAction.InitImage)
                         CurrentInitImgPath = paths[0];
+                    else if (imgForm.Action == ImageLoadForm.ImageAction.LoadSettings)
+                        Program.MainForm.LoadMetadataIntoUi(imgForm.CurrentMetadata);
+                    else if (imgForm.Action == ImageLoadForm.ImageAction.CopyPrompt)
+                        OsUtils.SetClipboard(imgForm.CurrentMetadata.Prompt);
                 }
 
                 if (ValidInitEmbeddingExtensions.Contains(Path.GetExtension(paths[0]).ToLower())) // Ask to use as embedding (finetuned model)

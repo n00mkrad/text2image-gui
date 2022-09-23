@@ -222,6 +222,7 @@
             this.textboxPrompt.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxPrompt.Multiline = true;
             this.textboxPrompt.Name = "textboxPrompt";
+            this.textboxPrompt.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textboxPrompt.Size = new System.Drawing.Size(512, 59);
             this.textboxPrompt.TabIndex = 0;
             this.toolTip.SetToolTip(this.textboxPrompt, "Text prompt. The AI will try to generate an image matching this description.");
@@ -631,7 +632,7 @@
             this.reGenerateImageWithCurrentSettingsToolStripMenuItem,
             this.useAsInitImageToolStripMenuItem});
             this.menuStripOutputImg.Name = "menuStripOutputImg";
-            this.menuStripOutputImg.Size = new System.Drawing.Size(292, 158);
+            this.menuStripOutputImg.Size = new System.Drawing.Size(292, 136);
             // 
             // openFileToolStripMenuItem
             // 
