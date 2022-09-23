@@ -64,6 +64,7 @@
             this.openOutputFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyImageToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copySeedToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.reGenerateImageWithCurrentSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.useAsInitImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.comboxSampler = new System.Windows.Forms.ComboBox();
@@ -92,9 +93,9 @@
             this.paypalBtn = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.textboxCliTest = new System.Windows.Forms.TextBox();
             this.panel12 = new System.Windows.Forms.Panel();
             this.panel11 = new System.Windows.Forms.Panel();
-            this.textboxCliTest = new System.Windows.Forms.TextBox();
             this.panelSeamless = new System.Windows.Forms.Panel();
             this.label8 = new System.Windows.Forms.Label();
             this.panelSampler = new System.Windows.Forms.Panel();
@@ -110,6 +111,8 @@
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.labelInitStrength = new System.Windows.Forms.Label();
             this.panelPrompt = new System.Windows.Forms.Panel();
+            this.labelCurrentConcept = new System.Windows.Forms.Label();
+            this.labelCurrentImage = new System.Windows.Forms.Label();
             this.menuStripLogs = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.progressBarImg = new HTAlt.WinForms.HTProgressBar();
             this.menuStripRunQueue = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -119,9 +122,6 @@
             this.separator = new System.Windows.Forms.Button();
             this.menuStripAddToQueue = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addCurrentSettingsToQueueToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.labelCurrentImage = new System.Windows.Forms.Label();
-            this.labelCurrentConcept = new System.Windows.Forms.Label();
-            this.reGenerateImageWithCurrentSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
             this.tableLayoutPanel6.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -637,30 +637,37 @@
             // openFileToolStripMenuItem
             // 
             this.openFileToolStripMenuItem.Name = "openFileToolStripMenuItem";
-            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(291, 22);
             this.openFileToolStripMenuItem.Text = "Open File";
             this.openFileToolStripMenuItem.Click += new System.EventHandler(this.openFileToolStripMenuItem_Click);
             // 
             // openOutputFolderToolStripMenuItem
             // 
             this.openOutputFolderToolStripMenuItem.Name = "openOutputFolderToolStripMenuItem";
-            this.openOutputFolderToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openOutputFolderToolStripMenuItem.Size = new System.Drawing.Size(291, 22);
             this.openOutputFolderToolStripMenuItem.Text = "Open Output Folder";
             this.openOutputFolderToolStripMenuItem.Click += new System.EventHandler(this.openOutputFolderToolStripMenuItem_Click);
             // 
             // copyImageToClipboardToolStripMenuItem
             // 
             this.copyImageToClipboardToolStripMenuItem.Name = "copyImageToClipboardToolStripMenuItem";
-            this.copyImageToClipboardToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.copyImageToClipboardToolStripMenuItem.Size = new System.Drawing.Size(291, 22);
             this.copyImageToClipboardToolStripMenuItem.Text = "Copy Image";
             this.copyImageToClipboardToolStripMenuItem.Click += new System.EventHandler(this.copyImageToClipboardToolStripMenuItem_Click);
             // 
             // copySeedToClipboardToolStripMenuItem
             // 
             this.copySeedToClipboardToolStripMenuItem.Name = "copySeedToClipboardToolStripMenuItem";
-            this.copySeedToClipboardToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.copySeedToClipboardToolStripMenuItem.Size = new System.Drawing.Size(291, 22);
             this.copySeedToClipboardToolStripMenuItem.Text = "Copy Seed";
             this.copySeedToClipboardToolStripMenuItem.Click += new System.EventHandler(this.copySeedToClipboardToolStripMenuItem_Click);
+            // 
+            // reGenerateImageWithCurrentSettingsToolStripMenuItem
+            // 
+            this.reGenerateImageWithCurrentSettingsToolStripMenuItem.Name = "reGenerateImageWithCurrentSettingsToolStripMenuItem";
+            this.reGenerateImageWithCurrentSettingsToolStripMenuItem.Size = new System.Drawing.Size(291, 22);
+            this.reGenerateImageWithCurrentSettingsToolStripMenuItem.Text = "Re-Generate Image With Current Settings";
+            this.reGenerateImageWithCurrentSettingsToolStripMenuItem.Click += new System.EventHandler(this.reGenerateImageWithCurrentSettingsToolStripMenuItem_Click);
             // 
             // useAsInitImageToolStripMenuItem
             // 
@@ -1138,6 +1145,19 @@
             this.panel1.Size = new System.Drawing.Size(633, 512);
             this.panel1.TabIndex = 106;
             // 
+            // textboxCliTest
+            // 
+            this.textboxCliTest.AllowDrop = true;
+            this.textboxCliTest.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textboxCliTest.ForeColor = System.Drawing.Color.White;
+            this.textboxCliTest.Location = new System.Drawing.Point(233, 478);
+            this.textboxCliTest.MinimumSize = new System.Drawing.Size(4, 21);
+            this.textboxCliTest.Name = "textboxCliTest";
+            this.textboxCliTest.Size = new System.Drawing.Size(397, 20);
+            this.textboxCliTest.TabIndex = 4;
+            this.textboxCliTest.Visible = false;
+            this.textboxCliTest.DoubleClick += new System.EventHandler(this.textboxCliTest_DoubleClick);
+            // 
             // panel12
             // 
             this.panel12.Dock = System.Windows.Forms.DockStyle.Top;
@@ -1153,19 +1173,6 @@
             this.panel11.Name = "panel11";
             this.panel11.Size = new System.Drawing.Size(633, 35);
             this.panel11.TabIndex = 10;
-            // 
-            // textboxCliTest
-            // 
-            this.textboxCliTest.AllowDrop = true;
-            this.textboxCliTest.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.textboxCliTest.ForeColor = System.Drawing.Color.White;
-            this.textboxCliTest.Location = new System.Drawing.Point(233, 478);
-            this.textboxCliTest.MinimumSize = new System.Drawing.Size(4, 21);
-            this.textboxCliTest.Name = "textboxCliTest";
-            this.textboxCliTest.Size = new System.Drawing.Size(397, 21);
-            this.textboxCliTest.TabIndex = 4;
-            this.textboxCliTest.Visible = false;
-            this.textboxCliTest.DoubleClick += new System.EventHandler(this.textboxCliTest_DoubleClick);
             // 
             // panelSeamless
             // 
@@ -1347,6 +1354,28 @@
             this.panelPrompt.Size = new System.Drawing.Size(639, 65);
             this.panelPrompt.TabIndex = 0;
             // 
+            // labelCurrentConcept
+            // 
+            this.labelCurrentConcept.AutoSize = true;
+            this.labelCurrentConcept.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelCurrentConcept.ForeColor = System.Drawing.Color.Silver;
+            this.labelCurrentConcept.Location = new System.Drawing.Point(344, 37);
+            this.labelCurrentConcept.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.labelCurrentConcept.Name = "labelCurrentConcept";
+            this.labelCurrentConcept.Size = new System.Drawing.Size(0, 13);
+            this.labelCurrentConcept.TabIndex = 92;
+            // 
+            // labelCurrentImage
+            // 
+            this.labelCurrentImage.AutoSize = true;
+            this.labelCurrentImage.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelCurrentImage.ForeColor = System.Drawing.Color.Silver;
+            this.labelCurrentImage.Location = new System.Drawing.Point(344, 9);
+            this.labelCurrentImage.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.labelCurrentImage.Name = "labelCurrentImage";
+            this.labelCurrentImage.Size = new System.Drawing.Size(0, 13);
+            this.labelCurrentImage.TabIndex = 91;
+            // 
             // menuStripLogs
             // 
             this.menuStripLogs.Name = "menuStripLogs";
@@ -1427,35 +1456,6 @@
             this.addCurrentSettingsToQueueToolStripMenuItem.Text = "Add Current Settings to Queue";
             this.addCurrentSettingsToQueueToolStripMenuItem.Click += new System.EventHandler(this.addCurrentSettingsToQueueToolStripMenuItem_Click);
             // 
-            // labelCurrentImage
-            // 
-            this.labelCurrentImage.AutoSize = true;
-            this.labelCurrentImage.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelCurrentImage.ForeColor = System.Drawing.Color.Silver;
-            this.labelCurrentImage.Location = new System.Drawing.Point(344, 9);
-            this.labelCurrentImage.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
-            this.labelCurrentImage.Name = "labelCurrentImage";
-            this.labelCurrentImage.Size = new System.Drawing.Size(0, 13);
-            this.labelCurrentImage.TabIndex = 91;
-            // 
-            // labelCurrentConcept
-            // 
-            this.labelCurrentConcept.AutoSize = true;
-            this.labelCurrentConcept.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelCurrentConcept.ForeColor = System.Drawing.Color.Silver;
-            this.labelCurrentConcept.Location = new System.Drawing.Point(344, 37);
-            this.labelCurrentConcept.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
-            this.labelCurrentConcept.Name = "labelCurrentConcept";
-            this.labelCurrentConcept.Size = new System.Drawing.Size(0, 13);
-            this.labelCurrentConcept.TabIndex = 92;
-            // 
-            // reGenerateImageWithCurrentSettingsToolStripMenuItem
-            // 
-            this.reGenerateImageWithCurrentSettingsToolStripMenuItem.Name = "reGenerateImageWithCurrentSettingsToolStripMenuItem";
-            this.reGenerateImageWithCurrentSettingsToolStripMenuItem.Size = new System.Drawing.Size(291, 22);
-            this.reGenerateImageWithCurrentSettingsToolStripMenuItem.Text = "Re-Generate Image With Current Settings";
-            this.reGenerateImageWithCurrentSettingsToolStripMenuItem.Click += new System.EventHandler(this.reGenerateImageWithCurrentSettingsToolStripMenuItem_Click);
-            // 
             // MainForm
             // 
             this.AllowDrop = true;
@@ -1463,8 +1463,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.ClientSize = new System.Drawing.Size(1178, 734);
-            this.Controls.Add(this.progressBarImg);
             this.Controls.Add(this.textboxPrompt);
+            this.Controls.Add(this.progressBarImg);
             this.Controls.Add(this.pictBoxImgViewer);
             this.Controls.Add(this.btnPromptHistory);
             this.Controls.Add(this.btnQueue);

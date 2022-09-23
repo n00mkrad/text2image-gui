@@ -74,7 +74,6 @@ namespace StableDiffusionGui.Forms
                         textboxInfo.Text += $"{n}Init Image:{n}{CurrentMetadata.InitImgName}{n}";
                         textboxInfo.Text += $"{n}Init Strength:{n}{CurrentMetadata.InitStrength}{n}";
                     }
-
                 }
             }
             else
