@@ -159,9 +159,16 @@ namespace StableDiffusionGui.Forms
             ConfigParser.SaveGuiElement(checkboxEnableHistory);
         }
 
+        string _previousFilterText = "";
+
         private void textboxFilter_TextChanged(object sender, EventArgs e)
         {
             string t = textboxFilter.Text.Trim();
+
+            if (t == _previousFilterText)
+                return;
+
+            _previousFilterText = t;
 
             if (_promptListMode == ListMode.History)
                 LoadPromptHistory(t);
