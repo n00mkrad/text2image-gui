@@ -9,7 +9,7 @@ namespace StableDiffusionGui.Main
 {
     internal class PromptHistory
     {
-        public static List<TtiSettings> Prompts = new List<TtiSettings>();
+        public static List<TtiSettings> History = new List<TtiSettings>();
 
         public static void Add(TtiSettings batch)
         {
@@ -17,26 +17,26 @@ namespace StableDiffusionGui.Main
                 return;
 
             foreach (string prompt in batch.Prompts)
-                Prompts.Add(new TtiSettings() { Prompts = new string[] { prompt }, Implementation = batch.Implementation, Iterations = batch.Iterations, Params = batch.Params });
+                History.Add(new TtiSettings() { Prompts = new string[] { prompt }, Implementation = batch.Implementation, Iterations = batch.Iterations, Params = batch.Params });
 
             Save();
         }
 
         public static void Delete(List<TtiSettings> promptsToDelete)
         {
-            Prompts = Prompts.Except(promptsToDelete).ToList();
+            History = History.Except(promptsToDelete).ToList();
             Save();
         }
 
         public static void DeleteAll()
         {
-            Prompts.Clear();
+            History.Clear();
             Save();
         }
 
         public static void Save()
         {
-            string text = JsonConvert.SerializeObject(Prompts, Formatting.Indented);
+            string text = JsonConvert.SerializeObject(History, Formatting.Indented);
             File.WriteAllText(GetJsonPath(), text);
         }
 
@@ -46,7 +46,7 @@ namespace StableDiffusionGui.Main
                 return;
 
             string text = File.ReadAllText(GetJsonPath());
-            Prompts = JsonConvert.DeserializeObject<List<TtiSettings>>(text);
+            History = JsonConvert.DeserializeObject<List<TtiSettings>>(text);
         }
 
         private static string GetJsonPath()

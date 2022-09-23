@@ -94,6 +94,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel12 = new System.Windows.Forms.Panel();
             this.panel11 = new System.Windows.Forms.Panel();
+            this.textboxCliTest = new System.Windows.Forms.TextBox();
             this.panelSeamless = new System.Windows.Forms.Panel();
             this.label8 = new System.Windows.Forms.Label();
             this.panelSampler = new System.Windows.Forms.Panel();
@@ -117,7 +118,8 @@
             this.generateAllQueuedPromptsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pictBoxImgViewer = new System.Windows.Forms.PictureBox();
             this.separator = new System.Windows.Forms.Button();
-            this.textboxCliTest = new System.Windows.Forms.TextBox();
+            this.menuStripAddToQueue = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.addCurrentSettingsToQueueToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
             this.tableLayoutPanel6.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -140,6 +142,7 @@
             this.panelPrompt.SuspendLayout();
             this.menuStripRunQueue.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictBoxImgViewer)).BeginInit();
+            this.menuStripAddToQueue.SuspendLayout();
             this.SuspendLayout();
             // 
             // runBtn
@@ -887,6 +890,7 @@
             this.toolTip.SetToolTip(this.btnQueue, "View Prompt Queue");
             this.btnQueue.UseVisualStyleBackColor = false;
             this.btnQueue.Click += new System.EventHandler(this.btnQueue_Click);
+            this.btnQueue.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnQueue_MouseDown);
             // 
             // btnPostProc
             // 
@@ -1140,6 +1144,18 @@
             this.panel11.Name = "panel11";
             this.panel11.Size = new System.Drawing.Size(633, 35);
             this.panel11.TabIndex = 10;
+            // 
+            // textboxCliTest
+            // 
+            this.textboxCliTest.AllowDrop = true;
+            this.textboxCliTest.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textboxCliTest.ForeColor = System.Drawing.Color.White;
+            this.textboxCliTest.Location = new System.Drawing.Point(233, 8);
+            this.textboxCliTest.MinimumSize = new System.Drawing.Size(4, 21);
+            this.textboxCliTest.Name = "textboxCliTest";
+            this.textboxCliTest.Size = new System.Drawing.Size(291, 20);
+            this.textboxCliTest.TabIndex = 4;
+            this.textboxCliTest.DoubleClick += new System.EventHandler(this.textboxCliTest_DoubleClick);
             // 
             // panelSeamless
             // 
@@ -1399,17 +1415,19 @@
             this.separator.TabStop = false;
             this.separator.UseVisualStyleBackColor = false;
             // 
-            // textboxCliTest
+            // menuStripAddToQueue
             // 
-            this.textboxCliTest.AllowDrop = true;
-            this.textboxCliTest.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.textboxCliTest.ForeColor = System.Drawing.Color.White;
-            this.textboxCliTest.Location = new System.Drawing.Point(233, 8);
-            this.textboxCliTest.MinimumSize = new System.Drawing.Size(4, 21);
-            this.textboxCliTest.Name = "textboxCliTest";
-            this.textboxCliTest.Size = new System.Drawing.Size(291, 21);
-            this.textboxCliTest.TabIndex = 4;
-            this.textboxCliTest.DoubleClick += new System.EventHandler(this.textboxCliTest_DoubleClick);
+            this.menuStripAddToQueue.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addCurrentSettingsToQueueToolStripMenuItem});
+            this.menuStripAddToQueue.Name = "menuStripAddToQueue";
+            this.menuStripAddToQueue.Size = new System.Drawing.Size(237, 26);
+            // 
+            // addCurrentSettingsToQueueToolStripMenuItem
+            // 
+            this.addCurrentSettingsToQueueToolStripMenuItem.Name = "addCurrentSettingsToQueueToolStripMenuItem";
+            this.addCurrentSettingsToQueueToolStripMenuItem.Size = new System.Drawing.Size(236, 22);
+            this.addCurrentSettingsToQueueToolStripMenuItem.Text = "Add Current Settings to Queue";
+            this.addCurrentSettingsToQueueToolStripMenuItem.Click += new System.EventHandler(this.addCurrentSettingsToQueueToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -1490,6 +1508,7 @@
             this.panelPrompt.PerformLayout();
             this.menuStripRunQueue.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictBoxImgViewer)).EndInit();
+            this.menuStripAddToQueue.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1584,6 +1603,8 @@
         private HTAlt.WinForms.HTButton btnResetMask;
         private System.Windows.Forms.PictureBox pictBoxImgViewer;
         private System.Windows.Forms.TextBox textboxCliTest;
+        private System.Windows.Forms.ContextMenuStrip menuStripAddToQueue;
+        private System.Windows.Forms.ToolStripMenuItem addCurrentSettingsToQueueToolStripMenuItem;
     }
 }
 

@@ -656,5 +656,19 @@ namespace StableDiffusionGui
             TtiProcess.WriteStdIn(textboxCliTest.Text);
             textboxCliTest.Text = "";
         }
+
+        private void addCurrentSettingsToQueueToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var settings = GetCurrentTtiSettings();
+
+            if (settings.Prompts.Where(x => !string.IsNullOrWhiteSpace(x)).Any())
+                MainUi.Queue.Add(settings);
+        }
+
+        private void btnQueue_MouseDown(object sender, MouseEventArgs e)
+        {
+            if(e.Button == MouseButtons.Right)
+                menuStripAddToQueue.Show(Cursor.Position);
+        }
     }
 }
