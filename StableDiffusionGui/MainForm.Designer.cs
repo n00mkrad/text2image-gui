@@ -121,6 +121,7 @@
             this.addCurrentSettingsToQueueToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.labelCurrentImage = new System.Windows.Forms.Label();
             this.labelCurrentConcept = new System.Windows.Forms.Label();
+            this.reGenerateImageWithCurrentSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
             this.tableLayoutPanel6.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -627,9 +628,10 @@
             this.openOutputFolderToolStripMenuItem,
             this.copyImageToClipboardToolStripMenuItem,
             this.copySeedToClipboardToolStripMenuItem,
+            this.reGenerateImageWithCurrentSettingsToolStripMenuItem,
             this.useAsInitImageToolStripMenuItem});
             this.menuStripOutputImg.Name = "menuStripOutputImg";
-            this.menuStripOutputImg.Size = new System.Drawing.Size(181, 114);
+            this.menuStripOutputImg.Size = new System.Drawing.Size(292, 158);
             // 
             // openFileToolStripMenuItem
             // 
@@ -662,8 +664,8 @@
             // useAsInitImageToolStripMenuItem
             // 
             this.useAsInitImageToolStripMenuItem.Name = "useAsInitImageToolStripMenuItem";
-            this.useAsInitImageToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.useAsInitImageToolStripMenuItem.Text = "Use as Init Image";
+            this.useAsInitImageToolStripMenuItem.Size = new System.Drawing.Size(291, 22);
+            this.useAsInitImageToolStripMenuItem.Text = "Use as Initialization Image";
             this.useAsInitImageToolStripMenuItem.Click += new System.EventHandler(this.useAsInitImageToolStripMenuItem_Click);
             // 
             // toolTip
@@ -1446,6 +1448,13 @@
             this.labelCurrentConcept.Size = new System.Drawing.Size(0, 13);
             this.labelCurrentConcept.TabIndex = 92;
             // 
+            // reGenerateImageWithCurrentSettingsToolStripMenuItem
+            // 
+            this.reGenerateImageWithCurrentSettingsToolStripMenuItem.Name = "reGenerateImageWithCurrentSettingsToolStripMenuItem";
+            this.reGenerateImageWithCurrentSettingsToolStripMenuItem.Size = new System.Drawing.Size(291, 22);
+            this.reGenerateImageWithCurrentSettingsToolStripMenuItem.Text = "Re-Generate Image With Current Settings";
+            this.reGenerateImageWithCurrentSettingsToolStripMenuItem.Click += new System.EventHandler(this.reGenerateImageWithCurrentSettingsToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AllowDrop = true;
@@ -1624,6 +1633,7 @@
         private System.Windows.Forms.ToolStripMenuItem addCurrentSettingsToQueueToolStripMenuItem;
         private System.Windows.Forms.Label labelCurrentConcept;
         private System.Windows.Forms.Label labelCurrentImage;
+        private System.Windows.Forms.ToolStripMenuItem reGenerateImageWithCurrentSettingsToolStripMenuItem;
     }
 }
 

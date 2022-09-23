@@ -82,7 +82,7 @@ namespace StableDiffusionGui
             List<string> gpuNames = gpus.Select(x => x.FullName).ToList();
             int maxGpusToListInTitle = 2;
 
-            if(gpuNames.Count < 1)
+            if (gpuNames.Count < 1)
                 Text = $"{Text} - No CUDA GPUs available.";
             else if (gpuNames.Count <= maxGpusToListInTitle)
                 Text = $"{Text} - CUDA GPU{(gpuNames.Count != 1 ? "s" : "")}: {string.Join(", ", gpuNames)}";
@@ -148,10 +148,15 @@ namespace StableDiffusionGui
             textboxPrompt.Text = string.Join(Environment.NewLine, lines.Select(x => MainUi.SanitizePrompt(x)).Where(x => !string.IsNullOrWhiteSpace(x)));
 
             if (upDownSeed.Text == "")
-            {
-                upDownSeed.Value = -1;
+                SetSeed();
+        }
+
+        public void SetSeed(long seed = -1)
+        {
+            upDownSeed.Value = seed;
+
+            if(seed < 0)
                 upDownSeed.Text = "";
-            }
         }
 
         public void LoadTtiSettingsIntoUi(string[] prompts)
@@ -658,8 +663,25 @@ namespace StableDiffusionGui
 
         private void btnQueue_MouseDown(object sender, MouseEventArgs e)
         {
-            if(e.Button == MouseButtons.Right)
+            if (e.Button == MouseButtons.Right)
                 menuStripAddToQueue.Show(Cursor.Position);
+        }
+
+        private void reGenerateImageWithCurrentSettingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Program.Busy)
+            {
+                UiUtils.ShowMessageBox("Please wait until the current process has finished.");
+                return;
+            }
+
+            var prevSeedVal = upDownSeed.Value;
+            var prevIterVal = upDownIterations.Value;
+            upDownSeed.Value = ImagePreview.CurrentImageMetadata.Seed;
+            upDownIterations.Value = 1;
+            runBtn_Click(null, null);
+            SetSeed((long)prevSeedVal);
+            upDownIterations.Value = prevIterVal;
         }
     }
 }
