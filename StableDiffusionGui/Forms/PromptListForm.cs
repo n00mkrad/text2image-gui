@@ -1,4 +1,5 @@
-﻿using StableDiffusionGui.Data;
+﻿using LibGit2Sharp;
+using StableDiffusionGui.Data;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.Ui;
@@ -31,6 +32,7 @@ namespace StableDiffusionGui.Forms
                 Text = "Prompt History";
                 btnAddPromptsToQueue.Visible = false;
                 panelEnableHistory.Visible = true;
+                panelFilter.Location = new System.Drawing.Point(570, panelFilter.Location.Y);
             }
 
             if (_promptListMode == ListMode.Queue)
@@ -38,6 +40,7 @@ namespace StableDiffusionGui.Forms
                 Text = "Prompt Queue";
                 btnAddPromptsToQueue.Visible = true;
                 panelEnableHistory.Visible = false;
+                panelFilter.Location = new System.Drawing.Point(680, panelFilter.Location.Y);
             }
 
             titleLabel.Text = Text;
@@ -53,16 +56,26 @@ namespace StableDiffusionGui.Forms
                 LoadQueue();
         }
 
-        private void LoadPromptHistory()
+        private void LoadPromptHistory(string filter = "")
         {
             promptListView.Items.Clear();
-            promptListView.Items.AddRange(PromptHistory.Prompts.Select(x => new ListViewItem() { Text = x.ToString(), Tag = x }).Reverse().ToArray());
+            var items = Filter(PromptHistory.Prompts, filter).Select(x => new ListViewItem() { Text = x.ToString(), Tag = x }).Reverse();
+            promptListView.Items.AddRange(items.ToArray());
         }
 
-        private void LoadQueue()
+        private void LoadQueue(string filter = "")
         {
             promptListView.Items.Clear();
-            promptListView.Items.AddRange(MainUi.Queue.Select(x => new ListViewItem() { Text = x.ToString(), Tag = x }).Reverse().ToArray());
+            var items = Filter(PromptHistory.Prompts, filter).Select(x => new ListViewItem() { Text = x.ToString(), Tag = x }).Reverse();
+            promptListView.Items.AddRange(items.ToArray());
+        }
+
+        private IEnumerable<TtiSettings> Filter (IEnumerable<TtiSettings> ttiSettings, string text)
+        {
+            if (!string.IsNullOrWhiteSpace(text))
+                return ttiSettings.Where(x => x.Prompts.FirstOrDefault().ToLower().Contains(text.ToLower()));
+            else
+                return ttiSettings;
         }
 
         private void btnOpenOutFolder_Click(object sender, EventArgs e)
@@ -144,6 +157,16 @@ namespace StableDiffusionGui.Forms
         private void PromptListForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             ConfigParser.SaveGuiElement(checkboxEnableHistory);
+        }
+
+        private void textboxFilter_TextChanged(object sender, EventArgs e)
+        {
+            string t = textboxFilter.Text.Trim();
+
+            if (_promptListMode == ListMode.History)
+                LoadPromptHistory(t);
+            else if (_promptListMode == ListMode.Queue)
+                LoadQueue(t);
         }
     }
 }

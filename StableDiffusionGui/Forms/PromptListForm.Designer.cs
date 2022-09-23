@@ -44,9 +44,13 @@
             this.loadPromptAndSettingsIntoGUIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelEnableHistory = new System.Windows.Forms.Panel();
             this.checkboxEnableHistory = new System.Windows.Forms.CheckBox();
+            this.panelFilter = new System.Windows.Forms.Panel();
+            this.textboxFilter = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.menuStripDelete.SuspendLayout();
             this.menuStripPromptHistory.SuspendLayout();
             this.panelEnableHistory.SuspendLayout();
+            this.panelFilter.SuspendLayout();
             this.SuspendLayout();
             // 
             // titleLabel
@@ -190,12 +194,47 @@
             this.checkboxEnableHistory.Text = "Enable Prompt History";
             this.checkboxEnableHistory.UseVisualStyleBackColor = true;
             // 
+            // panelFilter
+            // 
+            this.panelFilter.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.panelFilter.Controls.Add(this.label1);
+            this.panelFilter.Controls.Add(this.textboxFilter);
+            this.panelFilter.Location = new System.Drawing.Point(570, 9);
+            this.panelFilter.Name = "panelFilter";
+            this.panelFilter.Size = new System.Drawing.Size(300, 40);
+            this.panelFilter.TabIndex = 98;
+            // 
+            // textboxFilter
+            // 
+            this.textboxFilter.AllowDrop = true;
+            this.textboxFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.textboxFilter.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textboxFilter.ForeColor = System.Drawing.Color.White;
+            this.textboxFilter.Location = new System.Drawing.Point(105, 9);
+            this.textboxFilter.Margin = new System.Windows.Forms.Padding(3, 3, 12, 3);
+            this.textboxFilter.MinimumSize = new System.Drawing.Size(4, 21);
+            this.textboxFilter.Name = "textboxFilter";
+            this.textboxFilter.Size = new System.Drawing.Size(183, 21);
+            this.textboxFilter.TabIndex = 5;
+            this.textboxFilter.TextChanged += new System.EventHandler(this.textboxFilter_TextChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.ForeColor = System.Drawing.Color.White;
+            this.label1.Location = new System.Drawing.Point(10, 13);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(89, 13);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "Prompt Text Filter";
+            // 
             // PromptListForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.ClientSize = new System.Drawing.Size(1084, 361);
+            this.Controls.Add(this.panelFilter);
             this.Controls.Add(this.panelEnableHistory);
             this.Controls.Add(this.btnAddPromptsToQueue);
             this.Controls.Add(this.btnOpenOutFolder);
@@ -214,6 +253,8 @@
             this.menuStripPromptHistory.ResumeLayout(false);
             this.panelEnableHistory.ResumeLayout(false);
             this.panelEnableHistory.PerformLayout();
+            this.panelFilter.ResumeLayout(false);
+            this.panelFilter.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -235,5 +276,8 @@
         private System.Windows.Forms.Button btnAddPromptsToQueue;
         private System.Windows.Forms.Panel panelEnableHistory;
         private System.Windows.Forms.CheckBox checkboxEnableHistory;
+        private System.Windows.Forms.Panel panelFilter;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox textboxFilter;
     }
 }
