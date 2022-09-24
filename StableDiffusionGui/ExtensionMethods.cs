@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Management.Automation;
+using static StableDiffusionGui.Forms.PostProcSettingsForm;
 
 namespace StableDiffusionGui
 {
@@ -339,6 +340,28 @@ namespace StableDiffusionGui
             {
                 return String.Empty;
             }
+        }
+
+        public static string Get(this Dictionary<string, string> dict, string key, bool returnKeyInsteadOfEmptyString = false)
+        {
+            if (dict == null || !dict.ContainsKey(key))
+            {
+                if (returnKeyInsteadOfEmptyString)
+                    return key;
+                else
+                    return "";
+            }
+
+            return dict[key];
+        }
+
+        public static void FillFromEnum<TEnum>(this ComboBox comboBox, Dictionary<string, string> stringMap = null) where TEnum : Enum
+        {
+            if (stringMap == null)
+                stringMap = new Dictionary<string, string>();
+
+            comboBox.Items.Clear();
+            comboBox.Items.AddRange(Enum.GetValues(typeof(TEnum)).Cast<TEnum>().Select(x => stringMap.Get(x.ToString(), true)).ToArray());
         }
     }
 }

@@ -286,6 +286,7 @@ namespace StableDiffusionGui.Io
             comboxSdModel,
             lowMemTurbo,
             checkboxEnableHistory,
+            faceRestoreStrength,
         }
     }
 }

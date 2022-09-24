@@ -44,8 +44,7 @@ namespace StableDiffusionGui.Main
             int upscaleSetting = Config.GetInt("comboxUpscale");
             string upscaling = upscaleSetting == 0 ? "" : $"-U {Math.Pow(2, upscaleSetting)}";
 
-            float gfpganSetting = Config.GetFloat("sliderGfpgan");
-            string gfpgan = gfpganSetting > 0.01f ? $"-G {gfpganSetting.ToStringDot("0.00")}" : "";
+            string faceRestore = ArgsDreamPy.GetFaceRestoreArgs();
 
             int imgs = 0;
 
@@ -59,7 +58,7 @@ namespace StableDiffusionGui.Main
                         {
                             bool initImgExists = File.Exists(initImg);
                             string init = initImgExists ? $"--init_img {initImg.Wrap()} --strength {strength.ToStringDot("0.0000")}" : "";
-                            commands.Add($"{prompt} {init} -n {1} -s {steps} -C {scale.ToStringDot()} -A {sampler} -W {res.Width} -H {res.Height} -S {seed} {upscaling} {gfpgan} {(seamless ? "--seamless" : "")}");
+                            commands.Add($"{prompt} {init} -n {1} -s {steps} -C {scale.ToStringDot()} -A {sampler} -W {res.Width} -H {res.Height} -S {seed} {upscaling} {faceRestore} {(seamless ? "--seamless" : "")}");
                             imgs++;
 
                             if (!initImgExists)
