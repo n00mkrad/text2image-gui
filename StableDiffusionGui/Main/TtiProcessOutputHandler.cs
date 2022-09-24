@@ -120,12 +120,6 @@ namespace StableDiffusionGui.Main
                 UiUtils.ShowMessageBox($"Your GPU ran out of VRAM! Try a lower resolution.\n\n{line.Split("If reserved memory is").FirstOrDefault()}", UiUtils.MessageType.Error);
             }
 
-            if (!_hasErrored && (line.Contains("RuntimeError") || line.Contains("ImportError") || line.Contains("OSError")))
-            {
-                _hasErrored = true;
-                UiUtils.ShowMessageBox($"Python Error:\n\n{lastLogLines}", UiUtils.MessageType.Error);
-            }
-
             if (!_hasErrored && (line.Contains("PytorchStreamReader failed reading zip archive") || line.Contains("UnpicklingError")))
             {
                 _hasErrored = true;
@@ -142,6 +136,12 @@ namespace StableDiffusionGui.Main
             {
                 _hasErrored = true;
                 UiUtils.ShowMessageBox($"Your GPU appears to be unstable! If you have an overclock enabled, please disable it!\n\n{line}", UiUtils.MessageType.Error);
+            }
+
+            if (!_hasErrored && (line.Contains("RuntimeError") || line.Contains("ImportError") || line.Contains("OSError")))
+            {
+                _hasErrored = true;
+                UiUtils.ShowMessageBox($"Python Error:\n\n{lastLogLines}", UiUtils.MessageType.Error);
             }
 
             // if (!_hasErrored && line.ToLower().Contains("0 image(s) generated in"))
