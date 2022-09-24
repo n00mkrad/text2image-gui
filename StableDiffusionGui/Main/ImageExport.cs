@@ -45,6 +45,12 @@ namespace StableDiffusionGui.Main
                     images = images.Where(x => !IoUtils.IsFileLocked(x)).ToList(); // Ignore files that are still in use
                     images = images.Where(x => (DateTime.Now - x.LastWriteTime).TotalMilliseconds >= _minimumImageAgeMs).ToList(); // Wait a certain time to make sure python is done writing to it
 
+                    if (TextToImage.LastTaskSettings.Implementation == Implementation.StableDiffusion)
+                    {
+                        var logLines = Logger.GetSessionLog(Constants.SdLogFilename);
+                        images = images.Where(img => logLines.Where(line => line.Contains(img.Name)).Any()).ToList(); // Only take image if it was written into SD log. Avoids copying too early (post-proc etc)
+                    }
+
                     bool sub = TextToImage.CurrentTask.SubfoldersPerPrompt;
                     Dictionary<string, string> imageDirMap = new Dictionary<string, string>();
 

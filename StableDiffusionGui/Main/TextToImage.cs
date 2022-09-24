@@ -106,7 +106,7 @@ namespace StableDiffusionGui.Main
             }
             else
             {
-                bool logCopySuccess = OsUtils.SetClipboard(Logger.GetSessionLog("sd"));
+                bool logCopySuccess = OsUtils.SetClipboard(Logger.GetSessionLog(Constants.SdLogFilename));
                 Logger.Log($"No images generated. {(logCopySuccess ? "Log was copied to clipboard." : "")}");
             }
 
