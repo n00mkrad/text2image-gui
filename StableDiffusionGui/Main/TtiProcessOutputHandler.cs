@@ -43,10 +43,7 @@ namespace StableDiffusionGui.Main
                     int percent = (((float)stepsCurrentTarget[0] / stepsCurrentTarget[1]) * 100f).RoundToInt();
 
                     if (percent > 0 && percent <= 100)
-                    {
-                        //Logger.Log($"Generating... {percent}%", false, replace);
                         Program.MainForm.SetProgressImg(percent);
-                    }
                 }
 
                 if (line.Contains("image(s) generated in "))
@@ -77,10 +74,7 @@ namespace StableDiffusionGui.Main
                     int percent = line.Split("Decoding image: ")[1].Split('#')[0].GetInt();
 
                     if (percent > 0 && percent <= 100)
-                    {
-                        //Logger.Log($"Generating... {percent}%", false, replace);
                         Program.MainForm.SetProgressImg(percent);
-                    }
                 }
 
                 if (line.MatchesWildcard("*data: 100%*<00:00,*it*]"))
@@ -143,12 +137,6 @@ namespace StableDiffusionGui.Main
                 _hasErrored = true;
                 UiUtils.ShowMessageBox($"Python Error:\n\n{lastLogLines}", UiUtils.MessageType.Error);
             }
-
-            // if (!_hasErrored && line.ToLower().Contains("0 image(s) generated in"))
-            // {
-            //     _hasErrored = true;
-            //     UiUtils.ShowMessageBox($"An unknown error occured. Check the log for details:!\n\n{lastLogLines}", UiUtils.MessageType.Error);
-            // }
 
             if (_hasErrored)
                 TextToImage.Cancel();

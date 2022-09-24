@@ -47,8 +47,8 @@ namespace StableDiffusionGui.Main
 
                     if (TextToImage.LastTaskSettings.Implementation == Implementation.StableDiffusion)
                     {
-                        var logLines = Logger.GetSessionLog(Constants.SdLogFilename);
-                        images = images.Where(img => logLines.Where(line => line.Contains(img.Name)).Any()).ToList(); // Only take image if it was written into SD log. Avoids copying too early (post-proc etc)
+                        string log = Logger.GetSessionLog(Constants.SdLogFilename);
+                        images = images.Where(img => log.Contains(img.Name)).ToList(); // Only take image if it was written into SD log. Avoids copying too early (post-proc etc)
                     }
 
                     bool sub = TextToImage.CurrentTask.SubfoldersPerPrompt;
