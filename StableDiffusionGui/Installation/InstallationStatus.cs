@@ -1,8 +1,10 @@
 ﻿using StableDiffusionGui.Io;
+using StableDiffusionGui.Main;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Policy;
 using System.Threading.Tasks;
 
 namespace StableDiffusionGui.Installation
@@ -19,6 +21,8 @@ namespace StableDiffusionGui.Installation
             string minicondaExePath = Path.Combine(Paths.GetDataPath(), "mb", "_conda.exe");
             bool hasExe = File.Exists(minicondaExePath);
 
+            Logger.Log($"HasConda - Has *.bat: {hasBat} - Has _conda.exe: {hasExe}", true);
+
             return hasBat && hasExe;
         }
 
@@ -26,6 +30,8 @@ namespace StableDiffusionGui.Installation
         {
             string repoPath = Path.Combine(Paths.GetDataPath(), "repo");
             bool hasDreamScript = File.Exists(Path.Combine(repoPath, "scripts", "dream.py"));
+
+            Logger.Log($"HasSdRepo - Has dream.py: {hasDreamScript}", true);
 
             return hasDreamScript;
         }
@@ -41,6 +47,8 @@ namespace StableDiffusionGui.Installation
             string binPath = Path.Combine(Paths.GetDataPath(), "mb", "envs", "ldo", "Library", "bin");
             bool hasBin = Directory.Exists(binPath);
 
+            Logger.Log($"HasSdEnv - Has Python Exe: {hasPyExe} - Has Pytorch: {hasTorch} - Has bin: {hasBin}", true);
+
             return hasPyExe && hasTorch && hasBin;
         }
 
@@ -54,11 +62,16 @@ namespace StableDiffusionGui.Installation
             string esrganPath = Path.Combine(Paths.GetDataPath(), "mb", "envs", "ldo", "Lib", "site-packages", "basicsr");
             bool hasEsrgan = Directory.Exists(esrganPath);
 
-            string gfpPath = Path.Combine(Paths.GetDataPath(), "GFPGAN");
-            string gfpMdlPath = Path.Combine(Paths.GetDataPath(), "GFPGAN", "model.pth");
+            string gfpPath = Path.Combine(Paths.GetDataPath(), "gfpgan");
+            string gfpMdlPath = Path.Combine(Paths.GetDataPath(), "gfpgan", "gfpgan.pth");
             bool hasGfp = Directory.Exists(gfpPath) && File.Exists(gfpMdlPath);
 
-            return hasEsrgan && hasGfp;
+            string cfMdlPath = Path.Combine(Paths.GetDataPath(), "codeformer", "codeformer.pth");
+            bool hasCf = File.Exists(cfMdlPath);
+
+            Logger.Log($"HasSdUpscalers - Has ESRGAN: {hasEsrgan} - Has GFPGAN: {hasGfp} - Has Codeformer: {hasCf}", true);
+
+            return hasEsrgan && hasGfp && hasCf;
         }
     }
 }

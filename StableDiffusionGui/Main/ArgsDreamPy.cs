@@ -1,9 +1,6 @@
-﻿using StableDiffusionGui.Io;
+﻿using StableDiffusionGui.Installation;
+using StableDiffusionGui.Io;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StableDiffusionGui.Main
 {
@@ -16,7 +13,7 @@ namespace StableDiffusionGui.Main
 
         public static string GetDefaultArgs ()
         {
-            return $"--gfpgan_dir ../GFPGAN --gfpgan_model_path model.pth";
+            return $"--gfpgan_dir ../gfpgan --gfpgan_model_path gfpgan.pth";
         }
 
         public static string GetEmbeddingArg (string embeddingPath)
@@ -29,6 +26,9 @@ namespace StableDiffusionGui.Main
             var faceRestoreOpt = (Forms.PostProcSettingsForm.FaceRestoreOption)Config.GetInt("comboxFaceRestoration");
 
             if (faceRestoreOpt == Forms.PostProcSettingsForm.FaceRestoreOption.Disabled)
+                return "";
+
+            if (!InstallationStatus.HasSdUpscalers())
                 return "";
 
             string tool = "";

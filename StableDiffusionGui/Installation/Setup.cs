@@ -18,6 +18,8 @@ namespace StableDiffusionGui.Installation
         public static readonly string LogFilename = "installation";
         public static readonly string GitFile = "n00mkrad/stable-diffusion-cust.git";
 
+        private static bool ReplaceUiLogLine { get { return Logger.LastUiLine.EndsWith("..."); } }
+
         public static async Task Install(bool force = false)
         {
             try
@@ -160,7 +162,7 @@ namespace StableDiffusionGui.Installation
             await CloneSdRepo($"https://github.com/{GitFile}", GetDataSubPath("repo"));
         }
 
-        public static async Task CloneSdRepo(string url, string dir, string commit = "618276ed077b2ffd6b5745c2b131f2bb8d6799cd")
+        public static async Task CloneSdRepo(string url, string dir, string commit = "f6455b5b791d457fe19df40eaacc515b98f84c90")
         {
             try
             {
@@ -226,10 +228,9 @@ namespace StableDiffusionGui.Installation
         {
             try
             {
-                if (print)
-                    Logger.Log("Installing GFPGAN...");
+                if (print) Logger.Log("Installing GFPGAN...", ReplaceUiLogLine);
 
-                string gfpganPath = GetDataSubPath("GFPGAN");
+                string gfpganPath = GetDataSubPath("gfpgan");
                 IoUtils.SetAttributes(gfpganPath, FileAttributes.Normal);
 
                 if (Directory.Exists(gfpganPath))
@@ -242,29 +243,37 @@ namespace StableDiffusionGui.Installation
 
                 using (var localRepo = new Repository(gfpganPath))
                 {
-                    var localCommit = localRepo.Lookup<Commit>("3e27784b1b4eb008d06c04dbbaf6bdde34c4da84");
+                    var localCommit = localRepo.Lookup<Commit>("2eac2033893ca7f427f4035d80fe95b92649ac56");
                     Commands.Checkout(localRepo, localCommit);
                 }
 
-                if (print)
-                    Logger.Log("Downloading GFPGAN model file...");
-
-                string gfpGanMdlPath = Path.Combine(gfpganPath, "model.pth");
-
+                if (print) Logger.Log("Downloading GFPGAN model file...", ReplaceUiLogLine);
+                string gfpGanMdlPath = Path.Combine(gfpganPath, "gfpgan.pth");
                 IoUtils.TryDeleteIfExists(gfpGanMdlPath);
-
                 Process procGfpganDl = OsUtils.NewProcess(true);
-                procGfpganDl.ErrorDataReceived += (sender, line) => { try { Logger.Log($"Downloading... ({line.Data.Trim().Split(' ')[0].GetInt()}%)", false, Logger.LastUiLine.EndsWith("%)"), LogFilename); } catch { } };
-                procGfpganDl.StartInfo.Arguments = $"/C curl -k -L \"https://github.com/TencentARC/GFPGAN/releases/download/v1.3.0/GFPGANv1.3.pth\" -o {gfpGanMdlPath.Wrap()}";
+                procGfpganDl.ErrorDataReceived += (sender, line) => { try { Logger.Log($"Downloading GFPGAN model ({line.Data.Trim().Split(' ')[0].GetInt()}%)...", false, ReplaceUiLogLine, LogFilename); } catch { } };
+                procGfpganDl.StartInfo.Arguments = $"/C curl -k -L \"https://github.com/TencentARC/GFPGAN/releases/download/v1.3.0/GFPGANv1.4.pth\" -o {gfpGanMdlPath.Wrap()}";
                 procGfpganDl.Start();
                 procGfpganDl.BeginErrorReadLine();
 
-                while (!procGfpganDl.HasExited)
-                    await Task.Delay(1);
+                while (!procGfpganDl.HasExited) await Task.Delay(1);
+
+                string codeformerPath = GetDataSubPath("codeformer");
+                Directory.CreateDirectory(codeformerPath);
+                if (print) Logger.Log("Downloading Codeformer model file...", ReplaceUiLogLine);
+                string codeformerMdlPath = Path.Combine(codeformerPath, "codeformer.pth");
+                IoUtils.TryDeleteIfExists(codeformerMdlPath);
+                Process procCodeformerDl = OsUtils.NewProcess(true);
+                procCodeformerDl.ErrorDataReceived += (sender, line) => { try { Logger.Log($"Downloading CodeFormer model ({line.Data.Trim().Split(' ')[0].GetInt()}%)...", false, ReplaceUiLogLine, LogFilename); } catch { } };
+                procCodeformerDl.StartInfo.Arguments = $"/C curl -k -L \"https://github.com/sczhou/CodeFormer/releases/download/v0.1.0/codeformer.pth\" -o {codeformerMdlPath.Wrap()}";
+                procCodeformerDl.Start();
+                procCodeformerDl.BeginErrorReadLine();
+
+                while (!procCodeformerDl.HasExited) await Task.Delay(1);
 
                 await Task.Delay(100);
 
-                Logger.Log($"Downloaded and installed RealESRGAN and GFPGAN.", false, Logger.LastUiLine.EndsWith("%)"));
+                Logger.Log($"Downloaded and installed RealESRGAN, CodeFormer, and GFPGAN.", false, ReplaceUiLogLine);
             }
             catch (Exception ex)
             {
