@@ -56,7 +56,7 @@ namespace StableDiffusionGui.Main
                             string prompt = IoUtils.GetImageMetadata(img.FullName).Prompt;
                             int pathBudget = 255 - img.Directory.FullName.Length - 65;
                             string unixTimestamp = ((long)(DateTime.Now - new DateTime(1970, 1, 1)).TotalMilliseconds).ToString();
-                            string dirName = string.IsNullOrWhiteSpace(prompt) ? $"unknown_prompt_{unixTimestamp}" : FormatUtils.SanitizePromptFilename(prompt, pathBudget);
+                            string dirName = string.IsNullOrWhiteSpace(prompt) ? $"unknown_prompt_{unixTimestamp}" : FormatUtils.SanitizePromptFilename(FormatUtils.GetPromptWithoutModifiers(prompt), pathBudget);
                             imageDirMap[img.FullName] = Directory.CreateDirectory(Path.Combine(TextToImage.CurrentTask.OutDir, dirName)).FullName;
                         }
                     }

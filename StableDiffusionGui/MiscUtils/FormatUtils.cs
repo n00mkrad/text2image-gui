@@ -242,5 +242,27 @@ namespace StableDiffusionGui.MiscUtils
 
             return new Regex(@"[^a-zA-Z0-9 -!,.()]").Replace(prompt, "_").Trunc(pathBudget - 1, false).Replace(" ", "_");
         }
+
+        public static string GetPromptWithoutModifiers(string prompt)
+        {
+            List<char> final = new List<char>();
+            string noBrackets = Regex.Replace(prompt, @"(\[(?:\[??[^\[]*?\]))", "").Remove("[").Remove("]"); // Remove square brackets with contents
+
+            bool ignore = false;
+
+            foreach (char c in noBrackets)
+            {
+                if (c == ':')
+                    ignore = true; // Ignore this characater and any that follow up...
+
+                if (c == ' ' && ignore)
+                    ignore = false; // ...until there is a space
+
+                if (!ignore)
+                    final.Add(c);
+            }
+
+            return string.Join("", final).Trim();
+        }
     }
 }
