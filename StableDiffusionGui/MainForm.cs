@@ -143,7 +143,7 @@ namespace StableDiffusionGui
             }
 
             var lines = textboxPrompt.Text.SplitIntoLines();
-            textboxPrompt.Text = string.Join(Environment.NewLine, lines.Select(x => MainUi.SanitizePrompt(x)).Where(x => !string.IsNullOrWhiteSpace(x)));
+            textboxPrompt.Text = string.Join(Environment.NewLine, lines.Select(x => MainUi.SanitizePrompt(x)));
 
             if (upDownSeed.Text == "")
                 SetSeed();
@@ -603,7 +603,7 @@ namespace StableDiffusionGui
             if (textboxPrompt.Height == smallHeight)
             {
                 btnExpandPromptField.BackgroundImage = Resources.upArrowIcon;
-                textboxPrompt.Height = 577;
+                textboxPrompt.Height = pictBoxImgViewer.Height + 65;
                 pictBoxImgViewer.Visible = false;
             }
             else
