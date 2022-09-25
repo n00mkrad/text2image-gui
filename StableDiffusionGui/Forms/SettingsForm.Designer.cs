@@ -101,6 +101,7 @@
             this.panel11 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.btnRefreshModelsDropdown = new HTAlt.WinForms.HTButton();
             this.parentPanel.SuspendLayout();
             this.panel1.SuspendLayout();
             this.notificationPanel.SuspendLayout();
@@ -729,6 +730,7 @@
             // 
             // panel25
             // 
+            this.panel25.Controls.Add(this.btnRefreshModelsDropdown);
             this.panel25.Controls.Add(this.comboxSdModel);
             this.panel25.Controls.Add(this.btnOpenModelsFolder);
             this.panel25.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -755,7 +757,7 @@
             "k_dpm_2_a"});
             this.comboxSdModel.Location = new System.Drawing.Point(0, 4);
             this.comboxSdModel.Name = "comboxSdModel";
-            this.comboxSdModel.Size = new System.Drawing.Size(290, 21);
+            this.comboxSdModel.Size = new System.Drawing.Size(209, 21);
             this.comboxSdModel.TabIndex = 106;
             // 
             // btnOpenModelsFolder
@@ -953,6 +955,26 @@
             this.toolTip.InitialDelay = 200;
             this.toolTip.ReshowDelay = 40;
             // 
+            // btnRefreshModelsDropdown
+            // 
+            this.btnRefreshModelsDropdown.AutoColor = true;
+            this.btnRefreshModelsDropdown.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnRefreshModelsDropdown.ButtonImage = null;
+            this.btnRefreshModelsDropdown.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
+            this.btnRefreshModelsDropdown.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
+            this.btnRefreshModelsDropdown.DrawImage = false;
+            this.btnRefreshModelsDropdown.ForeColor = System.Drawing.Color.White;
+            this.btnRefreshModelsDropdown.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
+            this.btnRefreshModelsDropdown.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
+            this.btnRefreshModelsDropdown.Location = new System.Drawing.Point(215, 2);
+            this.btnRefreshModelsDropdown.Name = "btnRefreshModelsDropdown";
+            this.btnRefreshModelsDropdown.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+            this.btnRefreshModelsDropdown.Size = new System.Drawing.Size(75, 23);
+            this.btnRefreshModelsDropdown.TabIndex = 107;
+            this.btnRefreshModelsDropdown.TabStop = false;
+            this.btnRefreshModelsDropdown.Text = "Refresh List";
+            this.btnRefreshModelsDropdown.Click += new System.EventHandler(this.btnRefreshModelsDropdown_Click);
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1116,5 +1138,6 @@
         private System.Windows.Forms.Panel panel15;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.ToolTip toolTip;
+        private HTAlt.WinForms.HTButton btnRefreshModelsDropdown;
     }
 }

@@ -23,7 +23,7 @@ namespace StableDiffusionGui.Forms
         private void SettingsForm_Load(object sender, EventArgs e)
         {
             _ready = false;
-            LoadModels();
+            LoadModels(false);
             LoadSettings();
             Task.Run(() => LoadGpus());
         }
@@ -40,10 +40,13 @@ namespace StableDiffusionGui.Forms
             Program.MainForm.RefreshAfterSettingsChanged();
         }
 
-        private void LoadModels()
+        private void LoadModels(bool load)
         {
             comboxSdModel.Items.Clear();
             IoUtils.GetFileInfosSorted(Paths.GetModelsPath(), true, "*.ckpt").ToList().ForEach(x => comboxSdModel.Items.Add(x.Name));
+
+            if(load)
+                ConfigParser.LoadGuiElement(comboxSdModel);
         }
 
         private async Task LoadGpus()
@@ -116,6 +119,11 @@ namespace StableDiffusionGui.Forms
             if (_ready && checkboxOptimizedSd.Checked)
                 UiUtils.ShowMessageBox($"Warning: Low Memory Mode disables several features, such as custom samplers or seamless mode.\n" +
             $"Only keep this option enabled if your GPU has less than 6 GB of memory.");
+        }
+
+        private void btnRefreshModelsDropdown_Click(object sender, EventArgs e)
+        {
+            LoadModels(true);
         }
     }
 }
