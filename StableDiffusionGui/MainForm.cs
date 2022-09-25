@@ -1,5 +1,4 @@
-﻿using HTAlt.WinForms;
-using StableDiffusionGui.Forms;
+﻿using StableDiffusionGui.Forms;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.Ui;
@@ -15,17 +14,11 @@ using Microsoft.WindowsAPICodePack.Taskbar;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using StableDiffusionGui.Installation;
 using StableDiffusionGui.Data;
-using TextBox = System.Windows.Forms.TextBox;
 using StableDiffusionGui.Os;
-using Microsoft.VisualBasic.Logging;
-using System.Reflection;
 using StableDiffusionGui.Properties;
 using System.Threading.Tasks;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using ImageMagick;
 using Paths = StableDiffusionGui.Io.Paths;
-using StableDiffusionGui.MiscUtils;
 
 namespace StableDiffusionGui
 {
@@ -41,19 +34,23 @@ namespace StableDiffusionGui
 
         public bool IsInFocus() { return (ActiveForm == this); }
 
+        private float _defaultPromptFontSize;
+
         public MainForm()
         {
             InitializeComponent();
             Program.MainForm = this;
-            pictBoxImgViewer.MouseWheel += PictBoxImgViewer_MouseWheel;
+            pictBoxImgViewer.MouseWheel += pictBoxImgViewer_MouseWheel;
+            textboxPrompt.MouseWheel += textboxPrompt_MouseWheel;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
             CheckForIllegalCrossThreadCalls = false;
+            _defaultPromptFontSize = textboxPrompt.Font.Size;
             Logger.Textbox = logBox;
-            LoadUiElements();
-            PromptHistory.Load();
+            MinimumSize = Size;
+            MaximumSize = new Size((Size.Width * 1.5f).RoundToInt(), Size.Height);
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -63,6 +60,8 @@ namespace StableDiffusionGui
 
         private void MainForm_Shown(object sender, EventArgs e)
         {
+            LoadUiElements();
+            PromptHistory.Load();
             Setup.FixHardcodedPaths();
             Task.Run(() => SetGpusInWindowTitle());
             upDownSeed.Text = "";
@@ -660,7 +659,7 @@ namespace StableDiffusionGui
             InpaintingUtils.CurrentMask = null;
         }
 
-        private void PictBoxImgViewer_MouseWheel(object sender, MouseEventArgs e)
+        private void pictBoxImgViewer_MouseWheel(object sender, MouseEventArgs e)
         {
             ImagePreview.Move(e.Delta > 0);
         }
@@ -700,6 +699,12 @@ namespace StableDiffusionGui
             runBtn_Click(null, null);
             SetSeed((long)prevSeedVal);
             upDownIterations.Value = prevIterVal;
+        }
+
+        private void textboxPrompt_MouseWheel(object sender, MouseEventArgs e)
+        {
+            int sizeChange = e.Delta > 0 ? 1 : -1;
+            textboxPrompt.Font = new Font(textboxPrompt.Font.Name, (textboxPrompt.Font.Size + sizeChange).Clamp(_defaultPromptFontSize, _defaultPromptFontSize * 2f), textboxPrompt.Font.Style, textboxPrompt.Font.Unit);
         }
     }
 }
