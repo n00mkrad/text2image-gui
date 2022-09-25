@@ -1433,8 +1433,7 @@
             this.pictBoxImgViewer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.pictBoxImgViewer.BackgroundImage = global::StableDiffusionGui.Properties.Resources.checkerboard;
-            this.pictBoxImgViewer.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictBoxImgViewer.BackgroundImage = global::StableDiffusionGui.Properties.Resources.checkerboard_darkened;
             this.pictBoxImgViewer.Location = new System.Drawing.Point(654, 127);
             this.pictBoxImgViewer.Name = "pictBoxImgViewer";
             this.pictBoxImgViewer.Size = new System.Drawing.Size(512, 512);

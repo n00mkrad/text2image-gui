@@ -305,11 +305,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon1.ico" />
+    <None Include="Resources\checkerboard.png" />
+    <None Include="Resources\checkerboard-darkened.png" />
     <None Include="Resources\itch2.png" />
     <None Include="Resources\itch1.png" />
     <None Include="Resources\mona512x384.png" />
     <None Include="Resources\checkerboard1.png" />
-    <None Include="Resources\checkerboard.png" />
     <None Include="Resources\monsa.png" />
     <None Include="Resources\addToListIcon.png" />
     <None Include="Resources\deleteBtn.png" />
