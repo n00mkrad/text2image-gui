@@ -51,7 +51,7 @@ namespace StableDiffusionGui.Main
             char[] delimiters = new char[] { ' ', '\r', '\n' };
             int words = prompt.Split(delimiters, StringSplitOptions.RemoveEmptyEntries).Length;
 
-            int thresh = 70;
+            int thresh = 55;
 
             if (words > thresh)
                 UiUtils.ShowMessageBox($"{(prompts.Count > 1 ? "One of your prompts" : "Your prompt")} is very long (>{thresh} words).\nThe AI might ignore parts of your prompt. Shorten the prompt to avoid this.");

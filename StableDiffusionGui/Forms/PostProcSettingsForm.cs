@@ -11,7 +11,7 @@ namespace StableDiffusionGui.Forms
     public partial class PostProcSettingsForm : Form
     {
         public enum UpscaleOption { Disabled, X2, X4 }
-        public enum FaceRestoreOption { Disabled, CodeFormer, Gfpgan }
+        public enum FaceRestoreOption { Disabled, Gfpgan, CodeFormer }
 
         public Dictionary<string, string> UiStrings = new Dictionary<string, string>();
 
@@ -21,8 +21,8 @@ namespace StableDiffusionGui.Forms
         {
             UiStrings.Add(UpscaleOption.X2.ToString(), "2x");
             UiStrings.Add(UpscaleOption.X4.ToString(), "4x");
-            UiStrings.Add(FaceRestoreOption.CodeFormer.ToString(), "CodeFormer (2022)");
-            UiStrings.Add(FaceRestoreOption.Gfpgan.ToString(), "GFPGAN (2021)");
+            UiStrings.Add(FaceRestoreOption.Gfpgan.ToString(), "GFPGAN");
+            UiStrings.Add(FaceRestoreOption.CodeFormer.ToString(), "CodeFormer");
 
             InitializeComponent();
         }

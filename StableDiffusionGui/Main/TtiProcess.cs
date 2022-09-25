@@ -133,6 +133,8 @@ namespace StableDiffusionGui.Main
                 await WriteStdIn("!reset");
             }
 
+            Logger.Log($"Writing to stdin...\n{string.Join("\n", commands)}", true);
+
             foreach(string command in commands)
                 await WriteStdIn(command);
 
