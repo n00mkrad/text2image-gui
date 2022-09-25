@@ -57,8 +57,8 @@ namespace StableDiffusionGui.Forms
         {
             ConfigParser.LoadComboxIndex(comboxUpscale);
             ConfigParser.LoadComboxIndex(comboxFaceRestoration);
-            ConfigParser.LoadGuiElement(sliderFaceRestoreStrength, ConfigParser.SaveValueAs.Multiplied, 20f); sliderFaceRestoreStrength_Scroll(null, null);
-            ConfigParser.LoadGuiElement(sliderCodeformerFidelity, ConfigParser.SaveValueAs.Multiplied, 20f); sliderCodeformerFidelity_Scroll(null, null);
+            ConfigParser.LoadGuiElement(sliderFaceRestoreStrength, ConfigParser.SaveValueAs.Divided, 20f); sliderFaceRestoreStrength_Scroll(null, null);
+            ConfigParser.LoadGuiElement(sliderCodeformerFidelity, ConfigParser.SaveValueAs.Divided, 20f); sliderCodeformerFidelity_Scroll(null, null);
         }
 
         void SaveSettings()
@@ -79,13 +79,14 @@ namespace StableDiffusionGui.Forms
         private void comboxFaceRestoration_SelectedIndexChanged(object sender, EventArgs e)
         {
             panelFaceRestorationStrength.Visible = (FaceRestoreOption)comboxFaceRestoration.SelectedIndex != FaceRestoreOption.Disabled;
+            panelCodeformerFidelity.Visible = (FaceRestoreOption)comboxFaceRestoration.SelectedIndex == FaceRestoreOption.CodeFormer;
         }
 
         private void sliderCodeformerFidelity_Scroll(object sender, ScrollEventArgs e)
         {
-            float strength = sliderFaceRestoreStrength.Value / 20f;
+            float strength = sliderCodeformerFidelity.Value / 20f;
             PostProcUi.CurrentCfFidelity = strength;
-            labelFaceRestoreStrength.Text = strength.ToString();
+            labelCodeformerFidelity.Text = strength.ToString();
         }
     }
 }

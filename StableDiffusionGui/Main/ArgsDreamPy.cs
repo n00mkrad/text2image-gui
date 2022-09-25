@@ -32,10 +32,10 @@ namespace StableDiffusionGui.Main
                 return "";
 
             string tool = "";
-            string strength = Config.GetFloat(Config.Key.faceRestoreStrength).ToStringDot("0.000");
+            string strength = Config.GetFloat("sliderFaceRestoreStrength").ToStringDot("0.000");
 
             if (faceRestoreOpt == Forms.PostProcSettingsForm.FaceRestoreOption.CodeFormer)
-                tool = "codeformer";
+                tool = $"codeformer -cf {Config.GetFloat(Config.Key.sliderCodeformerFidelity).ToStringDot()}";
 
             if (faceRestoreOpt == Forms.PostProcSettingsForm.FaceRestoreOption.Gfpgan)
                 tool = "gfpgan";
