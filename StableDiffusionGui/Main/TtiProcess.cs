@@ -114,7 +114,7 @@ namespace StableDiffusionGui.Main
 
                 ProcessManager.FindAndKillOrphans("*repo*.py*");
                 TtiProcessOutputHandler.Start();
-                Logger.Log($"Loading Stable Diffusion ({TtiUtils.GetSdModel()})...");
+                Logger.Log($"Loading Stable Diffusion with model {TtiUtils.GetSdModel().Wrap()}...");
                 DreamPyParentProcess = dream;
                 dream.Start();
                 CurrentStdInWriter = dream.StandardInput;
@@ -220,7 +220,7 @@ namespace StableDiffusionGui.Main
 
                 ProcessManager.FindAndKillOrphans("*repo*.py*");
                 TtiProcessOutputHandler.Start();
-                Logger.Log("Loading Stable Diffusion...");
+                Logger.Log($"Loading Stable Diffusion with model {TtiUtils.GetSdModel().Wrap()}...");
                 DreamPyParentProcess = dream;
                 dream.Start();
 

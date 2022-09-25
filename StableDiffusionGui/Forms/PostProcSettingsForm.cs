@@ -15,8 +15,6 @@ namespace StableDiffusionGui.Forms
 
         public Dictionary<string, string> UiStrings = new Dictionary<string, string>();
 
-        private bool _loaded = false;
-
         public PostProcSettingsForm()
         {
             UiStrings.Add(UpscaleOption.X2.ToString(), "2x");
@@ -29,6 +27,16 @@ namespace StableDiffusionGui.Forms
 
         private void PostProcSettingsForm_Load(object sender, EventArgs e)
         {
+
+        }
+
+        private void PostProcSettingsForm_Shown(object sender, EventArgs e)
+        {
+            comboxUpscale.FillFromEnum<UpscaleOption>(UiStrings);
+            comboxFaceRestoration.FillFromEnum<FaceRestoreOption>(UiStrings);
+
+            LoadSettings();
+
             if (!InstallationStatus.HasSdUpscalers())
             {
                 DialogResult dialogResult = UiUtils.ShowMessageBox("Upscalers are not installed.\nDo you want to open the installer to install them (Up to 1 GB of disk space required)?", "Error", MessageBoxButtons.YesNo);
@@ -38,14 +46,6 @@ namespace StableDiffusionGui.Forms
 
                 Close();
             }
-        }
-
-        private void PostProcSettingsForm_Shown(object sender, EventArgs e)
-        {
-            comboxUpscale.FillFromEnum<UpscaleOption>(UiStrings);
-            comboxFaceRestoration.FillFromEnum<FaceRestoreOption>(UiStrings);
-
-            LoadSettings();
         }
 
         private void PostProcSettingsForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -58,15 +58,10 @@ namespace StableDiffusionGui.Forms
             ConfigParser.LoadComboxIndex(comboxUpscale);
             ConfigParser.LoadComboxIndex(comboxFaceRestoration);
             ConfigParser.LoadGuiElement(sliderFaceRestoreStrength); sliderGfpgan_Scroll(null, null);
-
-            _loaded = true;
         }
 
         void SaveSettings()
         {
-            if (!_loaded)
-                return;
-
             ConfigParser.SaveComboxIndex(comboxUpscale);
             ConfigParser.SaveComboxIndex(comboxFaceRestoration);
             ConfigParser.SaveGuiElement(sliderFaceRestoreStrength);
