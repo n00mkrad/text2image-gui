@@ -50,7 +50,6 @@ namespace StableDiffusionGui
             _defaultPromptFontSize = textboxPrompt.Font.Size;
             Logger.Textbox = logBox;
             MinimumSize = Size;
-            MaximumSize = new Size((Size.Width * 1.5f).RoundToInt(), Size.Height);
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
