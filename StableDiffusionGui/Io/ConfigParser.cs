@@ -1,9 +1,4 @@
-﻿using StableDiffusionGui.Io;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 using System.Windows.Forms;
 
 namespace StableDiffusionGui.Io
@@ -29,7 +24,7 @@ namespace StableDiffusionGui.Io
             {
                 case StringMode.Any: Config.Set(comboBox.Name, comboBox.Text); break;
                 case StringMode.Int: Config.Set(comboBox.Name, comboBox.Text.GetInt().ToString()); break;
-                case StringMode.Float: Config.Set(comboBox.Name, comboBox.Text.GetFloat().ToString().Replace(",", ".")); break;
+                case StringMode.Float: Config.Set(comboBox.Name, comboBox.Text.GetFloat().ToStringDot()); break;
             }
         }
 
@@ -42,15 +37,23 @@ namespace StableDiffusionGui.Io
         {
             switch (stringMode)
             {
-                case StringMode.Any: Config.Set(upDown.Name, ((float)upDown.Value).ToString().Replace(",", ".")); break;
+                case StringMode.Any: Config.Set(upDown.Name, ((float)upDown.Value).ToStringDot()); break;
                 case StringMode.Int: Config.Set(upDown.Name, ((int)upDown.Value).ToString()); break;
-                case StringMode.Float: Config.Set(upDown.Name, ((float)upDown.Value).ToString().Replace(",", ".")); ; break;
+                case StringMode.Float: Config.Set(upDown.Name, ((float)upDown.Value).ToStringDot()); break;
             }
         }
 
-        public static void SaveGuiElement(HTAlt.WinForms.HTSlider slider)
+        public static void SaveGuiElement(HTAlt.WinForms.HTSlider slider, SaveValueAs convertMode = SaveValueAs.Unchanged, float convertValue = 1f)
         {
-            Config.Set(slider.Name, slider.Value.ToString());
+            float value = (float)slider.Value;
+
+            if (convertMode == SaveValueAs.Multiplied)
+                value = value * convertValue;
+
+            if (convertMode == SaveValueAs.Divided)
+                value = value / convertValue;
+
+            Config.Set(slider.Name, value.ToStringDot());
         }
 
         public static void SaveComboxIndex(ComboBox comboBox)
@@ -78,9 +81,19 @@ namespace StableDiffusionGui.Io
             upDown.Value = Convert.ToDecimal(Config.GetFloat(upDown.Name).Clamp((float)upDown.Minimum, (float)upDown.Maximum));
         }
 
-        public static void LoadGuiElement(HTAlt.WinForms.HTSlider slider)
+        public enum SaveValueAs { Unchanged, Multiplied, Divided }
+
+        public static void LoadGuiElement(HTAlt.WinForms.HTSlider slider, SaveValueAs convertMode = SaveValueAs.Unchanged, float convertValue = 1f)
         {
-            slider.Value = Config.GetInt(slider.Name).Clamp(slider.Minimum, slider.Maximum);
+            var value = Config.GetFloat(slider.Name);
+
+            if (convertMode == SaveValueAs.Multiplied)
+                value = value / convertValue;
+
+            if (convertMode == SaveValueAs.Divided)
+                value = value * convertValue;
+
+            slider.Value = value.RoundToInt().Clamp(slider.Minimum, slider.Maximum);
         }
 
         public static void LoadComboxIndex(ComboBox comboBox)

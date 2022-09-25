@@ -95,23 +95,23 @@ namespace StableDiffusionGui
         private void LoadUiElements()
         {
             ConfigParser.LoadGuiElement(upDownIterations);
-            ConfigParser.LoadGuiElement(sliderSteps); sliderSteps_Scroll(null, null);
-            ConfigParser.LoadGuiElement(sliderScale); sliderScale_Scroll(null, null);
-            ConfigParser.LoadGuiElement(sliderResW); sliderResW_Scroll(null, null);
-            ConfigParser.LoadGuiElement(sliderResH); sliderResH_Scroll(null, null);
+            ConfigParser.LoadGuiElement(sliderSteps, ConfigParser.SaveValueAs.Multiplied, 5); sliderSteps_Scroll(null, null);
+            ConfigParser.LoadGuiElement(sliderScale, ConfigParser.SaveValueAs.Divided, 2f); sliderScale_Scroll(null, null);
+            ConfigParser.LoadGuiElement(sliderResW, ConfigParser.SaveValueAs.Multiplied, 64); sliderResW_Scroll(null, null);
+            ConfigParser.LoadGuiElement(sliderResH, ConfigParser.SaveValueAs.Multiplied, 64); sliderResH_Scroll(null, null);
             ConfigParser.LoadComboxIndex(comboxSampler);
-            ConfigParser.LoadGuiElement(sliderInitStrength); sliderInitStrength_Scroll(null, null);
+            ConfigParser.LoadGuiElement(sliderInitStrength, ConfigParser.SaveValueAs.Divided, 40f); sliderInitStrength_Scroll(null, null);
         }
 
         private void SaveUiElements()
         {
             ConfigParser.SaveGuiElement(upDownIterations);
-            ConfigParser.SaveGuiElement(sliderSteps);
-            ConfigParser.SaveGuiElement(sliderScale);
-            ConfigParser.SaveGuiElement(sliderResW);
-            ConfigParser.SaveGuiElement(sliderResH);
+            ConfigParser.SaveGuiElement(sliderSteps, ConfigParser.SaveValueAs.Multiplied, 5);
+            ConfigParser.SaveGuiElement(sliderScale, ConfigParser.SaveValueAs.Divided, 2f);
+            ConfigParser.SaveGuiElement(sliderResW, ConfigParser.SaveValueAs.Multiplied, 64);
+            ConfigParser.SaveGuiElement(sliderResH, ConfigParser.SaveValueAs.Multiplied, 64);
             ConfigParser.SaveComboxIndex(comboxSampler);
-            ConfigParser.SaveGuiElement(sliderInitStrength);
+            ConfigParser.SaveGuiElement(sliderInitStrength, ConfigParser.SaveValueAs.Divided, 40f);
         }
 
         public void RefreshAfterSettingsChanged()

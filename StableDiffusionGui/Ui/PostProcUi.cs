@@ -10,5 +10,6 @@ namespace StableDiffusionGui.Ui
     {
         public static int UpscaleFactor;
         public static float CurrentGfpganStrength;
+        public static float CurrentCfFidelity;
     }
 }

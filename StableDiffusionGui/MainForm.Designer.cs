@@ -290,21 +290,22 @@
             this.sliderSteps.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sliderSteps.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
             this.sliderSteps.ForeColor = System.Drawing.Color.Black;
-            this.sliderSteps.LargeChange = ((uint)(5u));
+            this.sliderSteps.LargeChange = ((uint)(10u));
             this.sliderSteps.Location = new System.Drawing.Point(0, 0);
             this.sliderSteps.Margin = new System.Windows.Forms.Padding(0);
-            this.sliderSteps.Maximum = 50;
+            this.sliderSteps.Maximum = 120;
             this.sliderSteps.Minimum = 1;
+            this.sliderSteps.MouseWheelBarPartitions = 1;
             this.sliderSteps.Name = "sliderSteps";
             this.sliderSteps.OverlayColor = System.Drawing.Color.White;
             this.sliderSteps.Size = new System.Drawing.Size(355, 21);
-            this.sliderSteps.SmallChange = ((uint)(1u));
+            this.sliderSteps.SmallChange = ((uint)(5u));
             this.sliderSteps.TabIndex = 4;
             this.sliderSteps.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
             this.sliderSteps.ThumbSize = new System.Drawing.Size(14, 14);
             this.toolTip.SetToolTip(this.sliderSteps, "Higher can create more detail and sometimes higher quality images, but more steps" +
         " take more time.");
-            this.sliderSteps.Value = 20;
+            this.sliderSteps.Value = 1;
             this.sliderSteps.Scroll += new System.Windows.Forms.ScrollEventHandler(this.sliderSteps_Scroll);
             // 
             // iterLabel
@@ -473,7 +474,7 @@
             this.sliderResW.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sliderResW.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
             this.sliderResW.ForeColor = System.Drawing.Color.Black;
-            this.sliderResW.LargeChange = ((uint)(4u));
+            this.sliderResW.LargeChange = ((uint)(2u));
             this.sliderResW.Location = new System.Drawing.Point(0, 0);
             this.sliderResW.Margin = new System.Windows.Forms.Padding(0);
             this.sliderResW.Maximum = 16;
@@ -526,7 +527,7 @@
             this.sliderResH.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sliderResH.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
             this.sliderResH.ForeColor = System.Drawing.Color.Black;
-            this.sliderResH.LargeChange = ((uint)(4u));
+            this.sliderResH.LargeChange = ((uint)(2u));
             this.sliderResH.Location = new System.Drawing.Point(0, 0);
             this.sliderResH.Margin = new System.Windows.Forms.Padding(0);
             this.sliderResH.Maximum = 16;

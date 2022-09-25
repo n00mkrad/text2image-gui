@@ -57,18 +57,19 @@ namespace StableDiffusionGui.Forms
         {
             ConfigParser.LoadComboxIndex(comboxUpscale);
             ConfigParser.LoadComboxIndex(comboxFaceRestoration);
-            ConfigParser.LoadGuiElement(sliderFaceRestoreStrength); sliderGfpgan_Scroll(null, null);
+            ConfigParser.LoadGuiElement(sliderFaceRestoreStrength, ConfigParser.SaveValueAs.Multiplied, 20f); sliderFaceRestoreStrength_Scroll(null, null);
+            ConfigParser.LoadGuiElement(sliderCodeformerFidelity, ConfigParser.SaveValueAs.Multiplied, 20f); sliderCodeformerFidelity_Scroll(null, null);
         }
 
         void SaveSettings()
         {
             ConfigParser.SaveComboxIndex(comboxUpscale);
             ConfigParser.SaveComboxIndex(comboxFaceRestoration);
-            ConfigParser.SaveGuiElement(sliderFaceRestoreStrength);
-            Config.Set(Config.Key.faceRestoreStrength, PostProcUi.CurrentGfpganStrength.ToStringDot());
+            ConfigParser.SaveGuiElement(sliderFaceRestoreStrength, ConfigParser.SaveValueAs.Divided, 20f);
+            ConfigParser.SaveGuiElement(sliderCodeformerFidelity, ConfigParser.SaveValueAs.Divided, 20f);
         }
 
-        private void sliderGfpgan_Scroll(object sender, ScrollEventArgs e)
+        private void sliderFaceRestoreStrength_Scroll(object sender, ScrollEventArgs e)
         {
             float strength = sliderFaceRestoreStrength.Value / 20f;
             PostProcUi.CurrentGfpganStrength = strength;
@@ -78,6 +79,13 @@ namespace StableDiffusionGui.Forms
         private void comboxFaceRestoration_SelectedIndexChanged(object sender, EventArgs e)
         {
             panelFaceRestorationStrength.Visible = (FaceRestoreOption)comboxFaceRestoration.SelectedIndex != FaceRestoreOption.Disabled;
+        }
+
+        private void sliderCodeformerFidelity_Scroll(object sender, ScrollEventArgs e)
+        {
+            float strength = sliderFaceRestoreStrength.Value / 20f;
+            PostProcUi.CurrentCfFidelity = strength;
+            labelFaceRestoreStrength.Text = strength.ToString();
         }
     }
 }
