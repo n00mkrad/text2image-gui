@@ -297,10 +297,10 @@ namespace StableDiffusionGui.Os
 
         public static void SendCtrlC (int pid)
         {
-            string exePath = Path.Combine(Paths.GetBinPath(), "windows-kill.exe");
+            string exePath = Path.Combine(Paths.GetBinPath(), "wkl.exe");
             Process p = NewProcess(true, exePath);
             p.StartInfo.Arguments = $"-SIGINT {pid}";
-            Logger.Log($"windows-kill.exe {p.StartInfo.Arguments}", true);
+            Logger.Log($"{Path.GetFileName(exePath)} {p.StartInfo.Arguments}", true);
             p.Start();
         }
 
