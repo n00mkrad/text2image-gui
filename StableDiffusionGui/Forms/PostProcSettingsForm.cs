@@ -18,7 +18,7 @@ namespace StableDiffusionGui.Forms
         public PostProcSettingsForm()
         {
             UiStrings.Add(UpscaleOption.X2.ToString(), "2x");
-            UiStrings.Add(UpscaleOption.X2.ToString(), "3x");
+            UiStrings.Add(UpscaleOption.X3.ToString(), "3x");
             UiStrings.Add(UpscaleOption.X4.ToString(), "4x");
             UiStrings.Add(FaceRestoreOption.Gfpgan.ToString(), "GFPGAN");
             UiStrings.Add(FaceRestoreOption.CodeFormer.ToString(), "CodeFormer");
