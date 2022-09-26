@@ -242,7 +242,7 @@ namespace StableDiffusionGui.MiscUtils
                 return "";
 
             prompt = prompt.Trim().Replace(" ", "_"); // Replace all spaces by underscores...
-            return new Regex(@"[^a-zA-Z0-9 -!,.()]").Replace(prompt, "").Trunc(pathBudget - 1, false); // ...remove all special chars
+            return new Regex(@"[^a-zA-Z0-9 ._]").Replace(prompt, "").Trunc(pathBudget - 1, false); // ...remove special chars
         }
 
         public static string GetPromptWithoutModifiers(string prompt)
