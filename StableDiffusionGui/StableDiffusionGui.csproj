@@ -305,6 +305,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon1.ico" />
+    <None Include="Resources\deleteBtn1.png" />
     <None Include="Resources\checkerboard.png" />
     <None Include="Resources\checkerboard-darkened.png" />
     <None Include="Resources\itch2.png" />

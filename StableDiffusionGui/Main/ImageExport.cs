@@ -69,6 +69,11 @@ namespace StableDiffusionGui.Main
 
                     List<string> renamedImgPaths = new List<string>();
 
+                    bool inclPrompt = !sub && Config.GetBool("checkboxPromptInFilename");
+                    bool inclSeed = Config.GetBool("checkboxSeedInFilename");
+                    bool inclScale = Config.GetBool("checkboxScaleInFilename");
+                    bool inclSampler = Config.GetBool("checkboxSamplerInFilename");
+
                     for (int i = 0; i < images.Count; i++)
                     {
                         try
@@ -76,10 +81,6 @@ namespace StableDiffusionGui.Main
                             var img = images[i];
                             string number = $"-{(TextToImage.CurrentTask.ImgCount).ToString().PadLeft(TextToImage.CurrentTask.TargetImgCount.ToString().Length, '0')}";
                             string parentDir = sub ? imageDirMap[img.FullName] : TextToImage.CurrentTask.OutDir;
-                            bool inclPrompt = !sub && Config.GetBool("checkboxPromptInFilename");
-                            bool inclSeed = Config.GetBool("checkboxSeedInFilename");
-                            bool inclScale = Config.GetBool("checkboxScaleInFilename");
-                            bool inclSampler = Config.GetBool("checkboxSamplerInFilename");
                             string renamedPath = FormatUtils.GetExportFilename(img.FullName, parentDir, number, "png", _maxPathLength, inclPrompt, inclSeed, inclScale, inclSampler);
                             OverlayMaskIfExists(img.FullName);
                             Logger.Log($"ImageExport: Trying to move {img.Name} => {renamedPath}", true);
@@ -95,7 +96,7 @@ namespace StableDiffusionGui.Main
                     outImgs.AddRange(renamedImgPaths);
 
                     if (outImgs.Count > 0 && show)
-                        ImagePreview.SetImages(outImgs, ImagePreview.ImgShowMode.ShowLast);
+                        ImagePreview.SetImages(outImgs.Where(x => File.Exists(x)).ToList(), ImagePreview.ImgShowMode.ShowLast);
 
                     await Task.Delay(_loopWaitTimeMs);
                 }

@@ -2,6 +2,7 @@
 using StableDiffusionGui.Data;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
+using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
@@ -174,6 +175,12 @@ namespace StableDiffusionGui.Forms
                 LoadPromptHistory(t);
             else if (_promptListMode == ListMode.Queue)
                 LoadQueue(t);
+        }
+
+        private void copyPromptToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TtiSettings s = (TtiSettings)promptListView.FocusedItem.Tag;
+            OsUtils.SetClipboard(s.Prompts.FirstOrDefault());
         }
     }
 }

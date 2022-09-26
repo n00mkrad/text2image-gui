@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -57,7 +58,7 @@ namespace StableDiffusionGui.Ui
             Show();
         }
 
-        public static void Show ()
+        public static void Show()
         {
             if (_currIndex < 0 || _currIndex >= _currentImages.Length)
             {
@@ -72,7 +73,7 @@ namespace StableDiffusionGui.Ui
 
             List<string> infos = new List<string>();
 
-            if(meta.Seed >= 0)
+            if (meta.Seed >= 0)
                 infos.Add($"Seed {meta.Seed}");
 
             if (meta.Scale >= 0)
@@ -87,10 +88,10 @@ namespace StableDiffusionGui.Ui
             if (!string.IsNullOrWhiteSpace(meta.Sampler))
                 infos.Add($"{meta.Sampler}");
 
-            Program.MainForm.OutputImgLabel.Text = $"Image {_currIndex+1}/{_currentImages.Length} {(infos.Count > 0 ? $" - {string.Join(" - ", infos)}" : "")}";
+            Program.MainForm.OutputImgLabel.Text = $"Image {_currIndex + 1}/{_currentImages.Length} {(infos.Count > 0 ? $" - {string.Join(" - ", infos)}" : "")}";
         }
 
-        public static void Clear ()
+        public static void Clear()
         {
             Program.MainForm.PictBoxImgViewer.Text = "";
             Program.MainForm.PictBoxImgViewer.Image = null;
@@ -115,8 +116,30 @@ namespace StableDiffusionGui.Ui
                 if (_currIndex < 0)
                     _currIndex = _currentImages.Length - 1;
             }
-                
+
             Show();
+        }
+
+        public static void DeleteCurrent()
+        {
+            IoUtils.TryDeleteIfExists(CurrentImagePath);
+            _currentImages = _currentImages.Where(x => File.Exists(x)).ToArray();
+            Move(true);
+        }
+
+        public static void DeleteAll()
+        {
+            var parentDirs = _currentImages.Select(x => x.GetParentDirOfFile());
+
+            _currentImages.ToList().ForEach(x => IoUtils.TryDeleteIfExists(x));
+            _currentImages = _currentImages.Where(x => File.Exists(x)).ToArray();
+
+            if (_currentImages.Length > 0)
+                Move(true);
+            else
+                Clear();
+
+            parentDirs.Where(dir => IoUtils.GetAmountOfFiles(dir, true) == 0).ToList().ForEach(dir => IoUtils.TryDeleteIfExists(dir)); // Delete dir if it's now empty
         }
     }
 }

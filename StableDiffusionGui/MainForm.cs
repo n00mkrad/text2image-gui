@@ -701,5 +701,20 @@ namespace StableDiffusionGui
         {
             MainUi.SetPromptFieldSize(MainUi.PromptFieldSizeMode.Collapse);
         }
+
+        private void btnDeleteBatch_Click(object sender, EventArgs e)
+        {
+            menuStripDeleteImages.Show(Cursor.Position);
+        }
+
+        private void deleteThisImageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ImagePreview.DeleteCurrent();
+        }
+
+        private void deleteAllCurrentImagesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ImagePreview.DeleteAll();
+        }
     }
 }

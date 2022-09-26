@@ -77,13 +77,14 @@
             this.btnSeedUsePrevious = new HTAlt.WinForms.HTButton();
             this.btnResetMask = new HTAlt.WinForms.HTButton();
             this.checkboxInpainting = new System.Windows.Forms.CheckBox();
+            this.btnDeleteBatch = new System.Windows.Forms.Button();
             this.btnPromptHistory = new System.Windows.Forms.Button();
             this.btnQueue = new System.Windows.Forms.Button();
             this.btnPostProc = new System.Windows.Forms.Button();
             this.btnSettings = new System.Windows.Forms.Button();
             this.btnDebug = new System.Windows.Forms.Button();
-            this.btnExpandPromptField = new System.Windows.Forms.Button();
             this.cliButton = new System.Windows.Forms.Button();
+            this.btnExpandPromptField = new System.Windows.Forms.Button();
             this.btnOpenOutFolder = new System.Windows.Forms.Button();
             this.btnPrevImg = new System.Windows.Forms.Button();
             this.btnNextImg = new System.Windows.Forms.Button();
@@ -118,10 +119,13 @@
             this.menuStripRunQueue = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.generateCurrentPromptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.generateAllQueuedPromptsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.pictBoxImgViewer = new System.Windows.Forms.PictureBox();
-            this.separator = new System.Windows.Forms.Button();
             this.menuStripAddToQueue = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addCurrentSettingsToQueueToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pictBoxImgViewer = new System.Windows.Forms.PictureBox();
+            this.separator = new System.Windows.Forms.Button();
+            this.menuStripDeleteImages = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.deleteThisImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteAllCurrentImagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
             this.tableLayoutPanel6.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -142,8 +146,9 @@
             this.tableLayoutPanel4.SuspendLayout();
             this.panelPrompt.SuspendLayout();
             this.menuStripRunQueue.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictBoxImgViewer)).BeginInit();
             this.menuStripAddToQueue.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictBoxImgViewer)).BeginInit();
+            this.menuStripDeleteImages.SuspendLayout();
             this.SuspendLayout();
             // 
             // runBtn
@@ -871,6 +876,24 @@
             this.toolTip.SetToolTip(this.checkboxInpainting, "Enable Mask-based Inpainting");
             this.checkboxInpainting.UseVisualStyleBackColor = true;
             // 
+            // btnDeleteBatch
+            // 
+            this.btnDeleteBatch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnDeleteBatch.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnDeleteBatch.BackgroundImage = global::StableDiffusionGui.Properties.Resources.deleteBtn;
+            this.btnDeleteBatch.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnDeleteBatch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnDeleteBatch.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDeleteBatch.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnDeleteBatch.Location = new System.Drawing.Point(988, 663);
+            this.btnDeleteBatch.Name = "btnDeleteBatch";
+            this.btnDeleteBatch.Size = new System.Drawing.Size(40, 40);
+            this.btnDeleteBatch.TabIndex = 114;
+            this.btnDeleteBatch.TabStop = false;
+            this.toolTip.SetToolTip(this.btnDeleteBatch, "Delete one or all images...");
+            this.btnDeleteBatch.UseVisualStyleBackColor = false;
+            this.btnDeleteBatch.Click += new System.EventHandler(this.btnDeleteBatch_Click);
+            // 
             // btnPromptHistory
             // 
             this.btnPromptHistory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -962,24 +985,6 @@
             this.btnDebug.UseVisualStyleBackColor = false;
             this.btnDebug.Click += new System.EventHandler(this.btnDebug_Click);
             // 
-            // btnExpandPromptField
-            // 
-            this.btnExpandPromptField.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.btnExpandPromptField.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnExpandPromptField.BackgroundImage = global::StableDiffusionGui.Properties.Resources.downArrowIcon;
-            this.btnExpandPromptField.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnExpandPromptField.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnExpandPromptField.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnExpandPromptField.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnExpandPromptField.Location = new System.Drawing.Point(613, 0);
-            this.btnExpandPromptField.Name = "btnExpandPromptField";
-            this.btnExpandPromptField.Size = new System.Drawing.Size(20, 59);
-            this.btnExpandPromptField.TabIndex = 86;
-            this.btnExpandPromptField.TabStop = false;
-            this.toolTip.SetToolTip(this.btnExpandPromptField, "Expand/Collapse Prompt Field");
-            this.btnExpandPromptField.UseVisualStyleBackColor = false;
-            this.btnExpandPromptField.Click += new System.EventHandler(this.btnExpandPromptField_Click);
-            // 
             // cliButton
             // 
             this.cliButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -997,6 +1002,24 @@
             this.toolTip.SetToolTip(this.cliButton, "Open Dream.py Command Line Interface");
             this.cliButton.UseVisualStyleBackColor = false;
             this.cliButton.Click += new System.EventHandler(this.cliButton_Click);
+            // 
+            // btnExpandPromptField
+            // 
+            this.btnExpandPromptField.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.btnExpandPromptField.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnExpandPromptField.BackgroundImage = global::StableDiffusionGui.Properties.Resources.downArrowIcon;
+            this.btnExpandPromptField.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnExpandPromptField.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnExpandPromptField.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnExpandPromptField.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnExpandPromptField.Location = new System.Drawing.Point(613, 0);
+            this.btnExpandPromptField.Name = "btnExpandPromptField";
+            this.btnExpandPromptField.Size = new System.Drawing.Size(20, 59);
+            this.btnExpandPromptField.TabIndex = 86;
+            this.btnExpandPromptField.TabStop = false;
+            this.toolTip.SetToolTip(this.btnExpandPromptField, "Expand/Collapse Prompt Field");
+            this.btnExpandPromptField.UseVisualStyleBackColor = false;
+            this.btnExpandPromptField.Click += new System.EventHandler(this.btnExpandPromptField_Click);
             // 
             // btnOpenOutFolder
             // 
@@ -1428,6 +1451,20 @@
             this.generateAllQueuedPromptsToolStripMenuItem.Text = "Generate All Queued Prompts";
             this.generateAllQueuedPromptsToolStripMenuItem.Click += new System.EventHandler(this.generateAllQueuedPromptsToolStripMenuItem_Click);
             // 
+            // menuStripAddToQueue
+            // 
+            this.menuStripAddToQueue.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addCurrentSettingsToQueueToolStripMenuItem});
+            this.menuStripAddToQueue.Name = "menuStripAddToQueue";
+            this.menuStripAddToQueue.Size = new System.Drawing.Size(237, 26);
+            // 
+            // addCurrentSettingsToQueueToolStripMenuItem
+            // 
+            this.addCurrentSettingsToQueueToolStripMenuItem.Name = "addCurrentSettingsToQueueToolStripMenuItem";
+            this.addCurrentSettingsToQueueToolStripMenuItem.Size = new System.Drawing.Size(236, 22);
+            this.addCurrentSettingsToQueueToolStripMenuItem.Text = "Add Current Settings to Queue";
+            this.addCurrentSettingsToQueueToolStripMenuItem.Click += new System.EventHandler(this.addCurrentSettingsToQueueToolStripMenuItem_Click);
+            // 
             // pictBoxImgViewer
             // 
             this.pictBoxImgViewer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -1459,19 +1496,27 @@
             this.separator.TabStop = false;
             this.separator.UseVisualStyleBackColor = false;
             // 
-            // menuStripAddToQueue
+            // menuStripDeleteImages
             // 
-            this.menuStripAddToQueue.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.addCurrentSettingsToQueueToolStripMenuItem});
-            this.menuStripAddToQueue.Name = "menuStripAddToQueue";
-            this.menuStripAddToQueue.Size = new System.Drawing.Size(237, 26);
+            this.menuStripDeleteImages.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.deleteThisImageToolStripMenuItem,
+            this.deleteAllCurrentImagesToolStripMenuItem});
+            this.menuStripDeleteImages.Name = "menuStripDeleteImages";
+            this.menuStripDeleteImages.Size = new System.Drawing.Size(209, 70);
             // 
-            // addCurrentSettingsToQueueToolStripMenuItem
+            // deleteThisImageToolStripMenuItem
             // 
-            this.addCurrentSettingsToQueueToolStripMenuItem.Name = "addCurrentSettingsToQueueToolStripMenuItem";
-            this.addCurrentSettingsToQueueToolStripMenuItem.Size = new System.Drawing.Size(236, 22);
-            this.addCurrentSettingsToQueueToolStripMenuItem.Text = "Add Current Settings to Queue";
-            this.addCurrentSettingsToQueueToolStripMenuItem.Click += new System.EventHandler(this.addCurrentSettingsToQueueToolStripMenuItem_Click);
+            this.deleteThisImageToolStripMenuItem.Name = "deleteThisImageToolStripMenuItem";
+            this.deleteThisImageToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.deleteThisImageToolStripMenuItem.Text = "Delete This Image";
+            this.deleteThisImageToolStripMenuItem.Click += new System.EventHandler(this.deleteThisImageToolStripMenuItem_Click);
+            // 
+            // deleteAllCurrentImagesToolStripMenuItem
+            // 
+            this.deleteAllCurrentImagesToolStripMenuItem.Name = "deleteAllCurrentImagesToolStripMenuItem";
+            this.deleteAllCurrentImagesToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.deleteAllCurrentImagesToolStripMenuItem.Text = "Delete All Current Images";
+            this.deleteAllCurrentImagesToolStripMenuItem.Click += new System.EventHandler(this.deleteAllCurrentImagesToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -1480,6 +1525,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.ClientSize = new System.Drawing.Size(1178, 734);
+            this.Controls.Add(this.btnDeleteBatch);
             this.Controls.Add(this.textboxPrompt);
             this.Controls.Add(this.progressBarImg);
             this.Controls.Add(this.pictBoxImgViewer);
@@ -1551,8 +1597,9 @@
             this.panelPrompt.ResumeLayout(false);
             this.panelPrompt.PerformLayout();
             this.menuStripRunQueue.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictBoxImgViewer)).EndInit();
             this.menuStripAddToQueue.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictBoxImgViewer)).EndInit();
+            this.menuStripDeleteImages.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1651,6 +1698,10 @@
         private System.Windows.Forms.Label labelCurrentConcept;
         private System.Windows.Forms.Label labelCurrentImage;
         private System.Windows.Forms.ToolStripMenuItem reGenerateImageWithCurrentSettingsToolStripMenuItem;
+        private System.Windows.Forms.Button btnDeleteBatch;
+        private System.Windows.Forms.ContextMenuStrip menuStripDeleteImages;
+        private System.Windows.Forms.ToolStripMenuItem deleteThisImageToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem deleteAllCurrentImagesToolStripMenuItem;
     }
 }
 

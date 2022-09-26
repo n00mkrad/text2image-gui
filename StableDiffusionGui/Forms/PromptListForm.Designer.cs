@@ -45,8 +45,9 @@
             this.panelEnableHistory = new System.Windows.Forms.Panel();
             this.checkboxEnableHistory = new System.Windows.Forms.CheckBox();
             this.panelFilter = new System.Windows.Forms.Panel();
-            this.textboxFilter = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.textboxFilter = new System.Windows.Forms.TextBox();
+            this.copyPromptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStripDelete.SuspendLayout();
             this.menuStripPromptHistory.SuspendLayout();
             this.panelEnableHistory.SuspendLayout();
@@ -155,9 +156,10 @@
             // 
             this.menuStripPromptHistory.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.loadPromptIntoGUIToolStripMenuItem,
-            this.loadPromptAndSettingsIntoGUIToolStripMenuItem});
+            this.loadPromptAndSettingsIntoGUIToolStripMenuItem,
+            this.copyPromptToolStripMenuItem});
             this.menuStripPromptHistory.Name = "menuStripPromptHistory";
-            this.menuStripPromptHistory.Size = new System.Drawing.Size(260, 48);
+            this.menuStripPromptHistory.Size = new System.Drawing.Size(260, 92);
             // 
             // loadPromptIntoGUIToolStripMenuItem
             // 
@@ -204,6 +206,16 @@
             this.panelFilter.Size = new System.Drawing.Size(300, 40);
             this.panelFilter.TabIndex = 98;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.ForeColor = System.Drawing.Color.White;
+            this.label1.Location = new System.Drawing.Point(10, 13);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(89, 13);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "Prompt Text Filter";
+            // 
             // textboxFilter
             // 
             this.textboxFilter.AllowDrop = true;
@@ -214,19 +226,16 @@
             this.textboxFilter.Margin = new System.Windows.Forms.Padding(3, 3, 12, 3);
             this.textboxFilter.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxFilter.Name = "textboxFilter";
-            this.textboxFilter.Size = new System.Drawing.Size(183, 21);
+            this.textboxFilter.Size = new System.Drawing.Size(183, 20);
             this.textboxFilter.TabIndex = 5;
             this.textboxFilter.TextChanged += new System.EventHandler(this.textboxFilter_TextChanged);
             // 
-            // label1
+            // copyPromptToolStripMenuItem
             // 
-            this.label1.AutoSize = true;
-            this.label1.ForeColor = System.Drawing.Color.White;
-            this.label1.Location = new System.Drawing.Point(10, 13);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(89, 13);
-            this.label1.TabIndex = 6;
-            this.label1.Text = "Prompt Text Filter";
+            this.copyPromptToolStripMenuItem.Name = "copyPromptToolStripMenuItem";
+            this.copyPromptToolStripMenuItem.Size = new System.Drawing.Size(259, 22);
+            this.copyPromptToolStripMenuItem.Text = "Copy Prompt";
+            this.copyPromptToolStripMenuItem.Click += new System.EventHandler(this.copyPromptToolStripMenuItem_Click);
             // 
             // PromptListForm
             // 
@@ -279,5 +288,6 @@
         private System.Windows.Forms.Panel panelFilter;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textboxFilter;
+        private System.Windows.Forms.ToolStripMenuItem copyPromptToolStripMenuItem;
     }
 }
