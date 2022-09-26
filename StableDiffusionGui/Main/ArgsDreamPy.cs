@@ -42,5 +42,21 @@ namespace StableDiffusionGui.Main
 
             return $"-G {strength} -ft {tool}";
         }
+
+        public static string GetUpscaleArgs ()
+        {
+            var upscaleSetting = (Forms.PostProcSettingsForm.UpscaleOption)Config.GetInt("comboxUpscale");
+
+            if (upscaleSetting == Forms.PostProcSettingsForm.UpscaleOption.Disabled)
+                return "";
+
+            int factor = 2;
+
+            if (upscaleSetting == Forms.PostProcSettingsForm.UpscaleOption.X2) factor = 2;
+            if (upscaleSetting == Forms.PostProcSettingsForm.UpscaleOption.X3) factor = 3;
+            if (upscaleSetting == Forms.PostProcSettingsForm.UpscaleOption.X4) factor = 4;
+
+            return $"-U {factor}";
+        }
     }
 }
