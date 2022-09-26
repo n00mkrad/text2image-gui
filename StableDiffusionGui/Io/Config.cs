@@ -242,7 +242,7 @@ namespace StableDiffusionGui.Io
             }
             catch
             {
-                return WriteDefault(keyStr, "");
+                key = Key.none;
             }
 
             if (key == Key.checkboxMultiPromptsSameSeed) return WriteDefault(key, "True");
@@ -256,8 +256,12 @@ namespace StableDiffusionGui.Io
             if (key == Key.comboxSdModel) return WriteDefault(key, IoUtils.GetFileInfosSorted(Paths.GetModelsPath(), true, "*.ckpt").Select(x => x.Name).FirstOrDefault());
             if (key == Key.checkboxEnableHistory) return WriteDefault(key, true.ToString());
             if (key == Key.sliderCodeformerFidelity) return WriteDefault(key, "0.6");
+            if (keyStr.MatchesWildcard("checkbox*InFilename")) return WriteDefault(key, true.ToString());
 
-            return WriteDefault(key, "");
+            if(key == Key.none)
+                return WriteDefault(keyStr, "");
+            else
+                return WriteDefault(key, "");
         }
 
         private static string WriteDefault(Key key, string def)
@@ -274,6 +278,7 @@ namespace StableDiffusionGui.Io
 
         public enum Key
         {
+            none,
             cmdDebugMode,
             checkboxMultiPromptsSameSeed,
             comboxSampler,

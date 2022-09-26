@@ -223,16 +223,6 @@ namespace StableDiffusionGui.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap itch1 {
-            get {
-                object obj = ResourceManager.GetObject("itch1", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap itch2 {
             get {
                 object obj = ResourceManager.GetObject("itch2", resourceCulture);

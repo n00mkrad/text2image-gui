@@ -82,6 +82,7 @@
             this.panelSdModel = new System.Windows.Forms.Panel();
             this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
             this.panel25 = new System.Windows.Forms.Panel();
+            this.btnRefreshModelsDropdown = new HTAlt.WinForms.HTButton();
             this.comboxSdModel = new System.Windows.Forms.ComboBox();
             this.btnOpenModelsFolder = new HTAlt.WinForms.HTButton();
             this.panel26 = new System.Windows.Forms.Panel();
@@ -101,7 +102,9 @@
             this.panel11 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.btnRefreshModelsDropdown = new HTAlt.WinForms.HTButton();
+            this.checkboxSeedInFilename = new System.Windows.Forms.CheckBox();
+            this.checkboxScaleInFilename = new System.Windows.Forms.CheckBox();
+            this.checkboxSamplerInFilename = new System.Windows.Forms.CheckBox();
             this.parentPanel.SuspendLayout();
             this.panel1.SuspendLayout();
             this.notificationPanel.SuspendLayout();
@@ -427,6 +430,9 @@
             // 
             // panel19
             // 
+            this.panel19.Controls.Add(this.checkboxSamplerInFilename);
+            this.panel19.Controls.Add(this.checkboxScaleInFilename);
+            this.panel19.Controls.Add(this.checkboxSeedInFilename);
             this.panel19.Controls.Add(this.checkboxPromptInFilename);
             this.panel19.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel19.Location = new System.Drawing.Point(383, 3);
@@ -440,8 +446,9 @@
             this.checkboxPromptInFilename.ForeColor = System.Drawing.Color.White;
             this.checkboxPromptInFilename.Location = new System.Drawing.Point(5, 7);
             this.checkboxPromptInFilename.Name = "checkboxPromptInFilename";
-            this.checkboxPromptInFilename.Size = new System.Drawing.Size(15, 14);
+            this.checkboxPromptInFilename.Size = new System.Drawing.Size(59, 17);
             this.checkboxPromptInFilename.TabIndex = 111;
+            this.checkboxPromptInFilename.Text = "Prompt";
             this.checkboxPromptInFilename.UseVisualStyleBackColor = true;
             // 
             // panel20
@@ -461,9 +468,9 @@
             this.label7.Location = new System.Drawing.Point(5, 8);
             this.label7.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(134, 13);
+            this.label7.Size = new System.Drawing.Size(158, 13);
             this.label7.TabIndex = 85;
-            this.label7.Text = "Include Prompt in Filename";
+            this.label7.Text = "Metadata to Include in Filename";
             // 
             // panelPromptSubfolders
             // 
@@ -507,7 +514,6 @@
             this.checkboxFolderPerPrompt.Size = new System.Drawing.Size(15, 14);
             this.checkboxFolderPerPrompt.TabIndex = 111;
             this.checkboxFolderPerPrompt.UseVisualStyleBackColor = true;
-            this.checkboxFolderPerPrompt.CheckedChanged += new System.EventHandler(this.checkboxFolderPerPrompt_CheckedChanged);
             // 
             // panel9
             // 
@@ -739,6 +745,26 @@
             this.panel25.Size = new System.Drawing.Size(374, 29);
             this.panel25.TabIndex = 88;
             // 
+            // btnRefreshModelsDropdown
+            // 
+            this.btnRefreshModelsDropdown.AutoColor = true;
+            this.btnRefreshModelsDropdown.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnRefreshModelsDropdown.ButtonImage = null;
+            this.btnRefreshModelsDropdown.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
+            this.btnRefreshModelsDropdown.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
+            this.btnRefreshModelsDropdown.DrawImage = false;
+            this.btnRefreshModelsDropdown.ForeColor = System.Drawing.Color.White;
+            this.btnRefreshModelsDropdown.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
+            this.btnRefreshModelsDropdown.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
+            this.btnRefreshModelsDropdown.Location = new System.Drawing.Point(215, 2);
+            this.btnRefreshModelsDropdown.Name = "btnRefreshModelsDropdown";
+            this.btnRefreshModelsDropdown.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+            this.btnRefreshModelsDropdown.Size = new System.Drawing.Size(75, 23);
+            this.btnRefreshModelsDropdown.TabIndex = 107;
+            this.btnRefreshModelsDropdown.TabStop = false;
+            this.btnRefreshModelsDropdown.Text = "Refresh List";
+            this.btnRefreshModelsDropdown.Click += new System.EventHandler(this.btnRefreshModelsDropdown_Click);
+            // 
             // comboxSdModel
             // 
             this.comboxSdModel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
@@ -955,25 +981,38 @@
             this.toolTip.InitialDelay = 200;
             this.toolTip.ReshowDelay = 40;
             // 
-            // btnRefreshModelsDropdown
+            // checkboxSeedInFilename
             // 
-            this.btnRefreshModelsDropdown.AutoColor = true;
-            this.btnRefreshModelsDropdown.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnRefreshModelsDropdown.ButtonImage = null;
-            this.btnRefreshModelsDropdown.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
-            this.btnRefreshModelsDropdown.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
-            this.btnRefreshModelsDropdown.DrawImage = false;
-            this.btnRefreshModelsDropdown.ForeColor = System.Drawing.Color.White;
-            this.btnRefreshModelsDropdown.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
-            this.btnRefreshModelsDropdown.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
-            this.btnRefreshModelsDropdown.Location = new System.Drawing.Point(215, 2);
-            this.btnRefreshModelsDropdown.Name = "btnRefreshModelsDropdown";
-            this.btnRefreshModelsDropdown.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
-            this.btnRefreshModelsDropdown.Size = new System.Drawing.Size(75, 23);
-            this.btnRefreshModelsDropdown.TabIndex = 107;
-            this.btnRefreshModelsDropdown.TabStop = false;
-            this.btnRefreshModelsDropdown.Text = "Refresh List";
-            this.btnRefreshModelsDropdown.Click += new System.EventHandler(this.btnRefreshModelsDropdown_Click);
+            this.checkboxSeedInFilename.AutoSize = true;
+            this.checkboxSeedInFilename.ForeColor = System.Drawing.Color.White;
+            this.checkboxSeedInFilename.Location = new System.Drawing.Point(70, 7);
+            this.checkboxSeedInFilename.Name = "checkboxSeedInFilename";
+            this.checkboxSeedInFilename.Size = new System.Drawing.Size(51, 17);
+            this.checkboxSeedInFilename.TabIndex = 112;
+            this.checkboxSeedInFilename.Text = "Seed";
+            this.checkboxSeedInFilename.UseVisualStyleBackColor = true;
+            // 
+            // checkboxScaleInFilename
+            // 
+            this.checkboxScaleInFilename.AutoSize = true;
+            this.checkboxScaleInFilename.ForeColor = System.Drawing.Color.White;
+            this.checkboxScaleInFilename.Location = new System.Drawing.Point(127, 7);
+            this.checkboxScaleInFilename.Name = "checkboxScaleInFilename";
+            this.checkboxScaleInFilename.Size = new System.Drawing.Size(53, 17);
+            this.checkboxScaleInFilename.TabIndex = 113;
+            this.checkboxScaleInFilename.Text = "Scale";
+            this.checkboxScaleInFilename.UseVisualStyleBackColor = true;
+            // 
+            // checkboxSamplerInFilename
+            // 
+            this.checkboxSamplerInFilename.AutoSize = true;
+            this.checkboxSamplerInFilename.ForeColor = System.Drawing.Color.White;
+            this.checkboxSamplerInFilename.Location = new System.Drawing.Point(186, 7);
+            this.checkboxSamplerInFilename.Name = "checkboxSamplerInFilename";
+            this.checkboxSamplerInFilename.Size = new System.Drawing.Size(64, 17);
+            this.checkboxSamplerInFilename.TabIndex = 114;
+            this.checkboxSamplerInFilename.Text = "Sampler";
+            this.checkboxSamplerInFilename.UseVisualStyleBackColor = true;
             // 
             // SettingsForm
             // 
@@ -1139,5 +1178,8 @@
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.ToolTip toolTip;
         private HTAlt.WinForms.HTButton btnRefreshModelsDropdown;
+        private System.Windows.Forms.CheckBox checkboxSamplerInFilename;
+        private System.Windows.Forms.CheckBox checkboxScaleInFilename;
+        private System.Windows.Forms.CheckBox checkboxSeedInFilename;
     }
 }

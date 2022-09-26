@@ -76,6 +76,9 @@ namespace StableDiffusionGui.Forms
             ConfigParser.LoadGuiElement(checkboxAdvancedMode);
             ConfigParser.LoadGuiElement(checkboxMultiPromptsSameSeed);
             ConfigParser.LoadGuiElement(checkboxPromptInFilename);
+            ConfigParser.LoadGuiElement(checkboxSeedInFilename);
+            ConfigParser.LoadGuiElement(checkboxScaleInFilename);
+            ConfigParser.LoadGuiElement(checkboxSamplerInFilename);
             ConfigParser.LoadGuiElement(textboxOutPath);
             ConfigParser.LoadGuiElement(comboxSdModel);
             // ConfigParser.LoadComboxIndex(comboxCudaDevice);
@@ -90,15 +93,13 @@ namespace StableDiffusionGui.Forms
             ConfigParser.SaveGuiElement(checkboxAdvancedMode);
             ConfigParser.SaveGuiElement(checkboxMultiPromptsSameSeed);
             ConfigParser.SaveGuiElement(checkboxPromptInFilename);
+            ConfigParser.SaveGuiElement(checkboxSeedInFilename);
+            ConfigParser.SaveGuiElement(checkboxScaleInFilename);
+            ConfigParser.SaveGuiElement(checkboxSamplerInFilename);
             ConfigParser.SaveGuiElement(textboxOutPath);
             ConfigParser.SaveGuiElement(comboxSdModel);
             ConfigParser.SaveComboxIndex(comboxCudaDevice);
             ConfigParser.SaveComboxIndex(comboxNotify);
-        }
-
-        private void checkboxFolderPerPrompt_CheckedChanged(object sender, EventArgs e)
-        {
-            panelPromptInFilename.Visible = !checkboxFolderPerPrompt.Checked;
         }
 
         private void btnOutPathBrowse_Click(object sender, EventArgs e)
