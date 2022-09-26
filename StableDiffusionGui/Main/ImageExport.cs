@@ -73,6 +73,7 @@ namespace StableDiffusionGui.Main
                     bool inclSeed = Config.GetBool("checkboxSeedInFilename");
                     bool inclScale = Config.GetBool("checkboxScaleInFilename");
                     bool inclSampler = Config.GetBool("checkboxSamplerInFilename");
+                    bool inclModel = Config.GetBool("checkboxModelInFilename");
 
                     for (int i = 0; i < images.Count; i++)
                     {
@@ -81,7 +82,7 @@ namespace StableDiffusionGui.Main
                             var img = images[i];
                             string number = $"-{(TextToImage.CurrentTask.ImgCount).ToString().PadLeft(TextToImage.CurrentTask.TargetImgCount.ToString().Length, '0')}";
                             string parentDir = sub ? imageDirMap[img.FullName] : TextToImage.CurrentTask.OutDir;
-                            string renamedPath = FormatUtils.GetExportFilename(img.FullName, parentDir, number, "png", _maxPathLength, inclPrompt, inclSeed, inclScale, inclSampler);
+                            string renamedPath = FormatUtils.GetExportFilename(img.FullName, parentDir, number, "png", _maxPathLength, inclPrompt, inclSeed, inclScale, inclSampler, inclModel);
                             OverlayMaskIfExists(img.FullName);
                             Logger.Log($"ImageExport: Trying to move {img.Name} => {renamedPath}", true);
                             img.MoveTo(renamedPath);

@@ -13,10 +13,8 @@ namespace StableDiffusionGui.MiscUtils
         {
             try
             {
-                var split = s.Split(delimiter);
-                int w = split[0].GetInt();
-                int h = split[1].GetInt();
-                return new Size(w, h);
+                string[] values = s.Split(delimiter);
+                return new Size(values[0].GetInt(), values[1].GetInt());
             }
             catch
             {

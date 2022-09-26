@@ -159,19 +159,6 @@ namespace StableDiffusionGui.MiscUtils
             return outStr;
         }
 
-        public static System.Drawing.Size ParseSize(string str)
-        {
-            try
-            {
-                string[] values = str.Split('x');
-                return new System.Drawing.Size(values[0].GetInt(), values[1].GetInt());
-            }
-            catch
-            {
-                return new System.Drawing.Size();
-            }
-        }
-
         public static string CapsIfShort(string codec, int capsIfShorterThan = 5)
         {
             if (codec.Length < capsIfShorterThan)
@@ -180,7 +167,7 @@ namespace StableDiffusionGui.MiscUtils
                 return codec.ToTitleCase();
         }
 
-        public static string GetExportFilename (string filePath, string parentDir, string suffix, string ext, int pathLimit, bool includePrompt, bool includeSeed, bool includeScale, bool includeSampler)
+        public static string GetExportFilename (string filePath, string parentDir, string suffix, string ext, int pathLimit, bool inclPrompt, bool inclSeed, bool inclScale, bool inclSampler, bool inclModel)
         {
             try
             {
@@ -198,7 +185,7 @@ namespace StableDiffusionGui.MiscUtils
 
                 string seed = $"-{meta.Seed}";
 
-                if (includeSeed && (pathBudget - seed.Length > 0))
+                if (inclSeed && (pathBudget - seed.Length > 0))
                 {
                     pathBudget -= seed.Length;
                     infoStr += seed;
@@ -206,7 +193,7 @@ namespace StableDiffusionGui.MiscUtils
 
                 string scale = $"-scale{meta.Scale.ToStringDot("0.00")}";
 
-                if (includeScale && (pathBudget - scale.Length > 0))
+                if (inclScale && (pathBudget - scale.Length > 0))
                 {
                     pathBudget -= scale.Length;
                     infoStr += scale;
@@ -214,13 +201,21 @@ namespace StableDiffusionGui.MiscUtils
 
                 string sampler = $"-{meta.Sampler}";
 
-                if (includeSampler && (pathBudget - sampler.Length > 0))
+                if (inclSampler && (pathBudget - sampler.Length > 0))
                 {
                     pathBudget -= sampler.Length;
                     infoStr += sampler;
                 }
 
-                if (includePrompt)
+                string model = $"-{Path.ChangeExtension(TextToImage.LastTaskSettings.Params.Get("model"), null).Trim().Remove("_pruned").Trunc(20, false)}";
+
+                if (inclModel && model.Length > 1 && (pathBudget - model.Length > 0))
+                {
+                    pathBudget -= model.Length;
+                    infoStr += model;
+                }
+
+                if (inclPrompt)
                 {
                     return Path.Combine(parentDir, $"{timestamp}{suffix}-{SanitizePromptFilename(meta.Prompt, pathBudget)}{infoStr}") + $".{ext}";
                 }

@@ -81,7 +81,7 @@ namespace StableDiffusionGui.Main
 
         public static bool CheckIfSdModelExists()
         {
-            if (!File.Exists(Path.Combine(Paths.GetModelsPath(), GetSdModel(true))))
+            if (!File.Exists(Path.Combine(Paths.GetModelsPath(), Config.Get(Config.Key.comboxSdModel))))
             {
                 string savedModelFileName = Config.Get(Config.Key.comboxSdModel);
 
@@ -99,12 +99,6 @@ namespace StableDiffusionGui.Main
             }
 
             return true;
-        }
-
-        public static string GetSdModel(bool withExtension = false)
-        {
-            string filename = Config.Get(Config.Key.comboxSdModel);
-            return withExtension ? filename : Path.GetFileNameWithoutExtension(filename);
         }
 
         public static string GetPathVariableCmd (string baseDir = ".")

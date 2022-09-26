@@ -79,6 +79,7 @@ namespace StableDiffusionGui.Forms
             ConfigParser.LoadGuiElement(checkboxSeedInFilename);
             ConfigParser.LoadGuiElement(checkboxScaleInFilename);
             ConfigParser.LoadGuiElement(checkboxSamplerInFilename);
+            ConfigParser.LoadGuiElement(checkboxModelInFilename);
             ConfigParser.LoadGuiElement(textboxOutPath);
             ConfigParser.LoadGuiElement(comboxSdModel);
             // ConfigParser.LoadComboxIndex(comboxCudaDevice);
@@ -96,6 +97,7 @@ namespace StableDiffusionGui.Forms
             ConfigParser.SaveGuiElement(checkboxSeedInFilename);
             ConfigParser.SaveGuiElement(checkboxScaleInFilename);
             ConfigParser.SaveGuiElement(checkboxSamplerInFilename);
+            ConfigParser.SaveGuiElement(checkboxModelInFilename);
             ConfigParser.SaveGuiElement(textboxOutPath);
             ConfigParser.SaveGuiElement(comboxSdModel);
             ConfigParser.SaveComboxIndex(comboxCudaDevice);

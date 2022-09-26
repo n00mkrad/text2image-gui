@@ -55,6 +55,9 @@
             this.panelPromptInFilename = new System.Windows.Forms.Panel();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.panel19 = new System.Windows.Forms.Panel();
+            this.checkboxSamplerInFilename = new System.Windows.Forms.CheckBox();
+            this.checkboxScaleInFilename = new System.Windows.Forms.CheckBox();
+            this.checkboxSeedInFilename = new System.Windows.Forms.CheckBox();
             this.checkboxPromptInFilename = new System.Windows.Forms.CheckBox();
             this.panel20 = new System.Windows.Forms.Panel();
             this.label7 = new System.Windows.Forms.Label();
@@ -102,9 +105,7 @@
             this.panel11 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.checkboxSeedInFilename = new System.Windows.Forms.CheckBox();
-            this.checkboxScaleInFilename = new System.Windows.Forms.CheckBox();
-            this.checkboxSamplerInFilename = new System.Windows.Forms.CheckBox();
+            this.checkboxModelInFilename = new System.Windows.Forms.CheckBox();
             this.parentPanel.SuspendLayout();
             this.panel1.SuspendLayout();
             this.notificationPanel.SuspendLayout();
@@ -430,6 +431,7 @@
             // 
             // panel19
             // 
+            this.panel19.Controls.Add(this.checkboxModelInFilename);
             this.panel19.Controls.Add(this.checkboxSamplerInFilename);
             this.panel19.Controls.Add(this.checkboxScaleInFilename);
             this.panel19.Controls.Add(this.checkboxSeedInFilename);
@@ -439,6 +441,39 @@
             this.panel19.Name = "panel19";
             this.panel19.Size = new System.Drawing.Size(374, 29);
             this.panel19.TabIndex = 88;
+            // 
+            // checkboxSamplerInFilename
+            // 
+            this.checkboxSamplerInFilename.AutoSize = true;
+            this.checkboxSamplerInFilename.ForeColor = System.Drawing.Color.White;
+            this.checkboxSamplerInFilename.Location = new System.Drawing.Point(186, 7);
+            this.checkboxSamplerInFilename.Name = "checkboxSamplerInFilename";
+            this.checkboxSamplerInFilename.Size = new System.Drawing.Size(64, 17);
+            this.checkboxSamplerInFilename.TabIndex = 114;
+            this.checkboxSamplerInFilename.Text = "Sampler";
+            this.checkboxSamplerInFilename.UseVisualStyleBackColor = true;
+            // 
+            // checkboxScaleInFilename
+            // 
+            this.checkboxScaleInFilename.AutoSize = true;
+            this.checkboxScaleInFilename.ForeColor = System.Drawing.Color.White;
+            this.checkboxScaleInFilename.Location = new System.Drawing.Point(127, 7);
+            this.checkboxScaleInFilename.Name = "checkboxScaleInFilename";
+            this.checkboxScaleInFilename.Size = new System.Drawing.Size(53, 17);
+            this.checkboxScaleInFilename.TabIndex = 113;
+            this.checkboxScaleInFilename.Text = "Scale";
+            this.checkboxScaleInFilename.UseVisualStyleBackColor = true;
+            // 
+            // checkboxSeedInFilename
+            // 
+            this.checkboxSeedInFilename.AutoSize = true;
+            this.checkboxSeedInFilename.ForeColor = System.Drawing.Color.White;
+            this.checkboxSeedInFilename.Location = new System.Drawing.Point(70, 7);
+            this.checkboxSeedInFilename.Name = "checkboxSeedInFilename";
+            this.checkboxSeedInFilename.Size = new System.Drawing.Size(51, 17);
+            this.checkboxSeedInFilename.TabIndex = 112;
+            this.checkboxSeedInFilename.Text = "Seed";
+            this.checkboxSeedInFilename.UseVisualStyleBackColor = true;
             // 
             // checkboxPromptInFilename
             // 
@@ -981,38 +1016,16 @@
             this.toolTip.InitialDelay = 200;
             this.toolTip.ReshowDelay = 40;
             // 
-            // checkboxSeedInFilename
+            // checkboxModelInFilename
             // 
-            this.checkboxSeedInFilename.AutoSize = true;
-            this.checkboxSeedInFilename.ForeColor = System.Drawing.Color.White;
-            this.checkboxSeedInFilename.Location = new System.Drawing.Point(70, 7);
-            this.checkboxSeedInFilename.Name = "checkboxSeedInFilename";
-            this.checkboxSeedInFilename.Size = new System.Drawing.Size(51, 17);
-            this.checkboxSeedInFilename.TabIndex = 112;
-            this.checkboxSeedInFilename.Text = "Seed";
-            this.checkboxSeedInFilename.UseVisualStyleBackColor = true;
-            // 
-            // checkboxScaleInFilename
-            // 
-            this.checkboxScaleInFilename.AutoSize = true;
-            this.checkboxScaleInFilename.ForeColor = System.Drawing.Color.White;
-            this.checkboxScaleInFilename.Location = new System.Drawing.Point(127, 7);
-            this.checkboxScaleInFilename.Name = "checkboxScaleInFilename";
-            this.checkboxScaleInFilename.Size = new System.Drawing.Size(53, 17);
-            this.checkboxScaleInFilename.TabIndex = 113;
-            this.checkboxScaleInFilename.Text = "Scale";
-            this.checkboxScaleInFilename.UseVisualStyleBackColor = true;
-            // 
-            // checkboxSamplerInFilename
-            // 
-            this.checkboxSamplerInFilename.AutoSize = true;
-            this.checkboxSamplerInFilename.ForeColor = System.Drawing.Color.White;
-            this.checkboxSamplerInFilename.Location = new System.Drawing.Point(186, 7);
-            this.checkboxSamplerInFilename.Name = "checkboxSamplerInFilename";
-            this.checkboxSamplerInFilename.Size = new System.Drawing.Size(64, 17);
-            this.checkboxSamplerInFilename.TabIndex = 114;
-            this.checkboxSamplerInFilename.Text = "Sampler";
-            this.checkboxSamplerInFilename.UseVisualStyleBackColor = true;
+            this.checkboxModelInFilename.AutoSize = true;
+            this.checkboxModelInFilename.ForeColor = System.Drawing.Color.White;
+            this.checkboxModelInFilename.Location = new System.Drawing.Point(256, 7);
+            this.checkboxModelInFilename.Name = "checkboxModelInFilename";
+            this.checkboxModelInFilename.Size = new System.Drawing.Size(55, 17);
+            this.checkboxModelInFilename.TabIndex = 115;
+            this.checkboxModelInFilename.Text = "Model";
+            this.checkboxModelInFilename.UseVisualStyleBackColor = true;
             // 
             // SettingsForm
             // 
@@ -1181,5 +1194,6 @@
         private System.Windows.Forms.CheckBox checkboxSamplerInFilename;
         private System.Windows.Forms.CheckBox checkboxScaleInFilename;
         private System.Windows.Forms.CheckBox checkboxSeedInFilename;
+        private System.Windows.Forms.CheckBox checkboxModelInFilename;
     }
 }

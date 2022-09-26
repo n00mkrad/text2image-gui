@@ -221,6 +221,7 @@ namespace StableDiffusionGui
                             { "embedding", MainUi.CurrentEmbeddingPath },
                             { "seamless", checkboxSeamless.Checked.ToString() },
                             { "inpainting", checkboxInpainting.Checked ? "masked" : "" },
+                            { "model", Config.Get(Config.Key.comboxSdModel) },
                         },
             };
 
