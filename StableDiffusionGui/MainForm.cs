@@ -29,8 +29,12 @@ namespace StableDiffusionGui
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         static extern EXECUTION_STATE SetThreadExecutionState(EXECUTION_STATE esFlags); // This should prevent Windows from going to sleep
 
+        #region References
+        public TextBox TextboxPrompt { get { return textboxPrompt; } }
         public PictureBox PictBoxImgViewer { get { return pictBoxImgViewer; } }
         public Label OutputImgLabel { get { return outputImgLabel; } }
+        public Button BtnExpandPromptField { get { return btnExpandPromptField; } }
+        #endregion
 
         public bool IsInFocus() { return (ActiveForm == this); }
 
@@ -598,20 +602,7 @@ namespace StableDiffusionGui
 
         private void btnExpandPromptField_Click(object sender, EventArgs e)
         {
-            int smallHeight = 59;
-
-            if (textboxPrompt.Height == smallHeight)
-            {
-                btnExpandPromptField.BackgroundImage = Resources.upArrowIcon;
-                textboxPrompt.Height = pictBoxImgViewer.Height + 65;
-                pictBoxImgViewer.Visible = false;
-            }
-            else
-            {
-                btnExpandPromptField.BackgroundImage = Resources.downArrowIcon;
-                textboxPrompt.Height = smallHeight;
-                pictBoxImgViewer.Visible = true;
-            }
+            MainUi.SetPromptFieldSize(MainUi.PromptFieldSizeMode.Toggle);
         }
 
         private void btnSeedUsePrevious_Click(object sender, EventArgs e)
@@ -704,6 +695,11 @@ namespace StableDiffusionGui
         {
             int sizeChange = e.Delta > 0 ? 1 : -1;
             textboxPrompt.Font = new Font(textboxPrompt.Font.Name, (textboxPrompt.Font.Size + sizeChange).Clamp(_defaultPromptFontSize, _defaultPromptFontSize * 2f), textboxPrompt.Font.Style, textboxPrompt.Font.Unit);
+        }
+
+        private void MainForm_ResizeBegin(object sender, EventArgs e)
+        {
+            MainUi.SetPromptFieldSize(MainUi.PromptFieldSizeMode.Collapse);
         }
     }
 }

@@ -4,6 +4,7 @@ using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.Os;
+using StableDiffusionGui.Properties;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -207,6 +208,31 @@ namespace StableDiffusionGui.Ui
             }
 
             return strengths;
+        }
+
+        public enum PromptFieldSizeMode { Expand, Collapse, Toggle }
+
+        public static void SetPromptFieldSize (PromptFieldSizeMode sizeMode = PromptFieldSizeMode.Toggle)
+        {
+            var form = Program.MainForm;
+            int smallHeight = 59;
+
+            if (sizeMode == PromptFieldSizeMode.Toggle)
+                sizeMode = form.TextboxPrompt.Height == smallHeight ? PromptFieldSizeMode.Expand : PromptFieldSizeMode.Collapse;
+
+            if (sizeMode == PromptFieldSizeMode.Expand)
+            {
+                form.BtnExpandPromptField.BackgroundImage = Resources.upArrowIcon;
+                form.TextboxPrompt.Height = form.PictBoxImgViewer.Height + 65;
+                form.PictBoxImgViewer.Visible = false;
+            }
+
+            if (sizeMode == PromptFieldSizeMode.Collapse)
+            {
+                form.BtnExpandPromptField.BackgroundImage = Resources.downArrowIcon;
+                form.TextboxPrompt.Height = smallHeight;
+                form.PictBoxImgViewer.Visible = true;
+            }
         }
     }
 }
