@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -225,7 +226,7 @@ namespace StableDiffusionGui.MiscUtils
                 }
                 else
                 {
-                    return Path.Combine(parentDir, $"{timestamp}{suffix}{infoStr}{suffix}") + $".{ext}";
+                    return Path.Combine(parentDir, $"{timestamp}{suffix}{infoStr}") + $".{ext}";
                 }
             }
             catch(Exception ex)
@@ -240,7 +241,8 @@ namespace StableDiffusionGui.MiscUtils
             if (string.IsNullOrWhiteSpace(prompt))
                 return "";
 
-            return new Regex(@"[^a-zA-Z0-9 -!,.()]").Replace(prompt, "_").Trunc(pathBudget - 1, false).Replace(" ", "_");
+            prompt = prompt.Trim().Replace(" ", "_"); // Replace all spaces by underscores...
+            return new Regex(@"[^a-zA-Z0-9 -!,.()]").Replace(prompt, "").Trunc(pathBudget - 1, false); // ...remove all special chars
         }
 
         public static string GetPromptWithoutModifiers(string prompt)
