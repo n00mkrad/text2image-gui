@@ -5,6 +5,7 @@ using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -119,30 +120,82 @@ namespace StableDiffusionGui.Main
                 OsUtils.ShowNotification("Stable Diffusion GUI", $"Image generation has finished.\nGenerated {imgCount} images in {FormatUtils.Time(timeTaken, false)}.", true);
         }
 
-        public static void CancelManually ()
+        public static void CancelManually()
         {
             Cancel("Canceled manually.", false);
         }
 
-        public static void Cancel(string reason = "", bool showMsgBox = true)
+        public static async void Cancel(string reason = "", bool showMsgBox = true)
         {
             Canceled = true;
 
             bool forceKill = reason.ToLower().Contains("manually") && Keyboard.Modifiers == ModifierKeys.Shift; // Shift force-kills the process
 
-            if (!forceKill && TtiProcess.IsDreamPyRunning) 
+            if (!forceKill && TtiProcess.IsDreamPyRunning)
             {
-                TtiUtils.SoftCancelDreamPy();
+                if (LastTaskSettings.Implementation == Implementation.StableDiffusionOptimized)
+                {
+                    IoUtils.TryDeleteIfExists(Path.Combine(Paths.GetSessionDataPath(), "prompts.txt"));
+                    TtiUtils.SoftCancelDreamPy();
+                }
+
+                if (LastTaskSettings.Implementation == Implementation.StableDiffusion)
+                {
+                    if (Logger.GetSessionLogLastLines(Constants.SdLogFilename, 10).Where(x => x.MatchesWildcard("step */*")).Any()) // Only attempt a soft cancel if we've been generating anything
+                        await WaitForDreamPyCancel();
+                    else // This condition should be true if we cancel while it's still initializing, so we can just force kill the process
+                        TtiProcess.Kill();
+                }
             }
             else
             {
                 TtiProcess.Kill();
             }
 
-            Logger.LogIfLastLineDoesNotContainMsg("Canceled."); 
+            Logger.LogIfLastLineDoesNotContainMsg("Canceled.");
 
             if (!string.IsNullOrWhiteSpace(reason) && showMsgBox)
                 UiUtils.ShowMessageBox($"Canceled:\n\n{reason}");
+        }
+
+        public static async Task WaitForDreamPyCancel()
+        {
+            Program.MainForm.RunBtn.Enabled = false;
+            DateTime cancelTime = DateTime.Now;
+            TtiUtils.SoftCancelDreamPy();
+            await Task.Delay(100);
+
+            KeyValuePair<string, TimeSpan> previousLastLine = new KeyValuePair<string, TimeSpan>();
+
+            while (true)
+            {
+                var lines = Logger.GetSessionLogLastLines(Constants.SdLogFilename, 5);
+                lines = lines.Where(x => x.MatchesRegex(@"\[(?:(?!\]\s+\[)(?:.|\n))*\]\s+\[(?:(?!\]\:)(?:.|\n))*\]\:")).ToList();
+                Dictionary<string, TimeSpan> linesWithAge = new Dictionary<string, TimeSpan>();
+
+                lines.ToList().ForEach(x => linesWithAge.Add(x, (DateTime.Now - DateTime.ParseExact(x.Split('[')[2].Split(']')[0], "MM-dd-yyyy HH:mm:ss", CultureInfo.InvariantCulture))));
+                linesWithAge = linesWithAge.Where(x => x.Value.TotalMilliseconds >= 0).ToDictionary(p => p.Key, p => p.Value);
+
+                if (linesWithAge.Where(x => linesWithAge.Last().Value.TotalMilliseconds >= 0 && x.Key.Contains("canceling")).Any())
+                    break;
+
+                if (linesWithAge.Count > 0)
+                {
+                    var lastLine = linesWithAge.Last();
+
+                    if (lastLine.Value.TotalMilliseconds > 2000)
+                        break;
+
+                    if (!string.IsNullOrWhiteSpace(previousLastLine.Key) && lastLine.Key != previousLastLine.Key && lastLine.Value.TotalMilliseconds < 500) // If lines changed (= still outputting), send ctrl+c again
+                        TtiUtils.SoftCancelDreamPy();
+
+                    previousLastLine = lastLine;
+                }
+
+                await Task.Delay(100);
+            }
+
+            Program.MainForm.RunBtn.Enabled = true;
         }
     }
 }

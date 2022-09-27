@@ -71,8 +71,6 @@ namespace StableDiffusionGui.Main
 
         public static void SoftCancelDreamPy()
         {
-            IoUtils.TryDeleteIfExists(Path.Combine(Paths.GetSessionDataPath(), "prompts.txt"));
-
             var childProcesses = OsUtils.GetChildProcesses(TtiProcess.DreamPyParentProcess);
 
             foreach (System.Diagnostics.Process p in childProcesses)

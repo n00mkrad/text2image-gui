@@ -302,6 +302,7 @@ namespace StableDiffusionGui.Os
             p.StartInfo.Arguments = $"-SIGINT {pid}";
             Logger.Log($"{Path.GetFileName(exePath)} {p.StartInfo.Arguments}", true);
             p.Start();
+            p.WaitForExit();
         }
 
         public static string GetTemporaryPathVariable(IEnumerable<string> additionalPaths)

@@ -19,6 +19,7 @@ using StableDiffusionGui.Properties;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 using Paths = StableDiffusionGui.Io.Paths;
+using System.Globalization;
 
 namespace StableDiffusionGui
 {
@@ -30,6 +31,7 @@ namespace StableDiffusionGui
         static extern EXECUTION_STATE SetThreadExecutionState(EXECUTION_STATE esFlags); // This should prevent Windows from going to sleep
 
         #region References
+        public Button RunBtn { get { return runBtn; } }
         public TextBox TextboxPrompt { get { return textboxPrompt; } }
         public PictureBox PictBoxImgViewer { get { return pictBoxImgViewer; } }
         public Label OutputImgLabel { get { return outputImgLabel; } }

@@ -278,6 +278,12 @@ namespace StableDiffusionGui
             return pattern.IsMatch(str);
         }
 
+        public static bool MatchesRegex(this string str, string pattern)
+        {
+            Regex regex = new Regex(pattern);
+            return regex.IsMatch(str);
+        }
+
         public static int RoundMod(this int n, int mod = 2)     // Round to a number that's divisible by 2 (for h264 etc)
         {
             int a = (n / 2) * 2;    // Smaller multiple
