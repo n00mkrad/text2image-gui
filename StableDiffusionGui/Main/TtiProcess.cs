@@ -68,7 +68,7 @@ namespace StableDiffusionGui.Main
                         {
                             bool initImgExists = File.Exists(initImg);
                             string init = initImgExists ? $"--init_img {initImg.Wrap()} --strength {strength.ToStringDot("0.0000")}" : "";
-                            commands.Add($"{prompt} {init} -n {1} -s {steps} -C {scale.ToStringDot()} -A {sampler} -W {res.Width} -H {res.Height} -S {seed} {upscale} {faceRestore} {(seamless ? "--seamless" : "")}");
+                            commands.Add($"{prompt} {init} -n {1} -s {steps} -C {scale.ToStringDot()} -A {sampler} -W {res.Width} -H {res.Height} -S {seed} {upscale} {faceRestore} {(seamless ? "--seamless" : "")} -t");
                             imgs++;
 
                             if (!initImgExists)
