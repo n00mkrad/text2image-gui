@@ -1,6 +1,9 @@
 ﻿using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
+using StableDiffusionGui.Os;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace StableDiffusionGui.Main
 {
@@ -13,7 +16,17 @@ namespace StableDiffusionGui.Main
 
         public static string GetDefaultArgs ()
         {
-            return $"--gfpgan_dir ../gfpgan --gfpgan_model_path gfpgan.pth";
+            bool lowVram = GpuUtils.CachedGpus.Count > 0 && GpuUtils.CachedGpus.First().VramGb < 7.9f;
+
+            List<string> args = new List<string>();
+
+            if (lowVram)
+                args.Add("--free_gpu_mem");
+
+            args.Add("--gfpgan_dir ../gfpgan");
+            args.Add("--gfpgan_model_path gfpgan.pth");
+
+            return string.Join(" ", args);
         }
 
         public static string GetEmbeddingArg (string embeddingPath)
