@@ -68,7 +68,7 @@ namespace StableDiffusionGui.Main
                         {
                             bool initImgExists = File.Exists(initImg);
                             string init = initImgExists ? $"--init_img {initImg.Wrap()} --strength {strength.ToStringDot("0.0000")}" : "";
-                            commands.Add($"{prompt} {init} -n {1} -s {steps} -C {scale.ToStringDot()} -A {sampler} -W {res.Width} -H {res.Height} -S {seed} {upscale} {faceRestore} {(seamless ? "--seamless" : "")} -t");
+                            commands.Add($"{prompt} {init} -n {1} -s {steps} -C {scale.ToStringDot()} -A {sampler} -W {res.Width} -H {res.Height} -S {seed} {upscale} {faceRestore} {(seamless ? "--seamless" : "")} {ArgsDreamPy.GetDefaultArgsCommand()}");
                             imgs++;
 
                             if (!initImgExists)
@@ -110,7 +110,7 @@ namespace StableDiffusionGui.Main
 
                 dream.StartInfo.RedirectStandardInput = true;
                 dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetPathVariableCmd()} && call activate.bat ldo && " +
-                    $"python repo/scripts/dream.py --model {modelNoExt} -o {outPath.Wrap()} {ArgsDreamPy.GetDefaultArgs()} {precArg} " +
+                    $"python repo/scripts/dream.py --model {modelNoExt} -o {outPath.Wrap()} {ArgsDreamPy.GetDefaultArgsStartup()} {precArg} " +
                     $"{embArg} ";
 
                 Logger.Log("cmd.exe " + dream.StartInfo.Arguments, true);
@@ -278,7 +278,7 @@ namespace StableDiffusionGui.Main
                 $"cd /D {Paths.GetDataPath().Wrap()}\n" +
                 $"SET PATH={OsUtils.GetTemporaryPathVariable(new string[] { "./mb", "./mb/Scripts", "./mb/condabin", "./mb/Library/bin" })}\n" +
                 $"call activate.bat mb/envs/ldo\n" +
-                $"python repo/scripts/dream.py --model {mdl} -o {outPath.Wrap()} {ArgsDreamPy.GetPrecisionArg()} {ArgsDreamPy.GetDefaultArgs()}";
+                $"python repo/scripts/dream.py --model {mdl} -o {outPath.Wrap()} {ArgsDreamPy.GetPrecisionArg()} {ArgsDreamPy.GetDefaultArgsStartup()}";
 
             File.WriteAllText(batPath, batText);
             ProcessManager.FindAndKillOrphans("*repo*.py*");

@@ -14,7 +14,7 @@ namespace StableDiffusionGui.Main
             return $"{(Config.GetBool("checkboxFullPrecision") ? "--precision float32" : "")}";
         }
 
-        public static string GetDefaultArgs ()
+        public static string GetDefaultArgsStartup ()
         {
             bool lowVram = GpuUtils.CachedGpus.Count > 0 && GpuUtils.CachedGpus.First().VramGb < 7.9f;
 
@@ -25,6 +25,18 @@ namespace StableDiffusionGui.Main
 
             args.Add("--gfpgan_dir ../gfpgan");
             args.Add("--gfpgan_model_path gfpgan.pth");
+
+            return string.Join(" ", args);
+        }
+
+        public static string GetDefaultArgsCommand()
+        {
+            List<string> args = new List<string>();
+
+            if (Config.GetBool("checkboxSaveUnprocessedImages"))
+                args.Add("-save_orig");
+
+            args.Add("-t");
 
             return string.Join(" ", args);
         }

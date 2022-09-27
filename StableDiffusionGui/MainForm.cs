@@ -600,6 +600,12 @@ namespace StableDiffusionGui
 
         private void btnPostProc_Click(object sender, EventArgs e)
         {
+            if (Config.GetBool("checkboxOptimizedSd"))
+            {
+                UiUtils.ShowMessageBox("Post-processing is not available when using Low Memory Mode.");
+                return;
+            }
+
             new PostProcSettingsForm().ShowDialog();
         }
 

@@ -84,6 +84,7 @@ namespace StableDiffusionGui.Forms
             ConfigParser.LoadGuiElement(comboxSdModel);
             // ConfigParser.LoadComboxIndex(comboxCudaDevice);
             ConfigParser.LoadComboxIndex(comboxNotify);
+            ConfigParser.LoadGuiElement(checkboxSaveUnprocessedImages);
         }
 
         void SaveSettings()
@@ -102,6 +103,7 @@ namespace StableDiffusionGui.Forms
             ConfigParser.SaveGuiElement(comboxSdModel);
             ConfigParser.SaveComboxIndex(comboxCudaDevice);
             ConfigParser.SaveComboxIndex(comboxNotify);
+            ConfigParser.SaveGuiElement(checkboxSaveUnprocessedImages);
         }
 
         private void btnOutPathBrowse_Click(object sender, EventArgs e)
