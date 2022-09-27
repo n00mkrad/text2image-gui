@@ -23,6 +23,10 @@ namespace StableDiffusionGui.Forms
         private void SettingsForm_Load(object sender, EventArgs e)
         {
             _ready = false;
+
+            MinimumSize = Size;
+            MaximumSize = new System.Drawing.Size(Size.Width, (Size.Height * 1.25f).RoundToInt());
+
             LoadModels(false);
             LoadSettings();
             Task.Run(() => LoadGpus());

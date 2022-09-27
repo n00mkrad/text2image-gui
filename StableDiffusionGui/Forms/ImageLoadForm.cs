@@ -23,7 +23,9 @@ namespace StableDiffusionGui.Forms
 
         private void ImageLoadForm_Load(object sender, EventArgs e)
         {
-            Text = Path.GetFileName(_path).Trunc(120);
+            string filename = Path.GetFileName(_path);
+            bool isClipboardImage = filename.ToLower() == "clipboard.png" && _path.GetParentDirOfFile() == Paths.GetSessionDataPath();
+            Text = isClipboardImage ? "Clipboard Image" :  filename.Trunc(120);
         }
 
         private void btnCopyPrompt_Click(object sender, EventArgs e)

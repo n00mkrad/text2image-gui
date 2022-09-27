@@ -20,6 +20,7 @@ using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 using Paths = StableDiffusionGui.Io.Paths;
 using System.Globalization;
+using HTAlt.WinForms;
 
 namespace StableDiffusionGui
 {
@@ -724,6 +725,28 @@ namespace StableDiffusionGui
         private void deleteAllCurrentImagesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ImagePreview.DeleteAll();
+        }
+
+        private void MainForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == (Keys.Control | Keys.V))
+            {
+                try
+                {
+                    Image clipboardImg = Clipboard.GetImage();
+
+                    if (clipboardImg == null)
+                        return;
+
+                    string savePath = Path.Combine(Paths.GetSessionDataPath(), "clipboard.png");
+                    clipboardImg.Save(savePath);
+                    MainUi.HandleDroppedFiles(new string[] { savePath });
+                }
+                catch (Exception ex)
+                {
+                    Logger.Log($"Failed to paste image from clipboard: {ex.Message}\n{ex.StackTrace}", true);
+                }
+            }
         }
     }
 }
