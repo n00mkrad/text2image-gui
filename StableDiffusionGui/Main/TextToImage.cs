@@ -118,6 +118,9 @@ namespace StableDiffusionGui.Main
 
             if (notifyMode == NotifyMode.Both || notifyMode == NotifyMode.Notification)
                 OsUtils.ShowNotification("Stable Diffusion GUI", $"Image generation has finished.\nGenerated {imgCount} images in {FormatUtils.Time(timeTaken, false)}.", true);
+
+            if (Config.GetBool("checkboxUnloadModel"))
+                TtiProcess.Kill();
         }
 
         public static void CancelManually()
