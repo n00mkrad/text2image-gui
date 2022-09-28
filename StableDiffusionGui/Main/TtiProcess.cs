@@ -1,4 +1,5 @@
-﻿using StableDiffusionGui.Forms;
+﻿using Microsoft.VisualBasic.Logging;
+using StableDiffusionGui.Forms;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
@@ -134,6 +135,7 @@ namespace StableDiffusionGui.Main
                     dream.BeginErrorReadLine();
                 }
 
+                Task.Run(() => CheckStillRunning(dream));
                 //while (!dream.HasExited) await Task.Delay(1); // We don't wait for it to quit since it keeps running in background.
             }
             else
@@ -144,7 +146,7 @@ namespace StableDiffusionGui.Main
 
             Logger.Log($"Writing to stdin...\n{string.Join("\n", commands)}", true);
 
-            foreach(string command in commands)
+            foreach (string command in commands)
                 await WriteStdIn(command);
 
             Finish();
@@ -250,6 +252,7 @@ namespace StableDiffusionGui.Main
                     dream.BeginErrorReadLine();
                 }
 
+                Task.Run(() => CheckStillRunning(dream));
                 //while (!dream.HasExited) await Task.Delay(1); // We don't wait for it to quit since it keeps running in background.
             }
             else
@@ -321,6 +324,18 @@ namespace StableDiffusionGui.Main
                         Logger.Log($"Failed to kill process tree: {e.Message}", true);
                     }
                 }
+            }
+        }
+
+        public static async Task CheckStillRunning(Process p)
+        {
+            while (!p.HasExited)
+                await Task.Delay(100);
+
+            if (!TextToImage.Canceled)
+            {
+                string log = "...\n" + string.Join("\n", Logger.GetSessionLogLastLines(Constants.SdLogFilename, 8));
+                TextToImage.Cancel($"Process has exited unexpectedly.\n\nOutput:\n{log}");
             }
         }
     }
