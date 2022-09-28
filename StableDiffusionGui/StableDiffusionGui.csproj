@@ -139,11 +139,11 @@
     <Compile Include="Data\TtiTaskInfo.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Extensions\UiControlExtensions.cs" />
-    <Compile Include="Forms\BigPreviewForm.cs">
+    <Compile Include="Forms\ImagePopupForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\BigPreviewForm.Designer.cs">
-      <DependentUpon>BigPreviewForm.cs</DependentUpon>
+    <Compile Include="Forms\ImagePopupForm.Designer.cs">
+      <DependentUpon>ImagePopupForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\DrawForm.cs">
       <SubType>Form</SubType>
@@ -231,8 +231,8 @@
     <Compile Include="Ui\ImagePreview.cs" />
     <Compile Include="Ui\PostProcUi.cs" />
     <Compile Include="Ui\UiUtils.cs" />
-    <EmbeddedResource Include="Forms\BigPreviewForm.resx">
-      <DependentUpon>BigPreviewForm.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\ImagePopupForm.resx">
+      <DependentUpon>ImagePopupForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\DrawForm.resx">
       <DependentUpon>DrawForm.cs</DependentUpon>

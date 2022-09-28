@@ -469,7 +469,7 @@ namespace StableDiffusionGui
             else
             {
                 if (pictBoxImgViewer.Image != null)
-                    new BigPreviewForm(pictBoxImgViewer.Image, true, checkboxSeamless.Checked).Show();
+                    new ImagePopupForm(pictBoxImgViewer.Image, ImagePopupForm.SizeMode.Percent100, checkboxSeamless.Checked).Show();
             }
         }
 
