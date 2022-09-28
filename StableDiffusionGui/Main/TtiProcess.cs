@@ -135,7 +135,7 @@ namespace StableDiffusionGui.Main
                     dream.BeginErrorReadLine();
                 }
 
-                Task.Run(() => CheckStillRunning(dream));
+                //Task.Run(() => CheckStillRunning(dream));
                 //while (!dream.HasExited) await Task.Delay(1); // We don't wait for it to quit since it keeps running in background.
             }
             else
@@ -252,7 +252,7 @@ namespace StableDiffusionGui.Main
                     dream.BeginErrorReadLine();
                 }
 
-                Task.Run(() => CheckStillRunning(dream));
+                //Task.Run(() => CheckStillRunning(dream));
                 //while (!dream.HasExited) await Task.Delay(1); // We don't wait for it to quit since it keeps running in background.
             }
             else
@@ -310,6 +310,8 @@ namespace StableDiffusionGui.Main
 
         public static void Kill()
         {
+            Logger.Log($"Killing current task's processes.", true);
+
             if (TextToImage.CurrentTask != null)
             {
                 foreach (var process in TextToImage.CurrentTask.Processes)

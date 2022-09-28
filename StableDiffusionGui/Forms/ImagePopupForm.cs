@@ -12,23 +12,23 @@ namespace StableDiffusionGui.Forms
     {
         public enum SizeMode { Percent100, Percent200, Maximized }
 
-        private Image _img;
+        private Image _currentImage;
+        public Image CurrentImage { get => _currentImage; set { _currentImage = value; picBox.Image = _currentImage; } }
+
         private SizeMode _sizeMode;
-        private bool _enableTiling;
         private int _currentTiling = 1;
 
-        public ImagePopupForm(Image img, SizeMode initSizeMode = SizeMode.Percent100, bool enableTiling = false)
+        public ImagePopupForm(Image img, SizeMode initSizeMode = SizeMode.Percent100)
         {
-            _img = img;
+            _currentImage = img;
             _sizeMode = initSizeMode;
-            _enableTiling = enableTiling;
             InitializeComponent();
         }
 
         private void ImagePopupForm_Load(object sender, EventArgs e)
         {
             SetSize(_sizeMode);
-            picBox.Image = _img;
+            picBox.Image = CurrentImage;
         }
 
         public void SetSize(SizeMode sizeMode)
@@ -36,9 +36,9 @@ namespace StableDiffusionGui.Forms
             WindowState = sizeMode == SizeMode.Maximized ? FormWindowState.Maximized : FormWindowState.Normal;
 
             if (sizeMode == SizeMode.Percent100)
-                Size = _img.Size;
+                Size = CurrentImage.Size;
             else if (sizeMode == SizeMode.Percent200)
-                Size = new Size(_img.Width * 2, _img.Height * 2);
+                Size = new Size(CurrentImage.Width * 2, CurrentImage.Height * 2);
         }
 
         public void SetImage(Image img, int repeat)
@@ -61,14 +61,7 @@ namespace StableDiffusionGui.Forms
         private void picBox_Click(object sender, EventArgs e)
         {
             if (((MouseEventArgs)e).Button == MouseButtons.Right)
-            {
                 menuStripOptions.Show(Cursor.Position);
-            }
-            else
-            {
-                if (_enableTiling)
-                    CycleTiling();
-            }
         }
 
         private void CycleTiling()
@@ -76,19 +69,19 @@ namespace StableDiffusionGui.Forms
             if (_currentTiling == 1)
             {
                 _currentTiling = 2;
-                SetImage(_img, _currentTiling);
+                SetImage(CurrentImage, _currentTiling);
                 return;
             }
             else if (_currentTiling == 2)
             {
                 _currentTiling = 3;
-                SetImage(_img, _currentTiling);
+                SetImage(CurrentImage, _currentTiling);
                 return;
             }
             else if (_currentTiling == 3)
             {
                 _currentTiling = 1;
-                SetImage(_img, _currentTiling);
+                SetImage(CurrentImage, _currentTiling);
                 return;
             }
         }
@@ -164,19 +157,19 @@ namespace StableDiffusionGui.Forms
         private void x1ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _currentTiling = 1;
-            SetImage(_img, _currentTiling);
+            SetImage(CurrentImage, _currentTiling);
         }
 
         private void x2ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _currentTiling = 2;
-            SetImage(_img, _currentTiling);
+            SetImage(CurrentImage, _currentTiling);
         }
 
         private void x3ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _currentTiling = 3;
-            SetImage(_img, _currentTiling);
+            SetImage(CurrentImage, _currentTiling);
         }
     }
 }

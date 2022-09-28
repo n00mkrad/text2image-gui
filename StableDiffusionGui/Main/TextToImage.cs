@@ -144,7 +144,7 @@ namespace StableDiffusionGui.Main
 
                 if (LastTaskSettings.Implementation == Implementation.StableDiffusion)
                 {
-                    if (Logger.GetSessionLogLastLines(Constants.SdLogFilename, 15).Where(x => x.MatchesWildcard("step */*")).Any()) // Only attempt a soft cancel if we've been generating anything
+                    if (Logger.GetSessionLogLastLines(Constants.SdLogFilename, 15).Where(x => x.MatchesWildcard("*step */*")).Any()) // Only attempt a soft cancel if we've been generating anything
                         await WaitForDreamPyCancel();
                     else // This condition should be true if we cancel while it's still initializing, so we can just force kill the process
                         TtiProcess.Kill();

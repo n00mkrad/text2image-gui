@@ -219,6 +219,7 @@
     <Compile Include="Os\ProcessManager.cs" />
     <Compile Include="Os\SdGuiProcess.cs" />
     <Compile Include="Ui\GetWebInfo.cs" />
+    <Compile Include="Ui\ImagePopup.cs" />
     <Compile Include="Ui\InpaintUi.cs" />
     <Compile Include="Ui\MainUi.cs" />
     <Compile Include="Main\TextToImage.cs" />
