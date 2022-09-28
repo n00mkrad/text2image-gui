@@ -14,6 +14,7 @@ namespace StableDiffusionGui.Forms
 
         private Image _currentImage;
         public Image CurrentImage { get => _currentImage; set { _currentImage = value; picBox.Image = _currentImage; } }
+        public bool SlideshowMode;
 
         private SizeMode _sizeMode;
         private int _currentTiling = 1;
@@ -170,6 +171,11 @@ namespace StableDiffusionGui.Forms
         {
             _currentTiling = 3;
             SetImage(CurrentImage, _currentTiling);
+        }
+
+        private void slideshowModeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SlideshowMode = slideshowModeToolStripMenuItem.Checked;
         }
     }
 }

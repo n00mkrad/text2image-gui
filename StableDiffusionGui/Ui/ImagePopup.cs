@@ -34,9 +34,9 @@ namespace StableDiffusionGui.Ui
             }
         }
 
-        public static void UpdateImageIfOpen (Image img)
+        public static void UpdateSlideshow (Image img)
         {
-            if(Form != null)
+            if(IsOpen && Form != null && Form.SlideshowMode && img != null)
                 Form.CurrentImage = img;
         }
     }

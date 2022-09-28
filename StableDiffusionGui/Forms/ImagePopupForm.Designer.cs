@@ -42,6 +42,7 @@
             this.x1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.x2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.x3ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.slideshowModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.picBox)).BeginInit();
             this.menuStripOptions.SuspendLayout();
             this.SuspendLayout();
@@ -68,9 +69,10 @@
             this.closeESCToolStripMenuItem,
             this.copyImageToolStripMenuItem,
             this.setSizeToolStripMenuItem,
-            this.setTilingToolStripMenuItem});
+            this.setTilingToolStripMenuItem,
+            this.slideshowModeToolStripMenuItem});
             this.menuStripOptions.Name = "menuStripOptions";
-            this.menuStripOptions.Size = new System.Drawing.Size(139, 92);
+            this.menuStripOptions.Size = new System.Drawing.Size(318, 136);
             // 
             // closeESCToolStripMenuItem
             // 
@@ -82,8 +84,8 @@
             // copyImageToolStripMenuItem
             // 
             this.copyImageToolStripMenuItem.Name = "copyImageToolStripMenuItem";
-            this.copyImageToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
-            this.copyImageToolStripMenuItem.Text = "Copy Image";
+            this.copyImageToolStripMenuItem.Size = new System.Drawing.Size(317, 22);
+            this.copyImageToolStripMenuItem.Text = "Copy Image to Clipboard";
             this.copyImageToolStripMenuItem.Click += new System.EventHandler(this.copyImageToolStripMenuItem_Click);
             // 
             // setSizeToolStripMenuItem
@@ -148,6 +150,14 @@
             this.x3ToolStripMenuItem.Text = "3x3";
             this.x3ToolStripMenuItem.Click += new System.EventHandler(this.x3ToolStripMenuItem_Click);
             // 
+            // slideshowModeToolStripMenuItem
+            // 
+            this.slideshowModeToolStripMenuItem.CheckOnClick = true;
+            this.slideshowModeToolStripMenuItem.Name = "slideshowModeToolStripMenuItem";
+            this.slideshowModeToolStripMenuItem.Size = new System.Drawing.Size(317, 22);
+            this.slideshowModeToolStripMenuItem.Text = "Enable Slideshow Mode (Mirror Image Viewer)";
+            this.slideshowModeToolStripMenuItem.Click += new System.EventHandler(this.slideshowModeToolStripMenuItem_Click);
+            // 
             // ImagePopupForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -184,5 +194,6 @@
         private System.Windows.Forms.ToolStripMenuItem x2ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem x3ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fullscreenToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem slideshowModeToolStripMenuItem;
     }
 }

@@ -68,6 +68,7 @@ namespace StableDiffusionGui.Ui
 
             Program.MainForm.PictBoxImgViewer.Text = "";
             Program.MainForm.PictBoxImgViewer.Image = IoUtils.GetImage(_currentImages[_currIndex]);
+            ImagePopup.UpdateSlideshow(Program.MainForm.PictBoxImgViewer.Image);
 
             ImageMetadata meta = CurrentImageMetadata;
 
