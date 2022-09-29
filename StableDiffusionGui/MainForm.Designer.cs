@@ -121,11 +121,14 @@
             this.generateAllQueuedPromptsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStripAddToQueue = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addCurrentSettingsToQueueToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.pictBoxImgViewer = new System.Windows.Forms.PictureBox();
-            this.separator = new System.Windows.Forms.Button();
             this.menuStripDeleteImages = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.deleteThisImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteAllCurrentImagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pictBoxImgViewer = new System.Windows.Forms.PictureBox();
+            this.separator = new System.Windows.Forms.Button();
+            this.menuStripDevTools = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.openDreampyCLIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openModelMergeToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
             this.tableLayoutPanel6.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -147,8 +150,9 @@
             this.panelPrompt.SuspendLayout();
             this.menuStripRunQueue.SuspendLayout();
             this.menuStripAddToQueue.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictBoxImgViewer)).BeginInit();
             this.menuStripDeleteImages.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictBoxImgViewer)).BeginInit();
+            this.menuStripDevTools.SuspendLayout();
             this.SuspendLayout();
             // 
             // runBtn
@@ -999,7 +1003,7 @@
             this.cliButton.Size = new System.Drawing.Size(40, 40);
             this.cliButton.TabIndex = 103;
             this.cliButton.TabStop = false;
-            this.toolTip.SetToolTip(this.cliButton, "Open Dream.py Command Line Interface");
+            this.toolTip.SetToolTip(this.cliButton, "Developer Tools");
             this.cliButton.UseVisualStyleBackColor = false;
             this.cliButton.Click += new System.EventHandler(this.cliButton_Click);
             // 
@@ -1465,6 +1469,28 @@
             this.addCurrentSettingsToQueueToolStripMenuItem.Text = "Add Current Settings to Queue";
             this.addCurrentSettingsToQueueToolStripMenuItem.Click += new System.EventHandler(this.addCurrentSettingsToQueueToolStripMenuItem_Click);
             // 
+            // menuStripDeleteImages
+            // 
+            this.menuStripDeleteImages.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.deleteThisImageToolStripMenuItem,
+            this.deleteAllCurrentImagesToolStripMenuItem});
+            this.menuStripDeleteImages.Name = "menuStripDeleteImages";
+            this.menuStripDeleteImages.Size = new System.Drawing.Size(209, 48);
+            // 
+            // deleteThisImageToolStripMenuItem
+            // 
+            this.deleteThisImageToolStripMenuItem.Name = "deleteThisImageToolStripMenuItem";
+            this.deleteThisImageToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.deleteThisImageToolStripMenuItem.Text = "Delete This Image";
+            this.deleteThisImageToolStripMenuItem.Click += new System.EventHandler(this.deleteThisImageToolStripMenuItem_Click);
+            // 
+            // deleteAllCurrentImagesToolStripMenuItem
+            // 
+            this.deleteAllCurrentImagesToolStripMenuItem.Name = "deleteAllCurrentImagesToolStripMenuItem";
+            this.deleteAllCurrentImagesToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.deleteAllCurrentImagesToolStripMenuItem.Text = "Delete All Current Images";
+            this.deleteAllCurrentImagesToolStripMenuItem.Click += new System.EventHandler(this.deleteAllCurrentImagesToolStripMenuItem_Click);
+            // 
             // pictBoxImgViewer
             // 
             this.pictBoxImgViewer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -1496,27 +1522,27 @@
             this.separator.TabStop = false;
             this.separator.UseVisualStyleBackColor = false;
             // 
-            // menuStripDeleteImages
+            // menuStripDevTools
             // 
-            this.menuStripDeleteImages.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.deleteThisImageToolStripMenuItem,
-            this.deleteAllCurrentImagesToolStripMenuItem});
-            this.menuStripDeleteImages.Name = "menuStripDeleteImages";
-            this.menuStripDeleteImages.Size = new System.Drawing.Size(209, 48);
+            this.menuStripDevTools.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openDreampyCLIToolStripMenuItem,
+            this.openModelMergeToolToolStripMenuItem});
+            this.menuStripDevTools.Name = "menuStripDevTools";
+            this.menuStripDevTools.Size = new System.Drawing.Size(203, 48);
             // 
-            // deleteThisImageToolStripMenuItem
+            // openDreampyCLIToolStripMenuItem
             // 
-            this.deleteThisImageToolStripMenuItem.Name = "deleteThisImageToolStripMenuItem";
-            this.deleteThisImageToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
-            this.deleteThisImageToolStripMenuItem.Text = "Delete This Image";
-            this.deleteThisImageToolStripMenuItem.Click += new System.EventHandler(this.deleteThisImageToolStripMenuItem_Click);
+            this.openDreampyCLIToolStripMenuItem.Name = "openDreampyCLIToolStripMenuItem";
+            this.openDreampyCLIToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.openDreampyCLIToolStripMenuItem.Text = "Open Dream.py CLI";
+            this.openDreampyCLIToolStripMenuItem.Click += new System.EventHandler(this.openDreampyCLIToolStripMenuItem_Click);
             // 
-            // deleteAllCurrentImagesToolStripMenuItem
+            // openModelMergeToolToolStripMenuItem
             // 
-            this.deleteAllCurrentImagesToolStripMenuItem.Name = "deleteAllCurrentImagesToolStripMenuItem";
-            this.deleteAllCurrentImagesToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
-            this.deleteAllCurrentImagesToolStripMenuItem.Text = "Delete All Current Images";
-            this.deleteAllCurrentImagesToolStripMenuItem.Click += new System.EventHandler(this.deleteAllCurrentImagesToolStripMenuItem_Click);
+            this.openModelMergeToolToolStripMenuItem.Name = "openModelMergeToolToolStripMenuItem";
+            this.openModelMergeToolToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.openModelMergeToolToolStripMenuItem.Text = "Open Model Merge Tool";
+            this.openModelMergeToolToolStripMenuItem.Click += new System.EventHandler(this.openModelMergeToolToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -1600,8 +1626,9 @@
             this.panelPrompt.PerformLayout();
             this.menuStripRunQueue.ResumeLayout(false);
             this.menuStripAddToQueue.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictBoxImgViewer)).EndInit();
             this.menuStripDeleteImages.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictBoxImgViewer)).EndInit();
+            this.menuStripDevTools.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1704,6 +1731,9 @@
         private System.Windows.Forms.ContextMenuStrip menuStripDeleteImages;
         private System.Windows.Forms.ToolStripMenuItem deleteThisImageToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteAllCurrentImagesToolStripMenuItem;
+        private System.Windows.Forms.ContextMenuStrip menuStripDevTools;
+        private System.Windows.Forms.ToolStripMenuItem openDreampyCLIToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openModelMergeToolToolStripMenuItem;
     }
 }
 

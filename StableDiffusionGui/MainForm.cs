@@ -453,10 +453,7 @@ namespace StableDiffusionGui
 
         private void cliButton_Click(object sender, EventArgs e)
         {
-            if (Program.Busy || !MainUi.IsInstalledWithWarning())
-                return;
-
-            TtiProcess.RunStableDiffusionCli(Config.Get(Config.Key.textboxOutPath));
+            menuStripDevTools.Show(Cursor.Position);
         }
 
         private void pictBoxImgViewer_Click(object sender, EventArgs e)
@@ -747,6 +744,19 @@ namespace StableDiffusionGui
                     Logger.Log($"Failed to paste image from clipboard: {ex.Message}\n{ex.StackTrace}", true);
                 }
             }
+        }
+
+        private void openDreampyCLIToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Program.Busy || !MainUi.IsInstalledWithWarning())
+                return;
+
+            TtiProcess.RunStableDiffusionCli(Config.Get(Config.Key.textboxOutPath));
+        }
+
+        private void openModelMergeToolToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new MergeModelsForm().ShowDialog();
         }
     }
 }

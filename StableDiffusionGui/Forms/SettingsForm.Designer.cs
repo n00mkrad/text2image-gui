@@ -44,6 +44,14 @@
             this.checkboxAdvancedMode = new System.Windows.Forms.CheckBox();
             this.panel17 = new System.Windows.Forms.Panel();
             this.label6 = new System.Windows.Forms.Label();
+            this.panelSaveUnprocessedImages = new System.Windows.Forms.Panel();
+            this.panel29 = new System.Windows.Forms.Panel();
+            this.panel30 = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel10 = new System.Windows.Forms.TableLayoutPanel();
+            this.panel31 = new System.Windows.Forms.Panel();
+            this.checkboxSaveUnprocessedImages = new System.Windows.Forms.CheckBox();
+            this.panel32 = new System.Windows.Forms.Panel();
+            this.label13 = new System.Windows.Forms.Label();
             this.panelMultiPromptsSameSeed = new System.Windows.Forms.Panel();
             this.panel18 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
@@ -91,6 +99,12 @@
             this.btnOpenModelsFolder = new HTAlt.WinForms.HTButton();
             this.panel26 = new System.Windows.Forms.Panel();
             this.label10 = new System.Windows.Forms.Label();
+            this.panelUnloadModel = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel11 = new System.Windows.Forms.TableLayoutPanel();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.checkboxUnloadModel = new System.Windows.Forms.CheckBox();
+            this.panel21 = new System.Windows.Forms.Panel();
+            this.label14 = new System.Windows.Forms.Label();
             this.panelFullPrecision = new System.Windows.Forms.Panel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.panel8 = new System.Windows.Forms.Panel();
@@ -106,20 +120,6 @@
             this.panel11 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.panelSaveUnprocessedImages = new System.Windows.Forms.Panel();
-            this.panel29 = new System.Windows.Forms.Panel();
-            this.panel30 = new System.Windows.Forms.Panel();
-            this.tableLayoutPanel10 = new System.Windows.Forms.TableLayoutPanel();
-            this.panel31 = new System.Windows.Forms.Panel();
-            this.checkboxSaveUnprocessedImages = new System.Windows.Forms.CheckBox();
-            this.panel32 = new System.Windows.Forms.Panel();
-            this.label13 = new System.Windows.Forms.Label();
-            this.panelUnloadModel = new System.Windows.Forms.Panel();
-            this.tableLayoutPanel11 = new System.Windows.Forms.TableLayoutPanel();
-            this.panel4 = new System.Windows.Forms.Panel();
-            this.checkboxUnloadModel = new System.Windows.Forms.CheckBox();
-            this.panel21 = new System.Windows.Forms.Panel();
-            this.label14 = new System.Windows.Forms.Label();
             this.parentPanel.SuspendLayout();
             this.panel1.SuspendLayout();
             this.notificationPanel.SuspendLayout();
@@ -129,6 +129,12 @@
             this.tableLayoutPanel4.SuspendLayout();
             this.panel16.SuspendLayout();
             this.panel17.SuspendLayout();
+            this.panelSaveUnprocessedImages.SuspendLayout();
+            this.panel29.SuspendLayout();
+            this.panel30.SuspendLayout();
+            this.tableLayoutPanel10.SuspendLayout();
+            this.panel31.SuspendLayout();
+            this.panel32.SuspendLayout();
             this.panelMultiPromptsSameSeed.SuspendLayout();
             this.panel18.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -156,6 +162,10 @@
             this.tableLayoutPanel8.SuspendLayout();
             this.panel25.SuspendLayout();
             this.panel26.SuspendLayout();
+            this.panelUnloadModel.SuspendLayout();
+            this.tableLayoutPanel11.SuspendLayout();
+            this.panel4.SuspendLayout();
+            this.panel21.SuspendLayout();
             this.panelFullPrecision.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel8.SuspendLayout();
@@ -165,16 +175,6 @@
             this.panel12.SuspendLayout();
             this.panel13.SuspendLayout();
             this.panel11.SuspendLayout();
-            this.panelSaveUnprocessedImages.SuspendLayout();
-            this.panel29.SuspendLayout();
-            this.panel30.SuspendLayout();
-            this.tableLayoutPanel10.SuspendLayout();
-            this.panel31.SuspendLayout();
-            this.panel32.SuspendLayout();
-            this.panelUnloadModel.SuspendLayout();
-            this.tableLayoutPanel11.SuspendLayout();
-            this.panel4.SuspendLayout();
-            this.panel21.SuspendLayout();
             this.SuspendLayout();
             // 
             // titleLabel
@@ -348,6 +348,88 @@
             this.label6.Size = new System.Drawing.Size(247, 13);
             this.label6.TabIndex = 85;
             this.label6.Text = "Advanced Mode (Unlock Higher Values for Sliders)";
+            // 
+            // panelSaveUnprocessedImages
+            // 
+            this.panelSaveUnprocessedImages.Controls.Add(this.panel29);
+            this.panelSaveUnprocessedImages.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelSaveUnprocessedImages.Location = new System.Drawing.Point(0, 385);
+            this.panelSaveUnprocessedImages.Name = "panelSaveUnprocessedImages";
+            this.panelSaveUnprocessedImages.Size = new System.Drawing.Size(760, 35);
+            this.panelSaveUnprocessedImages.TabIndex = 23;
+            // 
+            // panel29
+            // 
+            this.panel29.Controls.Add(this.panel30);
+            this.panel29.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel29.Location = new System.Drawing.Point(0, 0);
+            this.panel29.Name = "panel29";
+            this.panel29.Size = new System.Drawing.Size(760, 35);
+            this.panel29.TabIndex = 17;
+            // 
+            // panel30
+            // 
+            this.panel30.Controls.Add(this.tableLayoutPanel10);
+            this.panel30.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel30.Location = new System.Drawing.Point(0, 0);
+            this.panel30.Name = "panel30";
+            this.panel30.Size = new System.Drawing.Size(760, 35);
+            this.panel30.TabIndex = 16;
+            // 
+            // tableLayoutPanel10
+            // 
+            this.tableLayoutPanel10.ColumnCount = 2;
+            this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel10.Controls.Add(this.panel31, 0, 0);
+            this.tableLayoutPanel10.Controls.Add(this.panel32, 0, 0);
+            this.tableLayoutPanel10.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel10.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel10.Name = "tableLayoutPanel10";
+            this.tableLayoutPanel10.RowCount = 1;
+            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel10.Size = new System.Drawing.Size(760, 35);
+            this.tableLayoutPanel10.TabIndex = 2;
+            // 
+            // panel31
+            // 
+            this.panel31.Controls.Add(this.checkboxSaveUnprocessedImages);
+            this.panel31.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel31.Location = new System.Drawing.Point(383, 3);
+            this.panel31.Name = "panel31";
+            this.panel31.Size = new System.Drawing.Size(374, 29);
+            this.panel31.TabIndex = 88;
+            // 
+            // checkboxSaveUnprocessedImages
+            // 
+            this.checkboxSaveUnprocessedImages.AutoSize = true;
+            this.checkboxSaveUnprocessedImages.ForeColor = System.Drawing.Color.White;
+            this.checkboxSaveUnprocessedImages.Location = new System.Drawing.Point(5, 7);
+            this.checkboxSaveUnprocessedImages.Name = "checkboxSaveUnprocessedImages";
+            this.checkboxSaveUnprocessedImages.Size = new System.Drawing.Size(15, 14);
+            this.checkboxSaveUnprocessedImages.TabIndex = 111;
+            this.checkboxSaveUnprocessedImages.UseVisualStyleBackColor = true;
+            // 
+            // panel32
+            // 
+            this.panel32.Controls.Add(this.label13);
+            this.panel32.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel32.Location = new System.Drawing.Point(3, 3);
+            this.panel32.Name = "panel32";
+            this.panel32.Size = new System.Drawing.Size(374, 29);
+            this.panel32.TabIndex = 87;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label13.ForeColor = System.Drawing.Color.White;
+            this.label13.Location = new System.Drawing.Point(5, 8);
+            this.label13.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(324, 13);
+            this.label13.TabIndex = 85;
+            this.label13.Text = "When Post-Processing Is Enabled, Also Save Un-Processed Image";
             // 
             // panelMultiPromptsSameSeed
             // 
@@ -844,15 +926,6 @@
             this.comboxSdModel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.comboxSdModel.ForeColor = System.Drawing.Color.White;
             this.comboxSdModel.FormattingEnabled = true;
-            this.comboxSdModel.Items.AddRange(new object[] {
-            "k_euler_a",
-            "k_euler",
-            "k_lms",
-            "ddim",
-            "plms",
-            "k_heun",
-            "k_dpm_2",
-            "k_dpm_2_a"});
             this.comboxSdModel.Location = new System.Drawing.Point(0, 4);
             this.comboxSdModel.Name = "comboxSdModel";
             this.comboxSdModel.Size = new System.Drawing.Size(209, 21);
@@ -899,6 +972,69 @@
             this.label10.Size = new System.Drawing.Size(132, 13);
             this.label10.TabIndex = 85;
             this.label10.Text = "Stable Diffusion Model File";
+            // 
+            // panelUnloadModel
+            // 
+            this.panelUnloadModel.Controls.Add(this.tableLayoutPanel11);
+            this.panelUnloadModel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelUnloadModel.Location = new System.Drawing.Point(0, 105);
+            this.panelUnloadModel.Name = "panelUnloadModel";
+            this.panelUnloadModel.Size = new System.Drawing.Size(760, 35);
+            this.panelUnloadModel.TabIndex = 24;
+            // 
+            // tableLayoutPanel11
+            // 
+            this.tableLayoutPanel11.ColumnCount = 2;
+            this.tableLayoutPanel11.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel11.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel11.Controls.Add(this.panel4, 1, 0);
+            this.tableLayoutPanel11.Controls.Add(this.panel21, 0, 0);
+            this.tableLayoutPanel11.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel11.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel11.Name = "tableLayoutPanel11";
+            this.tableLayoutPanel11.RowCount = 1;
+            this.tableLayoutPanel11.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel11.Size = new System.Drawing.Size(760, 35);
+            this.tableLayoutPanel11.TabIndex = 0;
+            // 
+            // panel4
+            // 
+            this.panel4.Controls.Add(this.checkboxUnloadModel);
+            this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel4.Location = new System.Drawing.Point(383, 3);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(374, 29);
+            this.panel4.TabIndex = 86;
+            // 
+            // checkboxUnloadModel
+            // 
+            this.checkboxUnloadModel.AutoSize = true;
+            this.checkboxUnloadModel.Location = new System.Drawing.Point(5, 7);
+            this.checkboxUnloadModel.Name = "checkboxUnloadModel";
+            this.checkboxUnloadModel.Size = new System.Drawing.Size(15, 14);
+            this.checkboxUnloadModel.TabIndex = 86;
+            this.checkboxUnloadModel.UseVisualStyleBackColor = true;
+            // 
+            // panel21
+            // 
+            this.panel21.Controls.Add(this.label14);
+            this.panel21.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel21.Location = new System.Drawing.Point(3, 3);
+            this.panel21.Name = "panel21";
+            this.panel21.Size = new System.Drawing.Size(374, 29);
+            this.panel21.TabIndex = 85;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label14.ForeColor = System.Drawing.Color.White;
+            this.label14.Location = new System.Drawing.Point(5, 8);
+            this.label14.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(285, 13);
+            this.label14.TabIndex = 84;
+            this.label14.Text = "Unload Model After Each Generation (No Idle RAM Usage)";
             // 
             // panelFullPrecision
             // 
@@ -1053,151 +1189,6 @@
             this.toolTip.InitialDelay = 200;
             this.toolTip.ReshowDelay = 40;
             // 
-            // panelSaveUnprocessedImages
-            // 
-            this.panelSaveUnprocessedImages.Controls.Add(this.panel29);
-            this.panelSaveUnprocessedImages.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSaveUnprocessedImages.Location = new System.Drawing.Point(0, 385);
-            this.panelSaveUnprocessedImages.Name = "panelSaveUnprocessedImages";
-            this.panelSaveUnprocessedImages.Size = new System.Drawing.Size(760, 35);
-            this.panelSaveUnprocessedImages.TabIndex = 23;
-            // 
-            // panel29
-            // 
-            this.panel29.Controls.Add(this.panel30);
-            this.panel29.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel29.Location = new System.Drawing.Point(0, 0);
-            this.panel29.Name = "panel29";
-            this.panel29.Size = new System.Drawing.Size(760, 35);
-            this.panel29.TabIndex = 17;
-            // 
-            // panel30
-            // 
-            this.panel30.Controls.Add(this.tableLayoutPanel10);
-            this.panel30.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel30.Location = new System.Drawing.Point(0, 0);
-            this.panel30.Name = "panel30";
-            this.panel30.Size = new System.Drawing.Size(760, 35);
-            this.panel30.TabIndex = 16;
-            // 
-            // tableLayoutPanel10
-            // 
-            this.tableLayoutPanel10.ColumnCount = 2;
-            this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel10.Controls.Add(this.panel31, 0, 0);
-            this.tableLayoutPanel10.Controls.Add(this.panel32, 0, 0);
-            this.tableLayoutPanel10.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel10.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel10.Name = "tableLayoutPanel10";
-            this.tableLayoutPanel10.RowCount = 1;
-            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel10.Size = new System.Drawing.Size(760, 35);
-            this.tableLayoutPanel10.TabIndex = 2;
-            // 
-            // panel31
-            // 
-            this.panel31.Controls.Add(this.checkboxSaveUnprocessedImages);
-            this.panel31.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel31.Location = new System.Drawing.Point(383, 3);
-            this.panel31.Name = "panel31";
-            this.panel31.Size = new System.Drawing.Size(374, 29);
-            this.panel31.TabIndex = 88;
-            // 
-            // checkboxSaveUnprocessedImages
-            // 
-            this.checkboxSaveUnprocessedImages.AutoSize = true;
-            this.checkboxSaveUnprocessedImages.ForeColor = System.Drawing.Color.White;
-            this.checkboxSaveUnprocessedImages.Location = new System.Drawing.Point(5, 7);
-            this.checkboxSaveUnprocessedImages.Name = "checkboxSaveUnprocessedImages";
-            this.checkboxSaveUnprocessedImages.Size = new System.Drawing.Size(15, 14);
-            this.checkboxSaveUnprocessedImages.TabIndex = 111;
-            this.checkboxSaveUnprocessedImages.UseVisualStyleBackColor = true;
-            // 
-            // panel32
-            // 
-            this.panel32.Controls.Add(this.label13);
-            this.panel32.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel32.Location = new System.Drawing.Point(3, 3);
-            this.panel32.Name = "panel32";
-            this.panel32.Size = new System.Drawing.Size(374, 29);
-            this.panel32.TabIndex = 87;
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.ForeColor = System.Drawing.Color.White;
-            this.label13.Location = new System.Drawing.Point(5, 8);
-            this.label13.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(324, 13);
-            this.label13.TabIndex = 85;
-            this.label13.Text = "When Post-Processing Is Enabled, Also Save Un-Processed Image";
-            // 
-            // panelUnloadModel
-            // 
-            this.panelUnloadModel.Controls.Add(this.tableLayoutPanel11);
-            this.panelUnloadModel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelUnloadModel.Location = new System.Drawing.Point(0, 105);
-            this.panelUnloadModel.Name = "panelUnloadModel";
-            this.panelUnloadModel.Size = new System.Drawing.Size(760, 35);
-            this.panelUnloadModel.TabIndex = 24;
-            // 
-            // tableLayoutPanel11
-            // 
-            this.tableLayoutPanel11.ColumnCount = 2;
-            this.tableLayoutPanel11.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel11.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel11.Controls.Add(this.panel4, 1, 0);
-            this.tableLayoutPanel11.Controls.Add(this.panel21, 0, 0);
-            this.tableLayoutPanel11.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel11.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel11.Name = "tableLayoutPanel11";
-            this.tableLayoutPanel11.RowCount = 1;
-            this.tableLayoutPanel11.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel11.Size = new System.Drawing.Size(760, 35);
-            this.tableLayoutPanel11.TabIndex = 0;
-            // 
-            // panel4
-            // 
-            this.panel4.Controls.Add(this.checkboxUnloadModel);
-            this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel4.Location = new System.Drawing.Point(383, 3);
-            this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(374, 29);
-            this.panel4.TabIndex = 86;
-            // 
-            // checkboxUnloadModel
-            // 
-            this.checkboxUnloadModel.AutoSize = true;
-            this.checkboxUnloadModel.Location = new System.Drawing.Point(5, 7);
-            this.checkboxUnloadModel.Name = "checkboxUnloadModel";
-            this.checkboxUnloadModel.Size = new System.Drawing.Size(15, 14);
-            this.checkboxUnloadModel.TabIndex = 86;
-            this.checkboxUnloadModel.UseVisualStyleBackColor = true;
-            // 
-            // panel21
-            // 
-            this.panel21.Controls.Add(this.label14);
-            this.panel21.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel21.Location = new System.Drawing.Point(3, 3);
-            this.panel21.Name = "panel21";
-            this.panel21.Size = new System.Drawing.Size(374, 29);
-            this.panel21.TabIndex = 85;
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label14.ForeColor = System.Drawing.Color.White;
-            this.label14.Location = new System.Drawing.Point(5, 8);
-            this.label14.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(285, 13);
-            this.label14.TabIndex = 84;
-            this.label14.Text = "Unload Model After Each Generation (No Idle RAM Usage)";
-            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1231,6 +1222,14 @@
             this.panel16.PerformLayout();
             this.panel17.ResumeLayout(false);
             this.panel17.PerformLayout();
+            this.panelSaveUnprocessedImages.ResumeLayout(false);
+            this.panel29.ResumeLayout(false);
+            this.panel30.ResumeLayout(false);
+            this.tableLayoutPanel10.ResumeLayout(false);
+            this.panel31.ResumeLayout(false);
+            this.panel31.PerformLayout();
+            this.panel32.ResumeLayout(false);
+            this.panel32.PerformLayout();
             this.panelMultiPromptsSameSeed.ResumeLayout(false);
             this.panel18.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
@@ -1269,6 +1268,12 @@
             this.panel25.ResumeLayout(false);
             this.panel26.ResumeLayout(false);
             this.panel26.PerformLayout();
+            this.panelUnloadModel.ResumeLayout(false);
+            this.tableLayoutPanel11.ResumeLayout(false);
+            this.panel4.ResumeLayout(false);
+            this.panel4.PerformLayout();
+            this.panel21.ResumeLayout(false);
+            this.panel21.PerformLayout();
             this.panelFullPrecision.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.panel8.ResumeLayout(false);
@@ -1283,20 +1288,6 @@
             this.panel13.PerformLayout();
             this.panel11.ResumeLayout(false);
             this.panel11.PerformLayout();
-            this.panelSaveUnprocessedImages.ResumeLayout(false);
-            this.panel29.ResumeLayout(false);
-            this.panel30.ResumeLayout(false);
-            this.tableLayoutPanel10.ResumeLayout(false);
-            this.panel31.ResumeLayout(false);
-            this.panel31.PerformLayout();
-            this.panel32.ResumeLayout(false);
-            this.panel32.PerformLayout();
-            this.panelUnloadModel.ResumeLayout(false);
-            this.tableLayoutPanel11.ResumeLayout(false);
-            this.panel4.ResumeLayout(false);
-            this.panel4.PerformLayout();
-            this.panel21.ResumeLayout(false);
-            this.panel21.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 

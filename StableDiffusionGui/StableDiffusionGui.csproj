@@ -163,6 +163,12 @@
     <Compile Include="Forms\InstallerForm.Designer.cs">
       <DependentUpon>InstallerForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\MergeModelsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MergeModelsForm.Designer.cs">
+      <DependentUpon>MergeModelsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\MessageForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -245,6 +251,9 @@
       <DependentUpon>InstallerForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\MergeModelsForm.resx">
+      <DependentUpon>MergeModelsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\MessageForm.resx">
       <DependentUpon>MessageForm.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -306,6 +315,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon1.ico" />
+    <None Include="Resources\baseline_refresh_white_48dp.png" />
     <None Include="Resources\deleteBtn1.png" />
     <None Include="Resources\checkerboard.png" />
     <None Include="Resources\checkerboard-darkened.png" />

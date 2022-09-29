@@ -26,7 +26,7 @@ namespace StableDiffusionGui.Os
             List<string> outLines = new List<string>();
 
             Process p = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
-            p.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetPathVariableCmd()} && call activate.bat mb/envs/ldo && python repo/check_gpus.py";
+            p.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetPathVariableCmd()} && call activate.bat mb/envs/ldo && python repo/scripts/check_gpus.py";
 
             if (!OsUtils.ShowHiddenCmd())
             {
