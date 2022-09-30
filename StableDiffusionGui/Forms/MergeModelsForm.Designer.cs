@@ -32,22 +32,35 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MergeModelsForm));
             this.titleLabel = new System.Windows.Forms.Label();
             this.parentPanel = new System.Windows.Forms.Panel();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.sliderScale = new HTAlt.WinForms.HTSlider();
+            this.panel5 = new System.Windows.Forms.Panel();
+            this.label2 = new System.Windows.Forms.Label();
             this.panelModel2 = new System.Windows.Forms.Panel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.labelWeight2 = new System.Windows.Forms.Label();
             this.comboxModel2 = new System.Windows.Forms.ComboBox();
             this.panel3 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.panelModel1 = new System.Windows.Forms.Panel();
             this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
             this.panel25 = new System.Windows.Forms.Panel();
+            this.labelWeight1 = new System.Windows.Forms.Label();
             this.comboxModel1 = new System.Windows.Forms.ComboBox();
             this.panel26 = new System.Windows.Forms.Panel();
             this.label10 = new System.Windows.Forms.Label();
             this.btnOpenModelFolder = new System.Windows.Forms.Button();
             this.btnReloadModels = new System.Windows.Forms.Button();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.btnRun = new System.Windows.Forms.Button();
             this.parentPanel.SuspendLayout();
+            this.panel1.SuspendLayout();
+            this.tableLayoutPanel2.SuspendLayout();
+            this.panel4.SuspendLayout();
+            this.panel5.SuspendLayout();
             this.panelModel2.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -76,12 +89,91 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.parentPanel.AutoScroll = true;
+            this.parentPanel.Controls.Add(this.btnRun);
+            this.parentPanel.Controls.Add(this.panel1);
             this.parentPanel.Controls.Add(this.panelModel2);
             this.parentPanel.Controls.Add(this.panelModel1);
             this.parentPanel.Location = new System.Drawing.Point(12, 62);
             this.parentPanel.Name = "parentPanel";
-            this.parentPanel.Size = new System.Drawing.Size(560, 287);
+            this.parentPanel.Size = new System.Drawing.Size(560, 247);
             this.parentPanel.TabIndex = 15;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.tableLayoutPanel2);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel1.Location = new System.Drawing.Point(0, 70);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(560, 35);
+            this.panel1.TabIndex = 22;
+            // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.ColumnCount = 2;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.Controls.Add(this.panel4, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.panel5, 0, 0);
+            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 1;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(560, 35);
+            this.tableLayoutPanel2.TabIndex = 1;
+            // 
+            // panel4
+            // 
+            this.panel4.Controls.Add(this.sliderScale);
+            this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel4.Location = new System.Drawing.Point(283, 3);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(274, 29);
+            this.panel4.TabIndex = 88;
+            // 
+            // sliderScale
+            // 
+            this.sliderScale.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            this.sliderScale.BorderRoundRectSize = new System.Drawing.Size(12, 12);
+            this.sliderScale.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sliderScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
+            this.sliderScale.ForeColor = System.Drawing.Color.Black;
+            this.sliderScale.LargeChange = ((uint)(5u));
+            this.sliderScale.Location = new System.Drawing.Point(0, 0);
+            this.sliderScale.Margin = new System.Windows.Forms.Padding(0);
+            this.sliderScale.Maximum = 20;
+            this.sliderScale.Name = "sliderScale";
+            this.sliderScale.OverlayColor = System.Drawing.Color.White;
+            this.sliderScale.Size = new System.Drawing.Size(274, 29);
+            this.sliderScale.SmallChange = ((uint)(1u));
+            this.sliderScale.TabIndex = 5;
+            this.sliderScale.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
+            this.sliderScale.ThumbSize = new System.Drawing.Size(14, 14);
+            this.toolTip.SetToolTip(this.sliderScale, "Higher tries to match your prompt better, but can get chaotic. 7-12 is a safe ran" +
+        "ger for most things.");
+            this.sliderScale.Value = 10;
+            this.sliderScale.Scroll += new System.Windows.Forms.ScrollEventHandler(this.sliderScale_Scroll);
+            // 
+            // panel5
+            // 
+            this.panel5.Controls.Add(this.label2);
+            this.panel5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel5.Location = new System.Drawing.Point(3, 3);
+            this.panel5.Name = "panel5";
+            this.panel5.Size = new System.Drawing.Size(274, 29);
+            this.panel5.TabIndex = 87;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.Color.White;
+            this.label2.Location = new System.Drawing.Point(5, 8);
+            this.label2.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(96, 13);
+            this.label2.TabIndex = 85;
+            this.label2.Text = "Weight Distribution";
             // 
             // panelModel2
             // 
@@ -109,12 +201,24 @@
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.labelWeight2);
             this.panel2.Controls.Add(this.comboxModel2);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(283, 3);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(274, 29);
             this.panel2.TabIndex = 88;
+            // 
+            // labelWeight2
+            // 
+            this.labelWeight2.AutoSize = true;
+            this.labelWeight2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelWeight2.ForeColor = System.Drawing.Color.White;
+            this.labelWeight2.Location = new System.Drawing.Point(237, 8);
+            this.labelWeight2.Name = "labelWeight2";
+            this.labelWeight2.Size = new System.Drawing.Size(30, 13);
+            this.labelWeight2.TabIndex = 108;
+            this.labelWeight2.Text = "50%";
             // 
             // comboxModel2
             // 
@@ -126,7 +230,7 @@
             this.comboxModel2.FormattingEnabled = true;
             this.comboxModel2.Location = new System.Drawing.Point(0, 4);
             this.comboxModel2.Name = "comboxModel2";
-            this.comboxModel2.Size = new System.Drawing.Size(271, 21);
+            this.comboxModel2.Size = new System.Drawing.Size(231, 21);
             this.comboxModel2.TabIndex = 106;
             // 
             // panel3
@@ -176,12 +280,24 @@
             // 
             // panel25
             // 
+            this.panel25.Controls.Add(this.labelWeight1);
             this.panel25.Controls.Add(this.comboxModel1);
             this.panel25.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel25.Location = new System.Drawing.Point(283, 3);
             this.panel25.Name = "panel25";
             this.panel25.Size = new System.Drawing.Size(274, 29);
             this.panel25.TabIndex = 88;
+            // 
+            // labelWeight1
+            // 
+            this.labelWeight1.AutoSize = true;
+            this.labelWeight1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelWeight1.ForeColor = System.Drawing.Color.White;
+            this.labelWeight1.Location = new System.Drawing.Point(237, 8);
+            this.labelWeight1.Name = "labelWeight1";
+            this.labelWeight1.Size = new System.Drawing.Size(30, 13);
+            this.labelWeight1.TabIndex = 107;
+            this.labelWeight1.Text = "50%";
             // 
             // comboxModel1
             // 
@@ -193,7 +309,7 @@
             this.comboxModel1.FormattingEnabled = true;
             this.comboxModel1.Location = new System.Drawing.Point(0, 4);
             this.comboxModel1.Name = "comboxModel1";
-            this.comboxModel1.Size = new System.Drawing.Size(271, 21);
+            this.comboxModel1.Size = new System.Drawing.Size(231, 21);
             this.comboxModel1.TabIndex = 106;
             // 
             // panel26
@@ -259,12 +375,28 @@
             this.toolTip.InitialDelay = 200;
             this.toolTip.ReshowDelay = 40;
             // 
+            // btnRun
+            // 
+            this.btnRun.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnRun.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnRun.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRun.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.25F);
+            this.btnRun.ForeColor = System.Drawing.Color.White;
+            this.btnRun.Location = new System.Drawing.Point(0, 207);
+            this.btnRun.Name = "btnRun";
+            this.btnRun.Size = new System.Drawing.Size(120, 40);
+            this.btnRun.TabIndex = 101;
+            this.btnRun.Text = "Merge!";
+            this.toolTip.SetToolTip(this.btnRun, "Merge Models");
+            this.btnRun.UseVisualStyleBackColor = false;
+            this.btnRun.Click += new System.EventHandler(this.btnRun_Click);
+            // 
             // MergeModelsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.ClientSize = new System.Drawing.Size(584, 361);
+            this.ClientSize = new System.Drawing.Size(584, 321);
             this.Controls.Add(this.btnReloadModels);
             this.Controls.Add(this.btnOpenModelFolder);
             this.Controls.Add(this.parentPanel);
@@ -279,14 +411,21 @@
             this.Text = "Merge Models";
             this.Load += new System.EventHandler(this.MergeModelsForm_Load);
             this.parentPanel.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
+            this.tableLayoutPanel2.ResumeLayout(false);
+            this.panel4.ResumeLayout(false);
+            this.panel5.ResumeLayout(false);
+            this.panel5.PerformLayout();
             this.panelModel2.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
             this.panelModel1.ResumeLayout(false);
             this.tableLayoutPanel8.ResumeLayout(false);
             this.panel25.ResumeLayout(false);
+            this.panel25.PerformLayout();
             this.panel26.ResumeLayout(false);
             this.panel26.PerformLayout();
             this.ResumeLayout(false);
@@ -313,5 +452,14 @@
         private System.Windows.Forms.Button btnOpenModelFolder;
         private System.Windows.Forms.Button btnReloadModels;
         private System.Windows.Forms.ToolTip toolTip;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        private System.Windows.Forms.Panel panel4;
+        private System.Windows.Forms.Panel panel5;
+        private System.Windows.Forms.Label label2;
+        private HTAlt.WinForms.HTSlider sliderScale;
+        private System.Windows.Forms.Label labelWeight2;
+        private System.Windows.Forms.Label labelWeight1;
+        private System.Windows.Forms.Button btnRun;
     }
 }

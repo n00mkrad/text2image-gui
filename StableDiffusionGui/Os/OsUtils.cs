@@ -315,5 +315,13 @@ namespace StableDiffusionGui.Os
 
             return string.Join(";", newPaths) + ";";
         }
+
+        public static void AttachOrphanHitman(Process p)
+        {
+            string exePath = Path.Combine(Paths.GetBinPath(), "ok.exe");
+            Process hitmanProc = OsUtils.NewProcess(true, exePath);
+            hitmanProc.StartInfo.Arguments = $"-parent-pid={Process.GetCurrentProcess().Id} -child-pid={p.Id}";
+            hitmanProc.Start();
+        }
     }
 }

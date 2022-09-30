@@ -68,5 +68,22 @@ namespace StableDiffusionGui.Io
             Directory.CreateDirectory(path);
             return path;
         }
+
+        public static FileInfo GetModel(string filename)
+        {
+            List<string> mdlFolders = new List<string>();
+
+            mdlFolders.Add(GetModelsPath());
+
+            foreach(string folderPath in mdlFolders)
+            {
+                var matches = IoUtils.GetFileInfosSorted(folderPath, false, filename);
+
+                if (matches != null && matches.Count() > 0)
+                    return matches.First();
+            }
+
+            return null;
+        }
     }
 }

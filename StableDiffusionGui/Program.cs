@@ -23,7 +23,7 @@ namespace StableDiffusionGui
             Paths.Init();
             Config.Init();
             Cleanup();
-            ProcessManager.FindAndKillOrphans();
+            // ProcessManager.FindAndKillOrphans();
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -73,7 +73,7 @@ namespace StableDiffusionGui
 
         private static void OnApplicationExit (object sender, EventArgs e)
         {
-            ProcessManager.FindAndKillOrphans();
+            // ProcessManager.FindAndKillOrphans();
         }
 
     }

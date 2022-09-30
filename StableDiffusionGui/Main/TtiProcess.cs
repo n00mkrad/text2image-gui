@@ -111,7 +111,7 @@ namespace StableDiffusionGui.Main
 
                 dream.StartInfo.RedirectStandardInput = true;
                 dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetPathVariableCmd()} && call activate.bat ldo && " +
-                    $"python repo/scripts/dream.py --model {modelNoExt} -o {outPath.Wrap()} {ArgsDreamPy.GetDefaultArgsStartup()} {precArg} " +
+                    $"python repo/scripts/dream.py --model {modelNoExt.Wrap()} -o {outPath.Wrap()} {ArgsDreamPy.GetDefaultArgsStartup()} {precArg} " +
                     $"{embArg} ";
 
                 Logger.Log("cmd.exe " + dream.StartInfo.Arguments, true);
@@ -122,11 +122,12 @@ namespace StableDiffusionGui.Main
                     dream.ErrorDataReceived += (sender, line) => { TtiProcessOutputHandler.LogOutput(line.Data, true); };
                 }
 
-                ProcessManager.FindAndKillOrphans("*repo*.py*");
+                // ProcessManager.FindAndKillOrphans("*repo*.py*");
                 TtiProcessOutputHandler.Start();
                 Logger.Log($"Loading Stable Diffusion with model {modelNoExt.Wrap()}...");
                 DreamPyParentProcess = dream;
                 dream.Start();
+                OsUtils.AttachOrphanHitman(dream);
                 CurrentStdInWriter = dream.StandardInput;
 
                 if (!OsUtils.ShowHiddenCmd())
@@ -231,7 +232,7 @@ namespace StableDiffusionGui.Main
                 TextToImage.CurrentTask.Processes.Add(dream);
 
                 dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetPathVariableCmd()} && call activate.bat ldo && " +
-                    $"python repo/optimizedSD/optimized_txt2img_loop.py --model {modelNoExt} --outdir {outPath.Wrap()} --from_file_loop={promptFilePath.Wrap()} {precArg} ";
+                    $"python repo/optimizedSD/optimized_txt2img_loop.py --model {modelNoExt.Wrap()} --outdir {outPath.Wrap()} --from_file_loop={promptFilePath.Wrap()} {precArg} ";
                 Logger.Log("cmd.exe " + dream.StartInfo.Arguments, true);
 
                 if (!OsUtils.ShowHiddenCmd())
@@ -240,11 +241,12 @@ namespace StableDiffusionGui.Main
                     dream.ErrorDataReceived += (sender, line) => { TtiProcessOutputHandler.LogOutput(line.Data, true); };
                 }
 
-                ProcessManager.FindAndKillOrphans("*repo*.py*");
+                // ProcessManager.FindAndKillOrphans("*repo*.py*");
                 TtiProcessOutputHandler.Start();
                 Logger.Log($"Loading Stable Diffusion with model {modelNoExt.Wrap()}...");
                 DreamPyParentProcess = dream;
                 dream.Start();
+                OsUtils.AttachOrphanHitman(dream);
 
                 if (!OsUtils.ShowHiddenCmd())
                 {
@@ -284,8 +286,9 @@ namespace StableDiffusionGui.Main
                 $"python repo/scripts/dream.py --model {mdl} -o {outPath.Wrap()} {ArgsDreamPy.GetPrecisionArg()} {ArgsDreamPy.GetDefaultArgsStartup()}";
 
             File.WriteAllText(batPath, batText);
-            ProcessManager.FindAndKillOrphans("*repo*.py*");
-            Process.Start(batPath);
+            // ProcessManager.FindAndKillOrphans("*repo*.py*");
+            Process cli = Process.Start(batPath);
+            OsUtils.AttachOrphanHitman(cli);
         }
 
         public static async Task<bool> WriteStdIn(string text, bool submitLine = true)
