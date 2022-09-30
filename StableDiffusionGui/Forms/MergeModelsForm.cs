@@ -70,46 +70,70 @@ namespace StableDiffusionGui.Forms
 
         private async Task Merge ()
         {
-            FileInfo model1 = Paths.GetModel(comboxModel1.Text);
-            FileInfo model2 = Paths.GetModel(comboxModel2.Text);
-
-            string filename = $"{Path.GetFileNameWithoutExtension(model1.Name)}-{PercentModel1}-{Path.GetFileNameWithoutExtension(model2.Name)}-{PercentModel2}{model1.Extension}";
-            string outPath = Path.Combine(model1.Directory.FullName, filename);
-
-            List<string> outLines = new List<string>();
-
-            Process p = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
-            p.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetPathVariableCmd()} && call activate.bat mb/envs/ldo && " +
-                $"python repo/scripts/merge_models.py -1 {model1.FullName.Wrap()} -2 {model1.FullName.Wrap()} -w {(PercentModel2 / 100f).ToStringDot("0.0000")} -o {outPath.Wrap()}";
-
-            if (!OsUtils.ShowHiddenCmd())
+            if (Program.Busy)
             {
-                p.OutputDataReceived += (sender, line) => { if (line != null && line.Data != null) Logger.Log(line.Data); };
-                p.ErrorDataReceived += (sender, line) => { if (line != null && line.Data != null) Logger.Log(line.Data); };
+                UiUtils.ShowMessageBox("Please wait until the current process has finished.");
+                return;
             }
 
-            Logger.Log($"cmd {p.StartInfo.Arguments}", true);
-            p.Start();
-
-            if (!OsUtils.ShowHiddenCmd())
+            try
             {
-                p.BeginOutputReadLine();
-                p.BeginErrorReadLine();
+                if (string.IsNullOrWhiteSpace(comboxModel1.Text) || string.IsNullOrWhiteSpace(comboxModel2.Text) || comboxModel1.Text == comboxModel2.Text)
+                {
+                    UiUtils.ShowMessageBox("Invalid model selection.");
+                    return;
+                }
+
+                FileInfo model1 = Paths.GetModel(comboxModel1.Text);
+                FileInfo model2 = Paths.GetModel(comboxModel2.Text);
+
+                string filename = $"{Path.GetFileNameWithoutExtension(model1.Name)}-{PercentModel1}-with-{Path.GetFileNameWithoutExtension(model2.Name)}-{PercentModel2}{model1.Extension}";
+                string outPath = Path.Combine(model1.Directory.FullName, filename);
+
+                List<string> outLines = new List<string>();
+
+                Process p = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
+                p.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetPathVariableCmd()} && call activate.bat mb/envs/ldo && " +
+                    $"python repo/scripts/merge_models.py -1 {model1.FullName.Wrap()} -2 {model2.FullName.Wrap()} -w {(PercentModel2 / 100f).ToStringDot("0.0000")} -o {outPath.Wrap()}";
+
+                if (!OsUtils.ShowHiddenCmd())
+                {
+                    p.OutputDataReceived += (sender, line) => { if (line != null && line.Data != null) Logger.Log(line.Data); };
+                    p.ErrorDataReceived += (sender, line) => { if (line != null && line.Data != null) Logger.Log(line.Data); };
+                }
+
+                Logger.Log($"cmd {p.StartInfo.Arguments}", true);
+                p.Start();
+
+                if (!OsUtils.ShowHiddenCmd())
+                {
+                    p.BeginOutputReadLine();
+                    p.BeginErrorReadLine();
+                }
+
+                while (!p.HasExited) await Task.Delay(1);
+
+                Logger.ClearLogBox();
+
+                if (File.Exists(outPath))
+                    UiUtils.ShowMessageBox($"Done.\n\nSaved merged model to:\n{outPath}");
+                else
+                    UiUtils.ShowMessageBox($"Failed to merge models.");
             }
-
-            while (!p.HasExited) await Task.Delay(1);
-
-            if(File.Exists(outPath))
-                UiUtils.ShowMessageBox($"Done.\n\nSaved merged model to:\n{outPath}");
-            else
-                UiUtils.ShowMessageBox($"Failed to merge models.");
+            catch(Exception ex)
+            {
+                UiUtils.ShowMessageBox($"Error: {ex.Message}");
+                Logger.Log(ex.StackTrace);
+            }
         }
 
         private async void btnRun_Click(object sender, EventArgs e)
         {
-            btnRun.Enabled = false;
+            Enabled = false;
+            btnRun.Text = "Merging...";
             await Merge();
-            btnRun.Enabled = true;
+            Enabled = true;
+            btnRun.Text = "Merge!";
         }
     }
 }

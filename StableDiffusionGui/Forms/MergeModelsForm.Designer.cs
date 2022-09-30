@@ -32,6 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MergeModelsForm));
             this.titleLabel = new System.Windows.Forms.Label();
             this.parentPanel = new System.Windows.Forms.Panel();
+            this.btnRun = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.panel4 = new System.Windows.Forms.Panel();
@@ -55,7 +56,6 @@
             this.btnOpenModelFolder = new System.Windows.Forms.Button();
             this.btnReloadModels = new System.Windows.Forms.Button();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.btnRun = new System.Windows.Forms.Button();
             this.parentPanel.SuspendLayout();
             this.panel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -97,6 +97,22 @@
             this.parentPanel.Name = "parentPanel";
             this.parentPanel.Size = new System.Drawing.Size(560, 247);
             this.parentPanel.TabIndex = 15;
+            // 
+            // btnRun
+            // 
+            this.btnRun.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnRun.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnRun.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRun.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.25F);
+            this.btnRun.ForeColor = System.Drawing.Color.White;
+            this.btnRun.Location = new System.Drawing.Point(0, 207);
+            this.btnRun.Name = "btnRun";
+            this.btnRun.Size = new System.Drawing.Size(120, 40);
+            this.btnRun.TabIndex = 101;
+            this.btnRun.Text = "Merge!";
+            this.toolTip.SetToolTip(this.btnRun, "Merge Models");
+            this.btnRun.UseVisualStyleBackColor = false;
+            this.btnRun.Click += new System.EventHandler(this.btnRun_Click);
             // 
             // panel1
             // 
@@ -349,6 +365,7 @@
             this.btnOpenModelFolder.TabStop = false;
             this.toolTip.SetToolTip(this.btnOpenModelFolder, "Open Models Folder");
             this.btnOpenModelFolder.UseVisualStyleBackColor = false;
+            this.btnOpenModelFolder.Click += new System.EventHandler(this.btnOpenModelFolder_Click);
             // 
             // btnReloadModels
             // 
@@ -374,22 +391,6 @@
             this.toolTip.AutoPopDelay = 5000;
             this.toolTip.InitialDelay = 200;
             this.toolTip.ReshowDelay = 40;
-            // 
-            // btnRun
-            // 
-            this.btnRun.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnRun.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnRun.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnRun.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.25F);
-            this.btnRun.ForeColor = System.Drawing.Color.White;
-            this.btnRun.Location = new System.Drawing.Point(0, 207);
-            this.btnRun.Name = "btnRun";
-            this.btnRun.Size = new System.Drawing.Size(120, 40);
-            this.btnRun.TabIndex = 101;
-            this.btnRun.Text = "Merge!";
-            this.toolTip.SetToolTip(this.btnRun, "Merge Models");
-            this.btnRun.UseVisualStyleBackColor = false;
-            this.btnRun.Click += new System.EventHandler(this.btnRun_Click);
             // 
             // MergeModelsForm
             // 

@@ -1003,7 +1003,7 @@
             this.cliButton.Size = new System.Drawing.Size(40, 40);
             this.cliButton.TabIndex = 103;
             this.cliButton.TabStop = false;
-            this.toolTip.SetToolTip(this.cliButton, "Developer Tools");
+            this.toolTip.SetToolTip(this.cliButton, "Developer Tools...");
             this.cliButton.UseVisualStyleBackColor = false;
             this.cliButton.Click += new System.EventHandler(this.cliButton_Click);
             // 
