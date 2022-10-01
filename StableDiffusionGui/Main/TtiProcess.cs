@@ -122,7 +122,7 @@ namespace StableDiffusionGui.Main
                     dream.ErrorDataReceived += (sender, line) => { TtiProcessOutputHandler.LogOutput(line.Data, true); };
                 }
 
-                // ProcessManager.FindAndKillOrphans("*repo*.py*");
+                ProcessManager.FindAndKillOrphans($"*dream.py*{outPath}*");
                 TtiProcessOutputHandler.Start();
                 Logger.Log($"Loading Stable Diffusion with model {modelNoExt.Wrap()}...");
                 DreamPyParentProcess = dream;
@@ -241,7 +241,7 @@ namespace StableDiffusionGui.Main
                     dream.ErrorDataReceived += (sender, line) => { TtiProcessOutputHandler.LogOutput(line.Data, true); };
                 }
 
-                // ProcessManager.FindAndKillOrphans("*repo*.py*");
+                ProcessManager.FindAndKillOrphans($"*optimized_txt2img_loop.py*{outPath}*");
                 TtiProcessOutputHandler.Start();
                 Logger.Log($"Loading Stable Diffusion with model {modelNoExt.Wrap()}...");
                 DreamPyParentProcess = dream;
@@ -286,7 +286,7 @@ namespace StableDiffusionGui.Main
                 $"python repo/scripts/dream.py --model {mdl} -o {outPath.Wrap()} {ArgsDreamPy.GetPrecisionArg()} {ArgsDreamPy.GetDefaultArgsStartup()}";
 
             File.WriteAllText(batPath, batText);
-            // ProcessManager.FindAndKillOrphans("*repo*.py*");
+            ProcessManager.FindAndKillOrphans($"*dream.py*{outPath}*");
             Process cli = Process.Start(batPath);
             OsUtils.AttachOrphanHitman(cli);
         }
