@@ -16,17 +16,15 @@ using System.Windows.Forms;
 
 namespace StableDiffusionGui.Forms
 {
-    public partial class MergeModelsForm : Form
+    public partial class PruneModelsForm : Form
     {
-        private int PercentModel1 { get { return 100 - (sliderScale.Value * 5); } }
-        private int PercentModel2 { get { return 100 - PercentModel1; } }
 
-        public MergeModelsForm()
+        public PruneModelsForm()
         {
             InitializeComponent();
         }
 
-        private void MergeModelsForm_Load(object sender, EventArgs e)
+        private void PruneModelsForm_Load(object sender, EventArgs e)
         {
             LoadModels();
         }
@@ -45,50 +43,35 @@ namespace StableDiffusionGui.Forms
         {
             var ckptFiles = IoUtils.GetFileInfosSorted(Paths.GetModelsPath(), true, "*.ckpt").ToList();
 
-            comboxModel1.Items.Clear();
-            comboxModel2.Items.Clear();
-            ckptFiles.ForEach(x => comboxModel1.Items.Add(x.Name));
-            ckptFiles.ForEach(x => comboxModel2.Items.Add(x.Name));
+            comboxModel.Items.Clear();
+            ckptFiles.ForEach(x => comboxModel.Items.Add(x.Name));
 
-            if (comboxModel1.SelectedIndex < 0 && comboxModel1.Items.Count > 0)
-                comboxModel1.SelectedIndex = 0;
-
-            if (comboxModel2.SelectedIndex < 0)
-            {
-                if (comboxModel2.Items.Count > 1)
-                    comboxModel2.SelectedIndex = 1;
-                else if (comboxModel2.Items.Count > 0)
-                    comboxModel2.SelectedIndex = 0;
-            }
+            if (comboxModel.SelectedIndex < 0 && comboxModel.Items.Count > 0)
+                comboxModel.SelectedIndex = 0;
         }
 
-        private void sliderScale_Scroll(object sender, ScrollEventArgs e)
-        {
-            labelWeight1.Text = $"{PercentModel1}%";
-            labelWeight2.Text = $"{PercentModel2}%";
-        }
-
-        private async Task Merge ()
+        private async Task Prune ()
         {
             try
             {
-                FileInfo model1 = Paths.GetModel(comboxModel1.Text);
-                FileInfo model2 = Paths.GetModel(comboxModel2.Text);
+                FileInfo model1 = Paths.GetModel(comboxModel.Text);
 
-                string filename = $"{Path.GetFileNameWithoutExtension(model1.Name)}-{PercentModel1}-with-{Path.GetFileNameWithoutExtension(model2.Name)}-{PercentModel2}{model1.Extension}";
+                bool halfPrec = checkboxHalfPrec.Checked;
+
+                string filename = $"{Path.GetFileNameWithoutExtension(model1.Name)}-pruned-{(halfPrec ? "fp16" : "fp32")}{model1.Extension}";
                 string outPath = Path.Combine(model1.Directory.FullName, filename);
 
                 List<string> outLines = new List<string>();
 
                 Process p = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
                 p.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetPathVariableCmd()} && call activate.bat mb/envs/ldo && " +
-                    $"python repo/scripts/merge_models.py -1 {model1.FullName.Wrap()} -2 {model2.FullName.Wrap()} -w {(PercentModel2 / 100f).ToStringDot("0.0000")} -o {outPath.Wrap()}";
+                    $"python repo/scripts/prune_model.py -i {model1.FullName.Wrap()} -o {outPath.Wrap()} {(halfPrec ? "-half" : "")}";
 
-                if (!OsUtils.ShowHiddenCmd())
-                {
-                    p.OutputDataReceived += (sender, line) => { if (line != null && line.Data != null) Logger.Log(line.Data); };
-                    p.ErrorDataReceived += (sender, line) => { if (line != null && line.Data != null) Logger.Log(line.Data); };
-                }
+                // if (!OsUtils.ShowHiddenCmd())
+                // {
+                //     p.OutputDataReceived += (sender, line) => { if (line != null && line.Data != null) Logger.Log(line.Data.Trunc(120)); };
+                //     p.ErrorDataReceived += (sender, line) => { if (line != null && line.Data != null) Logger.Log(line.Data.Trunc(120)); };
+                // }
 
                 Logger.Log($"cmd {p.StartInfo.Arguments}", true);
                 p.Start();
@@ -102,9 +85,9 @@ namespace StableDiffusionGui.Forms
                 while (!p.HasExited) await Task.Delay(500);
 
                 if (File.Exists(outPath))
-                    UiUtils.ShowMessageBox($"Done.\n\nSaved merged model to:\n{outPath}");
+                    UiUtils.ShowMessageBox($"Done.\n\nSaved pruned model to:\n{outPath}");
                 else
-                    UiUtils.ShowMessageBox($"Failed to merge models.");
+                    UiUtils.ShowMessageBox($"Failed to pruned model.");
             }
             catch(Exception ex)
             {
@@ -121,7 +104,7 @@ namespace StableDiffusionGui.Forms
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(comboxModel1.Text) || string.IsNullOrWhiteSpace(comboxModel2.Text) || comboxModel1.Text == comboxModel2.Text)
+            if (string.IsNullOrWhiteSpace(comboxModel.Text))
             {
                 UiUtils.ShowMessageBox("Invalid model selection.");
                 return;
@@ -129,13 +112,13 @@ namespace StableDiffusionGui.Forms
 
             Program.MainForm.SetWorking(true);
             Enabled = false;
-            btnRun.Text = "Merging...";
+            btnRun.Text = "Pruning...";
 
-            await Merge();
+            await Prune();
 
             Program.MainForm.SetWorking(false);
             Enabled = true;
-            btnRun.Text = "Merge!";
+            btnRun.Text = "Prune!";
         }
     }
 }

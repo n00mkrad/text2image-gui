@@ -758,5 +758,10 @@ namespace StableDiffusionGui
         {
             new MergeModelsForm().ShowDialog();
         }
+
+        private void openModelPruningTrimmingToolToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new PruneModelsForm().ShowDialog();
+        }
     }
 }

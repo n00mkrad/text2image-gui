@@ -129,6 +129,7 @@
             this.menuStripDevTools = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.openDreampyCLIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openModelMergeToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openModelPruningTrimmingToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
             this.tableLayoutPanel6.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -1526,23 +1527,31 @@
             // 
             this.menuStripDevTools.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openDreampyCLIToolStripMenuItem,
-            this.openModelMergeToolToolStripMenuItem});
+            this.openModelMergeToolToolStripMenuItem,
+            this.openModelPruningTrimmingToolToolStripMenuItem});
             this.menuStripDevTools.Name = "menuStripDevTools";
-            this.menuStripDevTools.Size = new System.Drawing.Size(203, 48);
+            this.menuStripDevTools.Size = new System.Drawing.Size(182, 92);
             // 
             // openDreampyCLIToolStripMenuItem
             // 
             this.openDreampyCLIToolStripMenuItem.Name = "openDreampyCLIToolStripMenuItem";
-            this.openDreampyCLIToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.openDreampyCLIToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
             this.openDreampyCLIToolStripMenuItem.Text = "Open Dream.py CLI";
             this.openDreampyCLIToolStripMenuItem.Click += new System.EventHandler(this.openDreampyCLIToolStripMenuItem_Click);
             // 
             // openModelMergeToolToolStripMenuItem
             // 
             this.openModelMergeToolToolStripMenuItem.Name = "openModelMergeToolToolStripMenuItem";
-            this.openModelMergeToolToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            this.openModelMergeToolToolStripMenuItem.Text = "Open Model Merge Tool";
+            this.openModelMergeToolToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.openModelMergeToolToolStripMenuItem.Text = "Merge Models";
             this.openModelMergeToolToolStripMenuItem.Click += new System.EventHandler(this.openModelMergeToolToolStripMenuItem_Click);
+            // 
+            // openModelPruningTrimmingToolToolStripMenuItem
+            // 
+            this.openModelPruningTrimmingToolToolStripMenuItem.Name = "openModelPruningTrimmingToolToolStripMenuItem";
+            this.openModelPruningTrimmingToolToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.openModelPruningTrimmingToolToolStripMenuItem.Text = "Prune (Trim) Models";
+            this.openModelPruningTrimmingToolToolStripMenuItem.Click += new System.EventHandler(this.openModelPruningTrimmingToolToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -1734,6 +1743,7 @@
         private System.Windows.Forms.ContextMenuStrip menuStripDevTools;
         private System.Windows.Forms.ToolStripMenuItem openDreampyCLIToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openModelMergeToolToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openModelPruningTrimmingToolToolStripMenuItem;
     }
 }
 

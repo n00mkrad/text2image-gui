@@ -187,6 +187,12 @@
     <Compile Include="Forms\PromptListForm.Designer.cs">
       <DependentUpon>PromptListForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\PruneModelsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\PruneModelsForm.designer.cs">
+      <DependentUpon>PruneModelsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\SettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -263,6 +269,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\PromptListForm.resx">
       <DependentUpon>PromptListForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\PruneModelsForm.resx">
+      <DependentUpon>PruneModelsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
