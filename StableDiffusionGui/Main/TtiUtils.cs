@@ -99,9 +99,22 @@ namespace StableDiffusionGui.Main
             return true;
         }
 
-        public static string GetPathVariableCmd (string baseDir = ".")
+        public static string GetEnvVarsSd (bool allCudaDevices = false, string baseDir = ".")
         {
-            return $"SET PATH={OsUtils.GetTemporaryPathVariable(new string[] { $"{baseDir}/mb", $"{baseDir}/mb/Scripts", $"{baseDir}/mb/condabin", $"{baseDir}/mb/Library/bin" })}";
+            string path = OsUtils.GetTemporaryPathVariable(new string[] { $"{baseDir}/mb", $"{baseDir}/mb/Scripts", $"{baseDir}/mb/condabin", $"{baseDir}/mb/Library/bin" });
+
+            int cudaDeviceOpt = Config.GetInt("comboxCudaDevice");
+            string devicesArg = ""; // Don't set env var if cudaDeviceOpt == 0 (=> automatic)
+
+            if (!allCudaDevices)
+            {
+                if (cudaDeviceOpt == 1) // CPU
+                    devicesArg = $" && SET CUDA_VISIBLE_DEVICES=\"\""; // Set env var to empty string
+                else
+                    devicesArg = $" && SET CUDA_VISIBLE_DEVICES={cudaDeviceOpt - 2}"; // Set env var to selected GPU ID (-2 because the first two options are Automatic and CPU)
+            }
+
+            return $"SET PATH={path}{devicesArg}";
         }
     }
 }

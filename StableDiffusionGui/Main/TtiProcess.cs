@@ -110,7 +110,7 @@ namespace StableDiffusionGui.Main
                 TextToImage.CurrentTask.Processes.Add(dream);
 
                 dream.StartInfo.RedirectStandardInput = true;
-                dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetPathVariableCmd()} && call activate.bat ldo && " +
+                dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSd()} && call activate.bat ldo && " +
                     $"python repo/scripts/dream.py --model {modelNoExt.Wrap()} -o {outPath.Wrap()} {ArgsDreamPy.GetDefaultArgsStartup()} {precArg} " +
                     $"{embArg} ";
 
@@ -232,7 +232,7 @@ namespace StableDiffusionGui.Main
                 Process dream = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
                 TextToImage.CurrentTask.Processes.Add(dream);
 
-                dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetPathVariableCmd()} && call activate.bat ldo && " +
+                dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSd()} && call activate.bat ldo && " +
                     $"python repo/optimizedSD/optimized_txt2img_loop.py --model {modelNoExt.Wrap()} --outdir {outPath.Wrap()} --from_file_loop={promptFilePath.Wrap()} {precArg} ";
                 Logger.Log("cmd.exe " + dream.StartInfo.Arguments, true);
 
