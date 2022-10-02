@@ -41,6 +41,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.btnOk = new HTAlt.WinForms.HTButton();
             this.pictBox = new System.Windows.Forms.PictureBox();
+            this.invertMaskToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStripOptions.SuspendLayout();
             this.panelBlur.SuspendLayout();
             this.panelBrushSize.SuspendLayout();
@@ -51,14 +52,15 @@
             // menuStripOptions
             // 
             this.menuStripOptions.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.clearToolStripMenuItem});
+            this.clearToolStripMenuItem,
+            this.invertMaskToolStripMenuItem});
             this.menuStripOptions.Name = "menuStripOptions";
-            this.menuStripOptions.Size = new System.Drawing.Size(102, 26);
+            this.menuStripOptions.Size = new System.Drawing.Size(181, 70);
             // 
             // clearToolStripMenuItem
             // 
             this.clearToolStripMenuItem.Name = "clearToolStripMenuItem";
-            this.clearToolStripMenuItem.Size = new System.Drawing.Size(101, 22);
+            this.clearToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.clearToolStripMenuItem.Text = "Clear";
             this.clearToolStripMenuItem.Click += new System.EventHandler(this.clearToolStripMenuItem_Click);
             // 
@@ -201,6 +203,14 @@
             this.pictBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictBox_MouseMove);
             this.pictBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictBox_MouseUp);
             // 
+            // invertMaskToolStripMenuItem
+            // 
+            this.invertMaskToolStripMenuItem.Name = "invertMaskToolStripMenuItem";
+            this.invertMaskToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.invertMaskToolStripMenuItem.Text = "Invert Mask";
+            this.invertMaskToolStripMenuItem.Visible = false;
+            this.invertMaskToolStripMenuItem.Click += new System.EventHandler(this.invertMaskToolStripMenuItem_Click);
+            // 
             // DrawForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -244,5 +254,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel panel1;
         private HTAlt.WinForms.HTButton btnOk;
+        private System.Windows.Forms.ToolStripMenuItem invertMaskToolStripMenuItem;
     }
 }

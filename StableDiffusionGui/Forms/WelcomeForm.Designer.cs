@@ -32,13 +32,13 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WelcomeForm));
             this.titleLabel = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btnOk = new HTAlt.WinForms.HTButton();
             this.panelNews = new System.Windows.Forms.Panel();
             this.newsLabel = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
             this.panelPatrons = new System.Windows.Forms.Panel();
             this.patronsLabel = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
-            this.btnOk = new HTAlt.WinForms.HTButton();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.btnItch = new System.Windows.Forms.Button();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -71,6 +71,27 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(963, 490);
             this.panel1.TabIndex = 13;
+            // 
+            // btnOk
+            // 
+            this.btnOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnOk.AutoColor = true;
+            this.btnOk.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnOk.ButtonImage = null;
+            this.btnOk.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
+            this.btnOk.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
+            this.btnOk.DrawImage = false;
+            this.btnOk.ForeColor = System.Drawing.Color.White;
+            this.btnOk.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
+            this.btnOk.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
+            this.btnOk.Location = new System.Drawing.Point(884, 467);
+            this.btnOk.Name = "btnOk";
+            this.btnOk.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+            this.btnOk.Size = new System.Drawing.Size(79, 23);
+            this.btnOk.TabIndex = 110;
+            this.btnOk.TabStop = false;
+            this.btnOk.Text = "OK";
+            this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
             // 
             // panelNews
             // 
@@ -148,27 +169,6 @@
             this.label21.TabIndex = 8;
             this.label21.Text = "Patreon Supporters:";
             // 
-            // btnOk
-            // 
-            this.btnOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOk.AutoColor = true;
-            this.btnOk.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnOk.ButtonImage = null;
-            this.btnOk.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
-            this.btnOk.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
-            this.btnOk.DrawImage = false;
-            this.btnOk.ForeColor = System.Drawing.Color.White;
-            this.btnOk.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
-            this.btnOk.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
-            this.btnOk.Location = new System.Drawing.Point(884, 467);
-            this.btnOk.Name = "btnOk";
-            this.btnOk.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
-            this.btnOk.Size = new System.Drawing.Size(79, 23);
-            this.btnOk.TabIndex = 110;
-            this.btnOk.TabStop = false;
-            this.btnOk.Text = "OK";
-            this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
-            // 
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -225,8 +225,6 @@
             this.ForeColor = System.Drawing.Color.White;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
-            this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(2000, 1200);
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(750, 450);
             this.Name = "WelcomeForm";

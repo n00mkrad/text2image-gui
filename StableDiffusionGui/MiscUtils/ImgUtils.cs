@@ -47,6 +47,13 @@ namespace StableDiffusionGui.MiscUtils
             }
         }
 
+        public static Image Negate (Image image)
+        {
+            MagickImage magickImage = MagickImgFromImage(image);
+            magickImage.Negate();
+            return ImageFromMagickImg(magickImage);
+        }
+
         public static MagickImage AlphaMask (MagickImage image, MagickImage mask, bool invert)
         {
             if(invert)

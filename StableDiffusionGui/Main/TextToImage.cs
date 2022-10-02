@@ -132,9 +132,10 @@ namespace StableDiffusionGui.Main
         {
             Canceled = true;
 
-            bool forceKill = reason.ToLower().Contains("manually") && Keyboard.Modifiers == ModifierKeys.Shift; // Shift force-kills the process
+            bool manual = reason.ToLower().Contains("manually");
+            bool forceKill = manual && Keyboard.Modifiers == ModifierKeys.Shift; // Shift force-kills the process
 
-            Logger.Log($"Canceling manually. Implementation: {LastTaskSettings.Implementation} - Force Kill: {forceKill}", true);
+            Logger.Log($"Canceling. Manual: {manual} - Implementation: {(LastTaskSettings != null ? LastTaskSettings.Implementation.ToString() : "None")} - Force Kill: {forceKill}", true);
 
             if (!forceKill && TtiProcess.IsAiProcessRunning)
             {

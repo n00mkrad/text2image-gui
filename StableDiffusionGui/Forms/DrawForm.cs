@@ -1,4 +1,5 @@
-﻿using StableDiffusionGui.MiscUtils;
+﻿using Newtonsoft.Json.Linq;
+using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Ui;
 using System;
 using System.Drawing;
@@ -102,16 +103,21 @@ namespace StableDiffusionGui.Forms
             Blur();
         }
 
-        private void Blur()
-        {
-            if (_raw != null)
-                pictBox.Image = new GaussianBlur(_raw).Process(InpaintingUtils.CurrentBlurValue);
-        }
-
         private void btnOk_Click(object sender, EventArgs e)
         {
             Mask = pictBox.Image;
             Close();
+        }
+
+        private void invertMaskToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void Blur()
+        {
+            if (_raw != null)
+                pictBox.Image = new GaussianBlur(_raw).Process(InpaintingUtils.CurrentBlurValue);
         }
     }
 }
