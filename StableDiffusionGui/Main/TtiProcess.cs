@@ -17,9 +17,9 @@ namespace StableDiffusionGui.Main
 {
     internal class TtiProcess
     {
-        public static Process DreamPyParentProcess;
+        public static Process CurrentProcess;
         public static StreamWriter CurrentStdInWriter;
-        public static bool IsDreamPyRunning { get { return DreamPyParentProcess != null && !DreamPyParentProcess.HasExited; } }
+        public static bool IsAiProcessRunning { get { return CurrentProcess != null && !CurrentProcess.HasExited; } }
 
         public static void Finish()
         {
@@ -94,7 +94,7 @@ namespace StableDiffusionGui.Main
             string strengths = File.Exists(initImg) ? $" and {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
             Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} with {iterations} iteration{(iterations != 1 ? "s" : "")} each and {scales.Length} scale{(scales.Length != 1 ? "s" : "")}{strengths} each = {imgs} images total.");
 
-            if (!IsDreamPyRunning || (IsDreamPyRunning && _lastDreamPyStartupSettings != newStartupSettings))
+            if (!IsAiProcessRunning || (IsAiProcessRunning && _lastDreamPyStartupSettings != newStartupSettings))
             {
                 _lastDreamPyStartupSettings = newStartupSettings;
 
@@ -122,10 +122,12 @@ namespace StableDiffusionGui.Main
                     dream.ErrorDataReceived += (sender, line) => { TtiProcessOutputHandler.LogOutput(line.Data, true); };
                 }
 
-                ProcessManager.FindAndKillOrphans($"*dream.py*{outPath}*");
+                if (CurrentProcess != null)
+                    OsUtils.KillProcessTree(CurrentProcess.Id);
+
                 TtiProcessOutputHandler.Start();
                 Logger.Log($"Loading Stable Diffusion with model {modelNoExt.Wrap()}...");
-                DreamPyParentProcess = dream;
+                CurrentProcess = dream;
                 dream.Start();
                 OsUtils.AttachOrphanHitman(dream);
                 CurrentStdInWriter = dream.StandardInput;
@@ -141,7 +143,7 @@ namespace StableDiffusionGui.Main
             }
             else
             {
-                TextToImage.CurrentTask.Processes.Add(DreamPyParentProcess);
+                TextToImage.CurrentTask.Processes.Add(CurrentProcess);
                 await WriteStdIn("!reset");
             }
 
@@ -225,7 +227,7 @@ namespace StableDiffusionGui.Main
             string strengths = File.Exists(initImg) ? $" and {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
             Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} with {iterations} iteration{(iterations != 1 ? "s" : "")} each and {scales.Length} scale{(scales.Length != 1 ? "s" : "")}{strengths} each = {imgs} images total.");
 
-            if (!IsDreamPyRunning || (IsDreamPyRunning && _lastDreamPyStartupSettings != newStartupSettings))
+            if (!IsAiProcessRunning || (IsAiProcessRunning && _lastDreamPyStartupSettings != newStartupSettings))
             {
                 _lastDreamPyStartupSettings = newStartupSettings;
 
@@ -242,10 +244,12 @@ namespace StableDiffusionGui.Main
                     dream.ErrorDataReceived += (sender, line) => { TtiProcessOutputHandler.LogOutput(line.Data, true); };
                 }
 
-                ProcessManager.FindAndKillOrphans($"*optimized_txt2img_loop.py*{outPath}*");
+                if (CurrentProcess != null)
+                    OsUtils.KillProcessTree(CurrentProcess.Id);
+
                 TtiProcessOutputHandler.Start();
                 Logger.Log($"Loading Stable Diffusion with model {modelNoExt.Wrap()}...");
-                DreamPyParentProcess = dream;
+                CurrentProcess = dream;
                 dream.Start();
                 OsUtils.AttachOrphanHitman(dream);
 
@@ -260,7 +264,7 @@ namespace StableDiffusionGui.Main
             }
             else
             {
-                TextToImage.CurrentTask.Processes.Add(DreamPyParentProcess);
+                TextToImage.CurrentTask.Processes.Add(CurrentProcess);
             }
 
             Finish();

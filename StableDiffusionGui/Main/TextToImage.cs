@@ -136,7 +136,7 @@ namespace StableDiffusionGui.Main
 
             Logger.Log($"Canceling manually. Implementation: {LastTaskSettings.Implementation} - Force Kill: {forceKill}", true);
 
-            if (!forceKill && TtiProcess.IsDreamPyRunning)
+            if (!forceKill && TtiProcess.IsAiProcessRunning)
             {
                 if (LastTaskSettings.Implementation == Implementation.StableDiffusionOptimized)
                 {

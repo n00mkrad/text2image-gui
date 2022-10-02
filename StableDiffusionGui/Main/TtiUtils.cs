@@ -69,7 +69,7 @@ namespace StableDiffusionGui.Main
 
         public static void SoftCancelDreamPy()
         {
-            var childProcesses = OsUtils.GetChildProcesses(TtiProcess.DreamPyParentProcess);
+            var childProcesses = OsUtils.GetChildProcesses(TtiProcess.CurrentProcess);
 
             foreach (System.Diagnostics.Process p in childProcesses)
                 OsUtils.SendCtrlC(p.Id);
