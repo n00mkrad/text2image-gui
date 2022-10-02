@@ -62,7 +62,7 @@ namespace StableDiffusionGui.Main
                     continue;
                 }
 
-                TtiUtils.WarnIfPromptLong(s.Prompts.ToList());
+                TtiUtils.ShowPromptWarnings(s.Prompts.ToList());
 
                 PromptHistory.Add(s);
 

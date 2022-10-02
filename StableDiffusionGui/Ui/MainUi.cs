@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace StableDiffusionGui.Ui
@@ -233,6 +234,22 @@ namespace StableDiffusionGui.Ui
                 form.TextboxPrompt.Height = smallHeight;
                 form.PictBoxImgViewer.Visible = true;
             }
+        }
+
+        public static async Task SetGpusInWindowTitle()
+        {
+            var gpus = await GpuUtils.GetCudaGpus();
+            List<string> gpuNames = gpus.Select(x => x.FullName).ToList();
+            int maxGpusToListInTitle = 2;
+
+            if (gpuNames.Count < 1)
+                Program.MainForm.Text = $"{Program.MainForm.Text} - No CUDA GPUs available.";
+            else if (gpuNames.Count <= maxGpusToListInTitle)
+                Program.MainForm.Text = $"{Program.MainForm.Text} - CUDA GPU{(gpuNames.Count != 1 ? "s" : "")}: {string.Join(", ", gpuNames)}";
+            else
+                Program.MainForm.Text = $"{Program.MainForm.Text} - CUDA GPUs: {string.Join(", ", gpuNames.Take(maxGpusToListInTitle))} (+{gpuNames.Count - maxGpusToListInTitle})";
+
+            Logger.Log($"Detected {gpus.Count.ToString().Replace("0", "no")} CUDA-capable GPU{(gpus.Count != 1 ? "s" : "")}.");
         }
     }
 }
