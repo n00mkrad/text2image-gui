@@ -33,6 +33,7 @@ namespace StableDiffusionGui.Os
                 p.ErrorDataReceived += (sender, line) => { if (line != null && line.Data != null) outLines.Add(line.Data); };
             }
 
+            Logger.Log("cmd.exe " + p.StartInfo.Arguments, true);
             p.Start();
 
             if (!OsUtils.ShowHiddenCmd())

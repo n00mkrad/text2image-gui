@@ -104,7 +104,7 @@ namespace StableDiffusionGui.Main
             int cudaDeviceOpt = Config.GetInt("comboxCudaDevice");
             string devicesArg = ""; // Don't set env var if cudaDeviceOpt == 0 (=> automatic)
 
-            if (!allCudaDevices)
+            if (!allCudaDevices && cudaDeviceOpt > 0)
             {
                 if (cudaDeviceOpt == 1) // CPU
                     devicesArg = $" && SET CUDA_VISIBLE_DEVICES=\"\""; // Set env var to empty string

@@ -1530,7 +1530,7 @@
             this.openModelMergeToolToolStripMenuItem,
             this.openModelPruningTrimmingToolToolStripMenuItem});
             this.menuStripDevTools.Name = "menuStripDevTools";
-            this.menuStripDevTools.Size = new System.Drawing.Size(182, 92);
+            this.menuStripDevTools.Size = new System.Drawing.Size(182, 70);
             // 
             // openDreampyCLIToolStripMenuItem
             // 
@@ -1590,7 +1590,7 @@
             this.KeyPreview = true;
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Stable Diffusion GUI 1.4.0";
+            this.Text = "Stable Diffusion GUI 1.5.0";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.Shown += new System.EventHandler(this.MainForm_Shown);
