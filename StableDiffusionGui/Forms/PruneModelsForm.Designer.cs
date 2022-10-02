@@ -35,6 +35,7 @@
             this.panelHalfPrec = new System.Windows.Forms.Panel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.checkboxHalfPrec = new System.Windows.Forms.CheckBox();
             this.panel3 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.panelModel = new System.Windows.Forms.Panel();
@@ -46,7 +47,6 @@
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.btnReloadModels = new System.Windows.Forms.Button();
             this.btnOpenModelFolder = new System.Windows.Forms.Button();
-            this.checkboxHalfPrec = new System.Windows.Forms.CheckBox();
             this.parentPanel.SuspendLayout();
             this.panelHalfPrec.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -132,6 +132,18 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(274, 29);
             this.panel2.TabIndex = 88;
+            // 
+            // checkboxHalfPrec
+            // 
+            this.checkboxHalfPrec.AutoSize = true;
+            this.checkboxHalfPrec.Checked = true;
+            this.checkboxHalfPrec.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkboxHalfPrec.Location = new System.Drawing.Point(5, 7);
+            this.checkboxHalfPrec.Name = "checkboxHalfPrec";
+            this.checkboxHalfPrec.Size = new System.Drawing.Size(15, 14);
+            this.checkboxHalfPrec.TabIndex = 87;
+            this.toolTip.SetToolTip(this.checkboxHalfPrec, "Cuts the file size in half but may slightly reduce quality.");
+            this.checkboxHalfPrec.UseVisualStyleBackColor = true;
             // 
             // panel3
             // 
@@ -263,16 +275,6 @@
             this.toolTip.SetToolTip(this.btnOpenModelFolder, "Open Models Folder");
             this.btnOpenModelFolder.UseVisualStyleBackColor = false;
             this.btnOpenModelFolder.Click += new System.EventHandler(this.btnOpenModelFolder_Click);
-            // 
-            // checkboxHalfPrec
-            // 
-            this.checkboxHalfPrec.AutoSize = true;
-            this.checkboxHalfPrec.Location = new System.Drawing.Point(5, 7);
-            this.checkboxHalfPrec.Name = "checkboxHalfPrec";
-            this.checkboxHalfPrec.Size = new System.Drawing.Size(15, 14);
-            this.checkboxHalfPrec.TabIndex = 87;
-            this.toolTip.SetToolTip(this.checkboxHalfPrec, "Cuts the file size in half but may slightly reduce quality.");
-            this.checkboxHalfPrec.UseVisualStyleBackColor = true;
             // 
             // PruneModelsForm
             // 

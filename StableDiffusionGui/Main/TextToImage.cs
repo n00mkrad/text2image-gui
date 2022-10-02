@@ -134,6 +134,8 @@ namespace StableDiffusionGui.Main
 
             bool forceKill = reason.ToLower().Contains("manually") && Keyboard.Modifiers == ModifierKeys.Shift; // Shift force-kills the process
 
+            Logger.Log($"Canceling manually. Implementation: {LastTaskSettings.Implementation} - Force Kill: {forceKill}", true);
+
             if (!forceKill && TtiProcess.IsDreamPyRunning)
             {
                 if (LastTaskSettings.Implementation == Implementation.StableDiffusionOptimized)

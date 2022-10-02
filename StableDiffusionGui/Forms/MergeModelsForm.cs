@@ -68,7 +68,7 @@ namespace StableDiffusionGui.Forms
             labelWeight2.Text = $"{PercentModel2}%";
         }
 
-        private async Task Merge ()
+        private async Task<string> Merge ()
         {
             try
             {
@@ -84,11 +84,11 @@ namespace StableDiffusionGui.Forms
                 p.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSd()} && call activate.bat mb/envs/ldo && " +
                     $"python repo/scripts/merge_models.py -1 {model1.FullName.Wrap()} -2 {model2.FullName.Wrap()} -w {(PercentModel2 / 100f).ToStringDot("0.0000")} -o {outPath.Wrap()}";
 
-                if (!OsUtils.ShowHiddenCmd())
-                {
-                    p.OutputDataReceived += (sender, line) => { if (line != null && line.Data != null) Logger.Log(line.Data); };
-                    p.ErrorDataReceived += (sender, line) => { if (line != null && line.Data != null) Logger.Log(line.Data); };
-                }
+                // if (!OsUtils.ShowHiddenCmd())
+                // {
+                //     p.OutputDataReceived += (sender, line) => { if (line != null && line.Data != null) Logger.Log(line.Data); };
+                //     p.ErrorDataReceived += (sender, line) => { if (line != null && line.Data != null) Logger.Log(line.Data); };
+                // }
 
                 Logger.Log($"cmd {p.StartInfo.Arguments}", true);
                 p.Start();
@@ -99,17 +99,15 @@ namespace StableDiffusionGui.Forms
                     p.BeginErrorReadLine();
                 }
 
-                while (!p.HasExited) await Task.Delay(500);
+                while (!p.HasExited) await Task.Delay(1);
 
-                if (File.Exists(outPath))
-                    UiUtils.ShowMessageBox($"Done.\n\nSaved merged model to:\n{outPath}");
-                else
-                    UiUtils.ShowMessageBox($"Failed to merge models.");
+                return outPath;
             }
             catch(Exception ex)
             {
                 UiUtils.ShowMessageBox($"Error: {ex.Message}");
                 Logger.Log(ex.StackTrace);
+                return "";
             }
         }
 
@@ -131,11 +129,16 @@ namespace StableDiffusionGui.Forms
             Enabled = false;
             btnRun.Text = "Merging...";
 
-            await Merge();
+            string outPath = await Merge();
 
             Program.MainForm.SetWorking(false);
             Enabled = true;
             btnRun.Text = "Merge!";
+
+            if (File.Exists(outPath))
+                UiUtils.ShowMessageBox($"Done.\n\nSaved merged model to:\n{outPath}");
+            else
+                UiUtils.ShowMessageBox($"Failed to merge models.");
         }
     }
 }

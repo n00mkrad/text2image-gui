@@ -50,7 +50,7 @@ namespace StableDiffusionGui.Forms
                 comboxModel.SelectedIndex = 0;
         }
 
-        private async Task Prune ()
+        private async Task<string> Prune ()
         {
             try
             {
@@ -82,17 +82,15 @@ namespace StableDiffusionGui.Forms
                     p.BeginErrorReadLine();
                 }
 
-                while (!p.HasExited) await Task.Delay(500);
+                while (!p.HasExited) await Task.Delay(1);
 
-                if (File.Exists(outPath))
-                    UiUtils.ShowMessageBox($"Done.\n\nSaved pruned model to:\n{outPath}");
-                else
-                    UiUtils.ShowMessageBox($"Failed to pruned model.");
+                return outPath;
             }
             catch(Exception ex)
             {
-                UiUtils.ShowMessageBox($"Error: {ex.Message}");
+                Logger.Log($"Error: {ex.Message}");
                 Logger.Log(ex.StackTrace);
+                return "";
             }
         }
 
@@ -114,11 +112,16 @@ namespace StableDiffusionGui.Forms
             Enabled = false;
             btnRun.Text = "Pruning...";
 
-            await Prune();
+            string outPath = await Prune();
 
             Program.MainForm.SetWorking(false);
             Enabled = true;
             btnRun.Text = "Prune!";
+
+            if (File.Exists(outPath))
+                UiUtils.ShowMessageBox($"Done.\n\nSaved pruned model to:\n{outPath}");
+            else
+                UiUtils.ShowMessageBox($"Failed to prune model.");
         }
     }
 }

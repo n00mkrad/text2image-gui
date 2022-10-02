@@ -177,7 +177,7 @@ namespace StableDiffusionGui.Main
 
             long startSeed = seed;
 
-            string promptFilePath = Path.Combine(Paths.GetSessionDataPath(), "prompts-opt.txt");
+            string promptFilePath = Path.Combine(Paths.GetSessionDataPath(), "prompts.txt");
             List<string> promptFileLines = new List<string>();
 
             int upscaleSetting = Config.GetInt("comboxUpscale");
