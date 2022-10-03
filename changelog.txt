@@ -1,3 +1,36 @@
+SD GUI 1.5.0 Changelog:
+- Upstream Code Update: Supports exclusion words, runs on 4 GB VRAM (when no other apps are open)
+- UI is now more flexible, window can be resized, prompt field is bigger and has zoomable text
+- Added CodeFormer face restoration as an alternative to GFPGAN
+- Updated RealESRGAN (upscaler), should now be faster with same or better quality
+- Added button to delete either the current image, or all generated images
+- Added separate checkboxes to choose if you want to include prompt/seed/scale/sampler/model in filename
+- Added option to save original image in addition to the post-processed image (if post-proc is enabled)
+- Added option to select the CUDA device (Automatic, CPU, or a specific GPU)
+- Added model merging tool
+- Added model pruning tool (strip EMA data and/or convert to fp16 half-precision for 2 GB models)
+- Added option to unload Stable Diffusion after each generation (like in pre-1.4.0)
+- Added reliable orphan process handling (Python no longer stays in RAM if the GUI crashes)
+- Image Viewer: Added short cooldown after using prev/next image buttons, before the newest will be shown again
+- Image Viewer context menu: Added button to re-generate single image with current settings/seed
+- Image Viewer Pop-up: Now borderless, 100% zoom by default, double-click for fullscreen
+- Image Viewer Pop-up: Added "Slideshow Mode" which mirrors the regular image viewer when enabled
+- Added image load form, allows you to use as init image, load settings from metadata, or copy prompt
+- Images can now be loaded from clipboard, not just from files
+- Prompt History: Added option to disable history, added text filter
+- You can now add an entry to the prompt queue by right-clicking on its icon
+- Disabled post-processing with Low Memory Mode as it was not working properly
+- Prompt text in folder/file names now strips weighting (won't create new folders for each weight change)
+- Current model name gets printed whenever Stable Diffusion is started
+- Fixed empty/invalid prompts (e.g. newlines) counting towards the target image amount
+- Some fixes regarding cancelling the generation process
+
+NOTES:
+Low Memory Mode is a low priority for me because it's a separate codebase so adding features is hard.
+Also, the regular mode can now run on 6 GB easily, and even 4 GB if all other GPU apps are closed.
+Apart from that, it's now possible to run the regular mode on CPU, which is slow, but it works.
+
+
 SD GUI 1.4.0 Changelog:
 - Stable Diffusion model no longer needs to be reloaded every time new images are generated
 - Added support for mask-based inpainting
