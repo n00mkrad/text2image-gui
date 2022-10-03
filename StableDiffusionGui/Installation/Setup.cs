@@ -78,8 +78,8 @@ namespace StableDiffusionGui.Installation
             l.Add($"");
             l.Add($"SET PATH={OsUtils.GetTemporaryPathVariable(new string[] { "../mb", "../mb/Scripts", "../mb/condabin", "../mb/Library/bin" })}");
             l.Add($"");
-            l.Add($"_conda env create -f environment.yaml -p \"%CONDA_ROOT_PATH%\\envs\\ldo\"");
-            l.Add($"_conda env update --file environment.yaml --prune -p \"%CONDA_ROOT_PATH%\\envs\\ldo\"");
+            l.Add($"_conda env create -f environment.yml -p \"%CONDA_ROOT_PATH%\\envs\\ldo\"");
+            l.Add($"_conda env update --file environment.yml --prune -p \"%CONDA_ROOT_PATH%\\envs\\ldo\"");
             l.Add($"");
             l.Add($"rmdir /q /s \"%CONDA_ROOT_PATH%\\pkgs\"");
             l.Add($"call \"%CONDA_SCRIPTS_PATH%\\activate.bat\" \"%CONDA_ROOT_PATH%\\envs\\ldo\"");
