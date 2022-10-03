@@ -22,8 +22,9 @@ SD GUI 1.5.0 Changelog:
 - Disabled post-processing with Low Memory Mode as it was not working properly
 - Prompt text in folder/file names now strips weighting (won't create new folders for each weight change)
 - Current model name gets printed whenever Stable Diffusion is started
+- Full Precision is now enabled by default on GTX 16 series cards to fix compatibility with them
 - Fixed empty/invalid prompts (e.g. newlines) counting towards the target image amount
-- Some fixes regarding cancelling the generation process
+- Some fixes regarding cancelling the generation process and handling crashes
 
 NOTES:
 Low Memory Mode is a low priority for me because it's a separate codebase so adding features is hard.
