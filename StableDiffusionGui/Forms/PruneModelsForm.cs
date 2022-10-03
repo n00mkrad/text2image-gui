@@ -119,9 +119,14 @@ namespace StableDiffusionGui.Forms
             btnRun.Text = "Prune!";
 
             if (File.Exists(outPath))
-                UiUtils.ShowMessageBox($"Done.\n\nSaved pruned model to:\n{outPath}");
+                Logger.Log($"Done.\nSaved pruned model to:\n{outPath}");
             else
-                UiUtils.ShowMessageBox($"Failed to prune model.");
+                Logger.Log($"Failed to prune model.");
+
+            // if (File.Exists(outPath))
+            //     UiUtils.ShowMessageBox($"Done.\n\nSaved pruned model to:\n{outPath}");
+            // else
+            //     UiUtils.ShowMessageBox($"Failed to prune model.");
         }
     }
 }

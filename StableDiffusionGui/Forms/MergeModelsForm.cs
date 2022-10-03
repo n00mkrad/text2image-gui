@@ -136,9 +136,14 @@ namespace StableDiffusionGui.Forms
             btnRun.Text = "Merge!";
 
             if (File.Exists(outPath))
-                UiUtils.ShowMessageBox($"Done.\n\nSaved merged model to:\n{outPath}");
+                Logger.Log($"Done.\nSaved merged model to:\n{outPath}");
             else
-                UiUtils.ShowMessageBox($"Failed to merge models.");
+                Logger.Log($"Failed to merge models.");
+
+            //if (File.Exists(outPath))
+            //    UiUtils.ShowMessageBox($"Done.\n\nSaved merged model to:\n{outPath}");
+            //else
+            //    UiUtils.ShowMessageBox($"Failed to merge models.");
         }
     }
 }
