@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using StableDiffusionGui.Main;
 using System.Linq;
+using StableDiffusionGui.Os;
 
 namespace StableDiffusionGui.Io
 {
@@ -256,9 +257,10 @@ namespace StableDiffusionGui.Io
             if (key == Key.comboxSdModel) return WriteDefault(key, IoUtils.GetFileInfosSorted(Paths.GetModelsPath(), true, "*.ckpt").Select(x => x.Name).FirstOrDefault());
             if (key == Key.checkboxEnableHistory) return WriteDefault(key, true.ToString());
             if (key == Key.sliderCodeformerFidelity) return WriteDefault(key, "0.6");
+            if (keyStr == "checkboxFullPrecision") return WriteDefault(key, (GpuUtils.CachedGpus.Count > 0 && GpuUtils.CachedGpus[0].FullName.Contains(" GTX 16")).ToString());
             if (keyStr.MatchesWildcard("checkbox*InFilename")) return WriteDefault(key, true.ToString());
 
-            if(key == Key.none)
+            if (key == Key.none)
                 return WriteDefault(keyStr, "");
             else
                 return WriteDefault(key, "");
