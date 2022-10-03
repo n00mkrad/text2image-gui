@@ -1,6 +1,4 @@
-﻿using Microsoft.VisualBasic.Logging;
-using StableDiffusionGui.Forms;
-using StableDiffusionGui.Io;
+﻿using StableDiffusionGui.Io;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using System;
@@ -9,9 +7,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Management.Automation.Runspaces;
 using System.Threading.Tasks;
-using System.Windows.Interop;
 
 namespace StableDiffusionGui.Main
 {
@@ -19,6 +15,7 @@ namespace StableDiffusionGui.Main
     {
         public static Process CurrentProcess;
         public static StreamWriter CurrentStdInWriter;
+        public static bool ProcessExistWasIntentional = false;
         public static bool IsAiProcessRunning { get { return CurrentProcess != null && !CurrentProcess.HasExited; } }
 
         public static void Finish()
@@ -123,11 +120,15 @@ namespace StableDiffusionGui.Main
                 }
 
                 if (CurrentProcess != null)
+                {
+                    ProcessExistWasIntentional = true;
                     OsUtils.KillProcessTree(CurrentProcess.Id);
+                }
 
                 TtiProcessOutputHandler.Start();
                 Logger.Log($"Loading Stable Diffusion with model {modelNoExt.Wrap()}...");
                 CurrentProcess = dream;
+                ProcessExistWasIntentional = false;
                 dream.Start();
                 OsUtils.AttachOrphanHitman(dream);
                 CurrentStdInWriter = dream.StandardInput;
@@ -138,7 +139,7 @@ namespace StableDiffusionGui.Main
                     dream.BeginErrorReadLine();
                 }
 
-                //Task.Run(() => CheckStillRunning(dream));
+                Task.Run(() => CheckStillRunning());
                 //while (!dream.HasExited) await Task.Delay(1); // We don't wait for it to quit since it keeps running in background.
             }
             else
@@ -245,11 +246,15 @@ namespace StableDiffusionGui.Main
                 }
 
                 if (CurrentProcess != null)
+                {
+                    ProcessExistWasIntentional = true;
                     OsUtils.KillProcessTree(CurrentProcess.Id);
+                }
 
                 TtiProcessOutputHandler.Start();
                 Logger.Log($"Loading Stable Diffusion with model {modelNoExt.Wrap()}...");
                 CurrentProcess = dream;
+                ProcessExistWasIntentional = false;
                 dream.Start();
                 OsUtils.AttachOrphanHitman(dream);
 
@@ -259,7 +264,7 @@ namespace StableDiffusionGui.Main
                     dream.BeginErrorReadLine();
                 }
 
-                //Task.Run(() => CheckStillRunning(dream));
+                Task.Run(() => CheckStillRunning());
                 //while (!dream.HasExited) await Task.Delay(1); // We don't wait for it to quit since it keeps running in background.
             }
             else
@@ -327,7 +332,12 @@ namespace StableDiffusionGui.Main
                     try
                     {
                         if (process != null && !process.HasExited)
+                        {
+                            if (process == CurrentProcess)
+                                ProcessExistWasIntentional = true;
+
                             OsUtils.KillProcessTree(process.Id);
+                        }
                     }
                     catch (Exception e)
                     {
@@ -337,12 +347,19 @@ namespace StableDiffusionGui.Main
             }
         }
 
-        public static async Task CheckStillRunning(Process p)
+        public static async Task CheckStillRunning()
         {
-            while (!p.HasExited)
-                await Task.Delay(100);
+            while (CurrentProcess != null && !CurrentProcess.HasExited)
+                await Task.Delay(1);
 
-            if (!TextToImage.Canceled)
+            if (TextToImage.Canceled)
+                return;
+
+            if (ProcessExistWasIntentional)
+            {
+                ProcessExistWasIntentional = false;
+            }
+            else
             {
                 string log = "...\n" + string.Join("\n", Logger.GetSessionLogLastLines(Constants.SdLogFilename, 8));
                 TextToImage.Cancel($"Process has exited unexpectedly.\n\nOutput:\n{log}");
