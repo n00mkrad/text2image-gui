@@ -236,6 +236,7 @@
             this.textboxPrompt.Size = new System.Drawing.Size(512, 59);
             this.textboxPrompt.TabIndex = 0;
             this.toolTip.SetToolTip(this.textboxPrompt, "Text prompt. The AI will try to generate an image matching this description.");
+            this.textboxPrompt.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textboxPrompt_KeyDown);
             // 
             // label1
             // 
