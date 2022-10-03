@@ -40,8 +40,9 @@
             this.patronsLabel = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.btnItch = new System.Windows.Forms.Button();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.btnGithub = new System.Windows.Forms.Button();
+            this.btnItch = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panelNews.SuspendLayout();
             this.panelPatrons.SuspendLayout();
@@ -187,6 +188,31 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(963, 460);
             this.tableLayoutPanel1.TabIndex = 111;
             // 
+            // toolTip
+            // 
+            this.toolTip.AutomaticDelay = 200;
+            this.toolTip.AutoPopDelay = 5000;
+            this.toolTip.InitialDelay = 200;
+            this.toolTip.ReshowDelay = 40;
+            // 
+            // btnGithub
+            // 
+            this.btnGithub.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnGithub.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnGithub.BackgroundImage = global::StableDiffusionGui.Properties.Resources.github;
+            this.btnGithub.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnGithub.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnGithub.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnGithub.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnGithub.Location = new System.Drawing.Point(889, 9);
+            this.btnGithub.Name = "btnGithub";
+            this.btnGithub.Size = new System.Drawing.Size(40, 40);
+            this.btnGithub.TabIndex = 113;
+            this.btnGithub.TabStop = false;
+            this.toolTip.SetToolTip(this.btnGithub, "Open Github repository");
+            this.btnGithub.UseVisualStyleBackColor = false;
+            this.btnGithub.Click += new System.EventHandler(this.btnGithub_Click);
+            // 
             // btnItch
             // 
             this.btnItch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -205,19 +231,13 @@
             this.btnItch.UseVisualStyleBackColor = false;
             this.btnItch.Click += new System.EventHandler(this.btnItch_Click);
             // 
-            // toolTip
-            // 
-            this.toolTip.AutomaticDelay = 200;
-            this.toolTip.AutoPopDelay = 5000;
-            this.toolTip.InitialDelay = 200;
-            this.toolTip.ReshowDelay = 40;
-            // 
             // WelcomeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.ClientSize = new System.Drawing.Size(984, 561);
+            this.Controls.Add(this.btnGithub);
             this.Controls.Add(this.btnItch);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.panel1);
@@ -257,5 +277,6 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Button btnItch;
         private System.Windows.Forms.ToolTip toolTip;
+        private System.Windows.Forms.Button btnGithub;
     }
 }

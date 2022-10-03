@@ -324,6 +324,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon1.ico" />
+    <None Include="Resources\github.png" />
     <None Include="Resources\baseline_refresh_white_48dp.png" />
     <None Include="Resources\deleteBtn1.png" />
     <None Include="Resources\checkerboard.png" />

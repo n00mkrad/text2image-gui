@@ -34,5 +34,10 @@ namespace StableDiffusionGui.Forms
         {
             Process.Start("https://nmkd.itch.io/t2i-gui");
         }
+
+        private void btnGithub_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://github.com/n00mkrad/text2image-gui");
+        }
     }
 }
