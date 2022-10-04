@@ -179,7 +179,14 @@ namespace StableDiffusionGui.Main
                 lines = lines.Where(x => x.MatchesRegex(@"\[(?:(?!\]\s+\[)(?:.|\n))*\]\s+\[(?:(?!\]\:)(?:.|\n))*\]\:")).ToList();
                 Dictionary<string, TimeSpan> linesWithAge = new Dictionary<string, TimeSpan>();
 
-                lines.ToList().ForEach(x => linesWithAge.Add(x, (DateTime.Now - DateTime.ParseExact(x.Split('[')[2].Split(']')[0], "MM-dd-yyyy HH:mm:ss", CultureInfo.InvariantCulture))));
+                foreach(string line in lines)
+                {
+                    if (linesWithAge.ContainsKey(line))
+                        continue;
+
+                    linesWithAge.Add(line, (DateTime.Now - DateTime.ParseExact(line.Split('[')[2].Split(']')[0], "MM-dd-yyyy HH:mm:ss", CultureInfo.InvariantCulture)));
+                }
+
                 linesWithAge = linesWithAge.Where(x => x.Value.TotalMilliseconds >= 0).ToDictionary(p => p.Key, p => p.Value);
 
                 if (linesWithAge.Where(x => linesWithAge.Last().Value.TotalMilliseconds >= 0 && x.Key.Contains("canceling")).Any())
