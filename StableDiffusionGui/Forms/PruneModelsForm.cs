@@ -84,6 +84,7 @@ namespace StableDiffusionGui.Forms
 
                 while (!p.HasExited) await Task.Delay(1);
 
+                Logger.ClearLogBox();
                 return outPath;
             }
             catch(Exception ex)

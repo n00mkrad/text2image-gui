@@ -72,12 +72,12 @@
             this.setTilingToolStripMenuItem,
             this.slideshowModeToolStripMenuItem});
             this.menuStripOptions.Name = "menuStripOptions";
-            this.menuStripOptions.Size = new System.Drawing.Size(318, 136);
+            this.menuStripOptions.Size = new System.Drawing.Size(318, 114);
             // 
             // closeESCToolStripMenuItem
             // 
             this.closeESCToolStripMenuItem.Name = "closeESCToolStripMenuItem";
-            this.closeESCToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.closeESCToolStripMenuItem.Size = new System.Drawing.Size(317, 22);
             this.closeESCToolStripMenuItem.Text = "Close (ESC)";
             this.closeESCToolStripMenuItem.Click += new System.EventHandler(this.closeESCToolStripMenuItem_Click);
             // 
@@ -95,7 +95,7 @@
             this.toolStripMenuItem2,
             this.fullscreenToolStripMenuItem});
             this.setSizeToolStripMenuItem.Name = "setSizeToolStripMenuItem";
-            this.setSizeToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.setSizeToolStripMenuItem.Size = new System.Drawing.Size(317, 22);
             this.setSizeToolStripMenuItem.Text = "Set Size...";
             // 
             // pixelPerfectToolStripMenuItem
@@ -126,7 +126,7 @@
             this.x2ToolStripMenuItem,
             this.x3ToolStripMenuItem});
             this.setTilingToolStripMenuItem.Name = "setTilingToolStripMenuItem";
-            this.setTilingToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.setTilingToolStripMenuItem.Size = new System.Drawing.Size(317, 22);
             this.setTilingToolStripMenuItem.Text = "Set Tiling...";
             // 
             // x1ToolStripMenuItem

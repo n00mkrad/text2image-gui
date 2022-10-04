@@ -1,5 +1,7 @@
-﻿using StableDiffusionGui.Main;
+﻿using LibGit2Sharp;
+using StableDiffusionGui.Main;
 using StableDiffusionGui.Os;
+using StableDiffusionGui.Ui;
 using System;
 using System.Drawing;
 using System.Linq;
@@ -18,18 +20,46 @@ namespace StableDiffusionGui.Forms
 
         private SizeMode _sizeMode;
         private int _currentTiling = 1;
+        private int _currentZoom = 100;
+
+        private int _zoomMax = 100;
+        private readonly int _zoomStep = 25;
 
         public ImagePopupForm(Image img, SizeMode initSizeMode = SizeMode.Percent100)
         {
             _currentImage = img;
             _sizeMode = initSizeMode;
+            Anchor = AnchorStyles.None;
+            SetMaxZoom();
             InitializeComponent();
         }
 
         private void ImagePopupForm_Load(object sender, EventArgs e)
         {
+            picBox.MouseWheel += pictBoxImgViewer_MouseWheel;
             SetSize(_sizeMode);
             picBox.Image = CurrentImage;
+        }
+
+        private void SetMaxZoom ()
+        {
+            Screen smallestScreen = Screen.AllScreens.OrderBy(x => x.Bounds.Height).First();
+
+            while (true)
+            {
+                float zoomFactor = _zoomMax / 100f;
+                Size zoomed = new Size((CurrentImage.Width * zoomFactor).RoundToInt(), (CurrentImage.Height * zoomFactor).RoundToInt());
+
+                if (zoomed.Width >= smallestScreen.Bounds.Width || zoomed.Height >= smallestScreen.Bounds.Height)
+                    break;
+
+                _zoomMax += _zoomStep;
+            }
+
+            for(int i = 100; i < _zoomMax; i += _zoomStep)
+            {
+
+            }
         }
 
         public void SetSize(SizeMode sizeMode)
@@ -37,9 +67,19 @@ namespace StableDiffusionGui.Forms
             WindowState = sizeMode == SizeMode.Maximized ? FormWindowState.Maximized : FormWindowState.Normal;
 
             if (sizeMode == SizeMode.Percent100)
-                Size = CurrentImage.Size;
+                SetZoom(100);
             else if (sizeMode == SizeMode.Percent200)
-                Size = new Size(CurrentImage.Width * 2, CurrentImage.Height * 2);
+                SetZoom(200);
+        }
+
+        private void SetZoom(int newZoomPercent = 0) // Default = 0 = Do not change zoom, just apply it
+        {
+            if(newZoomPercent > 0)
+                _currentZoom = newZoomPercent;
+
+            _currentZoom = _currentZoom.Clamp(_zoomStep, _zoomMax);
+            float zoomFactor = _currentZoom / 100f;
+            Size = new Size((CurrentImage.Width * zoomFactor).RoundToInt(), (CurrentImage.Height * zoomFactor).RoundToInt());
         }
 
         public void SetImage(Image img, int repeat)
@@ -96,6 +136,15 @@ namespace StableDiffusionGui.Forms
         {
             if (e.KeyCode == Keys.Escape)
                 Close();
+
+            if (SlideshowMode)
+            {
+                if (e.KeyCode == Keys.Left)
+                    ImagePreview.Move(true);
+
+                if (e.KeyCode == Keys.Right)
+                    ImagePreview.Move();
+            }
         }
 
         private void closeESCToolStripMenuItem_Click(object sender, EventArgs e)
@@ -176,6 +225,14 @@ namespace StableDiffusionGui.Forms
         private void slideshowModeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SlideshowMode = slideshowModeToolStripMenuItem.Checked;
+        }
+
+        private void pictBoxImgViewer_MouseWheel(object sender, MouseEventArgs e)
+        {
+            if (e.Delta > 0)
+                SetZoom(_currentZoom += _zoomStep);
+            else
+                SetZoom(_currentZoom -= _zoomStep);
         }
     }
 }
