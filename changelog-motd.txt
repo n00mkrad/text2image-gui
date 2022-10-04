@@ -20,14 +20,14 @@ SD GUI 1.5.0 Changelog:
 - Prompt History: Added option to disable history, added text filter
 - You can now add an entry to the prompt queue by right-clicking on its icon
 - Disabled post-processing with Low Memory Mode as it was not working properly
-- Prompt text in folder/file names now strips weighting (won't create new folders for each weight change)
+- Prompt text in filenames now strips weighting (won't create new folders for each weight change)
 - Current model name gets printed whenever Stable Diffusion is started
 - Full Precision is now enabled by default on GTX 16 series cards to fix compatibility with them
 - Fixed empty/invalid prompts (e.g. newlines) counting towards the target image amount
 - Some fixes regarding cancelling the generation process and handling crashes
 
 NOTES:
-Low Memory Mode is a low priority for me because it's a separate codebase so adding features is hard.
+Low Memory Mode is a low priority for me because it's a separate codebase, adding features is hard.
 Also, the regular mode can now run on 6 GB easily, and even 4 GB if all other GPU apps are closed.
 Apart from that, it's now possible to run the regular mode on CPU, which is slow, but it works.
 
