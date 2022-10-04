@@ -5,7 +5,7 @@ SD GUI 1.5.0 Changelog:
 - Updated RealESRGAN (upscaler), should now be faster with same or better quality
 - Added button to delete either the current image, or all generated images
 - Added separate checkboxes for including prompt/seed/scale/sampler/model in filename
-- Added option to save original image in addition to the post-processed image (if post-proc is enabled)
+- Added option to save original image in addition to the post-processed image (if postproc is enabled)
 - Added option to select the CUDA device (Automatic, CPU, or a specific GPU)
 - Added model merging tool
 - Added model pruning tool (strip EMA data and/or convert to fp16 half-precision for 2 GB models)
@@ -14,7 +14,7 @@ SD GUI 1.5.0 Changelog:
 - Image Viewer slideshow: Added short cooldown after using prev/next image buttons
 - Image Viewer context menu: Added button to re-generate single image with current settings/seed
 - Image Viewer Pop-up: Now borderless, 100% zoom by default, double-click for fullscreen
-- Image Viewer Pop-up: Added "Slideshow Mode" which mirrors the regular image viewer when enabled
+- Image Viewer Pop-up: Added Slideshow Mode which mirrors the regular image viewer when enabled
 - Added image load form, allows you to use as init image, load settings from metadata, or copy prompt
 - Images can now be loaded from clipboard, not just from files
 - Prompt History: Added option to disable history, added text filter
