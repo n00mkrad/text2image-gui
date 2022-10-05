@@ -189,8 +189,8 @@ namespace StableDiffusionGui.Main
 
                 linesWithAge = linesWithAge.Where(x => x.Value.TotalMilliseconds >= 0).ToDictionary(p => p.Key, p => p.Value);
 
-                if (linesWithAge.Where(x => linesWithAge.Last().Value.TotalMilliseconds >= 0 && x.Key.Contains("canceling")).Any())
-                    break;
+                //if (linesWithAge.Where(x => linesWithAge.Last().Value.TotalMilliseconds >= 0 && x.Key.Contains("canceling")).Any())
+                //    break;
 
                 if (linesWithAge.Count > 0)
                 {

@@ -144,18 +144,12 @@ namespace StableDiffusionGui.Main
             }
             else
             {
-                try
-                {
-                    TextToImage.CurrentTask.Processes.Add(CurrentProcess);
-                }
-                catch(Exception ex)
-                {
-                    Logger.Log($"Ex: {ex.Message}\n{ex.StackTrace}");
-                    await WriteStdIn("!reset");
-                }
+                TextToImage.CurrentTask.Processes.Add(CurrentProcess);
             }
 
-            Logger.Log($"Writing to stdin...\n{string.Join("\n", commands)}", true);
+            Logger.Log($"Writing to stdin...", true);
+
+            await WriteStdIn("!reset");
 
             foreach (string command in commands)
                 await WriteStdIn(command);
@@ -314,6 +308,8 @@ namespace StableDiffusionGui.Main
             {
                 if (CurrentStdInWriter == null)
                     return false;
+
+                Logger.Log($"=> {text}", true);
 
                 if (submitLine)
                     await CurrentStdInWriter.WriteLineAsync(text);
