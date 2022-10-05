@@ -1,10 +1,4 @@
 ﻿using Nmkoder.Forms;
-using StableDiffusionGui.Main;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace StableDiffusionGui.Ui
@@ -25,7 +19,7 @@ namespace StableDiffusionGui.Ui
             return DialogResult.OK;
         }
 
-        public static DialogResult ShowMessageBox(string text, string title, MessageBoxButtons btns)
+        public static DialogResult ShowMessageBox(string text, string title, MessageBoxButtons btns = MessageBoxButtons.OK)
         {
             MessageForm form = new MessageForm(text, title, btns);
             return form.ShowDialog();

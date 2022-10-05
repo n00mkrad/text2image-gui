@@ -144,8 +144,15 @@ namespace StableDiffusionGui.Main
             }
             else
             {
-                TextToImage.CurrentTask.Processes.Add(CurrentProcess);
-                await WriteStdIn("!reset");
+                try
+                {
+                    TextToImage.CurrentTask.Processes.Add(CurrentProcess);
+                }
+                catch(Exception ex)
+                {
+                    Logger.Log($"Ex: {ex.Message}\n{ex.StackTrace}");
+                    await WriteStdIn("!reset");
+                }
             }
 
             Logger.Log($"Writing to stdin...\n{string.Join("\n", commands)}", true);

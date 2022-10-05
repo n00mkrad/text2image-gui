@@ -25,6 +25,9 @@ namespace StableDiffusionGui.Forms
         private int _zoomMax = 100;
         private readonly int _zoomStep = 25;
 
+        private DateTime _lastInfoLabelShowTime;
+        private readonly int _infoLabelShowTimeMs = 1500;
+
         public ImagePopupForm(Image img, SizeMode initSizeMode = SizeMode.Percent100)
         {
             _currentImage = img;
@@ -39,9 +42,16 @@ namespace StableDiffusionGui.Forms
             picBox.MouseWheel += pictBoxImgViewer_MouseWheel;
             SetSize(_sizeMode);
             picBox.Image = CurrentImage;
+            Task.Run(() => InfoLabelVisLoop());
+            SetInfoLabel("Press ESC to close, right-click for more options.");
         }
 
-        private void SetMaxZoom ()
+        private void ImagePopupForm_Shown(object sender, EventArgs e)
+        {
+            FixLabelPosition();
+        }
+
+        private void SetMaxZoom()
         {
             Screen smallestScreen = Screen.AllScreens.OrderBy(x => x.Bounds.Height).First();
 
@@ -54,11 +64,6 @@ namespace StableDiffusionGui.Forms
                     break;
 
                 _zoomMax += _zoomStep;
-            }
-
-            for(int i = 100; i < _zoomMax; i += _zoomStep)
-            {
-
             }
         }
 
@@ -76,7 +81,7 @@ namespace StableDiffusionGui.Forms
         {
             Size oldSize = Size;
 
-            if(newZoomPercent > 0)
+            if (newZoomPercent > 0)
                 _currentZoom = newZoomPercent;
 
             _currentZoom = _currentZoom.Clamp(_zoomStep, _zoomMax);
@@ -113,24 +118,9 @@ namespace StableDiffusionGui.Forms
 
         private void CycleTiling()
         {
-            if (_currentTiling == 1)
-            {
-                _currentTiling = 2;
-                SetImage(CurrentImage, _currentTiling);
-                return;
-            }
-            else if (_currentTiling == 2)
-            {
-                _currentTiling = 3;
-                SetImage(CurrentImage, _currentTiling);
-                return;
-            }
-            else if (_currentTiling == 3)
-            {
-                _currentTiling = 1;
-                SetImage(CurrentImage, _currentTiling);
-                return;
-            }
+            _currentTiling = _currentTiling == 3 ? 1 : _currentTiling += 1;
+            SetImage(CurrentImage, _currentTiling);
+            SetInfoLabel($"Tiling set to {_currentTiling}x{_currentTiling}");
         }
 
         private void copyImageToolStripMenuItem_Click(object sender, EventArgs e)
@@ -140,16 +130,31 @@ namespace StableDiffusionGui.Forms
 
         private void ImagePopupForm_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Escape)
+            if (e.KeyCode == Keys.Escape || e.KeyCode == Keys.Q)
+            {
                 Close();
+                return;
+            }
+
+            if (e.KeyCode == Keys.T)
+            {
+                CycleTiling();
+                return;
+            }
 
             if (SlideshowMode)
             {
                 if (e.KeyCode == Keys.Left)
+                {
                     ImagePreview.Move(true);
+                    return;
+                }
 
                 if (e.KeyCode == Keys.Right)
+                {
                     ImagePreview.Move();
+                    return;
+                }
             }
         }
 
@@ -245,5 +250,56 @@ namespace StableDiffusionGui.Forms
         {
             TopMost = alwaysOnTopToolStripMenuItem.Checked;
         }
+
+        private void helpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            UiUtils.ShowMessageBox("ESC: Close\n\nT: Cycle through tiling modes\n\nClick and drag: Move window around\n\nDouble-Click: Toggle Fullscreen\n\nMouse Wheel: Zoom In/Out\n\n" +
+                "Slideshow Mode: When enabled, the pop-up viewer behaves the same way as the regular image viewer. Use arrow keys for previous/next image.\n\n", "Pop-Up Viewer Help");
+        }
+
+        #region Info Label
+
+        private void ImagePopupForm_SizeChanged(object sender, EventArgs e)
+        {
+            FixLabelPosition();
+            SetZoomText();
+        }
+
+        private void ImagePopupForm_LocationChanged(object sender, EventArgs e)
+        {
+            FixLabelPosition();
+        }
+
+        private void FixLabelPosition()
+        {
+            infoLabel.Left = (Width - infoLabel.Width) / 2;
+            infoLabel.Top = (Height - infoLabel.Height) / 2;
+        }
+
+        private void SetZoomText()
+        {
+            if (_currentImage == null)
+                return;
+
+            int zoomPercent = (Width / (float)_currentImage.Width * 100f).RoundToInt();
+            SetInfoLabel(WindowState == FormWindowState.Maximized ? $"Zoom: Fullscreen ({zoomPercent}%)" : $"Zoom: {zoomPercent}%");
+        }
+
+        private void SetInfoLabel(string text)
+        {
+            infoLabel.Text = text;
+            _lastInfoLabelShowTime = DateTime.Now;
+        }
+
+        private async Task InfoLabelVisLoop()
+        {
+            while (true)
+            {
+                infoLabel.Visible = (DateTime.Now - _lastInfoLabelShowTime).TotalMilliseconds <= _infoLabelShowTimeMs;
+                await Task.Delay(1);
+            }
+        }
+
+        #endregion
     }
 }
