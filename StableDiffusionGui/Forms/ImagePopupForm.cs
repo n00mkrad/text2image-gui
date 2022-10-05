@@ -72,14 +72,20 @@ namespace StableDiffusionGui.Forms
                 SetZoom(200);
         }
 
-        private void SetZoom(int newZoomPercent = 0) // Default = 0 = Do not change zoom, just apply it
+        private void SetZoom(int newZoomPercent = 0) // Default = 0 => Do not change zoom, just apply the current value
         {
+            Size oldSize = Size;
+
             if(newZoomPercent > 0)
                 _currentZoom = newZoomPercent;
 
             _currentZoom = _currentZoom.Clamp(_zoomStep, _zoomMax);
             float zoomFactor = _currentZoom / 100f;
             Size = new Size((CurrentImage.Width * zoomFactor).RoundToInt(), (CurrentImage.Height * zoomFactor).RoundToInt());
+
+            // Keep centered after zooming:
+            Size sizeDifference = Size - oldSize;
+            Location = new Point(Location.X - (sizeDifference.Width / 2f).RoundToInt(), Location.Y - (sizeDifference.Height / 2f).RoundToInt());
         }
 
         public void SetImage(Image img, int repeat)
