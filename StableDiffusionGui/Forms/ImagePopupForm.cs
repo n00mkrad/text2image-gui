@@ -234,5 +234,10 @@ namespace StableDiffusionGui.Forms
             else
                 SetZoom(_currentZoom -= _zoomStep);
         }
+
+        private void alwaysOnTopToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TopMost = alwaysOnTopToolStripMenuItem.Checked;
+        }
     }
 }

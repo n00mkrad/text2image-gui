@@ -43,6 +43,7 @@
             this.x2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.x3ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.slideshowModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.alwaysOnTopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.picBox)).BeginInit();
             this.menuStripOptions.SuspendLayout();
             this.SuspendLayout();
@@ -70,9 +71,10 @@
             this.copyImageToolStripMenuItem,
             this.setSizeToolStripMenuItem,
             this.setTilingToolStripMenuItem,
-            this.slideshowModeToolStripMenuItem});
+            this.slideshowModeToolStripMenuItem,
+            this.alwaysOnTopToolStripMenuItem});
             this.menuStripOptions.Name = "menuStripOptions";
-            this.menuStripOptions.Size = new System.Drawing.Size(318, 114);
+            this.menuStripOptions.Size = new System.Drawing.Size(318, 158);
             // 
             // closeESCToolStripMenuItem
             // 
@@ -158,6 +160,14 @@
             this.slideshowModeToolStripMenuItem.Text = "Enable Slideshow Mode (Mirror Image Viewer)";
             this.slideshowModeToolStripMenuItem.Click += new System.EventHandler(this.slideshowModeToolStripMenuItem_Click);
             // 
+            // alwaysOnTopToolStripMenuItem
+            // 
+            this.alwaysOnTopToolStripMenuItem.CheckOnClick = true;
+            this.alwaysOnTopToolStripMenuItem.Name = "alwaysOnTopToolStripMenuItem";
+            this.alwaysOnTopToolStripMenuItem.Size = new System.Drawing.Size(317, 22);
+            this.alwaysOnTopToolStripMenuItem.Text = "Always on Top";
+            this.alwaysOnTopToolStripMenuItem.Click += new System.EventHandler(this.alwaysOnTopToolStripMenuItem_Click);
+            // 
             // ImagePopupForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -195,5 +205,6 @@
         private System.Windows.Forms.ToolStripMenuItem x3ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fullscreenToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem slideshowModeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem alwaysOnTopToolStripMenuItem;
     }
 }
