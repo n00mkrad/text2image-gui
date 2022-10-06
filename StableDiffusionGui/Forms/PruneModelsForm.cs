@@ -4,13 +4,9 @@ using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -18,15 +14,23 @@ namespace StableDiffusionGui.Forms
 {
     public partial class PruneModelsForm : Form
     {
+        private Dictionary<string, string> _uiStrings = new Dictionary<string, string>();
 
         public PruneModelsForm()
         {
+            _uiStrings.Add(Enums.ModelFormat.Fp16.ToString(), "Half Precision (FP16)");
+            _uiStrings.Add(Enums.ModelFormat.Fp32.ToString(), "Full Precision (FP32)");
+
             InitializeComponent();
         }
 
         private void PruneModelsForm_Load(object sender, EventArgs e)
         {
             LoadModels();
+            comboxPrunePrecision.FillFromEnum<Enums.ModelFormat>(_uiStrings);
+
+            ConfigParser.LoadComboxIndex(comboxPrunePrecision);
+            ConfigParser.LoadGuiElement(checkboxPruneDeleteInput);
         }
 
         private void btnReloadModels_Click(object sender, EventArgs e)
@@ -54,20 +58,20 @@ namespace StableDiffusionGui.Forms
         {
             try
             {
-                bool halfPrec = checkboxHalfPrec.Checked;
+                bool fp16 = (Enums.ModelFormat)comboxPrunePrecision.SelectedIndex == Enums.ModelFormat.Fp16;
                 FileInfo model = Paths.GetModel(comboxModel.Text);
 
                 Logger.ClearLogBox();
-                Logger.Log($"Pruning model '{Path.GetFileNameWithoutExtension(model.Name)}' and saving as fp{(halfPrec ? "16" : "32")}...");
+                Logger.Log($"Pruning model '{Path.GetFileNameWithoutExtension(model.Name)}' and saving as fp{(fp16 ? "16" : "32")} checkpoint...");
 
-                string filename = $"{Path.GetFileNameWithoutExtension(model.Name)}-pruned-{(halfPrec ? "fp16" : "fp32")}{model.Extension}";
+                string filename = $"{Path.GetFileNameWithoutExtension(model.Name)}-pruned-{(fp16 ? "fp16" : "fp32")}{model.Extension}";
                 string outPath = Path.Combine(model.Directory.FullName, filename);
 
                 List<string> outLines = new List<string>();
 
                 Process p = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
                 p.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSd()} && call activate.bat mb/envs/ldo && " +
-                    $"python {Constants.Dirs.RepoSd}/scripts/prune_model.py -i {model.FullName.Wrap()} -o {outPath.Wrap()} {(halfPrec ? "-half" : "")}";
+                    $"python {Constants.Dirs.RepoSd}/scripts/prune_model.py -i {model.FullName.Wrap()} -o {outPath.Wrap()} {(fp16 ? "-half" : "")}";
 
                 if (!OsUtils.ShowHiddenCmd())
                 {
@@ -111,6 +115,9 @@ namespace StableDiffusionGui.Forms
                 return;
             }
 
+            ConfigParser.SaveComboxIndex(comboxPrunePrecision);
+            ConfigParser.SaveGuiElement(checkboxPruneDeleteInput);
+
             Program.MainForm.SetWorking(true);
             Enabled = false;
             btnRun.Text = "Pruning...";
@@ -122,9 +129,24 @@ namespace StableDiffusionGui.Forms
             btnRun.Text = "Prune!";
 
             if (File.Exists(outPath))
+            {
                 Logger.Log($"Done. Saved pruned model to:\n{outPath.Replace(Paths.GetDataPath(), "Data")}");
-            else
-                Logger.Log($"Failed to prune model.");
+
+                if (checkboxPruneDeleteInput.Checked)
+                {
+                    var inputFile = Paths.GetModel(comboxModel.Text);
+                    bool s = IoUtils.TryDeleteIfExists(inputFile.FullName);
+
+                    if (s)
+                        Logger.Log($"{(s ? "Deleted" : "Failed to delete")} input file '{inputFile.Name}'.");
+
+                    LoadModels();
+                }
+                else
+                {
+                    Logger.Log($"Failed to prune model.");
+                }
+            }
 
             // if (File.Exists(outPath))
             //     UiUtils.ShowMessageBox($"Done.\n\nSaved pruned model to:\n{outPath}");

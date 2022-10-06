@@ -33,10 +33,10 @@
             this.titleLabel = new System.Windows.Forms.Label();
             this.parentPanel = new System.Windows.Forms.Panel();
             this.btnRun = new System.Windows.Forms.Button();
-            this.panelHalfPrec = new System.Windows.Forms.Panel();
+            this.panelPrecision = new System.Windows.Forms.Panel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.checkboxHalfPrec = new System.Windows.Forms.CheckBox();
+            this.comboxPrunePrecision = new System.Windows.Forms.ComboBox();
             this.panel3 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.panelModel = new System.Windows.Forms.Panel();
@@ -48,8 +48,14 @@
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.btnReloadModels = new System.Windows.Forms.Button();
             this.btnOpenModelFolder = new System.Windows.Forms.Button();
+            this.panelDelInput = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.panel5 = new System.Windows.Forms.Panel();
+            this.label2 = new System.Windows.Forms.Label();
+            this.checkboxPruneDeleteInput = new System.Windows.Forms.CheckBox();
             this.parentPanel.SuspendLayout();
-            this.panelHalfPrec.SuspendLayout();
+            this.panelPrecision.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -57,6 +63,10 @@
             this.tableLayoutPanel8.SuspendLayout();
             this.panel25.SuspendLayout();
             this.panel26.SuspendLayout();
+            this.panelDelInput.SuspendLayout();
+            this.tableLayoutPanel2.SuspendLayout();
+            this.panel4.SuspendLayout();
+            this.panel5.SuspendLayout();
             this.SuspendLayout();
             // 
             // titleLabel
@@ -77,8 +87,9 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.parentPanel.AutoScroll = true;
+            this.parentPanel.Controls.Add(this.panelDelInput);
             this.parentPanel.Controls.Add(this.btnRun);
-            this.parentPanel.Controls.Add(this.panelHalfPrec);
+            this.parentPanel.Controls.Add(this.panelPrecision);
             this.parentPanel.Controls.Add(this.panelModel);
             this.parentPanel.Location = new System.Drawing.Point(12, 62);
             this.parentPanel.Name = "parentPanel";
@@ -101,14 +112,14 @@
             this.btnRun.UseVisualStyleBackColor = false;
             this.btnRun.Click += new System.EventHandler(this.btnRun_Click);
             // 
-            // panelHalfPrec
+            // panelPrecision
             // 
-            this.panelHalfPrec.Controls.Add(this.tableLayoutPanel1);
-            this.panelHalfPrec.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelHalfPrec.Location = new System.Drawing.Point(0, 35);
-            this.panelHalfPrec.Name = "panelHalfPrec";
-            this.panelHalfPrec.Size = new System.Drawing.Size(560, 35);
-            this.panelHalfPrec.TabIndex = 21;
+            this.panelPrecision.Controls.Add(this.tableLayoutPanel1);
+            this.panelPrecision.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelPrecision.Location = new System.Drawing.Point(0, 35);
+            this.panelPrecision.Name = "panelPrecision";
+            this.panelPrecision.Size = new System.Drawing.Size(560, 35);
+            this.panelPrecision.TabIndex = 21;
             // 
             // tableLayoutPanel1
             // 
@@ -127,24 +138,25 @@
             // 
             // panel2
             // 
-            this.panel2.Controls.Add(this.checkboxHalfPrec);
+            this.panel2.Controls.Add(this.comboxPrunePrecision);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(283, 3);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(274, 29);
             this.panel2.TabIndex = 88;
             // 
-            // checkboxHalfPrec
+            // comboxPrunePrecision
             // 
-            this.checkboxHalfPrec.AutoSize = true;
-            this.checkboxHalfPrec.Checked = true;
-            this.checkboxHalfPrec.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkboxHalfPrec.Location = new System.Drawing.Point(5, 7);
-            this.checkboxHalfPrec.Name = "checkboxHalfPrec";
-            this.checkboxHalfPrec.Size = new System.Drawing.Size(15, 14);
-            this.checkboxHalfPrec.TabIndex = 87;
-            this.toolTip.SetToolTip(this.checkboxHalfPrec, "Cuts the file size in half but may slightly reduce quality.");
-            this.checkboxHalfPrec.UseVisualStyleBackColor = true;
+            this.comboxPrunePrecision.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboxPrunePrecision.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.comboxPrunePrecision.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboxPrunePrecision.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboxPrunePrecision.ForeColor = System.Drawing.Color.White;
+            this.comboxPrunePrecision.FormattingEnabled = true;
+            this.comboxPrunePrecision.Location = new System.Drawing.Point(0, 4);
+            this.comboxPrunePrecision.Name = "comboxPrunePrecision";
+            this.comboxPrunePrecision.Size = new System.Drawing.Size(274, 21);
+            this.comboxPrunePrecision.TabIndex = 107;
             // 
             // panel3
             // 
@@ -163,9 +175,9 @@
             this.label1.Location = new System.Drawing.Point(5, 8);
             this.label1.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(146, 13);
+            this.label1.Size = new System.Drawing.Size(106, 13);
             this.label1.TabIndex = 85;
-            this.label1.Text = "Save as Half-Precision Model";
+            this.label1.Text = "Model Output Format";
             // 
             // panelModel
             // 
@@ -277,6 +289,70 @@
             this.btnOpenModelFolder.UseVisualStyleBackColor = false;
             this.btnOpenModelFolder.Click += new System.EventHandler(this.btnOpenModelFolder_Click);
             // 
+            // panelDelInput
+            // 
+            this.panelDelInput.Controls.Add(this.tableLayoutPanel2);
+            this.panelDelInput.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelDelInput.Location = new System.Drawing.Point(0, 70);
+            this.panelDelInput.Name = "panelDelInput";
+            this.panelDelInput.Size = new System.Drawing.Size(560, 35);
+            this.panelDelInput.TabIndex = 102;
+            // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.ColumnCount = 2;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.Controls.Add(this.panel4, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.panel5, 0, 0);
+            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 1;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(560, 35);
+            this.tableLayoutPanel2.TabIndex = 1;
+            // 
+            // panel4
+            // 
+            this.panel4.Controls.Add(this.checkboxPruneDeleteInput);
+            this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel4.Location = new System.Drawing.Point(283, 3);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(274, 29);
+            this.panel4.TabIndex = 88;
+            // 
+            // panel5
+            // 
+            this.panel5.Controls.Add(this.label2);
+            this.panel5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel5.Location = new System.Drawing.Point(3, 3);
+            this.panel5.Name = "panel5";
+            this.panel5.Size = new System.Drawing.Size(274, 29);
+            this.panel5.TabIndex = 87;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.Color.White;
+            this.label2.Location = new System.Drawing.Point(5, 8);
+            this.label2.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(148, 13);
+            this.label2.TabIndex = 85;
+            this.label2.Text = "Delete Input File If Successful";
+            // 
+            // checkboxPruneDeleteInput
+            // 
+            this.checkboxPruneDeleteInput.AutoSize = true;
+            this.checkboxPruneDeleteInput.ForeColor = System.Drawing.Color.White;
+            this.checkboxPruneDeleteInput.Location = new System.Drawing.Point(5, 7);
+            this.checkboxPruneDeleteInput.Name = "checkboxPruneDeleteInput";
+            this.checkboxPruneDeleteInput.Size = new System.Drawing.Size(15, 14);
+            this.checkboxPruneDeleteInput.TabIndex = 112;
+            this.checkboxPruneDeleteInput.UseVisualStyleBackColor = true;
+            // 
             // PruneModelsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -297,10 +373,9 @@
             this.Text = "Prune Models";
             this.Load += new System.EventHandler(this.PruneModelsForm_Load);
             this.parentPanel.ResumeLayout(false);
-            this.panelHalfPrec.ResumeLayout(false);
+            this.panelPrecision.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
             this.panelModel.ResumeLayout(false);
@@ -308,6 +383,12 @@
             this.panel25.ResumeLayout(false);
             this.panel26.ResumeLayout(false);
             this.panel26.PerformLayout();
+            this.panelDelInput.ResumeLayout(false);
+            this.tableLayoutPanel2.ResumeLayout(false);
+            this.panel4.ResumeLayout(false);
+            this.panel4.PerformLayout();
+            this.panel5.ResumeLayout(false);
+            this.panel5.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -323,7 +404,7 @@
         private System.Windows.Forms.ComboBox comboxModel;
         private System.Windows.Forms.Panel panel26;
         private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Panel panelHalfPrec;
+        private System.Windows.Forms.Panel panelPrecision;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Panel panel3;
@@ -332,6 +413,12 @@
         private System.Windows.Forms.Button btnReloadModels;
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.Button btnRun;
-        private System.Windows.Forms.CheckBox checkboxHalfPrec;
+        private System.Windows.Forms.ComboBox comboxPrunePrecision;
+        private System.Windows.Forms.Panel panelDelInput;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        private System.Windows.Forms.Panel panel4;
+        private System.Windows.Forms.Panel panel5;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.CheckBox checkboxPruneDeleteInput;
     }
 }
