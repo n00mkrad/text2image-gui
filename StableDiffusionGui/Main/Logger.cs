@@ -15,7 +15,6 @@ namespace StableDiffusionGui.Main
     {
         public static TextBox Textbox;
         private static string _file;
-        public const string DefaultLogName = "sessionlog";
         public static long Id;
 
         public static Dictionary<string, string> SessionLogs = new Dictionary<string, string>();
@@ -44,15 +43,16 @@ namespace StableDiffusionGui.Main
 
         public static void Log(string msg, bool hidden = false, bool replaceLastLine = false, string filename = "")
         {
+            if (string.IsNullOrWhiteSpace(msg))
+                return;
+
             logQueue.Enqueue(new Entry(msg, hidden, replaceLastLine, filename));
             ShowNext();
         }
 
         public static void ShowNext()
         {
-            Entry entry;
-
-            if (logQueue.TryDequeue(out entry))
+            if (logQueue.TryDequeue(out Entry entry))
                 Show(entry);
         }
 
@@ -102,7 +102,7 @@ namespace StableDiffusionGui.Main
         public static void LogToFile(string logStr, bool noLineBreak, string filename)
         {
             if (string.IsNullOrWhiteSpace(filename))
-                filename = DefaultLogName;
+                filename = Constants.Lognames.Session;
 
             if (Path.GetExtension(filename) != ".txt")
                 filename = Path.ChangeExtension(filename, "txt");
@@ -151,7 +151,7 @@ namespace StableDiffusionGui.Main
         public static void WriteToFile(string content, bool append, string filename)
         {
             if (string.IsNullOrWhiteSpace(filename))
-                filename = DefaultLogName;
+                filename = Constants.Lognames.Session;
 
             if (Path.GetExtension(filename) != ".txt")
                 filename = Path.ChangeExtension(filename, "txt");

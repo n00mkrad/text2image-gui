@@ -50,28 +50,30 @@ namespace StableDiffusionGui.Forms
                 comboxModel.SelectedIndex = 0;
         }
 
-        private async Task<string> Prune ()
+        private async Task<string> Prune()
         {
             try
             {
-                FileInfo model1 = Paths.GetModel(comboxModel.Text);
-
                 bool halfPrec = checkboxHalfPrec.Checked;
+                FileInfo model = Paths.GetModel(comboxModel.Text);
 
-                string filename = $"{Path.GetFileNameWithoutExtension(model1.Name)}-pruned-{(halfPrec ? "fp16" : "fp32")}{model1.Extension}";
-                string outPath = Path.Combine(model1.Directory.FullName, filename);
+                Logger.ClearLogBox();
+                Logger.Log($"Pruning model '{Path.GetFileNameWithoutExtension(model.Name)}' and saving as fp{(halfPrec ? "16" : "32")}...");
+
+                string filename = $"{Path.GetFileNameWithoutExtension(model.Name)}-pruned-{(halfPrec ? "fp16" : "fp32")}{model.Extension}";
+                string outPath = Path.Combine(model.Directory.FullName, filename);
 
                 List<string> outLines = new List<string>();
 
                 Process p = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
                 p.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSd()} && call activate.bat mb/envs/ldo && " +
-                    $"python repo/scripts/prune_model.py -i {model1.FullName.Wrap()} -o {outPath.Wrap()} {(halfPrec ? "-half" : "")}";
+                    $"python {Constants.Dirs.RepoSd}/scripts/prune_model.py -i {model.FullName.Wrap()} -o {outPath.Wrap()} {(halfPrec ? "-half" : "")}";
 
-                // if (!OsUtils.ShowHiddenCmd())
-                // {
-                //     p.OutputDataReceived += (sender, line) => { if (line != null && line.Data != null) Logger.Log(line.Data.Trunc(120)); };
-                //     p.ErrorDataReceived += (sender, line) => { if (line != null && line.Data != null) Logger.Log(line.Data.Trunc(120)); };
-                // }
+                if (!OsUtils.ShowHiddenCmd())
+                {
+                    p.OutputDataReceived += (sender, line) => { Logger.Log(line?.Data, true, false, Constants.Lognames.Prune); };
+                    p.ErrorDataReceived += (sender, line) => { Logger.Log(line?.Data, true, false, Constants.Lognames.Prune); };
+                }
 
                 Logger.Log($"cmd {p.StartInfo.Arguments}", true);
                 p.Start();
@@ -87,9 +89,9 @@ namespace StableDiffusionGui.Forms
                 Logger.ClearLogBox();
                 return outPath;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                Logger.Log($"Error: {ex.Message}");
+                Logger.Log($"Pruning Error: {ex.Message}");
                 Logger.Log(ex.StackTrace);
                 return "";
             }
@@ -120,7 +122,7 @@ namespace StableDiffusionGui.Forms
             btnRun.Text = "Prune!";
 
             if (File.Exists(outPath))
-                Logger.Log($"Done.\nSaved pruned model to:\n{outPath}");
+                Logger.Log($"Done. Saved pruned model to:\n{outPath.Replace(Paths.GetDataPath(), "Data")}");
             else
                 Logger.Log($"Failed to prune model.");
 

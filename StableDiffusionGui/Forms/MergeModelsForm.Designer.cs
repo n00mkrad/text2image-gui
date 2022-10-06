@@ -95,7 +95,7 @@
             this.parentPanel.Controls.Add(this.panelModel1);
             this.parentPanel.Location = new System.Drawing.Point(12, 62);
             this.parentPanel.Name = "parentPanel";
-            this.parentPanel.Size = new System.Drawing.Size(560, 247);
+            this.parentPanel.Size = new System.Drawing.Size(560, 217);
             this.parentPanel.TabIndex = 15;
             // 
             // btnRun
@@ -105,7 +105,7 @@
             this.btnRun.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnRun.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.25F);
             this.btnRun.ForeColor = System.Drawing.Color.White;
-            this.btnRun.Location = new System.Drawing.Point(0, 207);
+            this.btnRun.Location = new System.Drawing.Point(0, 177);
             this.btnRun.Name = "btnRun";
             this.btnRun.Size = new System.Drawing.Size(120, 40);
             this.btnRun.TabIndex = 101;
@@ -397,7 +397,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.ClientSize = new System.Drawing.Size(584, 321);
+            this.ClientSize = new System.Drawing.Size(584, 291);
             this.Controls.Add(this.btnReloadModels);
             this.Controls.Add(this.btnOpenModelFolder);
             this.Controls.Add(this.parentPanel);

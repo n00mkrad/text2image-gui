@@ -47,7 +47,7 @@ namespace StableDiffusionGui.Main
 
                     if (TextToImage.LastTaskSettings.Implementation == Implementation.StableDiffusion)
                     {
-                        string log = Logger.GetSessionLog(Constants.SdLogFilename);
+                        string log = Logger.GetSessionLog(Constants.Lognames.Sd);
                         images = images.Where(img => log.Contains(img.Name)).ToList(); // Only take image if it was written into SD log. Avoids copying too early (post-proc etc)
                     }
 

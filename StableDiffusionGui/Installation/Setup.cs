@@ -15,7 +15,6 @@ namespace StableDiffusionGui.Installation
 {
     internal class Setup
     {
-        public static readonly string LogFilename = "installation";
         public static readonly string GitFile = "n00mkrad/stable-diffusion-cust.git";
 
         private static bool ReplaceUiLogLine { get { return Logger.LastUiLine.EndsWith("..."); } }
@@ -38,7 +37,7 @@ namespace StableDiffusionGui.Installation
                 if (force || !InstallationStatus.HasSdUpscalers())
                     await InstallUpscalers();
 
-                RemoveGitFiles(GetDataSubPath("repo"));
+                RemoveGitFiles(GetDataSubPath(Constants.Dirs.RepoSd));
 
                 await Task.Delay(500);
 
@@ -62,7 +61,7 @@ namespace StableDiffusionGui.Installation
 
         public static async Task SetupPythonEnv()
         {
-            string repoPath = GetDataSubPath("repo");
+            string repoPath = GetDataSubPath(Constants.Dirs.RepoSd);
             string batPath = Path.Combine(repoPath, "install.bat");
 
             List<string> l = new List<string>();
@@ -106,7 +105,7 @@ namespace StableDiffusionGui.Installation
 
             while (!p.HasExited) await Task.Delay(1);
 
-            RemoveGitFiles(GetDataSubPath("repo"));
+            RemoveGitFiles(GetDataSubPath(Constants.Dirs.RepoSd));
             Logger.Log("Done.");
         }
 
@@ -117,7 +116,7 @@ namespace StableDiffusionGui.Installation
 
             log = log.Trim();
 
-            Logger.Log($"{log.Remove("PRINTME ")}", !log.Contains("PRINTME "), false, LogFilename);
+            Logger.Log($"{log.Remove("PRINTME ")}", !log.Contains("PRINTME "), false, Constants.Lognames.Installer);
 
             if (log.EndsWith("%") && log.Contains(" | "))
             {
@@ -141,7 +140,7 @@ namespace StableDiffusionGui.Installation
             Logger.Log("Downloading model file...");
 
             Process p = OsUtils.NewProcess(true);
-            p.ErrorDataReceived += (sender, line) => { try { Logger.Log($"Downloading... ({line.Data.Trim().Split(' ')[0]}%)", false, Logger.LastUiLine.EndsWith("%)"), LogFilename); } catch { } };
+            p.ErrorDataReceived += (sender, line) => { try { Logger.Log($"Downloading... ({line.Data.Trim().Split(' ')[0]}%)", false, Logger.LastUiLine.EndsWith("%)"), Constants.Lognames.Installer); } catch { } };
             p.StartInfo.Arguments = $"/C curl -k \"https://www.googleapis.com/storage/v1/b/aai-blog-files/o/sd-v1-4.ckpt?alt=media\" -o {mdlPath.Wrap()}";
             p.Start();
             p.BeginErrorReadLine();
@@ -159,7 +158,7 @@ namespace StableDiffusionGui.Installation
 
         public static async Task CloneSdRepo()
         {
-            await CloneSdRepo($"https://github.com/{GitFile}", GetDataSubPath("repo"));
+            await CloneSdRepo($"https://github.com/{GitFile}", GetDataSubPath(Constants.Dirs.RepoSd));
         }
 
         public static async Task CloneSdRepo(string url, string dir, string commit = "6a6bceee2a3c354787c924902f135efc1347e44f")
@@ -251,7 +250,7 @@ namespace StableDiffusionGui.Installation
                 string gfpGanMdlPath = Path.Combine(gfpganPath, "gfpgan.pth");
                 IoUtils.TryDeleteIfExists(gfpGanMdlPath);
                 Process procGfpganDl = OsUtils.NewProcess(true);
-                procGfpganDl.ErrorDataReceived += (sender, line) => { try { Logger.Log($"Downloading GFPGAN model ({line.Data.Trim().Split(' ')[0].GetInt()}%)...", false, ReplaceUiLogLine, LogFilename); } catch { } };
+                procGfpganDl.ErrorDataReceived += (sender, line) => { try { Logger.Log($"Downloading GFPGAN model ({line.Data.Trim().Split(' ')[0].GetInt()}%)...", false, ReplaceUiLogLine, Constants.Lognames.Installer); } catch { } };
                 procGfpganDl.StartInfo.Arguments = $"/C curl -k -L \"https://github.com/TencentARC/GFPGAN/releases/download/v1.3.0/GFPGANv1.4.pth\" -o {gfpGanMdlPath.Wrap()}";
                 procGfpganDl.Start();
                 procGfpganDl.BeginErrorReadLine();
@@ -264,7 +263,7 @@ namespace StableDiffusionGui.Installation
                 string codeformerMdlPath = Path.Combine(codeformerPath, "codeformer.pth");
                 IoUtils.TryDeleteIfExists(codeformerMdlPath);
                 Process procCodeformerDl = OsUtils.NewProcess(true);
-                procCodeformerDl.ErrorDataReceived += (sender, line) => { try { Logger.Log($"Downloading CodeFormer model ({line.Data.Trim().Split(' ')[0].GetInt()}%)...", false, ReplaceUiLogLine, LogFilename); } catch { } };
+                procCodeformerDl.ErrorDataReceived += (sender, line) => { try { Logger.Log($"Downloading CodeFormer model ({line.Data.Trim().Split(' ')[0].GetInt()}%)...", false, ReplaceUiLogLine, Constants.Lognames.Installer); } catch { } };
                 procCodeformerDl.StartInfo.Arguments = $"/C curl -k -L \"https://github.com/sczhou/CodeFormer/releases/download/v0.1.0/codeformer.pth\" -o {codeformerMdlPath.Wrap()}";
                 procCodeformerDl.Start();
                 procCodeformerDl.BeginErrorReadLine();
@@ -288,8 +287,8 @@ namespace StableDiffusionGui.Installation
 
         public static async Task Cleanup()
         {
-            IoUtils.SetAttributes(GetDataSubPath("repo"), FileAttributes.Normal);
-            await IoUtils.TryDeleteIfExistsAsync(GetDataSubPath("repo"));
+            IoUtils.SetAttributes(GetDataSubPath(Constants.Dirs.RepoSd), FileAttributes.Normal);
+            await IoUtils.TryDeleteIfExistsAsync(GetDataSubPath(Constants.Dirs.RepoSd));
             await IoUtils.TryDeleteIfExistsAsync(GetDataSubPath("ldo"));
         }
 
@@ -319,12 +318,12 @@ namespace StableDiffusionGui.Installation
 
                     if (nameNoExt == "latent-diffusion")
                     {
-                        string path = Path.Combine(GetDataSubPath("repo"));
+                        string path = Path.Combine(GetDataSubPath(Constants.Dirs.RepoSd));
                         File.WriteAllText(eggLink.FullName, path + "\n.");
                     }
                     else
                     {
-                        string path = Path.Combine(GetDataSubPath("repo"), "src", nameNoExt);
+                        string path = Path.Combine(GetDataSubPath(Constants.Dirs.RepoSd), "src", nameNoExt);
                         File.WriteAllText(eggLink.FullName, path + "\n.");
                     }
 
@@ -338,7 +337,7 @@ namespace StableDiffusionGui.Installation
                     var easyInstallLines = File.ReadAllLines(easyInstallPth);
                     List<string> newLines = new List<string>();
 
-                    string splitText = @"data\repo";
+                    string splitText = $@"data\{Constants.Dirs.RepoSd}";
                     string newBasePath = Paths.GetExeDir().ToLower().Replace("/", @"\");
 
                     Logger.Log($"easy-install.pth new lines:", true);

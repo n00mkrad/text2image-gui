@@ -36,7 +36,7 @@ namespace StableDiffusionGui.Main
                 $"    width: 512\n" +
                 $"    height: 512\n";
 
-            File.WriteAllText(Path.Combine(Paths.GetDataPath(), "repo", "configs", "models.yaml"), text);
+            File.WriteAllText(Path.Combine(Paths.GetDataPath(), Constants.Dirs.RepoSd, "configs", "models.yaml"), text);
         }
 
         public static void ShowPromptWarnings(List<string> prompts)

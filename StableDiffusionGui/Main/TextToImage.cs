@@ -105,7 +105,7 @@ namespace StableDiffusionGui.Main
             }
             else
             {
-                bool logCopySuccess = OsUtils.SetClipboard(Logger.GetSessionLog(Constants.SdLogFilename));
+                bool logCopySuccess = OsUtils.SetClipboard(Logger.GetSessionLog(Constants.Lognames.Sd));
                 Logger.Log($"No images generated. {(logCopySuccess ? "Log was copied to clipboard." : "")}");
             }
 
@@ -147,7 +147,7 @@ namespace StableDiffusionGui.Main
 
                 if (LastTaskSettings.Implementation == Implementation.StableDiffusion)
                 {
-                    if (Logger.GetSessionLogLastLines(Constants.SdLogFilename, 15).Where(x => x.MatchesWildcard("*step */*")).Any()) // Only attempt a soft cancel if we've been generating anything
+                    if (Logger.GetSessionLogLastLines(Constants.Lognames.Sd, 15).Where(x => x.MatchesWildcard("*step */*")).Any()) // Only attempt a soft cancel if we've been generating anything
                         await WaitForDreamPyCancel();
                     else // This condition should be true if we cancel while it's still initializing, so we can just force kill the process
                         TtiProcess.Kill();
@@ -175,7 +175,7 @@ namespace StableDiffusionGui.Main
 
             while (true)
             {
-                var lines = Logger.GetSessionLogLastLines(Constants.SdLogFilename, 5);
+                var lines = Logger.GetSessionLogLastLines(Constants.Lognames.Sd, 5);
                 lines = lines.Where(x => x.MatchesRegex(@"\[(?:(?!\]\s+\[)(?:.|\n))*\]\s+\[(?:(?!\]\:)(?:.|\n))*\]\:")).ToList();
                 Dictionary<string, TimeSpan> linesWithAge = new Dictionary<string, TimeSpan>();
 

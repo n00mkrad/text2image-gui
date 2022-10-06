@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StableDiffusionGui.Main;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -64,7 +65,7 @@ namespace StableDiffusionGui.Io
 
         public static string GetBinPath()
         {
-            string path = Path.Combine(GetDataPath(), "bin");
+            string path = Path.Combine(GetDataPath(), Constants.Dirs.Bins);
             Directory.CreateDirectory(path);
             return path;
         }

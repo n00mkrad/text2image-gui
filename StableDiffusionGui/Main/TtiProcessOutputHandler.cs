@@ -22,7 +22,7 @@ namespace StableDiffusionGui.Main
             if (string.IsNullOrWhiteSpace(line))
                 return;
 
-            Logger.Log(line, true, false, Constants.SdLogFilename);
+            Logger.Log(line, true, false, Constants.Lognames.Sd);
 
             if (TextToImage.Canceled)
                 return;
@@ -106,7 +106,7 @@ namespace StableDiffusionGui.Main
                     Logger.Log($"Concept keyword: <{line.Split("Added terms: *, ").LastOrDefault()}>", false, ellipsis);
             }
 
-            string lastLogLines = string.Join("\n", Logger.GetSessionLogLastLines(Constants.SdLogFilename, 6));
+            string lastLogLines = string.Join("\n", Logger.GetSessionLogLastLines(Constants.Lognames.Sd, 6));
 
             if (!_hasErrored && line.Contains("CUDA out of memory"))
             {

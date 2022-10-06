@@ -75,20 +75,21 @@ namespace StableDiffusionGui.Forms
                 FileInfo model1 = Paths.GetModel(comboxModel1.Text);
                 FileInfo model2 = Paths.GetModel(comboxModel2.Text);
 
+                Logger.ClearLogBox();
+                Logger.Log($"Merging models '{Path.GetFileNameWithoutExtension(model1.Name)}' ({PercentModel1}%) and '{Path.GetFileNameWithoutExtension(model2.Name)}' ({PercentModel2}%)...");
+
                 string filename = $"{Path.GetFileNameWithoutExtension(model1.Name)}-{PercentModel1}-with-{Path.GetFileNameWithoutExtension(model2.Name)}-{PercentModel2}{model1.Extension}";
                 string outPath = Path.Combine(model1.Directory.FullName, filename);
 
-                List<string> outLines = new List<string>();
-
                 Process p = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
                 p.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSd()} && call activate.bat mb/envs/ldo && " +
-                    $"python repo/scripts/merge_models.py -1 {model1.FullName.Wrap()} -2 {model2.FullName.Wrap()} -w {(PercentModel2 / 100f).ToStringDot("0.0000")} -o {outPath.Wrap()}";
+                    $"python {Constants.Dirs.RepoSd}/scripts/merge_models.py -1 {model1.FullName.Wrap()} -2 {model2.FullName.Wrap()} -w {(PercentModel2 / 100f).ToStringDot("0.0000")} -o {outPath.Wrap()}";
 
-                // if (!OsUtils.ShowHiddenCmd())
-                // {
-                //     p.OutputDataReceived += (sender, line) => { if (line != null && line.Data != null) Logger.Log(line.Data); };
-                //     p.ErrorDataReceived += (sender, line) => { if (line != null && line.Data != null) Logger.Log(line.Data); };
-                // }
+                if (!OsUtils.ShowHiddenCmd())
+                {
+                    p.OutputDataReceived += (sender, line) => { Logger.Log(line?.Data, true, false, Constants.Lognames.Merge); };
+                    p.ErrorDataReceived += (sender, line) => { Logger.Log(line?.Data, true, false, Constants.Lognames.Merge); };
+                }
 
                 Logger.Log($"cmd {p.StartInfo.Arguments}", true);
                 p.Start();
@@ -106,7 +107,7 @@ namespace StableDiffusionGui.Forms
             }
             catch(Exception ex)
             {
-                UiUtils.ShowMessageBox($"Error: {ex.Message}");
+                UiUtils.ShowMessageBox($"Merging Error: {ex.Message}");
                 Logger.Log(ex.StackTrace);
                 return "";
             }
@@ -137,7 +138,7 @@ namespace StableDiffusionGui.Forms
             btnRun.Text = "Merge!";
 
             if (File.Exists(outPath))
-                Logger.Log($"Done.\nSaved merged model to:\n{outPath}");
+                Logger.Log($"Done. Saved merged model to:\n{outPath.Replace(Paths.GetDataPath(), "Data")}");
             else
                 Logger.Log($"Failed to merge models.");
 

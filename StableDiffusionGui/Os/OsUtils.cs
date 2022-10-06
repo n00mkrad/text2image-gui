@@ -297,7 +297,7 @@ namespace StableDiffusionGui.Os
 
         public static void SendCtrlC (int pid)
         {
-            string exePath = Path.Combine(Paths.GetBinPath(), "wkl.exe");
+            string exePath = Path.Combine(Paths.GetBinPath(), $"{Constants.Bins.WindowsKill}.exe");
             Process p = NewProcess(true, exePath);
             p.StartInfo.Arguments = $"-SIGINT {pid}";
             Logger.Log($"{Path.GetFileName(exePath)} {p.StartInfo.Arguments}", true);
@@ -318,8 +318,8 @@ namespace StableDiffusionGui.Os
 
         public static void AttachOrphanHitman(Process p)
         {
-            string exePath = Path.Combine(Paths.GetBinPath(), "ok.exe");
-            Process hitmanProc = OsUtils.NewProcess(true, exePath);
+            string exePath = Path.Combine(Paths.GetBinPath(), $"{Constants.Bins.OrphanHitman}.exe");
+            Process hitmanProc = NewProcess(true, exePath);
             hitmanProc.StartInfo.Arguments = $"-parent-pid={Process.GetCurrentProcess().Id} -child-pid={p.Id}";
             hitmanProc.Start();
         }

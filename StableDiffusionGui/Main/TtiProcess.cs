@@ -108,7 +108,7 @@ namespace StableDiffusionGui.Main
 
                 dream.StartInfo.RedirectStandardInput = true;
                 dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSd()} && call activate.bat ldo && " +
-                    $"python repo/scripts/dream.py --model {modelNoExt.Wrap()} -o {outPath.Wrap()} {ArgsDreamPy.GetDefaultArgsStartup()} {precArg} " +
+                    $"python {Constants.Dirs.RepoSd}/scripts/dream.py --model {modelNoExt.Wrap()} -o {outPath.Wrap()} {ArgsDreamPy.GetDefaultArgsStartup()} {precArg} " +
                     $"{embArg} ";
 
                 Logger.Log("cmd.exe " + dream.StartInfo.Arguments, true);
@@ -237,7 +237,7 @@ namespace StableDiffusionGui.Main
                 TextToImage.CurrentTask.Processes.Add(dream);
 
                 dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSd()} && call activate.bat ldo && " +
-                    $"python repo/optimizedSD/optimized_txt2img_loop.py --model {modelNoExt.Wrap()} --outdir {outPath.Wrap()} --from_file_loop={promptFilePath.Wrap()} {precArg} ";
+                    $"python {Constants.Dirs.RepoSd}/optimizedSD/optimized_txt2img_loop.py --model {modelNoExt.Wrap()} --outdir {outPath.Wrap()} --from_file_loop={promptFilePath.Wrap()} {precArg} ";
                 Logger.Log("cmd.exe " + dream.StartInfo.Arguments, true);
 
                 if (!OsUtils.ShowHiddenCmd())
@@ -294,7 +294,7 @@ namespace StableDiffusionGui.Main
                 $"cd /D {Paths.GetDataPath().Wrap()}\n" +
                 $"SET PATH={OsUtils.GetTemporaryPathVariable(new string[] { "./mb", "./mb/Scripts", "./mb/condabin", "./mb/Library/bin" })}\n" +
                 $"call activate.bat mb/envs/ldo\n" +
-                $"python repo/scripts/dream.py --model {mdl} -o {outPath.Wrap()} {ArgsDreamPy.GetPrecisionArg()} {ArgsDreamPy.GetDefaultArgsStartup()}";
+                $"python {Constants.Dirs.RepoSd}/scripts/dream.py --model {mdl} -o {outPath.Wrap()} {ArgsDreamPy.GetPrecisionArg()} {ArgsDreamPy.GetDefaultArgsStartup()}";
 
             File.WriteAllText(batPath, batText);
             ProcessManager.FindAndKillOrphans($"*dream.py*{outPath}*");
@@ -364,7 +364,7 @@ namespace StableDiffusionGui.Main
             }
             else
             {
-                string log = "...\n" + string.Join("\n", Logger.GetSessionLogLastLines(Constants.SdLogFilename, 8));
+                string log = "...\n" + string.Join("\n", Logger.GetSessionLogLastLines(Constants.Lognames.Sd, 8));
                 TextToImage.Cancel($"Process has exited unexpectedly.\n\nOutput:\n{log}");
             }
         }

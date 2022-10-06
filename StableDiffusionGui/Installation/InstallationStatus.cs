@@ -28,7 +28,7 @@ namespace StableDiffusionGui.Installation
 
         public static bool HasSdRepo ()
         {
-            string repoPath = Path.Combine(Paths.GetDataPath(), "repo");
+            string repoPath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.RepoSd);
             bool hasDreamScript = File.Exists(Path.Combine(repoPath, "scripts", "dream.py"));
 
             Logger.Log($"HasSdRepo - Has dream.py: {hasDreamScript}", true);
