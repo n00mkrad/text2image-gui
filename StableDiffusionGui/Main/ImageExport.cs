@@ -17,7 +17,7 @@ namespace StableDiffusionGui.Main
         private static readonly int _loopWaitBeforeStartMs = 1000;
         private static readonly int _loopWaitTimeMs = 200;
 
-        public static async Task ExportLoop(string imagesDir, bool show)
+        public static async Task ExportLoop(string imagesDir, int startingImgCount, int targetImgCount, bool show)
         {
             Logger.Log("ExportLoop START", true);
             List<string> outImgs = new List<string>();
@@ -33,7 +33,7 @@ namespace StableDiffusionGui.Main
 
                     // TODO: Adapt for new dream.py implementation
                     if (TextToImage.LastTaskSettings.Implementation == Implementation.StableDiffusion)
-                        running = TextToImage.CurrentTask.TargetImgCount > 0 && TextToImage.CurrentTask.ImgCount < TextToImage.CurrentTask.TargetImgCount;
+                        running = (TextToImage.CurrentTask.ImgCount - startingImgCount) < targetImgCount;
 
                     if (!running && !files.Any())
                     {

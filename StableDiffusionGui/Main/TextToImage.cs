@@ -82,7 +82,7 @@ namespace StableDiffusionGui.Main
                 if (s.Implementation == Implementation.StableDiffusionOptimized)
                     tasks.Add(TtiProcess.RunStableDiffusionOpt(s.Prompts, s.Iterations, s.Params, tempOutDir));
 
-                tasks.Add(ImageExport.ExportLoop(tempOutDir, true));
+                tasks.Add(ImageExport.ExportLoop(tempOutDir, CurrentTask.ImgCount, s.GetTargetImgCount(), true));
 
                 await Task.WhenAll(tasks);
 
