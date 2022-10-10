@@ -175,6 +175,12 @@
     <Compile Include="Forms\MessageForm.designer.cs">
       <DependentUpon>MessageForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\ModelFoldersForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ModelFoldersForm.designer.cs">
+      <DependentUpon>ModelFoldersForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\ModelQuickSelectForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -278,6 +284,9 @@
       <DependentUpon>MessageForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ModelFoldersForm.resx">
+      <DependentUpon>ModelFoldersForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\ModelQuickSelectForm.resx">
       <DependentUpon>ModelQuickSelectForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -344,6 +353,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon1.ico" />
+    <None Include="Resources\iconRemove.png" />
+    <None Include="Resources\iconAdd.png" />
     <None Include="Resources\github.png" />
     <None Include="Resources\baseline_refresh_white_48dp.png" />
     <None Include="Resources\deleteBtn1.png" />

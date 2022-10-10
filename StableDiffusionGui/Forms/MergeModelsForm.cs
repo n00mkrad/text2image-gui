@@ -38,12 +38,13 @@ namespace StableDiffusionGui.Forms
 
         private void btnOpenModelFolder_Click(object sender, EventArgs e)
         {
-            Process.Start("explorer", Paths.GetModelsPath().Wrap());
+            new ModelFoldersForm().ShowDialog();
+            LoadModels();
         }
 
         private void LoadModels()
         {
-            var ckptFiles = IoUtils.GetFileInfosSorted(Paths.GetModelsPath(), true, "*.ckpt").ToList();
+            var ckptFiles = Paths.GetModels();
 
             comboxModel1.Items.Clear();
             comboxModel2.Items.Clear();

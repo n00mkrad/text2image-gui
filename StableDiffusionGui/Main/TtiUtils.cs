@@ -30,9 +30,11 @@ namespace StableDiffusionGui.Main
 
         public static void WriteModelsYaml(string mdlName)
         {
+            var mdl = Paths.GetModel(mdlName, true);
+
             string text = $"{mdlName}:\n" +
                 $"    config: configs/stable-diffusion/v1-inference.yaml\n" +
-                $"    weights: ../models/{mdlName}.ckpt\n" +
+                $"    weights: {(mdl == null ? "unknown.ckpt" : mdl.FullName.Replace(@"\", "/").Wrap())}\n" +
                 $"    width: 512\n" +
                 $"    height: 512\n";
 
@@ -77,21 +79,23 @@ namespace StableDiffusionGui.Main
 
         public static bool CheckIfSdModelExists()
         {
-            if (!File.Exists(Path.Combine(Paths.GetModelsPath(), Config.Get(Config.Key.comboxSdModel))))
-            {
-                string savedModelFileName = Config.Get(Config.Key.comboxSdModel);
+            string savedModelFileName = Config.Get(Config.Key.comboxSdModel);
 
-                if (string.IsNullOrWhiteSpace(savedModelFileName))
-                {
-                    TextToImage.Cancel($"No Stable Diffusion model file has been set.\nPlease set one in the settings.");
-                    new SettingsForm().ShowDialog();
-                }
-                else
+            if (string.IsNullOrWhiteSpace(savedModelFileName))
+            {
+                TextToImage.Cancel($"No Stable Diffusion model file has been set.\nPlease set one in the settings.");
+                new SettingsForm().ShowDialog();
+                return false;
+            }
+            else
+            {
+                var model = Paths.GetModel(savedModelFileName);
+
+                if(model == null)
                 {
                     TextToImage.Cancel($"Stable Diffusion model file {savedModelFileName.Wrap()} not found.\nPossibly it was moved, renamed, or deleted.");
+                    return false;
                 }
-
-                return false;
             }
 
             return true;

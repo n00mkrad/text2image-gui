@@ -28,7 +28,7 @@ namespace StableDiffusionGui.Forms
 
         private void PromptListForm_Load(object sender, EventArgs e)
         {
-            if (_promptListMode == ListMode.History)
+                if (_promptListMode == ListMode.History)
             {
                 Text = "Prompt History";
                 btnAddPromptsToQueue.Visible = false;

@@ -40,15 +40,14 @@ namespace StableDiffusionGui.Forms
 
         private void btnOpenModelFolder_Click(object sender, EventArgs e)
         {
-            Process.Start("explorer", Paths.GetModelsPath().Wrap());
+            new ModelFoldersForm().ShowDialog();
+            LoadModels();
         }
 
         private void LoadModels()
         {
-            var ckptFiles = IoUtils.GetFileInfosSorted(Paths.GetModelsPath(), true, "*.ckpt").ToList();
-
             comboxModel.Items.Clear();
-            ckptFiles.ForEach(x => comboxModel.Items.Add(x.Name));
+            Paths.GetModels().ForEach(x => comboxModel.Items.Add(x.Name));
 
             if (comboxModel.SelectedIndex < 0 && comboxModel.Items.Count > 0)
                 comboxModel.SelectedIndex = 0;

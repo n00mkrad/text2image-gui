@@ -160,7 +160,7 @@ namespace StableDiffusionGui
             sliderResW.Value = meta.GeneratedResolution.Width / 64; sliderResW_Scroll(null, null);
             sliderResH.Value = meta.GeneratedResolution.Height / 64; sliderResH_Scroll(null, null);
             upDownSeed.Value = meta.Seed;
-            comboxSampler.Text = meta.Sampler;
+            comboxSampler.Text = meta.Sampler; // TODO: MAKE THIS WORK WITH ALIASES
             MainUi.CurrentInitImgPath = meta.InitImgName;
 
             if (meta.InitStrength > 0f)
@@ -183,7 +183,7 @@ namespace StableDiffusionGui
             sliderResW.Value = s.Params["res"].Split('x')[0].GetInt() / 64; sliderResW_Scroll(null, null);
             sliderResH.Value = s.Params["res"].Split('x')[1].GetInt() / 64; sliderResH_Scroll(null, null);
             upDownSeed.Value = s.Params["seed"].GetLong();
-            comboxSampler.Text = s.Params["sampler"];
+            comboxSampler.Text = s.Params["sampler"]; // TODO: MAKE THIS WORK WITH ALIASES
             MainUi.CurrentInitImgPath = s.Params["initImg"];
             sliderInitStrength.Value = (s.Params["initStrengths"].Split(",")[0].GetFloat() * 40f).RoundToInt(); sliderInitStrength_Scroll(null, null);
             MainUi.CurrentEmbeddingPath = s.Params["embedding"];
@@ -206,7 +206,7 @@ namespace StableDiffusionGui
                             { "scales", string.Join(",", MainUi.GetScales(textboxExtraScales.Text).Select(x => x.ToStringDot("0.0000"))) },
                             { "res", $"{MainUi.CurrentResW}x{MainUi.CurrentResH}" },
                             { "seed", upDownSeed.Value < 0 ? (new Random().Next(0, Int32.MaxValue)).ToString() : ((long)upDownSeed.Value).ToString() },
-                            { "sampler", comboxSampler.Text.Trim() },
+                            { "sampler", ((Enums.StableDiffusion.Sampler)comboxSampler.SelectedIndex).ToString().ToLower() },
                             { "initImg", MainUi.CurrentInitImgPath },
                             { "initStrengths", string.Join(",", MainUi.GetInitStrengths(textboxExtraInitStrengths.Text).Select(x => x.ToStringDot("0.0000"))) },
                             { "embedding", MainUi.CurrentEmbeddingPath },

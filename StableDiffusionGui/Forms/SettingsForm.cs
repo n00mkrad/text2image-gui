@@ -47,7 +47,7 @@ namespace StableDiffusionGui.Forms
         private void LoadModels(bool loadCombox)
         {
             comboxSdModel.Items.Clear();
-            IoUtils.GetFileInfosSorted(Paths.GetModelsPath(), true, "*.ckpt").ToList().ForEach(x => comboxSdModel.Items.Add(x.Name));
+            Paths.GetModels().ForEach(x => comboxSdModel.Items.Add(x.Name));
 
             if(loadCombox)
                 ConfigParser.LoadGuiElement(comboxSdModel);
@@ -122,7 +122,9 @@ namespace StableDiffusionGui.Forms
 
         private void btnOpenModelsFolder_Click(object sender, EventArgs e)
         {
-            Process.Start("explorer", Paths.GetModelsPath().Wrap());
+            // Process.Start("explorer", Paths.GetModelsPath().Wrap());
+            new ModelFoldersForm().ShowDialog();
+            LoadModels(true);
         }
 
         private void checkboxOptimizedSd_CheckedChanged(object sender, EventArgs e)

@@ -1,4 +1,5 @@
-﻿using StableDiffusionGui.Main;
+﻿using Newtonsoft.Json;
+using StableDiffusionGui.Main;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -70,21 +71,40 @@ namespace StableDiffusionGui.Io
             return path;
         }
 
-        public static FileInfo GetModel(string filename)
+        public static List<FileInfo> GetModels(string pattern = "*.ckpt")
         {
-            List<string> mdlFolders = new List<string>();
+            List<FileInfo> list = new List<FileInfo>();
 
-            mdlFolders.Add(GetModelsPath());
-
-            foreach(string folderPath in mdlFolders)
+            try
             {
-                var matches = IoUtils.GetFileInfosSorted(folderPath, false, filename);
+                List<string> mdlFolders = new List<string>() { GetModelsPath() };
 
-                if (matches != null && matches.Count() > 0)
-                    return matches.First();
+                var customModelDirsList = JsonConvert.DeserializeObject<List<string>>(Config.Get(Config.Key.customModelDirs));
+
+                if (customModelDirsList != null)
+                    mdlFolders.AddRange(customModelDirsList);
+
+
+                foreach (string folderPath in mdlFolders)
+                    list.AddRange(IoUtils.GetFileInfosSorted(folderPath, false, pattern).ToList());
+
+                return list.Distinct().ToList();
+            }
+            catch (Exception ex)
+            {
+                Logger.Log($"Error getting models: {ex.Message}");
+                Logger.Log(ex.StackTrace, true);
             }
 
-            return null;
+            return list;
+        }
+
+        public static FileInfo GetModel(string filename, bool anyExtension = false)
+        {
+            if (anyExtension)
+                return GetModels().Where(x => Path.GetFileNameWithoutExtension(x.Name) == Path.GetFileNameWithoutExtension(filename)).FirstOrDefault();
+            else
+                return GetModels().Where(x => x.Name == filename).FirstOrDefault();
         }
     }
 }

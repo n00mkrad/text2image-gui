@@ -54,7 +54,7 @@ namespace StableDiffusionGui.Installation
 
         public static bool HasSdModel ()
         {
-            return IoUtils.GetAmountOfFiles(Paths.GetModelsPath(), false, "*.ckpt") > 0;
+            return Paths.GetModels().Count() > 0;
         }
 
         public static bool HasSdUpscalers()

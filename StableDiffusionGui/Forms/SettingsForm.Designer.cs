@@ -947,7 +947,7 @@
             this.btnOpenModelsFolder.Size = new System.Drawing.Size(75, 23);
             this.btnOpenModelsFolder.TabIndex = 4;
             this.btnOpenModelsFolder.TabStop = false;
-            this.btnOpenModelsFolder.Text = "Open Folder";
+            this.btnOpenModelsFolder.Text = "Folders...";
             this.toolTip.SetToolTip(this.btnOpenModelsFolder, "Open Models Folder");
             this.btnOpenModelsFolder.Click += new System.EventHandler(this.btnOpenModelsFolder_Click);
             // 

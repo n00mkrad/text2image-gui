@@ -27,7 +27,7 @@ namespace StableDiffusionGui.Forms
         private void LoadModels(bool loadCombox)
         {
             comboxSdModel.Items.Clear();
-            IoUtils.GetFileInfosSorted(Paths.GetModelsPath(), true, "*.ckpt").ToList().ForEach(x => comboxSdModel.Items.Add(x.Name));
+            Paths.GetModels().ForEach(x => comboxSdModel.Items.Add(x.Name));
 
             if (loadCombox)
                 ConfigParser.LoadGuiElement(comboxSdModel);
