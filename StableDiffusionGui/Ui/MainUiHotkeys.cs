@@ -25,7 +25,7 @@ namespace StableDiffusionGui.Ui
             if (keys == (Keys.Control | Keys.Delete)) // Hotkey: Delete generated image
                 ImagePreview.DeleteCurrent();
 
-            if (keys == (Keys.Control | Keys.Shift | Keys.Delete)) // Hotkey: Delete all generated images
+            if (keys == (Keys.Control | Keys.Alt | Keys.Delete)) // Hotkey: Delete all generated images
                 ImagePreview.DeleteAll();
 
             if (keys == (Keys.Control | Keys.Add) || keys == (Keys.Control | Keys.Oemplus)) // Hotkey: Toggle prompt field size
@@ -34,7 +34,7 @@ namespace StableDiffusionGui.Ui
             if (keys == (Keys.Control | Keys.O)) // Hotkey: Open current image
                 ImagePreview.OpenCurrent();
 
-            if (keys == (Keys.Control | Keys.Shift | Keys.O)) // Hotkey: Open folder of current image
+            if (keys == (Keys.Control | Keys.Alt | Keys.O)) // Hotkey: Open folder of current image
                 ImagePreview.OpenFolderOfCurrent();
 
             if (keys == (Keys.F12)) // Hotkey: Open settings
