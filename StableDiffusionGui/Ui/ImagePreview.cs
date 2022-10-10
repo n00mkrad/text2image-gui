@@ -3,6 +3,7 @@ using StableDiffusionGui.Io;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -119,6 +120,16 @@ namespace StableDiffusionGui.Ui
             }
 
             Show();
+        }
+
+        public static void OpenCurrent ()
+        {
+            Process.Start(CurrentImagePath);
+        }
+
+        public static void OpenFolderOfCurrent()
+        {
+            Process.Start("explorer", $@"/select, {CurrentImagePath.Wrap()}");
         }
 
         public static void DeleteCurrent()

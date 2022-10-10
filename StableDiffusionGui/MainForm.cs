@@ -83,7 +83,7 @@ namespace StableDiffusionGui
             textboxCliTest.Visible = Debugger.IsAttached;
         }
 
-        private void SetUiElements ()
+        private void SetUiElements()
         {
             comboxSampler.FillFromEnum<Enums.StableDiffusion.Sampler>(MainUi.UiStrings);
         }
@@ -151,11 +151,11 @@ namespace StableDiffusionGui
         {
             upDownSeed.Value = seed;
 
-            if(seed < 0)
+            if (seed < 0)
                 upDownSeed.Text = "";
         }
 
-        public void LoadMetadataIntoUi (ImageMetadata meta)
+        public void LoadMetadataIntoUi(ImageMetadata meta)
         {
             textboxPrompt.Text = meta.Prompt;
             sliderSteps.Value = meta.Steps / 5; sliderSteps_Scroll(null, null);
@@ -170,7 +170,7 @@ namespace StableDiffusionGui
                 sliderInitStrength.Value = (meta.InitStrength * 40f).RoundToInt().Clamp(sliderInitStrength.Minimum, sliderInitStrength.Maximum); sliderInitStrength_Scroll(null, null);
 
             UpdateInitImgAndEmbeddingUi();
-        } 
+        }
 
         public void LoadTtiSettingsIntoUi(string[] prompts)
         {
@@ -411,12 +411,12 @@ namespace StableDiffusionGui
 
         private void openFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start(ImagePreview.CurrentImagePath);
+            ImagePreview.OpenCurrent();
         }
 
         private void openOutputFolderToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start("explorer", $@"/select, {ImagePreview.CurrentImagePath.Wrap()}");
+            ImagePreview.OpenFolderOfCurrent();
         }
 
         private void copyImageToClipboardToolStripMenuItem_Click(object sender, EventArgs e)
