@@ -26,7 +26,7 @@ namespace StableDiffusionGui.Ui
             if (keys == (Keys.Control | Keys.Shift | Keys.Delete)) // Hotkey: Delete all generated images
                 ImagePreview.DeleteAll();
 
-            if (keys == (Keys.Control | Keys.Oemplus)) // Hotkey: Toggle prompt field size
+            if (keys == (Keys.Control | Keys.Add) || keys == (Keys.Control | Keys.Oemplus)) // Hotkey: Toggle prompt field size
                 MainUi.SetPromptFieldSize(MainUi.PromptFieldSizeMode.Toggle);
         }
     }
