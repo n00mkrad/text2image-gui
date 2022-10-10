@@ -32,6 +32,12 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PruneModelsForm));
             this.titleLabel = new System.Windows.Forms.Label();
             this.parentPanel = new System.Windows.Forms.Panel();
+            this.panelDelInput = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.checkboxPruneDeleteInput = new System.Windows.Forms.CheckBox();
+            this.panel5 = new System.Windows.Forms.Panel();
+            this.label2 = new System.Windows.Forms.Label();
             this.btnRun = new System.Windows.Forms.Button();
             this.panelPrecision = new System.Windows.Forms.Panel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
@@ -48,13 +54,11 @@
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.btnReloadModels = new System.Windows.Forms.Button();
             this.btnOpenModelFolder = new System.Windows.Forms.Button();
-            this.panelDelInput = new System.Windows.Forms.Panel();
-            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.panel4 = new System.Windows.Forms.Panel();
-            this.panel5 = new System.Windows.Forms.Panel();
-            this.label2 = new System.Windows.Forms.Label();
-            this.checkboxPruneDeleteInput = new System.Windows.Forms.CheckBox();
             this.parentPanel.SuspendLayout();
+            this.panelDelInput.SuspendLayout();
+            this.tableLayoutPanel2.SuspendLayout();
+            this.panel4.SuspendLayout();
+            this.panel5.SuspendLayout();
             this.panelPrecision.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -63,10 +67,6 @@
             this.tableLayoutPanel8.SuspendLayout();
             this.panel25.SuspendLayout();
             this.panel26.SuspendLayout();
-            this.panelDelInput.SuspendLayout();
-            this.tableLayoutPanel2.SuspendLayout();
-            this.panel4.SuspendLayout();
-            this.panel5.SuspendLayout();
             this.SuspendLayout();
             // 
             // titleLabel
@@ -95,6 +95,70 @@
             this.parentPanel.Name = "parentPanel";
             this.parentPanel.Size = new System.Drawing.Size(560, 187);
             this.parentPanel.TabIndex = 15;
+            // 
+            // panelDelInput
+            // 
+            this.panelDelInput.Controls.Add(this.tableLayoutPanel2);
+            this.panelDelInput.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelDelInput.Location = new System.Drawing.Point(0, 70);
+            this.panelDelInput.Name = "panelDelInput";
+            this.panelDelInput.Size = new System.Drawing.Size(560, 35);
+            this.panelDelInput.TabIndex = 102;
+            // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.ColumnCount = 2;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.Controls.Add(this.panel4, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.panel5, 0, 0);
+            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 1;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(560, 35);
+            this.tableLayoutPanel2.TabIndex = 1;
+            // 
+            // panel4
+            // 
+            this.panel4.Controls.Add(this.checkboxPruneDeleteInput);
+            this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel4.Location = new System.Drawing.Point(283, 3);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(274, 29);
+            this.panel4.TabIndex = 88;
+            // 
+            // checkboxPruneDeleteInput
+            // 
+            this.checkboxPruneDeleteInput.AutoSize = true;
+            this.checkboxPruneDeleteInput.ForeColor = System.Drawing.Color.White;
+            this.checkboxPruneDeleteInput.Location = new System.Drawing.Point(5, 7);
+            this.checkboxPruneDeleteInput.Name = "checkboxPruneDeleteInput";
+            this.checkboxPruneDeleteInput.Size = new System.Drawing.Size(15, 14);
+            this.checkboxPruneDeleteInput.TabIndex = 112;
+            this.checkboxPruneDeleteInput.UseVisualStyleBackColor = true;
+            // 
+            // panel5
+            // 
+            this.panel5.Controls.Add(this.label2);
+            this.panel5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel5.Location = new System.Drawing.Point(3, 3);
+            this.panel5.Name = "panel5";
+            this.panel5.Size = new System.Drawing.Size(274, 29);
+            this.panel5.TabIndex = 87;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.Color.White;
+            this.label2.Location = new System.Drawing.Point(5, 8);
+            this.label2.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(148, 13);
+            this.label2.TabIndex = 85;
+            this.label2.Text = "Delete Input File If Successful";
             // 
             // btnRun
             // 
@@ -289,70 +353,6 @@
             this.btnOpenModelFolder.UseVisualStyleBackColor = false;
             this.btnOpenModelFolder.Click += new System.EventHandler(this.btnOpenModelFolder_Click);
             // 
-            // panelDelInput
-            // 
-            this.panelDelInput.Controls.Add(this.tableLayoutPanel2);
-            this.panelDelInput.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelDelInput.Location = new System.Drawing.Point(0, 70);
-            this.panelDelInput.Name = "panelDelInput";
-            this.panelDelInput.Size = new System.Drawing.Size(560, 35);
-            this.panelDelInput.TabIndex = 102;
-            // 
-            // tableLayoutPanel2
-            // 
-            this.tableLayoutPanel2.ColumnCount = 2;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.Controls.Add(this.panel4, 0, 0);
-            this.tableLayoutPanel2.Controls.Add(this.panel5, 0, 0);
-            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-            this.tableLayoutPanel2.RowCount = 1;
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(560, 35);
-            this.tableLayoutPanel2.TabIndex = 1;
-            // 
-            // panel4
-            // 
-            this.panel4.Controls.Add(this.checkboxPruneDeleteInput);
-            this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel4.Location = new System.Drawing.Point(283, 3);
-            this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(274, 29);
-            this.panel4.TabIndex = 88;
-            // 
-            // panel5
-            // 
-            this.panel5.Controls.Add(this.label2);
-            this.panel5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel5.Location = new System.Drawing.Point(3, 3);
-            this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(274, 29);
-            this.panel5.TabIndex = 87;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(5, 8);
-            this.label2.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(148, 13);
-            this.label2.TabIndex = 85;
-            this.label2.Text = "Delete Input File If Successful";
-            // 
-            // checkboxPruneDeleteInput
-            // 
-            this.checkboxPruneDeleteInput.AutoSize = true;
-            this.checkboxPruneDeleteInput.ForeColor = System.Drawing.Color.White;
-            this.checkboxPruneDeleteInput.Location = new System.Drawing.Point(5, 7);
-            this.checkboxPruneDeleteInput.Name = "checkboxPruneDeleteInput";
-            this.checkboxPruneDeleteInput.Size = new System.Drawing.Size(15, 14);
-            this.checkboxPruneDeleteInput.TabIndex = 112;
-            this.checkboxPruneDeleteInput.UseVisualStyleBackColor = true;
-            // 
             // PruneModelsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -371,8 +371,15 @@
             this.Name = "PruneModelsForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Prune Models";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.PruneModelsForm_FormClosing);
             this.Load += new System.EventHandler(this.PruneModelsForm_Load);
             this.parentPanel.ResumeLayout(false);
+            this.panelDelInput.ResumeLayout(false);
+            this.tableLayoutPanel2.ResumeLayout(false);
+            this.panel4.ResumeLayout(false);
+            this.panel4.PerformLayout();
+            this.panel5.ResumeLayout(false);
+            this.panel5.PerformLayout();
             this.panelPrecision.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
@@ -383,12 +390,6 @@
             this.panel25.ResumeLayout(false);
             this.panel26.ResumeLayout(false);
             this.panel26.PerformLayout();
-            this.panelDelInput.ResumeLayout(false);
-            this.tableLayoutPanel2.ResumeLayout(false);
-            this.panel4.ResumeLayout(false);
-            this.panel4.PerformLayout();
-            this.panel5.ResumeLayout(false);
-            this.panel5.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 

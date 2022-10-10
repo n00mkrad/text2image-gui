@@ -114,8 +114,7 @@ namespace StableDiffusionGui.Forms
                 return;
             }
 
-            ConfigParser.SaveComboxIndex(comboxPrunePrecision);
-            ConfigParser.SaveGuiElement(checkboxPruneDeleteInput);
+            SaveConfig();
 
             Program.MainForm.SetWorking(true);
             Enabled = false;
@@ -151,6 +150,17 @@ namespace StableDiffusionGui.Forms
             //     UiUtils.ShowMessageBox($"Done.\n\nSaved pruned model to:\n{outPath}");
             // else
             //     UiUtils.ShowMessageBox($"Failed to prune model.");
+        }
+
+        private void PruneModelsForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            SaveConfig();
+        }
+
+        private void SaveConfig ()
+        {
+            ConfigParser.SaveComboxIndex(comboxPrunePrecision);
+            ConfigParser.SaveGuiElement(checkboxPruneDeleteInput);
         }
     }
 }
