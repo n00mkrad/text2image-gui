@@ -15,13 +15,9 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 using StableDiffusionGui.Installation;
 using StableDiffusionGui.Data;
 using StableDiffusionGui.Os;
-using StableDiffusionGui.Properties;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 using Paths = StableDiffusionGui.Io.Paths;
-using System.Globalization;
-using HTAlt.WinForms;
-using Microsoft.VisualBasic;
 
 namespace StableDiffusionGui
 {
@@ -38,6 +34,7 @@ namespace StableDiffusionGui
         public PictureBox PictBoxImgViewer { get { return pictBoxImgViewer; } }
         public Label OutputImgLabel { get { return outputImgLabel; } }
         public Button BtnExpandPromptField { get { return btnExpandPromptField; } }
+        public Panel PanelBg { get { return panel1; } }
         #endregion
 
         public bool IsInFocus() { return (ActiveForm == this); }
