@@ -340,9 +340,9 @@
             this.label3.Location = new System.Drawing.Point(5, 10);
             this.label3.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(70, 13);
+            this.label3.Size = new System.Drawing.Size(89, 13);
             this.label3.TabIndex = 89;
-            this.label3.Text = "Detail (Steps)";
+            this.label3.Text = "Generation Steps";
             // 
             // label4
             // 
@@ -352,9 +352,9 @@
             this.label4.Location = new System.Drawing.Point(5, 10);
             this.label4.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(153, 13);
+            this.label4.Size = new System.Drawing.Size(149, 13);
             this.label4.TabIndex = 90;
-            this.label4.Text = "Creativeness (Guidance Scale)";
+            this.label4.Text = "Prompt Guidance (CFG Scale)";
             // 
             // tableLayoutPanel1
             // 
@@ -1515,26 +1515,26 @@
             this.openModelPruningTrimmingToolToolStripMenuItem,
             this.viewLogInRealtimeToolStripMenuItem});
             this.menuStripDevTools.Name = "menuStripDevTools";
-            this.menuStripDevTools.Size = new System.Drawing.Size(185, 114);
+            this.menuStripDevTools.Size = new System.Drawing.Size(185, 92);
             // 
             // openDreampyCLIToolStripMenuItem
             // 
             this.openDreampyCLIToolStripMenuItem.Name = "openDreampyCLIToolStripMenuItem";
-            this.openDreampyCLIToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.openDreampyCLIToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
             this.openDreampyCLIToolStripMenuItem.Text = "Open Dream.py CLI";
             this.openDreampyCLIToolStripMenuItem.Click += new System.EventHandler(this.openDreampyCLIToolStripMenuItem_Click);
             // 
             // openModelMergeToolToolStripMenuItem
             // 
             this.openModelMergeToolToolStripMenuItem.Name = "openModelMergeToolToolStripMenuItem";
-            this.openModelMergeToolToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.openModelMergeToolToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
             this.openModelMergeToolToolStripMenuItem.Text = "Merge Models";
             this.openModelMergeToolToolStripMenuItem.Click += new System.EventHandler(this.openModelMergeToolToolStripMenuItem_Click);
             // 
             // openModelPruningTrimmingToolToolStripMenuItem
             // 
             this.openModelPruningTrimmingToolToolStripMenuItem.Name = "openModelPruningTrimmingToolToolStripMenuItem";
-            this.openModelPruningTrimmingToolToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.openModelPruningTrimmingToolToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
             this.openModelPruningTrimmingToolToolStripMenuItem.Text = "Prune (Trim) Models";
             this.openModelPruningTrimmingToolToolStripMenuItem.Click += new System.EventHandler(this.openModelPruningTrimmingToolToolStripMenuItem_Click);
             // 
