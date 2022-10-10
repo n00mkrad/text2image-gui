@@ -77,6 +77,8 @@ namespace StableDiffusionGui
 
             if (!Debugger.IsAttached)
                 new WelcomeForm().ShowDialog();
+            else
+                new RealtimeLoggerForm().Show();
 
             textboxCliTest.Visible = Debugger.IsAttached;
         }

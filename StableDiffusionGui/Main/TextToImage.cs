@@ -199,8 +199,14 @@ namespace StableDiffusionGui.Main
                     if (lastLine.Value.TotalMilliseconds > 2000)
                         break;
 
-                    if (!string.IsNullOrWhiteSpace(previousLastLine.Key) && lastLine.Key != previousLastLine.Key && lastLine.Value.TotalMilliseconds < 500) // If lines changed (= still outputting), send ctrl+c again
+                    bool linesChanged = !string.IsNullOrWhiteSpace(previousLastLine.Key) && lastLine.Key != previousLastLine.Key && lastLine.Value.TotalMilliseconds < 500;
+
+                    if (linesChanged && !lastLine.Key.Contains("skipped")) // If lines changed (= still outputting), send ctrl+c again
+                    {
+                        Logger.Log(previousLastLine.Key);
+                        Logger.Log(lastLine.Key);
                         TtiUtils.SoftCancelDreamPy();
+                    }
 
                     previousLastLine = lastLine;
                 }

@@ -14,6 +14,7 @@ namespace StableDiffusionGui.Main
     internal class Logger
     {
         public static TextBox Textbox;
+        public static TextBox TextboxDebug;
         private static string _file;
         public static long Id;
 
@@ -41,7 +42,7 @@ namespace StableDiffusionGui.Main
 
         private static ConcurrentQueue<Entry> logQueue = new ConcurrentQueue<Entry>();
 
-        public static void Log(string msg, bool hidden = false, bool replaceLastLine = false, string filename = "")
+        public static void Log(string msg, bool hidden = false, bool replaceLastLine = false, string filename = Constants.Lognames.Session)
         {
             if (string.IsNullOrWhiteSpace(msg))
                 return;
@@ -84,7 +85,7 @@ namespace StableDiffusionGui.Main
             catch { }
             msg = msg.Replace("\n", Environment.NewLine);
 
-            if (!entry.hidden && Textbox != null)
+            if (!entry.hidden && Textbox != null && !Textbox.IsDisposed)
                 Textbox.AppendText((Textbox.Text.Length > 1 ? Environment.NewLine : "") + msg);
 
             if (entry.replaceLastLine)
@@ -95,6 +96,9 @@ namespace StableDiffusionGui.Main
 
             if (!entry.hidden)
                 msg = "[UI] " + msg;
+
+            if (TextboxDebug != null && !TextboxDebug.IsDisposed)
+                TextboxDebug.AppendText($"[{entry.filename}] {msg}{Environment.NewLine}");
 
             LogToFile(msg, false, entry.filename);
         }
