@@ -34,7 +34,7 @@
             // 
             // logBox
             // 
-            this.logBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.logBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.logBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.logBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.logBox.ForeColor = System.Drawing.Color.Silver;
@@ -42,7 +42,7 @@
             this.logBox.Multiline = true;
             this.logBox.Name = "logBox";
             this.logBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.logBox.Size = new System.Drawing.Size(784, 561);
+            this.logBox.Size = new System.Drawing.Size(884, 561);
             this.logBox.TabIndex = 79;
             this.logBox.TabStop = false;
             // 
@@ -51,15 +51,16 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.ClientSize = new System.Drawing.Size(784, 561);
+            this.ClientSize = new System.Drawing.Size(884, 561);
             this.Controls.Add(this.logBox);
             this.ForeColor = System.Drawing.Color.White;
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.Name = "RealtimeLoggerForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Realtime Log Viewer";
+            this.Text = "Log Viewer";
             this.Load += new System.EventHandler(this.RealtimeLoggerForm_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.RealtimeLoggerForm_KeyDown);
             this.ResumeLayout(false);
             this.PerformLayout();
 

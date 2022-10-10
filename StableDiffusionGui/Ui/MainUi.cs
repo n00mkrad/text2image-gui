@@ -5,8 +5,10 @@ using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Properties;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -51,6 +53,18 @@ namespace StableDiffusionGui.Ui
 
         public static readonly string[] ValidInitImgExtensions = new string[] { ".png", ".jpeg", ".jpg", ".jfif", ".bmp", ".webp" };
         public static readonly string[] ValidInitEmbeddingExtensions = new string[] { ".pt", ".bin" };
+
+        public static Dictionary<string, string> UiStrings = new Dictionary<string, string>
+        {
+            { Enums.StableDiffusion.Sampler.K_Euler_A.ToString(), "Euler Ancestral" },
+            { Enums.StableDiffusion.Sampler.K_Euler.ToString(), "Euler" },
+            { Enums.StableDiffusion.Sampler.K_Lms.ToString(), "LMS" },
+            { Enums.StableDiffusion.Sampler.Ddim.ToString(), "DDIM" },
+            { Enums.StableDiffusion.Sampler.Plms.ToString(), "PLMS" },
+            { Enums.StableDiffusion.Sampler.K_Heun.ToString(), "Heun" },
+            { Enums.StableDiffusion.Sampler.K_Dpm_2.ToString(), "DPM 2" },
+            { Enums.StableDiffusion.Sampler.K_Dpm_2_A.ToString(), "DPM 2 Ancestral" },
+        };
 
         public static void DoStartupChecks ()
         {
@@ -124,6 +138,25 @@ namespace StableDiffusionGui.Ui
                 }
 
                 Program.MainForm.UpdateInitImgAndEmbeddingUi();
+            }
+        }
+
+        public static void HandlePaste ()
+        {
+            try
+            {
+                Image clipboardImg = Clipboard.GetImage();
+
+                if (clipboardImg == null)
+                    return;
+
+                string savePath = Path.Combine(Paths.GetSessionDataPath(), "clipboard.png");
+                clipboardImg.Save(savePath);
+                MainUi.HandleDroppedFiles(new string[] { savePath });
+            }
+            catch (Exception ex)
+            {
+                Logger.Log($"Failed to paste image from clipboard: {ex.Message}\n{ex.StackTrace}", true);
             }
         }
 

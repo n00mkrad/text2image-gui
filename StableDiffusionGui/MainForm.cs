@@ -21,6 +21,7 @@ using System.Runtime.InteropServices;
 using Paths = StableDiffusionGui.Io.Paths;
 using System.Globalization;
 using HTAlt.WinForms;
+using Microsoft.VisualBasic;
 
 namespace StableDiffusionGui
 {
@@ -66,6 +67,7 @@ namespace StableDiffusionGui
 
         private void MainForm_Shown(object sender, EventArgs e)
         {
+            SetUiElements();
             LoadUiElements();
             PromptHistory.Load();
             Setup.FixHardcodedPaths();
@@ -77,10 +79,13 @@ namespace StableDiffusionGui
 
             if (!Debugger.IsAttached)
                 new WelcomeForm().ShowDialog();
-            else
-                new RealtimeLoggerForm().Show();
 
             textboxCliTest.Visible = Debugger.IsAttached;
+        }
+
+        private void SetUiElements ()
+        {
+            comboxSampler.FillFromEnum<Enums.StableDiffusion.Sampler>(MainUi.UiStrings);
         }
 
         private void LoadUiElements()
@@ -444,6 +449,8 @@ namespace StableDiffusionGui
 
         private void pictBoxImgViewer_Click(object sender, EventArgs e)
         {
+            pictBoxImgViewer.Focus();
+
             if (((MouseEventArgs)e).Button == MouseButtons.Right)
             {
                 if (!string.IsNullOrWhiteSpace(ImagePreview.CurrentImagePath) && File.Exists(ImagePreview.CurrentImagePath))
@@ -712,24 +719,7 @@ namespace StableDiffusionGui
 
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyData == (Keys.Control | Keys.V))
-            {
-                try
-                {
-                    Image clipboardImg = Clipboard.GetImage();
-
-                    if (clipboardImg == null)
-                        return;
-
-                    string savePath = Path.Combine(Paths.GetSessionDataPath(), "clipboard.png");
-                    clipboardImg.Save(savePath);
-                    MainUi.HandleDroppedFiles(new string[] { savePath });
-                }
-                catch (Exception ex)
-                {
-                    Logger.Log($"Failed to paste image from clipboard: {ex.Message}\n{ex.StackTrace}", true);
-                }
-            }
+            MainUiHotkeys.Handle(e.KeyData);
         }
 
         private void openDreampyCLIToolStripMenuItem_Click(object sender, EventArgs e)
@@ -759,6 +749,16 @@ namespace StableDiffusionGui
                 if (textboxPrompt.SelectionStart > 0)
                     SendKeys.Send("+{LEFT}{DEL}");
             }
+        }
+
+        private void panel1_Click(object sender, EventArgs e)
+        {
+            panel1.Focus();
+        }
+
+        private void viewLogInRealtimeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new RealtimeLoggerForm().Show();
         }
     }
 }

@@ -95,7 +95,6 @@
             this.label7 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.textboxCliTest = new System.Windows.Forms.TextBox();
-            this.panel12 = new System.Windows.Forms.Panel();
             this.panel11 = new System.Windows.Forms.Panel();
             this.panelSeamless = new System.Windows.Forms.Panel();
             this.label8 = new System.Windows.Forms.Label();
@@ -130,6 +129,7 @@
             this.openDreampyCLIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openModelMergeToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openModelPruningTrimmingToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewLogInRealtimeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
             this.tableLayoutPanel6.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -703,18 +703,9 @@
             this.comboxSampler.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.comboxSampler.ForeColor = System.Drawing.Color.White;
             this.comboxSampler.FormattingEnabled = true;
-            this.comboxSampler.Items.AddRange(new object[] {
-            "k_euler_a",
-            "k_euler",
-            "k_lms",
-            "ddim",
-            "plms",
-            "k_heun",
-            "k_dpm_2",
-            "k_dpm_2_a"});
             this.comboxSampler.Location = new System.Drawing.Point(233, 7);
             this.comboxSampler.Name = "comboxSampler";
-            this.comboxSampler.Size = new System.Drawing.Size(100, 21);
+            this.comboxSampler.Size = new System.Drawing.Size(200, 21);
             this.comboxSampler.TabIndex = 105;
             this.toolTip.SetToolTip(this.comboxSampler, "Changes how the image is sampled.\r\nk_euler_a works very well at low step counts.");
             // 
@@ -1170,7 +1161,6 @@
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.panel1.Controls.Add(this.textboxCliTest);
-            this.panel1.Controls.Add(this.panel12);
             this.panel1.Controls.Add(this.panel11);
             this.panel1.Controls.Add(this.panelSeamless);
             this.panel1.Controls.Add(this.panelSampler);
@@ -1185,6 +1175,7 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(633, 512);
             this.panel1.TabIndex = 106;
+            this.panel1.Click += new System.EventHandler(this.panel1_Click);
             // 
             // textboxCliTest
             // 
@@ -1198,14 +1189,6 @@
             this.textboxCliTest.TabIndex = 4;
             this.textboxCliTest.Visible = false;
             this.textboxCliTest.DoubleClick += new System.EventHandler(this.textboxCliTest_DoubleClick);
-            // 
-            // panel12
-            // 
-            this.panel12.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel12.Location = new System.Drawing.Point(0, 350);
-            this.panel12.Name = "panel12";
-            this.panel12.Size = new System.Drawing.Size(633, 35);
-            this.panel12.TabIndex = 11;
             // 
             // panel11
             // 
@@ -1529,9 +1512,10 @@
             this.menuStripDevTools.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openDreampyCLIToolStripMenuItem,
             this.openModelMergeToolToolStripMenuItem,
-            this.openModelPruningTrimmingToolToolStripMenuItem});
+            this.openModelPruningTrimmingToolToolStripMenuItem,
+            this.viewLogInRealtimeToolStripMenuItem});
             this.menuStripDevTools.Name = "menuStripDevTools";
-            this.menuStripDevTools.Size = new System.Drawing.Size(182, 70);
+            this.menuStripDevTools.Size = new System.Drawing.Size(185, 114);
             // 
             // openDreampyCLIToolStripMenuItem
             // 
@@ -1553,6 +1537,13 @@
             this.openModelPruningTrimmingToolToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
             this.openModelPruningTrimmingToolToolStripMenuItem.Text = "Prune (Trim) Models";
             this.openModelPruningTrimmingToolToolStripMenuItem.Click += new System.EventHandler(this.openModelPruningTrimmingToolToolStripMenuItem_Click);
+            // 
+            // viewLogInRealtimeToolStripMenuItem
+            // 
+            this.viewLogInRealtimeToolStripMenuItem.Name = "viewLogInRealtimeToolStripMenuItem";
+            this.viewLogInRealtimeToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.viewLogInRealtimeToolStripMenuItem.Text = "View Log In Realtime";
+            this.viewLogInRealtimeToolStripMenuItem.Click += new System.EventHandler(this.viewLogInRealtimeToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -1699,7 +1690,6 @@
         private System.Windows.Forms.Panel panelRes;
         private System.Windows.Forms.Panel panelSeed;
         private System.Windows.Forms.Panel panelScale;
-        private System.Windows.Forms.Panel panel12;
         private System.Windows.Forms.Panel panel11;
         private System.Windows.Forms.Panel panelSeamless;
         private System.Windows.Forms.Panel panelInitImgStrength;
@@ -1745,6 +1735,7 @@
         private System.Windows.Forms.ToolStripMenuItem openDreampyCLIToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openModelMergeToolToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openModelPruningTrimmingToolToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem viewLogInRealtimeToolStripMenuItem;
     }
 }
 

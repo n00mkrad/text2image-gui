@@ -18,8 +18,8 @@ namespace StableDiffusionGui.Forms
 
         public PruneModelsForm()
         {
-            _uiStrings.Add(Enums.ModelFormat.Fp16.ToString(), "Half Precision (FP16)");
-            _uiStrings.Add(Enums.ModelFormat.Fp32.ToString(), "Full Precision (FP32)");
+            _uiStrings.Add(Enums.Models.Format.Fp16.ToString(), "Half Precision (FP16)");
+            _uiStrings.Add(Enums.Models.Format.Fp32.ToString(), "Full Precision (FP32)");
 
             InitializeComponent();
         }
@@ -27,7 +27,7 @@ namespace StableDiffusionGui.Forms
         private void PruneModelsForm_Load(object sender, EventArgs e)
         {
             LoadModels();
-            comboxPrunePrecision.FillFromEnum<Enums.ModelFormat>(_uiStrings);
+            comboxPrunePrecision.FillFromEnum<Enums.Models.Format>(_uiStrings);
 
             ConfigParser.LoadComboxIndex(comboxPrunePrecision);
             ConfigParser.LoadGuiElement(checkboxPruneDeleteInput);
@@ -58,7 +58,7 @@ namespace StableDiffusionGui.Forms
         {
             try
             {
-                bool fp16 = (Enums.ModelFormat)comboxPrunePrecision.SelectedIndex == Enums.ModelFormat.Fp16;
+                bool fp16 = (Enums.Models.Format)comboxPrunePrecision.SelectedIndex == Enums.Models.Format.Fp16;
                 FileInfo model = Paths.GetModel(comboxModel.Text);
 
                 Logger.ClearLogBox();
