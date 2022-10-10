@@ -15,7 +15,7 @@ namespace StableDiffusionGui.Forms
 
         private void ModelQuickSelectForm_Load(object sender, EventArgs e)
         {
-            
+            Location = Cursor.Position;
         }
 
         private void ModelQuickSelectForm_Shown(object sender, EventArgs e)
