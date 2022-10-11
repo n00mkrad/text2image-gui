@@ -106,13 +106,19 @@ namespace StableDiffusionGui
             return value;
         }
 
-        public static string Wrap(this string path, bool addSpaceFront = false, bool addSpaceEnd = false)
+        public static string Wrap(this string path, bool backslashToSlash = false, bool addSpaceFront = false, bool addSpaceEnd = false)
         {
             string s = "\"" + path + "\"";
+
             if (addSpaceFront)
                 s = " " + s;
+
             if (addSpaceEnd)
                 s = s + " ";
+
+            if (backslashToSlash)
+                s = s.Replace(@"\", "/");
+
             return s;
         }
 

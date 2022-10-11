@@ -106,7 +106,7 @@ namespace StableDiffusionGui.Forms
                 // 
                 // Process p = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
                 // p.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSd()} && call activate.bat mb/envs/ldo && " +
-                //     $"python {Constants.Dirs.RepoSd}/scripts/merge_models.py -1 {model1.FullName.Wrap()} -2 {model2.FullName.Wrap()} -w {(PercentModel2 / 100f).ToStringDot("0.0000")} -o {outPath.Wrap()}";
+                //     $"python {Constants.Dirs.RepoSd}/scripts/merge_models.py -1 {model1.FullName.Wrap()} -2 {model2.FullName.Wrap()} -w {(PercentModel2 / 100f).ToStringDot("0.0000")} -o {outPath.Wrap(true)}";
                 // 
                 // if (!OsUtils.ShowHiddenCmd())
                 // {
