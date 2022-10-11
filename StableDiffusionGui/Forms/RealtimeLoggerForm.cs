@@ -1,4 +1,5 @@
 ﻿using StableDiffusionGui.Main;
+using StableDiffusionGui.MiscUtils;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -23,6 +24,7 @@ namespace StableDiffusionGui.Forms
 
         private void logBox_MouseWheel(object sender, MouseEventArgs e)
         {
+            if (!InputUtils.IsHoldingCtrl) return;
             int sizeChange = e.Delta > 0 ? 1 : -1;
             logBox.Font = new Font(logBox.Font.Name, (logBox.Font.Size + sizeChange).Clamp(_defaultFontSize, _defaultFontSize * 2f), logBox.Font.Style, logBox.Font.Unit);
         }

@@ -18,6 +18,7 @@ using StableDiffusionGui.Os;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 using Paths = StableDiffusionGui.Io.Paths;
+using StableDiffusionGui.MiscUtils;
 
 namespace StableDiffusionGui
 {
@@ -690,6 +691,7 @@ namespace StableDiffusionGui
 
         private void textboxPrompt_MouseWheel(object sender, MouseEventArgs e)
         {
+            if (!InputUtils.IsHoldingCtrl) return;
             int sizeChange = e.Delta > 0 ? 1 : -1;
             textboxPrompt.Font = new Font(textboxPrompt.Font.Name, (textboxPrompt.Font.Size + sizeChange).Clamp(_defaultPromptFontSize, _defaultPromptFontSize * 2f), textboxPrompt.Font.Style, textboxPrompt.Font.Unit);
         }
