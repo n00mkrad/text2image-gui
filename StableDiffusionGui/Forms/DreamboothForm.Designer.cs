@@ -29,23 +29,30 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DreamboothForm));
             this.titleLabel = new System.Windows.Forms.Label();
             this.parentPanel = new System.Windows.Forms.Panel();
+            this.panelToken = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.panel6 = new System.Windows.Forms.Panel();
+            this.textboxClassName = new System.Windows.Forms.TextBox();
+            this.panel7 = new System.Windows.Forms.Panel();
+            this.label3 = new System.Windows.Forms.Label();
             this.btnStart = new System.Windows.Forms.Button();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.panelTrainImgs = new System.Windows.Forms.Panel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.panel4 = new System.Windows.Forms.Panel();
             this.textboxTrainImgsDir = new System.Windows.Forms.TextBox();
             this.btnTrainImgsBrowse = new HTAlt.WinForms.HTButton();
             this.panel5 = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
-            this.panelModel2 = new System.Windows.Forms.Panel();
+            this.panelTrainPreset = new System.Windows.Forms.Panel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.comboxTrainPreset = new System.Windows.Forms.ComboBox();
             this.panel3 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
-            this.panelModel1 = new System.Windows.Forms.Panel();
+            this.panelBaseModel = new System.Windows.Forms.Panel();
             this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
             this.panel25 = new System.Windows.Forms.Panel();
             this.comboxBaseModel = new System.Windows.Forms.ComboBox();
@@ -55,15 +62,19 @@
             this.btnReloadModels = new System.Windows.Forms.Button();
             this.btnOpenModelFolder = new System.Windows.Forms.Button();
             this.parentPanel.SuspendLayout();
-            this.panel1.SuspendLayout();
+            this.panelToken.SuspendLayout();
+            this.tableLayoutPanel3.SuspendLayout();
+            this.panel6.SuspendLayout();
+            this.panel7.SuspendLayout();
+            this.panelTrainImgs.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel5.SuspendLayout();
-            this.panelModel2.SuspendLayout();
+            this.panelTrainPreset.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
-            this.panelModel1.SuspendLayout();
+            this.panelBaseModel.SuspendLayout();
             this.tableLayoutPanel8.SuspendLayout();
             this.panel25.SuspendLayout();
             this.panel26.SuspendLayout();
@@ -87,14 +98,81 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.parentPanel.AutoScroll = true;
+            this.parentPanel.Controls.Add(this.panelToken);
             this.parentPanel.Controls.Add(this.btnStart);
-            this.parentPanel.Controls.Add(this.panel1);
-            this.parentPanel.Controls.Add(this.panelModel2);
-            this.parentPanel.Controls.Add(this.panelModel1);
+            this.parentPanel.Controls.Add(this.panelTrainImgs);
+            this.parentPanel.Controls.Add(this.panelTrainPreset);
+            this.parentPanel.Controls.Add(this.panelBaseModel);
             this.parentPanel.Location = new System.Drawing.Point(12, 62);
             this.parentPanel.Name = "parentPanel";
             this.parentPanel.Size = new System.Drawing.Size(760, 287);
             this.parentPanel.TabIndex = 15;
+            // 
+            // panelToken
+            // 
+            this.panelToken.Controls.Add(this.tableLayoutPanel3);
+            this.panelToken.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelToken.Location = new System.Drawing.Point(0, 105);
+            this.panelToken.Name = "panelToken";
+            this.panelToken.Size = new System.Drawing.Size(760, 35);
+            this.panelToken.TabIndex = 102;
+            // 
+            // tableLayoutPanel3
+            // 
+            this.tableLayoutPanel3.ColumnCount = 2;
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
+            this.tableLayoutPanel3.Controls.Add(this.panel6, 0, 0);
+            this.tableLayoutPanel3.Controls.Add(this.panel7, 0, 0);
+            this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+            this.tableLayoutPanel3.RowCount = 1;
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(760, 35);
+            this.tableLayoutPanel3.TabIndex = 1;
+            // 
+            // panel6
+            // 
+            this.panel6.Controls.Add(this.textboxClassName);
+            this.panel6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel6.Location = new System.Drawing.Point(307, 3);
+            this.panel6.Name = "panel6";
+            this.panel6.Size = new System.Drawing.Size(450, 29);
+            this.panel6.TabIndex = 88;
+            // 
+            // textboxClassName
+            // 
+            this.textboxClassName.AllowDrop = true;
+            this.textboxClassName.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textboxClassName.ForeColor = System.Drawing.Color.White;
+            this.textboxClassName.Location = new System.Drawing.Point(0, 4);
+            this.textboxClassName.MinimumSize = new System.Drawing.Size(4, 21);
+            this.textboxClassName.Multiline = true;
+            this.textboxClassName.Name = "textboxClassName";
+            this.textboxClassName.Size = new System.Drawing.Size(450, 21);
+            this.textboxClassName.TabIndex = 4;
+            // 
+            // panel7
+            // 
+            this.panel7.Controls.Add(this.label3);
+            this.panel7.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel7.Location = new System.Drawing.Point(3, 3);
+            this.panel7.Name = "panel7";
+            this.panel7.Size = new System.Drawing.Size(298, 29);
+            this.panel7.TabIndex = 87;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.ForeColor = System.Drawing.Color.White;
+            this.label3.Location = new System.Drawing.Point(2, 8);
+            this.label3.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(166, 13);
+            this.label3.TabIndex = 85;
+            this.label3.Text = "Class Token (Override This Class)";
             // 
             // btnStart
             // 
@@ -109,18 +187,17 @@
             this.btnStart.Size = new System.Drawing.Size(120, 40);
             this.btnStart.TabIndex = 101;
             this.btnStart.Text = "Start Training";
-            this.toolTip.SetToolTip(this.btnStart, "Merge Models");
             this.btnStart.UseVisualStyleBackColor = false;
             this.btnStart.Click += new System.EventHandler(this.btnRun_Click);
             // 
-            // panel1
+            // panelTrainImgs
             // 
-            this.panel1.Controls.Add(this.tableLayoutPanel2);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Location = new System.Drawing.Point(0, 70);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(760, 35);
-            this.panel1.TabIndex = 22;
+            this.panelTrainImgs.Controls.Add(this.tableLayoutPanel2);
+            this.panelTrainImgs.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelTrainImgs.Location = new System.Drawing.Point(0, 70);
+            this.panelTrainImgs.Name = "panelTrainImgs";
+            this.panelTrainImgs.Size = new System.Drawing.Size(760, 35);
+            this.panelTrainImgs.TabIndex = 22;
             // 
             // tableLayoutPanel2
             // 
@@ -156,7 +233,7 @@
             this.textboxTrainImgsDir.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxTrainImgsDir.Multiline = true;
             this.textboxTrainImgsDir.Name = "textboxTrainImgsDir";
-            this.textboxTrainImgsDir.Size = new System.Drawing.Size(372, 21);
+            this.textboxTrainImgsDir.Size = new System.Drawing.Size(366, 21);
             this.textboxTrainImgsDir.TabIndex = 4;
             // 
             // btnTrainImgsBrowse
@@ -170,7 +247,7 @@
             this.btnTrainImgsBrowse.ForeColor = System.Drawing.Color.White;
             this.btnTrainImgsBrowse.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
             this.btnTrainImgsBrowse.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
-            this.btnTrainImgsBrowse.Location = new System.Drawing.Point(378, 2);
+            this.btnTrainImgsBrowse.Location = new System.Drawing.Point(372, 2);
             this.btnTrainImgsBrowse.Name = "btnTrainImgsBrowse";
             this.btnTrainImgsBrowse.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
             this.btnTrainImgsBrowse.Size = new System.Drawing.Size(75, 23);
@@ -200,14 +277,14 @@
             this.label2.TabIndex = 85;
             this.label2.Text = "Training Images Folder";
             // 
-            // panelModel2
+            // panelTrainPreset
             // 
-            this.panelModel2.Controls.Add(this.tableLayoutPanel1);
-            this.panelModel2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelModel2.Location = new System.Drawing.Point(0, 35);
-            this.panelModel2.Name = "panelModel2";
-            this.panelModel2.Size = new System.Drawing.Size(760, 35);
-            this.panelModel2.TabIndex = 21;
+            this.panelTrainPreset.Controls.Add(this.tableLayoutPanel1);
+            this.panelTrainPreset.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelTrainPreset.Location = new System.Drawing.Point(0, 35);
+            this.panelTrainPreset.Name = "panelTrainPreset";
+            this.panelTrainPreset.Size = new System.Drawing.Size(760, 35);
+            this.panelTrainPreset.TabIndex = 21;
             // 
             // tableLayoutPanel1
             // 
@@ -243,7 +320,7 @@
             this.comboxTrainPreset.FormattingEnabled = true;
             this.comboxTrainPreset.Location = new System.Drawing.Point(0, 4);
             this.comboxTrainPreset.Name = "comboxTrainPreset";
-            this.comboxTrainPreset.Size = new System.Drawing.Size(453, 21);
+            this.comboxTrainPreset.Size = new System.Drawing.Size(450, 21);
             this.comboxTrainPreset.TabIndex = 106;
             // 
             // panel3
@@ -267,14 +344,14 @@
             this.label1.TabIndex = 85;
             this.label1.Text = "Training Preset";
             // 
-            // panelModel1
+            // panelBaseModel
             // 
-            this.panelModel1.Controls.Add(this.tableLayoutPanel8);
-            this.panelModel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelModel1.Location = new System.Drawing.Point(0, 0);
-            this.panelModel1.Name = "panelModel1";
-            this.panelModel1.Size = new System.Drawing.Size(760, 35);
-            this.panelModel1.TabIndex = 20;
+            this.panelBaseModel.Controls.Add(this.tableLayoutPanel8);
+            this.panelBaseModel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelBaseModel.Location = new System.Drawing.Point(0, 0);
+            this.panelBaseModel.Name = "panelBaseModel";
+            this.panelBaseModel.Size = new System.Drawing.Size(760, 35);
+            this.panelBaseModel.TabIndex = 20;
             // 
             // tableLayoutPanel8
             // 
@@ -310,7 +387,7 @@
             this.comboxBaseModel.FormattingEnabled = true;
             this.comboxBaseModel.Location = new System.Drawing.Point(0, 4);
             this.comboxBaseModel.Name = "comboxBaseModel";
-            this.comboxBaseModel.Size = new System.Drawing.Size(453, 21);
+            this.comboxBaseModel.Size = new System.Drawing.Size(450, 21);
             this.comboxBaseModel.TabIndex = 106;
             // 
             // panel26
@@ -389,26 +466,33 @@
             this.Controls.Add(this.titleLabel);
             this.ForeColor = System.Drawing.Color.White;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "DreamboothForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "DreamBooth Training";
+            this.Text = "Loading...";
             this.Load += new System.EventHandler(this.DreamboothForm_Load);
             this.Shown += new System.EventHandler(this.DreamboothForm_Shown);
             this.parentPanel.ResumeLayout(false);
-            this.panel1.ResumeLayout(false);
+            this.panelToken.ResumeLayout(false);
+            this.tableLayoutPanel3.ResumeLayout(false);
+            this.panel6.ResumeLayout(false);
+            this.panel6.PerformLayout();
+            this.panel7.ResumeLayout(false);
+            this.panel7.PerformLayout();
+            this.panelTrainImgs.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
-            this.panelModel2.ResumeLayout(false);
+            this.panelTrainPreset.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
-            this.panelModel1.ResumeLayout(false);
+            this.panelBaseModel.ResumeLayout(false);
             this.tableLayoutPanel8.ResumeLayout(false);
             this.panel25.ResumeLayout(false);
             this.panel26.ResumeLayout(false);
@@ -422,13 +506,13 @@
 
         private System.Windows.Forms.Label titleLabel;
         private System.Windows.Forms.Panel parentPanel;
-        private System.Windows.Forms.Panel panelModel1;
+        private System.Windows.Forms.Panel panelBaseModel;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel8;
         private System.Windows.Forms.Panel panel25;
         private System.Windows.Forms.ComboBox comboxBaseModel;
         private System.Windows.Forms.Panel panel26;
         private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Panel panelModel2;
+        private System.Windows.Forms.Panel panelTrainPreset;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Panel panel3;
@@ -436,7 +520,7 @@
         private System.Windows.Forms.Button btnOpenModelFolder;
         private System.Windows.Forms.Button btnReloadModels;
         private System.Windows.Forms.ToolTip toolTip;
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel panelTrainImgs;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.Panel panel5;
@@ -445,5 +529,11 @@
         private System.Windows.Forms.ComboBox comboxTrainPreset;
         private System.Windows.Forms.TextBox textboxTrainImgsDir;
         private HTAlt.WinForms.HTButton btnTrainImgsBrowse;
+        private System.Windows.Forms.Panel panelToken;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
+        private System.Windows.Forms.Panel panel6;
+        private System.Windows.Forms.TextBox textboxClassName;
+        private System.Windows.Forms.Panel panel7;
+        private System.Windows.Forms.Label label3;
     }
 }

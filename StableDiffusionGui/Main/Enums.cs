@@ -16,7 +16,7 @@ namespace StableDiffusionGui.Main
 
         public class Dreambooth
         {
-            public enum TrainPreset { HigherQuality, FasterSpeed }
+            public enum TrainPreset { VeryHighQuality, HighQuality, MedQuality, LowQuality }
         }
     }
 }

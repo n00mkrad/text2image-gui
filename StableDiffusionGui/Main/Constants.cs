@@ -9,12 +9,14 @@
             public const string Sd = "sd";
             public const string Prune = "prune";
             public const string Merge = "merge";
+            public const string Dreambooth = "dreambooth";
         }
 
         public class Dirs
         {
             public const string Bins = "bin";
             public const string RepoSd = "repo";
+            public const string Dreambooth = "db";
         }
 
         public class Bins

@@ -135,10 +135,7 @@ namespace StableDiffusionGui.Os
                     if (procWithCli.Contains(dataPath))
                     {
                         if (!string.IsNullOrWhiteSpace(wildcardFilter) && !procWithCli.MatchesWildcard(wildcardFilter))
-                        {
-                            Logger.Log($"Proc does not match wildcard: {procWithCli} (PID {pid})", true);
                             continue;
-                        }
 
                         try
                         {
