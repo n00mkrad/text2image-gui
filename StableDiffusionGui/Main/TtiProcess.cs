@@ -37,7 +37,6 @@ namespace StableDiffusionGui.Main
             Size res = Parser.GetSize(paramsDict.Get("res"));
             bool seamless = bool.Parse(paramsDict.Get("seamless"));
             string model = paramsDict.Get("model");
-            string modelNoExt = Path.ChangeExtension(model, null);
 
             if (!TtiUtils.CheckIfSdModelExists())
                 return;
@@ -45,7 +44,7 @@ namespace StableDiffusionGui.Main
             if (File.Exists(initImg))
                 initImg = TtiUtils.ResizeInitImg(initImg, res);
 
-            TtiUtils.WriteModelsYaml(modelNoExt);
+            TtiUtils.WriteModelsYaml(model);
 
             long startSeed = seed;
 
@@ -86,7 +85,7 @@ namespace StableDiffusionGui.Main
             string precArg = ArgsDreamPy.GetPrecisionArg();
             string embArg = ArgsDreamPy.GetEmbeddingArg(embedding);
 
-            string newStartupSettings = $"{modelNoExt}{precArg}{embArg}"; // Check if startup settings match - If not, we need to restart the process
+            string newStartupSettings = $"{model}{precArg}{embArg}"; // Check if startup settings match - If not, we need to restart the process
 
             string strengths = File.Exists(initImg) ? $" and {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
             Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} with {iterations} iteration{(iterations != 1 ? "s" : "")} each and {scales.Length} scale{(scales.Length != 1 ? "s" : "")}{strengths} each = {imgs} images total.");
@@ -108,7 +107,7 @@ namespace StableDiffusionGui.Main
 
                 dream.StartInfo.RedirectStandardInput = true;
                 dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSd()} && call activate.bat ldo && " +
-                    $"python {Constants.Dirs.RepoSd}/scripts/dream.py --model {modelNoExt.Wrap()} -o {outPath.Wrap()} {ArgsDreamPy.GetDefaultArgsStartup()} {precArg} " +
+                    $"python {Constants.Dirs.RepoSd}/scripts/dream.py --model default -o {outPath.Wrap()} {ArgsDreamPy.GetDefaultArgsStartup()} {precArg} " +
                     $"{embArg} ";
 
                 Logger.Log("cmd.exe " + dream.StartInfo.Arguments, true);
@@ -126,7 +125,7 @@ namespace StableDiffusionGui.Main
                 }
 
                 TtiProcessOutputHandler.Start();
-                Logger.Log($"Loading Stable Diffusion with model {modelNoExt.Wrap()}...");
+                Logger.Log($"Loading Stable Diffusion with model {Path.ChangeExtension(model, null).Wrap()}...");
                 CurrentProcess = dream;
                 ProcessExistWasIntentional = false;
                 dream.Start();
@@ -284,8 +283,7 @@ namespace StableDiffusionGui.Main
             if (!TtiUtils.CheckIfSdModelExists())
                 return;
 
-            string mdl = Path.GetFileNameWithoutExtension(Config.Get(Config.Key.comboxSdModel));
-            TtiUtils.WriteModelsYaml(mdl);
+            TtiUtils.WriteModelsYaml(Config.Get(Config.Key.comboxSdModel));
 
             string batPath = Path.Combine(Paths.GetSessionDataPath(), "dream.bat");
 
@@ -294,7 +292,7 @@ namespace StableDiffusionGui.Main
                 $"cd /D {Paths.GetDataPath().Wrap()}\n" +
                 $"SET PATH={OsUtils.GetTemporaryPathVariable(new string[] { "./mb", "./mb/Scripts", "./mb/condabin", "./mb/Library/bin" })}\n" +
                 $"call activate.bat mb/envs/ldo\n" +
-                $"python {Constants.Dirs.RepoSd}/scripts/dream.py --model {mdl} -o {outPath.Wrap()} {ArgsDreamPy.GetPrecisionArg()} {ArgsDreamPy.GetDefaultArgsStartup()}";
+                $"python {Constants.Dirs.RepoSd}/scripts/dream.py --model default -o {outPath.Wrap()} {ArgsDreamPy.GetPrecisionArg()} {ArgsDreamPy.GetDefaultArgsStartup()}";
 
             File.WriteAllText(batPath, batText);
             ProcessManager.FindAndKillOrphans($"*dream.py*{outPath}*");

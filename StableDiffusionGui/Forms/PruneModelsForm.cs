@@ -14,13 +14,14 @@ namespace StableDiffusionGui.Forms
 {
     public partial class PruneModelsForm : Form
     {
-        private Dictionary<string, string> _uiStrings = new Dictionary<string, string>();
+        private Dictionary<string, string> _uiStrings = new Dictionary<string, string>()
+        {
+            { Enums.Models.Format.Fp16.ToString(), "Half Precision (FP16)" },
+            { Enums.Models.Format.Fp32.ToString(), "Full Precision (FP32)" },
+        };
 
         public PruneModelsForm()
         {
-            _uiStrings.Add(Enums.Models.Format.Fp16.ToString(), "Half Precision (FP16)");
-            _uiStrings.Add(Enums.Models.Format.Fp32.ToString(), "Full Precision (FP32)");
-
             InitializeComponent();
         }
 

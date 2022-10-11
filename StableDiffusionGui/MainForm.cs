@@ -757,5 +757,10 @@ namespace StableDiffusionGui
         {
             new RealtimeLoggerForm().Show();
         }
+
+        private void trainDreamBoothModelToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new DreamboothForm().ShowDialog();
+        }
     }
 }

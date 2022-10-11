@@ -28,11 +28,11 @@ namespace StableDiffusionGui.Main
             return outPath;
         }
 
-        public static void WriteModelsYaml(string mdlName)
+        public static void WriteModelsYaml(string mdlName, string keyName = "default")
         {
-            var mdl = Paths.GetModel(mdlName, true);
+            var mdl = Paths.GetModel(mdlName);
 
-            string text = $"{mdlName}:\n" +
+            string text = $"{keyName}:\n" +
                 $"    config: configs/stable-diffusion/v1-inference.yaml\n" +
                 $"    weights: {(mdl == null ? "unknown.ckpt" : mdl.FullName.Replace(@"\", "/").Wrap())}\n" +
                 $"    width: 512\n" +

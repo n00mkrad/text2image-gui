@@ -13,5 +13,10 @@ namespace StableDiffusionGui.Main
         {
             public enum Sampler { K_Euler_A, K_Euler, K_Lms, Ddim, Plms, K_Heun, K_Dpm_2, K_Dpm_2_A }
         }
+
+        public class Dreambooth
+        {
+            public enum TrainPreset { HigherQuality, FasterSpeed }
+        }
     }
 }

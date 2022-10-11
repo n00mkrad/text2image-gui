@@ -101,10 +101,7 @@ namespace StableDiffusionGui.Io
 
         public static FileInfo GetModel(string filename, bool anyExtension = false)
         {
-            if (anyExtension)
-                return GetModels().Where(x => Path.GetFileNameWithoutExtension(x.Name) == Path.GetFileNameWithoutExtension(filename)).FirstOrDefault();
-            else
-                return GetModels().Where(x => x.Name == filename).FirstOrDefault();
+            return GetModels().Where(x => x.Name == filename).FirstOrDefault();
         }
     }
 }

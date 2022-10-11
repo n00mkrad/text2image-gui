@@ -53,9 +53,9 @@
             this.comboxModel1 = new System.Windows.Forms.ComboBox();
             this.panel26 = new System.Windows.Forms.Panel();
             this.label10 = new System.Windows.Forms.Label();
-            this.btnOpenModelFolder = new System.Windows.Forms.Button();
-            this.btnReloadModels = new System.Windows.Forms.Button();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.btnReloadModels = new System.Windows.Forms.Button();
+            this.btnOpenModelFolder = new System.Windows.Forms.Button();
             this.parentPanel.SuspendLayout();
             this.panel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -184,7 +184,7 @@
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(5, 8);
+            this.label2.Location = new System.Drawing.Point(2, 8);
             this.label2.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(96, 13);
@@ -263,7 +263,7 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.White;
-            this.label1.Location = new System.Drawing.Point(5, 8);
+            this.label1.Location = new System.Drawing.Point(2, 8);
             this.label1.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(76, 13);
@@ -342,30 +342,19 @@
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label10.ForeColor = System.Drawing.Color.White;
-            this.label10.Location = new System.Drawing.Point(5, 8);
+            this.label10.Location = new System.Drawing.Point(2, 8);
             this.label10.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(58, 13);
             this.label10.TabIndex = 85;
             this.label10.Text = "First Model";
             // 
-            // btnOpenModelFolder
+            // toolTip
             // 
-            this.btnOpenModelFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOpenModelFolder.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnOpenModelFolder.BackgroundImage = global::StableDiffusionGui.Properties.Resources.baseline_folder_open_white_48dp;
-            this.btnOpenModelFolder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnOpenModelFolder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnOpenModelFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnOpenModelFolder.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnOpenModelFolder.Location = new System.Drawing.Point(486, 9);
-            this.btnOpenModelFolder.Name = "btnOpenModelFolder";
-            this.btnOpenModelFolder.Size = new System.Drawing.Size(40, 40);
-            this.btnOpenModelFolder.TabIndex = 109;
-            this.btnOpenModelFolder.TabStop = false;
-            this.toolTip.SetToolTip(this.btnOpenModelFolder, "Open Models Folder");
-            this.btnOpenModelFolder.UseVisualStyleBackColor = false;
-            this.btnOpenModelFolder.Click += new System.EventHandler(this.btnOpenModelFolder_Click);
+            this.toolTip.AutomaticDelay = 200;
+            this.toolTip.AutoPopDelay = 5000;
+            this.toolTip.InitialDelay = 200;
+            this.toolTip.ReshowDelay = 40;
             // 
             // btnReloadModels
             // 
@@ -385,12 +374,23 @@
             this.btnReloadModels.UseVisualStyleBackColor = false;
             this.btnReloadModels.Click += new System.EventHandler(this.btnReloadModels_Click);
             // 
-            // toolTip
+            // btnOpenModelFolder
             // 
-            this.toolTip.AutomaticDelay = 200;
-            this.toolTip.AutoPopDelay = 5000;
-            this.toolTip.InitialDelay = 200;
-            this.toolTip.ReshowDelay = 40;
+            this.btnOpenModelFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnOpenModelFolder.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnOpenModelFolder.BackgroundImage = global::StableDiffusionGui.Properties.Resources.baseline_folder_open_white_48dp;
+            this.btnOpenModelFolder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnOpenModelFolder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnOpenModelFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnOpenModelFolder.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnOpenModelFolder.Location = new System.Drawing.Point(486, 9);
+            this.btnOpenModelFolder.Name = "btnOpenModelFolder";
+            this.btnOpenModelFolder.Size = new System.Drawing.Size(40, 40);
+            this.btnOpenModelFolder.TabIndex = 109;
+            this.btnOpenModelFolder.TabStop = false;
+            this.toolTip.SetToolTip(this.btnOpenModelFolder, "Open Models Folder");
+            this.btnOpenModelFolder.UseVisualStyleBackColor = false;
+            this.btnOpenModelFolder.Click += new System.EventHandler(this.btnOpenModelFolder_Click);
             // 
             // MergeModelsForm
             // 
