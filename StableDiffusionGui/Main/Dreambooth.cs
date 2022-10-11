@@ -13,10 +13,15 @@ namespace StableDiffusionGui.Main
     {
         static readonly string[] _validImgExtensions = new string[] { ".png", ".jpeg", ".jpg", ".jfif" };
         static readonly bool _useVisibleCmdWindow = false;
+        static readonly bool _onlySaveFinalCkpt = true;
         static readonly float _learningRateMagicNumber = 0.18f;
+
+        public static int CurrentTargetSteps;
 
         public static async Task<string> RunTraining(FileInfo baseModel, DirectoryInfo trainImgDir, string className, Enums.Dreambooth.TrainPreset preset)
         {
+            CurrentTargetSteps = 0;
+
             try
             {
                 Logger.ClearLogBox();
@@ -29,8 +34,8 @@ namespace StableDiffusionGui.Main
                 IoUtils.TryDeleteIfExists(logDir);
                 Directory.CreateDirectory(logDir);
 
-                Process p = OsUtils.NewProcess(!showCmd);
-                p.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSd()} && call activate.bat mb/envs/ldo && python {Constants.Dirs.RepoSd}/db/main.py -t " +
+                Process db = OsUtils.NewProcess(!showCmd);
+                db.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSd()} && call activate.bat mb/envs/ldo && python {Constants.Dirs.RepoSd}/db/main.py -t " +
                     $"--base {WriteConfig(logDir, trainImgDir, preset).Wrap(true)} " +
                     $"--actual_resume {baseModel.FullName.Wrap(true)} " +
                     $"--name {name.Wrap()} " +
@@ -42,25 +47,27 @@ namespace StableDiffusionGui.Main
 
                 if (!showCmd)
                 {
-                    p.OutputDataReceived += (sender, line) => { Logger.Log(line?.Data, true, false, Constants.Lognames.Dreambooth); };
-                    p.ErrorDataReceived += (sender, line) => { Logger.Log(line?.Data, true, false, Constants.Lognames.Dreambooth); };
+                    db.OutputDataReceived += (sender, line) => { DreamboothOutputHandler.Log(line?.Data); };
+                    db.ErrorDataReceived += (sender, line) => { DreamboothOutputHandler.Log(line?.Data, true); };
                 }
 
-                Logger.Log($"Starting training on GPU {cudaId}.\nLog Folder: {logDir.Remove(Paths.GetExeDir())}");
+                Logger.Log($"Starting training on GPU {cudaId}.\nLog Folder: {logDir.Remove(Paths.GetExeDir())}\nLoading...");
 
-                Logger.Log($"cmd {p.StartInfo.Arguments}", true);
-                p.Start();
+                DreamboothOutputHandler.Start();
+                Logger.Log($"cmd {db.StartInfo.Arguments}", true);
+                db.Start();
+                OsUtils.AttachOrphanHitman(db);
 
                 if (!showCmd)
                 {
-                    p.BeginOutputReadLine();
-                    p.BeginErrorReadLine();
+                    db.BeginOutputReadLine();
+                    db.BeginErrorReadLine();
                 }
 
-                while (!p.HasExited) await Task.Delay(1);
+                while (!db.HasExited) await Task.Delay(1);
 
-                Logger.ClearLogBox();
-                return ""; // outPath;
+                // Logger.ClearLogBox();
+                return logDir; // outPath;
             }
             catch (Exception ex)
             {
@@ -80,10 +87,12 @@ namespace StableDiffusionGui.Main
             int loggerInterval = values.Item2;
             float lrMultiplier = values.Item3;
 
+            CurrentTargetSteps = targetSteps;
+
             int trainImgs = IoUtils.GetFileInfosSorted(trainDir.FullName, false, "*.*").Where(x => _validImgExtensions.Contains(x.Extension.ToLower())).Count();
             double lr = trainImgs * _learningRateMagicNumber * 0.0000001 * lrMultiplier;
             configLines[1] = $"  base_learning_rate: {lr.ToString().Replace(",", ".")}";
-            configLines[108] = $"      every_n_train_steps: {loggerInterval}";
+            configLines[108] = $"      every_n_train_steps: {(_onlySaveFinalCkpt ? targetSteps + 1 : loggerInterval)}";
             configLines[113] = $"        batch_frequency: {loggerInterval}";
             configLines[119] = $"    max_steps: {targetSteps}";
 

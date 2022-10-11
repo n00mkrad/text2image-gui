@@ -244,6 +244,7 @@
     <Compile Include="Main\ArgsDreamPy.cs" />
     <Compile Include="Main\Constants.cs" />
     <Compile Include="Main\Dreambooth.cs" />
+    <Compile Include="Main\DreamboothOutputHandler.cs" />
     <Compile Include="Main\Enums.cs" />
     <Compile Include="Main\Logger.cs" />
     <Compile Include="Main\ImageExport.cs" />

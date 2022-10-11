@@ -5,10 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace StableDiffusionGui.MiscUtils
 {
@@ -167,7 +164,7 @@ namespace StableDiffusionGui.MiscUtils
                 return codec.ToTitleCase();
         }
 
-        public static string GetExportFilename (string filePath, string parentDir, string suffix, string ext, int pathLimit, bool inclPrompt, bool inclSeed, bool inclScale, bool inclSampler, bool inclModel)
+        public static string GetExportFilename(string filePath, string parentDir, string suffix, string ext, int pathLimit, bool inclPrompt, bool inclSeed, bool inclScale, bool inclSampler, bool inclModel)
         {
             try
             {
@@ -224,14 +221,14 @@ namespace StableDiffusionGui.MiscUtils
                     return Path.Combine(parentDir, $"{timestamp}{suffix}{infoStr}") + $".{ext}";
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logger.Log($"GetExportFilename Error: {ex.Message}\n{ex.StackTrace}");
                 return "";
             }
         }
 
-        public static string SanitizePromptFilename (string prompt, int pathBudget = 64)
+        public static string SanitizePromptFilename(string prompt, int pathBudget = 64)
         {
             if (string.IsNullOrWhiteSpace(prompt))
                 return "";
