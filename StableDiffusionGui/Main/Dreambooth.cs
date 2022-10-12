@@ -34,16 +34,20 @@ namespace StableDiffusionGui.Main
                 IoUtils.TryDeleteIfExists(logDir);
                 Directory.CreateDirectory(logDir);
 
+                string configPath = WriteConfig(logDir, trainImgDir, preset);
+                string outPath = Path.Combine(Paths.GetModelsPath(), $"dreambooth-{className}-{CurrentTargetSteps}.ckpt");
+
                 Process db = OsUtils.NewProcess(!showCmd);
                 db.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSd()} && call activate.bat mb/envs/ldo && python {Constants.Dirs.RepoSd}/db/main.py -t " +
-                    $"--base {WriteConfig(logDir, trainImgDir, preset).Wrap(true)} " +
+                    $"--base {configPath.Wrap(true)} " +
                     $"--actual_resume {baseModel.FullName.Wrap(true)} " +
                     $"--name {name.Wrap()} " +
                     $"--logdir {logDir.Wrap(true)} " +
                     $"--gpus {cudaId}, " + // TODO: Support multi-GPU
                     $"--data_root {trainImgDir.FullName.Wrap(true)} " +
                     $"--reg_data_root {trainImgDir.FullName.Wrap(true)} " +
-                    $"--class_word {className.Wrap()}";
+                    $"--class_word {className.Wrap()} " +
+                    $"&& python {Constants.Dirs.RepoSd}/scripts/prune_model.py -i {Path.Combine(logDir, "checkpoints", "last.ckpt").Wrap(true)} -o {outPath.Wrap(true)}";
 
                 if (!showCmd)
                 {
@@ -66,8 +70,11 @@ namespace StableDiffusionGui.Main
 
                 while (!db.HasExited) await Task.Delay(1);
 
+                IoUtils.TryDeleteIfExists(Path.Combine(logDir, "checkpoints", "last.ckpt"));
+                IoUtils.TryDeleteIfExists(Path.Combine(logDir, "testtube"));
+
                 // Logger.ClearLogBox();
-                return logDir; // outPath;
+                return outPath;
             }
             catch (Exception ex)
             {
@@ -92,6 +99,7 @@ namespace StableDiffusionGui.Main
             int trainImgs = IoUtils.GetFileInfosSorted(trainDir.FullName, false, "*.*").Where(x => _validImgExtensions.Contains(x.Extension.ToLower())).Count();
             double lr = trainImgs * _learningRateMagicNumber * 0.0000001 * lrMultiplier;
             configLines[1] = $"  base_learning_rate: {lr.ToString().Replace(",", ".")}";
+            configLines[95] = $"        repeats: 100";
             configLines[108] = $"      every_n_train_steps: {(_onlySaveFinalCkpt ? targetSteps + 1 : loggerInterval)}";
             configLines[113] = $"        batch_frequency: {loggerInterval}";
             configLines[119] = $"    max_steps: {targetSteps}";

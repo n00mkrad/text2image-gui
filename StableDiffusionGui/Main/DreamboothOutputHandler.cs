@@ -57,6 +57,9 @@ namespace StableDiffusionGui.Main
             if (line.Contains("Saving"))
                 Logger.Log($"Saving checkpoint...", false, replace);
 
+            if (line.Contains("Pruning..."))
+                Logger.Log($"Pruning model...", false, replace);
+
             if (line.MatchesWildcard("*%|*/*[*B/s]*") && !line.ToLower().Contains("it/s") && !line.ToLower().Contains("s/it"))
             {
                 Logger.Log($"Downloading required files... {line.Trunc(80)}", false, ellipsis);

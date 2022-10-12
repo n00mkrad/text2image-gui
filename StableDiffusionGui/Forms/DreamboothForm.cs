@@ -120,7 +120,8 @@ namespace StableDiffusionGui.Forms
 
             FileInfo baseModel = Paths.GetModel(comboxBaseModel.Text);
             DirectoryInfo trainImgDir = new DirectoryInfo(textboxTrainImgsDir.Text.Trim());
-            string className = textboxClassName.Text.Trim().Trunc(50, false);
+            string className = string.Join("_", textboxClassName.Text.Trim().Split(Path.GetInvalidFileNameChars())).Trunc(50, false);
+            textboxClassName.Text = className;
             Enums.Dreambooth.TrainPreset preset = (Enums.Dreambooth.TrainPreset)comboxTrainPreset.SelectedIndex;
 
             string outPath = await Dreambooth.RunTraining(baseModel, trainImgDir, className, preset);
@@ -129,10 +130,10 @@ namespace StableDiffusionGui.Forms
             Enabled = true;
             //btnStart.Text = "Merge!";
 
-            //if (File.Exists(outPath))
-            //    Logger.Log($"Done. Saved merged model to:\n{outPath.Replace(Paths.GetDataPath(), "Data")}");
-            //else
-            //    Logger.Log($"Failed to merge models.");
+            if (File.Exists(outPath))
+                Logger.Log($"Done. Saved trained model to:\n{outPath.Replace(Paths.GetDataPath(), "Data")}");
+            else
+                Logger.Log($"Training failed - model file was not saved.");
 
             //if (File.Exists(outPath))
             //    UiUtils.ShowMessageBox($"Done.\n\nSaved merged model to:\n{outPath}");
