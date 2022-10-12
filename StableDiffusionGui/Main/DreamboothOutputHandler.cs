@@ -11,8 +11,6 @@ namespace StableDiffusionGui.Main
     internal class DreamboothOutputHandler
     {
         private static bool _hasErrored = false;
-        private static int _etaDataPointsCount = 10;
-        private static List<int> _etaDataPointsMs = new List<int>();
 
         public static void Start()
         {
@@ -26,8 +24,8 @@ namespace StableDiffusionGui.Main
 
             Logger.Log(line, true, false, Constants.Lognames.Dreambooth);
 
-            // if (TextToImage.Canceled)
-            //     return;
+            if (!Program.Busy)
+                return;
 
             bool ellipsis = Logger.LastUiLine.EndsWith("...");
 
@@ -39,7 +37,9 @@ namespace StableDiffusionGui.Main
             if (line.Contains("Training:") && line.Contains("?it/s"))
                 Logger.Log($"Starting training...", false, replace);
 
-            if (line.Contains("global_step="))
+            string lastLogLines = string.Join("\n", Logger.GetSessionLogLastLines(Constants.Lognames.Dreambooth, 6));
+
+            if (line.Contains("global_step=") && !lastLogLines.Contains("Saving"))
             {
                 int step = line.Split("global_step=").LastOrDefault().Split('.').First().GetInt();
                 int percent = (((float)step / Dreambooth.CurrentTargetSteps) * 100f).RoundToInt();
@@ -51,7 +51,8 @@ namespace StableDiffusionGui.Main
                 int msPerStep = speed.EndsWith("it/s") ? (1000000f / (speed.Remove(".").Remove("it/s") + "0").GetInt()).RoundToInt() : (speed.Remove(".").Remove("it/s") + "0").GetInt();
                 int remainingMs = (Dreambooth.CurrentTargetSteps - step) * msPerStep;
 
-                Logger.Log($"Training (Step {step}/{Dreambooth.CurrentTargetSteps} - {percent}%{(remainingMs > 1000 ? $" - ETA: {FormatUtils.Time(remainingMs, false)}" : "")})...", false, replace);
+                if ((Dreambooth.CurrentTargetSteps - step) > 1)
+                    Logger.Log($"Training (Step {step}/{Dreambooth.CurrentTargetSteps} - {percent}%{(step >= 5 && remainingMs > 1000 ? $" - ETA: {FormatUtils.Time(remainingMs, false)}" : "")})...", false, replace);
             }
 
             if (line.Contains("Saving"))
@@ -64,8 +65,6 @@ namespace StableDiffusionGui.Main
             {
                 Logger.Log($"Downloading required files... {line.Trunc(80)}", false, ellipsis);
             }
-
-            string lastLogLines = string.Join("\n", Logger.GetSessionLogLastLines(Constants.Lognames.Dreambooth, 6));
 
             if (!_hasErrored && line.Contains("CUDA out of memory"))
             {

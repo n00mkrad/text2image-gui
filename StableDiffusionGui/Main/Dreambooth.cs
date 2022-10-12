@@ -30,12 +30,13 @@ namespace StableDiffusionGui.Main
 
                 string name = trainImgDir.Name.Trunc(25, false);
                 int cudaId = Config.GetInt("comboxCudaDevice") - 2;
-                string logDir = Path.Combine(Paths.GetSessionDataPath(), "db", ((long)(DateTime.Now - new DateTime(1970, 1, 1)).TotalMilliseconds).ToString());
+                long timestamp = (long)(DateTime.Now - new DateTime(1970, 1, 1)).TotalMilliseconds;
+                string logDir = Path.Combine(Paths.GetSessionDataPath(), "db", timestamp.ToString());
                 IoUtils.TryDeleteIfExists(logDir);
                 Directory.CreateDirectory(logDir);
 
                 string configPath = WriteConfig(logDir, trainImgDir, preset);
-                string outPath = Path.Combine(Paths.GetModelsPath(), $"dreambooth-{className}-{CurrentTargetSteps}.ckpt");
+                string outPath = Path.Combine(Paths.GetModelsPath(), $"dreambooth-{className}-{CurrentTargetSteps}step-{timestamp}.ckpt");
 
                 Process db = OsUtils.NewProcess(!showCmd);
                 db.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSd()} && call activate.bat mb/envs/ldo && python {Constants.Dirs.RepoSd}/db/main.py -t " +
@@ -82,6 +83,8 @@ namespace StableDiffusionGui.Main
                 Logger.Log(ex.StackTrace);
                 return "";
             }
+
+            Program.MainForm.SetProgress(0);
         }
 
         private static string WriteConfig (string logDir, DirectoryInfo trainDir, Enums.Dreambooth.TrainPreset preset)
@@ -98,11 +101,14 @@ namespace StableDiffusionGui.Main
 
             int trainImgs = IoUtils.GetFileInfosSorted(trainDir.FullName, false, "*.*").Where(x => _validImgExtensions.Contains(x.Extension.ToLower())).Count();
             double lr = trainImgs * _learningRateMagicNumber * 0.0000001 * lrMultiplier;
-            configLines[1] = $"  base_learning_rate: {lr.ToString().Replace(",", ".")}";
+            string lrStr = lr.ToString().Replace(",", ".");
+            configLines[1] = $"  base_learning_rate: {lrStr}";
             configLines[95] = $"        repeats: 100";
             configLines[108] = $"      every_n_train_steps: {(_onlySaveFinalCkpt ? targetSteps + 1 : loggerInterval)}";
             configLines[113] = $"        batch_frequency: {loggerInterval}";
             configLines[119] = $"    max_steps: {targetSteps}";
+
+            Logger.Log($"Training on {trainImgs} images to {targetSteps} steps using learning rate of {lrStr}.");
 
             string configOutPath = Path.Combine(logDir, "config.yaml");
             File.WriteAllLines(configOutPath, configLines);
