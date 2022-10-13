@@ -18,7 +18,7 @@ namespace StableDiffusionGui.Main
 
         public static int CurrentTargetSteps;
 
-        public static async Task<string> RunTraining(FileInfo baseModel, DirectoryInfo trainImgDir, string className, Enums.Dreambooth.TrainPreset preset)
+        public static async Task<string> RunTraining(FileInfo baseModel, DirectoryInfo trainImgDir, string className, Enums.Dreambooth.TrainPreset preset, float lrMultiplier = 1f)
         {
             CurrentTargetSteps = 0;
 
@@ -38,7 +38,7 @@ namespace StableDiffusionGui.Main
                 IoUtils.TryDeleteIfExists(logDir);
                 Directory.CreateDirectory(logDir);
 
-                string configPath = WriteConfig(logDir, trainImgDir, preset);
+                string configPath = WriteConfig(logDir, trainImgDir, preset, lrMultiplier);
 
                 if (!File.Exists(configPath))
                     throw new Exception("Could not create training config.");
@@ -94,7 +94,7 @@ namespace StableDiffusionGui.Main
             Program.MainForm.SetProgress(0);
         }
 
-        private static string WriteConfig (string logDir, DirectoryInfo trainDir, Enums.Dreambooth.TrainPreset preset)
+        private static string WriteConfig (string logDir, DirectoryInfo trainDir, Enums.Dreambooth.TrainPreset preset, float userlrMult)
         {
             string configPath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.RepoSd, Constants.Dirs.Dreambooth, "configs", "stable-diffusion", "v1-finetune_unfrozen.yaml");
             var configLines = File.ReadAllLines(configPath).ToArray();
@@ -121,8 +121,9 @@ namespace StableDiffusionGui.Main
                 return "";
             }
 
-            double lr = trainImgs * _learningRateMagicNumber * 0.0000001 * lrMultiplier;
+            double lr = trainImgs * _learningRateMagicNumber * 0.0000001 * lrMultiplier * userlrMult;
             string lrStr = lr.ToString().Replace(",", ".");
+
             configLines[1] = $"  base_learning_rate: {lrStr}";
             configLines[95] = $"        repeats: 100";
             configLines[108] = $"      every_n_train_steps: {(_onlySaveFinalCkpt ? targetSteps + 1 : loggerInterval)}";

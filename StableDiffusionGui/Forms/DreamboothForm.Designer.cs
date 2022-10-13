@@ -59,8 +59,13 @@
             this.panel26 = new System.Windows.Forms.Panel();
             this.label10 = new System.Windows.Forms.Label();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.btnReloadModels = new System.Windows.Forms.Button();
             this.btnOpenModelFolder = new System.Windows.Forms.Button();
+            this.panelLr = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+            this.panel8 = new System.Windows.Forms.Panel();
+            this.panel9 = new System.Windows.Forms.Panel();
+            this.label4 = new System.Windows.Forms.Label();
+            this.comboxLrMultiplier = new System.Windows.Forms.ComboBox();
             this.parentPanel.SuspendLayout();
             this.panelToken.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
@@ -78,6 +83,10 @@
             this.tableLayoutPanel8.SuspendLayout();
             this.panel25.SuspendLayout();
             this.panel26.SuspendLayout();
+            this.panelLr.SuspendLayout();
+            this.tableLayoutPanel4.SuspendLayout();
+            this.panel8.SuspendLayout();
+            this.panel9.SuspendLayout();
             this.SuspendLayout();
             // 
             // titleLabel
@@ -98,6 +107,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.parentPanel.AutoScroll = true;
+            this.parentPanel.Controls.Add(this.panelLr);
             this.parentPanel.Controls.Add(this.panelToken);
             this.parentPanel.Controls.Add(this.btnStart);
             this.parentPanel.Controls.Add(this.panelTrainImgs);
@@ -418,24 +428,6 @@
             this.toolTip.InitialDelay = 200;
             this.toolTip.ReshowDelay = 40;
             // 
-            // btnReloadModels
-            // 
-            this.btnReloadModels.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnReloadModels.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnReloadModels.BackgroundImage = global::StableDiffusionGui.Properties.Resources.baseline_refresh_white_48dp;
-            this.btnReloadModels.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnReloadModels.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnReloadModels.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnReloadModels.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnReloadModels.Location = new System.Drawing.Point(732, 9);
-            this.btnReloadModels.Name = "btnReloadModels";
-            this.btnReloadModels.Size = new System.Drawing.Size(40, 40);
-            this.btnReloadModels.TabIndex = 110;
-            this.btnReloadModels.TabStop = false;
-            this.toolTip.SetToolTip(this.btnReloadModels, "Reload Model List");
-            this.btnReloadModels.UseVisualStyleBackColor = false;
-            this.btnReloadModels.Click += new System.EventHandler(this.btnReloadModels_Click);
-            // 
             // btnOpenModelFolder
             // 
             this.btnOpenModelFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -445,14 +437,91 @@
             this.btnOpenModelFolder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnOpenModelFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnOpenModelFolder.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnOpenModelFolder.Location = new System.Drawing.Point(686, 9);
+            this.btnOpenModelFolder.Location = new System.Drawing.Point(732, 9);
             this.btnOpenModelFolder.Name = "btnOpenModelFolder";
             this.btnOpenModelFolder.Size = new System.Drawing.Size(40, 40);
             this.btnOpenModelFolder.TabIndex = 109;
             this.btnOpenModelFolder.TabStop = false;
-            this.toolTip.SetToolTip(this.btnOpenModelFolder, "Open Models Folder");
+            this.toolTip.SetToolTip(this.btnOpenModelFolder, "Manage Model Folders");
             this.btnOpenModelFolder.UseVisualStyleBackColor = false;
             this.btnOpenModelFolder.Click += new System.EventHandler(this.btnOpenModelFolder_Click);
+            // 
+            // panelLr
+            // 
+            this.panelLr.Controls.Add(this.tableLayoutPanel4);
+            this.panelLr.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelLr.Location = new System.Drawing.Point(0, 140);
+            this.panelLr.Name = "panelLr";
+            this.panelLr.Size = new System.Drawing.Size(760, 35);
+            this.panelLr.TabIndex = 103;
+            // 
+            // tableLayoutPanel4
+            // 
+            this.tableLayoutPanel4.ColumnCount = 2;
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
+            this.tableLayoutPanel4.Controls.Add(this.panel8, 0, 0);
+            this.tableLayoutPanel4.Controls.Add(this.panel9, 0, 0);
+            this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel4.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel4.Name = "tableLayoutPanel4";
+            this.tableLayoutPanel4.RowCount = 1;
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(760, 35);
+            this.tableLayoutPanel4.TabIndex = 1;
+            // 
+            // panel8
+            // 
+            this.panel8.Controls.Add(this.comboxLrMultiplier);
+            this.panel8.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel8.Location = new System.Drawing.Point(307, 3);
+            this.panel8.Name = "panel8";
+            this.panel8.Size = new System.Drawing.Size(450, 29);
+            this.panel8.TabIndex = 88;
+            // 
+            // panel9
+            // 
+            this.panel9.Controls.Add(this.label4);
+            this.panel9.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel9.Location = new System.Drawing.Point(3, 3);
+            this.panel9.Name = "panel9";
+            this.panel9.Size = new System.Drawing.Size(298, 29);
+            this.panel9.TabIndex = 87;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.ForeColor = System.Drawing.Color.White;
+            this.label4.Location = new System.Drawing.Point(2, 8);
+            this.label4.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(74, 13);
+            this.label4.TabIndex = 85;
+            this.label4.Text = "Learning Rate";
+            // 
+            // comboxLrMultiplier
+            // 
+            this.comboxLrMultiplier.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboxLrMultiplier.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.comboxLrMultiplier.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboxLrMultiplier.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboxLrMultiplier.ForeColor = System.Drawing.Color.White;
+            this.comboxLrMultiplier.FormattingEnabled = true;
+            this.comboxLrMultiplier.Items.AddRange(new object[] {
+            "0.50x",
+            "0.75x",
+            "Normal",
+            "1.25x",
+            "1.50x",
+            "1.75x",
+            "2.00x"});
+            this.comboxLrMultiplier.Location = new System.Drawing.Point(0, 3);
+            this.comboxLrMultiplier.Name = "comboxLrMultiplier";
+            this.comboxLrMultiplier.Size = new System.Drawing.Size(450, 21);
+            this.comboxLrMultiplier.TabIndex = 108;
+            this.toolTip.SetToolTip(this.comboxLrMultiplier, "A higher learning rate can help the model learn faster, but if it\'s too high it w" +
+        "ill overfit and the model becomes less flexible.");
             // 
             // DreamboothForm
             // 
@@ -460,7 +529,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.ClientSize = new System.Drawing.Size(784, 361);
-            this.Controls.Add(this.btnReloadModels);
             this.Controls.Add(this.btnOpenModelFolder);
             this.Controls.Add(this.parentPanel);
             this.Controls.Add(this.titleLabel);
@@ -472,6 +540,7 @@
             this.Name = "DreamboothForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Loading...";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.DreamboothForm_FormClosing);
             this.Load += new System.EventHandler(this.DreamboothForm_Load);
             this.Shown += new System.EventHandler(this.DreamboothForm_Shown);
             this.parentPanel.ResumeLayout(false);
@@ -497,6 +566,11 @@
             this.panel25.ResumeLayout(false);
             this.panel26.ResumeLayout(false);
             this.panel26.PerformLayout();
+            this.panelLr.ResumeLayout(false);
+            this.tableLayoutPanel4.ResumeLayout(false);
+            this.panel8.ResumeLayout(false);
+            this.panel9.ResumeLayout(false);
+            this.panel9.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -518,7 +592,6 @@
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnOpenModelFolder;
-        private System.Windows.Forms.Button btnReloadModels;
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.Panel panelTrainImgs;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
@@ -535,5 +608,11 @@
         private System.Windows.Forms.TextBox textboxClassName;
         private System.Windows.Forms.Panel panel7;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Panel panelLr;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
+        private System.Windows.Forms.Panel panel8;
+        private System.Windows.Forms.Panel panel9;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.ComboBox comboxLrMultiplier;
     }
 }

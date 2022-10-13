@@ -35,6 +35,7 @@ namespace StableDiffusionGui.Forms
 
         private async void DreamboothForm_Shown(object sender, EventArgs e)
         {
+            comboxLrMultiplier.Text = "Normal";
             await PerformChecks();
         }
 
@@ -141,8 +142,9 @@ namespace StableDiffusionGui.Forms
             string className = string.Join("_", textboxClassName.Text.Trim().Split(Path.GetInvalidFileNameChars())).Trunc(50, false);
             textboxClassName.Text = className;
             Enums.Dreambooth.TrainPreset preset = (Enums.Dreambooth.TrainPreset)comboxTrainPreset.SelectedIndex;
+            float lrMultiplier = comboxLrMultiplier.Text.EndsWith("x") ? comboxLrMultiplier.Text.GetFloat() : 1f;
 
-            string outPath = await Dreambooth.RunTraining(baseModel, trainImgDir, className, preset);
+            string outPath = await Dreambooth.RunTraining(baseModel, trainImgDir, className, preset, lrMultiplier);
 
             Program.MainForm.SetWorking(Program.BusyState.Standby);
             btnStart.Text = "Start Training";
@@ -159,6 +161,12 @@ namespace StableDiffusionGui.Forms
 
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok && Directory.Exists(dialog.FileName))
                 textboxTrainImgsDir.Text = dialog.FileName;
+        }
+
+        private void DreamboothForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (Program.State == Program.BusyState.Dreambooth)
+                e.Cancel = true;
         }
     }
 }
