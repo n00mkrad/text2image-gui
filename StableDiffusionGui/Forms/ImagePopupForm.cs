@@ -281,7 +281,8 @@ namespace StableDiffusionGui.Forms
             if (_currentImage == null)
                 return;
 
-            int zoomPercent = (Width / (float)_currentImage.Width * 100f).RoundToInt();
+            bool letterboxed = Width == Screen.FromControl(this).Bounds.Width; // True => Letterboxed - False => Pillarboxed
+            int zoomPercent = (letterboxed ? (Height / (float)_currentImage.Height * 100f) : (Width / (float)_currentImage.Width * 100f)).RoundToInt();
             SetInfoLabel(WindowState == FormWindowState.Maximized ? $"Zoom: Fullscreen ({zoomPercent}%)" : $"Zoom: {zoomPercent}%");
         }
 
