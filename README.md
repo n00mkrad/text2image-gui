@@ -5,7 +5,7 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (form
 
 
 
-# System Requirements
+## System Requirements
 
 ### Minimum:
 
@@ -25,10 +25,23 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (form
 **RAM:** 32 GB RAM
 **Disk:** 12 GB (another free 30 GB for temporary files recommended)
 
-# Features and How to Use Them
+## Features and How to Use Them
 
 ### Run Multiple Prompts:
 
 Enter each prompt on a new line (newline-separated). Word wrapping does not count towards this.
 
-# WORK IN PROGRESS
+### WORK IN PROGRESS
+
+## Hotkeys (Main Window)
+
+**CTRL+G:** Run Image Generation (or Cancel if already running)
+**CTRL+M:** Show Model Quick Switcher
+**CTRL+PLUS:** Toggle Prompt Textbox Size
+**CTLR+DEL:** Delete currently viewed image
+**CTRL+SHIFT+DEL:** Delete all generated images (of the current batch)
+**CTRL+O:** Open currently viewed image
+**CTRL+SHIFT+O:** Show current image in its folder
+**F12:** Open Settings
+**CTRL+V:** Paste Image (If clipboard contains a bitmap)
+**CTRL+Q:** Quit

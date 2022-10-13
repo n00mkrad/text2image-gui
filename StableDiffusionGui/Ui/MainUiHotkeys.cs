@@ -36,7 +36,7 @@ namespace StableDiffusionGui.Ui
             if (keys == (Keys.F12)) // Hotkey: Open settings
                 new SettingsForm().ShowDialog();
 
-            if (keys == (Keys.Control | Keys.M)) // Hotkey: Open settings
+            if (keys == (Keys.Control | Keys.M)) // Hotkey: Model quick switcher
             {
                 Program.MainForm.PanelBg.Focus();
                 new ModelQuickSelectForm().ShowDialog();
