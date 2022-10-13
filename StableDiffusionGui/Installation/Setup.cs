@@ -23,7 +23,7 @@ namespace StableDiffusionGui.Installation
         {
             try
             {
-                Program.MainForm.SetWorking(true);
+                Program.MainForm.SetWorking(Program.BusyState.Installation);
 
                 if (force || !InstallationStatus.HasSdRepo() || !InstallationStatus.HasSdEnv())
                     await CloneSdRepo();
@@ -56,7 +56,7 @@ namespace StableDiffusionGui.Installation
                 Logger.Log($"Install error: {ex.Message}\n{ex.StackTrace}");
             }
 
-            Program.MainForm.SetWorking(false);
+            Program.MainForm.SetWorking(Program.BusyState.Standby);
         }
 
         public static async Task SetupPythonEnv()

@@ -7,9 +7,11 @@ using System.Windows.Forms;
 
 namespace StableDiffusionGui
 {
-    internal static class Program
+    public static class Program
     {
-        public static bool Busy;
+        public enum BusyState { Standby, Installation, ImageGeneration, Script, Dreambooth, Other }
+        public static BusyState State = BusyState.Standby;
+        public static bool Busy { get { return State != BusyState.Standby; } }
         public static MainForm MainForm;
 
         /// <summary>

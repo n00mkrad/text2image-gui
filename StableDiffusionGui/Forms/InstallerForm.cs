@@ -82,10 +82,10 @@ namespace StableDiffusionGui.Forms
         private async void btnClone_Click(object sender, EventArgs e)
         {
             this.Enabled = false;
-            Program.MainForm.SetWorking(true);
+            Program.MainForm.SetWorking(Program.BusyState.Installation);
             await Setup.CloneSdRepo();
             UpdateStatus();
-            Program.MainForm.SetWorking(false);
+            Program.MainForm.SetWorking(Program.BusyState.Standby);
             this.Enabled = true;
         }
 

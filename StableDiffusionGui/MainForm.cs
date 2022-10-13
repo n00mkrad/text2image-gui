@@ -288,28 +288,30 @@ namespace StableDiffusionGui
             }
         }
 
-        public void SetWorking(bool state, bool allowCancel = true)
+        public void SetWorking(Program.BusyState state, bool allowCancel = true)
         {
             Logger.Log($"SetWorking({state})", true);
+            Program.State = state;
             SetProgress(-1);
-            runBtn.Text = state ? "Cancel" : "Generate!";
-            runBtn.ForeColor = state ? Color.IndianRed : Color.White;
+
+            bool imageGen = state == Program.BusyState.ImageGeneration;
+
+            runBtn.Text = imageGen ? "Cancel" : "Generate!";
+            runBtn.ForeColor = imageGen ? Color.IndianRed : Color.White;
             Control[] controlsToDisable = new Control[] { };
             Control[] controlsToHide = new Control[] { };
-            progressCircle.Visible = state;
+            progressCircle.Visible = state != Program.BusyState.Standby;
 
             foreach (Control c in controlsToDisable)
-                c.Enabled = !state;
+                c.Enabled = !imageGen;
 
             foreach (Control c in controlsToHide)
-                c.Visible = !state;
+                c.Visible = !imageGen;
 
-            if (!state)
+            if (!imageGen)
                 SetProgressImg(0);
 
-            progressBarImg.Visible = state;
-
-            Program.Busy = state;
+            progressBarImg.Visible = imageGen;
         }
 
         public void SetProgress(int percent, bool taskbarProgress = true)

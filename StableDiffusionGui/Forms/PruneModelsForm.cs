@@ -117,13 +117,13 @@ namespace StableDiffusionGui.Forms
 
             SaveConfig();
 
-            Program.MainForm.SetWorking(true);
+            Program.MainForm.SetWorking(Program.BusyState.Script);
             Enabled = false;
             btnRun.Text = "Pruning...";
 
             string outPath = await Prune();
 
-            Program.MainForm.SetWorking(false);
+            Program.MainForm.SetWorking(Program.BusyState.Standby);
             Enabled = true;
             btnRun.Text = "Prune!";
 

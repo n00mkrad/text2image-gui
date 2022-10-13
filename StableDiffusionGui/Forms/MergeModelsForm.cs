@@ -128,13 +128,13 @@ namespace StableDiffusionGui.Forms
                 return;
             }
 
-            Program.MainForm.SetWorking(true);
+            Program.MainForm.SetWorking(Program.BusyState.Script);
             Enabled = false;
             btnRun.Text = "Merging...";
 
             string outPath = await Merge();
 
-            Program.MainForm.SetWorking(false);
+            Program.MainForm.SetWorking(Program.BusyState.Standby);
             Enabled = true;
             btnRun.Text = "Merge!";
 

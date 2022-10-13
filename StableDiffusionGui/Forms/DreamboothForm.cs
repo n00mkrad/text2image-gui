@@ -114,7 +114,7 @@ namespace StableDiffusionGui.Forms
             //     return;
             // }
 
-            Program.MainForm.SetWorking(true);
+            Program.MainForm.SetWorking(Program.BusyState.Dreambooth);
             Enabled = false;
             //btnStart.Text = "Merging...";
 
@@ -126,7 +126,7 @@ namespace StableDiffusionGui.Forms
 
             string outPath = await Dreambooth.RunTraining(baseModel, trainImgDir, className, preset);
 
-            Program.MainForm.SetWorking(false);
+            Program.MainForm.SetWorking(Program.BusyState.Standby);
             Enabled = true;
             //btnStart.Text = "Merge!";
 
