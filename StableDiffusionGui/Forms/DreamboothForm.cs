@@ -168,5 +168,21 @@ namespace StableDiffusionGui.Forms
             if (Program.State == Program.BusyState.Dreambooth)
                 e.Cancel = true;
         }
+
+        private void btnInfo_Click(object sender, EventArgs e)
+        {
+            OpenGuide();
+        }
+
+        private void DreamboothForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.F1)
+                OpenGuide();
+        }
+
+        private void OpenGuide()
+        {
+            System.Diagnostics.Process.Start("https://github.com/n00mkrad/text2image-gui/blob/main/DreamBooth.md");
+        }
     }
 }

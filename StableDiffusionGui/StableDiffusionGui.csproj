@@ -365,6 +365,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon1.ico" />
+    <None Include="Resources\iconInfo.png" />
     <None Include="Resources\iconRemove.png" />
     <None Include="Resources\iconAdd.png" />
     <None Include="Resources\github.png" />
