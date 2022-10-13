@@ -7,23 +7,25 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (form
 
 ## System Requirements
 
-### Minimum:
+#### Minimum:
 
 **GPU:** Nvidia GPU with 4 GB VRAM, Maxwell Architecture (2014) or newer
 **RAM:** 8 GB RAM (Note: Pagefile must be enabled as swapping will occur with only 8 GB!)
 **Disk:** 12 GB (another free 2 GB for temporary files recommended)
 
-### Recommended:
+#### Recommended:
 
 **GPU:** Nvidia GPU with 8 GB VRAM, Pascal Architecture (2016) or newer
 **RAM:** 16 GB RAM
 **Disk:** 12 GB (another free 2 GB for temporary files recommended)
 
-### Professional/DreamBooth-capable:
+#### Professional/DreamBooth-capable:
 
 **GPU:** Nvidia GPU with 24GB VRAM, Turing Architecture (2018) or newer
 **RAM:** 32 GB RAM
 **Disk:** 12 GB (another free 30 GB for temporary files recommended)
+
+
 
 ## Features and How to Use Them
 
@@ -33,10 +35,14 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (form
 - **Exclusion Words:** Put words or phrases into [square brackets] to tell the AI to exclude those things when generating images.
 - **Emphasis:** Use (parentheses) to make a word/phrase more impactful, or {curly brackets} to do the opposite. You can also use ((multiple)).
 
+
+
 ### Additional Inputs
 
 * **Load Image:** Load an initialization image that will be used together with your text prompt ("img2img")
 * **Load Concept:** Load a Textual Inversion concept to apply a style or use a specific character
+
+
 
 ### Stable Diffusion Settings
 
@@ -63,7 +69,7 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (form
 
 
 
-### Settings
+### Settings Button (Top Bar)
 
 * **Low Memory Mode:** Use "optimizedSD" implementation that is very slow, but requires less VRAM. Not recommended unless you need it.
 * **Use Full Precision:** Use FP32 instead of FP16 math, which requires more VRAM but can fix certain compatibility issues.
@@ -81,7 +87,25 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (form
 
 
 
-### Developer Tools
+### Logs Button (Top Bar)
+
+* **Open Logs Folder:** Opens the log folder of the current session. The application deletes logs older than 3 days on every startup.
+* **Copy <logname.txt>**: Copy one of the log files generated in the current session to clipboard.
+
+
+
+### Installer Button (Top Bar)
+
+* **Installation Status:** Shows which modules are installed (checkboxes are not interactive and only indicate if a module is installed correctly!).
+* **Redownload SD Model:** Re-downloads Stable Diffusion 1.4 model (4 GB) from Google Storage servers.
+* **Re-Install SD Code:** Re-installs the Stable Diffusion code from its repository. Can fix some issues related to file paths.
+* **Re-Install Upscalers:** (Re-)Installs upscaling files (RealESRGAN, GFPGAN, CodeFormer, including model files).
+* **(Re-)Install:** Installs everything. Skips already installed components.
+* **Uninstall:** Removes everything except for Conda which is included and needed for a re-installation.
+
+
+
+### Developer Tools Button (Top Bar)
 
 * **Open Dream.py CLI:** Use Stable Diffusion in command-line interface
 * **Merge Models:** Allows you to merge/blend two models. The percentage numbers represent their respective weight.
@@ -91,7 +115,23 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (form
 
 
 
-### WORK IN PROGRESS
+### Post-Processing Button (Top Bar)
+
+* **Upscaling:** Set RealESRGAN upscaling factor.
+* **Face Restoration:** Enable GFPGAN or CodeFormer for face restoration.
+
+
+
+### Bottom Bar Buttons
+
+* **Generate:** Start AI image generation (or cancel if it's already running).
+* **Prompt Queue Button:** Right-click to add the current settings to the queue, or left-click to manage the queued entries.
+* **Prompt History Button:** View recent prompts, load them into the main window, search or clear history, or disable it.
+* **Image Deletion Button:** Delete either the image that is being viewed currently, or all images from the current batch.
+* **Open Folder Button:** Opens the (root) image output folder.
+* **Left/Right Buttons:** Show the previous or next image from the current batch.
+
+
 
 ## Hotkeys (Main Window)
 
