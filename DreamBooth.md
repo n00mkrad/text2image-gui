@@ -17,6 +17,14 @@ Basic training GUI for [DreamBooth](https://dreambooth.github.io/).
 
 ## Training
 
+### Preparing Your Dataset
+
+* Use 4-20 images for training. More images are not necessarily better. **Quality over quantity!** 5 hand-picked, manually cropped images can be better than 200 bulk-downloaded images that were automatically cropped/padded. 
+* Resize images to 512px on the longer side, then pad them to fill 512x512.
+* Use images that represent your character/object in different (optimally somewhat neutral) poses/scenarios. Variation helps (e.g. if all your images have a blank white background, it will be harder for your model to generate a different background). Avoid low-quality images, messy images where the subject is not clear, and unusual poses. Overall, you need to **find a sweet spot between variety and uniformity**.
+
+
+
 ### Settings
 
 - **Base Model:** Set the model you want to use as a "template". Your new object/character will be added into it.
