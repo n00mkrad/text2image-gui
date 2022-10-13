@@ -30,3 +30,5 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (form
 ### Run Multiple Prompts:
 
 Enter each prompt on a new line (newline-separated). Word wrapping does not count towards this.
+
+# WORK IN PROGRESS
