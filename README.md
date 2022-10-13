@@ -51,13 +51,45 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (form
 * **Sampler:** Changes the way images are sampled. Euler Ancestral is default because it's fast and tends to look good even with few steps.
 * **Generate Seamless Images:** Generates seamless/tileable images, very useful for making game textures or repeating backgrounds.
 
+
+
 ### Image Viewer
 
 * **Review current images:** Use the scroll wheel while hovering over the image to go to the previous/next image.
 * **Slideshow:** The image viewer always shows the newest generated image if you haven't manually changed it in the last 3 seconds.
-* **Context Menu:** Right-click into the image area to show more options
+* **Context Menu:** Right-click into the image area to show more options.
 * **Pop-Up Viewer:** Click into the image area to open the current image in a floating window.
   * Use the mouse wheel to change the window's size (zoom), right-click for more options, double-click to toggle fullscreen.
+
+
+
+### Settings
+
+* **Low Memory Mode:** Use "optimizedSD" implementation that is very slow, but requires less VRAM. Not recommended unless you need it.
+* **Use Full Precision:** Use FP32 instead of FP16 math, which requires more VRAM but can fix certain compatibility issues.
+* **Unload Model After Each Generation:** Completely unload Stable Diffusion after images are generated.
+* **Stable Diffusion Model File:** Select the model file to use for image generation.
+  * Included models are located in `Data/models`. You can add your own folder paths by clicking on "Folders...".
+* **CUDA Device:** Allows your to specify the GPU to run the AI on, or set it to run on the CPU (very slow).
+* **Image Output Folder:** Set the folder where your generated images will be saved.
+* **Create a Subfolder for Each Prompt:** If enabled, images will be saved in a folder named after their prompt.
+* **Metadata to Include in Filename:** Specify which information should be included in the filename.
+* **When Running Multiple Prompts, Use Same Starting Seed for All of Them:** If enabled, the seed resets to the starting value for every new prompt. If disabled, the seed will be incremented by 1 after each iteration, being sequential until all prompts/iterations have been generated.
+* **When Post-Processing Is Enabled, Also Save Un-Processed Image:** When enabled, both the "raw" and the post-processed image will be saved.
+* **Advanced Mode:** Increases the limits of the sliders in the main window. Not very useful most of the time unless you really need those high values.
+* **Notify When Image Generation Has Finished:** Play a sound, show a notification, or do both if image generation finishes in background.
+
+
+
+### Developer Tools
+
+* **Open Dream.py CLI:** Use Stable Diffusion in command-line interface
+* **Merge Models:** Allows you to merge/blend two models. The percentage numbers represent their respective weight.
+* **Prune Models:** Allows you to reduce the size of models by removing data that's not needed for image generation.
+* **View Log In Realtime:** Opens a separate window that shows all log output, including messages that are not shown in the normal log box.
+* **Train DreamBooth Model:** Allows you to train a model on a specific object or character using only 3-20 images of it.
+
+
 
 ### WORK IN PROGRESS
 
