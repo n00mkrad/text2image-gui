@@ -26,6 +26,9 @@ namespace StableDiffusionGui.Main
             {
                 Logger.ClearLogBox();
 
+                TtiProcess.ProcessExistWasIntentional = true;
+                ProcessManager.FindAndKillOrphans($"*dream.py*{Paths.SessionTimestamp}*");
+
                 bool showCmd = _useVisibleCmdWindow || OsUtils.ShowHiddenCmd();
 
                 string name = trainImgDir.Name.Trunc(25, false);
@@ -36,6 +39,10 @@ namespace StableDiffusionGui.Main
                 Directory.CreateDirectory(logDir);
 
                 string configPath = WriteConfig(logDir, trainImgDir, preset);
+
+                if (!File.Exists(configPath))
+                    throw new Exception("Could not create training config.");
+
                 string outPath = Path.Combine(Paths.GetModelsPath(), $"dreambooth-{className}-{CurrentTargetSteps}step-{timestamp}.ckpt");
 
                 Process db = OsUtils.NewProcess(!showCmd);
@@ -80,7 +87,7 @@ namespace StableDiffusionGui.Main
             catch (Exception ex)
             {
                 UiUtils.ShowMessageBox($"Training Error: {ex.Message}");
-                Logger.Log(ex.StackTrace);
+                Logger.Log(ex.StackTrace, true);
                 return "";
             }
 
@@ -99,7 +106,21 @@ namespace StableDiffusionGui.Main
 
             CurrentTargetSteps = targetSteps;
 
-            int trainImgs = IoUtils.GetFileInfosSorted(trainDir.FullName, false, "*.*").Where(x => _validImgExtensions.Contains(x.Extension.ToLower())).Count();
+            var filesInTrainDir = IoUtils.GetFileInfosSorted(trainDir.FullName, false, "*.*");
+            int trainImgs = filesInTrainDir.Where(x => _validImgExtensions.Contains(x.Extension.ToLower())).Count();
+
+            if (trainImgs < 1)
+            {
+                Logger.Log($"Error: Training folder does not contain any valid images. Currently supported are {string.Join(", ", _validImgExtensions.Select(x => x.Substring(1).ToUpperInvariant()))}.");
+                return "";
+            }
+
+            if (filesInTrainDir.Count() > trainImgs)
+            {
+                Logger.Log($"Error: Training folder contains invalid files. Currently supported are {string.Join(", ", _validImgExtensions.Select(x => x.Substring(1).ToUpperInvariant()))}.");
+                return "";
+            }
+
             double lr = trainImgs * _learningRateMagicNumber * 0.0000001 * lrMultiplier;
             string lrStr = lr.ToString().Replace(",", ".");
             configLines[1] = $"  base_learning_rate: {lrStr}";

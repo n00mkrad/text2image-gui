@@ -132,7 +132,7 @@ namespace StableDiffusionGui.Os
 
                     string procWithCli = $"{exe} {cli}";
 
-                    if (procWithCli.Contains(dataPath))
+                    if (procWithCli.Contains(dataPath) || procWithCli.Contains(dataPath.Replace(@"\", "/")))
                     {
                         if (!string.IsNullOrWhiteSpace(wildcardFilter) && !procWithCli.MatchesWildcard(wildcardFilter))
                             continue;

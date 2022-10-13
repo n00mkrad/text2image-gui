@@ -4,19 +4,17 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StableDiffusionGui.Io
 {
     internal class Paths
     {
-        public static string sessionTimestamp;
+        public static string SessionTimestamp;
 
         public static void Init()
         {
             var n = DateTime.Now;
-            sessionTimestamp = $"{n.Year}-{n.Month.ToString().PadLeft(2, '0')}-{n.Day.ToString().PadLeft(2, '0')}-{n.Hour.ToString().PadLeft(2, '0')}-{n.Minute.ToString().PadLeft(2, '0')}-{n.Second.ToString().PadLeft(2, '0')}";
+            SessionTimestamp = $"{n.Year}-{n.Month.ToString().PadLeft(2, '0')}-{n.Day.ToString().PadLeft(2, '0')}-{n.Hour.ToString().PadLeft(2, '0')}-{n.Minute.ToString().PadLeft(2, '0')}-{n.Second.ToString().PadLeft(2, '0')}";
         }
 
         public static string GetExe()
@@ -45,7 +43,7 @@ namespace StableDiffusionGui.Io
 
         public static string GetLogPath(bool noSession = false)
         {
-            string path = Path.Combine(GetDataPath(), "logs", (noSession ? "" : sessionTimestamp));
+            string path = Path.Combine(GetDataPath(), "logs", (noSession ? "" : SessionTimestamp));
             Directory.CreateDirectory(path);
             return path;
         }
@@ -59,7 +57,7 @@ namespace StableDiffusionGui.Io
 
         public static string GetSessionDataPath()
         {
-            string path = Path.Combine(GetSessionsPath(), sessionTimestamp);
+            string path = Path.Combine(GetSessionsPath(), SessionTimestamp);
             Directory.CreateDirectory(path);
             return path;
         }
