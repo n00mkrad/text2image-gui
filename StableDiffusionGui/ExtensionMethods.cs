@@ -14,12 +14,13 @@ namespace StableDiffusionGui
 {
     public static class ExtensionMethods
     {
-        public static string TrimNumbers(this string s, bool allowDotComma = false)
+        public static string TrimNumbers(this string s, bool allowDotComma = false, bool allowScientific = false)
         {
             if (!allowDotComma)
-                s = Regex.Replace(s, "[^0-9]", "");
+                s = Regex.Replace(s, $"[^0-9{(allowScientific ? "e" : "")}]", "");
             else
-                s = Regex.Replace(s, "[^.,0-9]", "");
+                s = Regex.Replace(s, $"[^.,0-9{(allowScientific ? "e" : "")}]", "");
+
             return s.Trim();
         }
 
@@ -33,7 +34,7 @@ namespace StableDiffusionGui
             return GetInt(combobox.Text);
         }
 
-        public static int GetInt(this string str)
+        public static int GetInt(this string str, bool allowScientificNotation = true)
         {
             if (str == null || str.Length < 1)
                 return 0;
@@ -42,6 +43,9 @@ namespace StableDiffusionGui
 
             try
             {
+                if(allowScientificNotation && CouldBeScientificNotation(str))
+                    return int.Parse(str.TrimNumbers(true, true), NumberStyles.Float, CultureInfo.InvariantCulture);
+
                 if (str.Length >= 2 && str[0] == '-' && str[1] != '-')
                     return int.Parse("-" + str.TrimNumbers());
                 else
@@ -51,6 +55,17 @@ namespace StableDiffusionGui
             {
                 return 0;
             }
+        }
+
+        private static bool CouldBeScientificNotation (string s)
+        {
+            if (!(s.ToLowerInvariant().Contains("e+") || s.ToLowerInvariant().Contains("e-")))
+                return false;
+
+            if (s[0] == 'e' || s.Last() == '+' || s.Last() == '-') // e must be in the middle, can't be first char (and +- can't be last)
+                return false;
+
+            return true;
         }
 
         public static long GetLong(this string str)

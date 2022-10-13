@@ -41,15 +41,14 @@ namespace StableDiffusionGui.Main
 
             if (line.Contains("global_step=") && !lastLogLines.Contains("Saving"))
             {
-                int step = line.Split("global_step=").LastOrDefault().Split('.').First().GetInt();
+                int step = line.Split("global_step=").LastOrDefault().Split('.').First().GetInt(true);
                 int percent = (((float)step / Dreambooth.CurrentTargetSteps) * 100f).RoundToInt();
 
                 if (percent > 0 && percent <= 100)
                     Program.MainForm.SetProgress(percent);
 
                 string speed = line.Split(", loss=").First().Split(' ').Last();
-                int msPerStep = speed.EndsWith("it/s") ? (1000000f / (speed.Remove(".").Remove("it/s") + "0").GetInt()).RoundToInt() : (speed.Remove(".").Remove("it/s") + "0").GetInt();
-                int remainingMs = (Dreambooth.CurrentTargetSteps - step) * msPerStep;
+                int remainingMs = (Dreambooth.CurrentTargetSteps - step) * FormatUtils.IterationsToMsPerIteration(speed);
 
                 if ((Dreambooth.CurrentTargetSteps - step) > 1)
                     Logger.Log($"Training (Step {step}/{Dreambooth.CurrentTargetSteps} - {percent}%{(step >= 5 && remainingMs > 1000 ? $" - ETA: {FormatUtils.Time(remainingMs, false)}" : "")})...", false, replace);

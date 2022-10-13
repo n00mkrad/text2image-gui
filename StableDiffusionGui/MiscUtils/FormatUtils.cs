@@ -258,5 +258,15 @@ namespace StableDiffusionGui.MiscUtils
 
             return string.Join("", final).Trim();
         }
+
+        public static int IterationsToMsPerIteration(string s)
+        {
+            bool its = s.EndsWith("it/s");
+
+            if (its) // iterations per second
+                return (1000000f / (s.Remove(".").Remove("it/s") + "0").GetInt()).RoundToInt();
+            else // seconds per iteration
+                return (s.Remove(".").Remove("it/s") + "0").GetInt();
+        }
     }
 }
