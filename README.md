@@ -27,9 +27,37 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (form
 
 ## Features and How to Use Them
 
-### Run Multiple Prompts:
+### Prompt Input
 
-Enter each prompt on a new line (newline-separated). Word wrapping does not count towards this.
+- **Multiple prompts at once:** Enter each prompt on a new line (newline-separated). Word wrapping does not count towards this.
+- **Exclusion Words:** Put words or phrases into [square brackets] to tell the AI to exclude those things when generating images.
+- **Emphasis:** Use (parentheses) to make a word/phrase more impactful, or {curly brackets} to do the opposite. You can also use ((multiple)).
+
+### Additional Inputs
+
+* **Load Image:** Load an initialization image that will be used together with your text prompt ("img2img")
+* **Load Concept:** Load a Textual Inversion concept to apply a style or use a specific character
+
+### Stable Diffusion Settings
+
+* **Steps:** More steps can increase detail, but only to a certain extend. Depending on the sampler, 20-60 is a good range.
+  * Has a linear performance impact: Doubling the step count means each image takes twice as long to generate.
+* **Prompt Guidance (CFG Scale):** Lower values are closer to the raw output of the AI, higher values try to respect your prompt more accurately.
+  * Use low values if you are happy with the AI's representation of your prompt. Use higher values if not - but going too high will degrade quality.
+  * No performance impact, no matter the value.
+* **Seed:** Starting value for the image generation. Allows you to create the exact same image again by using the same seed.
+  * When using the same seed, the image will only be identical if you also use the same sampler and resolution (and other settings).
+* **Resolution:** Adjust image size. Only values that are divisible by 64 are possible. Sizes above 512x512 can lead to repeated patterns.
+* **Sampler:** Changes the way images are sampled. Euler Ancestral is default because it's fast and tends to look good even with few steps.
+* **Generate Seamless Images:** Generates seamless/tileable images, very useful for making game textures or repeating backgrounds.
+
+### Image Viewer
+
+* **Review current images:** Use the scroll wheel while hovering over the image to go to the previous/next image.
+* **Slideshow:** The image viewer always shows the newest generated image if you haven't manually changed it in the last 3 seconds.
+* **Context Menu:** Right-click into the image area to show more options
+* **Pop-Up Viewer:** Click into the image area to open the current image in a floating window.
+  * Use the mouse wheel to change the window's size (zoom), right-click for more options, double-click to toggle fullscreen.
 
 ### WORK IN PROGRESS
 
