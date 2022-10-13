@@ -948,7 +948,7 @@
             this.btnOpenModelsFolder.TabIndex = 4;
             this.btnOpenModelsFolder.TabStop = false;
             this.btnOpenModelsFolder.Text = "Folders...";
-            this.toolTip.SetToolTip(this.btnOpenModelsFolder, "Open Models Folder");
+            this.toolTip.SetToolTip(this.btnOpenModelsFolder, "Manage Model Folders");
             this.btnOpenModelsFolder.Click += new System.EventHandler(this.btnOpenModelsFolder_Click);
             // 
             // panel26

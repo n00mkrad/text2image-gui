@@ -61,6 +61,12 @@ namespace StableDiffusionGui
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             SaveUiElements();
+
+            if (Program.Busy)
+            {
+                DialogResult dialogResult = UiUtils.ShowMessageBox($"The program is still busy. Are you sure you want to quit?", UiUtils.MessageType.Warning.ToString(), MessageBoxButtons.YesNo);
+                e.Cancel = dialogResult != DialogResult.Yes;
+            }
         }
 
         private void MainForm_Shown(object sender, EventArgs e)
