@@ -16,14 +16,12 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (form
 #### Recommended:
 
 - **GPU:** Nvidia GPU with 8 GB VRAM, Pascal Architecture (2016) or newer
-
 - **RAM:** 16 GB RAM
 - **Disk:** 12 GB on SSD (another free 2 GB for temporary files recommended)
 
 #### Professional/DreamBooth-capable:
 
 - **GPU:** Nvidia GPU with 24GB VRAM, Turing Architecture (2018) or newer
-
 - **RAM:** 32 GB RAM
 - **Disk:** 12 GB on NVME SSD (another free 30 GB for temporary files recommended)
 
