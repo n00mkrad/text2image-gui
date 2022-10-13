@@ -9,21 +9,23 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (form
 
 #### Minimum:
 
-**GPU:** Nvidia GPU with 4 GB VRAM, Maxwell Architecture (2014) or newer
-**RAM:** 8 GB RAM (Note: Pagefile must be enabled as swapping will occur with only 8 GB!)
-**Disk:** 12 GB (another free 2 GB for temporary files recommended)
+- **GPU:** Nvidia GPU with 4 GB VRAM, Maxwell Architecture (2014) or newer
+- **RAM:** 8 GB RAM (Note: Pagefile must be enabled as swapping will occur with only 8 GB!)
+- **Disk:** 12 GB (another free 2 GB for temporary files recommended)
 
 #### Recommended:
 
-**GPU:** Nvidia GPU with 8 GB VRAM, Pascal Architecture (2016) or newer
-**RAM:** 16 GB RAM
-**Disk:** 12 GB (another free 2 GB for temporary files recommended)
+- **GPU:** Nvidia GPU with 8 GB VRAM, Pascal Architecture (2016) or newer
+
+- **RAM:** 16 GB RAM
+- **Disk:** 12 GB on SSD (another free 2 GB for temporary files recommended)
 
 #### Professional/DreamBooth-capable:
 
-**GPU:** Nvidia GPU with 24GB VRAM, Turing Architecture (2018) or newer
-**RAM:** 32 GB RAM
-**Disk:** 12 GB (another free 30 GB for temporary files recommended)
+- **GPU:** Nvidia GPU with 24GB VRAM, Turing Architecture (2018) or newer
+
+- **RAM:** 32 GB RAM
+- **Disk:** 12 GB on NVME SSD (another free 30 GB for temporary files recommended)
 
 
 
