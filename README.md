@@ -35,13 +35,15 @@ Enter each prompt on a new line (newline-separated). Word wrapping does not coun
 
 ## Hotkeys (Main Window)
 
-**CTRL+G:** Run Image Generation (or Cancel if already running)
-**CTRL+M:** Show Model Quick Switcher
-**CTRL+PLUS:** Toggle Prompt Textbox Size
-**CTLR+DEL:** Delete currently viewed image
-**CTRL+SHIFT+DEL:** Delete all generated images (of the current batch)
-**CTRL+O:** Open currently viewed image
-**CTRL+SHIFT+O:** Show current image in its folder
-**F12:** Open Settings
-**CTRL+V:** Paste Image (If clipboard contains a bitmap)
-**CTRL+Q:** Quit
+- **CTRL+G:** Run Image Generation (or Cancel if already running)
+- **CTRL+M:** Show Model Quick Switcher
+- **CTRL+PLUS:** Toggle Prompt Textbox Size
+- **CTLR+DEL:** Delete currently viewed image
+- **CTRL+SHIFT+DEL:** Delete all generated images (of the current batch)
+- **CTRL+O:** Open currently viewed image
+- **CTRL+SHIFT+O:** Show current image in its folder
+- **CTRL+V:** Paste Image (If clipboard contains a bitmap)
+- **CTRL+Q:** Quit
+- **CTRL+Scroll:** Change font size (only while mouse is over prompt text field)
+- **F1:** Open Help (Currently links to GitHub Readme)
+- **F12:** Open Settings

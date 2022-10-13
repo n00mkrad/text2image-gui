@@ -1,5 +1,6 @@
 ﻿using StableDiffusionGui.Forms;
 using StableDiffusionGui.MiscUtils;
+using System.Diagnostics;
 using System.Windows.Forms;
 using System.Windows.Input;
 
@@ -33,14 +34,17 @@ namespace StableDiffusionGui.Ui
             if (keys == (Keys.Control | Keys.Shift | Keys.O)) // Hotkey: Open folder of current image
                 ImagePreview.OpenFolderOfCurrent();
 
-            if (keys == (Keys.F12)) // Hotkey: Open settings
-                new SettingsForm().ShowDialog();
-
             if (keys == (Keys.Control | Keys.M)) // Hotkey: Model quick switcher
             {
                 Program.MainForm.PanelBg.Focus();
                 new ModelQuickSelectForm().ShowDialog();
             }
+
+            if (keys == (Keys.F1)) // Hotkey: Help
+                Process.Start("https://github.com/n00mkrad/text2image-gui/blob/main/README.md");
+
+            if (keys == (Keys.F12)) // Hotkey: Open settings
+                new SettingsForm().ShowDialog();
         }
     }
 }
