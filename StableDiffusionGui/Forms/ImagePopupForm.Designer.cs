@@ -107,21 +107,21 @@
             // pixelPerfectToolStripMenuItem
             // 
             this.pixelPerfectToolStripMenuItem.Name = "pixelPerfectToolStripMenuItem";
-            this.pixelPerfectToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.pixelPerfectToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
             this.pixelPerfectToolStripMenuItem.Text = "100% (Pixel Perfect)";
             this.pixelPerfectToolStripMenuItem.Click += new System.EventHandler(this.pixelPerfectToolStripMenuItem_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(178, 22);
             this.toolStripMenuItem2.Text = "200%";
             this.toolStripMenuItem2.Click += new System.EventHandler(this.toolStripMenuItem2_Click);
             // 
             // fullscreenToolStripMenuItem
             // 
             this.fullscreenToolStripMenuItem.Name = "fullscreenToolStripMenuItem";
-            this.fullscreenToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.fullscreenToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
             this.fullscreenToolStripMenuItem.Text = "Fullscreen";
             this.fullscreenToolStripMenuItem.Click += new System.EventHandler(this.fullscreenToolStripMenuItem_Click);
             // 
@@ -138,21 +138,21 @@
             // x1ToolStripMenuItem
             // 
             this.x1ToolStripMenuItem.Name = "x1ToolStripMenuItem";
-            this.x1ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.x1ToolStripMenuItem.Size = new System.Drawing.Size(92, 22);
             this.x1ToolStripMenuItem.Text = "1x1";
             this.x1ToolStripMenuItem.Click += new System.EventHandler(this.x1ToolStripMenuItem_Click);
             // 
             // x2ToolStripMenuItem
             // 
             this.x2ToolStripMenuItem.Name = "x2ToolStripMenuItem";
-            this.x2ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.x2ToolStripMenuItem.Size = new System.Drawing.Size(92, 22);
             this.x2ToolStripMenuItem.Text = "2x2";
             this.x2ToolStripMenuItem.Click += new System.EventHandler(this.x2ToolStripMenuItem_Click);
             // 
             // x3ToolStripMenuItem
             // 
             this.x3ToolStripMenuItem.Name = "x3ToolStripMenuItem";
-            this.x3ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.x3ToolStripMenuItem.Size = new System.Drawing.Size(92, 22);
             this.x3ToolStripMenuItem.Text = "3x3";
             this.x3ToolStripMenuItem.Click += new System.EventHandler(this.x3ToolStripMenuItem_Click);
             // 
@@ -195,7 +195,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(704, 601);
             this.Controls.Add(this.infoLabel);
             this.Controls.Add(this.picBox);
