@@ -16,8 +16,8 @@ namespace StableDiffusionGui.Forms
     {
         private Dictionary<string, string> _uiStrings = new Dictionary<string, string>()
         {
-            { Enums.Models.Format.Fp16.ToString(), "Half Precision (FP16)" },
-            { Enums.Models.Format.Fp32.ToString(), "Full Precision (FP32)" },
+            { Enums.Models.Format.Fp16.ToString(), "Half Precision (FP16 - 2 GB)" },
+            { Enums.Models.Format.Fp32.ToString(), "Full Precision (FP32 - 4 GB)" },
         };
 
         public PruneModelsForm()

@@ -71,7 +71,7 @@ namespace StableDiffusionGui.Forms
                 else
                     Close();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Close();
                 Logger.Log($"Error: {ex.Message}");
@@ -102,23 +102,41 @@ namespace StableDiffusionGui.Forms
 
         private async void btnRun_Click(object sender, EventArgs e)
         {
+            if(Program.State == Program.BusyState.Dreambooth)
+            {
+                ProcessManager.FindAndKillOrphans($"*{Constants.Dirs.Dreambooth}*.py*{Paths.SessionTimestamp}*");
+                return;
+            }
+
             if (Program.Busy)
             {
                 UiUtils.ShowMessageBox("Please wait until the current process has finished.");
                 return;
             }
 
-            // if (string.IsNullOrWhiteSpace(comboxBaseModel.Text) || string.IsNullOrWhiteSpace(comboxTrainPreset.Text) || comboxBaseModel.Text == comboxTrainPreset.Text)
-            // {
-            //     UiUtils.ShowMessageBox("Invalid model selection.");
-            //     return;
-            // }
+            if (!Directory.Exists(textboxTrainImgsDir.Text.Trim()))
+            {
+                UiUtils.ShowMessageBox("Invalid training directory.");
+                return;
+            }
 
-            Program.MainForm.SetWorking(Program.BusyState.Dreambooth);
-            Enabled = false;
-            //btnStart.Text = "Merging...";
+            if (string.IsNullOrWhiteSpace(textboxClassName.Text.Trim()))
+            {
+                UiUtils.ShowMessageBox("Please enter a class name.");
+                return;
+            }
 
             FileInfo baseModel = Paths.GetModel(comboxBaseModel.Text);
+
+            if (baseModel == null)
+            {
+                UiUtils.ShowMessageBox("Invalid model selection.");
+                return;
+            }
+
+            Program.MainForm.SetWorking(Program.BusyState.Dreambooth);
+            btnStart.Text = "Cancel";
+
             DirectoryInfo trainImgDir = new DirectoryInfo(textboxTrainImgsDir.Text.Trim());
             string className = string.Join("_", textboxClassName.Text.Trim().Split(Path.GetInvalidFileNameChars())).Trunc(50, false);
             textboxClassName.Text = className;
@@ -127,18 +145,12 @@ namespace StableDiffusionGui.Forms
             string outPath = await Dreambooth.RunTraining(baseModel, trainImgDir, className, preset);
 
             Program.MainForm.SetWorking(Program.BusyState.Standby);
-            Enabled = true;
-            //btnStart.Text = "Merge!";
+            btnStart.Text = "Start Training";
 
             if (File.Exists(outPath))
                 Logger.Log($"Done. Saved trained model to:\n{outPath.Replace(Paths.GetDataPath(), "Data")}");
             else
                 Logger.Log($"Training failed - model file was not saved.");
-
-            //if (File.Exists(outPath))
-            //    UiUtils.ShowMessageBox($"Done.\n\nSaved merged model to:\n{outPath}");
-            //else
-            //    UiUtils.ShowMessageBox($"Failed to merge models.");
         }
 
         private void btnTrainImgsBrowse_Click(object sender, EventArgs e)
