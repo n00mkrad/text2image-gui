@@ -1,13 +1,6 @@
 ﻿using StableDiffusionGui.Installation;
 using StableDiffusionGui.Main;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace StableDiffusionGui.Forms
@@ -26,11 +19,11 @@ namespace StableDiffusionGui.Forms
 
         private async void installBtn_Click(object sender, EventArgs e)
         {
-            this.Enabled = false;
-            await Setup.Install(InstallationStatus.IsInstalled);
+            Enabled = false;
+            await Setup.Install(InstallationStatus.IsInstalledAll);
             BringToFront();
             UpdateStatus();
-            this.Enabled = true;
+            Enabled = true;
         }
 
         private void InstallerForm_Shown(object sender, EventArgs e)
@@ -60,7 +53,7 @@ namespace StableDiffusionGui.Forms
                     checkedListBoxStatus.SetItemChecked(i, InstallationStatus.HasSdUpscalers());
             }
 
-            if (checkedListBoxStatus.CheckedItems.Count == checkedListBoxStatus.Items.Count) // all checked
+            if (InstallationStatus.IsInstalledAll)
                 btnInstall.Text = "Re-Install";
             else
                 btnInstall.Text = "Install";

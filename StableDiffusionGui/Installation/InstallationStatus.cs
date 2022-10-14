@@ -11,7 +11,8 @@ namespace StableDiffusionGui.Installation
 {
     internal class InstallationStatus
     {
-        public static bool IsInstalled { get { return HasConda() && HasSdRepo() && HasSdEnv() && HasSdModel(); } }
+        public static bool IsInstalledBasic { get { return HasConda() && HasSdRepo() && HasSdEnv() && HasSdModel(); } }
+        public static bool IsInstalledAll { get { return IsInstalledBasic && HasSdUpscalers(); } }
 
         public static bool HasConda ()
         {

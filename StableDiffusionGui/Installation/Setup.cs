@@ -41,7 +41,7 @@ namespace StableDiffusionGui.Installation
 
                 await Task.Delay(500);
 
-                if (InstallationStatus.IsInstalled)
+                if (InstallationStatus.IsInstalledBasic)
                 {
                     Logger.Log("Finished. Everything is installed.");
                 }

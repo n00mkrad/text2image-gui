@@ -87,7 +87,7 @@ namespace StableDiffusionGui.Ui
                 Logger.Log("Debugger is attached.");
             }
 
-            if (!InstallationStatus.IsInstalled)
+            if (!InstallationStatus.IsInstalledBasic)
             {
                 UiUtils.ShowMessageBox("No complete installation of the Stable Diffusion files was found.\n\nThe GUI will now open the installer.\nPlease press \"Install\" in the next window to install all required files.");
                 new InstallerForm().ShowDialog();
@@ -96,7 +96,7 @@ namespace StableDiffusionGui.Ui
 
         public static bool IsInstalledWithWarning(bool showInstaller = true)
         {
-            if (!InstallationStatus.IsInstalled)
+            if (!InstallationStatus.IsInstalledBasic)
             {
                 UiUtils.ShowMessageBox("A valid installation is required.");
 
