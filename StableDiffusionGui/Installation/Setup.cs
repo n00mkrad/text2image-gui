@@ -21,21 +21,36 @@ namespace StableDiffusionGui.Installation
 
         public static async Task Install(bool force = false)
         {
+            Logger.Log($"Installing (Force = {force})", true, false, Constants.Lognames.Installer);
+
             try
             {
                 Program.MainForm.SetWorking(Program.BusyState.Installation);
 
                 if (force || !InstallationStatus.HasSdRepo() || !InstallationStatus.HasSdEnv())
-                    await CloneSdRepo();
+                {
+                    if (!force)
+                        Logger.Log("Install: Cloning repo and setting up env because either SD Repo or SD Env is missing.", true, false, Constants.Lognames.Installer);
 
-                // if (force || !InstallationStatus.HasSdEnv())
-                //     await SetupPythonEnv();
+                    await CloneSdRepo();
+                }
 
                 if (force || !InstallationStatus.HasSdModel())
+                {
+                    if (!force)
+                        Logger.Log("Install: Downloading model file because there is none.", true, false, Constants.Lognames.Installer);
+
                     await DownloadSdModelFile();
 
+                }
+
                 if (force || !InstallationStatus.HasSdUpscalers())
+                {
+                    if (!force)
+                        Logger.Log("Install: Downloading upscalers because they are not installed.", true, false, Constants.Lognames.Installer);
+
                     await InstallUpscalers();
+                }
 
                 RemoveGitFiles(GetDataSubPath(Constants.Dirs.RepoSd));
 
