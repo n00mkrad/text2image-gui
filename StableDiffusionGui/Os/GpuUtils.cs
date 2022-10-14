@@ -3,6 +3,7 @@ using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -22,6 +23,15 @@ namespace StableDiffusionGui.Os
 
         public static async Task<List<Gpu>> GetCudaGpus()
         {
+            int readConfigRetries = 0;
+
+            // This function might run at the same time as the config file gets first created, so we retry up to 10 times with 100ms delay if it's locked
+            while (readConfigRetries < 10 && (!File.Exists(Config.ConfigPath) || IoUtils.IsFileLocked(Config.ConfigPath)))
+            {
+                readConfigRetries++;
+                await Task.Delay(100);
+            }
+
             List<string> outLines = new List<string>();
 
             Process p = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());

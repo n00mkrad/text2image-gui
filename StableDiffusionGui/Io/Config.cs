@@ -15,13 +15,13 @@ namespace StableDiffusionGui.Io
 {
     class Config
     {
-        private static string configPath;
-        public static Dictionary<string, string> cachedValues = new Dictionary<string, string>();
+        public static string ConfigPath = "";
+        private static Dictionary<string, string> _cachedConfig = new Dictionary<string, string>();
 
         public static void Init()
         {
-            configPath = Path.Combine(Paths.GetDataPath(), "config.json");
-            IoUtils.CreateFileIfNotExists(configPath);
+            ConfigPath = Path.Combine(Paths.GetDataPath(), Constants.Files.Config);
+            IoUtils.CreateFileIfNotExists(ConfigPath);
             Reload();
         }
 
@@ -57,7 +57,7 @@ namespace StableDiffusionGui.Io
         public static void Set(string str, string value)
         {
             Reload();
-            cachedValues[str] = value;
+            _cachedConfig[str] = value;
             WriteConfig();
         }
 
@@ -66,15 +66,15 @@ namespace StableDiffusionGui.Io
             Reload();
 
             foreach (KeyValuePair<string, string> entry in keyValuePairs)
-                cachedValues[entry.Key] = entry.Value;
+                _cachedConfig[entry.Key] = entry.Value;
 
             WriteConfig();
         }
 
         private static void WriteConfig()
         {
-            SortedDictionary<string, string> cachedValuesSorted = new SortedDictionary<string, string>(cachedValues);
-            File.WriteAllText(configPath, JsonConvert.SerializeObject(cachedValuesSorted, Newtonsoft.Json.Formatting.Indented));
+            SortedDictionary<string, string> cachedValuesSorted = new SortedDictionary<string, string>(_cachedConfig);
+            File.WriteAllText(ConfigPath, JsonConvert.SerializeObject(cachedValuesSorted, Newtonsoft.Json.Formatting.Indented));
         }
 
         private static void Reload()
@@ -82,7 +82,7 @@ namespace StableDiffusionGui.Io
             try
             {
                 Dictionary<string, string> newDict = new Dictionary<string, string>();
-                Dictionary<string, string> deserializedConfig = JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(configPath));
+                Dictionary<string, string> deserializedConfig = JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(ConfigPath));
 
                 if (deserializedConfig == null)
                     deserializedConfig = new Dictionary<string, string>();
@@ -90,7 +90,7 @@ namespace StableDiffusionGui.Io
                 foreach (KeyValuePair<string, string> entry in deserializedConfig)
                     newDict.Add(entry.Key, entry.Value);
 
-                cachedValues = newDict; // Use temp dict and only copy it back if no exception was thrown
+                _cachedConfig = newDict; // Use temp dict and only copy it back if no exception was thrown
             }
             catch (Exception e)
             {
@@ -123,8 +123,8 @@ namespace StableDiffusionGui.Io
 
             try
             {
-                if (cachedValues.ContainsKey(keyStr))
-                    return cachedValues[keyStr];
+                if (_cachedConfig.ContainsKey(keyStr))
+                    return _cachedConfig[keyStr];
 
                 return WriteDefaultValIfExists(key.ToString(), type);
             }
@@ -226,7 +226,7 @@ namespace StableDiffusionGui.Io
 
         static void WriteIfDoesntExist(string key, string val)
         {
-            if (cachedValues.ContainsKey(key.ToString()))
+            if (_cachedConfig.ContainsKey(key.ToString()))
                 return;
 
             Set(key, val);

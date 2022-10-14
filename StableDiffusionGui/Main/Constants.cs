@@ -24,5 +24,10 @@
             public const string WindowsKill = "wkl";
             public const string OrphanHitman = "ok";
         }
+
+        public class Files
+        {
+            public const string Config = "config.json";
+        }
     }
 }
