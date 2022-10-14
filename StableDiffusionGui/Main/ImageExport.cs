@@ -31,7 +31,6 @@ namespace StableDiffusionGui.Main
                     var files = IoUtils.GetFileInfosSorted(imagesDir, false, "*.png");
                     bool running = IoUtils.GetFileInfosSorted(Paths.GetSessionDataPath(), false, "prompts*.*").Any();
 
-                    // TODO: Adapt for new dream.py implementation
                     if (TextToImage.LastTaskSettings.Implementation == Implementation.StableDiffusion)
                         running = (TextToImage.CurrentTask.ImgCount - startingImgCount) < targetImgCount;
 

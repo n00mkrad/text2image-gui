@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Path = System.IO.Path;
 using Paths = StableDiffusionGui.Io.Paths;
 
@@ -43,10 +44,11 @@ namespace StableDiffusionGui.Main
 
         public static void ShowPromptWarnings(List<string> prompts)
         {
-            string prompt = prompts.OrderByDescending(s => s.Length).First();
+            string longest = prompts.OrderByDescending(s => s.Length).First();
+            longest = Regex.Replace(longest, @"(\[(?:\[??[^\[]*?\]))", "").Remove("[").Remove("]"); // Remove square brackets and contents
 
             char[] delimiters = new char[] { ' ', '\r', '\n' };
-            int words = prompt.Split(delimiters, StringSplitOptions.RemoveEmptyEntries).Length;
+            int words = longest.Split(delimiters, StringSplitOptions.RemoveEmptyEntries).Length;
 
             int thresh = 55;
 
