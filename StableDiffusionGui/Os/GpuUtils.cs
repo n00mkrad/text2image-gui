@@ -25,7 +25,7 @@ namespace StableDiffusionGui.Os
         {
             int readConfigRetries = 0;
 
-            // This function might run at the same time as the config file gets first created, so we retry up to 10 times with 100ms delay if it's locked
+            // This function might run at the same time as the config file gets first created, so we retry up to 10 times with a delay
             while (!Config.Ready)
             {
                 readConfigRetries++;
