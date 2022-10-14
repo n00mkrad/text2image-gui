@@ -26,10 +26,10 @@ namespace StableDiffusionGui.Os
             int readConfigRetries = 0;
 
             // This function might run at the same time as the config file gets first created, so we retry up to 10 times with 100ms delay if it's locked
-            while (readConfigRetries < 10 && (!File.Exists(Config.ConfigPath) || IoUtils.IsFileLocked(Config.ConfigPath)))
+            while (!Config.Ready)
             {
                 readConfigRetries++;
-                await Task.Delay(100);
+                await Task.Delay(200);
             }
 
             List<string> outLines = new List<string>();

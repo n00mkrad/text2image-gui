@@ -15,6 +15,7 @@ namespace StableDiffusionGui.Io
 {
     class Config
     {
+        public static bool Ready = false;
         public static string ConfigPath = "";
         private static Dictionary<string, string> _cachedConfig = new Dictionary<string, string>();
 
@@ -23,6 +24,7 @@ namespace StableDiffusionGui.Io
             ConfigPath = Path.Combine(Paths.GetDataPath(), Constants.Files.Config);
             IoUtils.CreateFileIfNotExists(ConfigPath);
             Reload();
+            Ready = true;
         }
 
         // public static async Task Reset(int retries = 3, SettingsForm settingsForm = null)

@@ -62,17 +62,17 @@ namespace StableDiffusionGui.Main
                 UiUtils.ShowMessageBox($"{(prompts.Count > 1 ? "One of your prompts" : "Your prompt")} does not contain a concept placeholder (*).\n\nIt will not use your loaded concept.");
         }
 
-        public static string GetCudaDevice(string arg)
-        {
-            int opt = Config.GetInt("comboxCudaDevice");
-
-            if (opt == 0)
-                return "";
-            else if (opt == 1)
-                return $"{arg} cpu";
-            else
-                return $"{arg} cuda:{opt - 2}";
-        }
+        // public static string GetCudaDevice(string arg)
+        // {
+        //     int opt = Config.GetInt("comboxCudaDevice");
+        // 
+        //     if (opt == 0)
+        //         return "";
+        //     else if (opt == 1)
+        //         return $"{arg} cpu";
+        //     else
+        //         return $"{arg} cuda:{opt - 2}";
+        // }
 
         public static void SoftCancelDreamPy()
         {
