@@ -23,7 +23,7 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (form
 
 - **GPU:** Nvidia GPU with 24GB VRAM, Turing Architecture (2018) or newer
 - **RAM:** 32 GB RAM
-- **Disk:** 12 GB on NVME SSD (another free 30 GB for temporary files recommended)
+- **Disk:** 12 GB on NVME SSD (another free 25 GB for temporary files recommended)
 
 
 
@@ -54,7 +54,9 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (form
 * **Seed:** Starting value for the image generation. Allows you to create the exact same image again by using the same seed.
   * When using the same seed, the image will only be identical if you also use the same sampler and resolution (and other settings).
 * **Resolution:** Adjust image size. Only values that are divisible by 64 are possible. Sizes above 512x512 can lead to repeated patterns.
-* **Sampler:** Changes the way images are sampled. Euler Ancestral is default because it's fast and tends to look good even with few steps.
+  * Higher resolution images require more VRAM and are slower to generate.
+
+* **Sampler:** Changes the way images are sampled. Euler Ancestral is the default because it's fast and tends to look good even with few steps.
 * **Generate Seamless Images:** Generates seamless/tileable images, very useful for making game textures or repeating backgrounds.
 
 
@@ -75,7 +77,7 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (form
 * **Use Full Precision:** Use FP32 instead of FP16 math, which requires more VRAM but can fix certain compatibility issues.
 * **Unload Model After Each Generation:** Completely unload Stable Diffusion after images are generated.
 * **Stable Diffusion Model File:** Select the model file to use for image generation.
-  * Included models are located in `Data/models`. You can add your own folder paths by clicking on "Folders...".
+  * Included models are located in `Data/models`. You can add more folder paths by clicking on "Folders...".
 * **CUDA Device:** Allows your to specify the GPU to run the AI on, or set it to run on the CPU (very slow).
 * **Image Output Folder:** Set the folder where your generated images will be saved.
 * **Create a Subfolder for Each Prompt:** If enabled, images will be saved in a folder named after their prompt.
@@ -90,7 +92,7 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (form
 ### Logs Button (Top Bar)
 
 * **Open Logs Folder:** Opens the log folder of the current session. The application deletes logs older than 3 days on every startup.
-* **Copy <logname.txt>**: Copy one of the log files generated in the current session to clipboard.
+* **Copy \<logname\>.txt**: Copy one of the log files generated in the current session to clipboard.
 
 
 
@@ -111,7 +113,7 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (form
 * **Merge Models:** Allows you to merge/blend two models. The percentage numbers represent their respective weight.
 * **Prune Models:** Allows you to reduce the size of models by removing data that's not needed for image generation.
 * **View Log In Realtime:** Opens a separate window that shows all log output, including messages that are not shown in the normal log box.
-* **Train DreamBooth Model:** Allows you to train a model on a specific object or character using only 3-20 images of it.
+* **Train DreamBooth Model:** Allows you to train a model on a specific object or character using only a few images of it. (Guide)
 
 
 
@@ -136,7 +138,7 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (form
 ## Hotkeys (Main Window)
 
 - **CTRL+G:** Run Image Generation (or Cancel if already running)
-- **CTRL+M:** Show Model Quick Switcher
+- **CTRL+M:** Show Model Quick Switcher (Once it's open, use ESC to Cancel or Enter to confirm)
 - **CTRL+PLUS:** Toggle Prompt Textbox Size
 - **CTLR+DEL:** Delete currently viewed image
 - **CTRL+SHIFT+DEL:** Delete all generated images (of the current batch)

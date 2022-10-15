@@ -55,7 +55,14 @@ namespace StableDiffusionGui.Forms
                 }
 
                 int cudaDeviceOpt = Config.GetInt("comboxCudaDevice");
-                Data.Gpu gpu = gpus[cudaDeviceOpt - 2];
+
+                if (valid && cudaDeviceOpt == (int)Enums.Cuda.Device.Cpu)
+                {
+                    UiUtils.ShowMessageBox("DreamBooth training is not supported on CPU.", UiUtils.MessageType.Error);
+                    valid = false;
+                }
+
+                Data.Gpu gpu = cudaDeviceOpt == (int)Enums.Cuda.Device.Automatic ? gpus[0] : gpus[cudaDeviceOpt - 2];
 
                 if (valid && gpu.VramGb < 23f)
                 {
