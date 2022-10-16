@@ -1,5 +1,6 @@
 SD GUI 1.6.0 Changelog:
 - Added Dreambooth training (24 GB VRAM required for now!)
+- Added support for prompt emphasis - () for more, {} for less
 - Added Model Quick Switcher: Press Ctrl+M to quickly change the current AI model
 - Added model folder manager: You can now add additional model folders to load models from
 - Pop-Up Image Viewer: When slideshow mode is enabled, Left/Right arrow keys change images
