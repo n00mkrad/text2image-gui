@@ -1,3 +1,18 @@
+SD GUI 1.6.0 Changelog:
+- Added Dreambooth training (24 GB VRAM required for now!)
+- Added Model Quick Switcher: Press Ctrl+M to quickly change the current AI model
+- Added model folder manager: You can now add additional model folders to load models from
+- Pop-Up Image Viewer: When slideshow mode is enabled, Left/Right arrow keys change images
+- Pop-Up Image Viewer: Window can now be resized/zoomed in 25% steps using mouse wheel
+- Pop-Up Image Viewer: Added "Always on Top" option to keep window always on top
+- Added lots of hotkeys, documented on Github Readme
+- Words in prompt field can now be deleted using CTRL+BACKSPACE, like in most text editors
+- Model Pruning Tool: Added option to delete input file if pruning was successful
+- Fixed an issue where the Stable Diffusion process would be killed when cancelling
+- Fixed prompt queue not working after running first entry
+
+
+
 SD GUI 1.5.0 Changelog:
 - SD Update: Supports exclusion words, runs on 4 GB VRAM (when no other apps are open)
 - UI is now more flexible, window can be resized, prompt field is bigger and has zoomable text
@@ -30,7 +45,6 @@ NOTES:
 Low Memory Mode is a low priority for me because it's a separate codebase, adding features is hard.
 Also, the regular mode can now run on 6 GB easily, and even 4 GB if all other GPU apps are closed.
 Apart from that, it's now possible to run the regular mode on CPU, which is slow, but it works.
-
 
 
 
