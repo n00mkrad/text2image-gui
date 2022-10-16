@@ -494,40 +494,6 @@ namespace StableDiffusionGui.Io
             return true;
         }
 
-        public static void ZeroPadDir(string path, string ext, int targetLength, bool recursive = false)
-        {
-            FileInfo[] files;
-
-            if (recursive)
-                files = new DirectoryInfo(path).GetFiles($"*.{ext}", SearchOption.AllDirectories);
-            else
-                files = new DirectoryInfo(path).GetFiles($"*.{ext}", SearchOption.TopDirectoryOnly);
-
-            ZeroPadDir(files.Select(x => x.FullName).ToList(), targetLength);
-        }
-
-        public static void ZeroPadDir(List<string> files, int targetLength, List<string> exclude = null, bool noLog = true)
-        {
-            if (exclude != null)
-                files = files.Except(exclude).ToList();
-
-            foreach (string file in files)
-            {
-                string fname = Path.GetFileNameWithoutExtension(file);
-                string targetFilename = Path.Combine(Path.GetDirectoryName(file), fname.PadLeft(targetLength, '0') + Path.GetExtension(file));
-                try
-                {
-                    if (targetFilename != file)
-                        File.Move(file, targetFilename);
-                }
-                catch (Exception e)
-                {
-                    if (!noLog)
-                        Logger.Log($"Failed to zero-pad {file} => {targetFilename}: {e.Message}", true);
-                }
-            }
-        }
-
         public static string[] GetFilesSorted(string path, bool recursive = false, string pattern = "*")
         {
             try
