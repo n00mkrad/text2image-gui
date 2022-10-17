@@ -9,18 +9,13 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static StableDiffusionGui.Main.Enums.Dreambooth;
 
 namespace StableDiffusionGui.Forms
 {
     public partial class DreamboothForm : Form
     {
-        private Dictionary<string, string> _uiStrings = new Dictionary<string, string>()
-        {
-            { Enums.Dreambooth.TrainPreset.VeryHighQuality.ToString(), "Very High Quality (80 minutes on RTX 3090)" },
-            { Enums.Dreambooth.TrainPreset.HighQuality.ToString(), "High Quality (40 Minutes on RTX 3090)" },
-            { Enums.Dreambooth.TrainPreset.MedQuality.ToString(), "Medium Quality (20 Minutes on RTX 3090)" },
-            { Enums.Dreambooth.TrainPreset.LowQuality.ToString(), "Low Quality, for Testing (6 Minutes on RTX 3090)" },
-        };
+        private Dictionary<string, string> _uiStrings = new Dictionary<string, string>();
 
         public DreamboothForm()
         {
@@ -29,7 +24,13 @@ namespace StableDiffusionGui.Forms
 
         private void DreamboothForm_Load(object sender, EventArgs e)
         {
-            comboxTrainPreset.FillFromEnum<Enums.Dreambooth.TrainPreset>(_uiStrings, 0);
+            bool is4090 = GpuUtils.CachedGpus.Where(x => x.FullName.Contains("RTX 4090")).Any();
+            _uiStrings.Add(TrainPreset.VeryHighQuality.ToString(), $"Very High Quality ({(is4090 ? "50 minutes on RTX 4090" : "80 minutes on RTX 3090")})");
+            _uiStrings.Add(TrainPreset.HighQuality.ToString(), $"High Quality ({(is4090 ? "25 minutes on RTX 4090" : "40 minutes on RTX 3090")})");
+            _uiStrings.Add(TrainPreset.MedQuality.ToString(), $"Medium Quality ({(is4090 ? "12 minutes on RTX 4090" : "20 minutes on RTX 3090")})");
+            _uiStrings.Add(TrainPreset.LowQuality.ToString(), $"Low Quality, for Testing ({(is4090 ? "4 minutes on RTX 4090" : "6 minutes on RTX 3090")})");
+
+            comboxTrainPreset.FillFromEnum<TrainPreset>(_uiStrings, 0);
             LoadModels();
         }
 

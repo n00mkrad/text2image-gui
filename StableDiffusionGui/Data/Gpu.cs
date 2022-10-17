@@ -19,6 +19,7 @@ namespace StableDiffusionGui.Data
                 CudaDeviceId = split[0].GetInt();
                 FullName = split[1].Trim();
                 VramGb = split[2].Trim().Split(' ')[0].GetFloat();
+                VramGb = (float)Math.Round(VramGb * 10f) / 10f;
             }
             catch(Exception ex)
             {
