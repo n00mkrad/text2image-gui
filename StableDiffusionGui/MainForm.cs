@@ -360,21 +360,17 @@ namespace StableDiffusionGui
 
         private void sliderScale_Scroll(object sender, ScrollEventArgs e)
         {
-            float scale = sliderScale.Value / 2f;
-            MainUi.CurrentScale = scale;
-            scaleLabel.Text = scale.ToString();
+            MainUi.CurrentScale = sliderScale.ActualValueFloat;
         }
 
         private void sliderResW_Scroll(object sender, ScrollEventArgs e)
         {
             MainUi.CurrentResW = sliderResW.ActualValueInt;
-            labelResW.Text = sliderResW.ActualValueInt.ToString();
         }
 
         private void sliderResH_Scroll(object sender, ScrollEventArgs e)
         {
             MainUi.CurrentResH = sliderResH.ActualValueInt;
-            labelResH.Text = sliderResH.ActualValueInt.ToString();
         }
 
         private void sliderInitStrength_Scroll(object sender, ScrollEventArgs e)

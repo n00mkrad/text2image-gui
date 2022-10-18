@@ -19,10 +19,11 @@ namespace StableDiffusionGui.Controls
                 _valueBox = (TextBox)value;
                 value.Leave += new EventHandler(valueBox_Leave);
                 value.KeyPress += new KeyPressEventHandler(valueBox_KeyPress);
+                UpdateValueBox();
             } }
         private bool HasValueBox { get { return ValueBox != null && ValueBox is TextBox; } }
 
-        public decimal ActualValue { get { return Value / _conversionFactor; } set { Value = ((double)(value * _conversionFactor)).RoundToInt().Clamp(Minimum, Maximum); } }
+        public decimal ActualValue { get { return Value / _conversionFactor; } set { Value = ((double)(value * _conversionFactor)).RoundToInt().Clamp(Minimum, Maximum);  UpdateValueBox(); } }
         
         [Browsable(false)]
         public int ActualValueInt { get { return (int)ActualValue; } }
@@ -67,6 +68,7 @@ namespace StableDiffusionGui.Controls
         {
             Maximum = ((double)ActualMaximum * (double)_conversionFactor).RoundToInt();
             Minimum = ((double)ActualMinimum * (double)_conversionFactor).RoundToInt();
+            UpdateValueBox();
         }
 
         private void UpdateValueBox ()
