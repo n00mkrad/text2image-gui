@@ -1,4 +1,6 @@
-﻿namespace StableDiffusionGui
+﻿using StableDiffusionGui.Controls;
+
+namespace StableDiffusionGui
 {
     partial class MainForm
     {
@@ -39,21 +41,17 @@
             this.label1 = new System.Windows.Forms.Label();
             this.upDownIterations = new System.Windows.Forms.NumericUpDown();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
-            this.sliderSteps = new HTAlt.WinForms.HTSlider();
-            this.iterLabel = new System.Windows.Forms.Label();
+            this.textboxSliderSteps = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.sliderScale = new HTAlt.WinForms.HTSlider();
             this.scaleLabel = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.upDownSeed = new System.Windows.Forms.NumericUpDown();
             this.label6 = new System.Windows.Forms.Label();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.sliderResW = new HTAlt.WinForms.HTSlider();
             this.labelResW = new System.Windows.Forms.Label();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
-            this.sliderResH = new HTAlt.WinForms.HTSlider();
             this.labelResH = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.progressCircle = new CircularProgressBar.CircularProgressBar();
@@ -68,7 +66,6 @@
             this.useAsInitImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.comboxSampler = new System.Windows.Forms.ComboBox();
-            this.sliderInitStrength = new HTAlt.WinForms.HTSlider();
             this.textboxExtraInitStrengths = new System.Windows.Forms.TextBox();
             this.checkboxSeamless = new System.Windows.Forms.CheckBox();
             this.btnEmbeddingBrowse = new HTAlt.WinForms.HTButton();
@@ -131,6 +128,11 @@
             this.trainDreamBoothModelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pictBoxImgViewer = new System.Windows.Forms.PictureBox();
             this.separator = new System.Windows.Forms.Button();
+            this.sliderResW = new StableDiffusionGui.Controls.CustomSlider();
+            this.sliderResH = new StableDiffusionGui.Controls.CustomSlider();
+            this.sliderScale = new StableDiffusionGui.Controls.CustomSlider();
+            this.sliderSteps = new StableDiffusionGui.Controls.CustomSlider();
+            this.sliderInitStrength = new StableDiffusionGui.Controls.CustomSlider();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
             this.tableLayoutPanel6.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -283,55 +285,31 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel6.ColumnCount = 2;
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 45F));
+            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tableLayoutPanel6.Controls.Add(this.textboxSliderSteps, 1, 0);
             this.tableLayoutPanel6.Controls.Add(this.sliderSteps, 0, 0);
-            this.tableLayoutPanel6.Controls.Add(this.iterLabel, 1, 0);
             this.tableLayoutPanel6.Location = new System.Drawing.Point(233, 6);
-            this.tableLayoutPanel6.Margin = new System.Windows.Forms.Padding(6);
             this.tableLayoutPanel6.Name = "tableLayoutPanel6";
             this.tableLayoutPanel6.RowCount = 1;
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 21F));
             this.tableLayoutPanel6.Size = new System.Drawing.Size(400, 21);
             this.tableLayoutPanel6.TabIndex = 88;
             // 
-            // sliderSteps
+            // textboxSliderSteps
             // 
-            this.sliderSteps.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.sliderSteps.BorderRoundRectSize = new System.Drawing.Size(12, 12);
-            this.sliderSteps.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.sliderSteps.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
-            this.sliderSteps.ForeColor = System.Drawing.Color.Black;
-            this.sliderSteps.LargeChange = ((uint)(10u));
-            this.sliderSteps.Location = new System.Drawing.Point(0, 0);
-            this.sliderSteps.Margin = new System.Windows.Forms.Padding(0);
-            this.sliderSteps.Maximum = 120;
-            this.sliderSteps.Minimum = 1;
-            this.sliderSteps.MouseWheelBarPartitions = 1;
-            this.sliderSteps.Name = "sliderSteps";
-            this.sliderSteps.OverlayColor = System.Drawing.Color.White;
-            this.sliderSteps.Size = new System.Drawing.Size(355, 21);
-            this.sliderSteps.SmallChange = ((uint)(5u));
-            this.sliderSteps.TabIndex = 4;
-            this.sliderSteps.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
-            this.sliderSteps.ThumbSize = new System.Drawing.Size(14, 14);
-            this.toolTip.SetToolTip(this.sliderSteps, "Higher can create more detail and sometimes higher quality images, but more steps" +
-        " take more time.");
-            this.sliderSteps.Value = 1;
-            this.sliderSteps.Scroll += new System.Windows.Forms.ScrollEventHandler(this.sliderSteps_Scroll);
-            // 
-            // iterLabel
-            // 
-            this.iterLabel.AutoSize = true;
-            this.iterLabel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.iterLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.iterLabel.ForeColor = System.Drawing.Color.Silver;
-            this.iterLabel.Location = new System.Drawing.Point(362, 0);
-            this.iterLabel.Name = "iterLabel";
-            this.iterLabel.Size = new System.Drawing.Size(35, 21);
-            this.iterLabel.TabIndex = 5;
-            this.iterLabel.Text = "1000";
-            this.iterLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.textboxSliderSteps.AllowDrop = true;
+            this.textboxSliderSteps.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.textboxSliderSteps.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textboxSliderSteps.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textboxSliderSteps.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textboxSliderSteps.ForeColor = System.Drawing.Color.Silver;
+            this.textboxSliderSteps.Location = new System.Drawing.Point(360, 0);
+            this.textboxSliderSteps.Margin = new System.Windows.Forms.Padding(0);
+            this.textboxSliderSteps.MinimumSize = new System.Drawing.Size(4, 21);
+            this.textboxSliderSteps.Name = "textboxSliderSteps";
+            this.textboxSliderSteps.Size = new System.Drawing.Size(40, 21);
+            this.textboxSliderSteps.TabIndex = 92;
+            this.toolTip.SetToolTip(this.textboxSliderSteps, resources.GetString("textboxSliderSteps.ToolTip"));
             // 
             // label3
             // 
@@ -374,29 +352,6 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 21F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(291, 21);
             this.tableLayoutPanel1.TabIndex = 91;
-            // 
-            // sliderScale
-            // 
-            this.sliderScale.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.sliderScale.BorderRoundRectSize = new System.Drawing.Size(12, 12);
-            this.sliderScale.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.sliderScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
-            this.sliderScale.ForeColor = System.Drawing.Color.Black;
-            this.sliderScale.LargeChange = ((uint)(5u));
-            this.sliderScale.Location = new System.Drawing.Point(0, 0);
-            this.sliderScale.Margin = new System.Windows.Forms.Padding(0);
-            this.sliderScale.Maximum = 40;
-            this.sliderScale.Name = "sliderScale";
-            this.sliderScale.OverlayColor = System.Drawing.Color.White;
-            this.sliderScale.Size = new System.Drawing.Size(246, 21);
-            this.sliderScale.SmallChange = ((uint)(1u));
-            this.sliderScale.TabIndex = 4;
-            this.sliderScale.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
-            this.sliderScale.ThumbSize = new System.Drawing.Size(14, 14);
-            this.toolTip.SetToolTip(this.sliderScale, "Higher tries to match your prompt better, but can get chaotic. 7-12 is a safe ran" +
-        "ger for most things.");
-            this.sliderScale.Value = 20;
-            this.sliderScale.Scroll += new System.Windows.Forms.ScrollEventHandler(this.sliderScale_Scroll);
             // 
             // scaleLabel
             // 
@@ -479,28 +434,6 @@
             this.tableLayoutPanel2.Size = new System.Drawing.Size(190, 21);
             this.tableLayoutPanel2.TabIndex = 96;
             // 
-            // sliderResW
-            // 
-            this.sliderResW.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.sliderResW.BorderRoundRectSize = new System.Drawing.Size(12, 12);
-            this.sliderResW.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.sliderResW.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
-            this.sliderResW.ForeColor = System.Drawing.Color.Black;
-            this.sliderResW.LargeChange = ((uint)(2u));
-            this.sliderResW.Location = new System.Drawing.Point(0, 0);
-            this.sliderResW.Margin = new System.Windows.Forms.Padding(0);
-            this.sliderResW.Maximum = 16;
-            this.sliderResW.Minimum = 4;
-            this.sliderResW.Name = "sliderResW";
-            this.sliderResW.OverlayColor = System.Drawing.Color.White;
-            this.sliderResW.Size = new System.Drawing.Size(145, 21);
-            this.sliderResW.SmallChange = ((uint)(1u));
-            this.sliderResW.TabIndex = 4;
-            this.sliderResW.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
-            this.sliderResW.ThumbSize = new System.Drawing.Size(14, 14);
-            this.sliderResW.Value = 16;
-            this.sliderResW.Scroll += new System.Windows.Forms.ScrollEventHandler(this.sliderResW_Scroll);
-            // 
             // labelResW
             // 
             this.labelResW.AutoSize = true;
@@ -531,28 +464,6 @@
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 21F));
             this.tableLayoutPanel3.Size = new System.Drawing.Size(190, 21);
             this.tableLayoutPanel3.TabIndex = 97;
-            // 
-            // sliderResH
-            // 
-            this.sliderResH.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.sliderResH.BorderRoundRectSize = new System.Drawing.Size(12, 12);
-            this.sliderResH.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.sliderResH.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
-            this.sliderResH.ForeColor = System.Drawing.Color.Black;
-            this.sliderResH.LargeChange = ((uint)(2u));
-            this.sliderResH.Location = new System.Drawing.Point(0, 0);
-            this.sliderResH.Margin = new System.Windows.Forms.Padding(0);
-            this.sliderResH.Maximum = 16;
-            this.sliderResH.Minimum = 4;
-            this.sliderResH.Name = "sliderResH";
-            this.sliderResH.OverlayColor = System.Drawing.Color.White;
-            this.sliderResH.Size = new System.Drawing.Size(145, 21);
-            this.sliderResH.SmallChange = ((uint)(1u));
-            this.sliderResH.TabIndex = 4;
-            this.sliderResH.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
-            this.sliderResH.ThumbSize = new System.Drawing.Size(14, 14);
-            this.sliderResH.Value = 16;
-            this.sliderResH.Scroll += new System.Windows.Forms.ScrollEventHandler(this.sliderResH_Scroll);
             // 
             // labelResH
             // 
@@ -709,30 +620,6 @@
             this.comboxSampler.Size = new System.Drawing.Size(200, 21);
             this.comboxSampler.TabIndex = 105;
             this.toolTip.SetToolTip(this.comboxSampler, "Changes how the image is sampled.\r\nk_euler_a works very well at low step counts.");
-            // 
-            // sliderInitStrength
-            // 
-            this.sliderInitStrength.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.sliderInitStrength.BorderRoundRectSize = new System.Drawing.Size(12, 12);
-            this.sliderInitStrength.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.sliderInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
-            this.sliderInitStrength.ForeColor = System.Drawing.Color.Black;
-            this.sliderInitStrength.LargeChange = ((uint)(2u));
-            this.sliderInitStrength.Location = new System.Drawing.Point(0, 0);
-            this.sliderInitStrength.Margin = new System.Windows.Forms.Padding(0);
-            this.sliderInitStrength.Maximum = 38;
-            this.sliderInitStrength.Minimum = 2;
-            this.sliderInitStrength.Name = "sliderInitStrength";
-            this.sliderInitStrength.OverlayColor = System.Drawing.Color.White;
-            this.sliderInitStrength.Size = new System.Drawing.Size(246, 21);
-            this.sliderInitStrength.SmallChange = ((uint)(1u));
-            this.sliderInitStrength.TabIndex = 4;
-            this.sliderInitStrength.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
-            this.sliderInitStrength.ThumbSize = new System.Drawing.Size(14, 14);
-            this.toolTip.SetToolTip(this.sliderInitStrength, "Lower Value: Result Looks More Like Your Text Prompt\r\nHigher Value: Result Looks " +
-        "More Like Your Image");
-            this.sliderInitStrength.Value = 2;
-            this.sliderInitStrength.Scroll += new System.Windows.Forms.ScrollEventHandler(this.sliderInitStrength_Scroll);
             // 
             // textboxExtraInitStrengths
             // 
@@ -1554,6 +1441,224 @@
             this.separator.TabStop = false;
             this.separator.UseVisualStyleBackColor = false;
             // 
+            // sliderResW
+            // 
+            this.sliderResW.ActualMaximum = new decimal(new int[] {
+            1024,
+            0,
+            0,
+            0});
+            this.sliderResW.ActualMinimum = new decimal(new int[] {
+            256,
+            0,
+            0,
+            0});
+            this.sliderResW.ActualValue = new decimal(new int[] {
+            256,
+            0,
+            0,
+            0});
+            this.sliderResW.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            this.sliderResW.BorderRoundRectSize = new System.Drawing.Size(12, 12);
+            this.sliderResW.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sliderResW.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
+            this.sliderResW.ForeColor = System.Drawing.Color.Black;
+            this.sliderResW.LargeChange = ((uint)(2u));
+            this.sliderResW.Location = new System.Drawing.Point(0, 0);
+            this.sliderResW.Margin = new System.Windows.Forms.Padding(0);
+            this.sliderResW.Maximum = 16;
+            this.sliderResW.Minimum = 4;
+            this.sliderResW.Name = "sliderResW";
+            this.sliderResW.OverlayColor = System.Drawing.Color.White;
+            this.sliderResW.Size = new System.Drawing.Size(145, 21);
+            this.sliderResW.SmallChange = ((uint)(1u));
+            this.sliderResW.TabIndex = 4;
+            this.sliderResW.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
+            this.sliderResW.ThumbSize = new System.Drawing.Size(14, 14);
+            this.sliderResW.Value = 4;
+            this.sliderResW.ValueBox = null;
+            this.sliderResW.ValueStep = new decimal(new int[] {
+            64,
+            0,
+            0,
+            0});
+            this.sliderResW.Scroll += new System.Windows.Forms.ScrollEventHandler(this.sliderResW_Scroll);
+            // 
+            // sliderResH
+            // 
+            this.sliderResH.ActualMaximum = new decimal(new int[] {
+            1024,
+            0,
+            0,
+            0});
+            this.sliderResH.ActualMinimum = new decimal(new int[] {
+            256,
+            0,
+            0,
+            0});
+            this.sliderResH.ActualValue = new decimal(new int[] {
+            1024,
+            0,
+            0,
+            0});
+            this.sliderResH.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            this.sliderResH.BorderRoundRectSize = new System.Drawing.Size(12, 12);
+            this.sliderResH.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sliderResH.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
+            this.sliderResH.ForeColor = System.Drawing.Color.Black;
+            this.sliderResH.LargeChange = ((uint)(2u));
+            this.sliderResH.Location = new System.Drawing.Point(0, 0);
+            this.sliderResH.Margin = new System.Windows.Forms.Padding(0);
+            this.sliderResH.Maximum = 16;
+            this.sliderResH.Minimum = 4;
+            this.sliderResH.Name = "sliderResH";
+            this.sliderResH.OverlayColor = System.Drawing.Color.White;
+            this.sliderResH.Size = new System.Drawing.Size(145, 21);
+            this.sliderResH.SmallChange = ((uint)(1u));
+            this.sliderResH.TabIndex = 4;
+            this.sliderResH.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
+            this.sliderResH.ThumbSize = new System.Drawing.Size(14, 14);
+            this.sliderResH.Value = 16;
+            this.sliderResH.ValueBox = null;
+            this.sliderResH.ValueStep = new decimal(new int[] {
+            64,
+            0,
+            0,
+            0});
+            this.sliderResH.Scroll += new System.Windows.Forms.ScrollEventHandler(this.sliderResH_Scroll);
+            // 
+            // sliderScale
+            // 
+            this.sliderScale.ActualMaximum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            65536});
+            this.sliderScale.ActualMinimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.sliderScale.ActualValue = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.sliderScale.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            this.sliderScale.BorderRoundRectSize = new System.Drawing.Size(12, 12);
+            this.sliderScale.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sliderScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
+            this.sliderScale.ForeColor = System.Drawing.Color.Black;
+            this.sliderScale.LargeChange = ((uint)(5u));
+            this.sliderScale.Location = new System.Drawing.Point(0, 0);
+            this.sliderScale.Margin = new System.Windows.Forms.Padding(0);
+            this.sliderScale.Maximum = 20;
+            this.sliderScale.Name = "sliderScale";
+            this.sliderScale.OverlayColor = System.Drawing.Color.White;
+            this.sliderScale.Size = new System.Drawing.Size(246, 21);
+            this.sliderScale.SmallChange = ((uint)(1u));
+            this.sliderScale.TabIndex = 4;
+            this.sliderScale.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
+            this.sliderScale.ThumbSize = new System.Drawing.Size(14, 14);
+            this.toolTip.SetToolTip(this.sliderScale, "Higher tries to match your prompt better, but can get chaotic. 7-12 is a safe ran" +
+        "ger for most things.");
+            this.sliderScale.Value = 0;
+            this.sliderScale.ValueBox = null;
+            this.sliderScale.ValueStep = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.sliderScale.Scroll += new System.Windows.Forms.ScrollEventHandler(this.sliderScale_Scroll);
+            // 
+            // sliderSteps
+            // 
+            this.sliderSteps.ActualMaximum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.sliderSteps.ActualMinimum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            65536});
+            this.sliderSteps.ActualValue = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.sliderSteps.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            this.sliderSteps.BorderRoundRectSize = new System.Drawing.Size(12, 12);
+            this.sliderSteps.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sliderSteps.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
+            this.sliderSteps.ForeColor = System.Drawing.Color.Black;
+            this.sliderSteps.LargeChange = ((uint)(5u));
+            this.sliderSteps.Location = new System.Drawing.Point(0, 0);
+            this.sliderSteps.Margin = new System.Windows.Forms.Padding(0);
+            this.sliderSteps.Maximum = 20;
+            this.sliderSteps.Name = "sliderSteps";
+            this.sliderSteps.OverlayColor = System.Drawing.Color.White;
+            this.sliderSteps.Size = new System.Drawing.Size(360, 21);
+            this.sliderSteps.SmallChange = ((uint)(1u));
+            this.sliderSteps.TabIndex = 13;
+            this.sliderSteps.Text = "sliderSteps";
+            this.sliderSteps.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
+            this.sliderSteps.ThumbSize = new System.Drawing.Size(14, 14);
+            this.sliderSteps.Value = 2;
+            this.sliderSteps.ValueBox = this.textboxSliderSteps;
+            this.sliderSteps.ValueStep = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.sliderSteps.Scroll += new System.Windows.Forms.ScrollEventHandler(this.sliderSteps_Scroll);
+            // 
+            // sliderInitStrength
+            // 
+            this.sliderInitStrength.ActualMaximum = new decimal(new int[] {
+            9,
+            0,
+            0,
+            65536});
+            this.sliderInitStrength.ActualMinimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.sliderInitStrength.ActualValue = new decimal(new int[] {
+            3,
+            0,
+            0,
+            65536});
+            this.sliderInitStrength.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            this.sliderInitStrength.BorderRoundRectSize = new System.Drawing.Size(12, 12);
+            this.sliderInitStrength.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sliderInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
+            this.sliderInitStrength.ForeColor = System.Drawing.Color.Black;
+            this.sliderInitStrength.LargeChange = ((uint)(2u));
+            this.sliderInitStrength.Location = new System.Drawing.Point(0, 0);
+            this.sliderInitStrength.Margin = new System.Windows.Forms.Padding(0);
+            this.sliderInitStrength.Maximum = 18;
+            this.sliderInitStrength.Minimum = 2;
+            this.sliderInitStrength.Name = "sliderInitStrength";
+            this.sliderInitStrength.OverlayColor = System.Drawing.Color.White;
+            this.sliderInitStrength.Size = new System.Drawing.Size(246, 21);
+            this.sliderInitStrength.SmallChange = ((uint)(1u));
+            this.sliderInitStrength.TabIndex = 4;
+            this.sliderInitStrength.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
+            this.sliderInitStrength.ThumbSize = new System.Drawing.Size(14, 14);
+            this.toolTip.SetToolTip(this.sliderInitStrength, "Lower Value: Result Looks More Like Your Text Prompt\r\nHigher Value: Result Looks " +
+        "More Like Your Image");
+            this.sliderInitStrength.Value = 6;
+            this.sliderInitStrength.ValueBox = null;
+            this.sliderInitStrength.ValueStep = new decimal(new int[] {
+            5,
+            0,
+            0,
+            131072});
+            this.sliderInitStrength.Scroll += new System.Windows.Forms.ScrollEventHandler(this.sliderInitStrength_Scroll);
+            // 
             // MainForm
             // 
             this.AllowDrop = true;
@@ -1660,22 +1765,20 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.NumericUpDown upDownIterations;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
-        private HTAlt.WinForms.HTSlider sliderSteps;
-        private System.Windows.Forms.Label iterLabel;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private HTAlt.WinForms.HTSlider sliderScale;
+        private CustomSlider sliderScale;
         private System.Windows.Forms.Label scaleLabel;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.NumericUpDown upDownSeed;
         private System.Windows.Forms.Button btnOpenOutFolder;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
-        private HTAlt.WinForms.HTSlider sliderResW;
+        private CustomSlider sliderResW;
         private System.Windows.Forms.Label labelResW;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
-        private HTAlt.WinForms.HTSlider sliderResH;
+        private CustomSlider sliderResH;
         private System.Windows.Forms.Label labelResH;
         private System.Windows.Forms.Label label9;
         private CircularProgressBar.CircularProgressBar progressCircle;
@@ -1705,7 +1808,7 @@
         private HTAlt.WinForms.HTButton btnInitImgBrowse;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
-        private HTAlt.WinForms.HTSlider sliderInitStrength;
+        private StableDiffusionGui.Controls.CustomSlider sliderInitStrength;
         private System.Windows.Forms.Label labelInitStrength;
         private System.Windows.Forms.Button btnDebug;
         private System.Windows.Forms.Button btnSettings;
@@ -1746,6 +1849,8 @@
         private System.Windows.Forms.ToolStripMenuItem openModelPruningTrimmingToolToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewLogInRealtimeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem trainDreamBoothModelToolStripMenuItem;
+        private System.Windows.Forms.TextBox textboxSliderSteps;
+        private CustomSlider sliderSteps;
     }
 }
 

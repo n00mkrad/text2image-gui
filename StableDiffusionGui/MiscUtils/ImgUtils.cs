@@ -4,6 +4,7 @@ using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace StableDiffusionGui.MiscUtils
 {
@@ -84,6 +85,75 @@ namespace StableDiffusionGui.MiscUtils
             }
 
             return img;
+        }
+
+        public enum ScaleMode { Percentage, Height, Width, LongerSide, ShorterSide }
+
+        public static async Task<MagickImage> Scale(string path, ScaleMode mode, float targetScale, bool write)
+        {
+            MagickImage img = new MagickImage(path);
+            return await Scale(img, mode, targetScale, write);
+        }
+
+        public static async Task<MagickImage> Scale(MagickImage img, ScaleMode mode, float targetScale, bool write)
+        {
+            img.FilterType = FilterType.Mitchell;
+
+            bool heightLonger = img.Height > img.Width;
+            bool widthLonger = img.Width > img.Height;
+            bool square = (img.Height == img.Width);
+
+            MagickGeometry geom = null;
+
+            if ((square && mode != ScaleMode.Percentage) || mode == ScaleMode.Height || (mode == ScaleMode.LongerSide && heightLonger) || (mode == ScaleMode.ShorterSide && widthLonger))
+            {
+                geom = new MagickGeometry("x" + targetScale);
+            }
+            if (mode == ScaleMode.Width || (mode == ScaleMode.LongerSide && widthLonger) || (mode == ScaleMode.ShorterSide && heightLonger))
+            {
+                geom = new MagickGeometry(targetScale + "x");
+            }
+            if (mode == ScaleMode.Percentage)
+            {
+                geom = new MagickGeometry(Math.Round(img.Width * targetScale / 100f) + "x" + Math.Round(img.Height * targetScale));
+            }
+
+            img.Resize(geom);
+
+            if (write)
+            {
+                img.Write(img.FileName);
+                img.Dispose();
+                return null;
+            }
+            else
+            {
+                return img;
+            }
+        }
+
+        public static async Task<MagickImage> Pad(string path, Size newSize, bool write, MagickColor fillColor = null)
+        {
+            MagickImage img = new MagickImage(path);
+            return await Pad(img, newSize, write, fillColor);
+        }
+
+        public static async Task<MagickImage> Pad(MagickImage img, Size newSize, bool write, MagickColor fillColor = null)
+        {
+            img.BackgroundColor = fillColor ?? MagickColors.Black;
+            img.Extent(newSize.Width, newSize.Height, Gravity.Center);
+            img.Write(img.FileName);
+
+            if (write)
+            {
+                img.Write(img.FileName);
+                img.Dispose();
+                return null;
+            }
+            else
+            {
+                return img;
+            }
         }
     }
 }

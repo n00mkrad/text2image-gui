@@ -1,6 +1,12 @@
-﻿using StableDiffusionGui.Forms;
+﻿using Microsoft.WindowsAPICodePack.Dialogs;
+using Microsoft.WindowsAPICodePack.Taskbar;
+using StableDiffusionGui.Data;
+using StableDiffusionGui.Forms;
+using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
+using StableDiffusionGui.MiscUtils;
+using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
@@ -9,16 +15,10 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Windows.Forms;
-using Microsoft.WindowsAPICodePack.Taskbar;
-using Microsoft.WindowsAPICodePack.Dialogs;
-using StableDiffusionGui.Installation;
-using StableDiffusionGui.Data;
-using StableDiffusionGui.Os;
-using System.Threading.Tasks;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using Paths = StableDiffusionGui.Io.Paths;
-using StableDiffusionGui.MiscUtils;
 
 namespace StableDiffusionGui
 {
@@ -95,23 +95,23 @@ namespace StableDiffusionGui
         private void LoadUiElements()
         {
             ConfigParser.LoadGuiElement(upDownIterations);
-            ConfigParser.LoadGuiElement(sliderSteps, ConfigParser.SaveValueAs.Multiplied, 5); sliderSteps_Scroll(null, null);
-            ConfigParser.LoadGuiElement(sliderScale, ConfigParser.SaveValueAs.Divided, 2f); sliderScale_Scroll(null, null);
-            ConfigParser.LoadGuiElement(sliderResW, ConfigParser.SaveValueAs.Multiplied, 64); sliderResW_Scroll(null, null);
-            ConfigParser.LoadGuiElement(sliderResH, ConfigParser.SaveValueAs.Multiplied, 64); sliderResH_Scroll(null, null);
+            ConfigParser.LoadGuiElement(sliderSteps); sliderSteps_Scroll(null, null);
+            ConfigParser.LoadGuiElement(sliderScale); sliderScale_Scroll(null, null);
+            ConfigParser.LoadGuiElement(sliderResW); sliderResW_Scroll(null, null);
+            ConfigParser.LoadGuiElement(sliderResH); sliderResH_Scroll(null, null);
             ConfigParser.LoadComboxIndex(comboxSampler);
-            ConfigParser.LoadGuiElement(sliderInitStrength, ConfigParser.SaveValueAs.Divided, 40f); sliderInitStrength_Scroll(null, null);
+            ConfigParser.LoadGuiElement(sliderInitStrength); sliderInitStrength_Scroll(null, null);
         }
 
         private void SaveUiElements()
         {
             ConfigParser.SaveGuiElement(upDownIterations);
-            ConfigParser.SaveGuiElement(sliderSteps, ConfigParser.SaveValueAs.Multiplied, 5);
-            ConfigParser.SaveGuiElement(sliderScale, ConfigParser.SaveValueAs.Divided, 2f);
-            ConfigParser.SaveGuiElement(sliderResW, ConfigParser.SaveValueAs.Multiplied, 64);
-            ConfigParser.SaveGuiElement(sliderResH, ConfigParser.SaveValueAs.Multiplied, 64);
+            ConfigParser.SaveGuiElement(sliderSteps);
+            ConfigParser.SaveGuiElement(sliderScale);
+            ConfigParser.SaveGuiElement(sliderResW);
+            ConfigParser.SaveGuiElement(sliderResH);
             ConfigParser.SaveComboxIndex(comboxSampler);
-            ConfigParser.SaveGuiElement(sliderInitStrength, ConfigParser.SaveValueAs.Divided, 40f);
+            ConfigParser.SaveGuiElement(sliderInitStrength);
         }
 
         public void RefreshAfterSettingsChanged()
@@ -125,10 +125,11 @@ namespace StableDiffusionGui
             bool adv = Config.GetBool("checkboxAdvancedMode");
 
             upDownIterations.Maximum = !adv ? 1000 : 10000;
-            sliderSteps.Maximum = !adv ? 24 : 100;
-            sliderScale.Maximum = !adv ? 50 : 100;
-            sliderResW.Maximum = !adv ? 16 : 32;
-            sliderResH.Maximum = !adv ? 16 : 32;
+            sliderSteps.ActualMaximum = !adv ? 120 : 500;
+            sliderSteps.ValueStep = !adv ? 5 : 1;
+            sliderScale.ActualMaximum = !adv ? 25 : 50;
+            sliderResW.ActualMaximum = !adv ? 1024 : 2048;
+            sliderResH.ActualMaximum = !adv ? 1024 : 2048;
         }
 
         private void installerBtn_Click(object sender, EventArgs e)
@@ -354,9 +355,7 @@ namespace StableDiffusionGui
 
         private void sliderSteps_Scroll(object sender, ScrollEventArgs e)
         {
-            int steps = sliderSteps.Value * 5;
-            MainUi.CurrentSteps = steps;
-            iterLabel.Text = steps.ToString();
+            MainUi.CurrentSteps = sliderSteps.ActualValueInt;
         }
 
         private void sliderScale_Scroll(object sender, ScrollEventArgs e)
@@ -368,23 +367,20 @@ namespace StableDiffusionGui
 
         private void sliderResW_Scroll(object sender, ScrollEventArgs e)
         {
-            int px = sliderResW.Value * 64;
-            MainUi.CurrentResW = px;
-            labelResW.Text = px.ToString();
+            MainUi.CurrentResW = sliderResW.ActualValueInt;
+            labelResW.Text = sliderResW.ActualValueInt.ToString();
         }
 
         private void sliderResH_Scroll(object sender, ScrollEventArgs e)
         {
-            int px = sliderResH.Value * 64;
-            MainUi.CurrentResH = px;
-            labelResH.Text = px.ToString();
+            MainUi.CurrentResH = sliderResH.ActualValueInt;
+            labelResH.Text = sliderResH.ActualValueInt.ToString();
         }
 
         private void sliderInitStrength_Scroll(object sender, ScrollEventArgs e)
         {
-            float strength = sliderInitStrength.Value / 40f;
-            MainUi.CurrentInitImgStrength = strength;
-            labelInitStrength.Text = strength.ToString("0.000");
+            MainUi.CurrentInitImgStrength = sliderInitStrength.ActualValueFloat;
+            labelInitStrength.Text = sliderInitStrength.ActualValueFloat.ToString("0.000");
         }
 
         #endregion

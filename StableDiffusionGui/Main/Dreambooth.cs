@@ -1,17 +1,22 @@
 ﻿using StableDiffusionGui.Io;
+using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
 using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace StableDiffusionGui.Main
 {
     internal class Dreambooth
     {
-        static readonly string[] _validImgExtensions = new string[] { ".png", ".jpeg", ".jpg", ".jfif" };
+        static readonly string[] _validImgExtensions = new string[] { ".png", ".jpeg", ".jpg", ".jfif", ".bmp", ".webp" };
         static readonly bool _useVisibleCmdWindow = false;
         static readonly bool _onlySaveFinalCkpt = true;
         static readonly float _learningRateMagicNumber = 0.18f;
@@ -38,7 +43,7 @@ namespace StableDiffusionGui.Main
                 IoUtils.TryDeleteIfExists(logDir);
                 Directory.CreateDirectory(logDir);
 
-                string configPath = WriteConfig(logDir, trainImgDir, preset, lrMultiplier);
+                string configPath = await WriteConfig(logDir, trainImgDir, preset, lrMultiplier);
 
                 if (!File.Exists(configPath))
                     throw new Exception("Could not create training config.");
@@ -94,7 +99,7 @@ namespace StableDiffusionGui.Main
             Program.MainForm.SetProgress(0);
         }
 
-        private static string WriteConfig (string logDir, DirectoryInfo trainDir, Enums.Dreambooth.TrainPreset preset, float userlrMult)
+        private static async Task<string> WriteConfig (string logDir, DirectoryInfo trainDir, Enums.Dreambooth.TrainPreset preset, float userlrMult)
         {
             string configPath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.RepoSd, Constants.Dirs.Dreambooth, "configs", "stable-diffusion", "v1-finetune_unfrozen.yaml");
             var configLines = File.ReadAllLines(configPath).ToArray();
@@ -115,11 +120,40 @@ namespace StableDiffusionGui.Main
                 return "";
             }
 
-            if (filesInTrainDir.Count() > trainImgs)
+            var validateResult1Valid2ContainsFixable = await ValidateImages(trainDir.FullName);
+
+            if(!validateResult1Valid2ContainsFixable.Item1)
             {
-                Logger.Log($"Error: Training folder contains invalid files. Currently supported are {string.Join(", ", _validImgExtensions.Select(x => x.Substring(1).ToUpperInvariant()))}.");
-                return "";
+                if (validateResult1Valid2ContainsFixable.Item2)
+                {
+                    DialogResult dialogResult = UiUtils.ShowMessageBox($"Your training folder contains files in the correct format, but they need to be resized.\n" +
+                    $"Do you want to do this automatically now? The files will be overwritten!", UiUtils.MessageType.Warning.ToString(), MessageBoxButtons.YesNo);
+
+                    if (dialogResult == DialogResult.Yes)
+                    {
+                        await FormatImages(trainDir.FullName);
+                        Logger.Log("Images have been formatted. Checking dataset again...");
+
+                        if (!(await ValidateImages(trainDir.FullName)).Item1)
+                            return "";
+                    }
+                    else
+                    {
+                        return "";
+                    }
+                }
+                else
+                {
+                    return "";
+                }
             }
+
+            // 
+            // if (filesInTrainDir.Count() > trainImgs)
+            // {
+            //     Logger.Log($"Error: Training folder contains invalid files. Currently supported are {string.Join(", ", _validImgExtensions.Select(x => x.Substring(1).ToUpperInvariant()))}.");
+            //     return "";
+            // }
 
             double lr = trainImgs * _learningRateMagicNumber * 0.0000001 * lrMultiplier * userlrMult;
             string lrStr = lr.ToString().Replace(",", ".");
@@ -150,8 +184,76 @@ namespace StableDiffusionGui.Main
 
             if (preset == Enums.Dreambooth.TrainPreset.LowQuality)
                 return new Tuple<int, int, float>(250, 250, 16f);
-
             return new Tuple<int, int, float>(4000, 1000, 1f);
+        }
+
+        /// <returns> Bool1: All Valid - Bool2: Contains fixable images </returns>
+        public static async Task<Tuple<bool, bool>> ValidateImages (string dir)
+        {
+            var files = IoUtils.GetFileInfosSorted(dir, false, "*.*").Where(x => _validImgExtensions.Contains(x.Extension.ToLower())).ToList();
+
+            bool allValid = true;
+            bool containsFixableImages = false;
+
+            foreach(var file in files)
+            {
+                // Check extension
+                if (!_validImgExtensions.Contains(file.Extension.ToLowerInvariant()))
+                {
+                    Logger.Log($"File {file.Name} is invalid: Invalid file type. Supported are {string.Join(", ", _validImgExtensions.Select(x => x.Substring(1).ToUpperInvariant()))}");
+                    allValid = false;
+                    continue;
+                }
+
+                Image img = null;
+
+                try
+                {
+                    img = IoUtils.GetImage(file.FullName);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Log($"Error loading {file.Name}: {ex.Message}");
+                }
+
+                // Check if image can be loaded
+                if (img == null)
+                {
+                    Logger.Log($"Image {file.Name} is invalid: Can't load image.");
+                    allValid = false;
+                    continue;
+                }
+
+                // Check dimensions
+                if (img.Width != 512 || img.Height != 512)
+                {
+                    Logger.Log($"Image {file.Name} is invalid: Resolution is {img.Width}x{img.Height}, but training currently requires 512x512 images.");
+                    containsFixableImages = true;
+                    allValid = false;
+                    continue;
+                }
+            }
+
+            return new Tuple<bool, bool> (allValid, containsFixableImages);
+        }
+
+        public static async Task FormatImages (string dir)
+        {
+            var files = IoUtils.GetFileInfosSorted(dir, false, "*.*").Where(x => _validImgExtensions.Contains(x.Extension.ToLower())).ToList();
+
+            var opts = new ParallelOptions { MaxDegreeOfParallelism = (Environment.ProcessorCount / 2f).RoundToInt().Clamp(1, 12) }; // Thread count = Half the threads on this CPU, clamped to 1-12 (should be plenty for this...)
+            int count = 0;
+
+            Task imageProcessingTask = Task.Run(async () => Parallel.ForEach(files, opts, async file => {
+                var scaledImg = await ImgUtils.Scale(file.FullName, ImgUtils.ScaleMode.LongerSide, 512, false);
+                await ImgUtils.Pad(scaledImg, new Size(512, 512), true);
+                int currentCount = Interlocked.Increment(ref count);
+                Logger.Log($"Processed {currentCount}/{files.Count} images...", false, Logger.LastUiLine.EndsWith("..."));
+            }));
+
+            Logger.Log($"Processed {files.Count} images.", false, Logger.LastUiLine.EndsWith("..."));
+
+            while (!imageProcessingTask.IsCompleted) await Task.Delay(1);
         }
     }
 }

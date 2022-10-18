@@ -86,7 +86,7 @@ namespace StableDiffusionGui.Io
                 foreach (string folderPath in mdlFolders)
                     list.AddRange(IoUtils.GetFileInfosSorted(folderPath, false, pattern).ToList());
 
-                return list.Distinct().ToList();
+                return list.Distinct().OrderBy(x => x.Name).ToList();
             }
             catch (Exception ex)
             {
