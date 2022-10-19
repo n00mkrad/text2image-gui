@@ -326,7 +326,7 @@ namespace StableDiffusionGui
         {
             try
             {
-                return Path.GetExtension(filePath)?.ToLower() == ".concat";
+                return Path.GetExtension(filePath)?.Lower() == ".concat";
             }
             catch
             {
@@ -391,6 +391,14 @@ namespace StableDiffusionGui
 
             if (defaultIndex >= 0)
                 comboBox.SelectedIndex = defaultIndex;
+        }
+
+        public static string Lower (this string s)
+        {
+            if (s == null)
+                return s;
+
+            return s.ToLowerInvariant();
         }
     }
 }

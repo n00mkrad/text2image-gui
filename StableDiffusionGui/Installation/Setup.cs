@@ -352,11 +352,11 @@ namespace StableDiffusionGui.Installation
                     List<string> newLines = new List<string>();
 
                     string splitText = $@"data\{Constants.Dirs.RepoSd}";
-                    string newBasePath = Paths.GetExeDir().ToLower().Replace("/", @"\");
+                    string newBasePath = Paths.GetExeDir().Lower().Replace("/", @"\");
 
                     Logger.Log($"easy-install.pth new lines:", true);
 
-                    foreach (string line in easyInstallLines.Select(x => x.ToLower()))
+                    foreach (string line in easyInstallLines.Select(x => x.Lower()))
                     {
                         var split = line.Split(splitText);
                         newLines.Add(newBasePath + splitText + split.Last());

@@ -667,7 +667,7 @@ namespace StableDiffusionGui.Io
             {
                 IEnumerable<MetadataExtractor.Directory> directories = MetadataExtractor.ImageMetadataReader.ReadMetadata(path);
 
-                MetadataExtractor.Directory pngTextDir = directories.Where(x => x.Name.ToLower() == "png-text").FirstOrDefault();
+                MetadataExtractor.Directory pngTextDir = directories.Where(x => x.Name.Lower() == "png-text").FirstOrDefault();
 
                 if (pngTextDir != null)
                 {

@@ -311,7 +311,7 @@ namespace StableDiffusionGui.Os
             List<string> newPaths = new List<string>();
 
             newPaths.AddRange(additionalPaths);
-            newPaths.AddRange(paths.Where(x => x.ToLower().Replace("\\", "/").StartsWith("c:/windows")).ToList());
+            newPaths.AddRange(paths.Where(x => x.Lower().Replace("\\", "/").StartsWith("c:/windows")).ToList());
 
             return string.Join(";", newPaths) + ";";
         }

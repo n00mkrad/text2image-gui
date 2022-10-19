@@ -35,7 +35,7 @@ namespace StableDiffusionGui.Forms
         {
             for (int i = 0; i < checkedListBoxStatus.Items.Count; i++)
             {
-                string text = checkedListBoxStatus.Items[i].ToString().ToLower();
+                string text = checkedListBoxStatus.Items[i].ToString().Lower();
 
                 if (text.Contains("conda"))
                     checkedListBoxStatus.SetItemChecked(i, InstallationStatus.HasConda());

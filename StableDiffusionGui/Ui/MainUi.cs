@@ -61,7 +61,7 @@ namespace StableDiffusionGui.Ui
             {
                 string dir = Paths.GetExeDir();
 
-                if (dir.ToLower().Replace("\\", "/").MatchesWildcard("*/users/*/onedrive/*"))
+                if (dir.Lower().Replace("\\", "/").MatchesWildcard("*/users/*/onedrive/*"))
                 {
                     UiUtils.ShowMessageBox($"Running this program out of the OneDrive folder is not supported. Please move it to a local drive and try again.", UiUtils.MessageType.Error, Nmkoder.Forms.MessageForm.FontSize.Big);
                     Application.Exit();
@@ -100,12 +100,12 @@ namespace StableDiffusionGui.Ui
 
         public static void HandleDroppedFiles(string[] paths)
         {
-            if (Program.Busy)
+            if (Program.Busy || paths == null || paths.Length < 1)
                 return;
 
             if (paths.Length == 1)
             {
-                if (Constants.FileExtensions.ValidImages.Contains(Path.GetExtension(paths[0]).ToLower())) // Ask to use as init img
+                if (Constants.FileExtensions.ValidImages.Contains(Path.GetExtension(paths[0]).Lower())) // Ask to use as init img
                 {
                     ImageLoadForm imgForm = new ImageLoadForm(paths[0]);
                     imgForm.ShowDialog();
@@ -118,7 +118,7 @@ namespace StableDiffusionGui.Ui
                         OsUtils.SetClipboard(imgForm.CurrentMetadata.Prompt);
                 }
 
-                if (Constants.FileExtensions.ValidEmbeddings.Contains(Path.GetExtension(paths[0]).ToLower())) // Ask to use as embedding (finetuned model)
+                if (Constants.FileExtensions.ValidEmbeddings.Contains(Path.GetExtension(paths[0]).Lower())) // Ask to use as embedding (finetuned model)
                 {
                     DialogResult dialogResult = UiUtils.ShowMessageBox($"Do you want to load this concept?", $"Dropped {Path.GetFileName(paths[0]).Trunc(40)}", MessageBoxButtons.YesNo);
 
@@ -127,6 +127,10 @@ namespace StableDiffusionGui.Ui
                 }
 
                 Program.MainForm.UpdateInitImgAndEmbeddingUi();
+            }
+            else
+            {
+                var validImagesInPathList = paths.Where(path => Constants.FileExtensions.ValidImages.Contains(Path.GetExtension(path).Lower()));
             }
         }
 

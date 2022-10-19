@@ -132,7 +132,7 @@ namespace StableDiffusionGui.Main
         {
             Canceled = true;
 
-            bool manual = reason.ToLower().Contains("manually");
+            bool manual = reason.Lower().Contains("manually");
             bool forceKill = manual && InputUtils.IsHoldingShift; // Shift force-kills the process
 
             Logger.Log($"Canceling. Manual: {manual} - Implementation: {(LastTaskSettings != null ? LastTaskSettings.Implementation.ToString() : "None")} - Force Kill: {forceKill}", true);

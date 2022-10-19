@@ -111,7 +111,7 @@ namespace StableDiffusionGui.Main
             CurrentTargetSteps = targetSteps;
 
             var filesInTrainDir = IoUtils.GetFileInfosSorted(trainDir.FullName, false, "*.*");
-            int trainImgs = filesInTrainDir.Where(x => Constants.FileExtensions.ValidImages.Contains(x.Extension.ToLower())).Count();
+            int trainImgs = filesInTrainDir.Where(x => Constants.FileExtensions.ValidImages.Contains(x.Extension.Lower())).Count();
 
             if (trainImgs < 1)
             {
@@ -189,7 +189,7 @@ namespace StableDiffusionGui.Main
         /// <returns> Bool1: All Valid - Bool2: Contains fixable images </returns>
         public static async Task<Tuple<bool, bool>> ValidateImages (string dir)
         {
-            var files = IoUtils.GetFileInfosSorted(dir, false, "*.*").Where(x => Constants.FileExtensions.ValidImages.Contains(x.Extension.ToLower())).ToList();
+            var files = IoUtils.GetFileInfosSorted(dir, false, "*.*").Where(x => Constants.FileExtensions.ValidImages.Contains(x.Extension.Lower())).ToList();
 
             bool allValid = true;
             bool containsFixableImages = false;
@@ -238,7 +238,7 @@ namespace StableDiffusionGui.Main
 
         public static async Task FormatImages (string dir)
         {
-            var files = IoUtils.GetFileInfosSorted(dir, false, "*.*").Where(x => Constants.FileExtensions.ValidImages.Contains(x.Extension.ToLower())).ToList();
+            var files = IoUtils.GetFileInfosSorted(dir, false, "*.*").Where(x => Constants.FileExtensions.ValidImages.Contains(x.Extension.Lower())).ToList();
 
             var opts = new ParallelOptions { MaxDegreeOfParallelism = (Environment.ProcessorCount / 2f).RoundToInt().Clamp(1, 12) }; // Thread count = Half the threads on this CPU, clamped to 1-12 (should be plenty for this...)
             int count = 0;

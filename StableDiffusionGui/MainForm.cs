@@ -147,7 +147,7 @@ namespace StableDiffusionGui
 
         public void CleanPrompt()
         {
-            if (File.Exists(MainUi.CurrentEmbeddingPath) && Path.GetExtension(MainUi.CurrentEmbeddingPath).ToLower() == ".bin")
+            if (File.Exists(MainUi.CurrentEmbeddingPath) && Path.GetExtension(MainUi.CurrentEmbeddingPath).Lower() == ".bin")
             {
                 string conceptName = Path.GetFileNameWithoutExtension(MainUi.CurrentEmbeddingPath);
                 textboxPrompt.Text = textboxPrompt.Text.Replace("*", $"<{conceptName.Trim()}>");
@@ -222,7 +222,7 @@ namespace StableDiffusionGui
                             { "scales", string.Join(",", MainUi.GetScales(textboxExtraScales.Text).Select(x => x.ToStringDot("0.0000"))) },
                             { "res", $"{SliderResW.ActualValueInt}x{SliderResH.ActualValueInt}" },
                             { "seed", upDownSeed.Value < 0 ? new Random().Next(0, int.MaxValue).ToString() : ((long)upDownSeed.Value).ToString() },
-                            { "sampler", ((Enums.StableDiffusion.Sampler)comboxSampler.SelectedIndex).ToString().ToLower() },
+                            { "sampler", ((Enums.StableDiffusion.Sampler)comboxSampler.SelectedIndex).ToString().Lower() },
                             { "initImg", MainUi.CurrentInitImgPath },
                             { "initStrengths", string.Join(",", MainUi.GetInitStrengths(textboxExtraInitStrengths.Text).Select(x => x.ToStringDot("0.0000"))) },
                             { "embedding", MainUi.CurrentEmbeddingPath },
@@ -470,7 +470,7 @@ namespace StableDiffusionGui
 
                 if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
                 {
-                    if (Constants.FileExtensions.ValidImages.Contains(Path.GetExtension(dialog.FileName).ToLower()))
+                    if (Constants.FileExtensions.ValidImages.Contains(Path.GetExtension(dialog.FileName).Lower()))
                         MainUi.HandleDroppedFiles(new[] { dialog.FileName });
                     else
                         UiUtils.ShowMessageBox("Invalid file type.");
@@ -533,7 +533,7 @@ namespace StableDiffusionGui
 
                 if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
                 {
-                    if (Constants.FileExtensions.ValidEmbeddings.Contains(Path.GetExtension(dialog.FileName.ToLower())))
+                    if (Constants.FileExtensions.ValidEmbeddings.Contains(Path.GetExtension(dialog.FileName.Lower())))
                         MainUi.CurrentEmbeddingPath = dialog.FileName;
                     else
                         UiUtils.ShowMessageBox("Invalid file type.");

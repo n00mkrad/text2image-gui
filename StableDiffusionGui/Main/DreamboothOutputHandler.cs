@@ -60,7 +60,7 @@ namespace StableDiffusionGui.Main
             if (line.Contains("Pruning..."))
                 Logger.Log($"Pruning model...", false, replace);
 
-            if (line.MatchesWildcard("*%|*/*[*B/s]*") && !line.ToLower().Contains("it/s") && !line.ToLower().Contains("s/it"))
+            if (line.MatchesWildcard("*%|*/*[*B/s]*") && !line.Lower().Contains("it/s") && !line.Lower().Contains("s/it"))
             {
                 Logger.Log($"Downloading required files... {line.Trunc(80)}", false, ellipsis);
             }
@@ -83,7 +83,7 @@ namespace StableDiffusionGui.Main
                 UiUtils.ShowMessageBox($"Invalid CLI syntax.", UiUtils.MessageType.Error);
             }
 
-            if (!_hasErrored && line.ToLower().Contains("illegal memory access"))
+            if (!_hasErrored && line.Lower().Contains("illegal memory access"))
             {
                 _hasErrored = true;
                 UiUtils.ShowMessageBox($"Your GPU appears to be unstable! If you have an overclock enabled, please disable it!\n\n{line}", UiUtils.MessageType.Error);
