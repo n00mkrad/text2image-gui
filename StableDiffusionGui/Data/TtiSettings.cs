@@ -1,6 +1,10 @@
-﻿using System;
+﻿using StableDiffusionGui.Io;
+using StableDiffusionGui.Main;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using static StableDiffusionGui.Main.Enums.StableDiffusion;
+using System.Windows;
 
 namespace StableDiffusionGui.Data
 {
@@ -23,18 +27,46 @@ namespace StableDiffusionGui.Data
                 {
                     for (int i = 0; i < Iterations; i++)
                     {
-                        foreach (var scale in Params["scales"].Replace(" ", "").Split(","))
+                        foreach (float scale in Params["scales"].FromJson<List<float>>())
                         {
-                            foreach (var strength in Params["initStrengths"].Replace(" ", "").Split(","))
+                            List<string> initImages = Params["initImgs"].FromJson<List<string>>();
+
+                            if (initImages == null || initImages.Count < 1) // No init image(s)
                             {
                                 count++;
-
-                                if (string.IsNullOrWhiteSpace(Params["initImg"]))
-                                    break;
+                            }
+                            else // With init image(s)
+                            {
+                                foreach (string initImg in initImages)
+                                {
+                                    foreach (float strength in Params["initStrengths"].FromJson<List<float>>())
+                                    {
+                                        count++;
+                                    }
+                                }
                             }
                         }
                     }
                 }
+
+                // foreach (string prompt in Prompts)
+                // {
+                //     for (int i = 0; i < Iterations; i++)
+                //     {
+                //         foreach (var scale in Params["scales"].Replace(" ", "").Split(","))
+                //         {
+                // 
+                // 
+                //             foreach (var strength in Params["initStrengths"].Replace(" ", "").Split(","))
+                //             {
+                //                 count++;
+                // 
+                //                 if (string.IsNullOrWhiteSpace(Params["initImg"]))
+                //                     break;
+                //             }
+                //         }
+                //     }
+                // }
 
                 return count;
             }
@@ -46,10 +78,27 @@ namespace StableDiffusionGui.Data
 
         public override string ToString()
         {
-            string init = System.IO.File.Exists(Params["initImg"]) ? $" - With Image" : "";
-            string emb = System.IO.File.Exists(Params["embedding"]) ? $" - With Concept" : "";
-            string extraPrompts = Prompts.Length > 1 ? $" (+{Prompts.Length-1})" : "";
-            return $"\"{Prompts.FirstOrDefault().Trunc(75)}\"{extraPrompts} - {Iterations} Images - {Params["steps"]} Steps - Seed {Params["seed"]} - {Params["res"]} - Sampler {Params["sampler"]}{init}{emb}";
+            try // Old format
+            {
+                string init = !string.IsNullOrWhiteSpace(Params["initImg"]) ? $" - With Image" : "";
+                string emb = !string.IsNullOrWhiteSpace(Params["embedding"]) ? $" - With Concept" : "";
+                string extraPrompts = Prompts.Length > 1 ? $" (+{Prompts.Length - 1})" : "";
+                return $"\"{Prompts.FirstOrDefault().Trunc(85)}\"{extraPrompts} - {Iterations} Images - {Params["steps"]} Steps - Seed {Params["seed"]} - {Params["res"]} - {Params["sampler"]}{init}{emb}";
+            }
+            catch { }
+
+            try // New format
+            {
+                Size s = Params["res"].FromJson<Size>();
+                var initImgs = Params["initImgs"].FromJson<List<string>>();
+                string init = initImgs != null && initImgs.Count > 0 ? $" - With Image(s)" : "";
+                string emb = !string.IsNullOrWhiteSpace(Params["embedding"].FromJson<string>()) ? $" - With Concept" : "";
+                string extraPrompts = Prompts.Length > 1 ? $" (+{Prompts.Length - 1})" : "";
+                return $"\"{Prompts.FirstOrDefault().Trunc(85)}\"{extraPrompts} - {Iterations} Images - {Params["steps"].FromJson<int>()} Steps - Seed {Params["seed"].FromJson<long>()} - {s.Width}x{s.Height} - {Params["sampler"].FromJson<string>()}{init}{emb}";
+            }
+            catch { }
+
+            return "";
         }
     }
 }

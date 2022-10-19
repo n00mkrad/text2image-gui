@@ -18,13 +18,16 @@ namespace StableDiffusionGui.Ui
 {
     internal class MainUi
     {
-        private static string _currentInitImgPath;
-        public static string CurrentInitImgPath {
-            get => _currentInitImgPath;
+        private static List<string> _currentInitImgPaths;
+        public static List<string> CurrentInitImgPaths {
+            get => _currentInitImgPaths;
             set {
-                _currentInitImgPath = value;
-                Logger.Log(string.IsNullOrWhiteSpace(value) ? "" : $"Now using initialization image {Path.GetFileName(value).Wrap()}.");
-                if(InpaintingUtils.CurrentMask != null)
+                _currentInitImgPaths = value;
+
+                if(value != null && value.Count() > 0)
+                    Logger.Log(value.Count() == 1 ? $"Now using initialization image {Path.GetFileName(value[0]).Wrap()}." : $"Now using {value.Count()} initialization images.");
+
+                if (InpaintingUtils.CurrentMask != null)
                 {
                     InpaintingUtils.CurrentMask = null;
                     Logger.Log("Inpainting mask has been cleared.");
@@ -111,14 +114,14 @@ namespace StableDiffusionGui.Ui
                     imgForm.ShowDialog();
 
                     if (imgForm.Action == ImageLoadForm.ImageAction.InitImage)
-                        CurrentInitImgPath = paths[0];
+                        AddInitImages(paths.ToList());
                     else if (imgForm.Action == ImageLoadForm.ImageAction.LoadSettings)
                         Program.MainForm.LoadMetadataIntoUi(imgForm.CurrentMetadata);
                     else if (imgForm.Action == ImageLoadForm.ImageAction.CopyPrompt)
                         OsUtils.SetClipboard(imgForm.CurrentMetadata.Prompt);
                 }
 
-                if (Constants.FileExtensions.ValidEmbeddings.Contains(Path.GetExtension(paths[0]).Lower())) // Ask to use as embedding (finetuned model)
+                if (Constants.FileExtensions.ValidEmbeddings.Contains(Path.GetExtension(paths[0]).Lower())) // Ask to use as embedding (TI)
                 {
                     DialogResult dialogResult = UiUtils.ShowMessageBox($"Do you want to load this concept?", $"Dropped {Path.GetFileName(paths[0]).Trunc(40)}", MessageBoxButtons.YesNo);
 
@@ -130,8 +133,44 @@ namespace StableDiffusionGui.Ui
             }
             else
             {
+                paths = paths.OrderBy(path => Path.GetFileName(path)).ToArray(); // Sort by filename
                 var validImagesInPathList = paths.Where(path => Constants.FileExtensions.ValidImages.Contains(Path.GetExtension(path).Lower()));
+
+                if (validImagesInPathList.Any())
+                {
+                    DialogResult dialogResult = UiUtils.ShowMessageBox($"Do you want to load these images as initialization images?", $"Dropped {paths.Length} Images", MessageBoxButtons.YesNo);
+
+                    if (dialogResult == DialogResult.Yes)
+                        AddInitImages(paths.ToList());
+                }
             }
+        }
+
+        private static void AddInitImages(List<string> paths)
+        {
+            if (paths.Count < 1)
+                return;
+
+            if(CurrentInitImgPaths != null)
+            {
+                bool oldIs1 = CurrentInitImgPaths.Count == 1;
+                bool newIs1 = paths.Count == 1;
+
+                string msg = $"Do you want to replace the currently loaded {(oldIs1 ? $"image '{Path.GetFileName(CurrentInitImgPaths[0])}'" : $"{CurrentInitImgPaths.Count} images")}?\n\n" +
+                    $"Press \"No\" to append {(newIs1 ? "it" : "them")} to the list instead.";
+                DialogResult dialogResult = UiUtils.ShowMessageBox(msg, $"Replace current image{(oldIs1 ? "" : "s")}?", MessageBoxButtons.YesNo);
+
+                if (dialogResult == DialogResult.Yes)
+                    CurrentInitImgPaths = paths;
+                else
+                    CurrentInitImgPaths = CurrentInitImgPaths.Concat(paths).ToList();
+            }
+            else
+            {
+                CurrentInitImgPaths = paths;
+            }
+
+            Program.MainForm.UpdateInitImgAndEmbeddingUi();
         }
 
         public static void HandlePaste ()

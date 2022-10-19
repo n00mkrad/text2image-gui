@@ -1,4 +1,5 @@
-﻿using StableDiffusionGui.Forms;
+﻿using ImageMagick;
+using StableDiffusionGui.Forms;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
@@ -6,9 +7,11 @@ using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using XmpCore.Impl.XPath;
 using Path = System.IO.Path;
 using Paths = StableDiffusionGui.Io.Paths;
 
@@ -16,6 +19,66 @@ namespace StableDiffusionGui.Main
 {
     internal class TtiUtils
     {
+        public static Dictionary<string, string> CreateResizedInitImagesIfNeeded(List<string> initImgPaths, Size targetSize, bool print = false)
+        {
+            Dictionary<string, string> sourceAndImportedPaths = initImgPaths.ToDictionary(x => x, x => ""); // Dictionary key = original path, Value is imported path
+
+            for (int index = 0; index < sourceAndImportedPaths.Count; index++)
+            {
+                var pair = sourceAndImportedPaths.ElementAt(index);
+                MagickImage img = new MagickImage(pair.Key);
+
+                if (img.Width == targetSize.Width && img.Height == targetSize.Height) // Size already matches
+                {
+                    Logger.Log($"Init img '{Path.GetFileName(pair.Key)}' has correct dimensions ({img.Width}x{img.Height}).", true);
+                    sourceAndImportedPaths[pair.Key] = pair.Key; // Don't do anything, just assign the same input path as import path
+                }
+                else // Needs to be resized
+                {
+                    try
+                    {
+                        Logger.Log($"Init img '{Path.GetFileName(pair.Key)}' has incorrect dimensions ({img.Width}x{img.Height}), resizing to {targetSize.Width}x{targetSize.Height}.", true);
+                        img.Resize(targetSize.Width, targetSize.Height);
+                        img.Format = MagickFormat.Png24;
+                        string initImgsDir = Directory.CreateDirectory(Path.Combine(Paths.GetSessionDataPath(), "inits")).FullName;
+                        string resizedImgPath = Path.Combine(initImgsDir, $"{index}.png");
+                        img.Write(resizedImgPath);
+                        img.Dispose();
+                        sourceAndImportedPaths[pair.Key] = resizedImgPath;
+                    }
+                    catch(Exception ex)
+                    {
+                        Logger.Log($"Failed to resize image: {ex.Message}\n{ex.StackTrace}", true);
+                    }
+                }
+            }
+
+            return sourceAndImportedPaths;
+        }
+
+        /// <returns> Amount of removed images </returns>
+        public static int CleanInitImageList()
+        {
+            if (MainUi.CurrentInitImgPaths == null)
+                return 0;
+
+            var modifiedList = MainUi.CurrentInitImgPaths.Where(path => File.Exists(path)).ToList();
+            int removed = modifiedList.Count - MainUi.CurrentInitImgPaths.Count;
+            MainUi.CurrentInitImgPaths = modifiedList;
+
+            if (MainUi.CurrentInitImgPaths.Count < 1)
+            {
+                MainUi.CurrentInitImgPaths = null;
+                Logger.Log($"{(removed == 1 ? "Initialization image was cleared because the file no longer exists." : "Initialization images were cleared because the files no longer exist.")}");
+            }
+            else if (removed > 0)
+            {
+                Logger.Log($"{removed} initialization image were removed because the files no longer exist.");
+            }
+
+            return removed;
+        }
+
         /// <returns> Path to resized image </returns>
         public static string ResizeInitImg(string path, Size targetSize, bool print = false)
         {
@@ -55,10 +118,10 @@ namespace StableDiffusionGui.Main
             if (words > thresh)
                 UiUtils.ShowMessageBox($"{(prompts.Count > 1 ? "One of your prompts" : "Your prompt")} is very long (>{thresh} words).\n\nThe AI might ignore parts of your prompt. Shorten the prompt to avoid this.");
 
-            if(Config.GetBool("checkboxOptimizedSd") && prompts.Where(x => x.MatchesRegex(@"(?:(?!\[)(?:.|\n))*\[(?:(?!\])(?:.|\n))*\]")).Any())
+            if (Config.GetBool("checkboxOptimizedSd") && prompts.Where(x => x.MatchesRegex(@"(?:(?!\[)(?:.|\n))*\[(?:(?!\])(?:.|\n))*\]")).Any())
                 UiUtils.ShowMessageBox($"{(prompts.Count > 1 ? "One of your prompts" : "Your prompt")} contains square brackets used for exclusion words.\n\nThis is currently not supported in Low Memory Mode.");
 
-            if(MainUi.CurrentEmbeddingPath != null && MainUi.CurrentEmbeddingPath.ToLowerInvariant().EndsWith(".pt") && prompts.Any(x => !x.Contains("*")))
+            if (MainUi.CurrentEmbeddingPath != null && MainUi.CurrentEmbeddingPath.ToLowerInvariant().EndsWith(".pt") && prompts.Any(x => !x.Contains("*")))
                 UiUtils.ShowMessageBox($"{(prompts.Count > 1 ? "One of your prompts" : "Your prompt")} does not contain a concept placeholder (*).\n\nIt will not use your loaded concept.");
         }
 
@@ -96,7 +159,7 @@ namespace StableDiffusionGui.Main
             {
                 var model = Paths.GetModel(savedModelFileName);
 
-                if(model == null)
+                if (model == null)
                 {
                     TextToImage.Cancel($"Stable Diffusion model file {savedModelFileName.Wrap()} not found.\nPossibly it was moved, renamed, or deleted.");
                     return false;
@@ -106,7 +169,7 @@ namespace StableDiffusionGui.Main
             return true;
         }
 
-        public static string GetEnvVarsSd (bool allCudaDevices = false, string baseDir = ".")
+        public static string GetEnvVarsSd(bool allCudaDevices = false, string baseDir = ".")
         {
             string path = OsUtils.GetTemporaryPathVariable(new string[] { $"{baseDir}/mb", $"{baseDir}/mb/Scripts", $"{baseDir}/mb/condabin", $"{baseDir}/mb/Library/bin" });
 

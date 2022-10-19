@@ -4,8 +4,10 @@ using StableDiffusionGui.Forms;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Windows.Documents;
 using Paths = StableDiffusionGui.Io.Paths;
 
 namespace StableDiffusionGui.Ui
@@ -27,14 +29,25 @@ namespace StableDiffusionGui.Ui
 
         public static int CurrentBlurValue = -1;
 
+        /// <returns> If inpainting was enabled </returns>
         public static bool PrepareInpaintingIfEnabled(TtiSettings settings)
         {
-            bool img2img = !string.IsNullOrWhiteSpace(settings.Params["initImg"]);
-            bool inpaint = settings.Params["inpainting"] == "masked";
+            List<string> initImgs = settings.Params["initImgs"].FromJson<List<string>>();
 
-            if (img2img && inpaint)
+            if(initImgs == null)
             {
-                PrepareInpainting(settings.Params["initImg"], Parser.GetSize(settings.Params["res"]));
+                return false;
+            }
+
+            if(initImgs.Count > 1)
+            {
+                Logger.Log($"Inpainting is currently only available when using a single image as input, but you are currently using {initImgs.Count}.");
+                return false;
+            }
+
+            if (settings.Params["inpainting"].FromJson<string>() == "masked")
+            {
+                PrepareInpainting(initImgs[0], settings.Params["res"].FromJson<Size>());
                 return true;
             }
 

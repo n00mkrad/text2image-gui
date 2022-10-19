@@ -127,7 +127,7 @@ namespace StableDiffusionGui
             bool opt = Config.GetBool("checkboxOptimizedSd");
 
             btnEmbeddingBrowse.Visible = !opt; // Disable embedding browse btn when using optimizedSD
-            panelSampler.Visible = !(File.Exists(MainUi.CurrentInitImgPath) || opt); // Disable sampler selection if using optimized mode or using img2img
+            panelSampler.Visible = !(MainUi.CurrentInitImgPaths != null || opt); // Disable sampler selection if using optimized mode or using img2img
             panelSeamless.Visible = !opt; // Disable seamless option when using optimizedSD
 
             bool adv = Config.GetBool("checkboxAdvancedMode");
@@ -177,7 +177,8 @@ namespace StableDiffusionGui
             sliderResH.ActualValue = meta.GeneratedResolution.Height;
             upDownSeed.Value = meta.Seed;
             comboxSampler.Text = meta.Sampler; // TODO: MAKE THIS WORK WITH ALIASES
-            MainUi.CurrentInitImgPath = meta.InitImgName;
+            // MainUi.CurrentInitImgPaths = new[] { meta.InitImgName }.Where(x => string.IsNullOrWhiteSpace(x)).ToList(); // Does this even work if we only store the temp path?
+            MainUi.CurrentInitImgPaths = null;
 
             if (meta.InitStrength > 0f)
                 sliderInitStrength.ActualValue = (decimal)meta.InitStrength;
@@ -194,17 +195,17 @@ namespace StableDiffusionGui
         {
             textboxPrompt.Text = string.Join(Environment.NewLine, s.Prompts);
             upDownIterations.Value = s.Iterations;
-            sliderSteps.ActualValue = s.Params["steps"].GetInt();
-            sliderScale.ActualValue = (s.Params["scales"].Split(",")[0].GetFloat()).RoundToInt();
-            sliderResW.ActualValue = s.Params["res"].Split('x')[0].GetInt();
-            sliderResH.ActualValue = s.Params["res"].Split('x')[1].GetInt();
-            upDownSeed.Value = s.Params["seed"].GetLong();
-            comboxSampler.Text = s.Params["sampler"]; // TODO: MAKE THIS WORK WITH ALIASES
-            MainUi.CurrentInitImgPath = s.Params["initImg"];
-            sliderInitStrength.ActualValue = (s.Params["initStrengths"].Split(",")[0].GetFloat()).RoundToInt();
-            MainUi.CurrentEmbeddingPath = s.Params["embedding"];
-            checkboxSeamless.Checked = s.Params["seamless"] == true.ToString();
-            checkboxInpainting.Checked = s.Params["inpainting"] == "masked";
+            sliderSteps.ActualValue = s.Params["steps"].FromJson<int>();
+            sliderScale.ActualValue = (decimal)s.Params["scales"].FromJson<List<float>>().FirstOrDefault();
+            sliderResW.ActualValue = s.Params["res"].FromJson<Size>().Width;
+            sliderResH.ActualValue = s.Params["res"].FromJson<Size>().Height;
+            upDownSeed.Value = s.Params["seed"].FromJson<long>();
+            comboxSampler.Text = s.Params["sampler"].FromJson<string>(); // TODO: MAKE THIS WORK WITH ALIASES
+            MainUi.CurrentInitImgPaths = s.Params["initImgs"].FromJson<List<string>>();
+            sliderInitStrength.ActualValue = (decimal)s.Params["initStrengths"].FromJson<List<float>>().FirstOrDefault();
+            MainUi.CurrentEmbeddingPath = s.Params["embedding"].FromJson<string>();
+            checkboxSeamless.Checked = s.Params["seamless"].FromJson<bool>();
+            checkboxInpainting.Checked = s.Params["inpainting"].FromJson<string>() == "masked";
 
             UpdateInitImgAndEmbeddingUi();
         }
@@ -218,17 +219,17 @@ namespace StableDiffusionGui
                 Iterations = (int)upDownIterations.Value,
                 Params = new Dictionary<string, string>
                         {
-                            { "steps", SliderSteps.ActualValueInt.ToString() },
-                            { "scales", string.Join(",", MainUi.GetScales(textboxExtraScales.Text).Select(x => x.ToStringDot("0.0000"))) },
-                            { "res", $"{SliderResW.ActualValueInt}x{SliderResH.ActualValueInt}" },
-                            { "seed", upDownSeed.Value < 0 ? new Random().Next(0, int.MaxValue).ToString() : ((long)upDownSeed.Value).ToString() },
-                            { "sampler", ((Enums.StableDiffusion.Sampler)comboxSampler.SelectedIndex).ToString().Lower() },
-                            { "initImg", MainUi.CurrentInitImgPath },
-                            { "initStrengths", string.Join(",", MainUi.GetInitStrengths(textboxExtraInitStrengths.Text).Select(x => x.ToStringDot("0.0000"))) },
-                            { "embedding", MainUi.CurrentEmbeddingPath },
-                            { "seamless", checkboxSeamless.Checked.ToString() },
-                            { "inpainting", checkboxInpainting.Checked ? "masked" : "" },
-                            { "model", Config.Get(Config.Key.comboxSdModel) },
+                            { "steps", SliderSteps.ActualValueInt.ToJson() },
+                            { "scales", MainUi.GetScales(textboxExtraScales.Text).ToJson() },
+                            { "res", new Size(SliderResW.ActualValueInt, SliderResH.ActualValueInt).ToJson() },
+                            { "seed", (upDownSeed.Value < 0 ? new Random().Next(0, int.MaxValue) : ((long)upDownSeed.Value)).ToJson() },
+                            { "sampler", ((Enums.StableDiffusion.Sampler)comboxSampler.SelectedIndex).ToString().Lower().ToJson() },
+                            { "initImgs", MainUi.CurrentInitImgPaths.ToJson() },
+                            { "initStrengths", MainUi.GetInitStrengths(textboxExtraInitStrengths.Text).ToJson() },
+                            { "embedding", MainUi.CurrentEmbeddingPath.ToJson() },
+                            { "seamless", checkboxSeamless.Checked.ToJson() },
+                            { "inpainting", (checkboxInpainting.Checked ? "masked" : "").ToJson() },
+                            { "model", Config.Get(Config.Key.comboxSdModel).ToJson() },
                         },
             };
 
@@ -460,13 +461,13 @@ namespace StableDiffusionGui
             if (Program.Busy)
                 return;
 
-            if (!string.IsNullOrWhiteSpace(MainUi.CurrentInitImgPath))
+            if (MainUi.CurrentInitImgPaths != null)
             {
-                MainUi.CurrentInitImgPath = "";
+                MainUi.CurrentInitImgPaths = null;
             }
             else
             {
-                CommonOpenFileDialog dialog = new CommonOpenFileDialog { InitialDirectory = MainUi.CurrentInitImgPath.GetParentDirOfFile(), IsFolderPicker = false };
+                CommonOpenFileDialog dialog = new CommonOpenFileDialog { InitialDirectory = MainUi.CurrentInitImgPaths[0].GetParentDirOfFile(), IsFolderPicker = false };
 
                 if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
                 {
@@ -482,11 +483,7 @@ namespace StableDiffusionGui
 
         public void UpdateInitImgAndEmbeddingUi()
         {
-            if (!string.IsNullOrWhiteSpace(MainUi.CurrentInitImgPath) && !File.Exists(MainUi.CurrentInitImgPath))
-            {
-                MainUi.CurrentInitImgPath = "";
-                Logger.Log($"Initialization image was cleared because the file no longer exists.");
-            }
+            TtiUtils.CleanInitImageList();
 
             if (!string.IsNullOrWhiteSpace(MainUi.CurrentEmbeddingPath) && !File.Exists(MainUi.CurrentEmbeddingPath))
             {
@@ -494,15 +491,15 @@ namespace StableDiffusionGui
                 Logger.Log($"Concept was cleared because the file no longer exists.");
             }
 
-            bool imgExists = File.Exists(MainUi.CurrentInitImgPath);
-            panelInpainting.Visible = imgExists;
-            panelInitImgStrength.Visible = imgExists;
-            btnInitImgBrowse.Text = imgExists ? "Clear Image" : "Load Image";
+            bool img2img = MainUi.CurrentInitImgPaths != null;
+            panelInpainting.Visible = img2img;
+            panelInitImgStrength.Visible = img2img;
+            btnInitImgBrowse.Text = img2img ? "Clear Image" : "Load Image";
 
             bool embeddingExists = File.Exists(MainUi.CurrentEmbeddingPath);
             btnEmbeddingBrowse.Text = embeddingExists ? "Clear Concept" : "Load Concept";
 
-            labelCurrentImage.Text = string.IsNullOrWhiteSpace(MainUi.CurrentInitImgPath) ? "No initialization image loaded." : $"Currently using {Path.GetFileName(MainUi.CurrentInitImgPath).Trunc(30)}";
+            labelCurrentImage.Text = !img2img ? "No initialization image loaded." : (MainUi.CurrentInitImgPaths.Count == 1 ? $"Currently using {Path.GetFileName(MainUi.CurrentInitImgPaths[0]).Trunc(30)}" : $"Currently using {MainUi.CurrentInitImgPaths.Count} images.");
             labelCurrentConcept.Text = string.IsNullOrWhiteSpace(MainUi.CurrentEmbeddingPath) ? "No trained concept loaded." : $"Currently using {Path.GetFileName(MainUi.CurrentEmbeddingPath).Trunc(30)}";
 
             RefreshAfterSettingsChanged();

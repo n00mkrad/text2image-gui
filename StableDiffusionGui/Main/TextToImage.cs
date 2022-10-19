@@ -51,7 +51,7 @@ namespace StableDiffusionGui.Main
                     continue;
 
                 if (s.Params.ContainsKey("seed"))
-                    PreviousSeed = s.Params["seed"].GetLong();
+                    PreviousSeed = s.Params["seed"].FromJson<long>();
 
                 LastTaskSettings = s;
                 s.Prompts = s.Prompts.Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();

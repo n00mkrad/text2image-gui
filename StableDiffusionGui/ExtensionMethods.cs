@@ -9,6 +9,8 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Management.Automation;
+using Newtonsoft.Json;
+using StableDiffusionGui.Main;
 
 namespace StableDiffusionGui
 {
@@ -399,6 +401,24 @@ namespace StableDiffusionGui
                 return s;
 
             return s.ToLowerInvariant();
+        }
+
+        public static T FromJson<T> (this string s)
+        {
+            try
+            {
+                return JsonConvert.DeserializeObject<T>(s);
+            }
+            catch(Exception ex)
+            {
+                Logger.Log($"Failed to deserialize ({ex.Message}):\n{s.Trunc(1000)}", true);
+                return default(T);
+            }
+        }
+
+        public static string ToJson(this object o, Formatting format = Formatting.None)
+        {
+            return JsonConvert.SerializeObject(o, format);
         }
     }
 }
