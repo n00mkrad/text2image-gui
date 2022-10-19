@@ -69,6 +69,12 @@ namespace StableDiffusionGui.Controls
             UpdateValueBox();
         }
 
+        protected override void OnVisibleChanged(EventArgs e)
+        {
+            base.OnVisibleChanged(e);
+            UpdateValueBox();
+        }
+
         private decimal _conversionFactor { get { return 1m / ValueStep; } }
 
         private void UpdateProperties ()
