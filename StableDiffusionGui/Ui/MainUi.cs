@@ -43,9 +43,6 @@ namespace StableDiffusionGui.Ui
 
         public static List<TtiSettings> Queue = new List<TtiSettings>();
 
-        public static readonly string[] ValidInitImgExtensions = new string[] { ".png", ".jpeg", ".jpg", ".jfif", ".bmp", ".webp" };
-        public static readonly string[] ValidInitEmbeddingExtensions = new string[] { ".pt", ".bin" };
-
         public static Dictionary<string, string> UiStrings = new Dictionary<string, string>
         {
             { Enums.StableDiffusion.Sampler.K_Euler_A.ToString(), "Euler Ancestral" },
@@ -108,7 +105,7 @@ namespace StableDiffusionGui.Ui
 
             if (paths.Length == 1)
             {
-                if (ValidInitImgExtensions.Contains(Path.GetExtension(paths[0]).ToLower())) // Ask to use as init img
+                if (Constants.FileExtensions.ValidImages.Contains(Path.GetExtension(paths[0]).ToLower())) // Ask to use as init img
                 {
                     ImageLoadForm imgForm = new ImageLoadForm(paths[0]);
                     imgForm.ShowDialog();
@@ -121,7 +118,7 @@ namespace StableDiffusionGui.Ui
                         OsUtils.SetClipboard(imgForm.CurrentMetadata.Prompt);
                 }
 
-                if (ValidInitEmbeddingExtensions.Contains(Path.GetExtension(paths[0]).ToLower())) // Ask to use as embedding (finetuned model)
+                if (Constants.FileExtensions.ValidEmbeddings.Contains(Path.GetExtension(paths[0]).ToLower())) // Ask to use as embedding (finetuned model)
                 {
                     DialogResult dialogResult = UiUtils.ShowMessageBox($"Do you want to load this concept?", $"Dropped {Path.GetFileName(paths[0]).Trunc(40)}", MessageBoxButtons.YesNo);
 

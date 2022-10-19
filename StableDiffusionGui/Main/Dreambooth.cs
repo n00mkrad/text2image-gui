@@ -16,7 +16,6 @@ namespace StableDiffusionGui.Main
 {
     internal class Dreambooth
     {
-        static readonly string[] _validImgExtensions = new string[] { ".png", ".jpeg", ".jpg", ".jfif", ".bmp", ".webp" };
         static readonly bool _useVisibleCmdWindow = false;
         static readonly bool _onlySaveFinalCkpt = true;
         static readonly float _learningRateMagicNumber = 0.18f;
@@ -112,11 +111,11 @@ namespace StableDiffusionGui.Main
             CurrentTargetSteps = targetSteps;
 
             var filesInTrainDir = IoUtils.GetFileInfosSorted(trainDir.FullName, false, "*.*");
-            int trainImgs = filesInTrainDir.Where(x => _validImgExtensions.Contains(x.Extension.ToLower())).Count();
+            int trainImgs = filesInTrainDir.Where(x => Constants.FileExtensions.ValidImages.Contains(x.Extension.ToLower())).Count();
 
             if (trainImgs < 1)
             {
-                Logger.Log($"Error: Training folder does not contain any valid images. Currently supported are {string.Join(", ", _validImgExtensions.Select(x => x.Substring(1).ToUpperInvariant()))}.");
+                Logger.Log($"Error: Training folder does not contain any valid images. Currently supported are {string.Join(", ", Constants.FileExtensions.ValidImages.Select(x => x.Substring(1).ToUpperInvariant()))}.");
                 return "";
             }
 
@@ -190,7 +189,7 @@ namespace StableDiffusionGui.Main
         /// <returns> Bool1: All Valid - Bool2: Contains fixable images </returns>
         public static async Task<Tuple<bool, bool>> ValidateImages (string dir)
         {
-            var files = IoUtils.GetFileInfosSorted(dir, false, "*.*").Where(x => _validImgExtensions.Contains(x.Extension.ToLower())).ToList();
+            var files = IoUtils.GetFileInfosSorted(dir, false, "*.*").Where(x => Constants.FileExtensions.ValidImages.Contains(x.Extension.ToLower())).ToList();
 
             bool allValid = true;
             bool containsFixableImages = false;
@@ -198,9 +197,9 @@ namespace StableDiffusionGui.Main
             foreach(var file in files)
             {
                 // Check extension
-                if (!_validImgExtensions.Contains(file.Extension.ToLowerInvariant()))
+                if (!Constants.FileExtensions.ValidImages.Contains(file.Extension.ToLowerInvariant()))
                 {
-                    Logger.Log($"File {file.Name} is invalid: Invalid file type. Supported are {string.Join(", ", _validImgExtensions.Select(x => x.Substring(1).ToUpperInvariant()))}");
+                    Logger.Log($"File {file.Name} is invalid: Invalid file type. Supported are {string.Join(", ", Constants.FileExtensions.ValidImages.Select(x => x.Substring(1).ToUpperInvariant()))}");
                     allValid = false;
                     continue;
                 }
@@ -239,7 +238,7 @@ namespace StableDiffusionGui.Main
 
         public static async Task FormatImages (string dir)
         {
-            var files = IoUtils.GetFileInfosSorted(dir, false, "*.*").Where(x => _validImgExtensions.Contains(x.Extension.ToLower())).ToList();
+            var files = IoUtils.GetFileInfosSorted(dir, false, "*.*").Where(x => Constants.FileExtensions.ValidImages.Contains(x.Extension.ToLower())).ToList();
 
             var opts = new ParallelOptions { MaxDegreeOfParallelism = (Environment.ProcessorCount / 2f).RoundToInt().Clamp(1, 12) }; // Thread count = Half the threads on this CPU, clamped to 1-12 (should be plenty for this...)
             int count = 0;

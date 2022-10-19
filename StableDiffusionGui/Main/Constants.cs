@@ -29,5 +29,11 @@
         {
             public const string Config = "config.json";
         }
+
+        public class FileExtensions
+        {
+            public static readonly string[] ValidImages = new string[] { ".png", ".jpeg", ".jpg", ".jfif", ".bmp", ".webp" };
+            public static readonly string[] ValidEmbeddings = new string[] { ".pt", ".bin" };
+        }
     }
 }
