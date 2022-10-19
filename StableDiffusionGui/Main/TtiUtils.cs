@@ -7,11 +7,9 @@ using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using XmpCore.Impl.XPath;
 using Path = System.IO.Path;
 using Paths = StableDiffusionGui.Io.Paths;
 
@@ -38,7 +36,7 @@ namespace StableDiffusionGui.Main
                     try
                     {
                         Logger.Log($"Init img '{Path.GetFileName(pair.Key)}' has incorrect dimensions ({img.Width}x{img.Height}), resizing to {targetSize.Width}x{targetSize.Height}.", true);
-                        img.Resize(targetSize.Width, targetSize.Height);
+                        img.Scale(new MagickGeometry(targetSize.Width, targetSize.Height) { IgnoreAspectRatio = true } );
                         img.Format = MagickFormat.Png24;
                         string initImgsDir = Directory.CreateDirectory(Path.Combine(Paths.GetSessionDataPath(), "inits")).FullName;
                         string resizedImgPath = Path.Combine(initImgsDir, $"{index}.png");

@@ -101,7 +101,7 @@ namespace StableDiffusionGui.Ui
             return true;
         }
 
-        public static void HandleDroppedFiles(string[] paths)
+        public static void HandleDroppedFiles(string[] paths, bool noConfirmations = false)
         {
             if (Program.Busy || paths == null || paths.Length < 1)
                 return;
@@ -138,7 +138,7 @@ namespace StableDiffusionGui.Ui
 
                 if (validImagesInPathList.Any())
                 {
-                    DialogResult dialogResult = UiUtils.ShowMessageBox($"Do you want to load these images as initialization images?", $"Dropped {paths.Length} Images", MessageBoxButtons.YesNo);
+                    DialogResult dialogResult = noConfirmations ? DialogResult.Yes : UiUtils.ShowMessageBox($"Do you want to load these images as initialization images?", $"Dropped {paths.Length} Images", MessageBoxButtons.YesNo);
 
                     if (dialogResult == DialogResult.Yes)
                         AddInitImages(paths.ToList());

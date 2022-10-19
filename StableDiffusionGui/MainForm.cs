@@ -467,14 +467,16 @@ namespace StableDiffusionGui
             }
             else
             {
-                CommonOpenFileDialog dialog = new CommonOpenFileDialog { InitialDirectory = MainUi.CurrentInitImgPaths[0].GetParentDirOfFile(), IsFolderPicker = false };
+                CommonOpenFileDialog dialog = new CommonOpenFileDialog { InitialDirectory = MainUi.CurrentInitImgPaths?[0].GetParentDirOfFile(), IsFolderPicker = false, Multiselect = true };
 
                 if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
                 {
-                    if (Constants.FileExtensions.ValidImages.Contains(Path.GetExtension(dialog.FileName).Lower()))
-                        MainUi.HandleDroppedFiles(new[] { dialog.FileName });
+                    var paths = dialog.FileNames.Where(path => Constants.FileExtensions.ValidImages.Contains(Path.GetExtension(path).Lower()));
+
+                    if (paths.Count() > 0)
+                        MainUi.HandleDroppedFiles(paths.ToArray(), true);
                     else
-                        UiUtils.ShowMessageBox("Invalid file type.");
+                        UiUtils.ShowMessageBox(dialog.FileNames.Count() == 1 ? "Invalid file type." : "None of the selected files are valid.");
                 }
             }
 
@@ -494,7 +496,7 @@ namespace StableDiffusionGui
             bool img2img = MainUi.CurrentInitImgPaths != null;
             panelInpainting.Visible = img2img;
             panelInitImgStrength.Visible = img2img;
-            btnInitImgBrowse.Text = img2img ? "Clear Image" : "Load Image";
+            btnInitImgBrowse.Text = img2img ? $"Clear Image{(MainUi.CurrentInitImgPaths.Count == 1 ? "" : "s")}" : "Load Image(s)";
 
             bool embeddingExists = File.Exists(MainUi.CurrentEmbeddingPath);
             btnEmbeddingBrowse.Text = embeddingExists ? "Clear Concept" : "Load Concept";

@@ -34,19 +34,19 @@ namespace StableDiffusionGui.Ui
         {
             List<string> initImgs = settings.Params["initImgs"].FromJson<List<string>>();
 
-            if(initImgs == null)
+            if (initImgs == null)
             {
-                return false;
-            }
-
-            if(initImgs.Count > 1)
-            {
-                Logger.Log($"Inpainting is currently only available when using a single image as input, but you are currently using {initImgs.Count}.");
                 return false;
             }
 
             if (settings.Params["inpainting"].FromJson<string>() == "masked")
             {
+                if (initImgs.Count > 1)
+                {
+                    Logger.Log($"Inpainting is currently only available when using a single image as input, but you are currently using {initImgs.Count}.");
+                    return false;
+                }
+
                 PrepareInpainting(initImgs[0], settings.Params["res"].FromJson<Size>());
                 return true;
             }
@@ -78,7 +78,7 @@ namespace StableDiffusionGui.Ui
             maskedOverlay.Write(MaskedImagePath);
         }
 
-        public static void DeleteMaskedImage ()
+        public static void DeleteMaskedImage()
         {
             IoUtils.TryDeleteIfExists(MaskedImagePath);
         }
