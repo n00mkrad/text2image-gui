@@ -370,17 +370,26 @@ namespace StableDiffusionGui
             }
         }
 
-        public static string Get(this Dictionary<string, string> dict, string key, bool returnKeyInsteadOfEmptyString = false)
+        public static string Get(this Dictionary<string, string> dict, string key, bool returnKeyInsteadOfEmptyString = false, bool ignoreCase = false)
         {
-            if (dict == null || !dict.ContainsKey(key))
+            for(int i = 0; i < dict.Count; i++)
             {
-                if (returnKeyInsteadOfEmptyString)
-                    return key;
+                if (ignoreCase)
+                {
+                    if(key.Lower() == dict.ElementAt(i).Key.Lower())
+                        return dict.ElementAt(i).Value;
+                }
                 else
-                    return "";
+                {
+                    if (key == dict.ElementAt(i).Key)
+                        return dict.ElementAt(i).Value;
+                }
             }
 
-            return dict[key];
+            if (returnKeyInsteadOfEmptyString)
+                return key;
+            else
+                return "";
         }
 
         public static void FillFromEnum<TEnum>(this ComboBox comboBox, Dictionary<string, string> stringMap = null, int defaultIndex = -1) where TEnum : Enum
@@ -393,6 +402,39 @@ namespace StableDiffusionGui
 
             if (defaultIndex >= 0)
                 comboBox.SelectedIndex = defaultIndex;
+        }
+
+        public static void SetIfTextMatches(this ComboBox comboBox, string str, bool ignoreCase = true, Dictionary<string, string> stringMap = null)
+        {
+            if (stringMap == null)
+                stringMap = new Dictionary<string, string>();
+
+            str = stringMap.Get(str, true, true);
+            
+            for(int i = 0; i < comboBox.Items.Count; i++)
+            {
+                if (ignoreCase)
+                {
+                    if(comboBox.Items[i].ToString().Lower() == str.Lower())
+                    {
+                        comboBox.SelectedIndex = i;
+                        return;
+                    }
+                }
+                else
+                {
+                    if (comboBox.Items[i].ToString() == str)
+                    {
+                        comboBox.SelectedIndex = i;
+                        return;
+                    }
+                }
+            }
+        }
+
+        public static Dictionary<V, K> SwapKeysValues<V, K> (this Dictionary<K, V> dict)
+        {
+            return dict.ToDictionary(x => x.Value, x => x.Key);
         }
 
         public static string Lower (this string s)

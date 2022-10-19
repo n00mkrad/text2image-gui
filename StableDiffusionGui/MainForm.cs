@@ -176,7 +176,7 @@ namespace StableDiffusionGui
             sliderResW.ActualValue = meta.GeneratedResolution.Width;
             sliderResH.ActualValue = meta.GeneratedResolution.Height;
             upDownSeed.Value = meta.Seed;
-            comboxSampler.Text = meta.Sampler; // TODO: MAKE THIS WORK WITH ALIASES
+            comboxSampler.SetIfTextMatches(meta.Sampler, true, MainUi.UiStrings);
             // MainUi.CurrentInitImgPaths = new[] { meta.InitImgName }.Where(x => string.IsNullOrWhiteSpace(x)).ToList(); // Does this even work if we only store the temp path?
             MainUi.CurrentInitImgPaths = null;
 
