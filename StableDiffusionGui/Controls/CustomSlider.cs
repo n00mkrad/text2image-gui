@@ -23,7 +23,14 @@ namespace StableDiffusionGui.Controls
             } }
         private bool HasValueBox { get { return ValueBox != null && ValueBox is TextBox; } }
 
-        public decimal ActualValue { get { return Value / _conversionFactor; } set { Value = ((double)(value * _conversionFactor)).RoundToInt().Clamp(Minimum, Maximum);  UpdateValueBox(); } }
+        public decimal ActualValue { 
+            get { 
+                return Value / _conversionFactor; 
+            } 
+            set { 
+                Value = ((double)(value * _conversionFactor)).RoundToInt().Clamp(Minimum, Maximum);
+                UpdateValueBox(); 
+            } }
         
         [Browsable(false)]
         public int ActualValueInt { get { return (int)ActualValue; } }

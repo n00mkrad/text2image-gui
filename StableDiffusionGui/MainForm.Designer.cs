@@ -111,7 +111,6 @@ namespace StableDiffusionGui
             this.panelInitImgStrength = new System.Windows.Forms.Panel();
             this.label11 = new System.Windows.Forms.Label();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
-            this.labelInitStrength = new System.Windows.Forms.Label();
             this.panelPrompt = new System.Windows.Forms.Panel();
             this.labelCurrentConcept = new System.Windows.Forms.Label();
             this.labelCurrentImage = new System.Windows.Forms.Label();
@@ -133,6 +132,7 @@ namespace StableDiffusionGui
             this.trainDreamBoothModelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pictBoxImgViewer = new System.Windows.Forms.PictureBox();
             this.separator = new System.Windows.Forms.Button();
+            this.textboxSliderInitStrength = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
             this.tableLayoutPanel6.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -298,7 +298,7 @@ namespace StableDiffusionGui
             // textboxSliderSteps
             // 
             this.textboxSliderSteps.AllowDrop = true;
-            this.textboxSliderSteps.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.textboxSliderSteps.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.textboxSliderSteps.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderSteps.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textboxSliderSteps.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -310,7 +310,6 @@ namespace StableDiffusionGui
             this.textboxSliderSteps.Size = new System.Drawing.Size(40, 17);
             this.textboxSliderSteps.TabIndex = 92;
             this.textboxSliderSteps.Text = "10";
-            this.toolTip.SetToolTip(this.textboxSliderSteps, resources.GetString("textboxSliderSteps.ToolTip"));
             // 
             // sliderSteps
             // 
@@ -353,7 +352,6 @@ namespace StableDiffusionGui
             0,
             0,
             0});
-            this.sliderSteps.Scroll += new System.Windows.Forms.ScrollEventHandler(this.sliderSteps_Scroll);
             // 
             // label3
             // 
@@ -398,7 +396,7 @@ namespace StableDiffusionGui
             // textboxSliderScale
             // 
             this.textboxSliderScale.AllowDrop = true;
-            this.textboxSliderScale.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.textboxSliderScale.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.textboxSliderScale.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScale.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textboxSliderScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -410,7 +408,6 @@ namespace StableDiffusionGui
             this.textboxSliderScale.Size = new System.Drawing.Size(40, 17);
             this.textboxSliderScale.TabIndex = 93;
             this.textboxSliderScale.Text = "0";
-            this.toolTip.SetToolTip(this.textboxSliderScale, resources.GetString("textboxSliderScale.ToolTip"));
             // 
             // sliderScale
             // 
@@ -454,7 +451,6 @@ namespace StableDiffusionGui
             0,
             0,
             65536});
-            this.sliderScale.Scroll += new System.Windows.Forms.ScrollEventHandler(this.sliderScale_Scroll);
             // 
             // label5
             // 
@@ -526,7 +522,7 @@ namespace StableDiffusionGui
             // textboxSliderResW
             // 
             this.textboxSliderResW.AllowDrop = true;
-            this.textboxSliderResW.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.textboxSliderResW.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.textboxSliderResW.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderResW.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textboxSliderResW.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -538,7 +534,6 @@ namespace StableDiffusionGui
             this.textboxSliderResW.Size = new System.Drawing.Size(45, 17);
             this.textboxSliderResW.TabIndex = 94;
             this.textboxSliderResW.Text = "256";
-            this.toolTip.SetToolTip(this.textboxSliderResW, resources.GetString("textboxSliderResW.ToolTip"));
             // 
             // sliderResW
             // 
@@ -581,7 +576,6 @@ namespace StableDiffusionGui
             0,
             0,
             0});
-            this.sliderResW.Scroll += new System.Windows.Forms.ScrollEventHandler(this.sliderResW_Scroll);
             // 
             // tableLayoutPanel3
             // 
@@ -604,7 +598,7 @@ namespace StableDiffusionGui
             // textboxSliderResH
             // 
             this.textboxSliderResH.AllowDrop = true;
-            this.textboxSliderResH.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.textboxSliderResH.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.textboxSliderResH.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderResH.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textboxSliderResH.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -616,7 +610,6 @@ namespace StableDiffusionGui
             this.textboxSliderResH.Size = new System.Drawing.Size(45, 17);
             this.textboxSliderResH.TabIndex = 95;
             this.textboxSliderResH.Text = "1024";
-            this.toolTip.SetToolTip(this.textboxSliderResH, resources.GetString("textboxSliderResH.ToolTip"));
             // 
             // sliderResH
             // 
@@ -659,7 +652,6 @@ namespace StableDiffusionGui
             0,
             0,
             0});
-            this.sliderResH.Scroll += new System.Windows.Forms.ScrollEventHandler(this.sliderResH_Scroll);
             // 
             // label9
             // 
@@ -1254,13 +1246,12 @@ namespace StableDiffusionGui
             this.toolTip.SetToolTip(this.sliderInitStrength, "Lower Value: Result Looks More Like Your Text Prompt\r\nHigher Value: Result Looks " +
         "More Like Your Image");
             this.sliderInitStrength.Value = 6;
-            this.sliderInitStrength.ValueBox = null;
+            this.sliderInitStrength.ValueBox = this.textboxSliderInitStrength;
             this.sliderInitStrength.ValueStep = new decimal(new int[] {
             5,
             0,
             0,
             131072});
-            this.sliderInitStrength.Scroll += new System.Windows.Forms.ScrollEventHandler(this.sliderInitStrength_Scroll);
             // 
             // label7
             // 
@@ -1458,8 +1449,8 @@ namespace StableDiffusionGui
             this.tableLayoutPanel4.ColumnCount = 2;
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 45F));
+            this.tableLayoutPanel4.Controls.Add(this.textboxSliderInitStrength, 0, 0);
             this.tableLayoutPanel4.Controls.Add(this.sliderInitStrength, 0, 0);
-            this.tableLayoutPanel4.Controls.Add(this.labelInitStrength, 1, 0);
             this.tableLayoutPanel4.Location = new System.Drawing.Point(233, 6);
             this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(6);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
@@ -1468,19 +1459,6 @@ namespace StableDiffusionGui
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 21F));
             this.tableLayoutPanel4.Size = new System.Drawing.Size(291, 21);
             this.tableLayoutPanel4.TabIndex = 89;
-            // 
-            // labelInitStrength
-            // 
-            this.labelInitStrength.AutoSize = true;
-            this.labelInitStrength.Dock = System.Windows.Forms.DockStyle.Right;
-            this.labelInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelInitStrength.ForeColor = System.Drawing.Color.Silver;
-            this.labelInitStrength.Location = new System.Drawing.Point(253, 0);
-            this.labelInitStrength.Name = "labelInitStrength";
-            this.labelInitStrength.Size = new System.Drawing.Size(35, 21);
-            this.labelInitStrength.TabIndex = 5;
-            this.labelInitStrength.Text = "1000";
-            this.labelInitStrength.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // panelPrompt
             // 
@@ -1671,6 +1649,22 @@ namespace StableDiffusionGui
             this.separator.TabStop = false;
             this.separator.UseVisualStyleBackColor = false;
             // 
+            // textboxSliderInitStrength
+            // 
+            this.textboxSliderInitStrength.AllowDrop = true;
+            this.textboxSliderInitStrength.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            this.textboxSliderInitStrength.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textboxSliderInitStrength.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textboxSliderInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textboxSliderInitStrength.ForeColor = System.Drawing.Color.Silver;
+            this.textboxSliderInitStrength.Location = new System.Drawing.Point(246, 1);
+            this.textboxSliderInitStrength.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
+            this.textboxSliderInitStrength.MinimumSize = new System.Drawing.Size(4, 21);
+            this.textboxSliderInitStrength.Name = "textboxSliderInitStrength";
+            this.textboxSliderInitStrength.Size = new System.Drawing.Size(45, 21);
+            this.textboxSliderInitStrength.TabIndex = 94;
+            this.textboxSliderInitStrength.Text = "0,3";
+            // 
             // MainForm
             // 
             this.AllowDrop = true;
@@ -1818,7 +1812,6 @@ namespace StableDiffusionGui
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         private StableDiffusionGui.Controls.CustomSlider sliderInitStrength;
-        private System.Windows.Forms.Label labelInitStrength;
         private System.Windows.Forms.Button btnDebug;
         private System.Windows.Forms.Button btnSettings;
         private System.Windows.Forms.TextBox textboxExtraInitStrengths;
@@ -1863,6 +1856,7 @@ namespace StableDiffusionGui
         private System.Windows.Forms.TextBox textboxSliderScale;
         private System.Windows.Forms.TextBox textboxSliderResW;
         private System.Windows.Forms.TextBox textboxSliderResH;
+        private System.Windows.Forms.TextBox textboxSliderInitStrength;
     }
 }
 

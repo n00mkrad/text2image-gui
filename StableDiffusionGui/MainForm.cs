@@ -1,5 +1,6 @@
 ﻿using Microsoft.WindowsAPICodePack.Dialogs;
 using Microsoft.WindowsAPICodePack.Taskbar;
+using StableDiffusionGui.Controls;
 using StableDiffusionGui.Data;
 using StableDiffusionGui.Forms;
 using StableDiffusionGui.Installation;
@@ -30,12 +31,19 @@ namespace StableDiffusionGui
         static extern EXECUTION_STATE SetThreadExecutionState(EXECUTION_STATE esFlags); // This should prevent Windows from going to sleep
 
         #region References
+
         public Button RunBtn { get { return runBtn; } }
         public TextBox TextboxPrompt { get { return textboxPrompt; } }
         public PictureBox PictBoxImgViewer { get { return pictBoxImgViewer; } }
         public Label OutputImgLabel { get { return outputImgLabel; } }
         public Button BtnExpandPromptField { get { return btnExpandPromptField; } }
         public Panel PanelBg { get { return panel1; } }
+        public CustomSlider SliderStrength { get { return sliderInitStrength; } }
+        public CustomSlider SliderSteps { get { return sliderSteps; } }
+        public CustomSlider SliderScale { get { return sliderScale; } }
+        public CustomSlider SliderResW { get { return sliderResW; } }
+        public CustomSlider SliderResH { get { return sliderResH; } }
+
         #endregion
 
         public bool IsInFocus() { return (ActiveForm == this); }
@@ -95,12 +103,12 @@ namespace StableDiffusionGui
         private void LoadUiElements()
         {
             ConfigParser.LoadGuiElement(upDownIterations);
-            ConfigParser.LoadGuiElement(sliderSteps); sliderSteps_Scroll(null, null);
-            ConfigParser.LoadGuiElement(sliderScale); sliderScale_Scroll(null, null);
-            ConfigParser.LoadGuiElement(sliderResW); sliderResW_Scroll(null, null);
-            ConfigParser.LoadGuiElement(sliderResH); sliderResH_Scroll(null, null);
+            ConfigParser.LoadGuiElement(sliderSteps);
+            ConfigParser.LoadGuiElement(sliderScale);
+            ConfigParser.LoadGuiElement(sliderResW);
+            ConfigParser.LoadGuiElement(sliderResH);
             ConfigParser.LoadComboxIndex(comboxSampler);
-            ConfigParser.LoadGuiElement(sliderInitStrength); sliderInitStrength_Scroll(null, null);
+            ConfigParser.LoadGuiElement(sliderInitStrength);
         }
 
         private void SaveUiElements()
@@ -163,16 +171,16 @@ namespace StableDiffusionGui
         public void LoadMetadataIntoUi(ImageMetadata meta)
         {
             textboxPrompt.Text = meta.Prompt;
-            sliderSteps.Value = meta.Steps / 5; sliderSteps_Scroll(null, null);
-            sliderScale.Value = (meta.Scale * 2f).RoundToInt(); sliderScale_Scroll(null, null);
-            sliderResW.Value = meta.GeneratedResolution.Width / 64; sliderResW_Scroll(null, null);
-            sliderResH.Value = meta.GeneratedResolution.Height / 64; sliderResH_Scroll(null, null);
+            sliderSteps.ActualValue = meta.Steps;
+            sliderScale.ActualValue = (decimal)meta.Scale;
+            sliderResW.ActualValue = meta.GeneratedResolution.Width;
+            sliderResH.ActualValue = meta.GeneratedResolution.Height;
             upDownSeed.Value = meta.Seed;
             comboxSampler.Text = meta.Sampler; // TODO: MAKE THIS WORK WITH ALIASES
             MainUi.CurrentInitImgPath = meta.InitImgName;
 
             if (meta.InitStrength > 0f)
-                sliderInitStrength.Value = (meta.InitStrength * 40f).RoundToInt().Clamp(sliderInitStrength.Minimum, sliderInitStrength.Maximum); sliderInitStrength_Scroll(null, null);
+                sliderInitStrength.ActualValue = (decimal)meta.InitStrength;
 
             UpdateInitImgAndEmbeddingUi();
         }
@@ -186,14 +194,14 @@ namespace StableDiffusionGui
         {
             textboxPrompt.Text = string.Join(Environment.NewLine, s.Prompts);
             upDownIterations.Value = s.Iterations;
-            sliderSteps.Value = s.Params["steps"].GetInt() / 5; sliderSteps_Scroll(null, null);
-            sliderScale.Value = (s.Params["scales"].Split(",")[0].GetFloat() * 2f).RoundToInt(); sliderScale_Scroll(null, null);
-            sliderResW.Value = s.Params["res"].Split('x')[0].GetInt() / 64; sliderResW_Scroll(null, null);
-            sliderResH.Value = s.Params["res"].Split('x')[1].GetInt() / 64; sliderResH_Scroll(null, null);
+            sliderSteps.ActualValue = s.Params["steps"].GetInt();
+            sliderScale.ActualValue = (s.Params["scales"].Split(",")[0].GetFloat()).RoundToInt();
+            sliderResW.ActualValue = s.Params["res"].Split('x')[0].GetInt();
+            sliderResH.ActualValue = s.Params["res"].Split('x')[1].GetInt();
             upDownSeed.Value = s.Params["seed"].GetLong();
             comboxSampler.Text = s.Params["sampler"]; // TODO: MAKE THIS WORK WITH ALIASES
             MainUi.CurrentInitImgPath = s.Params["initImg"];
-            sliderInitStrength.Value = (s.Params["initStrengths"].Split(",")[0].GetFloat() * 40f).RoundToInt(); sliderInitStrength_Scroll(null, null);
+            sliderInitStrength.ActualValue = (s.Params["initStrengths"].Split(",")[0].GetFloat()).RoundToInt();
             MainUi.CurrentEmbeddingPath = s.Params["embedding"];
             checkboxSeamless.Checked = s.Params["seamless"] == true.ToString();
             checkboxInpainting.Checked = s.Params["inpainting"] == "masked";
@@ -210,10 +218,10 @@ namespace StableDiffusionGui
                 Iterations = (int)upDownIterations.Value,
                 Params = new Dictionary<string, string>
                         {
-                            { "steps", MainUi.CurrentSteps.ToString() },
+                            { "steps", SliderSteps.ActualValueInt.ToString() },
                             { "scales", string.Join(",", MainUi.GetScales(textboxExtraScales.Text).Select(x => x.ToStringDot("0.0000"))) },
-                            { "res", $"{MainUi.CurrentResW}x{MainUi.CurrentResH}" },
-                            { "seed", upDownSeed.Value < 0 ? (new Random().Next(0, Int32.MaxValue)).ToString() : ((long)upDownSeed.Value).ToString() },
+                            { "res", $"{SliderResW.ActualValueInt}x{SliderResH.ActualValueInt}" },
+                            { "seed", upDownSeed.Value < 0 ? new Random().Next(0, int.MaxValue).ToString() : ((long)upDownSeed.Value).ToString() },
                             { "sampler", ((Enums.StableDiffusion.Sampler)comboxSampler.SelectedIndex).ToString().ToLower() },
                             { "initImg", MainUi.CurrentInitImgPath },
                             { "initStrengths", string.Join(",", MainUi.GetInitStrengths(textboxExtraInitStrengths.Text).Select(x => x.ToStringDot("0.0000"))) },
@@ -350,36 +358,6 @@ namespace StableDiffusionGui
         {
             ImagePreview.Move(false);
         }
-
-        #region Sliders
-
-        private void sliderSteps_Scroll(object sender, ScrollEventArgs e)
-        {
-            MainUi.CurrentSteps = sliderSteps.ActualValueInt;
-        }
-
-        private void sliderScale_Scroll(object sender, ScrollEventArgs e)
-        {
-            MainUi.CurrentScale = sliderScale.ActualValueFloat;
-        }
-
-        private void sliderResW_Scroll(object sender, ScrollEventArgs e)
-        {
-            MainUi.CurrentResW = sliderResW.ActualValueInt;
-        }
-
-        private void sliderResH_Scroll(object sender, ScrollEventArgs e)
-        {
-            MainUi.CurrentResH = sliderResH.ActualValueInt;
-        }
-
-        private void sliderInitStrength_Scroll(object sender, ScrollEventArgs e)
-        {
-            MainUi.CurrentInitImgStrength = sliderInitStrength.ActualValueFloat;
-            labelInitStrength.Text = sliderInitStrength.ActualValueFloat.ToString("0.000");
-        }
-
-        #endregion
 
         private void btnOpenOutFolder_Click(object sender, EventArgs e)
         {
