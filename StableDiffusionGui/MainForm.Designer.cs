@@ -94,6 +94,7 @@ namespace StableDiffusionGui
             this.patreonBtn = new System.Windows.Forms.Button();
             this.paypalBtn = new System.Windows.Forms.Button();
             this.sliderInitStrength = new StableDiffusionGui.Controls.CustomSlider();
+            this.textboxSliderInitStrength = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.textboxCliTest = new System.Windows.Forms.TextBox();
@@ -132,7 +133,6 @@ namespace StableDiffusionGui
             this.trainDreamBoothModelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pictBoxImgViewer = new System.Windows.Forms.PictureBox();
             this.separator = new System.Windows.Forms.Button();
-            this.textboxSliderInitStrength = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
             this.tableLayoutPanel6.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -1253,6 +1253,22 @@ namespace StableDiffusionGui
             0,
             131072});
             // 
+            // textboxSliderInitStrength
+            // 
+            this.textboxSliderInitStrength.AllowDrop = true;
+            this.textboxSliderInitStrength.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            this.textboxSliderInitStrength.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textboxSliderInitStrength.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textboxSliderInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textboxSliderInitStrength.ForeColor = System.Drawing.Color.Silver;
+            this.textboxSliderInitStrength.Location = new System.Drawing.Point(246, 1);
+            this.textboxSliderInitStrength.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
+            this.textboxSliderInitStrength.MinimumSize = new System.Drawing.Size(4, 21);
+            this.textboxSliderInitStrength.Name = "textboxSliderInitStrength";
+            this.textboxSliderInitStrength.Size = new System.Drawing.Size(45, 17);
+            this.textboxSliderInitStrength.TabIndex = 94;
+            this.textboxSliderInitStrength.Text = "0,3";
+            // 
             // label7
             // 
             this.label7.AutoSize = true;
@@ -1648,22 +1664,6 @@ namespace StableDiffusionGui
             this.separator.TabIndex = 75;
             this.separator.TabStop = false;
             this.separator.UseVisualStyleBackColor = false;
-            // 
-            // textboxSliderInitStrength
-            // 
-            this.textboxSliderInitStrength.AllowDrop = true;
-            this.textboxSliderInitStrength.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.textboxSliderInitStrength.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textboxSliderInitStrength.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textboxSliderInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textboxSliderInitStrength.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderInitStrength.Location = new System.Drawing.Point(246, 1);
-            this.textboxSliderInitStrength.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
-            this.textboxSliderInitStrength.MinimumSize = new System.Drawing.Size(4, 21);
-            this.textboxSliderInitStrength.Name = "textboxSliderInitStrength";
-            this.textboxSliderInitStrength.Size = new System.Drawing.Size(45, 21);
-            this.textboxSliderInitStrength.TabIndex = 94;
-            this.textboxSliderInitStrength.Text = "0,3";
             // 
             // MainForm
             // 

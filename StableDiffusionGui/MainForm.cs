@@ -471,7 +471,7 @@ namespace StableDiffusionGui
                 if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
                 {
                     if (Constants.FileExtensions.ValidImages.Contains(Path.GetExtension(dialog.FileName).ToLower()))
-                        MainUi.CurrentInitImgPath = dialog.FileName;
+                        MainUi.HandleDroppedFiles(new[] { dialog.FileName });
                     else
                         UiUtils.ShowMessageBox("Invalid file type.");
                 }
