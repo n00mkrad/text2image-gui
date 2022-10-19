@@ -125,6 +125,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MessageForm_FormClosing);
             this.Load += new System.EventHandler(this.MessageForm_Load);
+            this.Shown += new System.EventHandler(this.MessageForm_Shown);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MessageForm_KeyDown);
             this.ResumeLayout(false);
             this.PerformLayout();

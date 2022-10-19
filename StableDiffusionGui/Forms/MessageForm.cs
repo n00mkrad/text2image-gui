@@ -133,5 +133,10 @@ namespace Nmkoder.Forms
                     btn1_Click(null, null);
             }
         }
+
+        private void MessageForm_Shown(object sender, EventArgs e)
+        {
+            Activate();
+        }
     }
 }
