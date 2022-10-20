@@ -41,7 +41,7 @@ namespace StableDiffusionGui.Main
             if (!TtiUtils.CheckIfSdModelExists())
                 return;
 
-            Dictionary<string, string> initImages = initImgs != null && initImgs.Length > 0 ? TtiUtils.CreateResizedInitImagesIfNeeded(initImgs.ToList(), res) : null;
+            Dictionary<string, string> initImages = initImgs != null && initImgs.Length > 0 ? await TtiUtils.CreateResizedInitImagesIfNeeded(initImgs.ToList(), res) : null;
 
             // if (File.Exists(initImgs))
             //     initImgs = TtiUtils.ResizeInitImg(initImgs, res);

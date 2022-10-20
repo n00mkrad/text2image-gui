@@ -10,6 +10,8 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 using Path = System.IO.Path;
 using Paths = StableDiffusionGui.Io.Paths;
 
@@ -17,40 +19,51 @@ namespace StableDiffusionGui.Main
 {
     internal class TtiUtils
     {
-        public static Dictionary<string, string> CreateResizedInitImagesIfNeeded(List<string> initImgPaths, Size targetSize, bool print = false)
+        public static async Task<Dictionary<string, string>> CreateResizedInitImagesIfNeeded(List<string> initImgPaths, Size targetSize, bool print = false)
         {
-            Dictionary<string, string> sourceAndImportedPaths = initImgPaths.ToDictionary(x => x, x => ""); // Dictionary key = original path, Value is imported path
+            Logger.Log($"Importing initialization images...");
 
-            for (int index = 0; index < sourceAndImportedPaths.Count; index++)
+            Dictionary<string, string> sourceAndImportedPaths = initImgPaths.ToDictionary(x => x, x => ""); // Dictionary key = original path, Value is imported path
+            int imgsSucessful = 0;
+            int imgsResized = 0;
+
+            var opts = new ParallelOptions() { MaxDegreeOfParallelism = Environment.ProcessorCount };
+            Task parallelTask = Task.Run(async () => Parallel.For(0, sourceAndImportedPaths.Count, opts, async index =>
             {
                 var pair = sourceAndImportedPaths.ElementAt(index);
-                MagickImage img = new MagickImage(pair.Key);
+                MagickImage img = new MagickImage(pair.Key) { Format = MagickFormat.Png24, Quality = 30 };
 
                 if (img.Width == targetSize.Width && img.Height == targetSize.Height) // Size already matches
                 {
                     Logger.Log($"Init img '{Path.GetFileName(pair.Key)}' has correct dimensions ({img.Width}x{img.Height}).", true);
                     sourceAndImportedPaths[pair.Key] = pair.Key; // Don't do anything, just assign the same input path as import path
+                    Interlocked.Increment(ref imgsSucessful);
                 }
                 else // Needs to be resized
                 {
                     try
                     {
                         Logger.Log($"Init img '{Path.GetFileName(pair.Key)}' has incorrect dimensions ({img.Width}x{img.Height}), resizing to {targetSize.Width}x{targetSize.Height}.", true);
-                        img.Scale(new MagickGeometry(targetSize.Width, targetSize.Height) { IgnoreAspectRatio = true } );
-                        img.Format = MagickFormat.Png24;
+                        img.Scale(new MagickGeometry(targetSize.Width, targetSize.Height) { IgnoreAspectRatio = true });
                         string initImgsDir = Directory.CreateDirectory(Path.Combine(Paths.GetSessionDataPath(), "inits")).FullName;
                         string resizedImgPath = Path.Combine(initImgsDir, $"{index}.png");
                         img.Write(resizedImgPath);
                         img.Dispose();
                         sourceAndImportedPaths[pair.Key] = resizedImgPath;
+                        Interlocked.Increment(ref imgsSucessful);
+                        Interlocked.Increment(ref imgsResized);
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         Logger.Log($"Failed to resize image: {ex.Message}\n{ex.StackTrace}", true);
                     }
                 }
-            }
+            }));
 
+            while (!parallelTask.IsCompleted)
+                await Task.Delay(1);
+
+            Logger.Log($"Imported {imgsSucessful} images{(imgsResized > 0 ? $" - {imgsResized} were resized to {targetSize.Width}x{targetSize.Height}" : "")}.", false, Logger.LastUiLine.EndsWith("..."));
             return sourceAndImportedPaths;
         }
 
