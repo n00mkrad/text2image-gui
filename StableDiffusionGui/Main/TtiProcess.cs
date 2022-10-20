@@ -43,9 +43,6 @@ namespace StableDiffusionGui.Main
 
             Dictionary<string, string> initImages = initImgs != null && initImgs.Length > 0 ? await TtiUtils.CreateResizedInitImagesIfNeeded(initImgs.ToList(), res) : null;
 
-            // if (File.Exists(initImgs))
-            //     initImgs = TtiUtils.ResizeInitImg(initImgs, res);
-
             TtiUtils.WriteModelsYaml(model);
 
             long startSeed = seed;
@@ -74,7 +71,7 @@ namespace StableDiffusionGui.Main
                             {
                                 foreach (float strength in initStrengths)
                                 {
-                                    string init = $"--init_img {initImg.Wrap()} --strength {strength.ToStringDot("0.0000")}";
+                                    string init = $"--init_img {initImg.Wrap()} --strength {strength.ToStringDot("0.###")}";
                                     cmds.Add($"{prompt} {init} -n {1} -s {steps} -C {scale.ToStringDot()} -A {sampler} -W {res.Width} -H {res.Height} -S {seed} {upscale} {faceFix} {(seamless ? "--seamless" : "")} {ArgsDreamPy.GetDefaultArgsCommand()}");
                                     imgs++;
                                 }
@@ -96,8 +93,8 @@ namespace StableDiffusionGui.Main
 
             string newStartupSettings = $"{model}{precArg}{embArg}"; // Check if startup settings match - If not, we need to restart the process
 
-            string strengths = initImages != null ? $" and {initImages.Count} image{(initImages.Count != 1 ? "s" : "")} using {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
-            Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} with {iterations} iteration{(iterations != 1 ? "s" : "")} each and {scales.Length} scale{(scales.Length != 1 ? "s" : "")}{strengths} each = {imgs} images total.");
+            string initsStr = initImages != null ? $" and {initImages.Count} image{(initImages.Count != 1 ? "s" : "")} using {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
+            Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} with {iterations} iteration{(iterations != 1 ? "s" : "")} each and {scales.Length} scale{(scales.Length != 1 ? "s" : "")}{initsStr} each = {imgs} images total.");
 
             if (!IsAiProcessRunning || (IsAiProcessRunning && _lastDreamPyStartupSettings != newStartupSettings))
             {
@@ -168,35 +165,33 @@ namespace StableDiffusionGui.Main
         public static async Task RunStableDiffusionOpt(string[] prompts, int iterations, Dictionary<string, string> paramsDict, string outPath)
         {
             // NOTE: Currently not implemented: Embeddings, Samplers, Seamless Mode
-
-            string initImg = paramsDict.Get("initImg");
-            //string embedding = paramsDict.Get("embedding");
-            float[] initStrengths = paramsDict.Get("initStrengths").Replace(" ", "").Split(",").Select(x => x.GetFloat()).ToArray();
-            int steps = paramsDict.Get("steps").GetInt();
-            float[] scales = paramsDict.Get("scales").Replace(" ", "").Split(",").Select(x => x.GetFloat()).ToArray();
-            long seed = paramsDict.Get("seed").GetLong();
-            //string sampler = paramsDict.Get("sampler");
-            Size res = Parser.GetSize(paramsDict.Get("res"));
-            //bool seamless = bool.Parse(paramsDict.Get("seamless"));
-            string model = paramsDict.Get("model");
+            string[] initImgs = paramsDict.Get("initImgs").FromJson<string[]>();
+            string embedding = paramsDict.Get("embedding").FromJson<string>();
+            float[] initStrengths = paramsDict.Get("initStrengths").FromJson<float[]>();
+            int steps = paramsDict.Get("steps").FromJson<int>();
+            float[] scales = paramsDict.Get("scales").FromJson<float[]>();
+            long seed = paramsDict.Get("seed").FromJson<long>();
+            string sampler = paramsDict.Get("sampler").FromJson<string>();
+            Size res = paramsDict.Get("res").FromJson<Size>();
+            bool seamless = paramsDict.Get("seamless").FromJson<bool>();
+            string model = paramsDict.Get("model").FromJson<string>();
             string modelNoExt = Path.ChangeExtension(model, null);
 
             if (!TtiUtils.CheckIfSdModelExists())
                 return;
 
-            if (File.Exists(initImg))
-                initImg = TtiUtils.ResizeInitImg(initImg, res);
+            Dictionary<string, string> initImages = initImgs != null && initImgs.Length > 0 ? await TtiUtils.CreateResizedInitImagesIfNeeded(initImgs.ToList(), res) : null;
 
             long startSeed = seed;
 
             string promptFilePath = Path.Combine(Paths.GetSessionDataPath(), "prompts.txt");
             List<string> promptFileLines = new List<string>();
 
-            int upscaleSetting = Config.GetInt("comboxUpscale");
-            string upscaling = upscaleSetting == 0 ? "" : $"-U {Math.Pow(2, upscaleSetting)}";
-
-            float gfpganSetting = Config.GetFloat("sliderGfpgan");
-            string gfpgan = gfpganSetting > 0.01f ? $"-G {gfpganSetting.ToStringDot("0.00")}" : "";
+            // int upscaleSetting = Config.GetInt("comboxUpscale");
+            // string upscaling = upscaleSetting == 0 ? "" : $"-U {Math.Pow(2, upscaleSetting)}";
+            // 
+            // float gfpganSetting = Config.GetFloat("sliderGfpgan");
+            // string gfpgan = gfpganSetting > 0.01f ? $"-G {gfpganSetting.ToStringDot("0.00")}" : "";
 
             int imgs = 0;
 
@@ -206,15 +201,22 @@ namespace StableDiffusionGui.Main
                 {
                     foreach (float scale in scales)
                     {
-                        foreach (float strength in initStrengths)
+                        if (initImages == null) // No init image(s)
                         {
-                            bool initImgExists = File.Exists(initImg);
-                            string init = initImgExists ? $"--init_img {initImg.Wrap()} --strength {strength.ToStringDot("0.0000")}" : "";
-                            promptFileLines.Add($"--prompt {prompt.Wrap()} {init} --ddim_steps {steps} --scale {scale.ToStringDot()} --W {res.Width} --H {res.Height} --seed {seed} {upscaling} {gfpgan}");
+                            promptFileLines.Add($"--prompt {prompt.Wrap()} --ddim_steps {steps} --scale {scale.ToStringDot()} --W {res.Width} --H {res.Height} --seed {seed}");
                             imgs++;
-
-                            if (!initImgExists)
-                                break;
+                        }
+                        else // With init image(s)
+                        {
+                            foreach (string initImg in initImages.Values)
+                            {
+                                foreach (float strength in initStrengths)
+                                {
+                                    string init = $"--init_img {initImg.Wrap()} --strength {strength.ToStringDot("0.###")}";
+                                    promptFileLines.Add($"--prompt {prompt.Wrap()} {init} --ddim_steps {steps} --scale {scale.ToStringDot()} --W {res.Width} --H {res.Height} --seed {seed}");
+                                    imgs++;
+                                }
+                            }
                         }
                     }
 
@@ -234,8 +236,8 @@ namespace StableDiffusionGui.Main
 
             string newStartupSettings = $"opt{modelNoExt}{precArg}"; // Check if startup settings match - If not, we need to restart the process
 
-            string strengths = File.Exists(initImg) ? $" and {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
-            Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} with {iterations} iteration{(iterations != 1 ? "s" : "")} each and {scales.Length} scale{(scales.Length != 1 ? "s" : "")}{strengths} each = {imgs} images total.");
+            string initsStr = initImages != null ? $" and {initImages.Count} image{(initImages.Count != 1 ? "s" : "")} using {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
+            Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} with {iterations} iteration{(iterations != 1 ? "s" : "")} each and {scales.Length} scale{(scales.Length != 1 ? "s" : "")}{initsStr} each = {imgs} images total.");
 
             if (!IsAiProcessRunning || (IsAiProcessRunning && _lastDreamPyStartupSettings != newStartupSettings))
             {
@@ -313,7 +315,7 @@ namespace StableDiffusionGui.Main
         {
             try
             {
-                if (CurrentStdInWriter == null)
+                if (TextToImage.Canceled || CurrentStdInWriter == null)
                     return false;
 
                 Logger.Log($"=> {text}", true);
