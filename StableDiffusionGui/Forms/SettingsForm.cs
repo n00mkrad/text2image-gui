@@ -18,6 +18,7 @@ namespace StableDiffusionGui.Forms
         public SettingsForm()
         {
             InitializeComponent();
+            Opacity = 0;
         }
 
         private void SettingsForm_Load(object sender, EventArgs e)
@@ -26,10 +27,15 @@ namespace StableDiffusionGui.Forms
 
             MinimumSize = Size;
             MaximumSize = new System.Drawing.Size(Size.Width, (Size.Height * 1.25f).RoundToInt());
+        }
 
+        private void SettingsForm_Shown(object sender, EventArgs e)
+        {
+            Refresh();
             LoadModels(false);
             LoadSettings();
             Task.Run(() => LoadGpus());
+            Opacity = 1;
         }
 
         private void SettingsForm_FormClosing(object sender, FormClosingEventArgs e)

@@ -48,6 +48,7 @@ namespace StableDiffusionGui.Forms
 
         private void ImageLoadForm_Shown(object sender, EventArgs e)
         {
+            Refresh();
             pictBox.Image = IoUtils.GetImage(_path);
             CurrentMetadata = IoUtils.GetImageMetadata(_path);
 

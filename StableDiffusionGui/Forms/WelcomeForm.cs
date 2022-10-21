@@ -15,6 +15,11 @@ namespace StableDiffusionGui.Forms
 
         private void WelcomeForm_Load(object sender, EventArgs e)
         {
+            
+        }
+
+        private void WelcomeForm_Shown(object sender, EventArgs e)
+        {
             Task.Run(() => GetWebInfo.LoadNews(newsLabel));
             Task.Run(() => GetWebInfo.LoadPatronListCsv(patronsLabel));
         }

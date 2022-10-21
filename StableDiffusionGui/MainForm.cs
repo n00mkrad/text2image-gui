@@ -54,8 +54,7 @@ namespace StableDiffusionGui
         {
             InitializeComponent();
             Program.MainForm = this;
-            pictBoxImgViewer.MouseWheel += pictBoxImgViewer_MouseWheel;
-            textboxPrompt.MouseWheel += textboxPrompt_MouseWheel;
+            Opacity = 0;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -77,8 +76,11 @@ namespace StableDiffusionGui
             }
         }
 
-        private void MainForm_Shown(object sender, EventArgs e)
+        private async void MainForm_Shown(object sender, EventArgs e)
         {
+            Refresh();
+            pictBoxImgViewer.MouseWheel += pictBoxImgViewer_MouseWheel;
+            textboxPrompt.MouseWheel += textboxPrompt_MouseWheel;
             SetUiElements();
             LoadUiElements();
             PromptHistory.Load();
@@ -88,6 +90,9 @@ namespace StableDiffusionGui
             MainUi.DoStartupChecks();
             RefreshAfterSettingsChanged();
             UpdateInitImgAndEmbeddingUi();
+
+            await Task.Delay(1); // Don't ask. Just keep it here
+            Opacity = 1.0;
 
             if (!Debugger.IsAttached)
                 new WelcomeForm().ShowDialog();

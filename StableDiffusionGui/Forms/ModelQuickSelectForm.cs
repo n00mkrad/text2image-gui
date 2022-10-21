@@ -20,12 +20,14 @@ namespace StableDiffusionGui.Forms
 
         private void ModelQuickSelectForm_Shown(object sender, EventArgs e)
         {
+            Refresh();
             LoadModels(true);
             comboxSdModel.DroppedDown = true;
         }
 
         private void LoadModels(bool loadCombox)
         {
+            comboxSdModel.Visible = true;
             comboxSdModel.Items.Clear();
             Paths.GetModels().ForEach(x => comboxSdModel.Items.Add(x.Name));
 

@@ -251,6 +251,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Welcome";
             this.Load += new System.EventHandler(this.WelcomeForm_Load);
+            this.Shown += new System.EventHandler(this.WelcomeForm_Shown);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.WelcomeForm_KeyDown);
             this.panel1.ResumeLayout(false);
             this.panelNews.ResumeLayout(false);

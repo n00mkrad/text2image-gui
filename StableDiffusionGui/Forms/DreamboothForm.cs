@@ -37,6 +37,7 @@ namespace StableDiffusionGui.Forms
         private async void DreamboothForm_Shown(object sender, EventArgs e)
         {
             comboxLrMultiplier.Text = "Normal";
+            Refresh();
             await PerformChecks();
         }
 

@@ -17,6 +17,8 @@ namespace StableDiffusionGui.Forms
 
         public PostProcSettingsForm()
         {
+            Opacity = 0;
+
             UiStrings.Add(UpscaleOption.X2.ToString(), "2x");
             UiStrings.Add(UpscaleOption.X3.ToString(), "3x");
             UiStrings.Add(UpscaleOption.X4.ToString(), "4x");
@@ -33,10 +35,13 @@ namespace StableDiffusionGui.Forms
 
         private void PostProcSettingsForm_Shown(object sender, EventArgs e)
         {
+            Refresh();
+
             comboxUpscale.FillFromEnum<UpscaleOption>(UiStrings);
             comboxFaceRestoration.FillFromEnum<FaceRestoreOption>(UiStrings);
 
             LoadSettings();
+            Opacity = 1;
 
             if (!InstallationStatus.HasSdUpscalers())
             {

@@ -1,5 +1,6 @@
 ﻿using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
+using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using System;
 using System.IO;
@@ -9,6 +10,8 @@ namespace StableDiffusionGui
 {
     public static class Program
     {
+        public static NmkdStopwatch SwTimeSinceProgramStart = new NmkdStopwatch();
+
         public enum BusyState { Standby, Installation, ImageGeneration, Script, Dreambooth, Other }
         public static BusyState State = BusyState.Standby;
         public static bool Busy { get { return State != BusyState.Standby; } }

@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace StableDiffusionGui.MiscUtils
 {
-    internal class NmkdStopwatch : Stopwatch
+    public class NmkdStopwatch : Stopwatch
     {
         public long ElapsedMs { get { return ElapsedMilliseconds; } }
         public string ElapsedString { get { return FormatUtils.Time(this); } }

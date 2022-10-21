@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace StableDiffusionGui.Forms
@@ -48,6 +49,8 @@ namespace StableDiffusionGui.Forms
 
         private void PromptListForm_Shown(object sender, EventArgs e)
         {
+            Refresh();
+
             if (_promptListMode == ListMode.History)
                 LoadPromptHistory();
             if (_promptListMode == ListMode.Queue)
@@ -56,9 +59,13 @@ namespace StableDiffusionGui.Forms
 
         private void LoadPromptHistory(string filter = "")
         {
+            Logger.Log($"Load Prompt History @ {Program.SwTimeSinceProgramStart.ElapsedMilliseconds} ms");
             promptListView.Items.Clear();
+            Logger.Log($"Load Prompt History: Filter and get history @ {Program.SwTimeSinceProgramStart.ElapsedMilliseconds} ms");
             var items = Filter(PromptHistory.History, filter).Select(x => new ListViewItem() { Text = x.ToString(), Tag = x }).Reverse();
+            Logger.Log($"Load Prompt History: Add items @ {Program.SwTimeSinceProgramStart.ElapsedMilliseconds} ms");
             promptListView.Items.AddRange(items.ToArray());
+            Logger.Log($"Load Prompt History: Done @ {Program.SwTimeSinceProgramStart.ElapsedMilliseconds} ms");
         }
 
         private void LoadQueue(string filter = "")

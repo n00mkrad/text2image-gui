@@ -28,6 +28,7 @@ namespace StableDiffusionGui.Forms
 
         private void InstallerForm_Shown(object sender, EventArgs e)
         {
+            Refresh();
             UpdateStatus();
         }
 

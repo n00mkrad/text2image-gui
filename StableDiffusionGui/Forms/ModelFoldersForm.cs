@@ -32,6 +32,7 @@ namespace StableDiffusionGui.Forms
 
         private void ModelFoldersForm_Shown(object sender, EventArgs e)
         {
+            Refresh();
             LoadDirs();
             FillList();
         }
