@@ -141,10 +141,10 @@ namespace StableDiffusionGui.Forms
 
                     LoadModels();
                 }
-                else
-                {
-                    Logger.Log($"Failed to prune model.");
-                }
+            }
+            else
+            {
+                Logger.Log($"Failed to prune model.");
             }
 
             // if (File.Exists(outPath))
