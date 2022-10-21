@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace StableDiffusionGui.Main
 {
-    internal class ArgsDreamPy
+    internal class ArgsInvoke
     {
         public static string GetPrecisionArg()
         {

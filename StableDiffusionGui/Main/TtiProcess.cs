@@ -23,7 +23,7 @@ namespace StableDiffusionGui.Main
             return;
         }
 
-        private static string _lastDreamPyStartupSettings;
+        private static string _lastInvokeStartupSettings;
 
         public static async Task RunStableDiffusion(string[] prompts, int iterations, Dictionary<string, string> paramsDict, string outPath)
         {
@@ -49,8 +49,8 @@ namespace StableDiffusionGui.Main
 
             List<string> cmds = new List<string>();
 
-            string upscale = ArgsDreamPy.GetUpscaleArgs();
-            string faceFix = ArgsDreamPy.GetFaceRestoreArgs();
+            string upscale = ArgsInvoke.GetUpscaleArgs();
+            string faceFix = ArgsInvoke.GetFaceRestoreArgs();
 
             int imgs = 0;
 
@@ -62,7 +62,7 @@ namespace StableDiffusionGui.Main
                     {
                         if(initImages == null) // No init image(s)
                         {
-                            cmds.Add($"{prompt} -n {1} -s {steps} -C {scale.ToStringDot()} -A {sampler} -W {res.Width} -H {res.Height} -S {seed} {upscale} {faceFix} {(seamless ? "--seamless" : "")} {ArgsDreamPy.GetDefaultArgsCommand()}");
+                            cmds.Add($"{prompt} -n {1} -s {steps} -C {scale.ToStringDot()} -A {sampler} -W {res.Width} -H {res.Height} -S {seed} {upscale} {faceFix} {(seamless ? "--seamless" : "")} {ArgsInvoke.GetDefaultArgsCommand()}");
                             imgs++;
                         }
                         else // With init image(s)
@@ -72,7 +72,7 @@ namespace StableDiffusionGui.Main
                                 foreach (float strength in initStrengths)
                                 {
                                     string init = $"--init_img {initImg.Wrap()} --strength {strength.ToStringDot("0.###")}";
-                                    cmds.Add($"{prompt} {init} -n {1} -s {steps} -C {scale.ToStringDot()} -A {sampler} -W {res.Width} -H {res.Height} -S {seed} {upscale} {faceFix} {(seamless ? "--seamless" : "")} {ArgsDreamPy.GetDefaultArgsCommand()}");
+                                    cmds.Add($"{prompt} {init} -n {1} -s {steps} -C {scale.ToStringDot()} -A {sampler} -W {res.Width} -H {res.Height} -S {seed} {upscale} {faceFix} {(seamless ? "--seamless" : "")} {ArgsInvoke.GetDefaultArgsCommand()}");
                                     imgs++;
                                 }
                             }
@@ -88,17 +88,17 @@ namespace StableDiffusionGui.Main
 
             Logger.Log($"Running Stable Diffusion - {iterations} Iterations, {steps} Steps, Scales {(scales.Length < 4 ? string.Join(", ", scales.Select(x => x.ToStringDot())) : $"{scales.First()}->{scales.Last()}")}, {res.Width}x{res.Height}, Starting Seed: {startSeed}");
 
-            string precArg = ArgsDreamPy.GetPrecisionArg();
-            string embArg = ArgsDreamPy.GetEmbeddingArg(embedding);
+            string precArg = ArgsInvoke.GetPrecisionArg();
+            string embArg = ArgsInvoke.GetEmbeddingArg(embedding);
 
             string newStartupSettings = $"{model}{precArg}{embArg}"; // Check if startup settings match - If not, we need to restart the process
 
             string initsStr = initImages != null ? $" and {initImages.Count} image{(initImages.Count != 1 ? "s" : "")} using {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
             Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} with {iterations} iteration{(iterations != 1 ? "s" : "")} each and {scales.Length} scale{(scales.Length != 1 ? "s" : "")}{initsStr} each = {imgs} images total.");
 
-            if (!IsAiProcessRunning || (IsAiProcessRunning && _lastDreamPyStartupSettings != newStartupSettings))
+            if (!IsAiProcessRunning || (IsAiProcessRunning && _lastInvokeStartupSettings != newStartupSettings))
             {
-                _lastDreamPyStartupSettings = newStartupSettings;
+                _lastInvokeStartupSettings = newStartupSettings;
 
                 if (!string.IsNullOrWhiteSpace(embedding))
                 {
@@ -108,20 +108,20 @@ namespace StableDiffusionGui.Main
                         Logger.Log($"Using learned concept: {Path.GetFileName(embedding)}");
                 }
 
-                Process dream = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
-                TextToImage.CurrentTask.Processes.Add(dream);
+                Process py = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
+                TextToImage.CurrentTask.Processes.Add(py);
 
-                dream.StartInfo.RedirectStandardInput = true;
-                dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSd()} && call activate.bat ldo && " +
-                    $"python {Constants.Dirs.RepoSd}/scripts/dream.py --model default -o {outPath.Wrap(true)} {ArgsDreamPy.GetDefaultArgsStartup()} {precArg} " +
+                py.StartInfo.RedirectStandardInput = true;
+                py.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSd()} && call activate.bat ldo && " +
+                    $"python {Constants.Dirs.RepoSd}/scripts/invoke.py --model default -o {outPath.Wrap(true)} {ArgsInvoke.GetDefaultArgsStartup()} {precArg} " +
                     $"{embArg} ";
 
-                Logger.Log("cmd.exe " + dream.StartInfo.Arguments, true);
+                Logger.Log("cmd.exe " + py.StartInfo.Arguments, true);
 
                 if (!OsUtils.ShowHiddenCmd())
                 {
-                    dream.OutputDataReceived += (sender, line) => { TtiProcessOutputHandler.LogOutput(line.Data); };
-                    dream.ErrorDataReceived += (sender, line) => { TtiProcessOutputHandler.LogOutput(line.Data, true); };
+                    py.OutputDataReceived += (sender, line) => { TtiProcessOutputHandler.LogOutput(line.Data); };
+                    py.ErrorDataReceived += (sender, line) => { TtiProcessOutputHandler.LogOutput(line.Data, true); };
                 }
 
                 if (CurrentProcess != null)
@@ -132,20 +132,19 @@ namespace StableDiffusionGui.Main
 
                 TtiProcessOutputHandler.Start();
                 Logger.Log($"Loading Stable Diffusion with model {Path.ChangeExtension(model, null).Wrap()}...");
-                CurrentProcess = dream;
+                CurrentProcess = py;
                 ProcessExistWasIntentional = false;
-                dream.Start();
-                OsUtils.AttachOrphanHitman(dream);
-                CurrentStdInWriter = dream.StandardInput;
+                py.Start();
+                OsUtils.AttachOrphanHitman(py);
+                CurrentStdInWriter = py.StandardInput;
 
                 if (!OsUtils.ShowHiddenCmd())
                 {
-                    dream.BeginOutputReadLine();
-                    dream.BeginErrorReadLine();
+                    py.BeginOutputReadLine();
+                    py.BeginErrorReadLine();
                 }
 
                 Task.Run(() => CheckStillRunning());
-                //while (!dream.HasExited) await Task.Delay(1); // We don't wait for it to quit since it keeps running in background.
             }
             else
             {
@@ -239,21 +238,21 @@ namespace StableDiffusionGui.Main
             string initsStr = initImages != null ? $" and {initImages.Count} image{(initImages.Count != 1 ? "s" : "")} using {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
             Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} with {iterations} iteration{(iterations != 1 ? "s" : "")} each and {scales.Length} scale{(scales.Length != 1 ? "s" : "")}{initsStr} each = {imgs} images total.");
 
-            if (!IsAiProcessRunning || (IsAiProcessRunning && _lastDreamPyStartupSettings != newStartupSettings))
+            if (!IsAiProcessRunning || (IsAiProcessRunning && _lastInvokeStartupSettings != newStartupSettings))
             {
-                _lastDreamPyStartupSettings = newStartupSettings;
+                _lastInvokeStartupSettings = newStartupSettings;
 
-                Process dream = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
-                TextToImage.CurrentTask.Processes.Add(dream);
+                Process py = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
+                TextToImage.CurrentTask.Processes.Add(py);
 
-                dream.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSd()} && call activate.bat ldo && " +
+                py.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSd()} && call activate.bat ldo && " +
                     $"python {Constants.Dirs.RepoSd}/optimizedSD/optimized_txt2img_loop.py --model {modelNoExt.Wrap()} --outdir {outPath.Wrap(true)} --from_file_loop={promptFilePath.Wrap()} {precArg} ";
-                Logger.Log("cmd.exe " + dream.StartInfo.Arguments, true);
+                Logger.Log("cmd.exe " + py.StartInfo.Arguments, true);
 
                 if (!OsUtils.ShowHiddenCmd())
                 {
-                    dream.OutputDataReceived += (sender, line) => { TtiProcessOutputHandler.LogOutput(line.Data); };
-                    dream.ErrorDataReceived += (sender, line) => { TtiProcessOutputHandler.LogOutput(line.Data, true); };
+                    py.OutputDataReceived += (sender, line) => { TtiProcessOutputHandler.LogOutput(line.Data); };
+                    py.ErrorDataReceived += (sender, line) => { TtiProcessOutputHandler.LogOutput(line.Data, true); };
                 }
 
                 if (CurrentProcess != null)
@@ -264,19 +263,18 @@ namespace StableDiffusionGui.Main
 
                 TtiProcessOutputHandler.Start();
                 Logger.Log($"Loading Stable Diffusion with model {modelNoExt.Wrap()}...");
-                CurrentProcess = dream;
+                CurrentProcess = py;
                 ProcessExistWasIntentional = false;
-                dream.Start();
-                OsUtils.AttachOrphanHitman(dream);
+                py.Start();
+                OsUtils.AttachOrphanHitman(py);
 
                 if (!OsUtils.ShowHiddenCmd())
                 {
-                    dream.BeginOutputReadLine();
-                    dream.BeginErrorReadLine();
+                    py.BeginOutputReadLine();
+                    py.BeginErrorReadLine();
                 }
 
                 Task.Run(() => CheckStillRunning());
-                //while (!dream.HasExited) await Task.Delay(1); // We don't wait for it to quit since it keeps running in background.
             }
             else
             {
@@ -296,17 +294,17 @@ namespace StableDiffusionGui.Main
 
             TtiUtils.WriteModelsYaml(Config.Get(Config.Key.comboxSdModel));
 
-            string batPath = Path.Combine(Paths.GetSessionDataPath(), "dream.bat");
+            string batPath = Path.Combine(Paths.GetSessionDataPath(), "invoke.bat");
 
             string batText = $"@echo off\n" +
-                $"title Dream.py CLI\n" +
+                $"title Invoke.py CLI\n" +
                 $"cd /D {Paths.GetDataPath().Wrap()}\n" +
                 $"SET PATH={OsUtils.GetTemporaryPathVariable(new string[] { "./mb", "./mb/Scripts", "./mb/condabin", "./mb/Library/bin" })}\n" +
                 $"call activate.bat mb/envs/ldo\n" +
-                $"python {Constants.Dirs.RepoSd}/scripts/dream.py --model default -o {outPath.Wrap(true)} {ArgsDreamPy.GetPrecisionArg()} {ArgsDreamPy.GetDefaultArgsStartup()}";
+                $"python {Constants.Dirs.RepoSd}/scripts/invoke.py --model default -o {outPath.Wrap(true)} {ArgsInvoke.GetPrecisionArg()} {ArgsInvoke.GetDefaultArgsStartup()}";
 
             File.WriteAllText(batPath, batText);
-            ProcessManager.FindAndKillOrphans($"*dream.py*{outPath}*");
+            ProcessManager.FindAndKillOrphans($"*invoke.py*{outPath}*");
             Process cli = Process.Start(batPath);
             OsUtils.AttachOrphanHitman(cli);
         }
