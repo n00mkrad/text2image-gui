@@ -1,7 +1,5 @@
 ﻿using StableDiffusionGui.Io;
 using System;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace StableDiffusionGui.Forms
@@ -28,6 +26,7 @@ namespace StableDiffusionGui.Forms
         private void LoadModels(bool loadCombox)
         {
             comboxSdModel.Visible = true;
+            comboxSdModel.Focus();
             comboxSdModel.Items.Clear();
             Paths.GetModels().ForEach(x => comboxSdModel.Items.Add(x.Name));
 
