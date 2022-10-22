@@ -59,13 +59,9 @@ namespace StableDiffusionGui.Forms
 
         private void LoadPromptHistory(string filter = "")
         {
-            Logger.Log($"Load Prompt History @ {Program.SwTimeSinceProgramStart.ElapsedMilliseconds} ms");
             promptListView.Items.Clear();
-            Logger.Log($"Load Prompt History: Filter and get history @ {Program.SwTimeSinceProgramStart.ElapsedMilliseconds} ms");
             var items = Filter(PromptHistory.History, filter).Select(x => new ListViewItem() { Text = x.ToString(), Tag = x }).Reverse();
-            Logger.Log($"Load Prompt History: Add items @ {Program.SwTimeSinceProgramStart.ElapsedMilliseconds} ms");
             promptListView.Items.AddRange(items.ToArray());
-            Logger.Log($"Load Prompt History: Done @ {Program.SwTimeSinceProgramStart.ElapsedMilliseconds} ms");
         }
 
         private void LoadQueue(string filter = "")

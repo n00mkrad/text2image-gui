@@ -200,17 +200,26 @@ namespace StableDiffusionGui
         {
             textboxPrompt.Text = string.Join(Environment.NewLine, s.Prompts);
             upDownIterations.Value = s.Iterations;
-            sliderSteps.ActualValue = s.Params["steps"].FromJson<int>();
-            sliderScale.ActualValue = (decimal)s.Params["scales"].FromJson<List<float>>().FirstOrDefault();
-            sliderResW.ActualValue = s.Params["res"].FromJson<Size>().Width;
-            sliderResH.ActualValue = s.Params["res"].FromJson<Size>().Height;
-            upDownSeed.Value = s.Params["seed"].FromJson<long>();
-            comboxSampler.Text = s.Params["sampler"].FromJson<string>(); // TODO: MAKE THIS WORK WITH ALIASES
-            MainUi.CurrentInitImgPaths = s.Params["initImgs"].FromJson<List<string>>();
-            sliderInitStrength.ActualValue = (decimal)s.Params["initStrengths"].FromJson<List<float>>().FirstOrDefault();
-            MainUi.CurrentEmbeddingPath = s.Params["embedding"].FromJson<string>();
-            checkboxSeamless.Checked = s.Params["seamless"].FromJson<bool>();
-            checkboxInpainting.Checked = s.Params["inpainting"].FromJson<string>() == "masked";
+
+            try
+            {
+                sliderSteps.ActualValue = s.Params["steps"].FromJson<int>();
+                sliderScale.ActualValue = (decimal)s.Params["scales"].FromJson<List<float>>().FirstOrDefault();
+                sliderResW.ActualValue = s.Params["res"].FromJson<Size>().Width;
+                sliderResH.ActualValue = s.Params["res"].FromJson<Size>().Height;
+                upDownSeed.Value = s.Params["seed"].FromJson<long>();
+                comboxSampler.Text = s.Params["sampler"].FromJson<string>(); // TODO: MAKE THIS WORK WITH ALIASES
+                MainUi.CurrentInitImgPaths = s.Params["initImgs"].FromJson<List<string>>();
+                sliderInitStrength.ActualValue = (decimal)s.Params["initStrengths"].FromJson<List<float>>().FirstOrDefault();
+                MainUi.CurrentEmbeddingPath = s.Params["embedding"].FromJson<string>();
+                checkboxSeamless.Checked = s.Params["seamless"].FromJson<bool>();
+                checkboxInpainting.Checked = s.Params["inpainting"].FromJson<string>() == "masked";
+            }
+            catch(Exception ex)
+            {
+                Logger.Log($"Failed to load generation settings. This can happen when you try to load prompts from an older version.");
+            }
+            
 
             UpdateInitImgAndEmbeddingUi();
         }
