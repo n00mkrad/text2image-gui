@@ -50,12 +50,14 @@ namespace StableDiffusionGui
 
         public bool IsInFocus() { return (ActiveForm == this); }
 
+        private Size _defaultWindowSize;
         private float _defaultPromptFontSize;
 
         public MainForm()
         {
             InitializeComponent();
             Program.MainForm = this;
+            _defaultWindowSize = Size;
             Opacity = 0;
         }
 
@@ -762,6 +764,20 @@ namespace StableDiffusionGui
         private void trainDreamBoothModelToolStripMenuItem_Click(object sender, EventArgs e)
         {
             new DreamboothForm().ShowDialog();
+        }
+
+        private void fitWindowSizeToImageSizeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (pictBoxImgViewer.Image.Size == pictBoxImgViewer.Size)
+                return;
+
+            int formWidthWithoutImgViewer = Size.Width - pictBoxImgViewer.Width;
+            int formHeightWithoutImgViewer = Size.Height - pictBoxImgViewer.Height;
+
+            Size targetSize = new Size(pictBoxImgViewer.Image.Width + formWidthWithoutImgViewer, pictBoxImgViewer.Image.Height + formHeightWithoutImgViewer);
+            Size = new Size(targetSize.Width.Clamp(512, int.MaxValue), targetSize.Height.Clamp(512, int.MaxValue));
+
+            CenterToScreen();
         }
     }
 }

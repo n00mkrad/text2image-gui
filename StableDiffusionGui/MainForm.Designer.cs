@@ -130,6 +130,7 @@ namespace StableDiffusionGui
             this.sliderScale = new StableDiffusionGui.Controls.CustomSlider();
             this.sliderSteps = new StableDiffusionGui.Controls.CustomSlider();
             this.sliderInitStrength = new StableDiffusionGui.Controls.CustomSlider();
+            this.fitWindowSizeToImageSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
             this.tableLayoutPanel6.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -490,49 +491,50 @@ namespace StableDiffusionGui
             this.copyImageToClipboardToolStripMenuItem,
             this.copySeedToClipboardToolStripMenuItem,
             this.reGenerateImageWithCurrentSettingsToolStripMenuItem,
-            this.useAsInitImageToolStripMenuItem});
+            this.useAsInitImageToolStripMenuItem,
+            this.fitWindowSizeToImageSizeToolStripMenuItem});
             this.menuStripOutputImg.Name = "menuStripOutputImg";
-            this.menuStripOutputImg.Size = new System.Drawing.Size(292, 136);
+            this.menuStripOutputImg.Size = new System.Drawing.Size(310, 180);
             // 
             // openFileToolStripMenuItem
             // 
             this.openFileToolStripMenuItem.Name = "openFileToolStripMenuItem";
-            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(291, 22);
+            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(309, 22);
             this.openFileToolStripMenuItem.Text = "Open File";
             this.openFileToolStripMenuItem.Click += new System.EventHandler(this.openFileToolStripMenuItem_Click);
             // 
             // openOutputFolderToolStripMenuItem
             // 
             this.openOutputFolderToolStripMenuItem.Name = "openOutputFolderToolStripMenuItem";
-            this.openOutputFolderToolStripMenuItem.Size = new System.Drawing.Size(291, 22);
+            this.openOutputFolderToolStripMenuItem.Size = new System.Drawing.Size(309, 22);
             this.openOutputFolderToolStripMenuItem.Text = "Open Output Folder";
             this.openOutputFolderToolStripMenuItem.Click += new System.EventHandler(this.openOutputFolderToolStripMenuItem_Click);
             // 
             // copyImageToClipboardToolStripMenuItem
             // 
             this.copyImageToClipboardToolStripMenuItem.Name = "copyImageToClipboardToolStripMenuItem";
-            this.copyImageToClipboardToolStripMenuItem.Size = new System.Drawing.Size(291, 22);
+            this.copyImageToClipboardToolStripMenuItem.Size = new System.Drawing.Size(309, 22);
             this.copyImageToClipboardToolStripMenuItem.Text = "Copy Image";
             this.copyImageToClipboardToolStripMenuItem.Click += new System.EventHandler(this.copyImageToClipboardToolStripMenuItem_Click);
             // 
             // copySeedToClipboardToolStripMenuItem
             // 
             this.copySeedToClipboardToolStripMenuItem.Name = "copySeedToClipboardToolStripMenuItem";
-            this.copySeedToClipboardToolStripMenuItem.Size = new System.Drawing.Size(291, 22);
+            this.copySeedToClipboardToolStripMenuItem.Size = new System.Drawing.Size(309, 22);
             this.copySeedToClipboardToolStripMenuItem.Text = "Copy Seed";
             this.copySeedToClipboardToolStripMenuItem.Click += new System.EventHandler(this.copySeedToClipboardToolStripMenuItem_Click);
             // 
             // reGenerateImageWithCurrentSettingsToolStripMenuItem
             // 
             this.reGenerateImageWithCurrentSettingsToolStripMenuItem.Name = "reGenerateImageWithCurrentSettingsToolStripMenuItem";
-            this.reGenerateImageWithCurrentSettingsToolStripMenuItem.Size = new System.Drawing.Size(291, 22);
+            this.reGenerateImageWithCurrentSettingsToolStripMenuItem.Size = new System.Drawing.Size(309, 22);
             this.reGenerateImageWithCurrentSettingsToolStripMenuItem.Text = "Re-Generate Image With Current Settings";
             this.reGenerateImageWithCurrentSettingsToolStripMenuItem.Click += new System.EventHandler(this.reGenerateImageWithCurrentSettingsToolStripMenuItem_Click);
             // 
             // useAsInitImageToolStripMenuItem
             // 
             this.useAsInitImageToolStripMenuItem.Name = "useAsInitImageToolStripMenuItem";
-            this.useAsInitImageToolStripMenuItem.Size = new System.Drawing.Size(291, 22);
+            this.useAsInitImageToolStripMenuItem.Size = new System.Drawing.Size(309, 22);
             this.useAsInitImageToolStripMenuItem.Text = "Use as Initialization Image";
             this.useAsInitImageToolStripMenuItem.Click += new System.EventHandler(this.useAsInitImageToolStripMenuItem_Click);
             // 
@@ -1547,6 +1549,13 @@ namespace StableDiffusionGui
             0,
             131072});
             // 
+            // fitWindowSizeToImageSizeToolStripMenuItem
+            // 
+            this.fitWindowSizeToImageSizeToolStripMenuItem.Name = "fitWindowSizeToImageSizeToolStripMenuItem";
+            this.fitWindowSizeToImageSizeToolStripMenuItem.Size = new System.Drawing.Size(309, 22);
+            this.fitWindowSizeToImageSizeToolStripMenuItem.Text = "Fit Window Size To Image Size (Pixel-Perfect)";
+            this.fitWindowSizeToImageSizeToolStripMenuItem.Click += new System.EventHandler(this.fitWindowSizeToImageSizeToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AllowDrop = true;
@@ -1732,6 +1741,7 @@ namespace StableDiffusionGui
         private System.Windows.Forms.ComboBox comboxResH;
         private System.Windows.Forms.ComboBox comboxResW;
         private System.Windows.Forms.CheckBox checkboxHiresFix;
+        private System.Windows.Forms.ToolStripMenuItem fitWindowSizeToImageSizeToolStripMenuItem;
     }
 }
 
