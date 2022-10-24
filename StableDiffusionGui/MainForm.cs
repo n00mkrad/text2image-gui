@@ -138,7 +138,7 @@ namespace StableDiffusionGui
             bool opt = Config.GetBool("checkboxOptimizedSd");
 
             btnEmbeddingBrowse.Visible = !opt; // Disable embedding browse btn when using optimizedSD
-            panelSampler.Visible = !(MainUi.CurrentInitImgPaths != null || opt); // Disable sampler selection if using optimized mode or using img2img
+            panelSampler.Visible = !opt; // Disable sampler selection if using optimized mode
             panelSeamless.Visible = !opt; // Disable seamless option when using optimizedSD
 
             bool adv = Config.GetBool("checkboxAdvancedMode");
@@ -214,7 +214,7 @@ namespace StableDiffusionGui
                 comboxResW.Text = s.Params.Get("res").FromJson<Size>().Width.ToString();
                 comboxResH.Text = s.Params.Get("res").FromJson<Size>().Height.ToString();
                 upDownSeed.Value = s.Params.Get("seed").FromJson<long>();
-                comboxSampler.Text = s.Params.Get("sampler").FromJson<string>(); // TODO: MAKE THIS WORK WITH ALIASES
+                comboxSampler.SetIfTextMatches(s.Params.Get("sampler").FromJson<string>(), true, MainUi.UiStrings);
                 MainUi.CurrentInitImgPaths = s.Params.Get("initImgs").FromJson<List<string>>();
                 sliderInitStrength.ActualValue = (decimal)s.Params.Get("initStrengths").FromJson<List<float>>().FirstOrDefault();
                 MainUi.CurrentEmbeddingPath = s.Params.Get("embedding").FromJson<string>();
