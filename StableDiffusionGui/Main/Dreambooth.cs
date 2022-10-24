@@ -22,7 +22,7 @@ namespace StableDiffusionGui.Main
 
         public static int CurrentTargetSteps;
 
-        public static async Task<string> RunTraining(FileInfo baseModel, DirectoryInfo trainImgDir, string className, Enums.Dreambooth.TrainPreset preset, float lrMultiplier = 1f)
+        public static async Task<string> RunTraining(FileInfo baseModel, DirectoryInfo trainImgDir, string className, Enums.Dreambooth.TrainPreset preset, float lrMult = 1f, float stepsMult = 1f)
         {
             CurrentTargetSteps = 0;
 
@@ -42,7 +42,7 @@ namespace StableDiffusionGui.Main
                 IoUtils.TryDeleteIfExists(logDir);
                 Directory.CreateDirectory(logDir);
 
-                string configPath = await WriteConfig(logDir, trainImgDir, preset, lrMultiplier);
+                string configPath = await WriteConfig(logDir, trainImgDir, preset, lrMult, stepsMult);
 
                 if (!File.Exists(configPath))
                     throw new Exception("Could not create training config.");
@@ -98,13 +98,13 @@ namespace StableDiffusionGui.Main
             Program.MainForm.SetProgress(0);
         }
 
-        private static async Task<string> WriteConfig (string logDir, DirectoryInfo trainDir, Enums.Dreambooth.TrainPreset preset, float userlrMult)
+        private static async Task<string> WriteConfig (string logDir, DirectoryInfo trainDir, Enums.Dreambooth.TrainPreset preset, float userlrMult, float userStepsMult)
         {
             string configPath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.RepoSd, Constants.Dirs.Dreambooth, "configs", "stable-diffusion", "v1-finetune_unfrozen.yaml");
             var configLines = File.ReadAllLines(configPath).ToArray();
 
             var values = GetStepsAndLoggerIntervalAndLrMultiplier(preset);
-            int targetSteps = values.Item1;
+            int targetSteps = (values.Item1 * userStepsMult).RoundToInt();
             int loggerInterval = values.Item2;
             float lrMultiplier = values.Item3;
 
@@ -170,7 +170,7 @@ namespace StableDiffusionGui.Main
             return configOutPath;
         }
 
-        private static Tuple<int, int, float> GetStepsAndLoggerIntervalAndLrMultiplier (Enums.Dreambooth.TrainPreset preset)
+        public static Tuple<int, int, float> GetStepsAndLoggerIntervalAndLrMultiplier (Enums.Dreambooth.TrainPreset preset)
         {
             if (preset == Enums.Dreambooth.TrainPreset.VeryHighQuality)
                 return new Tuple<int, int, float> (4000, 1000, 1f);
@@ -183,6 +183,7 @@ namespace StableDiffusionGui.Main
 
             if (preset == Enums.Dreambooth.TrainPreset.LowQuality)
                 return new Tuple<int, int, float>(250, 250, 16f);
+
             return new Tuple<int, int, float>(4000, 1000, 1f);
         }
 

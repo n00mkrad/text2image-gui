@@ -36,7 +36,6 @@ namespace StableDiffusionGui.Forms
 
         private async void DreamboothForm_Shown(object sender, EventArgs e)
         {
-            comboxLrMultiplier.Text = "Normal";
             Refresh();
             await PerformChecks();
         }
@@ -150,10 +149,10 @@ namespace StableDiffusionGui.Forms
             DirectoryInfo trainImgDir = new DirectoryInfo(textboxTrainImgsDir.Text.Trim());
             string className = string.Join("_", textboxClassName.Text.Trim().Split(Path.GetInvalidFileNameChars())).Trunc(50, false);
             textboxClassName.Text = className;
-            Enums.Dreambooth.TrainPreset preset = (Enums.Dreambooth.TrainPreset)comboxTrainPreset.SelectedIndex;
-            float lrMultiplier = comboxLrMultiplier.Text.EndsWith("x") ? comboxLrMultiplier.Text.GetFloat() : 1f;
+            TrainPreset preset = (TrainPreset)comboxTrainPreset.SelectedIndex;
+            float stepsMultiplier = sliderSteps.ActualValueFloat / Dreambooth.GetStepsAndLoggerIntervalAndLrMultiplier(preset).Item1;
 
-            string outPath = await Dreambooth.RunTraining(baseModel, trainImgDir, className, preset, lrMultiplier);
+            string outPath = await Dreambooth.RunTraining(baseModel, trainImgDir, className, preset, sliderLrMultiplier.ActualValueFloat, stepsMultiplier);
 
             Program.MainForm.SetWorking(Program.BusyState.Standby);
             btnStart.Text = "Start Training";
@@ -192,6 +191,18 @@ namespace StableDiffusionGui.Forms
         private void OpenGuide()
         {
             System.Diagnostics.Process.Start("https://github.com/n00mkrad/text2image-gui/blob/main/DreamBooth.md");
+        }
+
+        private void comboxTrainPreset_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            TrainPreset preset = (TrainPreset)comboxTrainPreset.SelectedIndex;
+            var presetValues = Dreambooth.GetStepsAndLoggerIntervalAndLrMultiplier(preset);
+            int steps = presetValues.Item1;
+
+            sliderSteps.ActualMinimum = 0;
+            sliderSteps.ActualMaximum = steps * 2;
+            sliderSteps.ActualMinimum = steps / 2;
+            sliderSteps.ActualValue = steps;
         }
     }
 }
