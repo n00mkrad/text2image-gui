@@ -36,6 +36,7 @@ namespace StableDiffusionGui.Main
             Size res = paramsDict.Get("res").FromJson<Size>();
             bool seamless = paramsDict.Get("seamless").FromJson<bool>();
             string model = paramsDict.Get("model").FromJson<string>();
+            bool hiresFix = paramsDict.Get("hiresFix").FromJson<bool>();
 
             if (!TtiUtils.CheckIfSdModelExists())
                 return;
@@ -48,9 +49,6 @@ namespace StableDiffusionGui.Main
 
             List<string> cmds = new List<string>();
 
-            string upscale = ArgsInvoke.GetUpscaleArgs();
-            string faceFix = ArgsInvoke.GetFaceRestoreArgs();
-
             int imgs = 0;
 
             foreach (string prompt in prompts)
@@ -61,7 +59,22 @@ namespace StableDiffusionGui.Main
                     {
                         if(initImages == null) // No init image(s)
                         {
-                            cmds.Add($"{prompt} -n {1} -s {steps} -C {scale.ToStringDot()} -A {sampler} -W {res.Width} -H {res.Height} -S {seed} {upscale} {faceFix} {(seamless ? "--seamless" : "")} {ArgsInvoke.GetDefaultArgsCommand()}");
+                            List<string> args = new List<string>();
+                            args.Add(prompt);
+                            args.Add($"-n 1");
+                            args.Add($"-s {steps}");
+                            args.Add($"-C {scale.ToStringDot()}");
+                            args.Add($"-A {sampler}");
+                            args.Add($"-W {res.Width} -H {res.Height}");
+                            args.Add($"-S {seed}");
+                            args.Add(ArgsInvoke.GetUpscaleArgs());
+                            args.Add(ArgsInvoke.GetFaceRestoreArgs());
+                            args.Add(seamless ? "--seamless" : "");
+                            args.Add(hiresFix ? "--hires_fix" : "");
+                            args.Add(ArgsInvoke.GetDefaultArgsCommand());
+
+                            cmds.Add(string.Join(" ", args.Where(x => !string.IsNullOrWhiteSpace(x))));
+
                             imgs++;
                         }
                         else // With init image(s)
@@ -70,8 +83,23 @@ namespace StableDiffusionGui.Main
                             {
                                 foreach (float strength in initStrengths)
                                 {
-                                    string init = $"--init_img {initImg.Wrap()} --strength {strength.ToStringDot("0.###")}";
-                                    cmds.Add($"{prompt} {init} -n {1} -s {steps} -C {scale.ToStringDot()} -A {sampler} -W {res.Width} -H {res.Height} -S {seed} {upscale} {faceFix} {(seamless ? "--seamless" : "")} {ArgsInvoke.GetDefaultArgsCommand()}");
+                                    List<string> args = new List<string>();
+                                    args.Add(prompt);
+                                    args.Add($"--init_img {initImg.Wrap()} --strength {strength.ToStringDot("0.###")}");
+                                    args.Add($"-n 1");
+                                    args.Add($"-s {steps}");
+                                    args.Add($"-C {scale.ToStringDot()}");
+                                    args.Add($"-A ddim");
+                                    args.Add($"-W {res.Width} -H {res.Height}");
+                                    args.Add($"-S {seed}");
+                                    args.Add(ArgsInvoke.GetUpscaleArgs());
+                                    args.Add(ArgsInvoke.GetFaceRestoreArgs());
+                                    args.Add(seamless ? "--seamless" : "");
+                                    args.Add(hiresFix ? "--hires_fix" : "");
+                                    args.Add(ArgsInvoke.GetDefaultArgsCommand());
+
+                                    cmds.Add(string.Join(" ", args.Where(x => !string.IsNullOrWhiteSpace(x))));
+
                                     imgs++;
                                 }
                             }

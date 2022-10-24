@@ -209,17 +209,18 @@ namespace StableDiffusionGui
 
             try
             {
-                sliderSteps.ActualValue = s.Params["steps"].FromJson<int>();
-                sliderScale.ActualValue = (decimal)s.Params["scales"].FromJson<List<float>>().FirstOrDefault();
-                comboxResW.Text = s.Params["res"].FromJson<Size>().Width.ToString();
-                comboxResH.Text = s.Params["res"].FromJson<Size>().Height.ToString();
-                upDownSeed.Value = s.Params["seed"].FromJson<long>();
-                comboxSampler.Text = s.Params["sampler"].FromJson<string>(); // TODO: MAKE THIS WORK WITH ALIASES
-                MainUi.CurrentInitImgPaths = s.Params["initImgs"].FromJson<List<string>>();
-                sliderInitStrength.ActualValue = (decimal)s.Params["initStrengths"].FromJson<List<float>>().FirstOrDefault();
-                MainUi.CurrentEmbeddingPath = s.Params["embedding"].FromJson<string>();
-                checkboxSeamless.Checked = s.Params["seamless"].FromJson<bool>();
-                checkboxInpainting.Checked = s.Params["inpainting"].FromJson<string>() == "masked";
+                sliderSteps.ActualValue = s.Params.Get("steps").FromJson<int>();
+                sliderScale.ActualValue = (decimal)s.Params.Get("scales").FromJson<List<float>>().FirstOrDefault();
+                comboxResW.Text = s.Params.Get("res").FromJson<Size>().Width.ToString();
+                comboxResH.Text = s.Params.Get("res").FromJson<Size>().Height.ToString();
+                upDownSeed.Value = s.Params.Get("seed").FromJson<long>();
+                comboxSampler.Text = s.Params.Get("sampler").FromJson<string>(); // TODO: MAKE THIS WORK WITH ALIASES
+                MainUi.CurrentInitImgPaths = s.Params.Get("initImgs").FromJson<List<string>>();
+                sliderInitStrength.ActualValue = (decimal)s.Params.Get("initStrengths").FromJson<List<float>>().FirstOrDefault();
+                MainUi.CurrentEmbeddingPath = s.Params.Get("embedding").FromJson<string>();
+                checkboxSeamless.Checked = s.Params.Get("seamless").FromJson<bool>();
+                checkboxInpainting.Checked = s.Params.Get("inpainting").FromJson<string>() == "masked";
+                checkboxHiresFix.Checked = s.Params.Get("hiresFix").FromJson<bool>();
             }
             catch(Exception ex)
             {
@@ -250,6 +251,7 @@ namespace StableDiffusionGui
                             { "seamless", checkboxSeamless.Checked.ToJson() },
                             { "inpainting", (checkboxInpainting.Checked ? "masked" : "").ToJson() },
                             { "model", Config.Get(Config.Key.comboxSdModel).ToJson() },
+                            { "hiresFix", checkboxHiresFix.Checked.ToJson() },
                         },
             };
 
