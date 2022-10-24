@@ -223,6 +223,7 @@ namespace StableDiffusionGui
                 checkboxSeamless.Checked = s.Params.Get("seamless").FromJson<bool>();
                 checkboxInpainting.Checked = s.Params.Get("inpainting").FromJson<string>() == "masked";
                 checkboxHiresFix.Checked = s.Params.Get("hiresFix").FromJson<bool>();
+                checkboxLockSeed.Checked = s.Params.Get("lockSeed").FromJson<bool>();
             }
             catch(Exception ex)
             {
@@ -254,6 +255,7 @@ namespace StableDiffusionGui
                             { "inpainting", (checkboxInpainting.Checked ? "masked" : "").ToJson() },
                             { "model", Config.Get(Config.Key.comboxSdModel).ToJson() },
                             { "hiresFix", checkboxHiresFix.Checked.ToJson() },
+                            { "lockSeed", checkboxLockSeed.Checked.ToJson() },
                         },
             };
 

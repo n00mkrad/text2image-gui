@@ -197,5 +197,35 @@ namespace StableDiffusionGui.Main
 
             return $"SET PATH={path}{devicesArg}";
         }
+
+        private static Random _random = new Random();
+
+        public static string ApplyWildcards (string prompt)
+        {
+            string[] split = prompt.Split(' ');
+
+            for(int i = 0; i < split.Length; i++)
+            {
+                if (string.IsNullOrWhiteSpace(split[i]))
+                    continue;
+
+                string word = split[i].Trim();
+
+                if (word.MatchesWildcard("<wc:*>"))
+                {
+                    string wildcardName = word.Split("<wc:")[1].Split('>')[0];
+                    string wildcardPath = Path.Combine(Paths.GetExeDir(), Constants.Dirs.Wildcards, wildcardName + ".txt");
+
+                    if (File.Exists(wildcardPath))
+                    {
+                        var lines = File.ReadAllLines(wildcardPath).Where(line => !string.IsNullOrWhiteSpace(line)).ToArray(); // Read all lines from wildcard file
+                        split[i] = lines[_random.Next(0, lines.Length)]; // Pick random line, insert back into word array
+                        Logger.Log($"Filled wildcard '{wildcardName}' with '{split[i]}'", true);
+                    }
+                }
+            }
+
+            return string.Join(" ", split);
+        }
     }
 }

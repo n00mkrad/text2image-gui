@@ -17,6 +17,7 @@
             public const string Bins = "bin";
             public const string RepoSd = "repo";
             public const string Dreambooth = "db";
+            public const string Wildcards = "Wildcards";
         }
 
         public class Bins

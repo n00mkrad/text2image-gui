@@ -37,6 +37,7 @@ namespace StableDiffusionGui.Main
             bool seamless = paramsDict.Get("seamless").FromJson<bool>();
             string model = paramsDict.Get("model").FromJson<string>();
             bool hiresFix = paramsDict.Get("hiresFix").FromJson<bool>();
+            bool lockSeed = paramsDict.Get("lockSeed").FromJson<bool>();
 
             if (!TtiUtils.CheckIfSdModelExists())
                 return;
@@ -60,7 +61,7 @@ namespace StableDiffusionGui.Main
                         if(initImages == null) // No init image(s)
                         {
                             List<string> args = new List<string>();
-                            args.Add(prompt);
+                            args.Add(TtiUtils.ApplyWildcards(prompt).Wrap());
                             args.Add($"-n 1");
                             args.Add($"-s {steps}");
                             args.Add($"-C {scale.ToStringDot()}");
@@ -84,7 +85,7 @@ namespace StableDiffusionGui.Main
                                 foreach (float strength in initStrengths)
                                 {
                                     List<string> args = new List<string>();
-                                    args.Add(prompt);
+                                    args.Add(TtiUtils.ApplyWildcards(prompt).Wrap());
                                     args.Add($"--init_img {initImg.Wrap()} --strength {strength.ToStringDot("0.###")}");
                                     args.Add($"-n 1");
                                     args.Add($"-s {steps}");
@@ -106,7 +107,8 @@ namespace StableDiffusionGui.Main
                         }
                     }
 
-                    seed++;
+                    if(!lockSeed)
+                        seed++;
                 }
 
                 if (Config.GetBool(Config.Key.checkboxMultiPromptsSameSeed))
