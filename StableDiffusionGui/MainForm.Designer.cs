@@ -86,6 +86,7 @@ namespace StableDiffusionGui
             this.patreonBtn = new System.Windows.Forms.Button();
             this.paypalBtn = new System.Windows.Forms.Button();
             this.textboxSliderInitStrength = new System.Windows.Forms.TextBox();
+            this.checkboxHiresFix = new System.Windows.Forms.CheckBox();
             this.label7 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.textboxCliTest = new System.Windows.Forms.TextBox();
@@ -94,6 +95,8 @@ namespace StableDiffusionGui
             this.label8 = new System.Windows.Forms.Label();
             this.panelSampler = new System.Windows.Forms.Panel();
             this.panelRes = new System.Windows.Forms.Panel();
+            this.comboxResH = new System.Windows.Forms.ComboBox();
+            this.comboxResW = new System.Windows.Forms.ComboBox();
             this.panelSeed = new System.Windows.Forms.Panel();
             this.panelScale = new System.Windows.Forms.Panel();
             this.panelSteps = new System.Windows.Forms.Panel();
@@ -124,12 +127,9 @@ namespace StableDiffusionGui
             this.trainDreamBoothModelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pictBoxImgViewer = new System.Windows.Forms.PictureBox();
             this.separator = new System.Windows.Forms.Button();
-            this.comboxResW = new System.Windows.Forms.ComboBox();
-            this.comboxResH = new System.Windows.Forms.ComboBox();
             this.sliderScale = new StableDiffusionGui.Controls.CustomSlider();
             this.sliderSteps = new StableDiffusionGui.Controls.CustomSlider();
             this.sliderInitStrength = new StableDiffusionGui.Controls.CustomSlider();
-            this.checkboxHiresFix = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
             this.tableLayoutPanel6.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -417,7 +417,7 @@ namespace StableDiffusionGui
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label9.ForeColor = System.Drawing.Color.White;
-            this.label9.Location = new System.Drawing.Point(344, 10);
+            this.label9.Location = new System.Drawing.Point(342, 10);
             this.label9.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(12, 13);
@@ -984,6 +984,19 @@ namespace StableDiffusionGui
             this.textboxSliderInitStrength.TabIndex = 94;
             this.textboxSliderInitStrength.Text = "0,3";
             // 
+            // checkboxHiresFix
+            // 
+            this.checkboxHiresFix.AutoSize = true;
+            this.checkboxHiresFix.ForeColor = System.Drawing.Color.White;
+            this.checkboxHiresFix.Location = new System.Drawing.Point(468, 6);
+            this.checkboxHiresFix.Name = "checkboxHiresFix";
+            this.checkboxHiresFix.Padding = new System.Windows.Forms.Padding(3);
+            this.checkboxHiresFix.Size = new System.Drawing.Size(123, 23);
+            this.checkboxHiresFix.TabIndex = 108;
+            this.checkboxHiresFix.Text = "High-Resolution Fix";
+            this.toolTip.SetToolTip(this.checkboxHiresFix, "Avoid duplications in high-resolution images, at the cost of generation speed.");
+            this.checkboxHiresFix.UseVisualStyleBackColor = true;
+            // 
             // label7
             // 
             this.label7.AutoSize = true;
@@ -1082,6 +1095,30 @@ namespace StableDiffusionGui
             this.panelRes.Name = "panelRes";
             this.panelRes.Size = new System.Drawing.Size(633, 35);
             this.panelRes.TabIndex = 5;
+            // 
+            // comboxResH
+            // 
+            this.comboxResH.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.comboxResH.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboxResH.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboxResH.ForeColor = System.Drawing.Color.White;
+            this.comboxResH.FormattingEnabled = true;
+            this.comboxResH.Location = new System.Drawing.Point(360, 7);
+            this.comboxResH.Name = "comboxResH";
+            this.comboxResH.Size = new System.Drawing.Size(100, 21);
+            this.comboxResH.TabIndex = 107;
+            // 
+            // comboxResW
+            // 
+            this.comboxResW.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.comboxResW.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboxResW.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboxResW.ForeColor = System.Drawing.Color.White;
+            this.comboxResW.FormattingEnabled = true;
+            this.comboxResW.Location = new System.Drawing.Point(233, 7);
+            this.comboxResW.Name = "comboxResW";
+            this.comboxResW.Size = new System.Drawing.Size(100, 21);
+            this.comboxResW.TabIndex = 106;
             // 
             // panelSeed
             // 
@@ -1381,30 +1418,6 @@ namespace StableDiffusionGui
             this.separator.TabStop = false;
             this.separator.UseVisualStyleBackColor = false;
             // 
-            // comboxResW
-            // 
-            this.comboxResW.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.comboxResW.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboxResW.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.comboxResW.ForeColor = System.Drawing.Color.White;
-            this.comboxResW.FormattingEnabled = true;
-            this.comboxResW.Location = new System.Drawing.Point(233, 7);
-            this.comboxResW.Name = "comboxResW";
-            this.comboxResW.Size = new System.Drawing.Size(100, 21);
-            this.comboxResW.TabIndex = 106;
-            // 
-            // comboxResH
-            // 
-            this.comboxResH.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.comboxResH.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboxResH.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.comboxResH.ForeColor = System.Drawing.Color.White;
-            this.comboxResH.FormattingEnabled = true;
-            this.comboxResH.Location = new System.Drawing.Point(362, 6);
-            this.comboxResH.Name = "comboxResH";
-            this.comboxResH.Size = new System.Drawing.Size(100, 21);
-            this.comboxResH.TabIndex = 107;
-            // 
             // sliderScale
             // 
             this.sliderScale.ActualMaximum = new decimal(new int[] {
@@ -1533,18 +1546,6 @@ namespace StableDiffusionGui
             0,
             0,
             131072});
-            // 
-            // checkboxHiresFix
-            // 
-            this.checkboxHiresFix.AutoSize = true;
-            this.checkboxHiresFix.ForeColor = System.Drawing.Color.White;
-            this.checkboxHiresFix.Location = new System.Drawing.Point(468, 10);
-            this.checkboxHiresFix.Name = "checkboxHiresFix";
-            this.checkboxHiresFix.Size = new System.Drawing.Size(74, 17);
-            this.checkboxHiresFix.TabIndex = 108;
-            this.checkboxHiresFix.Text = "Hi-Res Fix";
-            this.toolTip.SetToolTip(this.checkboxHiresFix, "Avoid duplications in high-resolution images");
-            this.checkboxHiresFix.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
