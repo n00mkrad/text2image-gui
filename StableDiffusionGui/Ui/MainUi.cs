@@ -58,6 +58,13 @@ namespace StableDiffusionGui.Ui
             { Enums.StableDiffusion.Sampler.K_Dpm_2_A.ToString(), "DPM 2 Ancestral" },
         };
 
+        public static List<int> Resolutions { get { return GetNumbers(384, 2048, 64); } }
+
+        public static List<int> GetNumbers (int min, int max, int step)
+        {
+            return Enumerable.Range(min, (max - min) + 1).Where(x => x % step == 0).ToList();
+        }
+
         public static void DoStartupChecks ()
         {
             if (!Debugger.IsAttached)

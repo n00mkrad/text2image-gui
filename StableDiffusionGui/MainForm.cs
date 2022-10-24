@@ -2,6 +2,7 @@
 using Microsoft.WindowsAPICodePack.Taskbar;
 using StableDiffusionGui.Controls;
 using StableDiffusionGui.Data;
+using StableDiffusionGui.Extensions;
 using StableDiffusionGui.Forms;
 using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
@@ -17,6 +18,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Paths = StableDiffusionGui.Io.Paths;
@@ -41,8 +43,8 @@ namespace StableDiffusionGui
         public CustomSlider SliderStrength { get { return sliderInitStrength; } }
         public CustomSlider SliderSteps { get { return sliderSteps; } }
         public CustomSlider SliderScale { get { return sliderScale; } }
-        public CustomSlider SliderResW { get { return sliderResW; } }
-        public CustomSlider SliderResH { get { return sliderResH; } }
+        public ComboBox ComboxResW { get { return comboxResW; } }
+        public ComboBox ComboxResH { get { return comboxResH; } }
 
         #endregion
 
@@ -103,6 +105,10 @@ namespace StableDiffusionGui
         private void SetUiElements()
         {
             comboxSampler.FillFromEnum<Enums.StableDiffusion.Sampler>(MainUi.UiStrings);
+
+            bool adv = Config.GetBool("checkboxAdvancedMode");
+            comboxResW.SetItems(MainUi.Resolutions.Where(x => x <= (adv ? 2048 : 1024)).Select(x => x.ToString()), UiControlExtensions.SelectMode.Last);
+            comboxResH.SetItems(MainUi.Resolutions.Where(x => x <= (adv ? 2048 : 1024)).Select(x => x.ToString()), UiControlExtensions.SelectMode.Last);
         }
 
         private void LoadUiElements()
@@ -110,8 +116,8 @@ namespace StableDiffusionGui
             ConfigParser.LoadGuiElement(upDownIterations);
             ConfigParser.LoadGuiElement(sliderSteps);
             ConfigParser.LoadGuiElement(sliderScale);
-            ConfigParser.LoadGuiElement(sliderResW);
-            ConfigParser.LoadGuiElement(sliderResH);
+            ConfigParser.LoadGuiElement(comboxResH);
+            ConfigParser.LoadGuiElement(comboxResW);
             ConfigParser.LoadComboxIndex(comboxSampler);
             ConfigParser.LoadGuiElement(sliderInitStrength);
         }
@@ -121,8 +127,8 @@ namespace StableDiffusionGui
             ConfigParser.SaveGuiElement(upDownIterations);
             ConfigParser.SaveGuiElement(sliderSteps);
             ConfigParser.SaveGuiElement(sliderScale);
-            ConfigParser.SaveGuiElement(sliderResW);
-            ConfigParser.SaveGuiElement(sliderResH);
+            ConfigParser.SaveGuiElement(comboxResH);
+            ConfigParser.SaveGuiElement(comboxResW);
             ConfigParser.SaveComboxIndex(comboxSampler);
             ConfigParser.SaveGuiElement(sliderInitStrength);
         }
@@ -141,8 +147,8 @@ namespace StableDiffusionGui
             sliderSteps.ActualMaximum = !adv ? 120 : 500;
             sliderSteps.ValueStep = !adv ? 5 : 1;
             sliderScale.ActualMaximum = !adv ? 25 : 50;
-            sliderResW.ActualMaximum = !adv ? 1024 : 2048;
-            sliderResH.ActualMaximum = !adv ? 1024 : 2048;
+            comboxResW.SetItems(MainUi.Resolutions.Where(x => x <= (adv ? 2048 : 1024)).Select(x => x.ToString()), UiControlExtensions.SelectMode.Retain, UiControlExtensions.SelectMode.Last );
+            comboxResH.SetItems(MainUi.Resolutions.Where(x => x <= (adv ? 2048 : 1024)).Select(x => x.ToString()), UiControlExtensions.SelectMode.Retain, UiControlExtensions.SelectMode.Last);
         }
 
         private void installerBtn_Click(object sender, EventArgs e)
@@ -178,8 +184,8 @@ namespace StableDiffusionGui
             textboxPrompt.Text = meta.Prompt;
             sliderSteps.ActualValue = meta.Steps;
             sliderScale.ActualValue = (decimal)meta.Scale;
-            sliderResW.ActualValue = meta.GeneratedResolution.Width;
-            sliderResH.ActualValue = meta.GeneratedResolution.Height;
+            comboxResW.Text = meta.GeneratedResolution.Width.ToString();
+            comboxResH.Text = meta.GeneratedResolution.Height.ToString();
             upDownSeed.Value = meta.Seed;
             comboxSampler.SetIfTextMatches(meta.Sampler, true, MainUi.UiStrings);
             // MainUi.CurrentInitImgPaths = new[] { meta.InitImgName }.Where(x => string.IsNullOrWhiteSpace(x)).ToList(); // Does this even work if we only store the temp path?
@@ -205,8 +211,8 @@ namespace StableDiffusionGui
             {
                 sliderSteps.ActualValue = s.Params["steps"].FromJson<int>();
                 sliderScale.ActualValue = (decimal)s.Params["scales"].FromJson<List<float>>().FirstOrDefault();
-                sliderResW.ActualValue = s.Params["res"].FromJson<Size>().Width;
-                sliderResH.ActualValue = s.Params["res"].FromJson<Size>().Height;
+                comboxResW.Text = s.Params["res"].FromJson<Size>().Width.ToString();
+                comboxResH.Text = s.Params["res"].FromJson<Size>().Height.ToString();
                 upDownSeed.Value = s.Params["seed"].FromJson<long>();
                 comboxSampler.Text = s.Params["sampler"].FromJson<string>(); // TODO: MAKE THIS WORK WITH ALIASES
                 MainUi.CurrentInitImgPaths = s.Params["initImgs"].FromJson<List<string>>();
@@ -235,7 +241,7 @@ namespace StableDiffusionGui
                         {
                             { "steps", SliderSteps.ActualValueInt.ToJson() },
                             { "scales", MainUi.GetScales(textboxExtraScales.Text).ToJson() },
-                            { "res", new Size(SliderResW.ActualValueInt, SliderResH.ActualValueInt).ToJson() },
+                            { "res", new Size(ComboxResW.Text.GetInt(), ComboxResH.Text.GetInt()).ToJson() },
                             { "seed", (upDownSeed.Value < 0 ? new Random().Next(0, int.MaxValue) : ((long)upDownSeed.Value)).ToJson() },
                             { "sampler", ((Enums.StableDiffusion.Sampler)comboxSampler.SelectedIndex).ToString().Lower().ToJson() },
                             { "initImgs", MainUi.CurrentInitImgPaths.ToJson() },
