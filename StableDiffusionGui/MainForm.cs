@@ -37,7 +37,8 @@ namespace StableDiffusionGui
         public Button RunBtn { get { return runBtn; } }
         public TextBox TextboxPrompt { get { return textboxPrompt; } }
         public PictureBox PictBoxImgViewer { get { return pictBoxImgViewer; } }
-        public Label OutputImgLabel { get { return outputImgLabel; } }
+        public Label LabelImgInfo { get { return labelImgInfo; } }
+        public Label LabelImgPrompt { get { return labelImgPrompt; } }
         public Button BtnExpandPromptField { get { return btnExpandPromptField; } }
         public Panel PanelBg { get { return panel1; } }
         public CustomSlider SliderStrength { get { return sliderInitStrength; } }

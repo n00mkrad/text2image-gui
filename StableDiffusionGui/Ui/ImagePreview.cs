@@ -90,14 +90,17 @@ namespace StableDiffusionGui.Ui
             if (!string.IsNullOrWhiteSpace(meta.Sampler))
                 infos.Add($"{meta.Sampler}");
 
-            Program.MainForm.OutputImgLabel.Text = $"Image {_currIndex + 1}/{_currentImages.Length} {(infos.Count > 0 ? $" - {string.Join(" - ", infos)}" : "")}";
+            Program.MainForm.LabelImgInfo.Text = $"Image {_currIndex + 1}/{_currentImages.Length} {(infos.Count > 0 ? $" - {string.Join(" - ", infos)}" : "")}";
+            Program.MainForm.LabelImgPrompt.Text = !string.IsNullOrWhiteSpace(meta.Prompt) ? meta.Prompt : "No prompt to show.";
+
         }
 
         public static void Clear()
         {
             Program.MainForm.PictBoxImgViewer.Text = "";
             Program.MainForm.PictBoxImgViewer.Image = null;
-            Program.MainForm.OutputImgLabel.Text = "No images to show.";
+            Program.MainForm.LabelImgInfo.Text = "No images to show.";
+            Program.MainForm.LabelImgPrompt.Text = "";
         }
 
         public static void Move(bool previous = false)
