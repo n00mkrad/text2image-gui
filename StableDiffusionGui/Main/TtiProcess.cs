@@ -65,7 +65,7 @@ namespace StableDiffusionGui.Main
                         {
                             List<string> args = new List<string>();
                             string p = PromptWildcardUtils.ApplyWildcards(prompt, iterations);
-                            TextToImage.CurrentTaskSettings.ProcessedAndRawPrompts[p] = prompt; // Save the prompt we stored plus the processed (wildcards etc.) one for later reference
+                            TextToImage.CurrentTaskSettings.ProcessedAndRawPrompts[FormatUtils.ConvertTextEncoding(p)] = prompt; // Save the prompt we stored plus the processed (wildcards etc.) one for later reference
                             args.Add(p.Wrap());
                             args.Add($"-n 1");
                             args.Add($"-s {steps}");
@@ -91,7 +91,7 @@ namespace StableDiffusionGui.Main
                                 {
                                     List<string> args = new List<string>();
                                     string p = PromptWildcardUtils.ApplyWildcards(prompt, iterations);
-                                    TextToImage.CurrentTaskSettings.RawAndProcessedPrompts[prompt] = p; // Save the prompt we stored plus the processed (wildcards etc.) one for later reference
+                                    TextToImage.CurrentTaskSettings.ProcessedAndRawPrompts[FormatUtils.ConvertTextEncoding(p)] = prompt; // Save the prompt we stored plus the processed (wildcards etc.) one for later reference
                                     args.Add(p.Wrap());
                                     args.Add($"--init_img {initImg.Wrap()} --strength {strength.ToStringDot("0.###")}");
                                     args.Add($"-n 1");

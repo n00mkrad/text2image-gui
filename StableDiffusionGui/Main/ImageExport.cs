@@ -19,6 +19,9 @@ namespace StableDiffusionGui.Main
 
         public static async Task ExportLoop(string imagesDir, int startingImgCount, int targetImgCount, bool show)
         {
+            TtiTaskInfo currTask = TextToImage.CurrentTask;
+            TtiSettings currSettings = TextToImage.CurrentTaskSettings;
+
             Logger.Log("ExportLoop START", true);
             List<string> outImgs = new List<string>();
 
@@ -31,8 +34,8 @@ namespace StableDiffusionGui.Main
                     var files = IoUtils.GetFileInfosSorted(imagesDir, false, "*.png");
                     bool running = IoUtils.GetFileInfosSorted(Paths.GetSessionDataPath(), false, "prompts*.*").Any();
 
-                    if (TextToImage.CurrentTaskSettings.Implementation == Implementation.StableDiffusion)
-                        running = (TextToImage.CurrentTask.ImgCount - startingImgCount) < targetImgCount;
+                    if (currSettings.Implementation == Implementation.StableDiffusion)
+                        running = (currTask.ImgCount - startingImgCount) < targetImgCount;
 
                     if (!running && !files.Any())
                     {
@@ -40,17 +43,17 @@ namespace StableDiffusionGui.Main
                         break;
                     }
 
-                    var images = files.Where(x => x.CreationTime > TextToImage.CurrentTask.StartTime).OrderBy(x => x.CreationTime).ToList(); // Find images and sort by date, newest to oldest
+                    var images = files.Where(x => x.CreationTime > currTask.StartTime).OrderBy(x => x.CreationTime).ToList(); // Find images and sort by date, newest to oldest
                     images = images.Where(x => !IoUtils.IsFileLocked(x)).ToList(); // Ignore files that are still in use
                     images = images.Where(x => (DateTime.Now - x.LastWriteTime).TotalMilliseconds >= _minimumImageAgeMs).ToList(); // Wait a certain time to make sure python is done writing to it
 
-                    if (TextToImage.CurrentTaskSettings.Implementation == Implementation.StableDiffusion)
+                    if (currSettings.Implementation == Implementation.StableDiffusion)
                     {
                         string log = Logger.GetSessionLog(Constants.Lognames.Sd);
                         images = images.Where(img => log.Contains(img.Name)).ToList(); // Only take image if it was written into SD log. Avoids copying too early (post-proc etc)
                     }
 
-                    bool sub = TextToImage.CurrentTask.SubfoldersPerPrompt;
+                    bool sub = currTask.SubfoldersPerPrompt;
                     Dictionary<string, string> imageDirMap = new Dictionary<string, string>();
 
                     if (sub)
@@ -61,9 +64,9 @@ namespace StableDiffusionGui.Main
                             string prompt = IoUtils.GetImageMetadata(img.FullName).Prompt;
                             int pathBudget = 255 - img.Directory.FullName.Length - 65;
                             string unixTimestamp = ((long)(DateTime.Now - new DateTime(1970, 1, 1)).TotalMilliseconds).ToString();
-                            prompt = TextToImage.CurrentTask.IgnoreWildcardsForFilenames ? TextToImage.CurrentTaskSettings.ProcessedAndRawPrompts[prompt] : prompt;
+                            prompt = currTask.IgnoreWildcardsForFilenames && currSettings.ProcessedAndRawPrompts.ContainsKey(prompt) ? currSettings.ProcessedAndRawPrompts[prompt] : prompt;
                             string dirName = string.IsNullOrWhiteSpace(prompt) ? $"unknown_prompt_{unixTimestamp}" : FormatUtils.SanitizePromptFilename(FormatUtils.GetPromptWithoutModifiers(prompt), pathBudget);
-                            imageDirMap[img.FullName] = Directory.CreateDirectory(Path.Combine(TextToImage.CurrentTask.OutDir, dirName)).FullName;
+                            imageDirMap[img.FullName] = Directory.CreateDirectory(Path.Combine(currTask.OutDir, dirName)).FullName;
                         }
                     }
 
@@ -80,8 +83,8 @@ namespace StableDiffusionGui.Main
                         try
                         {
                             var img = images[i];
-                            string number = $"-{(TextToImage.CurrentTask.ImgCount).ToString().PadLeft(TextToImage.CurrentTask.TargetImgCount.ToString().Length, '0')}";
-                            string parentDir = sub ? imageDirMap[img.FullName] : TextToImage.CurrentTask.OutDir;
+                            string number = $"-{(currTask.ImgCount).ToString().PadLeft(currTask.TargetImgCount.ToString().Length, '0')}";
+                            string parentDir = sub ? imageDirMap[img.FullName] : currTask.OutDir;
                             string renamedPath = FormatUtils.GetExportFilename(img.FullName, parentDir, number, "png", _maxPathLength, inclPrompt, inclSeed, inclScale, inclSampler, inclModel);
                             OverlayMaskIfExists(img.FullName);
                             Logger.Log($"ImageExport: Trying to move {img.Name} => {renamedPath}", true);

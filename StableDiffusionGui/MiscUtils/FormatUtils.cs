@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace StableDiffusionGui.MiscUtils
@@ -266,6 +267,16 @@ namespace StableDiffusionGui.MiscUtils
                 return (1000000f / (s.Remove(".").Remove("it/s") + "0").GetInt()).RoundToInt();
             else // seconds per iteration
                 return (s.Remove(".").Remove("it/s") + "0").GetInt();
+        }
+
+        public static string ConvertTextEncoding(string s, Encoding sourceEncoding = null, Encoding targetEncoding = null)
+        {
+            sourceEncoding = null ?? Encoding.UTF8;
+            targetEncoding = null ?? Encoding.Default; // ANSI
+
+            string output = targetEncoding.GetString(Encoding.Convert(sourceEncoding, targetEncoding, sourceEncoding.GetBytes(s)));
+
+            return output;
         }
     }
 }
