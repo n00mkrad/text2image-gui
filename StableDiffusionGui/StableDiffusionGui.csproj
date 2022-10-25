@@ -369,6 +369,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon1.ico" />
+    <None Include="Resources\iconReset.png" />
+    <None Include="Resources\iconPrevious.png" />
     <None Include="Resources\iconInfo.png" />
     <None Include="Resources\iconRemove.png" />
     <None Include="Resources\iconAdd.png" />
