@@ -27,7 +27,7 @@ namespace StableDiffusionGui.MiscUtils
 
                 for (int i = 1; i < split.Length; i++) // Start at 1 because we never need the first entry as it can't be a wildcard
                 {
-                    SortMode sort = SortMode.Sequential;
+                    SortMode sort = SortMode.Shuffle;
                     int identifierIndex = identifierIndexes[i - 1];
 
                     if ((identifierIndex + 1) <= prompt.Length && prompt[identifierIndex + 1] == _identifier)
@@ -79,7 +79,7 @@ namespace StableDiffusionGui.MiscUtils
             }
         }
 
-        private enum SortMode { Sequential, Shuffle, Alphabetically }
+        private enum SortMode { Shuffle, Sequential, Alphabetically }
 
         private static List<string> GetWildcardList(string wildcardPath, int listSize, SortMode sortMode)
         {
