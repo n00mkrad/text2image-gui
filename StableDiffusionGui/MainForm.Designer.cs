@@ -1578,9 +1578,9 @@ namespace StableDiffusionGui
             | System.Windows.Forms.AnchorStyles.Right)));
             this.labelImgPrompt.AutoEllipsis = true;
             this.labelImgPrompt.ForeColor = System.Drawing.Color.Silver;
-            this.labelImgPrompt.Location = new System.Drawing.Point(651, 127);
+            this.labelImgPrompt.Location = new System.Drawing.Point(651, 126);
             this.labelImgPrompt.Name = "labelImgPrompt";
-            this.labelImgPrompt.Size = new System.Drawing.Size(515, 13);
+            this.labelImgPrompt.Size = new System.Drawing.Size(515, 16);
             this.labelImgPrompt.TabIndex = 115;
             this.labelImgPrompt.Text = "No prompt to show.";
             // 

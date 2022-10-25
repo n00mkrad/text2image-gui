@@ -53,10 +53,10 @@ namespace StableDiffusionGui.Main
                         images = images.Where(img => log.Contains(img.Name)).ToList(); // Only take image if it was written into SD log. Avoids copying too early (post-proc etc)
                     }
 
-                    bool sub = currTask.SubfoldersPerPrompt;
+                    bool sessionDir = Config.GetBool("checkboxFolderPerSession");
                     Dictionary<string, string> imageDirMap = new Dictionary<string, string>();
 
-                    if (sub)
+                    if (currTask.SubfoldersPerPrompt)
                     {
                         foreach (var img in images)
                         {
@@ -66,13 +66,14 @@ namespace StableDiffusionGui.Main
                             string unixTimestamp = ((long)(DateTime.Now - new DateTime(1970, 1, 1)).TotalMilliseconds).ToString();
                             prompt = currTask.IgnoreWildcardsForFilenames && currSettings.ProcessedAndRawPrompts.ContainsKey(prompt) ? currSettings.ProcessedAndRawPrompts[prompt] : prompt;
                             string dirName = string.IsNullOrWhiteSpace(prompt) ? $"unknown_prompt_{unixTimestamp}" : FormatUtils.SanitizePromptFilename(FormatUtils.GetPromptWithoutModifiers(prompt), pathBudget);
-                            imageDirMap[img.FullName] = Directory.CreateDirectory(Path.Combine(currTask.OutDir, dirName)).FullName;
+                            string subDirPath = sessionDir ? Path.Combine(currTask.OutDir, Paths.SessionTimestamp, dirName) : Path.Combine(currTask.OutDir, dirName);
+                            imageDirMap[img.FullName] = Directory.CreateDirectory(subDirPath).FullName;
                         }
                     }
 
                     List<string> renamedImgPaths = new List<string>();
 
-                    bool inclPrompt = !sub && Config.GetBool("checkboxPromptInFilename");
+                    bool inclPrompt = !currTask.SubfoldersPerPrompt && Config.GetBool("checkboxPromptInFilename");
                     bool inclSeed = Config.GetBool("checkboxSeedInFilename");
                     bool inclScale = Config.GetBool("checkboxScaleInFilename");
                     bool inclSampler = Config.GetBool("checkboxSamplerInFilename");
@@ -83,9 +84,9 @@ namespace StableDiffusionGui.Main
                         try
                         {
                             var img = images[i];
-                            string number = $"-{(currTask.ImgCount).ToString().PadLeft(currTask.TargetImgCount.ToString().Length, '0')}";
-                            string parentDir = sub ? imageDirMap[img.FullName] : currTask.OutDir;
-                            string renamedPath = FormatUtils.GetExportFilename(img.FullName, parentDir, number, "png", _maxPathLength, inclPrompt, inclSeed, inclScale, inclSampler, inclModel);
+                            string number = $"{(sessionDir ? "" : "-")}{(currTask.ImgCount).ToString().PadLeft(currTask.TargetImgCount.ToString().Length, '0')}";
+                            string parentDir = currTask.SubfoldersPerPrompt ? imageDirMap[img.FullName] : currTask.OutDir;
+                            string renamedPath = FormatUtils.GetExportFilename(img.FullName, parentDir, number, "png", _maxPathLength, !sessionDir, inclPrompt, inclSeed, inclScale, inclSampler, inclModel);
                             OverlayMaskIfExists(img.FullName);
                             Logger.Log($"ImageExport: Trying to move {img.Name} => {renamedPath}", true);
                             img.MoveTo(renamedPath);

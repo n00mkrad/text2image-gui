@@ -164,21 +164,20 @@ namespace StableDiffusionGui.MiscUtils
                 return codec.ToTitleCase();
         }
 
-        public static string GetExportFilename(string filePath, string parentDir, string suffix, string ext, int pathLimit, bool inclPrompt, bool inclSeed, bool inclScale, bool inclSampler, bool inclModel)
+        public static string GetExportFilename(string filePath, string parentDir, string suffix, string ext, int pathLimit, bool inclTime, bool inclPrompt, bool inclSeed, bool inclScale, bool inclSampler, bool inclModel)
         {
             try
             {
                 ext = ext.Remove(".");
 
                 var n = DateTime.Now;
-                string timestamp = $"{n.Year}-{n.Month.ToString().PadLeft(2, '0')}-{n.Day.ToString().PadLeft(2, '0')}-{n.Hour.ToString().PadLeft(2, '0')}-{n.Minute.ToString().PadLeft(2, '0')}-{n.Second.ToString().PadLeft(2, '0')}";
+                string timestamp = inclTime ? $"{n.Year}-{n.Month.ToString().PadLeft(2, '0')}-{n.Day.ToString().PadLeft(2, '0')}-{n.Hour.ToString().PadLeft(2, '0')}-{n.Minute.ToString().PadLeft(2, '0')}-{n.Second.ToString().PadLeft(2, '0')}" : "";
 
                 int pathBudget = pathLimit - parentDir.Length - timestamp.Length - suffix.Length - 4;
 
                 var meta = IoUtils.GetImageMetadata(filePath);
 
                 string infoStr = "";
-
 
                 string seed = $"-{meta.Seed}";
 
