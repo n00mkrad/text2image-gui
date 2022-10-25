@@ -151,7 +151,7 @@ namespace StableDiffusionGui.Ui
             else
                 Clear();
 
-            parentDirs.Where(dir => IoUtils.GetAmountOfFiles(dir, true) == 0).ToList().ForEach(dir => IoUtils.TryDeleteIfExists(dir)); // Delete dir if it's now empty
+            parentDirs.Where(dir => !Directory.EnumerateFileSystemEntries(dir).Any()).ToList().ForEach(dir => IoUtils.TryDeleteIfExists(dir)); // Delete dir if it's now empty
         }
     }
 }
