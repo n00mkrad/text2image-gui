@@ -200,7 +200,7 @@ namespace StableDiffusionGui.Main
 
         private static Random _random = new Random();
 
-        public static string ApplyWildcards (string prompt)
+        public static string ApplyWildcards (string prompt, int iterations)
         {
             string[] split = prompt.Split(' ');
 
@@ -218,8 +218,18 @@ namespace StableDiffusionGui.Main
 
                     if (File.Exists(wildcardPath))
                     {
-                        var lines = File.ReadAllLines(wildcardPath).Where(line => !string.IsNullOrWhiteSpace(line)).ToArray(); // Read all lines from wildcard file
-                        split[i] = lines[_random.Next(0, lines.Length)]; // Pick random line, insert back into word array
+                        var lines = File.ReadAllLines(wildcardPath).Where(line => !string.IsNullOrWhiteSpace(line)); // Read all lines from wildcard file
+                        List<string> linesList = new List<string>(lines);
+
+                        while (lines.Count() < iterations)
+                            linesList.ToList().AddRange(lines);
+
+                        linesList = linesList.Take(iterations).ToList(); // Trim our list to the amount of iterations, even if it repeats
+                        List<int> usedIndexes = new List<int>(); // Store used indexes, to avoid using the same entry twice (if list entries > iterations at least...)
+
+                        int index = _random.Next(0, linesList.Count);
+                        usedIndexes.Add(index);
+                        split[i] = lines.ElementAt(index); // Pick random line, insert back into word array
                         Logger.Log($"Filled wildcard '{wildcardName}' with '{split[i]}'", true);
                     }
                 }

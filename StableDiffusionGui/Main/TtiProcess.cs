@@ -61,7 +61,7 @@ namespace StableDiffusionGui.Main
                         if(initImages == null) // No init image(s)
                         {
                             List<string> args = new List<string>();
-                            args.Add(TtiUtils.ApplyWildcards(prompt).Wrap());
+                            args.Add(TtiUtils.ApplyWildcards(prompt, iterations).Wrap());
                             args.Add($"-n 1");
                             args.Add($"-s {steps}");
                             args.Add($"-C {scale.ToStringDot()}");
@@ -85,7 +85,7 @@ namespace StableDiffusionGui.Main
                                 foreach (float strength in initStrengths)
                                 {
                                     List<string> args = new List<string>();
-                                    args.Add(TtiUtils.ApplyWildcards(prompt).Wrap());
+                                    args.Add(TtiUtils.ApplyWildcards(prompt, iterations).Wrap());
                                     args.Add($"--init_img {initImg.Wrap()} --strength {strength.ToStringDot("0.###")}");
                                     args.Add($"-n 1");
                                     args.Add($"-s {steps}");
