@@ -54,6 +54,8 @@ namespace StableDiffusionGui.Main
 
             foreach (string prompt in prompts)
             {
+                TtiUtils.ResetUsedWildcardIndexes();
+
                 for (int i = 0; i < iterations; i++)
                 {
                     foreach (float scale in scales)

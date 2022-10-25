@@ -199,6 +199,7 @@ namespace StableDiffusionGui.Main
         }
 
         private static Random _random = new Random();
+        private static List<int> _usedWildcardIndexes = new List<int>(); // Store used indexes, to avoid using the same entry twice (if list entries > iterations at least...)
 
         public static string ApplyWildcards (string prompt, int iterations)
         {
@@ -225,10 +226,13 @@ namespace StableDiffusionGui.Main
                             linesList.ToList().AddRange(lines);
 
                         linesList = linesList.Take(iterations).ToList(); // Trim our list to the amount of iterations, even if it repeats
-                        List<int> usedIndexes = new List<int>(); // Store used indexes, to avoid using the same entry twice (if list entries > iterations at least...)
 
                         int index = _random.Next(0, linesList.Count);
-                        usedIndexes.Add(index);
+
+                        while(_usedWildcardIndexes.Contains(index))
+                            index = _random.Next(0, linesList.Count);
+
+                        _usedWildcardIndexes.Add(index);
                         split[i] = lines.ElementAt(index); // Pick random line, insert back into word array
                         Logger.Log($"Filled wildcard '{wildcardName}' with '{split[i]}'", true);
                     }
@@ -236,6 +240,11 @@ namespace StableDiffusionGui.Main
             }
 
             return string.Join(" ", split);
+        }
+
+        public static void ResetUsedWildcardIndexes ()
+        {
+            _usedWildcardIndexes.Clear();
         }
     }
 }
