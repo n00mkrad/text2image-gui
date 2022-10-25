@@ -31,7 +31,7 @@ namespace StableDiffusionGui.Main
                     var files = IoUtils.GetFileInfosSorted(imagesDir, false, "*.png");
                     bool running = IoUtils.GetFileInfosSorted(Paths.GetSessionDataPath(), false, "prompts*.*").Any();
 
-                    if (TextToImage.LastTaskSettings.Implementation == Implementation.StableDiffusion)
+                    if (TextToImage.CurrentTaskSettings.Implementation == Implementation.StableDiffusion)
                         running = (TextToImage.CurrentTask.ImgCount - startingImgCount) < targetImgCount;
 
                     if (!running && !files.Any())
@@ -44,7 +44,7 @@ namespace StableDiffusionGui.Main
                     images = images.Where(x => !IoUtils.IsFileLocked(x)).ToList(); // Ignore files that are still in use
                     images = images.Where(x => (DateTime.Now - x.LastWriteTime).TotalMilliseconds >= _minimumImageAgeMs).ToList(); // Wait a certain time to make sure python is done writing to it
 
-                    if (TextToImage.LastTaskSettings.Implementation == Implementation.StableDiffusion)
+                    if (TextToImage.CurrentTaskSettings.Implementation == Implementation.StableDiffusion)
                     {
                         string log = Logger.GetSessionLog(Constants.Lognames.Sd);
                         images = images.Where(img => log.Contains(img.Name)).ToList(); // Only take image if it was written into SD log. Avoids copying too early (post-proc etc)
@@ -61,6 +61,7 @@ namespace StableDiffusionGui.Main
                             string prompt = IoUtils.GetImageMetadata(img.FullName).Prompt;
                             int pathBudget = 255 - img.Directory.FullName.Length - 65;
                             string unixTimestamp = ((long)(DateTime.Now - new DateTime(1970, 1, 1)).TotalMilliseconds).ToString();
+                            prompt = TextToImage.CurrentTask.IgnoreWildcardsForFilenames ? TextToImage.CurrentTaskSettings.ProcessedAndRawPrompts[prompt] : prompt;
                             string dirName = string.IsNullOrWhiteSpace(prompt) ? $"unknown_prompt_{unixTimestamp}" : FormatUtils.SanitizePromptFilename(FormatUtils.GetPromptWithoutModifiers(prompt), pathBudget);
                             imageDirMap[img.FullName] = Directory.CreateDirectory(Path.Combine(TextToImage.CurrentTask.OutDir, dirName)).FullName;
                         }
@@ -109,6 +110,11 @@ namespace StableDiffusionGui.Main
             }
 
             Logger.Log("ExportLoop END", true);
+        }
+
+        private string GetOutputSubDir ()
+        {
+            return "";
         }
 
         private static void OverlayMaskIfExists(string imgPath, bool copyMetadata = true)

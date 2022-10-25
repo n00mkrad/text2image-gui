@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StableDiffusionGui.Controls;
+using System;
 using System.Windows.Forms;
 
 namespace StableDiffusionGui.Io
@@ -45,7 +46,7 @@ namespace StableDiffusionGui.Io
 
         public static void SaveGuiElement(HTAlt.WinForms.HTSlider slider, SaveValueAs convertMode = SaveValueAs.Unchanged, float convertValue = 1f)
         {
-            float value = (float)slider.Value;
+            float value = slider is CustomSlider ? ((CustomSlider)slider).ActualValueFloat : slider.Value;
 
             if (convertMode == SaveValueAs.Multiplied)
                 value = value * convertValue;
@@ -93,7 +94,10 @@ namespace StableDiffusionGui.Io
             if (convertMode == SaveValueAs.Divided)
                 value = value * convertValue;
 
-            slider.Value = value.RoundToInt().Clamp(slider.Minimum, slider.Maximum);
+            if (slider is CustomSlider)
+                ((CustomSlider)slider).ActualValue = (decimal)value.Clamp((float)((CustomSlider)slider).ActualMinimum, (float)((CustomSlider)slider).ActualMaximum);
+            else
+                slider.Value = value.RoundToInt().Clamp(slider.Minimum, slider.Maximum);
         }
 
         public static void LoadComboxIndex(ComboBox comboBox)

@@ -434,7 +434,15 @@ namespace StableDiffusionGui
 
         public static Dictionary<V, K> SwapKeysValues<V, K> (this Dictionary<K, V> dict)
         {
-            return dict.ToDictionary(x => x.Value, x => x.Key);
+            Dictionary<V, K> result = new Dictionary<V, K>();
+
+            foreach(var pair in dict)
+            {
+                if(!result.ContainsKey(pair.Value))
+                    result.Add(pair.Value, pair.Key);
+            }
+
+            return result;
         }
 
         public static string Lower (this string s)

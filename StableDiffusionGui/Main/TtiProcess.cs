@@ -61,10 +61,12 @@ namespace StableDiffusionGui.Main
                 {
                     foreach (float scale in scales)
                     {
-                        if(initImages == null) // No init image(s)
+                        if (initImages == null) // No init image(s)
                         {
                             List<string> args = new List<string>();
-                            args.Add(PromptWildcardUtils.ApplyWildcards(prompt, iterations).Wrap());
+                            string p = PromptWildcardUtils.ApplyWildcards(prompt, iterations);
+                            TextToImage.CurrentTaskSettings.ProcessedAndRawPrompts[p] = prompt; // Save the prompt we stored plus the processed (wildcards etc.) one for later reference
+                            args.Add(p.Wrap());
                             args.Add($"-n 1");
                             args.Add($"-s {steps}");
                             args.Add($"-C {scale.ToStringDot()}");
@@ -83,12 +85,14 @@ namespace StableDiffusionGui.Main
                         }
                         else // With init image(s)
                         {
-                            foreach(string initImg in initImages.Values)
+                            foreach (string initImg in initImages.Values)
                             {
                                 foreach (float strength in initStrengths)
                                 {
                                     List<string> args = new List<string>();
-                                    args.Add(PromptWildcardUtils.ApplyWildcards(prompt, iterations).Wrap());
+                                    string p = PromptWildcardUtils.ApplyWildcards(prompt, iterations);
+                                    TextToImage.CurrentTaskSettings.RawAndProcessedPrompts[prompt] = p; // Save the prompt we stored plus the processed (wildcards etc.) one for later reference
+                                    args.Add(p.Wrap());
                                     args.Add($"--init_img {initImg.Wrap()} --strength {strength.ToStringDot("0.###")}");
                                     args.Add($"-n 1");
                                     args.Add($"-s {steps}");
@@ -110,7 +114,7 @@ namespace StableDiffusionGui.Main
                         }
                     }
 
-                    if(!lockSeed)
+                    if (!lockSeed)
                         seed++;
                 }
 

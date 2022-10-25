@@ -16,6 +16,9 @@ namespace StableDiffusionGui.Data
         public string[] Prompts { get; set; } = new string[] { "" };
         public int Iterations { get; set; } = 1;
         public Dictionary<string, string> Params { get; set; } = new Dictionary<string, string>();
+        public Dictionary<string, string> ProcessedAndRawPrompts { get; set; } = new Dictionary<string, string>();
+        public Dictionary<string, string> RawAndProcessedPrompts { get { return ProcessedAndRawPrompts.SwapKeysValues(); } } // Same as above but Key/Value swapped
+
 
         public int GetTargetImgCount()
         {
@@ -48,25 +51,6 @@ namespace StableDiffusionGui.Data
                         }
                     }
                 }
-
-                // foreach (string prompt in Prompts)
-                // {
-                //     for (int i = 0; i < Iterations; i++)
-                //     {
-                //         foreach (var scale in Params["scales"].Replace(" ", "").Split(","))
-                //         {
-                // 
-                // 
-                //             foreach (var strength in Params["initStrengths"].Replace(" ", "").Split(","))
-                //             {
-                //                 count++;
-                // 
-                //                 if (string.IsNullOrWhiteSpace(Params["initImg"]))
-                //                     break;
-                //             }
-                //         }
-                //     }
-                // }
 
                 return count;
             }

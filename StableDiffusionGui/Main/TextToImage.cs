@@ -16,7 +16,7 @@ namespace StableDiffusionGui.Main
     internal class TextToImage
     {
         public static TtiTaskInfo CurrentTask { get; set; } = null;
-        public static TtiSettings LastTaskSettings { get; set; } = null;
+        public static TtiSettings CurrentTaskSettings { get; set; } = null;
         public static long PreviousSeed = -1;
         public static bool Canceled = false;
 
@@ -42,6 +42,7 @@ namespace StableDiffusionGui.Main
                 StartTime = DateTime.Now,
                 OutDir = Config.Get(Config.Key.textboxOutPath),
                 SubfoldersPerPrompt = Config.GetBool("checkboxFolderPerPrompt"),
+                IgnoreWildcardsForFilenames = Config.GetBool("checkboxOutputIgnoreWildcards"),
                 TargetImgCount = batches.Sum(x => x.GetTargetImgCount()),
             };
 
@@ -53,7 +54,7 @@ namespace StableDiffusionGui.Main
                 if (s.Params.ContainsKey("seed"))
                     PreviousSeed = s.Params["seed"].FromJson<long>();
 
-                LastTaskSettings = s;
+                CurrentTaskSettings = s;
                 s.Prompts = s.Prompts.Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
 
                 if (!s.Prompts.Any())
@@ -135,17 +136,17 @@ namespace StableDiffusionGui.Main
             bool manual = reason.Lower().Contains("manually");
             bool forceKill = manual && InputUtils.IsHoldingShift; // Shift force-kills the process
 
-            Logger.Log($"Canceling. Manual: {manual} - Implementation: {(LastTaskSettings != null ? LastTaskSettings.Implementation.ToString() : "None")} - Force Kill: {forceKill}", true);
+            Logger.Log($"Canceling. Manual: {manual} - Implementation: {(CurrentTaskSettings != null ? CurrentTaskSettings.Implementation.ToString() : "None")} - Force Kill: {forceKill}", true);
 
             if (!forceKill && TtiProcess.IsAiProcessRunning)
             {
-                if (LastTaskSettings.Implementation == Implementation.StableDiffusionOptimized)
+                if (CurrentTaskSettings.Implementation == Implementation.StableDiffusionOptimized)
                 {
                     IoUtils.TryDeleteIfExists(Path.Combine(Paths.GetSessionDataPath(), "prompts.txt"));
                     TtiUtils.SoftCancelDreamPy();
                 }
 
-                if (LastTaskSettings.Implementation == Implementation.StableDiffusion)
+                if (CurrentTaskSettings.Implementation == Implementation.StableDiffusion)
                 {
                     if (Logger.GetSessionLogLastLines(Constants.Lognames.Sd, 15).Where(x => x.MatchesWildcard("*step */*")).Any()) // Only attempt a soft cancel if we've been generating anything
                         await WaitForDreamPyCancel();

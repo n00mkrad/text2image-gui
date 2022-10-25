@@ -250,10 +250,10 @@ namespace StableDiffusionGui.Io
 
             if (key == Key.checkboxMultiPromptsSameSeed) return WriteDefault(key, "True");
             if (key == Key.sliderInitStrength) return WriteDefault(key, "10");
-            if (key == Key.sliderResW) return WriteDefault(key, "512");
-            if (key == Key.sliderResH) return WriteDefault(key, "512");
+            if (keyStr == "comboxResW") return WriteDefault(key, "512");
+            if (keyStr == "comboxResH") return WriteDefault(key, "512");
             if (key == Key.sliderSteps) return WriteDefault(key, "25");
-            if (key == Key.sliderScale) return WriteDefault(key, "9");
+            if (key == Key.sliderScale) return WriteDefault(key, "8");
             if (key == Key.textboxOutPath) return WriteDefault(key, Path.Combine(Paths.GetExeDir(), "Images"));
             if (key == Key.upDownIterations) return WriteDefault(key, "5");
             if (key == Key.comboxSdModel) return WriteDefault(key, Paths.GetModels().Select(x => x.Name).FirstOrDefault());
@@ -261,6 +261,7 @@ namespace StableDiffusionGui.Io
             if (key == Key.sliderCodeformerFidelity) return WriteDefault(key, "0.6");
             if (keyStr == "checkboxFullPrecision") return WriteDefault(key, (GpuUtils.CachedGpus.Count > 0 && GpuUtils.CachedGpus[0].FullName.Contains(" GTX 16")).ToString());
             if (keyStr.MatchesWildcard("checkbox*InFilename")) return WriteDefault(key, true.ToString());
+            if (keyStr == "checkboxOutputIgnoreWildcards") return WriteDefault(key, true.ToString());
 
             if (key == Key.none)
                 return WriteDefault(keyStr, "");
@@ -287,8 +288,6 @@ namespace StableDiffusionGui.Io
             checkboxMultiPromptsSameSeed,
             comboxSampler,
             sliderInitStrength,
-            sliderResW,
-            sliderResH,
             sliderSteps,
             sliderScale,
             textboxOutPath,

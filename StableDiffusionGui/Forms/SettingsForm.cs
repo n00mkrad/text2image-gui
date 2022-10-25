@@ -83,6 +83,8 @@ namespace StableDiffusionGui.Forms
             ConfigParser.LoadGuiElement(checkboxOptimizedSd);
             ConfigParser.LoadGuiElement(checkboxFullPrecision);
             ConfigParser.LoadGuiElement(checkboxFolderPerPrompt);
+            ConfigParser.LoadGuiElement(checkboxOutputIgnoreWildcards);
+            ConfigParser.LoadGuiElement(checkboxFolderPerSession);
             ConfigParser.LoadGuiElement(checkboxAdvancedMode);
             ConfigParser.LoadGuiElement(checkboxMultiPromptsSameSeed);
             ConfigParser.LoadGuiElement(checkboxPromptInFilename);
@@ -103,6 +105,8 @@ namespace StableDiffusionGui.Forms
             ConfigParser.SaveGuiElement(checkboxOptimizedSd);
             ConfigParser.SaveGuiElement(checkboxFullPrecision);
             ConfigParser.SaveGuiElement(checkboxFolderPerPrompt);
+            ConfigParser.SaveGuiElement(checkboxOutputIgnoreWildcards);
+            ConfigParser.SaveGuiElement(checkboxFolderPerSession);
             ConfigParser.SaveGuiElement(checkboxAdvancedMode);
             ConfigParser.SaveGuiElement(checkboxMultiPromptsSameSeed);
             ConfigParser.SaveGuiElement(checkboxPromptInFilename);

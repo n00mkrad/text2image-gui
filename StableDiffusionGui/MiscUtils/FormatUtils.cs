@@ -203,7 +203,7 @@ namespace StableDiffusionGui.MiscUtils
                     infoStr += sampler;
                 }
 
-                string model = $"-{Path.ChangeExtension(TextToImage.LastTaskSettings.Params.Get("model").FromJson<string>(), null).Trim().Trunc(20, false)}";
+                string model = $"-{Path.ChangeExtension(TextToImage.CurrentTaskSettings.Params.Get("model").FromJson<string>(), null).Trim().Trunc(20, false)}";
 
                 if (inclModel && model.Length > 1 && (pathBudget - model.Length > 0))
                 {
