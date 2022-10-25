@@ -108,7 +108,6 @@ namespace StableDiffusionGui.Forms
                 comboxBaseModel.SelectedIndex = 0;
         }
 
-
         private async void btnRun_Click(object sender, EventArgs e)
         {
             if(Program.State == Program.BusyState.Dreambooth)

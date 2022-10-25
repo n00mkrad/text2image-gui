@@ -74,7 +74,7 @@ namespace StableDiffusionGui.MiscUtils
             catch(Exception ex)
             {
                 Logger.Log($"Wildcard Error: {ex.Message}");
-                Logger.Log($"Trace: {ex.StackTrace}");
+                Logger.Log(ex.StackTrace, true);
                 return prompt;
             }
         }
