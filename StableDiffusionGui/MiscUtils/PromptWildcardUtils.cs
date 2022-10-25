@@ -49,11 +49,17 @@ namespace StableDiffusionGui.MiscUtils
 
                     string regex = @"(?i)[^a-z-0-9]"; // A-Z, case insensitive, numbers
                     var wordSplit = Regex.Split(split[i], regex);
-                    string breakingDelimiter = Regex.Matches(split[i], regex).Cast<Match>().First().Value;
+
+                    string rest = "";
+                    var breakingDelimMatches = Regex.Matches(split[i], regex).Cast<Match>(); // If this has 0 matches, we are at the end of the string, see below...
+
+                    if (breakingDelimMatches.Count() > 0)
+                    {
+                        string breakingDelimiter = breakingDelimMatches.Count() > 0 ? breakingDelimMatches.First().Value : ""; // First char that no longer belongs to wildcard name
+                        rest = breakingDelimiter + string.Join(breakingDelimiter, split[i].Split(breakingDelimiter).Skip(1));
+                    }
 
                     string wildcardName = wordSplit.FirstOrDefault().Trim();
-                    string rest = breakingDelimiter + string.Join(breakingDelimiter, split[i].Split(breakingDelimiter).Skip(1));
-
                     string wildcardPath = Path.Combine(Paths.GetExeDir(), Constants.Dirs.Wildcards, wildcardName + ".txt");
 
                     if (File.Exists(wildcardPath))
