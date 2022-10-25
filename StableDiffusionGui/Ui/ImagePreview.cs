@@ -16,7 +16,7 @@ namespace StableDiffusionGui.Ui
     {
         public enum ImgShowMode { DontShow, ShowFirst, ShowLast }
 
-        public static string CurrentImagePath { get { return _currentImages.Length > 0 ? _currentImages[_currIndex] : ""; } }
+        public static string CurrentImagePath { get { try { return _currentImages.Length > 0 ? _currentImages[_currIndex] : ""; } catch { return ""; } } }
         public static ImageMetadata CurrentImageMetadata { get { return IoUtils.GetImageMetadata(CurrentImagePath); } }
 
         private static string[] _currentImages = new string[0];

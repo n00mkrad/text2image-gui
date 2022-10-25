@@ -197,54 +197,5 @@ namespace StableDiffusionGui.Main
 
             return $"SET PATH={path}{devicesArg}";
         }
-
-        private static Random _random = new Random();
-        private static List<int> _usedWildcardIndexes = new List<int>(); // Store used indexes, to avoid using the same entry twice (if list entries > iterations at least...)
-
-        public static string ApplyWildcards (string prompt, int iterations)
-        {
-            string[] split = prompt.Split(' ');
-
-            for(int i = 0; i < split.Length; i++)
-            {
-                if (string.IsNullOrWhiteSpace(split[i]))
-                    continue;
-
-                string word = split[i].Trim();
-
-                if (word.MatchesWildcard("<wc:*>"))
-                {
-                    string wildcardName = word.Split("<wc:")[1].Split('>')[0];
-                    string wildcardPath = Path.Combine(Paths.GetExeDir(), Constants.Dirs.Wildcards, wildcardName + ".txt");
-
-                    if (File.Exists(wildcardPath))
-                    {
-                        var lines = File.ReadAllLines(wildcardPath).Where(line => !string.IsNullOrWhiteSpace(line)); // Read all lines from wildcard file
-                        List<string> linesList = new List<string>(lines);
-
-                        while (lines.Count() < iterations)
-                            linesList.ToList().AddRange(lines);
-
-                        linesList = linesList.Take(iterations).ToList(); // Trim our list to the amount of iterations, even if it repeats
-
-                        int index = _random.Next(0, linesList.Count);
-
-                        while(_usedWildcardIndexes.Contains(index))
-                            index = _random.Next(0, linesList.Count);
-
-                        _usedWildcardIndexes.Add(index);
-                        split[i] = lines.ElementAt(index); // Pick random line, insert back into word array
-                        Logger.Log($"Filled wildcard '{wildcardName}' with '{split[i]}'", true);
-                    }
-                }
-            }
-
-            return string.Join(" ", split);
-        }
-
-        public static void ResetUsedWildcardIndexes ()
-        {
-            _usedWildcardIndexes.Clear();
-        }
     }
 }

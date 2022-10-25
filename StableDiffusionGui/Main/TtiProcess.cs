@@ -1,4 +1,5 @@
 ﻿using StableDiffusionGui.Io;
+using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using System;
 using System.Collections.Generic;
@@ -54,7 +55,7 @@ namespace StableDiffusionGui.Main
 
             foreach (string prompt in prompts)
             {
-                TtiUtils.ResetUsedWildcardIndexes();
+                PromptWildcardUtils.Reset();
 
                 for (int i = 0; i < iterations; i++)
                 {
@@ -63,7 +64,7 @@ namespace StableDiffusionGui.Main
                         if(initImages == null) // No init image(s)
                         {
                             List<string> args = new List<string>();
-                            args.Add(TtiUtils.ApplyWildcards(prompt, iterations).Wrap());
+                            args.Add(PromptWildcardUtils.ApplyWildcards(prompt, iterations).Wrap());
                             args.Add($"-n 1");
                             args.Add($"-s {steps}");
                             args.Add($"-C {scale.ToStringDot()}");
@@ -87,7 +88,7 @@ namespace StableDiffusionGui.Main
                                 foreach (float strength in initStrengths)
                                 {
                                     List<string> args = new List<string>();
-                                    args.Add(TtiUtils.ApplyWildcards(prompt, iterations).Wrap());
+                                    args.Add(PromptWildcardUtils.ApplyWildcards(prompt, iterations).Wrap());
                                     args.Add($"--init_img {initImg.Wrap()} --strength {strength.ToStringDot("0.###")}");
                                     args.Add($"-n 1");
                                     args.Add($"-s {steps}");
