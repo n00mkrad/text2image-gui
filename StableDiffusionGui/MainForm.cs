@@ -590,7 +590,7 @@ namespace StableDiffusionGui
 
         private void btnSettings_Click(object sender, EventArgs e)
         {
-            new SettingsForm().ShowDialogForm();
+            new SettingsForm().ShowDialogForm(0.5f);
         }
 
         private void btnPostProc_Click(object sender, EventArgs e)

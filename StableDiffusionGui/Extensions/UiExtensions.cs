@@ -71,12 +71,12 @@ namespace StableDiffusionGui.Extensions
             }
         }
 
-        public static DialogResult ShowDialogForm(this Form form, IWin32Window owner, float darken = 0.5f)
+        public static DialogResult ShowDialogForm(this Form form, IWin32Window owner, float darken = 0.0f)
         {
-            return ShowDialogForm(form, owner, darken);
+            return ShowDialogForm(form, darken, owner);
         }
 
-        public static DialogResult ShowDialogForm(this Form form, float darken = 0.5f, IWin32Window owner = null)
+        public static DialogResult ShowDialogForm(this Form form, float darken = 0.0f, IWin32Window owner = null)
         {
             if (darken < 0.01f || Program.MainForm.Controls.ContainsKey("overlayPanel"))
                 return form.ShowDialog(owner);

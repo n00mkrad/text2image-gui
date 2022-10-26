@@ -59,7 +59,7 @@ namespace StableDiffusionGui.Ui
                 Process.Start("https://github.com/n00mkrad/text2image-gui/blob/main/README.md");
 
             if (keys == (Keys.F12)) // Hotkey: Open settings
-                new SettingsForm().ShowDialogForm();
+                new SettingsForm().ShowDialogForm(0.5f);
         }
     }
 }
