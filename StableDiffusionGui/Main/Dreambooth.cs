@@ -31,7 +31,7 @@ namespace StableDiffusionGui.Main
                 Logger.ClearLogBox();
 
                 TtiProcess.ProcessExistWasIntentional = true;
-                ProcessManager.FindAndKillOrphans($"*dream.py*{Paths.SessionTimestamp}*");
+                ProcessManager.FindAndKillOrphans($"*invoke.py*{Paths.SessionTimestamp}*");
 
                 bool showCmd = _useVisibleCmdWindow || OsUtils.ShowHiddenCmd();
 

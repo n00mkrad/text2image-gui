@@ -128,7 +128,7 @@ namespace StableDiffusionGui.Main
             string precArg = ArgsInvoke.GetPrecisionArg();
             string embArg = ArgsInvoke.GetEmbeddingArg(embedding);
 
-            string newStartupSettings = $"{model}{vae}{precArg}{embArg}"; // Check if startup settings match - If not, we need to restart the process
+            string newStartupSettings = $"{model}{vae}{precArg}{embArg}{Config.GetInt("comboxCudaDevice")}"; // Check if startup settings match - If not, we need to restart the process
 
             string initsStr = initImages != null ? $" and {initImages.Count} image{(initImages.Count != 1 ? "s" : "")} using {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
             Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} with {iterations} iteration{(iterations != 1 ? "s" : "")} each and {scales.Length} scale{(scales.Length != 1 ? "s" : "")}{initsStr} each = {imgs} images total.");
@@ -168,7 +168,7 @@ namespace StableDiffusionGui.Main
                 }
 
                 TtiProcessOutputHandler.Start();
-                Logger.Log($"Loading Stable Diffusion with model {Path.ChangeExtension(model, null).Wrap()}{(string.IsNullOrWhiteSpace(vae) ? "" : $" and VAE {Path.GetFileNameWithoutExtension(vae).Wrap()}")}...");
+                Logger.Log($"Loading Stable Diffusion with model {Path.ChangeExtension(model, null).Trunc(40).Wrap()}{(string.IsNullOrWhiteSpace(vae) ? "" : $" and VAE {Path.GetFileNameWithoutExtension(vae).Trunc(40).Wrap()}")}...");
                 CurrentProcess = py;
                 ProcessExistWasIntentional = false;
                 py.Start();
@@ -270,7 +270,7 @@ namespace StableDiffusionGui.Main
 
             string precArg = $"--precision {(Config.GetBool("checkboxFullPrecision") ? "full" : "autocast")}";
 
-            string newStartupSettings = $"opt{modelNoExt}{precArg}"; // Check if startup settings match - If not, we need to restart the process
+            string newStartupSettings = $"opt{modelNoExt}{precArg}{Config.GetInt("comboxCudaDevice")}"; // Check if startup settings match - If not, we need to restart the process
 
             string initsStr = initImages != null ? $" and {initImages.Count} image{(initImages.Count != 1 ? "s" : "")} using {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
             Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} with {iterations} iteration{(iterations != 1 ? "s" : "")} each and {scales.Length} scale{(scales.Length != 1 ? "s" : "")}{initsStr} each = {imgs} images total.");

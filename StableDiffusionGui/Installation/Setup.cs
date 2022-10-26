@@ -172,6 +172,8 @@ namespace StableDiffusionGui.Installation
 
         public static async Task CloneSdRepo()
         {
+            TtiProcess.ProcessExistWasIntentional = true;
+            ProcessManager.FindAndKillOrphans($"*invoke.py*{Paths.SessionTimestamp}*");
             await CloneSdRepo($"https://github.com/{GitFile}", GetDataSubPath(Constants.Dirs.RepoSd));
         }
 
