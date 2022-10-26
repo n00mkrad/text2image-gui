@@ -14,7 +14,7 @@ namespace StableDiffusionGui.Forms
 
         private void InstallerForm_Load(object sender, EventArgs e)
         {
-
+            Enabled = false;
         }
 
         private async void installBtn_Click(object sender, EventArgs e)
@@ -30,6 +30,7 @@ namespace StableDiffusionGui.Forms
         {
             Refresh();
             UpdateStatus();
+            Enabled = true;
         }
 
         public void UpdateStatus ()

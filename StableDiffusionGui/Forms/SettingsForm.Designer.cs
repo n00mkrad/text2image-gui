@@ -226,7 +226,7 @@
             this.parentPanel.Controls.Add(this.panel11);
             this.parentPanel.Location = new System.Drawing.Point(12, 62);
             this.parentPanel.Name = "parentPanel";
-            this.parentPanel.Size = new System.Drawing.Size(800, 636);
+            this.parentPanel.Size = new System.Drawing.Size(800, 587);
             this.parentPanel.TabIndex = 14;
             // 
             // panel1
@@ -1353,7 +1353,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.ClientSize = new System.Drawing.Size(824, 710);
+            this.ClientSize = new System.Drawing.Size(824, 661);
             this.Controls.Add(this.parentPanel);
             this.Controls.Add(this.titleLabel);
             this.ForeColor = System.Drawing.Color.White;
