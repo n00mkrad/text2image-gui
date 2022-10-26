@@ -149,7 +149,7 @@ namespace StableDiffusionGui.Main
                 TextToImage.CurrentTask.Processes.Add(py);
 
                 py.StartInfo.RedirectStandardInput = true;
-                py.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSd()} && call activate.bat ldo && " +
+                py.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSd()} && call activate.bat {Constants.Dirs.SdEnv} && " +
                     $"python {Constants.Dirs.RepoSd}/scripts/invoke.py --model default -o {outPath.Wrap(true)} {ArgsInvoke.GetDefaultArgsStartup()} {precArg} " +
                     $"{embArg} ";
 
@@ -282,7 +282,7 @@ namespace StableDiffusionGui.Main
                 Process py = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
                 TextToImage.CurrentTask.Processes.Add(py);
 
-                py.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSd()} && call activate.bat ldo && " +
+                py.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSd()} && call activate.bat {Constants.Dirs.SdEnv} && " +
                     $"python {Constants.Dirs.RepoSd}/optimizedSD/optimized_txt2img_loop.py --model {modelNoExt.Wrap()} --outdir {outPath.Wrap(true)} --from_file_loop={promptFilePath.Wrap()} {precArg} ";
                 Logger.Log("cmd.exe " + py.StartInfo.Arguments, true);
 
@@ -336,14 +336,21 @@ namespace StableDiffusionGui.Main
             string batText = $"@echo off\n" +
                 $"title Stable Diffusion CLI (InvokeAI)\n" +
                 $"cd /D {Paths.GetDataPath().Wrap()}\n" +
-                $"SET PATH={OsUtils.GetTemporaryPathVariable(new string[] { "./mb", "./mb/Scripts", "./mb/condabin", "./mb/Library/bin" })}\n" +
-                $"call activate.bat mb/envs/ldo\n" +
+                $"SET PATH={OsUtils.GetTemporaryPathVariable(new string[] { $"./{Constants.Dirs.Conda}", $"./{Constants.Dirs.Conda}/Scripts", $"./{Constants.Dirs.Conda}/condabin", $"./{Constants.Dirs.Conda}/Library/bin" })}\n" +
+                $"call activate.bat {Constants.Dirs.Conda}/envs/{Constants.Dirs.SdEnv}\n" +
                 $"python {Constants.Dirs.RepoSd}/scripts/invoke.py --model default -o {outPath.Wrap(true)} {ArgsInvoke.GetPrecisionArg()} {ArgsInvoke.GetDefaultArgsStartup()}";
 
             File.WriteAllText(batPath, batText);
             ProcessManager.FindAndKillOrphans($"*invoke.py*{outPath}*");
             Process cli = Process.Start(batPath);
             OsUtils.AttachOrphanHitman(cli);
+        }
+
+        public static void StartCmdInSdCondaEnv ()
+        {
+            string c = Constants.Dirs.Conda;
+            string pathVar = OsUtils.GetTemporaryPathVariable(new string[] { $"./{c}", $"./{c}/Scripts", $"./{c}/condabin", $"./{c}/Library/bin" });
+            Process.Start("cmd", $"/K title Environment: {Constants.Dirs.SdEnv} && cd /D {Paths.GetDataPath().Wrap()} && SET PATH={pathVar} && call activate.bat {c}/envs/{Constants.Dirs.SdEnv}");
         }
 
         public static async Task<bool> WriteStdIn(string text, bool submitLine = true)

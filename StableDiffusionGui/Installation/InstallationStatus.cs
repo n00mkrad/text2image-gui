@@ -1,11 +1,8 @@
 ﻿using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Policy;
-using System.Threading.Tasks;
 
 namespace StableDiffusionGui.Installation
 {
@@ -16,10 +13,10 @@ namespace StableDiffusionGui.Installation
 
         public static bool HasConda ()
         {
-            string minicondaScriptsPath = Path.Combine(Paths.GetDataPath(), "mb", "Scripts");
+            string minicondaScriptsPath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.Conda, "Scripts");
             bool hasBat = IoUtils.GetAmountOfFiles(minicondaScriptsPath, false, "*.bat") > 0;
 
-            string minicondaExePath = Path.Combine(Paths.GetDataPath(), "mb", "_conda.exe");
+            string minicondaExePath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.Conda, "_conda.exe");
             bool hasExe = File.Exists(minicondaExePath);
 
             Logger.Log($"HasConda - Has *.bat: {hasBat} - Has _conda.exe: {hasExe}", true);
@@ -39,13 +36,13 @@ namespace StableDiffusionGui.Installation
 
         public static bool HasSdEnv()
         {
-            string pyExePath = Path.Combine(Paths.GetDataPath(), "mb", "envs", "ldo", "python.exe");
+            string pyExePath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.Conda, "envs", Constants.Dirs.SdEnv, "python.exe");
             bool hasPyExe = File.Exists(pyExePath);
 
-            string torchPath = Path.Combine(Paths.GetDataPath(), "mb", "envs", "ldo", "Lib", "site-packages", "torch");
+            string torchPath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.Conda, "envs", Constants.Dirs.SdEnv, "Lib", "site-packages", "torch");
             bool hasTorch = Directory.Exists(torchPath);
 
-            string binPath = Path.Combine(Paths.GetDataPath(), "mb", "envs", "ldo", "Library", "bin");
+            string binPath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.Conda, "envs", Constants.Dirs.SdEnv, "Library", "bin");
             bool hasBin = Directory.Exists(binPath);
 
             Logger.Log($"HasSdEnv - Has Python Exe: {hasPyExe} - Has Pytorch: {hasTorch} - Has bin: {hasBin}", true);
@@ -60,7 +57,7 @@ namespace StableDiffusionGui.Installation
 
         public static bool HasSdUpscalers()
         {
-            string esrganPath = Path.Combine(Paths.GetDataPath(), "mb", "envs", "ldo", "Lib", "site-packages", "basicsr");
+            string esrganPath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.Conda, "envs", Constants.Dirs.SdEnv, "Lib", "site-packages", "basicsr");
             bool hasEsrgan = Directory.Exists(esrganPath);
 
             string gfpPath = Path.Combine(Paths.GetDataPath(), "gfpgan");

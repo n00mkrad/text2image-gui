@@ -86,16 +86,16 @@ namespace StableDiffusionGui.Installation
             l.Add($"");
             l.Add($"echo Working dir: %cd%");
             l.Add($"");
-            l.Add($"SET CONDA_ROOT_PATH=../mb");
-            l.Add($"SET CONDA_SCRIPTS_PATH=../mb/Scripts");
+            l.Add($"SET CONDA_ROOT_PATH=../{Constants.Dirs.Conda}");
+            l.Add($"SET CONDA_SCRIPTS_PATH=../{Constants.Dirs.Conda}/Scripts");
             l.Add($"");
-            l.Add($"SET PATH={OsUtils.GetTemporaryPathVariable(new string[] { "../mb", "../mb/Scripts", "../mb/condabin", "../mb/Library/bin" })}");
+            l.Add($"SET PATH={OsUtils.GetTemporaryPathVariable(new string[] { $"../{Constants.Dirs.Conda}", $"../{Constants.Dirs.Conda}/Scripts", $"../{Constants.Dirs.Conda}/condabin", $"../{Constants.Dirs.Conda}/Library/bin" })}");
             l.Add($"");
-            l.Add($"_conda env create -f environment.yml -p \"%CONDA_ROOT_PATH%\\envs\\ldo\"");
-            l.Add($"_conda env update --file environment.yml --prune -p \"%CONDA_ROOT_PATH%\\envs\\ldo\"");
+            l.Add($"_conda env create -f environment.yml -p \"%CONDA_ROOT_PATH%\\envs\\{Constants.Dirs.SdEnv}\"");
+            l.Add($"_conda env update --file environment.yml --prune -p \"%CONDA_ROOT_PATH%\\envs\\{Constants.Dirs.SdEnv}\"");
             l.Add($"");
             l.Add($"rmdir /q /s \"%CONDA_ROOT_PATH%\\pkgs\"");
-            l.Add($"call \"%CONDA_SCRIPTS_PATH%\\activate.bat\" \"%CONDA_ROOT_PATH%\\envs\\ldo\"");
+            l.Add($"call \"%CONDA_SCRIPTS_PATH%\\activate.bat\" \"%CONDA_ROOT_PATH%\\envs\\{Constants.Dirs.SdEnv}\"");
 
             File.WriteAllLines(batPath, l);
 
@@ -299,16 +299,15 @@ namespace StableDiffusionGui.Installation
 
         #region Uninstall
 
-        public static async Task Cleanup()
+        public static async Task RemoveRepo()
         {
             IoUtils.SetAttributes(GetDataSubPath(Constants.Dirs.RepoSd), FileAttributes.Normal);
             await IoUtils.TryDeleteIfExistsAsync(GetDataSubPath(Constants.Dirs.RepoSd));
-            await IoUtils.TryDeleteIfExistsAsync(GetDataSubPath("ldo"));
         }
 
         public static async Task RemoveEnv()
         {
-            await IoUtils.TryDeleteIfExistsAsync(Path.Combine(Paths.GetDataPath(), "mb", "envs", "ldo"));
+            await IoUtils.TryDeleteIfExistsAsync(Path.Combine(Paths.GetDataPath(), Constants.Dirs.Conda, "envs", Constants.Dirs.SdEnv));
         }
 
         #endregion
@@ -321,7 +320,7 @@ namespace StableDiffusionGui.Installation
             {
                 Logger.Log($"Fixing hardcoded paths in python files...", true);
 
-                string parentDir = Path.Combine(GetDataSubPath("mb"), "envs", "ldo", "Lib", "site-packages");
+                string parentDir = Path.Combine(GetDataSubPath(Constants.Dirs.Conda), "envs", Constants.Dirs.SdEnv, "Lib", "site-packages");
                 var eggLinks = IoUtils.GetFileInfosSorted(parentDir, false, "*.egg-link");
 
                 List<string> easyInstallPaths = new List<string>();

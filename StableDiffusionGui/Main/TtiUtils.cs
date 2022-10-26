@@ -185,7 +185,7 @@ namespace StableDiffusionGui.Main
 
         public static string GetEnvVarsSd(bool allCudaDevices = false, string baseDir = ".")
         {
-            string path = OsUtils.GetTemporaryPathVariable(new string[] { $"{baseDir}/mb", $"{baseDir}/mb/Scripts", $"{baseDir}/mb/condabin", $"{baseDir}/mb/Library/bin" });
+            string path = OsUtils.GetTemporaryPathVariable(new string[] { $"{baseDir}/{Constants.Dirs.Conda}", $"{baseDir}/{Constants.Dirs.Conda}/Scripts", $"{baseDir}/{Constants.Dirs.Conda}/condabin", $"{baseDir}/{Constants.Dirs.Conda}/Library/bin" });
 
             int cudaDeviceOpt = Config.GetInt("comboxCudaDevice");
             string devicesArg = ""; // Don't set env var if cudaDeviceOpt == 0 (=> automatic)

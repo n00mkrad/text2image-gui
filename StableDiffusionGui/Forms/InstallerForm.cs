@@ -66,7 +66,7 @@ namespace StableDiffusionGui.Forms
         {
             this.Enabled = false;
             Logger.Log("Uninstalling...");
-            await Setup.Cleanup();
+            await Setup.RemoveRepo();
             await Setup.RemoveEnv();
             UpdateStatus();
             Logger.Log("Done.");
