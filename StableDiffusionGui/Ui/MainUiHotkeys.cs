@@ -1,4 +1,5 @@
-﻿using StableDiffusionGui.Forms;
+﻿using StableDiffusionGui.Extensions;
+using StableDiffusionGui.Forms;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using System.Diagnostics;
@@ -41,14 +42,14 @@ namespace StableDiffusionGui.Ui
             if (keys == (Keys.Control | Keys.M)) // Hotkey: Model quick switcher
             {
                 Program.MainForm.PanelBg.Focus();
-                new ModelQuickSelectForm().ShowDialog();
+                new ModelQuickSelectForm().ShowDialogForm();
             }
 
             if (keys == (Keys.F1)) // Hotkey: Help
                 Process.Start("https://github.com/n00mkrad/text2image-gui/blob/main/README.md");
 
             if (keys == (Keys.F12)) // Hotkey: Open settings
-                new SettingsForm().ShowDialog();
+                new SettingsForm().ShowDialogForm();
         }
     }
 }

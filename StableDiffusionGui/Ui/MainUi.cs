@@ -1,4 +1,5 @@
 ﻿using StableDiffusionGui.Data;
+using StableDiffusionGui.Extensions;
 using StableDiffusionGui.Forms;
 using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
@@ -89,7 +90,7 @@ namespace StableDiffusionGui.Ui
             if (!InstallationStatus.IsInstalledBasic)
             {
                 UiUtils.ShowMessageBox("No complete installation of the Stable Diffusion files was found.\n\nThe GUI will now open the installer.\nPlease press \"Install\" in the next window to install all required files.");
-                new InstallerForm().ShowDialog();
+                new InstallerForm().ShowDialogForm();
             }
         }
 
@@ -100,7 +101,7 @@ namespace StableDiffusionGui.Ui
                 UiUtils.ShowMessageBox("A valid installation is required.");
 
                 if (showInstaller)
-                    new InstallerForm().ShowDialog();
+                    new InstallerForm().ShowDialogForm();
 
                 return false;
             }
@@ -118,7 +119,7 @@ namespace StableDiffusionGui.Ui
                 if (Constants.FileExts.ValidImages.Contains(Path.GetExtension(paths[0]).Lower())) // Ask to use as init img
                 {
                     ImageLoadForm imgForm = new ImageLoadForm(paths[0]);
-                    imgForm.ShowDialog();
+                    imgForm.ShowDialogForm();
 
                     if (imgForm.Action == ImageLoadForm.ImageAction.InitImage)
                         AddInitImages(paths.ToList());

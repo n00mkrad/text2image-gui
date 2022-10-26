@@ -1,4 +1,5 @@
 ﻿using Nmkoder.Forms;
+using StableDiffusionGui.Extensions;
 using System.Windows.Forms;
 
 namespace StableDiffusionGui.Ui
@@ -15,14 +16,14 @@ namespace StableDiffusionGui.Ui
 
             MessageForm form = new MessageForm(text, $"{type}");
             form.MsgFontSize = fontSize;
-            form.ShowDialog(Program.MainForm);
+            form.ShowDialogForm(Program.MainForm);
             return DialogResult.OK;
         }
 
         public static DialogResult ShowMessageBox(string text, string title, MessageBoxButtons btns = MessageBoxButtons.OK)
         {
             MessageForm form = new MessageForm(text, title, btns);
-            return form.ShowDialog(Program.MainForm);
+            return form.ShowDialogForm(Program.MainForm);
         }
     }
 }

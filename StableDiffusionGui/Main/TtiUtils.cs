@@ -1,4 +1,5 @@
 ﻿using ImageMagick;
+using StableDiffusionGui.Extensions;
 using StableDiffusionGui.Forms;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.MiscUtils;
@@ -167,7 +168,7 @@ namespace StableDiffusionGui.Main
             if (string.IsNullOrWhiteSpace(savedModelFileName))
             {
                 TextToImage.Cancel($"No Stable Diffusion model file has been set.\nPlease set one in the settings.");
-                new SettingsForm().ShowDialog();
+                new SettingsForm().ShowDialogForm();
                 return false;
             }
             else

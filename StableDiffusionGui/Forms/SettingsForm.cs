@@ -145,13 +145,13 @@ namespace StableDiffusionGui.Forms
 
         private void btnOpenModelsFolder_Click(object sender, EventArgs e)
         {
-            new ModelFoldersForm(Enums.StableDiffusion.ModelType.Normal).ShowDialog();
+            new ModelFoldersForm(Enums.StableDiffusion.ModelType.Normal).ShowDialogForm();
             LoadModels(true, Enums.StableDiffusion.ModelType.Normal);
         }
 
         private void btnOpenModelsFolderVae_Click(object sender, EventArgs e)
         {
-            new ModelFoldersForm(Enums.StableDiffusion.ModelType.Vae).ShowDialog();
+            new ModelFoldersForm(Enums.StableDiffusion.ModelType.Vae).ShowDialogForm();
             LoadModels(true, Enums.StableDiffusion.ModelType.Vae);
         }
 

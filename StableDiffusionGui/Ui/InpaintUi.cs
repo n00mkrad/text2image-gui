@@ -1,5 +1,6 @@
 ﻿using ImageMagick;
 using StableDiffusionGui.Data;
+using StableDiffusionGui.Extensions;
 using StableDiffusionGui.Forms;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
@@ -61,7 +62,7 @@ namespace StableDiffusionGui.Ui
             if (CurrentMask == null)
             {
                 var maskForm = new DrawForm(img);
-                maskForm.ShowDialog();
+                maskForm.ShowDialogForm();
                 CurrentMask = maskForm.Mask;
             }
 

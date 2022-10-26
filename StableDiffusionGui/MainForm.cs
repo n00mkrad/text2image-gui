@@ -101,7 +101,7 @@ namespace StableDiffusionGui
             Opacity = 1.0;
 
             if (!Debugger.IsAttached)
-                new WelcomeForm().ShowDialog();
+                new WelcomeForm().ShowDialogForm();
 
             panelDebugVae.Visible = Debugger.IsAttached;
             panelDebugSendStdin.Visible = Debugger.IsAttached;
@@ -665,7 +665,7 @@ namespace StableDiffusionGui
 
         private void btnSettings_Click(object sender, EventArgs e)
         {
-            new SettingsForm().ShowDialog();
+            new SettingsForm().ShowDialogForm();
         }
 
         private void btnPostProc_Click(object sender, EventArgs e)
@@ -676,7 +676,7 @@ namespace StableDiffusionGui
                 return;
             }
 
-            new PostProcSettingsForm().ShowDialog();
+            new PostProcSettingsForm().ShowDialogForm();
         }
 
         private void btnExpandPromptField_Click(object sender, EventArgs e)
@@ -697,7 +697,7 @@ namespace StableDiffusionGui
 
         private void btnPromptHistory_Click(object sender, EventArgs e)
         {
-            new PromptListForm(PromptListForm.ListMode.History).ShowDialog();
+            new PromptListForm(PromptListForm.ListMode.History).ShowDialogForm();
         }
 
         private void btnQueue_Click(object sender, EventArgs e)
@@ -705,7 +705,7 @@ namespace StableDiffusionGui
             if (Program.Busy)
                 return;
 
-            new PromptListForm(PromptListForm.ListMode.Queue).ShowDialog();
+            new PromptListForm(PromptListForm.ListMode.Queue).ShowDialogForm();
         }
 
         private void generateCurrentPromptToolStripMenuItem_Click(object sender, EventArgs e)
@@ -812,12 +812,12 @@ namespace StableDiffusionGui
 
         private void openModelMergeToolToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            new MergeModelsForm().ShowDialog();
+            new MergeModelsForm().ShowDialogForm();
         }
 
         private void openModelPruningTrimmingToolToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            new PruneModelsForm().ShowDialog();
+            new PruneModelsForm().ShowDialogForm();
         }
 
         private void textboxPrompt_KeyDown(object sender, KeyEventArgs e)
@@ -843,7 +843,7 @@ namespace StableDiffusionGui
 
         private void trainDreamBoothModelToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            new DreamboothForm().ShowDialog();
+            new DreamboothForm().ShowDialogForm();
         }
 
         private void fitWindowSizeToImageSizeToolStripMenuItem_Click(object sender, EventArgs e)

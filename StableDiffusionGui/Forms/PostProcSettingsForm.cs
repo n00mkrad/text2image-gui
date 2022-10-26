@@ -1,4 +1,5 @@
-﻿using StableDiffusionGui.Installation;
+﻿using StableDiffusionGui.Extensions;
+using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Ui;
 using System;
@@ -48,7 +49,7 @@ namespace StableDiffusionGui.Forms
                 DialogResult dialogResult = UiUtils.ShowMessageBox("Upscalers are not installed.\nDo you want to open the installer to install them (Up to 1 GB of disk space required)?", "Error", MessageBoxButtons.YesNo);
 
                 if (dialogResult == DialogResult.Yes)
-                    new InstallerForm().ShowDialog();
+                    new InstallerForm().ShowDialogForm();
 
                 Close();
             }

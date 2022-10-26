@@ -1,4 +1,5 @@
-﻿using StableDiffusionGui.Io;
+﻿using StableDiffusionGui.Extensions;
+using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
@@ -32,7 +33,7 @@ namespace StableDiffusionGui.Forms
 
         private void btnOpenModelFolder_Click(object sender, EventArgs e)
         {
-            new ModelFoldersForm(Enums.StableDiffusion.ModelType.Normal).ShowDialog();
+            new ModelFoldersForm(Enums.StableDiffusion.ModelType.Normal).ShowDialogForm();
             LoadModels();
         }
 

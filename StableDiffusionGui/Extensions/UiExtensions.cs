@@ -70,8 +70,16 @@ namespace StableDiffusionGui.Extensions
             }
         }
 
-        public static DialogResult ShowDialogForm(this Form form, float darken = 0.5f)
+        public static DialogResult ShowDialogForm(this Form form, IWin32Window owner, float darken = 0.5f)
         {
+            return ShowDialogForm(form, owner, darken);
+        }
+
+        public static DialogResult ShowDialogForm(this Form form, float darken = 0.5f, IWin32Window owner = null)
+        {
+            if(darken < 0.01f)
+                return form.ShowDialog(owner);
+
             Bitmap screenshot = new Bitmap(Program.MainForm.Size.Width, Program.MainForm.Size.Height);
 
             using (Graphics gfx = Graphics.FromImage(screenshot))
@@ -89,9 +97,9 @@ namespace StableDiffusionGui.Extensions
                 Program.MainForm.Controls.Add(overlay);
                 overlay.BringToFront();
 
-                Program.MainForm.Size = new Size((Program.MainForm.Width * 1.3).RoundToInt(), (Program.MainForm.Height * 1.3).RoundToInt());
+                Program.MainForm.Refresh();
 
-                return form.ShowDialog();
+                return form.ShowDialog(owner);
             }
         }
     }
