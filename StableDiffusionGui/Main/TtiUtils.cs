@@ -103,15 +103,18 @@ namespace StableDiffusionGui.Main
             return outPath;
         }
 
-        public static void WriteModelsYaml(string mdlName, string keyName = "default")
+        public static void WriteModelsYaml(string mdlName, string vaePath = "", string keyName = "default")
         {
             var mdl = Paths.GetModel(mdlName);
 
             string text = $"{keyName}:\n" +
                 $"    config: configs/stable-diffusion/v1-inference.yaml\n" +
-                $"    weights: {(mdl == null ? "unknown.ckpt" : mdl.FullName.Replace(@"\", "/").Wrap())}\n" +
+                $"    weights: {(mdl == null ? "unknown.ckpt" : mdl.FullName.Wrap(true))}\n" +
+                $"    {(File.Exists(vaePath) ? $"vae: {vaePath.Wrap(true)}" : "")}\n" +
+                $"    description: Current NMKD SD GUI model\n" +
                 $"    width: 512\n" +
-                $"    height: 512\n";
+                $"    height: 512\n" +
+                $"    default: true";
 
             File.WriteAllText(Path.Combine(Paths.GetDataPath(), Constants.Dirs.RepoSd, "configs", "models.yaml"), text);
         }

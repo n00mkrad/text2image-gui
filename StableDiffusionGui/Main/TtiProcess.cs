@@ -39,13 +39,14 @@ namespace StableDiffusionGui.Main
             string model = paramsDict.Get("model").FromJson<string>();
             bool hiresFix = paramsDict.Get("hiresFix").FromJson<bool>();
             bool lockSeed = paramsDict.Get("lockSeed").FromJson<bool>();
+            string vae = paramsDict.Get("vae").FromJson<string>();
 
             if (!TtiUtils.CheckIfSdModelExists())
                 return;
 
             Dictionary<string, string> initImages = initImgs != null && initImgs.Length > 0 ? await TtiUtils.CreateResizedInitImagesIfNeeded(initImgs.ToList(), res) : null;
 
-            TtiUtils.WriteModelsYaml(model);
+            TtiUtils.WriteModelsYaml(model, vae);
 
             long startSeed = seed;
 
@@ -127,7 +128,7 @@ namespace StableDiffusionGui.Main
             string precArg = ArgsInvoke.GetPrecisionArg();
             string embArg = ArgsInvoke.GetEmbeddingArg(embedding);
 
-            string newStartupSettings = $"{model}{precArg}{embArg}"; // Check if startup settings match - If not, we need to restart the process
+            string newStartupSettings = $"{model}{vae}{precArg}{embArg}"; // Check if startup settings match - If not, we need to restart the process
 
             string initsStr = initImages != null ? $" and {initImages.Count} image{(initImages.Count != 1 ? "s" : "")} using {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
             Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} with {iterations} iteration{(iterations != 1 ? "s" : "")} each and {scales.Length} scale{(scales.Length != 1 ? "s" : "")}{initsStr} each = {imgs} images total.");
@@ -167,7 +168,7 @@ namespace StableDiffusionGui.Main
                 }
 
                 TtiProcessOutputHandler.Start();
-                Logger.Log($"Loading Stable Diffusion with model {Path.ChangeExtension(model, null).Wrap()}...");
+                Logger.Log($"Loading Stable Diffusion with model {Path.ChangeExtension(model, null).Wrap()}{(string.IsNullOrWhiteSpace(vae) ? "" : $" and VAE {Path.GetFileNameWithoutExtension(vae)}")}...");
                 CurrentProcess = py;
                 ProcessExistWasIntentional = false;
                 py.Start();
@@ -320,7 +321,7 @@ namespace StableDiffusionGui.Main
             Finish();
         }
 
-        public static async Task RunStableDiffusionCli(string outPath)
+        public static async Task RunStableDiffusionCli(string outPath, string vaePath)
         {
             if (Program.Busy)
                 return;
@@ -328,7 +329,7 @@ namespace StableDiffusionGui.Main
             if (!TtiUtils.CheckIfSdModelExists())
                 return;
 
-            TtiUtils.WriteModelsYaml(Config.Get(Config.Key.comboxSdModel));
+            TtiUtils.WriteModelsYaml(Config.Get(Config.Key.comboxSdModel), vaePath);
 
             string batPath = Path.Combine(Paths.GetSessionDataPath(), "invoke.bat");
 

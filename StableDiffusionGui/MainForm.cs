@@ -102,7 +102,8 @@ namespace StableDiffusionGui
             if (!Debugger.IsAttached)
                 new WelcomeForm().ShowDialog();
 
-            textboxCliTest.Visible = Debugger.IsAttached;
+            panelDebugVae.Visible = Debugger.IsAttached;
+            panelDebugSendStdin.Visible = Debugger.IsAttached;
         }
 
         private void SetUiElements()
@@ -257,6 +258,7 @@ namespace StableDiffusionGui
                             { "model", Config.Get(Config.Key.comboxSdModel).ToJson() },
                             { "hiresFix", checkboxHiresFix.Checked.ToJson() },
                             { "lockSeed", checkboxLockSeed.Checked.ToJson() },
+                            { "vae", textboxDebugVaePath.Text.ToJson() },
                         },
             };
 
@@ -730,7 +732,7 @@ namespace StableDiffusionGui
             if (Program.Busy || !MainUi.IsInstalledWithWarning())
                 return;
 
-            TtiProcess.RunStableDiffusionCli(Config.Get(Config.Key.textboxOutPath));
+            TtiProcess.RunStableDiffusionCli(Config.Get(Config.Key.textboxOutPath), textboxDebugVaePath.Text.Trim());
         }
 
         private void openModelMergeToolToolStripMenuItem_Click(object sender, EventArgs e)

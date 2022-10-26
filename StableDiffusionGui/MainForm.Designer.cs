@@ -95,7 +95,6 @@ namespace StableDiffusionGui
             this.label7 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.textboxCliTest = new System.Windows.Forms.TextBox();
-            this.panel11 = new System.Windows.Forms.Panel();
             this.panelSeamless = new System.Windows.Forms.Panel();
             this.label8 = new System.Windows.Forms.Label();
             this.panelSampler = new System.Windows.Forms.Panel();
@@ -133,6 +132,11 @@ namespace StableDiffusionGui
             this.pictBoxImgViewer = new System.Windows.Forms.PictureBox();
             this.separator = new System.Windows.Forms.Button();
             this.labelImgPrompt = new System.Windows.Forms.Label();
+            this.panelDebugSendStdin = new System.Windows.Forms.Panel();
+            this.label12 = new System.Windows.Forms.Label();
+            this.panelDebugVae = new System.Windows.Forms.Panel();
+            this.label13 = new System.Windows.Forms.Label();
+            this.textboxDebugVaePath = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
             this.tableLayoutPanel6.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -155,6 +159,8 @@ namespace StableDiffusionGui
             this.menuStripDeleteImages.SuspendLayout();
             this.menuStripDevTools.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictBoxImgViewer)).BeginInit();
+            this.panelDebugSendStdin.SuspendLayout();
+            this.panelDebugVae.SuspendLayout();
             this.SuspendLayout();
             // 
             // runBtn
@@ -1166,8 +1172,8 @@ namespace StableDiffusionGui
             // 
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.panel1.Controls.Add(this.textboxCliTest);
-            this.panel1.Controls.Add(this.panel11);
+            this.panel1.Controls.Add(this.panelDebugVae);
+            this.panel1.Controls.Add(this.panelDebugSendStdin);
             this.panel1.Controls.Add(this.panelSeamless);
             this.panel1.Controls.Add(this.panelSampler);
             this.panel1.Controls.Add(this.panelRes);
@@ -1188,21 +1194,12 @@ namespace StableDiffusionGui
             this.textboxCliTest.AllowDrop = true;
             this.textboxCliTest.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textboxCliTest.ForeColor = System.Drawing.Color.White;
-            this.textboxCliTest.Location = new System.Drawing.Point(233, 478);
+            this.textboxCliTest.Location = new System.Drawing.Point(233, 7);
             this.textboxCliTest.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxCliTest.Name = "textboxCliTest";
-            this.textboxCliTest.Size = new System.Drawing.Size(397, 20);
+            this.textboxCliTest.Size = new System.Drawing.Size(397, 21);
             this.textboxCliTest.TabIndex = 4;
-            this.textboxCliTest.Visible = false;
             this.textboxCliTest.DoubleClick += new System.EventHandler(this.textboxCliTest_DoubleClick);
-            // 
-            // panel11
-            // 
-            this.panel11.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel11.Location = new System.Drawing.Point(0, 315);
-            this.panel11.Name = "panel11";
-            this.panel11.Size = new System.Drawing.Size(633, 35);
-            this.panel11.TabIndex = 10;
             // 
             // panelSeamless
             // 
@@ -1584,6 +1581,63 @@ namespace StableDiffusionGui
             this.labelImgPrompt.TabIndex = 115;
             this.labelImgPrompt.Text = "No prompt to show.";
             // 
+            // panelDebugSendStdin
+            // 
+            this.panelDebugSendStdin.Controls.Add(this.label12);
+            this.panelDebugSendStdin.Controls.Add(this.textboxCliTest);
+            this.panelDebugSendStdin.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelDebugSendStdin.Location = new System.Drawing.Point(0, 315);
+            this.panelDebugSendStdin.Name = "panelDebugSendStdin";
+            this.panelDebugSendStdin.Size = new System.Drawing.Size(633, 35);
+            this.panelDebugSendStdin.TabIndex = 14;
+            this.panelDebugSendStdin.Visible = false;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label12.ForeColor = System.Drawing.Color.White;
+            this.label12.Location = new System.Drawing.Point(5, 10);
+            this.label12.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(172, 13);
+            this.label12.TabIndex = 105;
+            this.label12.Text = "Send stdin to running InvokeAI CLI";
+            // 
+            // panelDebugVae
+            // 
+            this.panelDebugVae.Controls.Add(this.label13);
+            this.panelDebugVae.Controls.Add(this.textboxDebugVaePath);
+            this.panelDebugVae.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelDebugVae.Location = new System.Drawing.Point(0, 350);
+            this.panelDebugVae.Name = "panelDebugVae";
+            this.panelDebugVae.Size = new System.Drawing.Size(633, 35);
+            this.panelDebugVae.TabIndex = 15;
+            this.panelDebugVae.Visible = false;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label13.ForeColor = System.Drawing.Color.White;
+            this.label13.Location = new System.Drawing.Point(5, 10);
+            this.label13.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(72, 13);
+            this.label13.TabIndex = 105;
+            this.label13.Text = "Set VAE Path";
+            // 
+            // textboxDebugVaePath
+            // 
+            this.textboxDebugVaePath.AllowDrop = true;
+            this.textboxDebugVaePath.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textboxDebugVaePath.ForeColor = System.Drawing.Color.White;
+            this.textboxDebugVaePath.Location = new System.Drawing.Point(233, 7);
+            this.textboxDebugVaePath.MinimumSize = new System.Drawing.Size(4, 21);
+            this.textboxDebugVaePath.Name = "textboxDebugVaePath";
+            this.textboxDebugVaePath.Size = new System.Drawing.Size(397, 21);
+            this.textboxDebugVaePath.TabIndex = 4;
+            // 
             // MainForm
             // 
             this.AllowDrop = true;
@@ -1638,7 +1692,6 @@ namespace StableDiffusionGui
             ((System.ComponentModel.ISupportInitialize)(this.upDownSeed)).EndInit();
             this.menuStripOutputImg.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             this.panelSeamless.ResumeLayout(false);
             this.panelSeamless.PerformLayout();
             this.panelSampler.ResumeLayout(false);
@@ -1666,6 +1719,10 @@ namespace StableDiffusionGui
             this.menuStripDeleteImages.ResumeLayout(false);
             this.menuStripDevTools.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictBoxImgViewer)).EndInit();
+            this.panelDebugSendStdin.ResumeLayout(false);
+            this.panelDebugSendStdin.PerformLayout();
+            this.panelDebugVae.ResumeLayout(false);
+            this.panelDebugVae.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1717,7 +1774,6 @@ namespace StableDiffusionGui
         private System.Windows.Forms.Panel panelRes;
         private System.Windows.Forms.Panel panelSeed;
         private System.Windows.Forms.Panel panelScale;
-        private System.Windows.Forms.Panel panel11;
         private System.Windows.Forms.Panel panelSeamless;
         private System.Windows.Forms.Panel panelInitImgStrength;
         private HTAlt.WinForms.HTButton btnInitImgBrowse;
@@ -1773,6 +1829,11 @@ namespace StableDiffusionGui
         private System.Windows.Forms.ToolStripMenuItem fitWindowSizeToImageSizeToolStripMenuItem;
         private System.Windows.Forms.CheckBox checkboxLockSeed;
         private System.Windows.Forms.Label labelImgPrompt;
+        private System.Windows.Forms.Panel panelDebugSendStdin;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Panel panelDebugVae;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.TextBox textboxDebugVaePath;
     }
 }
 
