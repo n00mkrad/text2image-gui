@@ -20,9 +20,12 @@ namespace StableDiffusionGui.Forms
     {
         public List<string> Folders = new List<string>();
 
-        public ModelFoldersForm()
+        private Enums.StableDiffusion.ModelType _modelType;
+
+        public ModelFoldersForm(Enums.StableDiffusion.ModelType modelType)
         {
             InitializeComponent();
+            _modelType = modelType;
         }
 
         private void ModelFoldersForm_Load(object sender, EventArgs e)
@@ -44,20 +47,14 @@ namespace StableDiffusionGui.Forms
 
         private void LoadDirs()
         {
-            Folders.Clear();
-            Folders.Add(Paths.GetModelsPath());
-
-            string serialized = Config.Get(Config.Key.customModelDirs);
-            var deserialized = JsonConvert.DeserializeObject<List<string>>(serialized);
-
-            if (deserialized != null)
-                Folders.AddRange(deserialized);
+            Folders = new List<string>() { Paths.GetModelsPath(_modelType) };
+            string serializedPaths = Config.Get($"CustomModelDirs{_modelType}");
+            Folders.AddRange(serializedPaths.FromJson<List<string>>(), out Folders);
         }
 
         private void SaveDirs()
         {
-            string serialized = JsonConvert.SerializeObject(Folders.Where(x => x != Paths.GetModelsPath()));
-            Config.Set(Config.Key.customModelDirs, serialized);
+            Config.Set($"CustomModelDirs{Enums.StableDiffusion.ModelType.Normal}", Folders.Where(x => x != Paths.GetModelsPath(_modelType)).ToJson());
         }
 
         private void FillList()

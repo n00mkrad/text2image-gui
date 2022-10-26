@@ -258,7 +258,7 @@ namespace StableDiffusionGui
                             { "model", Config.Get(Config.Key.comboxSdModel).ToJson() },
                             { "hiresFix", checkboxHiresFix.Checked.ToJson() },
                             { "lockSeed", checkboxLockSeed.Checked.ToJson() },
-                            { "vae", textboxDebugVaePath.Text.ToJson() },
+                            { "vae", Config.Get(Config.Key.comboxSdModelVae).ToJson() },
                         },
             };
 

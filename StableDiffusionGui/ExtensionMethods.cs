@@ -366,7 +366,7 @@ namespace StableDiffusionGui
             }
             catch (RegexMatchTimeoutException)
             {
-                return String.Empty;
+                return string.Empty;
             }
         }
 
@@ -469,6 +469,14 @@ namespace StableDiffusionGui
         public static string ToJson(this object o, Formatting format = Formatting.None)
         {
             return JsonConvert.SerializeObject(o, format);
+        }
+
+        public static void AddRange<T> (this List<T> listIn, IEnumerable<T> itemsToAdd, out List<T> listOut)
+        {
+            if (itemsToAdd != null)
+                listIn.AddRange(itemsToAdd);
+
+            listOut = listIn;
         }
     }
 }

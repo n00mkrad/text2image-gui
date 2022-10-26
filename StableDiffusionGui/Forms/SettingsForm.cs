@@ -1,8 +1,11 @@
 ﻿using Microsoft.WindowsAPICodePack.Dialogs;
+using StableDiffusionGui.Extensions;
 using StableDiffusionGui.Io;
+using StableDiffusionGui.Main;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -32,8 +35,10 @@ namespace StableDiffusionGui.Forms
         private void SettingsForm_Shown(object sender, EventArgs e)
         {
             Refresh();
-            LoadModels(false);
+            LoadModels(false, Enums.StableDiffusion.ModelType.Normal);
+            LoadModels(false, Enums.StableDiffusion.ModelType.Vae);
             LoadSettings();
+
             Task.Run(() => LoadGpus());
             Opacity = 1;
         }
@@ -50,13 +55,19 @@ namespace StableDiffusionGui.Forms
             Program.MainForm.RefreshAfterSettingsChanged();
         }
 
-        private void LoadModels(bool loadCombox)
+        private void LoadModels(bool loadCombox, Enums.StableDiffusion.ModelType type)
         {
-            comboxSdModel.Items.Clear();
-            Paths.GetModels().ForEach(x => comboxSdModel.Items.Add(x.Name));
+            var combox = type == Enums.StableDiffusion.ModelType.Normal ? comboxSdModel : comboxSdModelVae;
 
-            if(loadCombox)
-                ConfigParser.LoadGuiElement(comboxSdModel);
+            combox.Items.Clear();
+
+            if (type == Enums.StableDiffusion.ModelType.Vae)
+                combox.Items.Add("None");
+
+            Paths.GetModels(type).ForEach(x => combox.Items.Add(x.Name));
+
+            if (loadCombox)
+                ConfigParser.LoadGuiElement(combox);
         }
 
         private async Task LoadGpus()
@@ -94,6 +105,7 @@ namespace StableDiffusionGui.Forms
             ConfigParser.LoadGuiElement(checkboxModelInFilename);
             ConfigParser.LoadGuiElement(textboxOutPath);
             ConfigParser.LoadGuiElement(comboxSdModel);
+            ConfigParser.LoadGuiElement(comboxSdModelVae);
             // ConfigParser.LoadComboxIndex(comboxCudaDevice);
             ConfigParser.LoadComboxIndex(comboxNotify);
             ConfigParser.LoadGuiElement(checkboxSaveUnprocessedImages);
@@ -116,6 +128,7 @@ namespace StableDiffusionGui.Forms
             ConfigParser.SaveGuiElement(checkboxModelInFilename);
             ConfigParser.SaveGuiElement(textboxOutPath);
             ConfigParser.SaveGuiElement(comboxSdModel);
+            ConfigParser.SaveGuiElement(comboxSdModelVae);
             ConfigParser.SaveComboxIndex(comboxCudaDevice);
             ConfigParser.SaveComboxIndex(comboxNotify);
             ConfigParser.SaveGuiElement(checkboxSaveUnprocessedImages);
@@ -132,9 +145,14 @@ namespace StableDiffusionGui.Forms
 
         private void btnOpenModelsFolder_Click(object sender, EventArgs e)
         {
-            // Process.Start("explorer", Paths.GetModelsPath().Wrap());
-            new ModelFoldersForm().ShowDialog();
-            LoadModels(true);
+            new ModelFoldersForm(Enums.StableDiffusion.ModelType.Normal).ShowDialog();
+            LoadModels(true, Enums.StableDiffusion.ModelType.Normal);
+        }
+
+        private void btnOpenModelsFolderVae_Click(object sender, EventArgs e)
+        {
+            new ModelFoldersForm(Enums.StableDiffusion.ModelType.Vae).ShowDialog();
+            LoadModels(true, Enums.StableDiffusion.ModelType.Vae);
         }
 
         private void checkboxOptimizedSd_CheckedChanged(object sender, EventArgs e)
@@ -146,7 +164,12 @@ namespace StableDiffusionGui.Forms
 
         private void btnRefreshModelsDropdown_Click(object sender, EventArgs e)
         {
-            LoadModels(true);
+            LoadModels(true, Enums.StableDiffusion.ModelType.Normal);
+        }
+
+        private void btnRefreshModelsDropdownVae_Click(object sender, EventArgs e)
+        {
+            LoadModels(true, Enums.StableDiffusion.ModelType.Vae);
         }
 
         private void SettingsForm_KeyDown(object sender, KeyEventArgs e)

@@ -256,7 +256,8 @@ namespace StableDiffusionGui.Io
             if (key == Key.sliderScale) return WriteDefault(key, "8");
             if (key == Key.textboxOutPath) return WriteDefault(key, Path.Combine(Paths.GetExeDir(), "Images"));
             if (key == Key.upDownIterations) return WriteDefault(key, "5");
-            if (key == Key.comboxSdModel) return WriteDefault(key, Paths.GetModels().Select(x => x.Name).FirstOrDefault());
+            if (key == Key.comboxSdModel) return WriteDefault(key, Paths.GetModels(Enums.StableDiffusion.ModelType.Normal).Select(x => x.Name).FirstOrDefault());
+            if (key == Key.comboxSdModelVae) return WriteDefault(key, Paths.GetModels(Enums.StableDiffusion.ModelType.Vae).Select(x => x.Name).FirstOrDefault());
             if (key == Key.checkboxEnableHistory) return WriteDefault(key, true.ToString());
             if (key == Key.sliderCodeformerFidelity) return WriteDefault(key, "0.6");
             if (keyStr == "checkboxFullPrecision") return WriteDefault(key, (GpuUtils.CachedGpus.Count > 0 && GpuUtils.CachedGpus[0].FullName.Contains(" GTX 16")).ToString());
@@ -293,10 +294,10 @@ namespace StableDiffusionGui.Io
             textboxOutPath,
             upDownIterations,
             comboxSdModel,
+            comboxSdModelVae,
             lowMemTurbo,
             checkboxEnableHistory,
             sliderCodeformerFidelity,
-            customModelDirs,
         }
     }
 }

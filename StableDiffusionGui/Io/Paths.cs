@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
 namespace StableDiffusionGui.Io
 {
@@ -48,9 +49,15 @@ namespace StableDiffusionGui.Io
             return path;
         }
 
-        public static string GetModelsPath()
+        public static string GetModelsPath(ModelType type = ModelType.Normal)
         {
-            string path = Path.Combine(GetDataPath(), "models");
+            string path = "";
+
+            if (type == ModelType.Normal)
+                path = Path.Combine(GetDataPath(), "models");
+            else if (type == ModelType.Vae)
+                path = Path.Combine(GetDataPath(), "models", "vae");
+
             Directory.CreateDirectory(path);
             return path;
         }
@@ -69,23 +76,23 @@ namespace StableDiffusionGui.Io
             return path;
         }
 
-        public static List<FileInfo> GetModels(string pattern = null)
+        public static List<FileInfo> GetModels(ModelType type = ModelType.Normal, string pattern = null)
         {
             pattern = pattern ?? $"*{Constants.FileExts.SdModel}";  
             List<FileInfo> list = new List<FileInfo>();
 
             try
             {
-                List<string> mdlFolders = new List<string>() { GetModelsPath() };
+                List<string> mdlFolders = new List<string>() { GetModelsPath(type) };
 
-                var customModelDirsList = JsonConvert.DeserializeObject<List<string>>(Config.Get(Config.Key.customModelDirs));
-
-                if (customModelDirsList != null)
-                    mdlFolders.AddRange(customModelDirsList);
-
+                List<string> customModelDirsList = Config.Get($"CustomModelDirs{type}").FromJson<List<string>>();
+                mdlFolders.AddRange(customModelDirsList, out mdlFolders);
 
                 foreach (string folderPath in mdlFolders)
                     list.AddRange(IoUtils.GetFileInfosSorted(folderPath, false, pattern).ToList());
+
+                if (type == ModelType.Normal)
+                    list = list.Where(mdl => TtiUtils.ModelFilesizeValid(mdl.FullName, type)).ToList();
 
                 return list.Distinct().OrderBy(x => x.Name).ToList();
             }
@@ -98,9 +105,9 @@ namespace StableDiffusionGui.Io
             return list;
         }
 
-        public static FileInfo GetModel(string filename, bool anyExtension = false)
+        public static FileInfo GetModel(string filename, bool anyExtension = false, ModelType type = ModelType.Normal)
         {
-            return GetModels().Where(x => x.Name == filename).FirstOrDefault();
+            return GetModels(type).Where(x => x.Name == filename).FirstOrDefault();
         }
     }
 }

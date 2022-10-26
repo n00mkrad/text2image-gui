@@ -1,5 +1,6 @@
 ﻿using StableDiffusionGui.Controls;
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace StableDiffusionGui.Io

@@ -168,7 +168,7 @@ namespace StableDiffusionGui.Main
                 }
 
                 TtiProcessOutputHandler.Start();
-                Logger.Log($"Loading Stable Diffusion with model {Path.ChangeExtension(model, null).Wrap()}{(string.IsNullOrWhiteSpace(vae) ? "" : $" and VAE {Path.GetFileNameWithoutExtension(vae)}")}...");
+                Logger.Log($"Loading Stable Diffusion with model {Path.ChangeExtension(model, null).Wrap()}{(string.IsNullOrWhiteSpace(vae) ? "" : $" and VAE {Path.GetFileNameWithoutExtension(vae).Wrap()}")}...");
                 CurrentProcess = py;
                 ProcessExistWasIntentional = false;
                 py.Start();

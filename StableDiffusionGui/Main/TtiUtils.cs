@@ -103,14 +103,15 @@ namespace StableDiffusionGui.Main
             return outPath;
         }
 
-        public static void WriteModelsYaml(string mdlName, string vaePath = "", string keyName = "default")
+        public static void WriteModelsYaml(string mdlName, string vaeName = "", string keyName = "default")
         {
-            var mdl = Paths.GetModel(mdlName);
+            var mdl = Paths.GetModel(mdlName, false, Enums.StableDiffusion.ModelType.Normal);
+            var vae = Paths.GetModel(vaeName, false, Enums.StableDiffusion.ModelType.Vae);
 
             string text = $"{keyName}:\n" +
                 $"    config: configs/stable-diffusion/v1-inference.yaml\n" +
                 $"    weights: {(mdl == null ? $"unknown{Constants.FileExts.SdModel}" : mdl.FullName.Wrap(true))}\n" +
-                $"    {(File.Exists(vaePath) ? $"vae: {vaePath.Wrap(true)}" : "")}\n" +
+                $"    {(File.Exists(vae.FullName) ? $"vae: {vae.FullName.Wrap(true)}" : "")}\n" +
                 $"    description: Current NMKD SD GUI model\n" +
                 $"    width: 512\n" +
                 $"    height: 512\n" +
@@ -199,6 +200,17 @@ namespace StableDiffusionGui.Main
             }
 
             return $"SET PATH={path}{devicesArg}";
+        }
+
+        public static bool ModelFilesizeValid (string path, Enums.StableDiffusion.ModelType type = Enums.StableDiffusion.ModelType.Normal)
+        {
+            if (Config.GetBool("disableModelFilesizeValidation"))
+                return true;
+
+            if(type == Enums.StableDiffusion.ModelType.Normal)
+                return IoUtils.GetFilesize(path) > 2010000000;
+
+            return true;
         }
     }
 }
