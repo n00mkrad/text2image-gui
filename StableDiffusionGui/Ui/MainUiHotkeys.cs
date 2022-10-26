@@ -42,7 +42,7 @@ namespace StableDiffusionGui.Ui
             if (keys == (Keys.Control | Keys.M)) // Hotkey: Model quick switcher
             {
                 Program.MainForm.PanelBg.Focus();
-                new ModelQuickSelectForm().ShowDialogForm();
+                new ModelQuickSelectForm().ShowDialogForm(0f);
             }
 
             if (keys == (Keys.F1)) // Hotkey: Help

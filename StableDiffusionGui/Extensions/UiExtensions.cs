@@ -77,7 +77,7 @@ namespace StableDiffusionGui.Extensions
 
         public static DialogResult ShowDialogForm(this Form form, float darken = 0.5f, IWin32Window owner = null)
         {
-            if(darken < 0.01f)
+            if(darken < 0.01f || Program.MainForm.Controls.ContainsKey("overlayPanel"))
                 return form.ShowDialog(owner);
 
             Bitmap screenshot = new Bitmap(Program.MainForm.Size.Width, Program.MainForm.Size.Height);
@@ -91,7 +91,7 @@ namespace StableDiffusionGui.Extensions
                     gfx.FillRectangle(brush, Program.MainForm.ClientRectangle);
             }
 
-            using (Panel overlay = new Panel() { Size = Program.MainForm.Size, BackgroundImage = screenshot, BackgroundImageLayout = ImageLayout.Stretch } )
+            using (Panel overlay = new Panel() { Name = "overlayPanel", Size = Program.MainForm.Size, BackgroundImage = screenshot, BackgroundImageLayout = ImageLayout.Stretch } )
             {
                 overlay.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom;
                 Program.MainForm.Controls.Add(overlay);
