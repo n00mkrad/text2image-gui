@@ -91,7 +91,6 @@ namespace StableDiffusionGui
             PromptHistory.Load();
             Setup.FixHardcodedPaths();
             Task.Run(() => MainUi.SetGpusInWindowTitle());
-            //Task.Run(() => ActiveCheck());
             upDownSeed.Text = "";
             MainUi.DoStartupChecks();
             RefreshAfterSettingsChanged();
@@ -101,84 +100,10 @@ namespace StableDiffusionGui
             Opacity = 1.0;
 
             if (!Debugger.IsAttached)
-                new WelcomeForm().ShowDialogForm();
+                new WelcomeForm().ShowDialogForm(0f);
 
             panelDebugVae.Visible = Debugger.IsAttached;
             panelDebugSendStdin.Visible = Debugger.IsAttached;
-        }
-
-        private bool _previouslyActive = false;
-
-        private async Task ActiveCheck ()
-        {
-            Panel p = null;
-
-            while (true)
-            {
-                await Task.Delay(1);
-
-                if(ActiveForm == this && !_previouslyActive)
-                {
-                    Logger.Log("lighten");
-                    _previouslyActive = true;
-                    Lighten(p);
-                }
-                else if (ActiveForm != this && _previouslyActive)
-                {
-                    _previouslyActive = false;
-
-                    Logger.Log("darken");
-
-                    try
-                    {
-                        Darken(p);
-                    }
-                    catch(Exception ex)
-                    {
-                        Logger.Log(ex.Message);
-                        Logger.Log(ex.StackTrace);
-                    }
-                }
-            }
-        }
-
-        private void Darken (Panel p)
-        {
-            // take a screenshot of the form and darken it:
-            Bitmap bmp = new Bitmap(this.ClientRectangle.Width, this.ClientRectangle.Height);
-            using (Graphics G = Graphics.FromImage(bmp))
-            {
-                G.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
-                G.CopyFromScreen(this.PointToScreen(new Point(0, 0)), new Point(0, 0), this.ClientRectangle.Size);
-                double percent = 0.60;
-                Color darken = Color.FromArgb((int)(255 * percent), Color.Black);
-                using (Brush brsh = new SolidBrush(darken))
-                {
-                    G.FillRectangle(brsh, this.ClientRectangle);
-                }
-            }
-
-            // put the darkened screenshot into a Panel and bring it to the front:
-            p = new Panel();
-            p.Location = new Point(0, 0);
-            p.Size = Size;
-            p.BackgroundImage = bmp;
-
-            this.BeginInvoke((Action)(() =>
-            {
-                //perform on the UI thread
-                this.Controls.Add(p);
-                p.BringToFront();
-            }));
-            
-        }
-
-        private void Lighten (Panel p)
-        {
-            this.BeginInvoke((Action)(() =>
-            {
-                p?.Dispose();
-            }));
         }
 
         private void SetUiElements()
@@ -868,6 +793,11 @@ namespace StableDiffusionGui
         private void openCmdInCondaEnvironmentToolStripMenuItem_Click(object sender, EventArgs e)
         {
             TtiProcess.StartCmdInSdCondaEnv();
+        }
+
+        private void copyToFavoritesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ImagePreview.CopyCurrentToFavs();
         }
     }
 }

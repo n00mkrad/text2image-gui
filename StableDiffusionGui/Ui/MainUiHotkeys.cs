@@ -40,6 +40,9 @@ namespace StableDiffusionGui.Ui
             if (keys == (Keys.Control | Keys.Shift | Keys.O)) // Hotkey: Open folder of current image
                 ImagePreview.OpenFolderOfCurrent();
 
+            if (keys == (Keys.Control | Keys.D)) // Hotkey: Copy current image to favs
+                ImagePreview.CopyCurrentToFavs();
+
             if (keys == (Keys.Control | Keys.M)) // Hotkey: Model quick switcher
             {
                 Program.MainForm.PanelBg.Focus();

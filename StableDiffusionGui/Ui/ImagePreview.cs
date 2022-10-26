@@ -125,6 +125,12 @@ namespace StableDiffusionGui.Ui
             Show();
         }
 
+        public static void CopyCurrentToFavs ()
+        {
+            string dir = Directory.CreateDirectory(Config.Get("textboxFavsPath")).FullName;
+            File.Copy(CurrentImagePath, Path.Combine(dir, Path.GetFileName(CurrentImagePath)), true);
+        }
+
         public static void OpenCurrent ()
         {
             Process.Start(CurrentImagePath);

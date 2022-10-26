@@ -255,6 +255,7 @@ namespace StableDiffusionGui.Io
             if (key == Key.sliderSteps) return WriteDefault(key, "25");
             if (key == Key.sliderScale) return WriteDefault(key, "8");
             if (key == Key.textboxOutPath) return WriteDefault(key, Path.Combine(Paths.GetExeDir(), "Images"));
+            if (keyStr == "textboxFavsPath") return WriteDefault(key, Path.Combine(Paths.GetExeDir(), "Images", "Favs"));
             if (key == Key.upDownIterations) return WriteDefault(key, "5");
             if (key == Key.comboxSdModel) return WriteDefault(key, Paths.GetModels(Enums.StableDiffusion.ModelType.Normal).Select(x => x.Name).FirstOrDefault());
             if (key == Key.comboxSdModelVae) return WriteDefault(key, Paths.GetModels(Enums.StableDiffusion.ModelType.Vae).Select(x => x.Name).FirstOrDefault());

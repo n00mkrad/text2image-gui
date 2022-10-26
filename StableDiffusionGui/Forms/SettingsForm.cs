@@ -55,6 +55,12 @@ namespace StableDiffusionGui.Forms
             Program.MainForm.RefreshAfterSettingsChanged();
         }
 
+        private void SettingsForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+                Close();
+        }
+
         private void LoadModels(bool loadCombox, Enums.StableDiffusion.ModelType type)
         {
             var combox = type == Enums.StableDiffusion.ModelType.Normal ? comboxSdModel : comboxSdModelVae;
@@ -104,6 +110,7 @@ namespace StableDiffusionGui.Forms
             ConfigParser.LoadGuiElement(checkboxSamplerInFilename);
             ConfigParser.LoadGuiElement(checkboxModelInFilename);
             ConfigParser.LoadGuiElement(textboxOutPath);
+            ConfigParser.LoadGuiElement(textboxFavsPath);
             ConfigParser.LoadGuiElement(comboxSdModel);
             ConfigParser.LoadGuiElement(comboxSdModelVae);
             // ConfigParser.LoadComboxIndex(comboxCudaDevice);
@@ -127,6 +134,7 @@ namespace StableDiffusionGui.Forms
             ConfigParser.SaveGuiElement(checkboxSamplerInFilename);
             ConfigParser.SaveGuiElement(checkboxModelInFilename);
             ConfigParser.SaveGuiElement(textboxOutPath);
+            ConfigParser.SaveGuiElement(textboxFavsPath);
             ConfigParser.SaveGuiElement(comboxSdModel);
             ConfigParser.SaveGuiElement(comboxSdModelVae);
             ConfigParser.SaveComboxIndex(comboxCudaDevice);
@@ -172,10 +180,12 @@ namespace StableDiffusionGui.Forms
             LoadModels(true, Enums.StableDiffusion.ModelType.Vae);
         }
 
-        private void SettingsForm_KeyDown(object sender, KeyEventArgs e)
+        private void btnFavsPathBrowse_Click(object sender, EventArgs e)
         {
-            if (e.KeyCode == Keys.Escape)
-                Close();
+            CommonOpenFileDialog dialog = new CommonOpenFileDialog { InitialDirectory = textboxFavsPath.Text, IsFolderPicker = true };
+
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+                textboxFavsPath.Text = dialog.FileName;
         }
     }
 }
