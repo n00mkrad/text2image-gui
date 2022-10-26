@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using MS.WindowsAPICodePack.Internal;
+using Newtonsoft.Json.Linq;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Ui;
@@ -77,21 +78,20 @@ namespace StableDiffusionGui.Extensions
 
         public static DialogResult ShowDialogForm(this Form form, float darken = 0.5f, IWin32Window owner = null)
         {
-            if(darken < 0.01f || Program.MainForm.Controls.ContainsKey("overlayPanel"))
+            if (darken < 0.01f || Program.MainForm.Controls.ContainsKey("overlayPanel"))
                 return form.ShowDialog(owner);
 
-            Bitmap screenshot = new Bitmap(Program.MainForm.Size.Width, Program.MainForm.Size.Height);
+            Bitmap screen = new Bitmap(Program.MainForm.Width, Program.MainForm.Height);
 
-            using (Graphics gfx = Graphics.FromImage(screenshot))
-            {
-                gfx.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
-                gfx.CopyFromScreen(Program.MainForm.PointToScreen(new Point()), new Point(), Program.MainForm.Size);
+            Point clientAreaStartingPoint = Program.MainForm.PointToClient(Program.MainForm.Location);
+            Program.MainForm.DrawToBitmap(screen, new Rectangle(0, 0, Program.MainForm.Width, Program.MainForm.Height));
+            screen = screen.Clone(new Rectangle(-clientAreaStartingPoint.X, -clientAreaStartingPoint.Y, Program.MainForm.ClientRectangle.Width, Program.MainForm.ClientRectangle.Height), screen.PixelFormat);
 
+            using (Graphics gfx = Graphics.FromImage(screen))
                 using (Brush brush = new SolidBrush(Color.FromArgb((255 * darken).RoundToInt(), Color.Black)))
                     gfx.FillRectangle(brush, Program.MainForm.ClientRectangle);
-            }
 
-            using (Panel overlay = new Panel() { Name = "overlayPanel", Size = Program.MainForm.Size, BackgroundImage = screenshot, BackgroundImageLayout = ImageLayout.Stretch } )
+            using (Panel overlay = new Panel() { Name = "overlayPanel", Size = Program.MainForm.ClientRectangle.Size, BackgroundImage = screen, BackgroundImageLayout = ImageLayout.Stretch } )
             {
                 overlay.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom;
                 Program.MainForm.Controls.Add(overlay);
@@ -101,6 +101,15 @@ namespace StableDiffusionGui.Extensions
 
                 return form.ShowDialog(owner);
             }
+        }
+
+        public static List<Control> GetControls(this Control control)
+        {
+            List<Control> list = new List<Control>();
+            var controls = control.Controls.Cast<Control>().ToList();
+            list.AddRange(controls);
+            controls.ForEach(c => list.AddRange(c.GetControls()));
+            return list;
         }
     }
 }
