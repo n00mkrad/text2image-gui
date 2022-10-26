@@ -1,5 +1,6 @@
 ﻿using StableDiffusionGui.Forms;
 using StableDiffusionGui.MiscUtils;
+using StableDiffusionGui.Os;
 using System.Diagnostics;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -27,6 +28,9 @@ namespace StableDiffusionGui.Ui
 
             if (keys == (Keys.Control | Keys.Add) || keys == (Keys.Control | Keys.Oemplus)) // Hotkey: Toggle prompt field size
                 MainUi.SetPromptFieldSize(MainUi.PromptFieldSizeMode.Toggle);
+
+            if (keys == (Keys.Control | Keys.C)) // Hotkey: Copy current image
+                OsUtils.SetClipboard(Program.MainForm.PictBoxImgViewer.Image);
 
             if (keys == (Keys.Control | Keys.O)) // Hotkey: Open current image
                 ImagePreview.OpenCurrent();
