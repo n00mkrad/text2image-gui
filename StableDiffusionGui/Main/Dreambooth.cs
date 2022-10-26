@@ -47,7 +47,7 @@ namespace StableDiffusionGui.Main
                 if (!File.Exists(configPath))
                     throw new Exception("Could not create training config.");
 
-                string outPath = Path.Combine(Paths.GetModelsPath(), $"dreambooth-{className}-{CurrentTargetSteps}step-{timestamp}.ckpt");
+                string outPath = Path.Combine(Paths.GetModelsPath(), $"dreambooth-{className}-{CurrentTargetSteps}step-{timestamp}{Constants.FileExts.SdModel}");
 
                 Process db = OsUtils.NewProcess(!showCmd);
                 db.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSd()} && call activate.bat {Constants.Dirs.Conda}/envs/{Constants.Dirs.SdEnv} && python {Constants.Dirs.RepoSd}/db/main.py -t " +
@@ -111,11 +111,11 @@ namespace StableDiffusionGui.Main
             CurrentTargetSteps = targetSteps;
 
             var filesInTrainDir = IoUtils.GetFileInfosSorted(trainDir.FullName, false, "*.*");
-            int trainImgs = filesInTrainDir.Where(x => Constants.FileExtensions.ValidImages.Contains(x.Extension.Lower())).Count();
+            int trainImgs = filesInTrainDir.Where(x => Constants.FileExts.ValidImages.Contains(x.Extension.Lower())).Count();
 
             if (trainImgs < 1)
             {
-                Logger.Log($"Error: Training folder does not contain any valid images. Currently supported are {string.Join(", ", Constants.FileExtensions.ValidImages.Select(x => x.Substring(1).ToUpperInvariant()))}.");
+                Logger.Log($"Error: Training folder does not contain any valid images. Currently supported are {string.Join(", ", Constants.FileExts.ValidImages.Select(x => x.Substring(1).ToUpperInvariant()))}.");
                 return "";
             }
 
@@ -190,7 +190,7 @@ namespace StableDiffusionGui.Main
         /// <returns> Bool1: All Valid - Bool2: Contains fixable images </returns>
         public static async Task<Tuple<bool, bool>> ValidateImages (string dir)
         {
-            var files = IoUtils.GetFileInfosSorted(dir, false, "*.*").Where(x => Constants.FileExtensions.ValidImages.Contains(x.Extension.Lower())).ToList();
+            var files = IoUtils.GetFileInfosSorted(dir, false, "*.*").Where(x => Constants.FileExts.ValidImages.Contains(x.Extension.Lower())).ToList();
 
             bool allValid = true;
             bool containsFixableImages = false;
@@ -198,9 +198,9 @@ namespace StableDiffusionGui.Main
             foreach(var file in files)
             {
                 // Check extension
-                if (!Constants.FileExtensions.ValidImages.Contains(file.Extension.ToLowerInvariant()))
+                if (!Constants.FileExts.ValidImages.Contains(file.Extension.ToLowerInvariant()))
                 {
-                    Logger.Log($"File {file.Name} is invalid: Invalid file type. Supported are {string.Join(", ", Constants.FileExtensions.ValidImages.Select(x => x.Substring(1).ToUpperInvariant()))}");
+                    Logger.Log($"File {file.Name} is invalid: Invalid file type. Supported are {string.Join(", ", Constants.FileExts.ValidImages.Select(x => x.Substring(1).ToUpperInvariant()))}");
                     allValid = false;
                     continue;
                 }
@@ -239,7 +239,7 @@ namespace StableDiffusionGui.Main
 
         public static async Task FormatImages (string dir)
         {
-            var files = IoUtils.GetFileInfosSorted(dir, false, "*.*").Where(x => Constants.FileExtensions.ValidImages.Contains(x.Extension.Lower())).ToList();
+            var files = IoUtils.GetFileInfosSorted(dir, false, "*.*").Where(x => Constants.FileExts.ValidImages.Contains(x.Extension.Lower())).ToList();
 
             var opts = new ParallelOptions { MaxDegreeOfParallelism = (Environment.ProcessorCount / 2f).RoundToInt().Clamp(1, 12) }; // Thread count = Half the threads on this CPU, clamped to 1-12 (should be plenty for this...)
             int count = 0;

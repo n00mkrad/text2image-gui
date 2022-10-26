@@ -500,7 +500,7 @@ namespace StableDiffusionGui
 
                 if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
                 {
-                    var paths = dialog.FileNames.Where(path => Constants.FileExtensions.ValidImages.Contains(Path.GetExtension(path).Lower()));
+                    var paths = dialog.FileNames.Where(path => Constants.FileExts.ValidImages.Contains(Path.GetExtension(path).Lower()));
 
                     if (paths.Count() > 0)
                         MainUi.HandleDroppedFiles(paths.ToArray(), true);
@@ -561,7 +561,7 @@ namespace StableDiffusionGui
 
                 if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
                 {
-                    if (Constants.FileExtensions.ValidEmbeddings.Contains(Path.GetExtension(dialog.FileName.Lower())))
+                    if (Constants.FileExts.ValidEmbeddings.Contains(Path.GetExtension(dialog.FileName.Lower())))
                         MainUi.CurrentEmbeddingPath = dialog.FileName;
                     else
                         UiUtils.ShowMessageBox("Invalid file type.");

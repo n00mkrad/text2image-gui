@@ -109,7 +109,7 @@ namespace StableDiffusionGui.Main
 
             string text = $"{keyName}:\n" +
                 $"    config: configs/stable-diffusion/v1-inference.yaml\n" +
-                $"    weights: {(mdl == null ? "unknown.ckpt" : mdl.FullName.Wrap(true))}\n" +
+                $"    weights: {(mdl == null ? $"unknown{Constants.FileExts.SdModel}" : mdl.FullName.Wrap(true))}\n" +
                 $"    {(File.Exists(vaePath) ? $"vae: {vaePath.Wrap(true)}" : "")}\n" +
                 $"    description: Current NMKD SD GUI model\n" +
                 $"    width: 512\n" +

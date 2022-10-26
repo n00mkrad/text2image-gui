@@ -115,7 +115,7 @@ namespace StableDiffusionGui.Ui
 
             if (paths.Length == 1)
             {
-                if (Constants.FileExtensions.ValidImages.Contains(Path.GetExtension(paths[0]).Lower())) // Ask to use as init img
+                if (Constants.FileExts.ValidImages.Contains(Path.GetExtension(paths[0]).Lower())) // Ask to use as init img
                 {
                     ImageLoadForm imgForm = new ImageLoadForm(paths[0]);
                     imgForm.ShowDialog();
@@ -128,7 +128,7 @@ namespace StableDiffusionGui.Ui
                         OsUtils.SetClipboard(imgForm.CurrentMetadata.Prompt);
                 }
 
-                if (Constants.FileExtensions.ValidEmbeddings.Contains(Path.GetExtension(paths[0]).Lower())) // Ask to use as embedding (TI)
+                if (Constants.FileExts.ValidEmbeddings.Contains(Path.GetExtension(paths[0]).Lower())) // Ask to use as embedding (TI)
                 {
                     DialogResult dialogResult = UiUtils.ShowMessageBox($"Do you want to load this concept?", $"Dropped {Path.GetFileName(paths[0]).Trunc(40)}", MessageBoxButtons.YesNo);
 
@@ -141,7 +141,7 @@ namespace StableDiffusionGui.Ui
             else
             {
                 paths = paths.OrderBy(path => Path.GetFileName(path)).ToArray(); // Sort by filename
-                var validImagesInPathList = paths.Where(path => Constants.FileExtensions.ValidImages.Contains(Path.GetExtension(path).Lower()));
+                var validImagesInPathList = paths.Where(path => Constants.FileExts.ValidImages.Contains(Path.GetExtension(path).Lower()));
 
                 if (validImagesInPathList.Any())
                 {

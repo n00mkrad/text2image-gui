@@ -69,8 +69,9 @@ namespace StableDiffusionGui.Io
             return path;
         }
 
-        public static List<FileInfo> GetModels(string pattern = "*.ckpt")
+        public static List<FileInfo> GetModels(string pattern = null)
         {
+            pattern = pattern ?? $"*{Constants.FileExts.SdModel}";  
             List<FileInfo> list = new List<FileInfo>();
 
             try
