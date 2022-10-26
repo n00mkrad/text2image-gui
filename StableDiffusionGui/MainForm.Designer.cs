@@ -94,6 +94,11 @@ namespace StableDiffusionGui
             this.textboxSliderInitStrength = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.panelDebugVae = new System.Windows.Forms.Panel();
+            this.label13 = new System.Windows.Forms.Label();
+            this.textboxDebugVaePath = new System.Windows.Forms.TextBox();
+            this.panelDebugSendStdin = new System.Windows.Forms.Panel();
+            this.label12 = new System.Windows.Forms.Label();
             this.textboxCliTest = new System.Windows.Forms.TextBox();
             this.panelSeamless = new System.Windows.Forms.Panel();
             this.label8 = new System.Windows.Forms.Label();
@@ -124,7 +129,7 @@ namespace StableDiffusionGui
             this.deleteThisImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteAllCurrentImagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStripDevTools = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.openDreampyCLIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openCliToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openModelMergeToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openModelPruningTrimmingToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewLogInRealtimeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -132,17 +137,14 @@ namespace StableDiffusionGui
             this.pictBoxImgViewer = new System.Windows.Forms.PictureBox();
             this.separator = new System.Windows.Forms.Button();
             this.labelImgPrompt = new System.Windows.Forms.Label();
-            this.panelDebugSendStdin = new System.Windows.Forms.Panel();
-            this.label12 = new System.Windows.Forms.Label();
-            this.panelDebugVae = new System.Windows.Forms.Panel();
-            this.label13 = new System.Windows.Forms.Label();
-            this.textboxDebugVaePath = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
             this.tableLayoutPanel6.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.upDownSeed)).BeginInit();
             this.menuStripOutputImg.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.panelDebugVae.SuspendLayout();
+            this.panelDebugSendStdin.SuspendLayout();
             this.panelSeamless.SuspendLayout();
             this.panelSampler.SuspendLayout();
             this.panelRes.SuspendLayout();
@@ -159,8 +161,6 @@ namespace StableDiffusionGui
             this.menuStripDeleteImages.SuspendLayout();
             this.menuStripDevTools.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictBoxImgViewer)).BeginInit();
-            this.panelDebugSendStdin.SuspendLayout();
-            this.panelDebugVae.SuspendLayout();
             this.SuspendLayout();
             // 
             // runBtn
@@ -1189,6 +1189,63 @@ namespace StableDiffusionGui
             this.panel1.TabIndex = 106;
             this.panel1.Click += new System.EventHandler(this.panel1_Click);
             // 
+            // panelDebugVae
+            // 
+            this.panelDebugVae.Controls.Add(this.label13);
+            this.panelDebugVae.Controls.Add(this.textboxDebugVaePath);
+            this.panelDebugVae.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelDebugVae.Location = new System.Drawing.Point(0, 350);
+            this.panelDebugVae.Name = "panelDebugVae";
+            this.panelDebugVae.Size = new System.Drawing.Size(633, 35);
+            this.panelDebugVae.TabIndex = 15;
+            this.panelDebugVae.Visible = false;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label13.ForeColor = System.Drawing.Color.White;
+            this.label13.Location = new System.Drawing.Point(5, 10);
+            this.label13.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(72, 13);
+            this.label13.TabIndex = 105;
+            this.label13.Text = "Set VAE Path";
+            // 
+            // textboxDebugVaePath
+            // 
+            this.textboxDebugVaePath.AllowDrop = true;
+            this.textboxDebugVaePath.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textboxDebugVaePath.ForeColor = System.Drawing.Color.White;
+            this.textboxDebugVaePath.Location = new System.Drawing.Point(233, 7);
+            this.textboxDebugVaePath.MinimumSize = new System.Drawing.Size(4, 21);
+            this.textboxDebugVaePath.Name = "textboxDebugVaePath";
+            this.textboxDebugVaePath.Size = new System.Drawing.Size(397, 20);
+            this.textboxDebugVaePath.TabIndex = 4;
+            // 
+            // panelDebugSendStdin
+            // 
+            this.panelDebugSendStdin.Controls.Add(this.label12);
+            this.panelDebugSendStdin.Controls.Add(this.textboxCliTest);
+            this.panelDebugSendStdin.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelDebugSendStdin.Location = new System.Drawing.Point(0, 315);
+            this.panelDebugSendStdin.Name = "panelDebugSendStdin";
+            this.panelDebugSendStdin.Size = new System.Drawing.Size(633, 35);
+            this.panelDebugSendStdin.TabIndex = 14;
+            this.panelDebugSendStdin.Visible = false;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label12.ForeColor = System.Drawing.Color.White;
+            this.label12.Location = new System.Drawing.Point(5, 10);
+            this.label12.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(172, 13);
+            this.label12.TabIndex = 105;
+            this.label12.Text = "Send stdin to running InvokeAI CLI";
+            // 
             // textboxCliTest
             // 
             this.textboxCliTest.AllowDrop = true;
@@ -1197,7 +1254,7 @@ namespace StableDiffusionGui
             this.textboxCliTest.Location = new System.Drawing.Point(233, 7);
             this.textboxCliTest.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxCliTest.Name = "textboxCliTest";
-            this.textboxCliTest.Size = new System.Drawing.Size(397, 21);
+            this.textboxCliTest.Size = new System.Drawing.Size(397, 20);
             this.textboxCliTest.TabIndex = 4;
             this.textboxCliTest.DoubleClick += new System.EventHandler(this.textboxCliTest_DoubleClick);
             // 
@@ -1495,46 +1552,46 @@ namespace StableDiffusionGui
             // menuStripDevTools
             // 
             this.menuStripDevTools.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.openDreampyCLIToolStripMenuItem,
+            this.openCliToolStripMenuItem,
             this.openModelMergeToolToolStripMenuItem,
             this.openModelPruningTrimmingToolToolStripMenuItem,
             this.viewLogInRealtimeToolStripMenuItem,
             this.trainDreamBoothModelToolStripMenuItem});
             this.menuStripDevTools.Name = "menuStripDevTools";
-            this.menuStripDevTools.Size = new System.Drawing.Size(207, 114);
+            this.menuStripDevTools.Size = new System.Drawing.Size(210, 114);
             // 
-            // openDreampyCLIToolStripMenuItem
+            // openCliToolStripMenuItem
             // 
-            this.openDreampyCLIToolStripMenuItem.Name = "openDreampyCLIToolStripMenuItem";
-            this.openDreampyCLIToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
-            this.openDreampyCLIToolStripMenuItem.Text = "Open Dream.py CLI";
-            this.openDreampyCLIToolStripMenuItem.Click += new System.EventHandler(this.openDreampyCLIToolStripMenuItem_Click);
+            this.openCliToolStripMenuItem.Name = "openCliToolStripMenuItem";
+            this.openCliToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.openCliToolStripMenuItem.Text = "Open Stable Diffusion CLI";
+            this.openCliToolStripMenuItem.Click += new System.EventHandler(this.openDreampyCLIToolStripMenuItem_Click);
             // 
             // openModelMergeToolToolStripMenuItem
             // 
             this.openModelMergeToolToolStripMenuItem.Name = "openModelMergeToolToolStripMenuItem";
-            this.openModelMergeToolToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
+            this.openModelMergeToolToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
             this.openModelMergeToolToolStripMenuItem.Text = "Merge Models";
             this.openModelMergeToolToolStripMenuItem.Click += new System.EventHandler(this.openModelMergeToolToolStripMenuItem_Click);
             // 
             // openModelPruningTrimmingToolToolStripMenuItem
             // 
             this.openModelPruningTrimmingToolToolStripMenuItem.Name = "openModelPruningTrimmingToolToolStripMenuItem";
-            this.openModelPruningTrimmingToolToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
+            this.openModelPruningTrimmingToolToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
             this.openModelPruningTrimmingToolToolStripMenuItem.Text = "Prune (Trim) Models";
             this.openModelPruningTrimmingToolToolStripMenuItem.Click += new System.EventHandler(this.openModelPruningTrimmingToolToolStripMenuItem_Click);
             // 
             // viewLogInRealtimeToolStripMenuItem
             // 
             this.viewLogInRealtimeToolStripMenuItem.Name = "viewLogInRealtimeToolStripMenuItem";
-            this.viewLogInRealtimeToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
+            this.viewLogInRealtimeToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
             this.viewLogInRealtimeToolStripMenuItem.Text = "View Log In Realtime";
             this.viewLogInRealtimeToolStripMenuItem.Click += new System.EventHandler(this.viewLogInRealtimeToolStripMenuItem_Click);
             // 
             // trainDreamBoothModelToolStripMenuItem
             // 
             this.trainDreamBoothModelToolStripMenuItem.Name = "trainDreamBoothModelToolStripMenuItem";
-            this.trainDreamBoothModelToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
+            this.trainDreamBoothModelToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
             this.trainDreamBoothModelToolStripMenuItem.Text = "Train DreamBooth Model";
             this.trainDreamBoothModelToolStripMenuItem.Click += new System.EventHandler(this.trainDreamBoothModelToolStripMenuItem_Click);
             // 
@@ -1580,63 +1637,8 @@ namespace StableDiffusionGui
             this.labelImgPrompt.Size = new System.Drawing.Size(515, 16);
             this.labelImgPrompt.TabIndex = 115;
             this.labelImgPrompt.Text = "No prompt to show.";
-            // 
-            // panelDebugSendStdin
-            // 
-            this.panelDebugSendStdin.Controls.Add(this.label12);
-            this.panelDebugSendStdin.Controls.Add(this.textboxCliTest);
-            this.panelDebugSendStdin.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelDebugSendStdin.Location = new System.Drawing.Point(0, 315);
-            this.panelDebugSendStdin.Name = "panelDebugSendStdin";
-            this.panelDebugSendStdin.Size = new System.Drawing.Size(633, 35);
-            this.panelDebugSendStdin.TabIndex = 14;
-            this.panelDebugSendStdin.Visible = false;
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.ForeColor = System.Drawing.Color.White;
-            this.label12.Location = new System.Drawing.Point(5, 10);
-            this.label12.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(172, 13);
-            this.label12.TabIndex = 105;
-            this.label12.Text = "Send stdin to running InvokeAI CLI";
-            // 
-            // panelDebugVae
-            // 
-            this.panelDebugVae.Controls.Add(this.label13);
-            this.panelDebugVae.Controls.Add(this.textboxDebugVaePath);
-            this.panelDebugVae.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelDebugVae.Location = new System.Drawing.Point(0, 350);
-            this.panelDebugVae.Name = "panelDebugVae";
-            this.panelDebugVae.Size = new System.Drawing.Size(633, 35);
-            this.panelDebugVae.TabIndex = 15;
-            this.panelDebugVae.Visible = false;
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.ForeColor = System.Drawing.Color.White;
-            this.label13.Location = new System.Drawing.Point(5, 10);
-            this.label13.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(72, 13);
-            this.label13.TabIndex = 105;
-            this.label13.Text = "Set VAE Path";
-            // 
-            // textboxDebugVaePath
-            // 
-            this.textboxDebugVaePath.AllowDrop = true;
-            this.textboxDebugVaePath.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.textboxDebugVaePath.ForeColor = System.Drawing.Color.White;
-            this.textboxDebugVaePath.Location = new System.Drawing.Point(233, 7);
-            this.textboxDebugVaePath.MinimumSize = new System.Drawing.Size(4, 21);
-            this.textboxDebugVaePath.Name = "textboxDebugVaePath";
-            this.textboxDebugVaePath.Size = new System.Drawing.Size(397, 21);
-            this.textboxDebugVaePath.TabIndex = 4;
+            this.toolTip.SetToolTip(this.labelImgPrompt, "Shows the prompt of the displayed image. Click to copy.");
+            this.labelImgPrompt.Click += new System.EventHandler(this.labelImgPrompt_Click);
             // 
             // MainForm
             // 
@@ -1692,6 +1694,10 @@ namespace StableDiffusionGui
             ((System.ComponentModel.ISupportInitialize)(this.upDownSeed)).EndInit();
             this.menuStripOutputImg.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
+            this.panelDebugVae.ResumeLayout(false);
+            this.panelDebugVae.PerformLayout();
+            this.panelDebugSendStdin.ResumeLayout(false);
+            this.panelDebugSendStdin.PerformLayout();
             this.panelSeamless.ResumeLayout(false);
             this.panelSeamless.PerformLayout();
             this.panelSampler.ResumeLayout(false);
@@ -1719,10 +1725,6 @@ namespace StableDiffusionGui
             this.menuStripDeleteImages.ResumeLayout(false);
             this.menuStripDevTools.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictBoxImgViewer)).EndInit();
-            this.panelDebugSendStdin.ResumeLayout(false);
-            this.panelDebugSendStdin.PerformLayout();
-            this.panelDebugVae.ResumeLayout(false);
-            this.panelDebugVae.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1814,7 +1816,7 @@ namespace StableDiffusionGui
         private System.Windows.Forms.ToolStripMenuItem deleteThisImageToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteAllCurrentImagesToolStripMenuItem;
         private System.Windows.Forms.ContextMenuStrip menuStripDevTools;
-        private System.Windows.Forms.ToolStripMenuItem openDreampyCLIToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openCliToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openModelMergeToolToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openModelPruningTrimmingToolToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewLogInRealtimeToolStripMenuItem;

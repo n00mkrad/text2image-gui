@@ -784,5 +784,10 @@ namespace StableDiffusionGui
 
             CenterToScreen();
         }
+
+        private void labelImgPrompt_Click(object sender, EventArgs e)
+        {
+            OsUtils.SetClipboard(ImagePreview.CurrentImageMetadata.Prompt);
+        }
     }
 }
