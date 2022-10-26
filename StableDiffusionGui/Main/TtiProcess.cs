@@ -334,7 +334,7 @@ namespace StableDiffusionGui.Main
             string batPath = Path.Combine(Paths.GetSessionDataPath(), "invoke.bat");
 
             string batText = $"@echo off\n" +
-                $"title Invoke.py CLI\n" +
+                $"title Stable Diffusion CLI (InvokeAI)\n" +
                 $"cd /D {Paths.GetDataPath().Wrap()}\n" +
                 $"SET PATH={OsUtils.GetTemporaryPathVariable(new string[] { "./mb", "./mb/Scripts", "./mb/condabin", "./mb/Library/bin" })}\n" +
                 $"call activate.bat mb/envs/ldo\n" +

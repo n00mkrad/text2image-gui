@@ -789,5 +789,10 @@ namespace StableDiffusionGui
         {
             OsUtils.SetClipboard(ImagePreview.CurrentImageMetadata.Prompt);
         }
+
+        private void openCmdInCondaEnvironmentToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("cmd", $"/K title Conda Environment: {Constants.Dirs.SdEnv} && cd /D {Paths.GetDataPath().Wrap()} && SET PATH={OsUtils.GetTemporaryPathVariable(new string[] { "./mb", "./mb/Scripts", "./mb/condabin", "./mb/Library/bin" })} && call activate.bat mb/envs/{Constants.Dirs.SdEnv}");
+        }
     }
 }
