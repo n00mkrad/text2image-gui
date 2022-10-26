@@ -1,5 +1,6 @@
 ﻿using StableDiffusionGui.Extensions;
 using StableDiffusionGui.Forms;
+using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using System.Diagnostics;
@@ -42,7 +43,13 @@ namespace StableDiffusionGui.Ui
             if (keys == (Keys.Control | Keys.M)) // Hotkey: Model quick switcher
             {
                 Program.MainForm.PanelBg.Focus();
-                new ModelQuickSelectForm().ShowDialogForm(0f);
+                new ModelQuickSelectForm(Enums.StableDiffusion.ModelType.Normal).ShowDialogForm(0f);
+            }
+
+            if (keys == (Keys.Control | Keys.Shift | Keys.M)) // Hotkey: VAE quick switcher
+            {
+                Program.MainForm.PanelBg.Focus();
+                new ModelQuickSelectForm(Enums.StableDiffusion.ModelType.Vae).ShowDialogForm(0f);
             }
 
             if (keys == (Keys.F1)) // Hotkey: Help

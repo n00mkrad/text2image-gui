@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ModelQuickSelectForm));
-            this.comboxSdModel = new System.Windows.Forms.ComboBox();
+            this.comboxModel = new System.Windows.Forms.ComboBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
@@ -37,25 +37,25 @@
             // 
             // comboxSdModel
             // 
-            this.comboxSdModel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.comboxModel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.comboxSdModel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.comboxSdModel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboxSdModel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.comboxSdModel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.comboxSdModel.ForeColor = System.Drawing.Color.White;
-            this.comboxSdModel.FormattingEnabled = true;
-            this.comboxSdModel.Location = new System.Drawing.Point(11, 11);
-            this.comboxSdModel.Name = "comboxSdModel";
-            this.comboxSdModel.Size = new System.Drawing.Size(460, 23);
-            this.comboxSdModel.TabIndex = 107;
-            this.comboxSdModel.Visible = false;
+            this.comboxModel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.comboxModel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboxModel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboxModel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.comboxModel.ForeColor = System.Drawing.Color.White;
+            this.comboxModel.FormattingEnabled = true;
+            this.comboxModel.Location = new System.Drawing.Point(11, 11);
+            this.comboxModel.Name = "comboxSdModel";
+            this.comboxModel.Size = new System.Drawing.Size(460, 23);
+            this.comboxModel.TabIndex = 107;
+            this.comboxModel.Visible = false;
             // 
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Controls.Add(this.comboxSdModel);
+            this.panel1.Controls.Add(this.comboxModel);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
@@ -99,7 +99,7 @@
 
         #endregion
 
-        private System.Windows.Forms.ComboBox comboxSdModel;
+        private System.Windows.Forms.ComboBox comboxModel;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label1;
     }

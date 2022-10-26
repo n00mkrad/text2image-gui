@@ -1,4 +1,5 @@
 ﻿using StableDiffusionGui.Io;
+using StableDiffusionGui.Main;
 using System;
 using System.Windows.Forms;
 
@@ -6,9 +7,12 @@ namespace StableDiffusionGui.Forms
 {
     public partial class ModelQuickSelectForm : Form
     {
-        public ModelQuickSelectForm()
+        private Enums.StableDiffusion.ModelType _modelType;
+
+        public ModelQuickSelectForm(Enums.StableDiffusion.ModelType modelType)
         {
             InitializeComponent();
+            _modelType = modelType;
         }
 
         private void ModelQuickSelectForm_Load(object sender, EventArgs e)
@@ -19,19 +23,29 @@ namespace StableDiffusionGui.Forms
         private void ModelQuickSelectForm_Shown(object sender, EventArgs e)
         {
             Refresh();
+
+            if(_modelType == Enums.StableDiffusion.ModelType.Normal)
+                comboxModel.Name = Config.Key.comboxSdModel.ToString();
+            else if (_modelType == Enums.StableDiffusion.ModelType.Vae)
+                comboxModel.Name = Config.Key.comboxSdModelVae.ToString();
+
             LoadModels(true);
-            comboxSdModel.DroppedDown = true;
+            comboxModel.DroppedDown = true;
         }
 
         private void LoadModels(bool loadCombox)
         {
-            comboxSdModel.Visible = true;
-            comboxSdModel.Focus();
-            comboxSdModel.Items.Clear();
-            Paths.GetModels().ForEach(x => comboxSdModel.Items.Add(x.Name));
+            comboxModel.Visible = true;
+            comboxModel.Focus();
+            comboxModel.Items.Clear();
+
+            if (_modelType == Enums.StableDiffusion.ModelType.Vae)
+                comboxModel.Items.Add("None");
+
+            Paths.GetModels(_modelType).ForEach(x => comboxModel.Items.Add(x.Name));
 
             if (loadCombox)
-                ConfigParser.LoadGuiElement(comboxSdModel);
+                ConfigParser.LoadGuiElement(comboxModel);
         }
 
         private void ModelQuickSelectForm_KeyDown(object sender, KeyEventArgs e)
@@ -39,7 +53,7 @@ namespace StableDiffusionGui.Forms
             if (e.KeyCode == Keys.Return)
             {
                 if (IsModelValid())
-                    ConfigParser.SaveGuiElement(comboxSdModel);
+                    ConfigParser.SaveGuiElement(comboxModel);
 
                 Close();
             }
@@ -52,7 +66,10 @@ namespace StableDiffusionGui.Forms
 
         private bool IsModelValid()
         {
-            return Paths.GetModel(comboxSdModel.Text.Trim()) != null;
+            if (comboxModel.Text == "None")
+                return true;
+
+            return Paths.GetModel(comboxModel.Text.Trim(), false, _modelType) != null;
         }
     }
 }
