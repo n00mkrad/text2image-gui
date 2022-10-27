@@ -86,11 +86,11 @@ namespace StableDiffusionGui.Installation
             l.Add($"");
             l.Add($"echo Working dir: %cd%");
             l.Add($"");
-            l.Add($"SET CONDA_ROOT_PATH=../{Constants.Dirs.Conda}");
-            l.Add($"SET PYTHONHOME=../{Constants.Dirs.Conda}");
-            l.Add($"SET CONDA_SCRIPTS_PATH=../{Constants.Dirs.Conda}/Scripts");
+            l.Add($"SET CONDA_ROOT_PATH=..\\{Constants.Dirs.Conda}");
+            l.Add($"SET PYTHONHOME=..\\{Constants.Dirs.Conda}");
+            l.Add($"SET CONDA_SCRIPTS_PATH=..\\{Constants.Dirs.Conda}\\Scripts");
             l.Add($"");
-            l.Add($"SET PATH={OsUtils.GetTemporaryPathVariable(new string[] { $"../{Constants.Dirs.Conda}", $"../{Constants.Dirs.Conda}/Scripts", $"../{Constants.Dirs.Conda}/condabin", $"../{Constants.Dirs.Conda}/Library/bin" })}");
+            l.Add($"SET PATH={OsUtils.GetTemporaryPathVariable(new string[] { $"..\\{Constants.Dirs.Conda}", $"..\\{Constants.Dirs.Conda}\\Scripts", $"..\\{Constants.Dirs.Conda}\\condabin", $"..\\{Constants.Dirs.Conda}\\Library\\bin" })}");
             l.Add($"");
             l.Add($"_conda env create -f environment.yml -p \"%CONDA_ROOT_PATH%\\envs\\{Constants.Dirs.SdEnv}\"");
             l.Add($"_conda env update --file environment.yml --prune -p \"%CONDA_ROOT_PATH%\\envs\\{Constants.Dirs.SdEnv}\"");
