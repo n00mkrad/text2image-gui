@@ -41,7 +41,7 @@ namespace StableDiffusionGui.Main
             string model = paramsDict.Get("model").FromJson<string>();
             bool hiresFix = paramsDict.Get("hiresFix").FromJson<bool>();
             bool lockSeed = paramsDict.Get("lockSeed").FromJson<bool>();
-            string vae = paramsDict.Get("vae").FromJson<string>();
+            string vae = paramsDict.Get("vae").FromJson<string>().Replace("None", "");
 
             if (!TtiUtils.CheckIfSdModelExists())
                 return;
