@@ -87,6 +87,7 @@ namespace StableDiffusionGui.Installation
             l.Add($"echo Working dir: %cd%");
             l.Add($"");
             l.Add($"SET CONDA_ROOT_PATH=../{Constants.Dirs.Conda}");
+            l.Add($"SET PYTHONHOME=../{Constants.Dirs.Conda}");
             l.Add($"SET CONDA_SCRIPTS_PATH=../{Constants.Dirs.Conda}/Scripts");
             l.Add($"");
             l.Add($"SET PATH={OsUtils.GetTemporaryPathVariable(new string[] { $"../{Constants.Dirs.Conda}", $"../{Constants.Dirs.Conda}/Scripts", $"../{Constants.Dirs.Conda}/condabin", $"../{Constants.Dirs.Conda}/Library/bin" })}");
