@@ -174,7 +174,7 @@ namespace StableDiffusionGui.Main
                 string logMdl = Path.ChangeExtension(model, null).Trunc(string.IsNullOrWhiteSpace(vae) ? 35 : 80).Wrap();
                 string logVae = Path.GetFileNameWithoutExtension(vae).Trunc(35).Wrap();
                 Logger.Log($"Loading Stable Diffusion with model {logMdl}{(string.IsNullOrWhiteSpace(vae) ? "" : $" and VAE {logVae}")}...");
-                
+
                 CurrentProcess = py;
                 ProcessExistWasIntentional = false;
                 py.Start();
@@ -249,6 +249,7 @@ namespace StableDiffusionGui.Main
             bool seamless = paramsDict.Get("seamless").FromJson<bool>();
             string model = paramsDict.Get("model").FromJson<string>();
             string modelNoExt = Path.ChangeExtension(model, null);
+            bool lockSeed = paramsDict.Get("lockSeed").FromJson<bool>();
 
             if (!TtiUtils.CheckIfSdModelExists())
                 return;
@@ -293,7 +294,8 @@ namespace StableDiffusionGui.Main
                         }
                     }
 
-                    seed++;
+                    if (!lockSeed)
+                        seed++;
                 }
 
                 if (Config.GetBool(Config.Key.checkboxMultiPromptsSameSeed))
@@ -383,7 +385,7 @@ namespace StableDiffusionGui.Main
             OsUtils.AttachOrphanHitman(cli);
         }
 
-        public static void StartCmdInSdCondaEnv ()
+        public static void StartCmdInSdCondaEnv()
         {
             string c = Constants.Dirs.Conda;
             string pathVar = OsUtils.GetTemporaryPathVariable(new string[] { $"./{c}", $"./{c}/Scripts", $"./{c}/condabin", $"./{c}/Library/bin" });
