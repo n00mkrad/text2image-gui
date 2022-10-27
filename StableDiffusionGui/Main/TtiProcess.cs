@@ -232,7 +232,7 @@ namespace StableDiffusionGui.Main
             if (actions.Contains(FixAction.FaceRestoration))
                 args.Add(ArgsInvoke.GetFaceRestoreArgs(true));
 
-            WriteStdIn(string.Join(" ", args));
+            WriteStdIn(string.Join(" ", args), true);
         }
 
         public static async Task RunStableDiffusionOpt(string[] prompts, int iterations, Dictionary<string, string> paramsDict, string outPath)
@@ -390,16 +390,16 @@ namespace StableDiffusionGui.Main
             Process.Start("cmd", $"/K title Environment: {Constants.Dirs.SdEnv} && cd /D {Paths.GetDataPath().Wrap()} && SET PATH={pathVar} && call activate.bat {c}/envs/{Constants.Dirs.SdEnv}");
         }
 
-        public static async Task<bool> WriteStdIn(string text, bool submitLine = true)
+        public static async Task<bool> WriteStdIn(string text, bool ignoreCanceled = false, bool newLine = true)
         {
             try
             {
-                if (TextToImage.Canceled || CurrentStdInWriter == null)
+                if ((!ignoreCanceled && TextToImage.Canceled) || CurrentStdInWriter == null)
                     return false;
 
                 Logger.Log($"=> {text}", true);
 
-                if (submitLine)
+                if (newLine)
                     await CurrentStdInWriter.WriteLineAsync(text);
                 else
                     await CurrentStdInWriter.WriteAsync(text);

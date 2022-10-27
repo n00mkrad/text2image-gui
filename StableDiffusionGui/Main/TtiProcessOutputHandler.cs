@@ -26,19 +26,16 @@ namespace StableDiffusionGui.Main
 
             Logger.Log(line, true, false, Constants.Lognames.Sd);
 
-            if (TextToImage.Canceled)
-                return;
-
             bool ellipsis = Logger.LastUiLine.Contains("...");
 
             if (TextToImage.CurrentTaskSettings != null && TextToImage.CurrentTaskSettings.Implementation == Data.Implementation.StableDiffusion)
             {
                 bool replace = ellipsis || Logger.LastUiLine.MatchesWildcard("*Generated*image*in*");
 
-                if (line.Contains("Setting Sampler"))
+                if (!TextToImage.Canceled && line.Contains("Setting Sampler"))
                     Logger.Log("Generating...");
 
-                if (line.MatchesWildcard("step */*"))
+                if (!TextToImage.Canceled && line.MatchesWildcard("step */*"))
                 {
                     int[] stepsCurrentTarget = line.Split("step ")[1].Split('/').Select(x => x.GetInt()).ToArray();
 
@@ -48,7 +45,7 @@ namespace StableDiffusionGui.Main
                         Program.MainForm.SetProgressImg(percent);
                 }
 
-                if (line.Contains("image(s) generated in "))
+                if (!TextToImage.Canceled && line.Contains("image(s) generated in "))
                 {
                     var split = line.Split("image(s) generated in ");
                     TextToImage.CurrentTask.ImgCount += split[0].GetInt();
