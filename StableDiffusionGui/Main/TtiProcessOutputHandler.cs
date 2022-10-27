@@ -2,6 +2,7 @@
 using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -59,6 +60,19 @@ namespace StableDiffusionGui.Main
 
                     Logger.Log($"Generated {split[0].GetInt()} image in {split[1]} ({TextToImage.CurrentTask.ImgCount}/{TextToImage.CurrentTask.TargetImgCount})" +
                         $"{(TextToImage.CurrentTask.ImgCount > 1 && remainingMs > 1000 ? $" - ETA: {FormatUtils.Time(remainingMs, false)}" : "")}", false, replace || Logger.LastUiLine.MatchesWildcard("*Generated*image*in*"));
+                }
+
+                var last2 = Logger.GetSessionLogLastLines(Constants.Lognames.Sd, 2, true);
+
+                if (line.Contains(": !fix") && last2.FirstOrDefault() == "Outputs:")
+                {
+                    string pathSource = line.Split(": !fix \"")[1].Split("\" -")[0];
+                    string pathOut = line.Split(": !fix \"")[0];
+                    //string ext = Path.GetExtension(pathSource);
+                    string filenameSource = Path.GetFileName(pathSource);
+                    Logger.Log($"Fix source: {pathSource.Wrap(true)} - output: {pathOut.Wrap(true)}");
+                    ImagePreview.AppendImage(pathOut, ImagePreview.ImgShowMode.ShowLast, false);
+                    // TODO: Export to output folder!
                 }
             }
 

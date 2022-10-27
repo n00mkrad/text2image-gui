@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Management.Automation.Runspaces;
 using System.Threading.Tasks;
 
 namespace StableDiffusionGui.Main
@@ -202,6 +203,21 @@ namespace StableDiffusionGui.Main
             Finish();
         }
 
+        public enum FixAction { Upscale, FaceRestoration }
+
+        public static void InvokeAiFix(string imgPath, List<FixAction> actions)
+        {
+            List<string> args = new List<string> { "!fix", imgPath.Wrap(true) };
+
+            if (actions.Contains(FixAction.Upscale))
+                args.Add(ArgsInvoke.GetUpscaleArgs(true));
+
+            if (actions.Contains(FixAction.FaceRestoration))
+                args.Add(ArgsInvoke.GetFaceRestoreArgs(true));
+
+            WriteStdIn(string.Join(" ", args));
+        }
+
         public static async Task RunStableDiffusionOpt(string[] prompts, int iterations, Dictionary<string, string> paramsDict, string outPath)
         {
             // NOTE: Currently not implemented: Embeddings, Samplers, Seamless Mode
@@ -324,6 +340,7 @@ namespace StableDiffusionGui.Main
 
             Finish();
         }
+
 
         public static async Task RunStableDiffusionCli(string outPath, string vaePath)
         {

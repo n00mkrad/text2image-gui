@@ -11,8 +11,8 @@ namespace StableDiffusionGui.Forms
 {
     public partial class PostProcSettingsForm : Form
     {
-        public enum UpscaleOption { Disabled, X2, X3, X4 }
-        public enum FaceRestoreOption { Disabled, Gfpgan, CodeFormer }
+        public enum UpscaleOption { X2, X3, X4 }
+        public enum FaceRestoreOption { Gfpgan, CodeFormer }
 
         public Dictionary<string, string> UiStrings = new Dictionary<string, string>();
 
@@ -37,11 +37,10 @@ namespace StableDiffusionGui.Forms
         private void PostProcSettingsForm_Shown(object sender, EventArgs e)
         {
             Refresh();
-
             comboxUpscale.FillFromEnum<UpscaleOption>(UiStrings);
             comboxFaceRestoration.FillFromEnum<FaceRestoreOption>(UiStrings);
-
             LoadSettings();
+            UpdateVisibility();
             Opacity = 1;
 
             if (!InstallationStatus.HasSdUpscalers())
@@ -62,7 +61,9 @@ namespace StableDiffusionGui.Forms
 
         void LoadSettings()
         {
+            ConfigParser.LoadGuiElement(checkboxUpscaleEnable);
             ConfigParser.LoadComboxIndex(comboxUpscale);
+            ConfigParser.LoadGuiElement(checkboxFaceRestorationEnable);
             ConfigParser.LoadComboxIndex(comboxFaceRestoration);
             ConfigParser.LoadGuiElement(sliderFaceRestoreStrength, ConfigParser.SaveValueAs.Divided, 20f); sliderFaceRestoreStrength_Scroll(null, null);
             ConfigParser.LoadGuiElement(sliderCodeformerFidelity, ConfigParser.SaveValueAs.Divided, 20f); sliderCodeformerFidelity_Scroll(null, null);
@@ -70,7 +71,9 @@ namespace StableDiffusionGui.Forms
 
         void SaveSettings()
         {
+            ConfigParser.SaveGuiElement(checkboxUpscaleEnable);
             ConfigParser.SaveComboxIndex(comboxUpscale);
+            ConfigParser.SaveGuiElement(checkboxFaceRestorationEnable);
             ConfigParser.SaveComboxIndex(comboxFaceRestoration);
             ConfigParser.SaveGuiElement(sliderFaceRestoreStrength, ConfigParser.SaveValueAs.Divided, 20f);
             ConfigParser.SaveGuiElement(sliderCodeformerFidelity, ConfigParser.SaveValueAs.Divided, 20f);
@@ -83,17 +86,26 @@ namespace StableDiffusionGui.Forms
             labelFaceRestoreStrength.Text = strength.ToString();
         }
 
-        private void comboxFaceRestoration_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            panelFaceRestorationStrength.Visible = (FaceRestoreOption)comboxFaceRestoration.SelectedIndex != FaceRestoreOption.Disabled;
-            panelCodeformerFidelity.Visible = (FaceRestoreOption)comboxFaceRestoration.SelectedIndex == FaceRestoreOption.CodeFormer;
-        }
-
         private void sliderCodeformerFidelity_Scroll(object sender, ScrollEventArgs e)
         {
             float strength = sliderCodeformerFidelity.Value / 20f;
             PostProcUi.CurrentCfFidelity = strength;
             labelCodeformerFidelity.Text = strength.ToString();
+        }
+
+        private void checkboxUpscaleEnable_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateVisibility();
+        }
+
+        private void checkboxFaceRestorationEnable_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateVisibility();
+        }
+
+        private void UpdateVisibility ()
+        {
+            panelCodeformerFidelity.Visible = (FaceRestoreOption)comboxFaceRestoration.SelectedIndex == FaceRestoreOption.CodeFormer;
         }
     }
 }

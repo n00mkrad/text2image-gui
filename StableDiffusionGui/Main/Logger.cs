@@ -139,11 +139,14 @@ namespace StableDiffusionGui.Main
                 return "";
         }
 
-        public static List<string> GetSessionLogLastLines(string filename, int linesCount = 5)
+        public static List<string> GetSessionLogLastLines(string filename, int linesCount = 5, bool stripTimestamp = false)
         {
-            string log = GetSessionLog(filename);
-            string[] lines = log.SplitIntoLines();
-            return lines.Reverse().Take(linesCount).Reverse().ToList();
+            var lines = GetSessionLog(filename).SplitIntoLines();
+
+            if (stripTimestamp)
+                return lines.Reverse().Take(linesCount).Reverse().Select(line => line.Contains("]: ") ? line.Substring(line.IndexOf("]: ") + 1).Substring(2) : line).ToList();
+            else
+                return lines.Reverse().Take(linesCount).Reverse().ToList();
         }
 
         public static void LogIfLastLineDoesNotContainMsg(string s, bool hidden = false, bool replaceLastLine = false, string filename = "")

@@ -59,6 +59,13 @@ namespace StableDiffusionGui.Ui
             Show();
         }
 
+        public static void AppendImage (string imagePath, ImgShowMode showMode, bool ignoreTimeout = false)
+        {
+            List<string> newImgList = new List<string>(_currentImages);
+            newImgList.Add(imagePath);
+            SetImages(newImgList, showMode, ignoreTimeout);
+        }
+
         public static void Show()
         {
             if (_currIndex < 0 || _currIndex >= _currentImages.Length)

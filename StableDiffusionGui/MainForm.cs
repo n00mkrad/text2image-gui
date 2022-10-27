@@ -102,7 +102,6 @@ namespace StableDiffusionGui
             if (!Debugger.IsAttached)
                 new WelcomeForm().ShowDialogForm(0f);
 
-            panelDebugVae.Visible = Debugger.IsAttached;
             panelDebugSendStdin.Visible = Debugger.IsAttached;
         }
 
@@ -732,7 +731,7 @@ namespace StableDiffusionGui
             if (Program.Busy || !MainUi.IsInstalledWithWarning())
                 return;
 
-            TtiProcess.RunStableDiffusionCli(Config.Get(Config.Key.textboxOutPath), textboxDebugVaePath.Text.Trim());
+            TtiProcess.RunStableDiffusionCli(Config.Get(Config.Key.textboxOutPath), Config.Get(Config.Key.comboxSdModelVae));
         }
 
         private void openModelMergeToolToolStripMenuItem_Click(object sender, EventArgs e)
