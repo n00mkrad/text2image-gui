@@ -56,14 +56,8 @@ namespace StableDiffusionGui.Ui
                 new ModelQuickSelectForm(Enums.StableDiffusion.ModelType.Vae).ShowDialogForm(0f);
             }
 
-            if (keys == (Keys.Control | Keys.U)) // Hotkey: Upscale current image
-                TtiProcess.InvokeAiFix(ImagePreview.CurrentImagePath, new[] { TtiProcess.FixAction.Upscale }.ToList());
-
-            if (keys == (Keys.Control | Keys.F)) // Hotkey: Run face restoration on current image
-                TtiProcess.InvokeAiFix(ImagePreview.CurrentImagePath, new[] { TtiProcess.FixAction.FaceRestoration }.ToList());
-
-            if (keys == (Keys.Control | Keys.U | Keys.F)) // Hotkey: Upscale and face restoration on current image
-                TtiProcess.InvokeAiFix(ImagePreview.CurrentImagePath, new[] { TtiProcess.FixAction.Upscale, TtiProcess.FixAction.FaceRestoration }.ToList());
+            if (keys == (Keys.Control | Keys.P)) // Hotkey: Post-process current image
+                Program.MainForm.ShowPostProcessMenu();
 
             if (keys == Keys.F1) // Hotkey: Help
                 Process.Start("https://github.com/n00mkrad/text2image-gui/blob/main/README.md");

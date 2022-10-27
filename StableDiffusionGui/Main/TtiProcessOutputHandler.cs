@@ -1,4 +1,5 @@
-﻿using StableDiffusionGui.MiscUtils;
+﻿using StableDiffusionGui.Io;
+using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
@@ -62,17 +63,11 @@ namespace StableDiffusionGui.Main
                         $"{(TextToImage.CurrentTask.ImgCount > 1 && remainingMs > 1000 ? $" - ETA: {FormatUtils.Time(remainingMs, false)}" : "")}", false, replace || Logger.LastUiLine.MatchesWildcard("*Generated*image*in*"));
                 }
 
-                var last2 = Logger.GetSessionLogLastLines(Constants.Lognames.Sd, 2, true);
-
-                if (line.Contains(": !fix") && last2.FirstOrDefault() == "Outputs:")
+                if (line.Contains(": !fix") && Logger.GetSessionLogLastLines(Constants.Lognames.Sd, 2, true).FirstOrDefault() == "Outputs:")
                 {
                     string pathSource = line.Split(": !fix \"")[1].Split("\" -")[0];
                     string pathOut = line.Split(": !fix \"")[0];
-                    //string ext = Path.GetExtension(pathSource);
-                    string filenameSource = Path.GetFileName(pathSource);
-                    Logger.Log($"Fix source: {pathSource.Wrap(true)} - output: {pathOut.Wrap(true)}");
-                    ImagePreview.AppendImage(pathOut, ImagePreview.ImgShowMode.ShowLast, false);
-                    // TODO: Export to output folder!
+                    TtiUtils.ExportPostprocessedImage(pathSource, pathOut);
                 }
             }
 

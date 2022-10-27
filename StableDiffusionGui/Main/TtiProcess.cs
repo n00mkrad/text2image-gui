@@ -1,6 +1,7 @@
 ﻿using StableDiffusionGui.Io;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
+using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -207,6 +208,22 @@ namespace StableDiffusionGui.Main
 
         public static void InvokeAiFix(string imgPath, List<FixAction> actions)
         {
+            if (Program.Busy)
+            {
+                UiUtils.ShowMessageBox("Can't run post-processing while the program is still busy.");
+                return;
+            }
+
+            if (CurrentStdInWriter == null)
+            {
+                UiUtils.ShowMessageBox("Can't run post-processing when Stable Diffusion is not loaded.");
+                return;
+            }
+
+            Program.MainForm.SetWorking(Program.BusyState.PostProcessing, false);
+
+            Logger.Log($"InvokeAI Fix: {string.Join(", ", actions.Select(x => x.ToString()))}", true);
+
             List<string> args = new List<string> { "!fix", imgPath.Wrap(true) };
 
             if (actions.Contains(FixAction.Upscale))
@@ -340,7 +357,6 @@ namespace StableDiffusionGui.Main
 
             Finish();
         }
-
 
         public static async Task RunStableDiffusionCli(string outPath, string vaePath)
         {

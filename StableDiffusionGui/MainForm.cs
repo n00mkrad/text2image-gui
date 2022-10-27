@@ -150,7 +150,7 @@ namespace StableDiffusionGui
             sliderSteps.ActualMaximum = !adv ? 120 : 500;
             sliderSteps.ValueStep = !adv ? 5 : 1;
             sliderScale.ActualMaximum = !adv ? 25 : 50;
-            comboxResW.SetItems(MainUi.Resolutions.Where(x => x <= (adv ? 2048 : 1024)).Select(x => x.ToString()), UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.Last );
+            comboxResW.SetItems(MainUi.Resolutions.Where(x => x <= (adv ? 2048 : 1024)).Select(x => x.ToString()), UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.Last);
             comboxResH.SetItems(MainUi.Resolutions.Where(x => x <= (adv ? 2048 : 1024)).Select(x => x.ToString()), UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.Last);
         }
 
@@ -226,11 +226,11 @@ namespace StableDiffusionGui
                 checkboxHiresFix.Checked = s.Params.Get("hiresFix").FromJson<bool>();
                 checkboxLockSeed.Checked = s.Params.Get("lockSeed").FromJson<bool>();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logger.Log($"Failed to load generation settings. This can happen when you try to load prompts from an older version.");
             }
-            
+
 
             UpdateInitImgAndEmbeddingUi();
         }
@@ -443,6 +443,16 @@ namespace StableDiffusionGui
             }
 
             MainUi.HandleDroppedFiles(new string[] { ImagePreview.CurrentImagePath });
+        }
+
+        private void copyToFavoritesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ImagePreview.CopyCurrentToFavs();
+        }
+
+        private void postProcessImageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ShowPostProcessMenu();
         }
 
         #endregion
@@ -721,7 +731,7 @@ namespace StableDiffusionGui
             ImagePreview.DeleteAll();
         }
 
-        private void MainForm_KeyDown(object sender, KeyEventArgs e)
+        private void MainForm_Up(object sender, KeyEventArgs e)
         {
             MainUiHotkeys.Handle(e.KeyData);
         }
@@ -794,9 +804,24 @@ namespace StableDiffusionGui
             TtiProcess.StartCmdInSdCondaEnv();
         }
 
-        private void copyToFavoritesToolStripMenuItem_Click(object sender, EventArgs e)
+        public void ShowPostProcessMenu()
         {
-            ImagePreview.CopyCurrentToFavs();
+            menuStripPostProcess.Show(Cursor.Position);
+        }
+
+        private void upscaleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TtiProcess.InvokeAiFix(ImagePreview.CurrentImagePath, new[] { TtiProcess.FixAction.Upscale }.ToList());
+        }
+
+        private void applyFaceRestorationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TtiProcess.InvokeAiFix(ImagePreview.CurrentImagePath, new[] { TtiProcess.FixAction.FaceRestoration }.ToList());
+        }
+
+        private void applyAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TtiProcess.InvokeAiFix(ImagePreview.CurrentImagePath, new[] { TtiProcess.FixAction.Upscale, TtiProcess.FixAction.FaceRestoration }.ToList());
         }
     }
 }

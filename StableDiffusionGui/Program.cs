@@ -12,7 +12,7 @@ namespace StableDiffusionGui
     {
         public static NmkdStopwatch SwTimeSinceProgramStart = new NmkdStopwatch();
 
-        public enum BusyState { Standby, Installation, ImageGeneration, Script, Dreambooth, Other }
+        public enum BusyState { Standby, Installation, ImageGeneration, Script, Dreambooth, PostProcessing, Other }
         public static BusyState State = BusyState.Standby;
         public static bool Busy { get { return State != BusyState.Standby; } }
         public static MainForm MainForm;

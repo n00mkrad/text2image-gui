@@ -13,6 +13,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Shapes;
 using Path = System.IO.Path;
 using Paths = StableDiffusionGui.Io.Paths;
 
@@ -212,6 +213,42 @@ namespace StableDiffusionGui.Main
                 return IoUtils.GetFilesize(path) > 2010000000;
 
             return true;
+        }
+
+        public static void ExportPostprocessedImage (string sourceImgPath, string processedImgPath)
+        {
+            string ext = Path.GetExtension(sourceImgPath);
+            string movePath = GetUniquePath(Path.ChangeExtension(sourceImgPath, null) + $".fix" + ext);
+
+            File.Move(processedImgPath, movePath);
+
+            var meta = IoUtils.GetImageMetadata(sourceImgPath);
+            IoUtils.SetImageMetadata(movePath, meta.ParsedText);
+
+            ImagePreview.AppendImage(movePath, ImagePreview.ImgShowMode.ShowLast, false);
+
+            Program.MainForm.SetWorking(Program.BusyState.Standby);
+        }
+
+        private static string GetUniquePath (string preferredPath, string separator = "", int maxTries = 1000)
+        {
+            if (!File.Exists(preferredPath))
+                return preferredPath;
+
+            string pathNoExt = Path.ChangeExtension(preferredPath, null);
+            string ext = Path.GetExtension(preferredPath);
+
+            int counter = 1;
+
+            while (File.Exists($"{pathNoExt}{separator}{counter}{ext}"))
+            {
+                counter++;
+
+                if (counter >= maxTries)
+                    return "";
+            }
+
+            return $"{pathNoExt}{separator}{counter}{ext}";
         }
     }
 }
