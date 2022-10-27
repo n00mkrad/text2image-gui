@@ -211,6 +211,7 @@ namespace StableDiffusionGui.Main
                 await Task.Delay(100);
             }
 
+            await TtiProcess.WriteStdIn("!reset", true);
             Program.MainForm.RunBtn.Enabled = true;
         }
     }
