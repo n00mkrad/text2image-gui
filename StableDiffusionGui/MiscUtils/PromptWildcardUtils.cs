@@ -50,6 +50,7 @@ namespace StableDiffusionGui.MiscUtils
                     string regex = @"(?i)[^a-z-0-9]"; // A-Z, case insensitive, numbers
                     var wordSplit = Regex.Split(split[i], regex);
 
+                    bool inline = false;
                     string rest = "";
                     var breakingDelimMatches = Regex.Matches(split[i], regex).Cast<Match>(); // If this has 0 matches, we are at the end of the string, see below...
 
@@ -57,21 +58,33 @@ namespace StableDiffusionGui.MiscUtils
                     {
                         string breakingDelimiter = breakingDelimMatches.Count() > 0 ? breakingDelimMatches.First().Value : ""; // First char that no longer belongs to wildcard name
                         rest = breakingDelimiter + string.Join(breakingDelimiter, split[i].Split(breakingDelimiter).Skip(1));
+                        inline = split[i].Contains(",") && !split[i].Contains(" ");
                     }
 
-                    string wildcardName = wordSplit.FirstOrDefault().Trim();
-                    string wildcardPath = Path.Combine(Paths.GetExeDir(), Constants.Dirs.Wildcards, wildcardName + ".txt");
+                    string wildcardName = inline ? split[i] : wordSplit.FirstOrDefault().Trim();
 
-                    if (File.Exists(wildcardPath))
+                    if (inline)
                     {
-                        var list = GetWildcardList(wildcardPath, iterations, sort);
-                        string replacement = list.ElementAt(GetWildcardIndex(wildcardName, true));
-                        split[i] = replacement + rest; // Pick random line, insert back into word array
-                        Logger.Log($"Filled wildcard '{wildcardName}' with '{replacement}' (Order: {sort})", true);
+                        var list = GetWildcardListFromString(wildcardName, iterations, sort);
+                        string replacement = list.ElementAt(GetWildcardIndex(wildcardName, true)).Replace(".", " ");
+                        split[i] = replacement; // Pick random line, insert back into word array
+                        Logger.Log($"Wildcard '{wildcardName}' => '{replacement}' ({sort})", true);
                     }
-                    else
+                    else if(!string.IsNullOrWhiteSpace(wildcardName))
                     {
-                        Logger.Log($"No wildcard file found for '{wildcardName}'", true);
+                        string wildcardPath = Path.Combine(Paths.GetExeDir(), Constants.Dirs.Wildcards, wildcardName + ".txt");
+
+                        if (File.Exists(wildcardPath))
+                        {
+                            var list = GetWildcardListFromFile(wildcardPath, iterations, sort);
+                            string replacement = list.ElementAt(GetWildcardIndex(wildcardName, true));
+                            split[i] = replacement + rest; // Pick random line, insert back into word array
+                            Logger.Log($"Wildcard '{wildcardName}' => '{replacement}' ({sort})", true);
+                        }
+                        else
+                        {
+                            Logger.Log($"No wildcard file found for '{wildcardName}'", true);
+                        }
                     }
                 }
 
@@ -87,14 +100,28 @@ namespace StableDiffusionGui.MiscUtils
 
         private enum SortMode { Shuffle, Sequential, Alphabetically }
 
-        private static List<string> GetWildcardList(string wildcardPath, int listSize, SortMode sortMode)
+        private static List<string> GetWildcardListFromFile(string wildcardPath, int listSize, SortMode sortMode)
         {
-            string id = wildcardPath + sortMode.ToString(); // Cache per sort mode
+            string id = $"file-{wildcardPath}-{sortMode}"; // Cache per sort mode
+            return GetWildcardList(id, File.ReadAllLines(wildcardPath).Where(line => !string.IsNullOrWhiteSpace(line)), listSize, sortMode);
+        }
 
-            if(_cachedWildcardLists.ContainsKey(id))
+        private static List<string> GetWildcardListFromString(string wildcardStr, int listSize, SortMode sortMode)
+        {
+            string id = $"string-{wildcardStr}-{sortMode}"; // Cache per sort mode
+            List<string> split = wildcardStr.Split(',').Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+            return GetWildcardList(id, split, listSize, sortMode);
+        }
+
+        private static List<string> GetWildcardList(string id, IEnumerable<string> lines, int listSize, SortMode sortMode)
+        {
+            if (_cachedWildcardLists.ContainsKey(id))
                 return _cachedWildcardLists[id];
 
-            var linesSrc = File.ReadAllLines(wildcardPath).Where(line => !string.IsNullOrWhiteSpace(line)); // Read all lines from wildcard file
+            if(lines.Count() <= 0)
+                return new List<string>();
+
+            var linesSrc = lines.Where(line => !string.IsNullOrWhiteSpace(line)); // Read all lines from wildcard file
             List<string> list = new List<string>(linesSrc);
 
             while (list.Count < listSize) // Clone list until it's longer than the desired size (will not run at all if it's already long enough)
