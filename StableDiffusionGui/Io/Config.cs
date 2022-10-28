@@ -260,10 +260,11 @@ namespace StableDiffusionGui.Io
             if (key == Key.comboxSdModel) return WriteDefault(key, Paths.GetModels(Enums.StableDiffusion.ModelType.Normal).Select(x => x.Name).FirstOrDefault());
             if (key == Key.comboxSdModelVae) return WriteDefault(key, Paths.GetModels(Enums.StableDiffusion.ModelType.Vae).Select(x => x.Name).FirstOrDefault());
             if (key == Key.checkboxEnableHistory) return WriteDefault(key, true.ToString());
-            if (key == Key.sliderCodeformerFidelity) return WriteDefault(key, "0.6");
+            if (key == Key.sliderCodeformerFidelity) return WriteDefault(key, 0.6f.ToString());
             if (keyStr == "checkboxFullPrecision") return WriteDefault(key, (GpuUtils.CachedGpus.Count > 0 && GpuUtils.CachedGpus[0].FullName.Contains(" GTX 16")).ToString());
             if (keyStr.MatchesWildcard("checkbox*InFilename")) return WriteDefault(key, true.ToString());
             if (keyStr == "checkboxOutputIgnoreWildcards") return WriteDefault(key, true.ToString());
+            if (keyStr == "sliderFaceRestoreStrength") return WriteDefault(key, 0.8f.ToString());
 
             if (key == Key.none)
                 return WriteDefault(keyStr, "");

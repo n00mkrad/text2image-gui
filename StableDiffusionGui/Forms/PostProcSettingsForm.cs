@@ -65,8 +65,8 @@ namespace StableDiffusionGui.Forms
             ConfigParser.LoadComboxIndex(comboxUpscale);
             ConfigParser.LoadGuiElement(checkboxFaceRestorationEnable);
             ConfigParser.LoadComboxIndex(comboxFaceRestoration);
-            ConfigParser.LoadGuiElement(sliderFaceRestoreStrength, ConfigParser.SaveValueAs.Divided, 20f); sliderFaceRestoreStrength_Scroll(null, null);
-            ConfigParser.LoadGuiElement(sliderCodeformerFidelity, ConfigParser.SaveValueAs.Divided, 20f); sliderCodeformerFidelity_Scroll(null, null);
+            ConfigParser.LoadGuiElement(sliderFaceRestoreStrength);
+            ConfigParser.LoadGuiElement(sliderCodeformerFidelity);
         }
 
         void SaveSettings()
@@ -75,22 +75,8 @@ namespace StableDiffusionGui.Forms
             ConfigParser.SaveComboxIndex(comboxUpscale);
             ConfigParser.SaveGuiElement(checkboxFaceRestorationEnable);
             ConfigParser.SaveComboxIndex(comboxFaceRestoration);
-            ConfigParser.SaveGuiElement(sliderFaceRestoreStrength, ConfigParser.SaveValueAs.Divided, 20f);
-            ConfigParser.SaveGuiElement(sliderCodeformerFidelity, ConfigParser.SaveValueAs.Divided, 20f);
-        }
-
-        private void sliderFaceRestoreStrength_Scroll(object sender, ScrollEventArgs e)
-        {
-            float strength = sliderFaceRestoreStrength.Value / 20f;
-            PostProcUi.CurrentGfpganStrength = strength;
-            labelFaceRestoreStrength.Text = strength.ToString();
-        }
-
-        private void sliderCodeformerFidelity_Scroll(object sender, ScrollEventArgs e)
-        {
-            float strength = sliderCodeformerFidelity.Value / 20f;
-            PostProcUi.CurrentCfFidelity = strength;
-            labelCodeformerFidelity.Text = strength.ToString();
+            ConfigParser.SaveGuiElement(sliderFaceRestoreStrength);
+            ConfigParser.SaveGuiElement(sliderCodeformerFidelity);
         }
 
         private void checkboxUpscaleEnable_CheckedChanged(object sender, EventArgs e)
@@ -106,6 +92,11 @@ namespace StableDiffusionGui.Forms
         private void UpdateVisibility ()
         {
             panelCodeformerFidelity.Visible = (FaceRestoreOption)comboxFaceRestoration.SelectedIndex == FaceRestoreOption.CodeFormer;
+        }
+
+        private void comboxFaceRestoration_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateVisibility();
         }
     }
 }

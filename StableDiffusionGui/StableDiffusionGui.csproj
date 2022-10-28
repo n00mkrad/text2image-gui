@@ -275,7 +275,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Ui\ImagePreview.cs" />
     <Compile Include="Ui\MainUiHotkeys.cs" />
-    <Compile Include="Ui\PostProcUi.cs" />
     <Compile Include="Ui\UiUtils.cs" />
     <EmbeddedResource Include="Forms\DreamboothForm.resx">
       <DependentUpon>DreamboothForm.cs</DependentUpon>
