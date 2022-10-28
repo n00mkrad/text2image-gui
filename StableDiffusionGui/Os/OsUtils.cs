@@ -139,11 +139,6 @@ namespace StableDiffusionGui.Os
             return Config.GetInt(Config.Key.cmdDebugMode) > 0;
         }
 
-        public static bool HasNonAsciiChars(string str)
-        {
-            return (Encoding.UTF8.GetByteCount(str) != str.Length);
-        }
-
         public static int GetFreeRamMb()
         {
             try

@@ -4,6 +4,7 @@ using StableDiffusionGui.Forms;
 using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
+using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Properties;
 using System;
@@ -71,6 +72,15 @@ namespace StableDiffusionGui.Ui
             if (!Debugger.IsAttached)
             {
                 string dir = Paths.GetExeDir();
+
+                List<char> nonAsciiCharsInPath = FormatUtils.GetNonAsciiChars(dir);
+
+                if (nonAsciiCharsInPath.Count > 0)
+                {
+                    UiUtils.ShowMessageBox($"You are running this program from a path that contains special characters ({string.Join(", ", nonAsciiCharsInPath.Distinct())}).\n" +
+                        $"Please move it to a path without special characters and try again.", UiUtils.MessageType.Error, Nmkoder.Forms.MessageForm.FontSize.Big);
+                    Application.Exit();
+                }
 
                 if (dir.Lower().Replace("\\", "/").MatchesWildcard("*/users/*/onedrive/*"))
                 {

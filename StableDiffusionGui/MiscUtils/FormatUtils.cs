@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace StableDiffusionGui.MiscUtils
 {
@@ -276,6 +277,17 @@ namespace StableDiffusionGui.MiscUtils
             string output = targetEncoding.GetString(Encoding.Convert(sourceEncoding, targetEncoding, sourceEncoding.GetBytes(s)));
 
             return output;
+        }
+
+        public static bool StringContainsNonAsciiChars(string str)
+        {
+            return GetNonAsciiChars(str).Count > 0;
+        }
+
+        public static List<char> GetNonAsciiChars (string originalString)
+        {
+            string asciiString = Encoding.ASCII.GetString(Encoding.ASCII.GetBytes(originalString));
+            return originalString.ToList().Where(c => !asciiString.Contains(c)).ToList();
         }
     }
 }

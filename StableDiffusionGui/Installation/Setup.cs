@@ -9,7 +9,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using static StableDiffusionGui.Main.Constants;
 
 namespace StableDiffusionGui.Installation
 {
