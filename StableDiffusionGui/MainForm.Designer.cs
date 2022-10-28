@@ -61,6 +61,7 @@ namespace StableDiffusionGui
             this.copySeedToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reGenerateImageWithCurrentSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.useAsInitImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.postProcessImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fitWindowSizeToImageSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.comboxSampler = new System.Windows.Forms.ComboBox();
@@ -137,7 +138,6 @@ namespace StableDiffusionGui
             this.upscaleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.faceRestorationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.applyAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.postProcessImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sliderScale = new StableDiffusionGui.Controls.CustomSlider();
             this.sliderSteps = new StableDiffusionGui.Controls.CustomSlider();
             this.sliderInitStrength = new StableDiffusionGui.Controls.CustomSlider();
@@ -508,61 +508,69 @@ namespace StableDiffusionGui
             this.postProcessImageToolStripMenuItem,
             this.fitWindowSizeToImageSizeToolStripMenuItem});
             this.menuStripOutputImg.Name = "menuStripOutputImg";
-            this.menuStripOutputImg.Size = new System.Drawing.Size(310, 202);
+            this.menuStripOutputImg.ShowImageMargin = false;
+            this.menuStripOutputImg.Size = new System.Drawing.Size(285, 202);
             // 
             // openFileToolStripMenuItem
             // 
             this.openFileToolStripMenuItem.Name = "openFileToolStripMenuItem";
-            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(309, 22);
+            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(284, 22);
             this.openFileToolStripMenuItem.Text = "Open File";
             this.openFileToolStripMenuItem.Click += new System.EventHandler(this.openFileToolStripMenuItem_Click);
             // 
             // openOutputFolderToolStripMenuItem
             // 
             this.openOutputFolderToolStripMenuItem.Name = "openOutputFolderToolStripMenuItem";
-            this.openOutputFolderToolStripMenuItem.Size = new System.Drawing.Size(309, 22);
+            this.openOutputFolderToolStripMenuItem.Size = new System.Drawing.Size(284, 22);
             this.openOutputFolderToolStripMenuItem.Text = "Open Output Folder";
             this.openOutputFolderToolStripMenuItem.Click += new System.EventHandler(this.openOutputFolderToolStripMenuItem_Click);
             // 
             // copyToFavoritesToolStripMenuItem
             // 
             this.copyToFavoritesToolStripMenuItem.Name = "copyToFavoritesToolStripMenuItem";
-            this.copyToFavoritesToolStripMenuItem.Size = new System.Drawing.Size(309, 22);
+            this.copyToFavoritesToolStripMenuItem.Size = new System.Drawing.Size(284, 22);
             this.copyToFavoritesToolStripMenuItem.Text = "Copy To Favorites";
             this.copyToFavoritesToolStripMenuItem.Click += new System.EventHandler(this.copyToFavoritesToolStripMenuItem_Click);
             // 
             // copyImageToClipboardToolStripMenuItem
             // 
             this.copyImageToClipboardToolStripMenuItem.Name = "copyImageToClipboardToolStripMenuItem";
-            this.copyImageToClipboardToolStripMenuItem.Size = new System.Drawing.Size(309, 22);
+            this.copyImageToClipboardToolStripMenuItem.Size = new System.Drawing.Size(284, 22);
             this.copyImageToClipboardToolStripMenuItem.Text = "Copy Image";
             this.copyImageToClipboardToolStripMenuItem.Click += new System.EventHandler(this.copyImageToClipboardToolStripMenuItem_Click);
             // 
             // copySeedToClipboardToolStripMenuItem
             // 
             this.copySeedToClipboardToolStripMenuItem.Name = "copySeedToClipboardToolStripMenuItem";
-            this.copySeedToClipboardToolStripMenuItem.Size = new System.Drawing.Size(309, 22);
+            this.copySeedToClipboardToolStripMenuItem.Size = new System.Drawing.Size(284, 22);
             this.copySeedToClipboardToolStripMenuItem.Text = "Copy Seed";
             this.copySeedToClipboardToolStripMenuItem.Click += new System.EventHandler(this.copySeedToClipboardToolStripMenuItem_Click);
             // 
             // reGenerateImageWithCurrentSettingsToolStripMenuItem
             // 
             this.reGenerateImageWithCurrentSettingsToolStripMenuItem.Name = "reGenerateImageWithCurrentSettingsToolStripMenuItem";
-            this.reGenerateImageWithCurrentSettingsToolStripMenuItem.Size = new System.Drawing.Size(309, 22);
+            this.reGenerateImageWithCurrentSettingsToolStripMenuItem.Size = new System.Drawing.Size(284, 22);
             this.reGenerateImageWithCurrentSettingsToolStripMenuItem.Text = "Re-Generate Image With Current Settings";
             this.reGenerateImageWithCurrentSettingsToolStripMenuItem.Click += new System.EventHandler(this.reGenerateImageWithCurrentSettingsToolStripMenuItem_Click);
             // 
             // useAsInitImageToolStripMenuItem
             // 
             this.useAsInitImageToolStripMenuItem.Name = "useAsInitImageToolStripMenuItem";
-            this.useAsInitImageToolStripMenuItem.Size = new System.Drawing.Size(309, 22);
+            this.useAsInitImageToolStripMenuItem.Size = new System.Drawing.Size(284, 22);
             this.useAsInitImageToolStripMenuItem.Text = "Use as Initialization Image";
             this.useAsInitImageToolStripMenuItem.Click += new System.EventHandler(this.useAsInitImageToolStripMenuItem_Click);
+            // 
+            // postProcessImageToolStripMenuItem
+            // 
+            this.postProcessImageToolStripMenuItem.Name = "postProcessImageToolStripMenuItem";
+            this.postProcessImageToolStripMenuItem.Size = new System.Drawing.Size(284, 22);
+            this.postProcessImageToolStripMenuItem.Text = "Post-Process Image...";
+            this.postProcessImageToolStripMenuItem.Click += new System.EventHandler(this.postProcessImageToolStripMenuItem_Click);
             // 
             // fitWindowSizeToImageSizeToolStripMenuItem
             // 
             this.fitWindowSizeToImageSizeToolStripMenuItem.Name = "fitWindowSizeToImageSizeToolStripMenuItem";
-            this.fitWindowSizeToImageSizeToolStripMenuItem.Size = new System.Drawing.Size(309, 22);
+            this.fitWindowSizeToImageSizeToolStripMenuItem.Size = new System.Drawing.Size(284, 22);
             this.fitWindowSizeToImageSizeToolStripMenuItem.Text = "Fit Window Size To Image Size (Pixel-Perfect)";
             this.fitWindowSizeToImageSizeToolStripMenuItem.Click += new System.EventHandler(this.fitWindowSizeToImageSizeToolStripMenuItem_Click);
             // 
@@ -1339,7 +1347,8 @@ namespace StableDiffusionGui
             // menuStripLogs
             // 
             this.menuStripLogs.Name = "menuStripLogs";
-            this.menuStripLogs.Size = new System.Drawing.Size(61, 4);
+            this.menuStripLogs.ShowImageMargin = false;
+            this.menuStripLogs.Size = new System.Drawing.Size(36, 4);
             // 
             // progressBarImg
             // 
@@ -1360,19 +1369,20 @@ namespace StableDiffusionGui
             this.generateCurrentPromptToolStripMenuItem,
             this.generateAllQueuedPromptsToolStripMenuItem});
             this.menuStripRunQueue.Name = "menuStripRunQueue";
-            this.menuStripRunQueue.Size = new System.Drawing.Size(232, 48);
+            this.menuStripRunQueue.ShowImageMargin = false;
+            this.menuStripRunQueue.Size = new System.Drawing.Size(207, 48);
             // 
             // generateCurrentPromptToolStripMenuItem
             // 
             this.generateCurrentPromptToolStripMenuItem.Name = "generateCurrentPromptToolStripMenuItem";
-            this.generateCurrentPromptToolStripMenuItem.Size = new System.Drawing.Size(231, 22);
+            this.generateCurrentPromptToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
             this.generateCurrentPromptToolStripMenuItem.Text = "Generate Current Prompt";
             this.generateCurrentPromptToolStripMenuItem.Click += new System.EventHandler(this.generateCurrentPromptToolStripMenuItem_Click);
             // 
             // generateAllQueuedPromptsToolStripMenuItem
             // 
             this.generateAllQueuedPromptsToolStripMenuItem.Name = "generateAllQueuedPromptsToolStripMenuItem";
-            this.generateAllQueuedPromptsToolStripMenuItem.Size = new System.Drawing.Size(231, 22);
+            this.generateAllQueuedPromptsToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
             this.generateAllQueuedPromptsToolStripMenuItem.Text = "Generate All Queued Prompts";
             this.generateAllQueuedPromptsToolStripMenuItem.Click += new System.EventHandler(this.generateAllQueuedPromptsToolStripMenuItem_Click);
             // 
@@ -1381,12 +1391,13 @@ namespace StableDiffusionGui
             this.menuStripAddToQueue.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addCurrentSettingsToQueueToolStripMenuItem});
             this.menuStripAddToQueue.Name = "menuStripAddToQueue";
-            this.menuStripAddToQueue.Size = new System.Drawing.Size(237, 26);
+            this.menuStripAddToQueue.ShowImageMargin = false;
+            this.menuStripAddToQueue.Size = new System.Drawing.Size(212, 26);
             // 
             // addCurrentSettingsToQueueToolStripMenuItem
             // 
             this.addCurrentSettingsToQueueToolStripMenuItem.Name = "addCurrentSettingsToQueueToolStripMenuItem";
-            this.addCurrentSettingsToQueueToolStripMenuItem.Size = new System.Drawing.Size(236, 22);
+            this.addCurrentSettingsToQueueToolStripMenuItem.Size = new System.Drawing.Size(211, 22);
             this.addCurrentSettingsToQueueToolStripMenuItem.Text = "Add Current Settings to Queue";
             this.addCurrentSettingsToQueueToolStripMenuItem.Click += new System.EventHandler(this.addCurrentSettingsToQueueToolStripMenuItem_Click);
             // 
@@ -1396,19 +1407,20 @@ namespace StableDiffusionGui
             this.deleteThisImageToolStripMenuItem,
             this.deleteAllCurrentImagesToolStripMenuItem});
             this.menuStripDeleteImages.Name = "menuStripDeleteImages";
-            this.menuStripDeleteImages.Size = new System.Drawing.Size(209, 48);
+            this.menuStripDeleteImages.ShowImageMargin = false;
+            this.menuStripDeleteImages.Size = new System.Drawing.Size(184, 48);
             // 
             // deleteThisImageToolStripMenuItem
             // 
             this.deleteThisImageToolStripMenuItem.Name = "deleteThisImageToolStripMenuItem";
-            this.deleteThisImageToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.deleteThisImageToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
             this.deleteThisImageToolStripMenuItem.Text = "Delete This Image";
             this.deleteThisImageToolStripMenuItem.Click += new System.EventHandler(this.deleteThisImageToolStripMenuItem_Click);
             // 
             // deleteAllCurrentImagesToolStripMenuItem
             // 
             this.deleteAllCurrentImagesToolStripMenuItem.Name = "deleteAllCurrentImagesToolStripMenuItem";
-            this.deleteAllCurrentImagesToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.deleteAllCurrentImagesToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
             this.deleteAllCurrentImagesToolStripMenuItem.Text = "Delete All Current Images";
             this.deleteAllCurrentImagesToolStripMenuItem.Click += new System.EventHandler(this.deleteAllCurrentImagesToolStripMenuItem_Click);
             // 
@@ -1422,47 +1434,48 @@ namespace StableDiffusionGui
             this.viewLogInRealtimeToolStripMenuItem,
             this.trainDreamBoothModelToolStripMenuItem});
             this.menuStripDevTools.Name = "menuStripDevTools";
-            this.menuStripDevTools.Size = new System.Drawing.Size(256, 136);
+            this.menuStripDevTools.ShowImageMargin = false;
+            this.menuStripDevTools.Size = new System.Drawing.Size(231, 136);
             // 
             // openCliToolStripMenuItem
             // 
             this.openCliToolStripMenuItem.Name = "openCliToolStripMenuItem";
-            this.openCliToolStripMenuItem.Size = new System.Drawing.Size(255, 22);
+            this.openCliToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
             this.openCliToolStripMenuItem.Text = "Open Stable Diffusion CLI";
             this.openCliToolStripMenuItem.Click += new System.EventHandler(this.openDreampyCLIToolStripMenuItem_Click);
             // 
             // openCmdInCondaEnvironmentToolStripMenuItem
             // 
             this.openCmdInCondaEnvironmentToolStripMenuItem.Name = "openCmdInCondaEnvironmentToolStripMenuItem";
-            this.openCmdInCondaEnvironmentToolStripMenuItem.Size = new System.Drawing.Size(255, 22);
+            this.openCmdInCondaEnvironmentToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
             this.openCmdInCondaEnvironmentToolStripMenuItem.Text = "Open CMD in Conda Environment";
             this.openCmdInCondaEnvironmentToolStripMenuItem.Click += new System.EventHandler(this.openCmdInCondaEnvironmentToolStripMenuItem_Click);
             // 
             // openModelMergeToolToolStripMenuItem
             // 
             this.openModelMergeToolToolStripMenuItem.Name = "openModelMergeToolToolStripMenuItem";
-            this.openModelMergeToolToolStripMenuItem.Size = new System.Drawing.Size(255, 22);
+            this.openModelMergeToolToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
             this.openModelMergeToolToolStripMenuItem.Text = "Merge Models";
             this.openModelMergeToolToolStripMenuItem.Click += new System.EventHandler(this.openModelMergeToolToolStripMenuItem_Click);
             // 
             // openModelPruningTrimmingToolToolStripMenuItem
             // 
             this.openModelPruningTrimmingToolToolStripMenuItem.Name = "openModelPruningTrimmingToolToolStripMenuItem";
-            this.openModelPruningTrimmingToolToolStripMenuItem.Size = new System.Drawing.Size(255, 22);
+            this.openModelPruningTrimmingToolToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
             this.openModelPruningTrimmingToolToolStripMenuItem.Text = "Prune (Trim) Models";
             this.openModelPruningTrimmingToolToolStripMenuItem.Click += new System.EventHandler(this.openModelPruningTrimmingToolToolStripMenuItem_Click);
             // 
             // viewLogInRealtimeToolStripMenuItem
             // 
             this.viewLogInRealtimeToolStripMenuItem.Name = "viewLogInRealtimeToolStripMenuItem";
-            this.viewLogInRealtimeToolStripMenuItem.Size = new System.Drawing.Size(255, 22);
+            this.viewLogInRealtimeToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
             this.viewLogInRealtimeToolStripMenuItem.Text = "View Log In Realtime";
             this.viewLogInRealtimeToolStripMenuItem.Click += new System.EventHandler(this.viewLogInRealtimeToolStripMenuItem_Click);
             // 
             // trainDreamBoothModelToolStripMenuItem
             // 
             this.trainDreamBoothModelToolStripMenuItem.Name = "trainDreamBoothModelToolStripMenuItem";
-            this.trainDreamBoothModelToolStripMenuItem.Size = new System.Drawing.Size(255, 22);
+            this.trainDreamBoothModelToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
             this.trainDreamBoothModelToolStripMenuItem.Text = "Train DreamBooth Model";
             this.trainDreamBoothModelToolStripMenuItem.Click += new System.EventHandler(this.trainDreamBoothModelToolStripMenuItem_Click);
             // 
@@ -1505,35 +1518,28 @@ namespace StableDiffusionGui
             this.applyAllToolStripMenuItem});
             this.menuStripPostProcess.Name = "menuStripPostProcess";
             this.menuStripPostProcess.ShowImageMargin = false;
-            this.menuStripPostProcess.Size = new System.Drawing.Size(196, 92);
+            this.menuStripPostProcess.Size = new System.Drawing.Size(171, 92);
             // 
             // upscaleToolStripMenuItem
             // 
             this.upscaleToolStripMenuItem.Name = "upscaleToolStripMenuItem";
-            this.upscaleToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.upscaleToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
             this.upscaleToolStripMenuItem.Text = "Apply Upscaling";
             this.upscaleToolStripMenuItem.Click += new System.EventHandler(this.upscaleToolStripMenuItem_Click);
             // 
             // faceRestorationToolStripMenuItem
             // 
             this.faceRestorationToolStripMenuItem.Name = "faceRestorationToolStripMenuItem";
-            this.faceRestorationToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.faceRestorationToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
             this.faceRestorationToolStripMenuItem.Text = "Apply Face Restoration";
             this.faceRestorationToolStripMenuItem.Click += new System.EventHandler(this.applyFaceRestorationToolStripMenuItem_Click);
             // 
             // applyAllToolStripMenuItem
             // 
             this.applyAllToolStripMenuItem.Name = "applyAllToolStripMenuItem";
-            this.applyAllToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.applyAllToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
             this.applyAllToolStripMenuItem.Text = "Apply All";
             this.applyAllToolStripMenuItem.Click += new System.EventHandler(this.applyAllToolStripMenuItem_Click);
-            // 
-            // postProcessImageToolStripMenuItem
-            // 
-            this.postProcessImageToolStripMenuItem.Name = "postProcessImageToolStripMenuItem";
-            this.postProcessImageToolStripMenuItem.Size = new System.Drawing.Size(309, 22);
-            this.postProcessImageToolStripMenuItem.Text = "Post-Process Image...";
-            this.postProcessImageToolStripMenuItem.Click += new System.EventHandler(this.postProcessImageToolStripMenuItem_Click);
             // 
             // sliderScale
             // 

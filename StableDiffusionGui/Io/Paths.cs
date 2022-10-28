@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using StableDiffusionGui.Main;
+using StableDiffusionGui.MiscUtils;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -78,6 +79,8 @@ namespace StableDiffusionGui.Io
 
         public static List<FileInfo> GetModels(ModelType type = ModelType.Normal, string pattern = null)
         {
+            NmkdStopwatch sw = new NmkdStopwatch();
+
             pattern = pattern ?? $"*{Constants.FileExts.SdModel}";  
             List<FileInfo> list = new List<FileInfo>();
 
@@ -91,10 +94,19 @@ namespace StableDiffusionGui.Io
                 foreach (string folderPath in mdlFolders)
                     list.AddRange(IoUtils.GetFileInfosSorted(folderPath, false, pattern).ToList());
 
-                if (type == ModelType.Normal)
-                    list = list.Where(mdl => TtiUtils.ModelFilesizeValid(mdl.FullName, type)).ToList();
+                Logger.Log($"GetModels: {sw.ElapsedMilliseconds} ms", true);
 
-                return list.Distinct().OrderBy(x => x.Name).ToList();
+                if (type == ModelType.Normal && !Config.GetBool("disableModelFilesizeValidation"))
+                    list = list.Where(mdl => TtiUtils.ModelFilesizeValid(mdl, type)).ToList();
+
+                Logger.Log($"GetModels: {sw.ElapsedMilliseconds} ms", true);
+
+                list = list.Distinct().OrderBy(x => x.Name).ToList();
+
+                Logger.Log($"GetModels: {sw.ElapsedMilliseconds} ms", true);
+                Logger.Log($"Done", true);
+
+                return list;
             }
             catch (Exception ex)
             {

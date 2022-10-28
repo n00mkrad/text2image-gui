@@ -206,11 +206,23 @@ namespace StableDiffusionGui.Main
 
         public static bool ModelFilesizeValid (string path, Enums.StableDiffusion.ModelType type = Enums.StableDiffusion.ModelType.Normal)
         {
-            if (Config.GetBool("disableModelFilesizeValidation"))
-                return true;
+            if(!File.Exists(path))
+                return false;
 
-            if(type == Enums.StableDiffusion.ModelType.Normal)
-                return IoUtils.GetFilesize(path) > 2010000000;
+            return ModelFilesizeValid(new FileInfo(path));
+        }
+
+        public static bool ModelFilesizeValid(FileInfo file, Enums.StableDiffusion.ModelType type = Enums.StableDiffusion.ModelType.Normal)
+        {
+            try
+            {
+                if (type == Enums.StableDiffusion.ModelType.Normal)
+                    return file.Length > 2010000000;
+            }
+            catch
+            {
+                return true;
+            }
 
             return true;
         }
