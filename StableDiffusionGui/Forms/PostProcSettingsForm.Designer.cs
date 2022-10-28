@@ -723,6 +723,7 @@
             this.ForeColor = System.Drawing.Color.White;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "PostProcSettingsForm";
@@ -731,6 +732,7 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.PostProcSettingsForm_FormClosing);
             this.Load += new System.EventHandler(this.PostProcSettingsForm_Load);
             this.Shown += new System.EventHandler(this.PostProcSettingsForm_Shown);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.PostProcSettingsForm_KeyDown);
             this.panel1.ResumeLayout(false);
             this.panelCodeformerFidelity.ResumeLayout(false);
             this.tableLayoutPanel5.ResumeLayout(false);

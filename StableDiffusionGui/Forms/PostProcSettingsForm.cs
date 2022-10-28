@@ -59,6 +59,12 @@ namespace StableDiffusionGui.Forms
             SaveSettings();
         }
 
+        private void PostProcSettingsForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+                Close();
+        }
+
         void LoadSettings()
         {
             ConfigParser.LoadGuiElement(checkboxUpscaleEnable);
@@ -89,14 +95,14 @@ namespace StableDiffusionGui.Forms
             UpdateVisibility();
         }
 
-        private void UpdateVisibility ()
-        {
-            panelCodeformerFidelity.Visible = (FaceRestoreOption)comboxFaceRestoration.SelectedIndex == FaceRestoreOption.CodeFormer;
-        }
-
         private void comboxFaceRestoration_SelectedIndexChanged(object sender, EventArgs e)
         {
             UpdateVisibility();
+        }
+
+        private void UpdateVisibility()
+        {
+            panelCodeformerFidelity.Visible = (FaceRestoreOption)comboxFaceRestoration.SelectedIndex == FaceRestoreOption.CodeFormer;
         }
     }
 }
