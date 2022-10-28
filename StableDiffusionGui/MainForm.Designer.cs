@@ -1715,7 +1715,7 @@ namespace StableDiffusionGui
             this.ResizeBegin += new System.EventHandler(this.MainForm_ResizeBegin);
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.MainForm_DragDrop);
             this.DragEnter += new System.Windows.Forms.DragEventHandler(this.MainForm_DragEnter);
-            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.MainForm_Up);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).EndInit();
             this.tableLayoutPanel6.ResumeLayout(false);
             this.tableLayoutPanel6.PerformLayout();

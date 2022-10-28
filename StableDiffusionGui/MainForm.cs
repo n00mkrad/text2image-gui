@@ -736,11 +736,6 @@ namespace StableDiffusionGui
             ImagePreview.DeleteAll();
         }
 
-        private void MainForm_Up(object sender, KeyEventArgs e)
-        {
-            MainUiHotkeys.Handle(e.KeyData);
-        }
-
         private void openDreampyCLIToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (Program.Busy || !MainUi.IsInstalledWithWarning())
@@ -827,6 +822,11 @@ namespace StableDiffusionGui
         private void applyAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
             TtiProcess.InvokeAiFix(ImagePreview.CurrentImagePath, new[] { TtiProcess.FixAction.Upscale, TtiProcess.FixAction.FaceRestoration }.ToList());
+        }
+
+        private void MainForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            MainUiHotkeys.Handle(e.KeyData);
         }
     }
 }
