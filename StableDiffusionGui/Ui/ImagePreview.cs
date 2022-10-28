@@ -107,7 +107,7 @@ namespace StableDiffusionGui.Ui
             Program.MainForm.PictBoxImgViewer.Text = "";
             Program.MainForm.PictBoxImgViewer.Image = null;
             Program.MainForm.LabelImgInfo.Text = "No images to show.";
-            Program.MainForm.LabelImgPrompt.Text = "";
+            Program.MainForm.LabelImgPrompt.Text = "No prompt to show.";
         }
 
         public static void Move(bool previous = false)
