@@ -28,13 +28,26 @@ namespace StableDiffusionGui.Data
 
             try
             {
-                var split = dreamCli.Split("\"");
+                string paramsText = "";
 
-                Prompt = split[1].Remove("\"").Trim();
+
+                if (dreamCli.Trim().StartsWith("\""))
+                {
+                    var split = dreamCli.Split("\"");
+                    Prompt = split[1].Remove("\"").Trim();
+                    paramsText = split[2];
+                }
+                else
+                {
+                    var split = dreamCli.Split(" -");
+                    Prompt = split[0];
+                    paramsText = string.Join(" -", split.Skip(1));
+                }
+
                 GeneratedResolution = new Size();
 
                 bool newFormat = dreamCli.Contains("-W ") && dreamCli.Contains("-H "); // Check if metadata uses new format with spaces
-                var parameters = newFormat ? split.Last().Split("-").Select(x => $"-{x.Trim()}").ToList() : split.Last().Split(" ").Select(x => x.Trim()).ToList();
+                var parameters = newFormat ? paramsText.Split("-").Select(x => $"-{x.Trim()}").ToList() : paramsText.Split(" ").Select(x => x.Trim()).ToList();
 
                 foreach (string s in parameters)
                 {
@@ -66,9 +79,9 @@ namespace StableDiffusionGui.Data
                         InitImgName = s.Remove(0, 3).Trim();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                Logger.Log($"Failed to load image metadata from {path}: {ex.Message}", true);
+                Logger.Log($"Failed to load image metadata from {path}: {ex.Message}\n{ex.StackTrace}", true);
             }
         }
     }

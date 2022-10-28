@@ -63,7 +63,7 @@ namespace StableDiffusionGui.Main
                 if (line.Contains(": !fix") && Logger.GetSessionLogLastLines(Constants.Lognames.Sd, 2, true).FirstOrDefault() == "Outputs:")
                 {
                     string pathSource = line.Split(": !fix \"")[1].Split("\" -")[0];
-                    string pathOut = line.Split(": !fix \"")[0];
+                    string pathOut = line.Substring(line.IndexOf("] ") + 2).Split(": !fix \"")[0];
                     TtiUtils.ExportPostprocessedImage(pathSource, pathOut);
                 }
             }

@@ -177,7 +177,7 @@ namespace StableDiffusionGui.Installation
             await CloneSdRepo($"https://github.com/{GitFile}", GetDataSubPath(Constants.Dirs.RepoSd));
         }
 
-        public static async Task CloneSdRepo(string url, string dir, string commit = "")
+        public static async Task CloneSdRepo(string url, string dir, string branch = "main", string commit = "45a7ffcc02a6459b13dcd524c0836e5b4f0fee89")
         {
             try
             {
@@ -189,7 +189,7 @@ namespace StableDiffusionGui.Installation
                     Directory.Delete(dir, true);
                 }
 
-                Task t = Task.Run(() => { Repository.Clone(url, dir, new CloneOptions() { BranchName = "main" }); });
+                Task t = Task.Run(() => { Repository.Clone(url, dir, new CloneOptions() { BranchName = branch }); });
 
                 while (!t.IsCompleted)
                     await Task.Delay(1);

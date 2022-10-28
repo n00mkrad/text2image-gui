@@ -220,12 +220,20 @@ namespace StableDiffusionGui.Main
             string ext = Path.GetExtension(sourceImgPath);
             string movePath = GetUniquePath(Path.ChangeExtension(sourceImgPath, null) + $".fix" + ext);
 
-            File.Move(processedImgPath, movePath);
+            try
+            {
+                File.Move(processedImgPath, movePath);
 
-            var meta = IoUtils.GetImageMetadata(sourceImgPath);
-            IoUtils.SetImageMetadata(movePath, meta.ParsedText);
+                var meta = IoUtils.GetImageMetadata(sourceImgPath);
+                IoUtils.SetImageMetadata(movePath, meta.ParsedText);
 
-            ImagePreview.AppendImage(movePath, ImagePreview.ImgShowMode.ShowLast, false);
+                ImagePreview.AppendImage(movePath, ImagePreview.ImgShowMode.ShowLast, false);
+            }
+            catch(Exception ex)
+            {
+                Logger.Log($"Failed to save post-processed image: {ex.Message}");
+                Logger.Log($"From '{processedImgPath}' to '{movePath}' - Trace:\n{ex.StackTrace}", true);
+            }
 
             Program.MainForm.SetWorking(Program.BusyState.Standby);
         }
