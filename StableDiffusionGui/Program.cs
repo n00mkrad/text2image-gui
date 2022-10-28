@@ -2,8 +2,10 @@
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
+using StableDiffusionGui.Ui;
 using System;
 using System.IO;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace StableDiffusionGui
@@ -24,6 +26,10 @@ namespace StableDiffusionGui
         static void Main()
         {
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnApplicationExit);
+
+            Application.ThreadException += new ThreadExceptionEventHandler(Application_ThreadException);
+            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
 
             Paths.Init();
             Config.Init();
@@ -80,5 +86,21 @@ namespace StableDiffusionGui
             // ...
         }
 
+        static void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
+        {
+            ShowUnhandledError($"Unhandled Thread Exception!\n\n{e.Exception.Message}\n\nStack Trace:\n{e.Exception.StackTrace}");
+        }
+
+        static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            ShowUnhandledError($"Unhandled Exception!\n\n{((Exception)e.ExceptionObject).Message}\n\nStack Trace:\n{((Exception)e.ExceptionObject).StackTrace}");
+        }
+
+        static void ShowUnhandledError(string text)
+        {
+            Clipboard.SetText(text);
+            text += "\n\nThe error has been copied to the clipboard. Please inform the developer about this.";
+            UiUtils.ShowMessageBox(text, UiUtils.MessageType.Error);
+        }
     }
 }
