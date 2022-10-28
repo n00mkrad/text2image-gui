@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using static StableDiffusionGui.Main.Constants;
 
 namespace StableDiffusionGui.Installation
 {
@@ -216,23 +217,24 @@ namespace StableDiffusionGui.Installation
 
         public static void RemoveGitFiles(string rootPath)
         {
-            List<string> dirs = new List<string>();
+            List<DirectoryInfo> dirs = new List<DirectoryInfo>();
 
-            dirs.AddRange(Directory.GetDirectories(rootPath, ".git", SearchOption.AllDirectories));
+            dirs.AddRange(Directory.GetDirectories(rootPath, "*", SearchOption.AllDirectories).Select(x => new DirectoryInfo(x)));
 
-            foreach (string dir in dirs)
+            new DirectoryInfo(rootPath).Attributes = FileAttributes.Normal;
+            IoUtils.SetAttributes(rootPath, FileAttributes.Normal);
+
+            foreach (var dir in dirs)
             {
-                new DirectoryInfo(dir).Attributes = FileAttributes.Normal;
-                IoUtils.SetAttributes(dir, FileAttributes.Normal);
-                IoUtils.TryDeleteIfExists(dir);
+                if(dir.Name == ".git")
+                    IoUtils.TryDeleteIfExists(dir.FullName);
             }
 
-            string srcPath = Path.Combine(rootPath, "src");
-            IoUtils.SetAttributes(srcPath, FileAttributes.Normal);
-            IoUtils.GetFilesSorted(srcPath, true, "*.jpg").ToList().ForEach(x => IoUtils.TryDeleteIfExists(x));
-            IoUtils.GetFilesSorted(srcPath, true, "*.png").ToList().ForEach(x => IoUtils.TryDeleteIfExists(x));
-            IoUtils.GetFilesSorted(srcPath, true, "*.gif").ToList().ForEach(x => IoUtils.TryDeleteIfExists(x));
-            IoUtils.GetFilesSorted(srcPath, true, "*.ipynb").ToList().ForEach(x => IoUtils.TryDeleteIfExists(x));
+            var unneededDirs = new List<string> { "docs", "assets" };
+            unneededDirs.ForEach(dir => IoUtils.TryDeleteIfExists(Path.Combine(rootPath, dir)));
+
+            var unneededFileTypes = new List<string> { "jpg", "jpeg", "png", "gif", "ipynb", "ttf" };
+            unneededFileTypes.ForEach(ext => IoUtils.GetFilesSorted(rootPath, true, $"*.{ext}").ToList().ForEach(x => IoUtils.TryDeleteIfExists(x)));
         }
 
         #endregion
@@ -375,7 +377,7 @@ namespace StableDiffusionGui.Installation
             }
         }
 
-        private static string GetDataSubPath(string dir)
+        public static string GetDataSubPath(string dir)
         {
             return Path.Combine(Paths.GetDataPath(), dir);
         }

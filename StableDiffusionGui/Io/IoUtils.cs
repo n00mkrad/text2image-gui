@@ -557,19 +557,16 @@ namespace StableDiffusionGui.Io
             }
         }
 
-        public static long GetDirSize(string path, bool recursive, string[] includedExtensions = null)
+        public static long GetDirSize(string path, bool recursive, string[] extensionWhitelist = null, bool includeFilesWithoutExt = false)
         {
             long size = 0;
 
             try
             {
-                string[] files;
-                StringComparison ignCase = StringComparison.OrdinalIgnoreCase;
+                string[] files = Directory.GetFiles(path, includeFilesWithoutExt ? "*" : "*.*");
 
-                if (includedExtensions == null)
-                    files = Directory.GetFiles(path);
-                else
-                    files = Directory.GetFiles(path).Where(file => includedExtensions.Any(x => file.EndsWith(x, ignCase))).ToArray();
+                if (extensionWhitelist != null)
+                    files = files.Where(file => extensionWhitelist.Any(x => file.EndsWith(x, StringComparison.OrdinalIgnoreCase))).ToArray();
 
                 foreach (string file in files)
                 {
@@ -579,10 +576,8 @@ namespace StableDiffusionGui.Io
                 if (!recursive)
                     return size;
 
-                // Add subdirectory sizes.
-                DirectoryInfo[] dis = new DirectoryInfo(path).GetDirectories();
-                foreach (DirectoryInfo di in dis)
-                    size += GetDirSize(di.FullName, true, includedExtensions);
+                foreach (DirectoryInfo dir in new DirectoryInfo(path).GetDirectories()) // Add subdirectory sizes
+                    size += GetDirSize(dir.FullName, true, extensionWhitelist, includeFilesWithoutExt);
             }
             catch (Exception e)
             {
