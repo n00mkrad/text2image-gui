@@ -15,7 +15,7 @@ namespace StableDiffusionGui.MiscUtils
         private static Dictionary<string, List<string>> _cachedWildcardLists = new Dictionary<string, List<string>>(); // Cache until reset, to avoid re-shuffling
         private static Dictionary<string, int> _wildcardIndex = new Dictionary<string, int>(); // Store current index for each wildcard file
 
-        private static readonly char _identifier = '+';
+        private static readonly char _identifier = '~';
 
 
         public static string ApplyWildcards(string prompt, int iterations)
