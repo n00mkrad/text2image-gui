@@ -70,7 +70,7 @@ namespace StableDiffusionGui.MiscUtils
                         split[i] = replacement; // Pick random line, insert back into word array
                         Logger.Log($"Wildcard '{wildcardName}' => '{replacement}' ({sort})", true);
                     }
-                    else if(!string.IsNullOrWhiteSpace(wildcardName))
+                    else if (!string.IsNullOrWhiteSpace(wildcardName))
                     {
                         string wildcardPath = Path.Combine(Paths.GetExeDir(), Constants.Dirs.Wildcards, wildcardName + ".txt");
 
@@ -90,7 +90,7 @@ namespace StableDiffusionGui.MiscUtils
 
                 return string.Join("", split);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logger.Log($"Wildcard Error: {ex.Message}");
                 Logger.Log(ex.StackTrace, true);
@@ -118,19 +118,20 @@ namespace StableDiffusionGui.MiscUtils
             if (_cachedWildcardLists.ContainsKey(id))
                 return _cachedWildcardLists[id];
 
-            if(lines.Count() <= 0)
+            if (lines.Count() <= 0)
                 return new List<string>();
 
             var linesSrc = lines.Where(line => !string.IsNullOrWhiteSpace(line)); // Read all lines from wildcard file
+
+            if (sortMode == SortMode.Alphabetically)
+                linesSrc = linesSrc.OrderBy(a => a).ToList(); // Sort list optionally
+            if (sortMode == SortMode.Shuffle)
+                linesSrc = linesSrc.OrderBy(a => _random.Next()).ToList(); // Shuffle list optionally
+
             List<string> list = new List<string>(linesSrc);
 
             while (list.Count < listSize) // Clone list until it's longer than the desired size (will not run at all if it's already long enough)
                 list.AddRange(linesSrc);
-
-            if (sortMode == SortMode.Shuffle)
-                list = list.OrderBy(a => _random.Next()).ToList(); // Shuffle list optionally
-            else if (sortMode == SortMode.Alphabetically)
-                list = list.OrderBy(a => a).ToList(); // Sort list optionally
 
             list = list.Take(listSize).ToList(); // Trim to the exact desired size
 
@@ -138,7 +139,7 @@ namespace StableDiffusionGui.MiscUtils
             return list;
         }
 
-        private static int GetWildcardIndex (string wildcard, bool increment)
+        private static int GetWildcardIndex(string wildcard, bool increment)
         {
             if (!_wildcardIndex.ContainsKey(wildcard))
                 _wildcardIndex[wildcard] = 0;
