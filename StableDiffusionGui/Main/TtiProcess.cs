@@ -171,7 +171,7 @@ namespace StableDiffusionGui.Main
 
                 TtiProcessOutputHandler.Start();
 
-                string logMdl = Path.ChangeExtension(model, null).Trunc(string.IsNullOrWhiteSpace(vae) ? 35 : 80).Wrap();
+                string logMdl = Path.ChangeExtension(model, null).Trunc(!string.IsNullOrWhiteSpace(vae) ? 35 : 80).Wrap();
                 string logVae = Path.GetFileNameWithoutExtension(vae).Trunc(35).Wrap();
                 Logger.Log($"Loading Stable Diffusion with model {logMdl}{(string.IsNullOrWhiteSpace(vae) ? "" : $" and VAE {logVae}")}...");
 
