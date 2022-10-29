@@ -240,6 +240,7 @@ namespace StableDiffusionGui.Main
                 IoUtils.SetImageMetadata(movePath, meta.ParsedText);
 
                 ImagePreview.AppendImage(movePath, ImagePreview.ImgShowMode.ShowLast, false);
+                Logger.Log($"Saved post-processed image as '{Path.GetFileName(movePath)}'.");
             }
             catch(Exception ex)
             {

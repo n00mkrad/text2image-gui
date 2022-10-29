@@ -206,23 +206,25 @@ namespace StableDiffusionGui.Main
 
         public enum FixAction { Upscale, FaceRestoration }
 
-        public static void InvokeAiFix(string imgPath, List<FixAction> actions)
+        /// <summary> Run InvokeAI post-processing (!fix), with log timeout </summary>
+        /// <returns> Successful or not </returns>
+        public static async Task<bool> InvokeAiFix(string imgPath, List<FixAction> actions)
         {
             if (Program.Busy)
             {
                 UiUtils.ShowMessageBox("Can't run post-processing while the program is still busy.");
-                return;
+                return false;
             }
 
             if (CurrentStdInWriter == null)
             {
                 UiUtils.ShowMessageBox("Can't run post-processing when Stable Diffusion is not loaded.");
-                return;
+                return false;
             }
 
             Program.MainForm.SetWorking(Program.BusyState.PostProcessing, false);
 
-            Logger.Log($"InvokeAI Fix: {string.Join(", ", actions.Select(x => x.ToString()))}", true);
+            Logger.Log($"InvokeAI !fix: {string.Join(", ", actions.Select(x => x.ToString()))}", true);
 
             List<string> args = new List<string> { "!fix", imgPath.Wrap(true) };
 
@@ -232,7 +234,26 @@ namespace StableDiffusionGui.Main
             if (actions.Contains(FixAction.FaceRestoration))
                 args.Add(ArgsInvoke.GetFaceRestoreArgs(true));
 
-            WriteStdIn(string.Join(" ", args), true);
+            await WriteStdIn(string.Join(" ", args), true);
+
+            while (Logger.GetTimeSinceLastEntry(Constants.Lognames.Sd).TotalMilliseconds > 5000) // Wait for first log line
+                await Task.Delay(10);
+
+            while (Logger.GetTimeSinceLastEntry(Constants.Lognames.Sd).TotalMilliseconds < 5000) // Wait for last log line (timeout)
+            {
+                if (!Program.Busy)
+                {
+                    Logger.Log($"InvokeAI !fix done after {Logger.GetTimeSinceLastEntry(Constants.Lognames.Sd).TotalMilliseconds} ms.", true);
+                    return true; // No longer busy = Action was successful
+                }
+
+                await Task.Delay(10);
+            }
+
+            Program.MainForm.SetWorking(Program.BusyState.Standby);
+            UiUtils.ShowMessageBox($"Failed to post-process image.\nCheck '{Constants.Lognames.Sd}' log for details.", UiUtils.MessageType.Error);
+            Logger.Log($"InvokeAI !fix failed - timed out.", true);
+            return false;
         }
 
         public static async Task RunStableDiffusionOpt(string[] prompts, int iterations, Dictionary<string, string> paramsDict, string outPath)

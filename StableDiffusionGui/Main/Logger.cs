@@ -23,6 +23,7 @@ namespace StableDiffusionGui.Main
         public static string LastUiLine { get { return _lastUi; } }
         private static string _lastLog = "";
         public static string LastLogLine { get { return _lastLog; } }
+        private static Dictionary<string, DT> _lastEntryTimestampPerLog = new Dictionary<string, DT>();
 
         public struct Entry
         {
@@ -71,6 +72,9 @@ namespace StableDiffusionGui.Main
 
             if (!entry.hidden)
                 _lastUi = msg;
+
+            _lastEntryTimestampPerLog[entry.filename] = DT.Now;
+
             Console.WriteLine(msg);
 
             try
@@ -193,6 +197,14 @@ namespace StableDiffusionGui.Main
         public static void RemoveLastLine()
         {
             Textbox.Text = Textbox.Text.Remove(Textbox.Text.LastIndexOf(Environment.NewLine));
+        }
+
+        public static TimeSpan GetTimeSinceLastEntry (string logName)
+        {
+            if (_lastEntryTimestampPerLog.ContainsKey(logName))
+                return DT.Now - _lastEntryTimestampPerLog[logName];
+            else
+                return DT.MaxValue - DT.MinValue;
         }
     }
 }

@@ -809,19 +809,19 @@ namespace StableDiffusionGui
             menuStripPostProcess.Show(Cursor.Position);
         }
 
-        private void upscaleToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void upscaleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            TtiProcess.InvokeAiFix(ImagePreview.CurrentImagePath, new[] { TtiProcess.FixAction.Upscale }.ToList());
+            await TtiProcess.InvokeAiFix(ImagePreview.CurrentImagePath, new[] { TtiProcess.FixAction.Upscale }.ToList());
         }
 
-        private void applyFaceRestorationToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void applyFaceRestorationToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            TtiProcess.InvokeAiFix(ImagePreview.CurrentImagePath, new[] { TtiProcess.FixAction.FaceRestoration }.ToList());
+            await TtiProcess.InvokeAiFix(ImagePreview.CurrentImagePath, new[] { TtiProcess.FixAction.FaceRestoration }.ToList());
         }
 
-        private void applyAllToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void applyAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            TtiProcess.InvokeAiFix(ImagePreview.CurrentImagePath, new[] { TtiProcess.FixAction.Upscale, TtiProcess.FixAction.FaceRestoration }.ToList());
+            await TtiProcess.InvokeAiFix(ImagePreview.CurrentImagePath, new[] { TtiProcess.FixAction.Upscale, TtiProcess.FixAction.FaceRestoration }.ToList());
         }
 
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
