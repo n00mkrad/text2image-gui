@@ -72,7 +72,7 @@ namespace StableDiffusionGui.Data
                     if (s.StartsWith("-S"))
                         Seed = s.Remove(0, 2).GetLong();
 
-                    if (s.StartsWith("-f"))
+                    if (s.StartsWith("-f") && !s.Contains("fnformat"))
                         InitStrength = 1f - s.Remove(0, 2).GetFloat();
 
                     if (s.StartsWith("-IF"))
