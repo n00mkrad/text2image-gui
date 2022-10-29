@@ -660,17 +660,7 @@ namespace StableDiffusionGui.Io
         {
             try
             {
-                IEnumerable<MetadataExtractor.Directory> directories = MetadataExtractor.ImageMetadataReader.ReadMetadata(path);
-
-                MetadataExtractor.Directory pngTextDir = directories.Where(x => x.Name.Lower() == "png-text").FirstOrDefault();
-
-                if (pngTextDir != null)
-                {
-                    MetadataExtractor.Tag dreamTag = pngTextDir.Tags.Where(x => x.Description.Contains(keword)).FirstOrDefault();
-
-                    if (dreamTag != null)
-                        return new ImageMetadata(path, dreamTag.Description.Split(keword).Last());
-                }
+                return new ImageMetadata(path);
             }
             catch (Exception ex)
             {
