@@ -5,6 +5,7 @@ using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace StableDiffusionGui.Forms
@@ -31,16 +32,18 @@ namespace StableDiffusionGui.Forms
 
         private void PostProcSettingsForm_Load(object sender, EventArgs e)
         {
-
+            
         }
 
-        private void PostProcSettingsForm_Shown(object sender, EventArgs e)
+        private async void PostProcSettingsForm_Shown(object sender, EventArgs e)
         {
             Refresh();
             comboxUpscale.FillFromEnum<UpscaleOption>(UiStrings);
             comboxFaceRestoration.FillFromEnum<FaceRestoreOption>(UiStrings);
             LoadSettings();
             UpdateVisibility();
+            titleLabel.Focus();
+            await Task.Delay(1);
             Opacity = 1;
 
             if (!InstallationStatus.HasSdUpscalers())

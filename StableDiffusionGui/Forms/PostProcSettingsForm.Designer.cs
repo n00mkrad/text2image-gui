@@ -117,7 +117,7 @@
             this.titleLabel.Margin = new System.Windows.Forms.Padding(3, 0, 3, 10);
             this.titleLabel.Name = "titleLabel";
             this.titleLabel.Size = new System.Drawing.Size(218, 40);
-            this.titleLabel.TabIndex = 13;
+            this.titleLabel.TabIndex = 999;
             this.titleLabel.Text = "Post-Processing";
             // 
             // panel1
@@ -137,7 +137,7 @@
             this.panel1.Location = new System.Drawing.Point(12, 62);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(560, 287);
-            this.panel1.TabIndex = 14;
+            this.panel1.TabIndex = 999;
             // 
             // panelCodeformerFidelity
             // 
@@ -146,7 +146,7 @@
             this.panelCodeformerFidelity.Location = new System.Drawing.Point(0, 245);
             this.panelCodeformerFidelity.Name = "panelCodeformerFidelity";
             this.panelCodeformerFidelity.Size = new System.Drawing.Size(560, 35);
-            this.panelCodeformerFidelity.TabIndex = 14;
+            this.panelCodeformerFidelity.TabIndex = 999;
             // 
             // tableLayoutPanel5
             // 
@@ -161,7 +161,7 @@
             this.tableLayoutPanel5.RowCount = 1;
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel5.Size = new System.Drawing.Size(560, 35);
-            this.tableLayoutPanel5.TabIndex = 1;
+            this.tableLayoutPanel5.TabIndex = 999;
             // 
             // panel5
             // 
@@ -170,7 +170,7 @@
             this.panel5.Location = new System.Drawing.Point(283, 3);
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(274, 29);
-            this.panel5.TabIndex = 88;
+            this.panel5.TabIndex = 999;
             // 
             // tableLayoutPanel6
             // 
@@ -188,7 +188,7 @@
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 21F));
             this.tableLayoutPanel6.Size = new System.Drawing.Size(268, 21);
-            this.tableLayoutPanel6.TabIndex = 91;
+            this.tableLayoutPanel6.TabIndex = 999;
             // 
             // textboxSliderCodeformerFidelity
             // 
@@ -203,7 +203,7 @@
             this.textboxSliderCodeformerFidelity.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderCodeformerFidelity.Name = "textboxSliderCodeformerFidelity";
             this.textboxSliderCodeformerFidelity.Size = new System.Drawing.Size(45, 17);
-            this.textboxSliderCodeformerFidelity.TabIndex = 96;
+            this.textboxSliderCodeformerFidelity.TabIndex = 999;
             this.textboxSliderCodeformerFidelity.Text = "0,2";
             // 
             // sliderCodeformerFidelity
@@ -236,7 +236,7 @@
             this.sliderCodeformerFidelity.OverlayColor = System.Drawing.Color.White;
             this.sliderCodeformerFidelity.Size = new System.Drawing.Size(223, 21);
             this.sliderCodeformerFidelity.SmallChange = ((uint)(1u));
-            this.sliderCodeformerFidelity.TabIndex = 4;
+            this.sliderCodeformerFidelity.TabIndex = 999;
             this.sliderCodeformerFidelity.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
             this.sliderCodeformerFidelity.ThumbSize = new System.Drawing.Size(14, 14);
             this.toolTip.SetToolTip(this.sliderCodeformerFidelity, "0 produces high quality but low accuracy. 1 produces high accuracy but low qualit" +
@@ -256,7 +256,7 @@
             this.panel6.Location = new System.Drawing.Point(3, 3);
             this.panel6.Name = "panel6";
             this.panel6.Size = new System.Drawing.Size(274, 29);
-            this.panel6.TabIndex = 87;
+            this.panel6.TabIndex = 999;
             // 
             // label6
             // 
@@ -267,7 +267,7 @@
             this.label6.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(99, 13);
-            this.label6.TabIndex = 85;
+            this.label6.TabIndex = 999;
             this.label6.Text = "CodeFormer Fidelity";
             // 
             // panelFaceRestorationStrength
@@ -277,7 +277,7 @@
             this.panelFaceRestorationStrength.Location = new System.Drawing.Point(0, 210);
             this.panelFaceRestorationStrength.Name = "panelFaceRestorationStrength";
             this.panelFaceRestorationStrength.Size = new System.Drawing.Size(560, 35);
-            this.panelFaceRestorationStrength.TabIndex = 12;
+            this.panelFaceRestorationStrength.TabIndex = 999;
             // 
             // tableLayoutPanel2
             // 
@@ -292,7 +292,7 @@
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.Size = new System.Drawing.Size(560, 35);
-            this.tableLayoutPanel2.TabIndex = 1;
+            this.tableLayoutPanel2.TabIndex = 999;
             // 
             // panel10
             // 
@@ -301,7 +301,7 @@
             this.panel10.Location = new System.Drawing.Point(283, 3);
             this.panel10.Name = "panel10";
             this.panel10.Size = new System.Drawing.Size(274, 29);
-            this.panel10.TabIndex = 88;
+            this.panel10.TabIndex = 999;
             // 
             // tableLayoutPanel4
             // 
@@ -319,7 +319,7 @@
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 21F));
             this.tableLayoutPanel4.Size = new System.Drawing.Size(268, 21);
-            this.tableLayoutPanel4.TabIndex = 91;
+            this.tableLayoutPanel4.TabIndex = 999;
             // 
             // textboxSliderFaceRestoreStrength
             // 
@@ -334,7 +334,7 @@
             this.textboxSliderFaceRestoreStrength.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderFaceRestoreStrength.Name = "textboxSliderFaceRestoreStrength";
             this.textboxSliderFaceRestoreStrength.Size = new System.Drawing.Size(45, 17);
-            this.textboxSliderFaceRestoreStrength.TabIndex = 95;
+            this.textboxSliderFaceRestoreStrength.TabIndex = 999;
             this.textboxSliderFaceRestoreStrength.Text = "0,05";
             // 
             // sliderFaceRestoreStrength
@@ -367,7 +367,7 @@
             this.sliderFaceRestoreStrength.OverlayColor = System.Drawing.Color.White;
             this.sliderFaceRestoreStrength.Size = new System.Drawing.Size(223, 21);
             this.sliderFaceRestoreStrength.SmallChange = ((uint)(1u));
-            this.sliderFaceRestoreStrength.TabIndex = 4;
+            this.sliderFaceRestoreStrength.TabIndex = 999;
             this.sliderFaceRestoreStrength.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
             this.sliderFaceRestoreStrength.ThumbSize = new System.Drawing.Size(14, 14);
             this.toolTip.SetToolTip(this.sliderFaceRestoreStrength, "0 = Off, 1 = Full Restoration");
@@ -386,7 +386,7 @@
             this.panel9.Location = new System.Drawing.Point(3, 3);
             this.panel9.Name = "panel9";
             this.panel9.Size = new System.Drawing.Size(274, 29);
-            this.panel9.TabIndex = 87;
+            this.panel9.TabIndex = 999;
             // 
             // label3
             // 
@@ -397,7 +397,7 @@
             this.label3.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(131, 13);
-            this.label3.TabIndex = 85;
+            this.label3.TabIndex = 999;
             this.label3.Text = "Face Restoration Strength";
             // 
             // panelFaceRestorationMethod
@@ -407,7 +407,7 @@
             this.panelFaceRestorationMethod.Location = new System.Drawing.Point(0, 175);
             this.panelFaceRestorationMethod.Name = "panelFaceRestorationMethod";
             this.panelFaceRestorationMethod.Size = new System.Drawing.Size(560, 35);
-            this.panelFaceRestorationMethod.TabIndex = 13;
+            this.panelFaceRestorationMethod.TabIndex = 999;
             // 
             // tableLayoutPanel3
             // 
@@ -422,7 +422,7 @@
             this.tableLayoutPanel3.RowCount = 1;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel3.Size = new System.Drawing.Size(560, 35);
-            this.tableLayoutPanel3.TabIndex = 0;
+            this.tableLayoutPanel3.TabIndex = 999;
             // 
             // panel3
             // 
@@ -431,7 +431,7 @@
             this.panel3.Location = new System.Drawing.Point(283, 3);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(274, 29);
-            this.panel3.TabIndex = 86;
+            this.panel3.TabIndex = 999;
             // 
             // comboxFaceRestoration
             // 
@@ -443,7 +443,7 @@
             this.comboxFaceRestoration.Location = new System.Drawing.Point(0, 5);
             this.comboxFaceRestoration.Name = "comboxFaceRestoration";
             this.comboxFaceRestoration.Size = new System.Drawing.Size(150, 21);
-            this.comboxFaceRestoration.TabIndex = 106;
+            this.comboxFaceRestoration.TabIndex = 999;
             this.comboxFaceRestoration.SelectedIndexChanged += new System.EventHandler(this.comboxFaceRestoration_SelectedIndexChanged);
             // 
             // panel4
@@ -453,7 +453,7 @@
             this.panel4.Location = new System.Drawing.Point(3, 3);
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(274, 29);
-            this.panel4.TabIndex = 85;
+            this.panel4.TabIndex = 999;
             // 
             // label4
             // 
@@ -464,7 +464,7 @@
             this.label4.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(127, 13);
-            this.label4.TabIndex = 84;
+            this.label4.TabIndex = 999;
             this.label4.Text = "Face Restoration Method";
             // 
             // panelFaceRestorationEnable
@@ -474,7 +474,7 @@
             this.panelFaceRestorationEnable.Location = new System.Drawing.Point(0, 140);
             this.panelFaceRestorationEnable.Name = "panelFaceRestorationEnable";
             this.panelFaceRestorationEnable.Size = new System.Drawing.Size(560, 35);
-            this.panelFaceRestorationEnable.TabIndex = 27;
+            this.panelFaceRestorationEnable.TabIndex = 999;
             // 
             // tableLayoutPanel8
             // 
@@ -489,7 +489,7 @@
             this.tableLayoutPanel8.RowCount = 1;
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel8.Size = new System.Drawing.Size(560, 35);
-            this.tableLayoutPanel8.TabIndex = 1;
+            this.tableLayoutPanel8.TabIndex = 999;
             // 
             // panel15
             // 
@@ -498,7 +498,7 @@
             this.panel15.Location = new System.Drawing.Point(283, 3);
             this.panel15.Name = "panel15";
             this.panel15.Size = new System.Drawing.Size(274, 29);
-            this.panel15.TabIndex = 88;
+            this.panel15.TabIndex = 999;
             // 
             // checkboxFaceRestorationEnable
             // 
@@ -506,7 +506,7 @@
             this.checkboxFaceRestorationEnable.Location = new System.Drawing.Point(5, 7);
             this.checkboxFaceRestorationEnable.Name = "checkboxFaceRestorationEnable";
             this.checkboxFaceRestorationEnable.Size = new System.Drawing.Size(15, 14);
-            this.checkboxFaceRestorationEnable.TabIndex = 87;
+            this.checkboxFaceRestorationEnable.TabIndex = 999;
             this.checkboxFaceRestorationEnable.UseVisualStyleBackColor = true;
             this.checkboxFaceRestorationEnable.CheckedChanged += new System.EventHandler(this.checkboxFaceRestorationEnable_CheckedChanged);
             // 
@@ -517,7 +517,7 @@
             this.panel16.Location = new System.Drawing.Point(3, 3);
             this.panel16.Name = "panel16";
             this.panel16.Size = new System.Drawing.Size(274, 29);
-            this.panel16.TabIndex = 87;
+            this.panel16.TabIndex = 999;
             // 
             // label5
             // 
@@ -528,7 +528,7 @@
             this.label5.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(241, 13);
-            this.label5.TabIndex = 85;
+            this.label5.TabIndex = 999;
             this.label5.Text = "Run Face Restoration for Every Generated Image";
             // 
             // panel2
@@ -538,7 +538,7 @@
             this.panel2.Location = new System.Drawing.Point(0, 105);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(560, 35);
-            this.panel2.TabIndex = 28;
+            this.panel2.TabIndex = 999;
             // 
             // label8
             // 
@@ -548,7 +548,7 @@
             this.label8.Location = new System.Drawing.Point(5, 14);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(126, 16);
-            this.label8.TabIndex = 0;
+            this.label8.TabIndex = 999;
             this.label8.Text = "Face Restoration";
             // 
             // panelUpscaling
@@ -558,7 +558,7 @@
             this.panelUpscaling.Location = new System.Drawing.Point(0, 70);
             this.panelUpscaling.Name = "panelUpscaling";
             this.panelUpscaling.Size = new System.Drawing.Size(560, 35);
-            this.panelUpscaling.TabIndex = 11;
+            this.panelUpscaling.TabIndex = 999;
             // 
             // tableLayoutPanel1
             // 
@@ -573,7 +573,7 @@
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(560, 35);
-            this.tableLayoutPanel1.TabIndex = 0;
+            this.tableLayoutPanel1.TabIndex = 999;
             // 
             // panel8
             // 
@@ -582,7 +582,7 @@
             this.panel8.Location = new System.Drawing.Point(283, 3);
             this.panel8.Name = "panel8";
             this.panel8.Size = new System.Drawing.Size(274, 29);
-            this.panel8.TabIndex = 86;
+            this.panel8.TabIndex = 999;
             // 
             // comboxUpscale
             // 
@@ -598,7 +598,7 @@
             this.comboxUpscale.Location = new System.Drawing.Point(0, 5);
             this.comboxUpscale.Name = "comboxUpscale";
             this.comboxUpscale.Size = new System.Drawing.Size(150, 21);
-            this.comboxUpscale.TabIndex = 106;
+            this.comboxUpscale.TabIndex = 999;
             // 
             // panel7
             // 
@@ -607,7 +607,7 @@
             this.panel7.Location = new System.Drawing.Point(3, 3);
             this.panel7.Name = "panel7";
             this.panel7.Size = new System.Drawing.Size(274, 29);
-            this.panel7.TabIndex = 85;
+            this.panel7.TabIndex = 999;
             // 
             // label2
             // 
@@ -618,7 +618,7 @@
             this.label2.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(87, 13);
-            this.label2.TabIndex = 84;
+            this.label2.TabIndex = 999;
             this.label2.Text = "Upscaling Factor";
             // 
             // panelUpscaleEnable
@@ -628,7 +628,7 @@
             this.panelUpscaleEnable.Location = new System.Drawing.Point(0, 35);
             this.panelUpscaleEnable.Name = "panelUpscaleEnable";
             this.panelUpscaleEnable.Size = new System.Drawing.Size(560, 35);
-            this.panelUpscaleEnable.TabIndex = 26;
+            this.panelUpscaleEnable.TabIndex = 999;
             // 
             // tableLayoutPanel7
             // 
@@ -643,7 +643,7 @@
             this.tableLayoutPanel7.RowCount = 1;
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel7.Size = new System.Drawing.Size(560, 35);
-            this.tableLayoutPanel7.TabIndex = 1;
+            this.tableLayoutPanel7.TabIndex = 999;
             // 
             // panel13
             // 
@@ -652,7 +652,7 @@
             this.panel13.Location = new System.Drawing.Point(283, 3);
             this.panel13.Name = "panel13";
             this.panel13.Size = new System.Drawing.Size(274, 29);
-            this.panel13.TabIndex = 88;
+            this.panel13.TabIndex = 999;
             // 
             // checkboxUpscaleEnable
             // 
@@ -660,7 +660,7 @@
             this.checkboxUpscaleEnable.Location = new System.Drawing.Point(5, 7);
             this.checkboxUpscaleEnable.Name = "checkboxUpscaleEnable";
             this.checkboxUpscaleEnable.Size = new System.Drawing.Size(15, 14);
-            this.checkboxUpscaleEnable.TabIndex = 87;
+            this.checkboxUpscaleEnable.TabIndex = 999;
             this.checkboxUpscaleEnable.UseVisualStyleBackColor = true;
             this.checkboxUpscaleEnable.CheckedChanged += new System.EventHandler(this.checkboxUpscaleEnable_CheckedChanged);
             // 
@@ -671,7 +671,7 @@
             this.panel14.Location = new System.Drawing.Point(3, 3);
             this.panel14.Name = "panel14";
             this.panel14.Size = new System.Drawing.Size(274, 29);
-            this.panel14.TabIndex = 87;
+            this.panel14.TabIndex = 999;
             // 
             // label7
             // 
@@ -682,7 +682,7 @@
             this.label7.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(207, 13);
-            this.label7.TabIndex = 85;
+            this.label7.TabIndex = 999;
             this.label7.Text = "Run Upscaling for Every Generated Image";
             // 
             // panel11
@@ -692,7 +692,7 @@
             this.panel11.Location = new System.Drawing.Point(0, 0);
             this.panel11.Name = "panel11";
             this.panel11.Size = new System.Drawing.Size(560, 35);
-            this.panel11.TabIndex = 15;
+            this.panel11.TabIndex = 999;
             // 
             // label1
             // 
@@ -702,7 +702,7 @@
             this.label1.Location = new System.Drawing.Point(5, 14);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(77, 16);
-            this.label1.TabIndex = 0;
+            this.label1.TabIndex = 999;
             this.label1.Text = "Upscaling";
             // 
             // toolTip
