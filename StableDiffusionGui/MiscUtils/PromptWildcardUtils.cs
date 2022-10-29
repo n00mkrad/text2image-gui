@@ -24,6 +24,7 @@ namespace StableDiffusionGui.MiscUtils
             {
                 string[] split = prompt.Split(_identifier);
                 int[] identifierIndexes = prompt.Select((b, i) => b.Equals(_identifier) ? i : -1).Where(i => i != -1).ToArray();
+                int wildcardIndex = 0;
 
                 for (int i = 1; i < split.Length; i++) // Start at 1 because we never need the first entry as it can't be a wildcard
                 {
@@ -65,8 +66,8 @@ namespace StableDiffusionGui.MiscUtils
 
                     if (inline)
                     {
-                        var list = GetWildcardListFromString(wildcardName, iterations, sort);
-                        string replacement = list.ElementAt(GetWildcardIndex(wildcardName, true)).Replace(".", " ");
+                        var list = GetWildcardListFromString(wildcardIndex, wildcardName, iterations, sort);
+                        string replacement = list.ElementAt(GetWildcardValueIndex(wildcardIndex, wildcardName, true)).Replace(".", " ");
                         split[i] = replacement; // Pick random line, insert back into word array
                         Logger.Log($"Wildcard '{wildcardName}' => '{replacement}' ({sort})", true);
                     }
@@ -76,8 +77,8 @@ namespace StableDiffusionGui.MiscUtils
 
                         if (File.Exists(wildcardPath))
                         {
-                            var list = GetWildcardListFromFile(wildcardPath, iterations, sort);
-                            string replacement = list.ElementAt(GetWildcardIndex(wildcardName, true));
+                            var list = GetWildcardListFromFile(wildcardIndex, wildcardPath, iterations, sort);
+                            string replacement = list.ElementAt(GetWildcardValueIndex(wildcardIndex, wildcardName, true));
                             split[i] = replacement + rest; // Pick random line, insert back into word array
                             Logger.Log($"Wildcard '{wildcardName}' => '{replacement}' ({sort})", true);
                         }
@@ -86,6 +87,8 @@ namespace StableDiffusionGui.MiscUtils
                             Logger.Log($"No wildcard file found for '{wildcardName}'", true);
                         }
                     }
+
+                    wildcardIndex++;
                 }
 
                 return string.Join("", split);
@@ -100,15 +103,15 @@ namespace StableDiffusionGui.MiscUtils
 
         private enum SortMode { Shuffle, Sequential, Alphabetically }
 
-        private static List<string> GetWildcardListFromFile(string wildcardPath, int listSize, SortMode sortMode)
+        private static List<string> GetWildcardListFromFile(int index, string wildcardPath, int listSize, SortMode sortMode)
         {
-            string id = $"file-{wildcardPath}-{sortMode}"; // Cache per sort mode
+            string id = $"{index}-file-{wildcardPath}-{sortMode}"; // Cache per index & sort mode
             return GetWildcardList(id, File.ReadAllLines(wildcardPath).Where(line => !string.IsNullOrWhiteSpace(line)), listSize, sortMode);
         }
 
-        private static List<string> GetWildcardListFromString(string wildcardStr, int listSize, SortMode sortMode)
+        private static List<string> GetWildcardListFromString(int index, string wildcardStr, int listSize, SortMode sortMode)
         {
-            string id = $"string-{wildcardStr}-{sortMode}"; // Cache per sort mode
+            string id = $"{index}-string-{wildcardStr}-{sortMode}"; // Cache per index & sort mode
             List<string> split = wildcardStr.Split(',').Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
             return GetWildcardList(id, split, listSize, sortMode);
         }
@@ -139,17 +142,19 @@ namespace StableDiffusionGui.MiscUtils
             return list;
         }
 
-        private static int GetWildcardIndex(string wildcard, bool increment)
+        private static int GetWildcardValueIndex(int keyIndex, string wildcard, bool increment)
         {
-            if (!_wildcardIndex.ContainsKey(wildcard))
-                _wildcardIndex[wildcard] = 0;
+            string key = $"{keyIndex}_{wildcard}";
 
-            int index = _wildcardIndex[wildcard];
+            if (!_wildcardIndex.ContainsKey(key))
+                _wildcardIndex[key] = 0;
+
+            int valueIndex = _wildcardIndex[key];
 
             if (increment)
-                _wildcardIndex[wildcard] = _wildcardIndex[wildcard] + 1;
+                _wildcardIndex[key] = _wildcardIndex[key] + 1;
 
-            return index;
+            return valueIndex;
         }
 
         /// <summary> Resets randomization and saved indexes </summary>
