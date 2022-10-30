@@ -18,7 +18,6 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Paths = StableDiffusionGui.Io.Paths;
@@ -36,11 +35,13 @@ namespace StableDiffusionGui
 
         public Button RunBtn { get { return runBtn; } }
         public TextBox TextboxPrompt { get { return textboxPrompt; } }
+        public TextBox TextboxPromptNeg { get { return textboxPromptNeg; } }
         public PictureBox PictBoxImgViewer { get { return pictBoxImgViewer; } }
         public Label LabelImgInfo { get { return labelImgInfo; } }
         public Label LabelImgPrompt { get { return labelImgPrompt; } }
         public Button BtnExpandPromptField { get { return btnExpandPromptField; } }
-        public Panel PanelBg { get { return panel1; } }
+        public Button BtnExpandPromptNegField { get { return btnExpandPromptNegField; } }
+        public Panel PanelSettings { get { return panelSettings; } }
         public CustomSlider SliderStrength { get { return sliderInitStrength; } }
         public CustomSlider SliderSteps { get { return sliderSteps; } }
         public CustomSlider SliderScale { get { return sliderScale; } }
@@ -52,11 +53,11 @@ namespace StableDiffusionGui
         public bool IsInFocus() { return (ActiveForm == this); }
 
         private Size _defaultWindowSize;
-        private float _defaultPromptFontSize;
 
         public MainForm()
         {
             InitializeComponent();
+            ActiveControl = panelSettings;
             Program.MainForm = this;
             _defaultWindowSize = Size;
             Opacity = 0;
@@ -65,7 +66,6 @@ namespace StableDiffusionGui
         private void MainForm_Load(object sender, EventArgs e)
         {
             CheckForIllegalCrossThreadCalls = false;
-            _defaultPromptFontSize = textboxPrompt.Font.Size;
             Logger.Textbox = logBox;
             MinimumSize = Size;
         }
@@ -84,8 +84,8 @@ namespace StableDiffusionGui
         private async void MainForm_Shown(object sender, EventArgs e)
         {
             Refresh();
+            MainUi.SetSettingsVertScrollbar();
             pictBoxImgViewer.MouseWheel += pictBoxImgViewer_MouseWheel;
-            textboxPrompt.MouseWheel += textboxPrompt_MouseWheel;
             SetUiElements();
             LoadUiElements();
             PromptHistory.Load();
@@ -620,7 +620,12 @@ namespace StableDiffusionGui
 
         private void btnExpandPromptField_Click(object sender, EventArgs e)
         {
-            MainUi.SetPromptFieldSize(MainUi.PromptFieldSizeMode.Toggle);
+            MainUi.SetPromptFieldSize(MainUi.PromptFieldSizeMode.Toggle, false);
+        }
+
+        private void btnExpandPromptNegField_Click(object sender, EventArgs e)
+        {
+            MainUi.SetPromptFieldSize(MainUi.PromptFieldSizeMode.Toggle, true);
         }
 
         private void btnSeedUsePrevious_Click(object sender, EventArgs e)
@@ -709,18 +714,6 @@ namespace StableDiffusionGui
             upDownIterations.Value = prevIterVal;
         }
 
-        private void textboxPrompt_MouseWheel(object sender, MouseEventArgs e)
-        {
-            if (!InputUtils.IsHoldingCtrl) return;
-            int sizeChange = e.Delta > 0 ? 1 : -1;
-            textboxPrompt.Font = new Font(textboxPrompt.Font.Name, (textboxPrompt.Font.Size + sizeChange).Clamp(_defaultPromptFontSize, _defaultPromptFontSize * 2f), textboxPrompt.Font.Style, textboxPrompt.Font.Unit);
-        }
-
-        private void MainForm_ResizeBegin(object sender, EventArgs e)
-        {
-            MainUi.SetPromptFieldSize(MainUi.PromptFieldSizeMode.Collapse);
-        }
-
         private void btnDeleteBatch_Click(object sender, EventArgs e)
         {
             menuStripDeleteImages.Show(Cursor.Position);
@@ -767,7 +760,7 @@ namespace StableDiffusionGui
 
         private void panel1_Click(object sender, EventArgs e)
         {
-            panel1.Focus();
+            panelSettings.Focus();
         }
 
         private void viewLogInRealtimeToolStripMenuItem_Click(object sender, EventArgs e)
@@ -827,6 +820,20 @@ namespace StableDiffusionGui
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
             MainUiHotkeys.Handle(e.KeyData);
+        }
+
+        private void panelSettings_SizeChanged(object sender, EventArgs e)
+        {
+            var newPadding = panelSettings.Padding;
+            newPadding.Right = panelSettings.VerticalScroll.Visible ? 6 : 0;
+
+            if (panelSettings.Padding.Right != newPadding.Right)
+                panelSettings.Padding = newPadding;
+        }
+
+        private void MainForm_SizeChanged(object sender, EventArgs e)
+        {
+            MainUi.SetSettingsVertScrollbar();
         }
     }
 }

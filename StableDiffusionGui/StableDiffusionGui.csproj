@@ -133,7 +133,13 @@
     <Reference Include="System.Management.Automation" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\CustomPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\CustomSlider.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\CustomTextbox.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Data\Gpu.cs" />

@@ -30,7 +30,7 @@ namespace StableDiffusionGui.Ui
                 ImagePreview.DeleteAll();
 
             if (keys == (Keys.Control | Keys.Add) || keys == (Keys.Control | Keys.Oemplus)) // Hotkey: Toggle prompt field size
-                MainUi.SetPromptFieldSize(MainUi.PromptFieldSizeMode.Toggle);
+                MainUi.SetPromptFieldSize(MainUi.PromptFieldSizeMode.Toggle, false);
 
             if (keys == (Keys.Control | Keys.C)) // Hotkey: Copy current image
                 OsUtils.SetClipboard(Program.MainForm.PictBoxImgViewer.Image);
@@ -46,13 +46,13 @@ namespace StableDiffusionGui.Ui
 
             if (keys == (Keys.Control | Keys.M)) // Hotkey: Model quick switcher
             {
-                Program.MainForm.PanelBg.Focus();
+                Program.MainForm.PanelSettings.Focus();
                 new ModelQuickSelectForm(Enums.StableDiffusion.ModelType.Normal).ShowDialogForm(0f);
             }
 
             if (keys == (Keys.Control | Keys.Shift | Keys.M)) // Hotkey: VAE quick switcher
             {
-                Program.MainForm.PanelBg.Focus();
+                Program.MainForm.PanelSettings.Focus();
                 new ModelQuickSelectForm(Enums.StableDiffusion.ModelType.Vae).ShowDialogForm(0f);
             }
 

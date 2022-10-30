@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -296,26 +297,26 @@ namespace StableDiffusionGui.Ui
 
         public enum PromptFieldSizeMode { Expand, Collapse, Toggle }
 
-        public static void SetPromptFieldSize (PromptFieldSizeMode sizeMode = PromptFieldSizeMode.Toggle)
+        public static void SetPromptFieldSize (PromptFieldSizeMode sizeMode = PromptFieldSizeMode.Toggle, bool negativePromptField = false)
         {
             var form = Program.MainForm;
-            int smallHeight = 59;
+            var panel = negativePromptField ? form.TextboxPromptNeg.Parent : form.TextboxPrompt.Parent;
+            var btn = negativePromptField ? form.BtnExpandPromptNegField : form.BtnExpandPromptField;
+            int smallHeight = negativePromptField ? 40 : 65;
 
             if (sizeMode == PromptFieldSizeMode.Toggle)
-                sizeMode = form.TextboxPrompt.Height == smallHeight ? PromptFieldSizeMode.Expand : PromptFieldSizeMode.Collapse;
+                sizeMode = panel.Height == smallHeight ? PromptFieldSizeMode.Expand : PromptFieldSizeMode.Collapse;
 
             if (sizeMode == PromptFieldSizeMode.Expand)
             {
-                form.BtnExpandPromptField.BackgroundImage = Resources.upArrowIcon;
-                form.TextboxPrompt.Height = form.PictBoxImgViewer.Height + 65;
-                form.PictBoxImgViewer.Visible = false;
+                btn.BackgroundImage = Resources.upArrowIcon;
+                panel.Height = smallHeight * 4;
             }
 
             if (sizeMode == PromptFieldSizeMode.Collapse)
             {
-                form.BtnExpandPromptField.BackgroundImage = Resources.downArrowIcon;
-                form.TextboxPrompt.Height = smallHeight;
-                form.PictBoxImgViewer.Visible = true;
+                btn.BackgroundImage = Resources.downArrowIcon;
+                panel.Height = smallHeight;
             }
         }
 
@@ -333,6 +334,11 @@ namespace StableDiffusionGui.Ui
                 Program.MainForm.Text = $"{Program.MainForm.Text} - CUDA GPUs: {string.Join(", ", gpuNames.Take(maxGpusToListInTitle))} (+{gpuNames.Count - maxGpusToListInTitle})";
 
             Logger.Log($"Detected {gpus.Count.ToString().Replace("0", "no")} CUDA-capable GPU{(gpus.Count != 1 ? "s" : "")}.");
+        }
+
+        public static void SetSettingsVertScrollbar ()
+        {
+            Program.MainForm.PanelSettings.AutoScrollMinSize = new Size(Program.MainForm.PanelSettings.AutoScrollMinSize.Width, Program.MainForm.PanelSettings.Height + 1);
         }
     }
 }
