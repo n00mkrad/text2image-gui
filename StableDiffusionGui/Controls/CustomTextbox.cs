@@ -48,6 +48,14 @@ namespace StableDiffusionGui.Controls
             base.OnLostFocus(e);
         }
 
+        protected override void OnTextChanged(EventArgs e)
+        {
+            if (!Focused)
+                UpdatePlaceholderState();
+
+            base.OnTextChanged(e);
+        }
+
         private void UpdatePlaceholderState()
         {
             if (DesignMode)
@@ -59,7 +67,7 @@ namespace StableDiffusionGui.Controls
                     Text = "";
                 else if (Text == "")
                     Text = Placeholder;
-            
+
                 ForeColor = Text == Placeholder ? PlaceholderTextColor : _originalTextColor;
             }
         }
