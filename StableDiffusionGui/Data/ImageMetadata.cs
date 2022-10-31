@@ -11,17 +11,18 @@ namespace StableDiffusionGui.Data
     {
         public enum MetadataType { InvokeAi, Auto1111 }
         public MetadataType Type { get; set; }
-        public string Path { get; set; }
-        public string ParsedText { get; set; }
-        public string Prompt { get; set; }
-        public int Steps { get; set; }
-        public int BatchSize { get; set; }
+        public string Path { get; set; } = "";
+        public string ParsedText { get; set; } = ""; 
+        public string Prompt { get; set; } = "";
+        public int Steps { get; set; } = -1;
+        public int BatchSize { get; set; } = 1;
         public Size GeneratedResolution { get; set; }
         public float Scale { get; set; } = -1;
         public string Sampler { get; set; } = "";
         public long Seed { get; set; } = -1;
-        public string InitImgName { get; set; }
-        public float InitStrength { get; set; }
+        public string InitImgName { get; set; } = "";
+        public float InitStrength { get; set; } = 0f;
+        public bool Seamless { get; set; } = false;
 
         private readonly Dictionary<MetadataType, string> _tags = new Dictionary<MetadataType, string>() {
             { MetadataType.InvokeAi, "Dream: " },
@@ -95,32 +96,35 @@ namespace StableDiffusionGui.Data
 
                 foreach (string s in parameters)
                 {
-                    if (s.StartsWith("-s"))
+                    if (s.StartsWith("-s") && !s.Contains("seamless"))
                         Steps = s.Remove(0, 2).GetInt();
 
-                    if (s.StartsWith("-b"))
+                    else if (s.StartsWith("-b"))
                         BatchSize = s.Remove(0, 2).GetInt();
 
-                    if (s.StartsWith("-W"))
+                    else if (s.StartsWith("-W"))
                         GeneratedResolution = new Size(s.Remove(0, 2).GetInt(), GeneratedResolution.Height);
 
-                    if (s.StartsWith("-H"))
+                    else if (s.StartsWith("-H"))
                         GeneratedResolution = new Size(GeneratedResolution.Width, s.Remove(0, 2).GetInt());
 
-                    if (s.StartsWith("-C"))
+                    else if (s.StartsWith("-C"))
                         Scale = s.Remove(0, 2).GetFloat();
 
-                    if (s.StartsWith("-A"))
+                    else if (s.StartsWith("-A"))
                         Sampler = s.Remove(0, 2).Trim();
 
-                    if (s.StartsWith("-S"))
+                    else if (s.StartsWith("-S"))
                         Seed = s.Remove(0, 2).GetLong();
 
-                    if (s.StartsWith("-f") && !s.Contains("fnformat"))
+                    else if (s.StartsWith("-f") && !s.Contains("fnformat"))
                         InitStrength = 1f - s.Remove(0, 2).GetFloat();
 
-                    if (s.StartsWith("-IF"))
+                    else if (s.StartsWith("-IF"))
                         InitImgName = s.Remove(0, 3).Trim();
+
+                    else if (s == "-seamless")
+                        Seamless = true;
                 }
             }
             catch (Exception ex)
