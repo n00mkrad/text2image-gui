@@ -14,6 +14,7 @@ namespace StableDiffusionGui.Data
     {
         public Implementation Implementation { get; set; } = Implementation.StableDiffusion;
         public string[] Prompts { get; set; } = new string[] { "" };
+        public string NegativePrompt { get; set; } = "";
         public int Iterations { get; set; } = 1;
         public Dictionary<string, string> Params { get; set; } = new Dictionary<string, string>();
         public Dictionary<string, string> ProcessedAndRawPrompts { get; set; } = new Dictionary<string, string>();

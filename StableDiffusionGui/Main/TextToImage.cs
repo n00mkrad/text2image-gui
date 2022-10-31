@@ -78,7 +78,7 @@ namespace StableDiffusionGui.Main
                 List<Task> tasks = new List<Task>();
 
                 if (s.Implementation == Implementation.StableDiffusion)
-                    tasks.Add(TtiProcess.RunStableDiffusion(s.Prompts, s.Iterations, s.Params, tempOutDir));
+                    tasks.Add(TtiProcess.RunStableDiffusion(s.Prompts, s.NegativePrompt, s.Iterations, s.Params, tempOutDir));
 
                 if (s.Implementation == Implementation.StableDiffusionOptimized)
                     tasks.Add(TtiProcess.RunStableDiffusionOpt(s.Prompts, s.Iterations, s.Params, tempOutDir));

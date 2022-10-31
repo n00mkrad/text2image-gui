@@ -27,7 +27,7 @@ namespace StableDiffusionGui.Main
 
         private static string _lastInvokeStartupSettings;
 
-        public static async Task RunStableDiffusion(string[] prompts, int iterations, Dictionary<string, string> paramsDict, string outPath)
+        public static async Task RunStableDiffusion(string[] prompts, string negPrompt, int iterations, Dictionary<string, string> paramsDict, string outPath)
         {
             string[] initImgs = paramsDict.Get("initImgs").FromJson<string[]>();
             string embedding = paramsDict.Get("embedding").FromJson<string>();
@@ -51,6 +51,7 @@ namespace StableDiffusionGui.Main
             TtiUtils.WriteModelsYaml(model, vae);
 
             long startSeed = seed;
+            prompts = prompts.Select(p => $"{p.Trim()}{(string.IsNullOrWhiteSpace(negPrompt) ? "" : $" [{negPrompt}]")}").ToArray(); // Apply negative prompt
 
             List<string> cmds = new List<string>();
 

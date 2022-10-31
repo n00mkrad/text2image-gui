@@ -229,7 +229,8 @@ namespace StableDiffusionGui
             }
             catch (Exception ex)
             {
-                Logger.Log($"Failed to load generation settings. This can happen when you try to load prompts from an older version.");
+                Logger.Log($"Failed to load generation settings. This can happen when you try to load prompts from an older version. ({ex.Message})");
+                Logger.Log(ex.StackTrace, true);
             }
 
 
@@ -242,6 +243,7 @@ namespace StableDiffusionGui
             {
                 Implementation = Config.GetBool("checkboxOptimizedSd") ? Implementation.StableDiffusionOptimized : Implementation.StableDiffusion,
                 Prompts = textboxPrompt.Text.SplitIntoLines().Where(x => !string.IsNullOrWhiteSpace(x)).ToArray(),
+                NegativePrompt = textboxPromptNeg.Text.Trim().Replace(Environment.NewLine, " "),
                 Iterations = (int)upDownIterations.Value,
                 Params = new Dictionary<string, string>
                         {
