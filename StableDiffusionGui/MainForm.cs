@@ -242,8 +242,8 @@ namespace StableDiffusionGui
             TtiSettings settings = new TtiSettings
             {
                 Implementation = Config.GetBool("checkboxOptimizedSd") ? Implementation.StableDiffusionOptimized : Implementation.StableDiffusion,
-                Prompts = textboxPrompt.Text.SplitIntoLines().Where(x => !string.IsNullOrWhiteSpace(x)).ToArray(),
-                NegativePrompt = textboxPromptNeg.Text.Trim().Replace(Environment.NewLine, " "),
+                Prompts = textboxPrompt.TextNoPlaceholder.SplitIntoLines().Where(x => !string.IsNullOrWhiteSpace(x)).ToArray(),
+                NegativePrompt = textboxPromptNeg.TextNoPlaceholder.Trim().Replace(Environment.NewLine, " "),
                 Iterations = (int)upDownIterations.Value,
                 Params = new Dictionary<string, string>
                         {

@@ -23,6 +23,11 @@ namespace StableDiffusionGui.Controls
         [Browsable(false)]
         private float _defaultPromptFontSize;
 
+        public  string TextNoPlaceholder
+        {
+            get { return base.Text == Placeholder ? "" : base.Text; }
+        }
+
         protected override void OnVisibleChanged(EventArgs e)
         {
             if (!_init && !DesignMode)
