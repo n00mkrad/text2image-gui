@@ -656,18 +656,9 @@ namespace StableDiffusionGui.Io
             return exts.Select(x => x).Distinct().ToArray();
         }
 
-        public static ImageMetadata GetImageMetadata(string path, string keword = "Dream: ")
+        public static ImageMetadata GetImageMetadata(string path)
         {
-            try
-            {
-                return new ImageMetadata(path);
-            }
-            catch (Exception ex)
-            {
-
-            }
-
-            return new ImageMetadata();
+            return new ImageMetadata(path);
         }
 
         public static void SetImageMetadata(string imgPath, string text, string keyName = "")

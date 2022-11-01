@@ -66,6 +66,7 @@ namespace StableDiffusionGui.Forms
                     btnCopyPrompt.BackColor = btnInitImage.BackColor;
 
                     textboxInfo.Text += $"{n}Prompt:{n}{CurrentMetadata.Prompt}{n}";
+                    textboxInfo.Text += $"{n}Negative Prompt:{n}{CurrentMetadata.NegativePrompt}{n}";
                     textboxInfo.Text += $"{n}Steps:{n}{CurrentMetadata.Steps}{n}";
                     textboxInfo.Text += $"{n}Scale:{n}{CurrentMetadata.Scale.ToStringDot("0.00")}{n}";
                     textboxInfo.Text += $"{n}Seed:{n}{CurrentMetadata.Seed}{n}";

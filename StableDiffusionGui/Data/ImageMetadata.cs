@@ -14,6 +14,7 @@ namespace StableDiffusionGui.Data
         public string Path { get; set; } = "";
         public string ParsedText { get; set; } = ""; 
         public string Prompt { get; set; } = "";
+        public string NegativePrompt { get; set; } = "";
         public int Steps { get; set; } = -1;
         public int BatchSize { get; set; } = 1;
         public Size GeneratedResolution { get; set; }
@@ -89,6 +90,13 @@ namespace StableDiffusionGui.Data
                     paramsText = string.Join(" -", split.Skip(1));
                 }
 
+                if(Prompt.EndsWith("]") && Prompt.Contains(" [") && Prompt.Count(x => x =='[') == 1 && Prompt.Count(x => x == ']') == 1)
+                {
+                    NegativePrompt = Prompt.Split(" [").Last().Split(']')[0];
+                    var split = Prompt.Split(" [");
+                    Prompt = string.Join(" [", split.Reverse().Skip(1).Reverse());
+                }
+
                 GeneratedResolution = new Size();
 
                 bool newFormat = info.Contains("-W ") && info.Contains("-H "); // Check if metadata uses new format with spaces
@@ -143,9 +151,7 @@ namespace StableDiffusionGui.Data
                 var lines = info.SplitIntoLines();
 
                 Prompt = lines[0].Trim();
-                string negPrompt = lines[1].Split("Negative prompt: ")[1];
-                Prompt += $" [{negPrompt}]";
-
+                NegativePrompt = lines[1].Split("Negative prompt: ")[1];
                 Steps = lines[2].Split("Steps: ")[1].Split(',')[0].GetInt();
                 GeneratedResolution = Parser.GetSize(lines[2].Split("Size: ")[1].Split(',')[0]);
                 Scale = lines[2].Split("CFG scale: ")[1].Split(',')[0].GetFloat();

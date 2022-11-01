@@ -185,6 +185,7 @@ namespace StableDiffusionGui
         public void LoadMetadataIntoUi(ImageMetadata meta)
         {
             textboxPrompt.Text = meta.Prompt;
+            textboxPromptNeg.Text = meta.NegativePrompt;
             sliderSteps.ActualValue = meta.Steps;
             sliderScale.ActualValue = (decimal)meta.Scale;
             comboxResW.Text = meta.GeneratedResolution.Width.ToString();
