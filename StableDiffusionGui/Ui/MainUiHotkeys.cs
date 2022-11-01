@@ -32,6 +32,9 @@ namespace StableDiffusionGui.Ui
             if (keys == (Keys.Control | Keys.Add) || keys == (Keys.Control | Keys.Oemplus)) // Hotkey: Toggle prompt field size
                 MainUi.SetPromptFieldSize(MainUi.PromptFieldSizeMode.Toggle, false);
 
+            if (keys == (Keys.Control | Keys.Shift | Keys.Add) || keys == (Keys.Control | Keys.Shift | Keys.Oemplus)) // Hotkey: Toggle negative prompt field size
+                MainUi.SetPromptFieldSize(MainUi.PromptFieldSizeMode.Toggle, true);
+
             if (keys == (Keys.Control | Keys.C)) // Hotkey: Copy current image
                 OsUtils.SetClipboard(Program.MainForm.PictBoxImgViewer.Image);
 
@@ -64,6 +67,9 @@ namespace StableDiffusionGui.Ui
 
             if (keys == Keys.F12) // Hotkey: Open settings
                 new SettingsForm().ShowDialogForm(0.5f);
+
+            if (keys == Keys.Escape) // Hotkey: Remove focus from focused control
+                Program.MainForm.PanelSettings.Focus();
         }
     }
 }
