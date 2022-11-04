@@ -77,7 +77,6 @@ namespace StableDiffusionGui.Main
 
             var modifiedList = MainUi.CurrentInitImgPaths.Where(path => File.Exists(path)).ToList();
             int removed = modifiedList.Count - MainUi.CurrentInitImgPaths.Count;
-            MainUi.CurrentInitImgPaths = modifiedList;
 
             if (MainUi.CurrentInitImgPaths.Count < 1)
             {
@@ -86,6 +85,7 @@ namespace StableDiffusionGui.Main
             }
             else if (removed > 0)
             {
+                MainUi.CurrentInitImgPaths = modifiedList;
                 Logger.Log($"{removed} initialization image were removed because the files no longer exist.");
             }
 
@@ -204,9 +204,9 @@ namespace StableDiffusionGui.Main
             return $"SET PATH={path}{devicesArg}";
         }
 
-        public static bool ModelFilesizeValid (string path, Enums.StableDiffusion.ModelType type = Enums.StableDiffusion.ModelType.Normal)
+        public static bool ModelFilesizeValid(string path, Enums.StableDiffusion.ModelType type = Enums.StableDiffusion.ModelType.Normal)
         {
-            if(!File.Exists(path))
+            if (!File.Exists(path))
                 return false;
 
             return ModelFilesizeValid(new FileInfo(path));
@@ -227,7 +227,7 @@ namespace StableDiffusionGui.Main
             return true;
         }
 
-        public static void ExportPostprocessedImage (string sourceImgPath, string processedImgPath)
+        public static void ExportPostprocessedImage(string sourceImgPath, string processedImgPath)
         {
             string ext = Path.GetExtension(sourceImgPath);
             string movePath = GetUniquePath(Path.ChangeExtension(sourceImgPath, null) + $".fix" + ext);
@@ -242,7 +242,7 @@ namespace StableDiffusionGui.Main
                 ImagePreview.AppendImage(movePath, ImagePreview.ImgShowMode.ShowLast, false);
                 Logger.Log($"Saved post-processed image as '{Path.GetFileName(movePath)}'.");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logger.Log($"Failed to save post-processed image: {ex.Message}");
                 Logger.Log($"From '{processedImgPath}' to '{movePath}' - Trace:\n{ex.StackTrace}", true);
@@ -251,7 +251,7 @@ namespace StableDiffusionGui.Main
             Program.MainForm.SetWorking(Program.BusyState.Standby);
         }
 
-        private static string GetUniquePath (string preferredPath, string separator = "", int maxTries = 1000)
+        private static string GetUniquePath(string preferredPath, string separator = "", int maxTries = 1000)
         {
             if (!File.Exists(preferredPath))
                 return preferredPath;
