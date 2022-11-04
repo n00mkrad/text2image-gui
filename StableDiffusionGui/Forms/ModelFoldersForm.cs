@@ -54,7 +54,7 @@ namespace StableDiffusionGui.Forms
 
         private void SaveDirs()
         {
-            Config.Set($"CustomModelDirs{Enums.StableDiffusion.ModelType.Normal}", Folders.Where(x => x != Paths.GetModelsPath(_modelType)).ToJson());
+            Config.Set($"CustomModelDirs{_modelType}", Folders.Where(x => x != Paths.GetModelsPath(_modelType)).ToJson());
         }
 
         private void FillList()
