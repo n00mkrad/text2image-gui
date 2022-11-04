@@ -372,6 +372,9 @@ namespace StableDiffusionGui
 
         public static string Get(this Dictionary<string, string> dict, string key, bool returnKeyInsteadOfEmptyString = false, bool ignoreCase = false)
         {
+            if (key == null)
+                key = "";
+
             for(int i = 0; i < dict.Count; i++)
             {
                 if (ignoreCase)
@@ -477,6 +480,14 @@ namespace StableDiffusionGui
                 listIn.AddRange(itemsToAdd);
 
             listOut = listIn;
+        }
+
+        public static string NullToEmpty (this string s)
+        {
+            if (s == null)
+                return "";
+            else
+                return s;
         }
     }
 }
