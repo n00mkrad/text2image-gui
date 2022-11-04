@@ -959,7 +959,8 @@ namespace StableDiffusionGui
             this.comboxSampler.Name = "comboxSampler";
             this.comboxSampler.Size = new System.Drawing.Size(200, 21);
             this.comboxSampler.TabIndex = 105;
-            this.toolTip.SetToolTip(this.comboxSampler, "Changes how the image is sampled.\r\nk_euler_a works very well at low step counts.");
+            this.toolTip.SetToolTip(this.comboxSampler, "Changes how the image is sampled.\r\nEuler Ancestral works very well at low step co" +
+        "unts.");
             // 
             // panelRes
             // 
@@ -1709,7 +1710,8 @@ namespace StableDiffusionGui
             this.textboxPromptNeg.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textboxPromptNeg.Size = new System.Drawing.Size(636, 37);
             this.textboxPromptNeg.TabIndex = 1;
-            this.toolTip.SetToolTip(this.textboxPromptNeg, "Text prompt. The AI will try to generate an image matching this description.");
+            this.toolTip.SetToolTip(this.textboxPromptNeg, "Negative text prompt. The AI will try to avoid generating things you describe her" +
+        "e.");
             // 
             // panelPrompt
             // 
