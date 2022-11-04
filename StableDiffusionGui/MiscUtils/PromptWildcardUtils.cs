@@ -1,6 +1,7 @@
 ﻿using StableDiffusionGui.Main;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -20,6 +21,8 @@ namespace StableDiffusionGui.MiscUtils
 
         public static string ApplyWildcards(string prompt, int iterations)
         {
+            bool verboseLog = iterations == 1 || Debugger.IsAttached;
+
             try
             {
                 string[] split = prompt.Split(_identifier);
@@ -72,7 +75,7 @@ namespace StableDiffusionGui.MiscUtils
                         var list = GetWildcardListFromString(wildcardIndex, wildcardName, iterations, sort);
                         string replacement = list.ElementAt(GetWildcardValueIndex(wildcardIndex, wildcardName, true)).Replace(".", " ");
                         split[i] = replacement; // Pick random line, insert back into word array
-                        Logger.Log($"Wildcard '{wildcardName}' => '{replacement}' ({sort})", true);
+                        if(verboseLog) Logger.Log($"Wildcard '{wildcardName}' => '{replacement}' ({sort})", true);
                     }
                     else if (!string.IsNullOrWhiteSpace(wildcardName))
                     {
@@ -83,7 +86,7 @@ namespace StableDiffusionGui.MiscUtils
                             var list = GetWildcardListFromFile(wildcardIndex, wildcardPath, iterations, sort);
                             string replacement = list.ElementAt(GetWildcardValueIndex(wildcardIndex, wildcardName, true));
                             split[i] = replacement + rest; // Pick random line, insert back into word array
-                            Logger.Log($"Wildcard '{wildcardName}' => '{replacement}' ({sort})", true);
+                            if (verboseLog) Logger.Log($"Wildcard '{wildcardName}' => '{replacement}' ({sort})", true);
                         }
                         else
                         {

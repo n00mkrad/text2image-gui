@@ -26,14 +26,14 @@ namespace StableDiffusionGui
         [STAThread]
         static void Main()
         {
-            AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnApplicationExit);
+            Config.Init();
+            Paths.Init();
 
+            AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnApplicationExit);
             Application.ThreadException += new ThreadExceptionEventHandler(Application_ThreadException);
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
 
-            Paths.Init();
-            Config.Init();
             Cleanup();
 
             Application.EnableVisualStyles();
