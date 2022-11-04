@@ -752,17 +752,6 @@ namespace StableDiffusionGui
             new PruneModelsForm().ShowDialogForm();
         }
 
-        private void textboxPrompt_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Control && e.KeyCode == Keys.Back)
-            {
-                e.SuppressKeyPress = true;
-
-                if (textboxPrompt.SelectionStart > 0)
-                    SendKeys.Send("+{LEFT}{DEL}");
-            }
-        }
-
         private void panel1_Click(object sender, EventArgs e)
         {
             panelSettings.Focus();

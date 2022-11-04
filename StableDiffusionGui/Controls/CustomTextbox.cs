@@ -87,5 +87,18 @@ namespace StableDiffusionGui.Controls
 
             base.OnMouseWheel(e);
         }
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            base.OnKeyDown(e);
+
+            if (e.Control && e.KeyCode == Keys.Back)
+            {
+                e.SuppressKeyPress = true;
+
+                if (SelectionStart > 0)
+                    SendKeys.Send("+{LEFT}{DEL}");
+            }
+        }
     }
 }
