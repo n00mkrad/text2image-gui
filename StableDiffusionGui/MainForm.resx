@@ -120,9 +120,14 @@
   <metadata name="toolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>185, 17</value>
   </metadata>
-  <metadata name="toolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>185, 17</value>
+  <metadata name="menuStripOutputImg.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
   </metadata>
+  <data name="checkboxLockSeed.ToolTip" xml:space="preserve">
+    <value>When checked, the seed will not be incremented by 1 after each image.
+This is only useful in specific situations, for example when using randomized wildcards in the prompt.
+Otherwise, you will get the same image over and over.</value>
+  </data>
   <data name="textboxExtraScales.ToolTip" xml:space="preserve">
     <value>Here you can enter additional scales to run per image.
 
@@ -134,9 +139,6 @@ Incremental Syntax:
 10 &gt; 14 : 0.5
 will run scales 10 to 14 with steps of 0.5.</value>
   </data>
-  <metadata name="menuStripOutputImg.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
   <data name="textboxExtraInitStrengths.ToolTip" xml:space="preserve">
     <value>Here you can enter additional strength values to run per image.
 
@@ -147,11 +149,6 @@ will run your chosen scale as well as scale 0.2, 0.4 and 0.6.
 Incremental Syntax:
 0.2 &gt; 0.6 : 0.1
 will run scales 0.2 to 0.6 with steps of 0.1.</value>
-  </data>
-  <data name="checkboxLockSeed.ToolTip" xml:space="preserve">
-    <value>When checked, the seed will not be incremented by 1 after each image.
-This is only useful in specific situations, for example when using randomized wildcards in the prompt.
-Otherwise, you will get the same image over and over.</value>
   </data>
   <metadata name="menuStripLogs.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>275, 17</value>
