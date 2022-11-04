@@ -211,6 +211,7 @@ namespace StableDiffusionGui
         public void LoadTtiSettingsIntoUi(TtiSettings s)
         {
             textboxPrompt.Text = string.Join(Environment.NewLine, s.Prompts);
+            textboxPromptNeg.Text = s.NegativePrompt;
             upDownIterations.Value = s.Iterations;
 
             try

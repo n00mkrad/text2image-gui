@@ -17,7 +17,7 @@ namespace StableDiffusionGui.Main
                 return;
 
             foreach (string prompt in batch.Prompts)
-                History.Add(new TtiSettings() { Prompts = new string[] { prompt }, Implementation = batch.Implementation, Iterations = batch.Iterations, Params = batch.Params });
+                History.Add(new TtiSettings() { Prompts = new string[] { prompt }, NegativePrompt = batch.NegativePrompt, Implementation = batch.Implementation, Iterations = batch.Iterations, Params = batch.Params });
 
             Save();
         }
