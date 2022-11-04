@@ -1,12 +1,13 @@
 ﻿using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
-using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
 using System;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
+
+[assembly: System.Windows.Media.DisableDpiAwareness] // Disable Dpi awareness in the application assembly.
 
 namespace StableDiffusionGui
 {
