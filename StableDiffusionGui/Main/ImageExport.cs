@@ -27,6 +27,13 @@ namespace StableDiffusionGui.Main
 
             await Task.Delay(_loopWaitBeforeStartMs);
 
+            bool inclPrompt = !currTask.SubfoldersPerPrompt && Config.GetBool("checkboxPromptInFilename");
+            bool inclSeed = Config.GetBool("checkboxSeedInFilename");
+            bool inclScale = Config.GetBool("checkboxScaleInFilename");
+            bool inclSampler = Config.GetBool("checkboxSamplerInFilename");
+            bool inclModel = Config.GetBool("checkboxModelInFilename");
+            bool sessionDir = Config.GetBool("checkboxFolderPerSession");
+
             while (!TextToImage.Canceled)
             {
                 try
@@ -53,7 +60,6 @@ namespace StableDiffusionGui.Main
                         images = images.Where(img => log.Contains(img.Name)).ToList(); // Only take image if it was written into SD log. Avoids copying too early (post-proc etc)
                     }
 
-                    bool sessionDir = Config.GetBool("checkboxFolderPerSession");
                     Dictionary<string, string> imageDirMap = new Dictionary<string, string>();
 
                     if (currTask.SubfoldersPerPrompt)
@@ -72,12 +78,6 @@ namespace StableDiffusionGui.Main
                     }
 
                     List<string> renamedImgPaths = new List<string>();
-
-                    bool inclPrompt = !currTask.SubfoldersPerPrompt && Config.GetBool("checkboxPromptInFilename");
-                    bool inclSeed = Config.GetBool("checkboxSeedInFilename");
-                    bool inclScale = Config.GetBool("checkboxScaleInFilename");
-                    bool inclSampler = Config.GetBool("checkboxSamplerInFilename");
-                    bool inclModel = Config.GetBool("checkboxModelInFilename");
 
                     for (int i = 0; i < images.Count; i++)
                     {
