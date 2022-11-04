@@ -107,12 +107,15 @@ namespace StableDiffusionGui.Controls
                 return;
 
             float value;
-            bool parseSuccess = float.TryParse(ValueBox.Text.Trim(), NumberStyles.Any, CultureInfo.InvariantCulture, out value);
+            bool parseSuccess = float.TryParse(ValueBox.Text.Trim().Replace(",", "."), NumberStyles.Any, CultureInfo.InvariantCulture, out value);
 
             bool rangeValid = value >= (float)ActualMinimum && value <= (float)ActualMaximum;
             bool stepValid = value % (float)ValueStep == 0;
 
-            if (parseSuccess && rangeValid && stepValid)
+            if (!stepValid)
+                value = (value / (float)ValueStep).RoundToInt() * (float)ValueStep; // Lock into steps
+
+            if (parseSuccess && rangeValid)
                 ActualValue = (decimal)value;
             else
                 UpdateValueBox();
