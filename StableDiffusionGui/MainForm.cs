@@ -47,6 +47,7 @@ namespace StableDiffusionGui
         public CustomSlider SliderScale { get { return sliderScale; } }
         public ComboBox ComboxResW { get { return comboxResW; } }
         public ComboBox ComboxResH { get { return comboxResH; } }
+        public ToolTip ToolTip { get { return toolTip; } }
 
         #endregion
 

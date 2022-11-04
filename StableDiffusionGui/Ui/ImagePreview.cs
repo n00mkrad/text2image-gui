@@ -99,7 +99,7 @@ namespace StableDiffusionGui.Ui
 
             Program.MainForm.LabelImgInfo.Text = $"Image {_currIndex + 1}/{_currentImages.Length} {(infos.Count > 0 ? $" - {string.Join(" - ", infos)}" : "")}";
             Program.MainForm.LabelImgPrompt.Text = !string.IsNullOrWhiteSpace(meta.Prompt) ? meta.Prompt : "No prompt to show.";
-
+            Program.MainForm.ToolTip.SetToolTip(Program.MainForm.LabelImgPrompt, $"{Program.MainForm.LabelImgPrompt.Text}\n\nClick to copy.");
         }
 
         public static void Clear()
