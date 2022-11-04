@@ -37,6 +37,7 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (form
 - **Wildcards:** Randomly fill in words or phrases into the prompt.
   - Inline: `photo of a ~car,tree,dog~`.
   - From File: `photo of a ~objects` for loading texts from `objects.txt` in your `Wildcards` folder in the SD GUI root folder.
+  - Order: Use `~` for random/shuffled, `~~` for unchanged order, or `~~~` for sorted (A-Z) mode
 
 
 
