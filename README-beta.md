@@ -165,7 +165,7 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (form
 - **CTRL+D:** Copy currently viewed image to favorites
 - **CTRL+V:** Paste image (If clipboard contains a bitmap)
 - **CTRL+Q:** Quit
-- **CTRL+Scroll:** Change font size (only works while the text field is being used)
+- **CTRL+Scroll:** Change textbox font size (only works while the textbox is being used)
 - **F1:** Open Help (Currently links to GitHub Readme)
 - **F12:** Open Settings
 - **ESC:** Remove focus from currently focused GUI element (e.g. get out of the prompt textbox)
