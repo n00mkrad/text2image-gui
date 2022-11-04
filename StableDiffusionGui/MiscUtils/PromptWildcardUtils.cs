@@ -31,6 +31,9 @@ namespace StableDiffusionGui.MiscUtils
                     SortMode sort = SortMode.Shuffle;
                     int identifierIndex = identifierIndexes[i - 1];
 
+                    if ((identifierIndex + 1) >= prompt.Length)
+                        break;
+
                     if ((identifierIndex + 1) <= prompt.Length && prompt[identifierIndex + 1] == _identifier)
                     {
                         sort = SortMode.Sequential;
