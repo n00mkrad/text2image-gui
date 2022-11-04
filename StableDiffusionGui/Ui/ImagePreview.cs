@@ -95,7 +95,7 @@ namespace StableDiffusionGui.Ui
                 infos.Add($"Strength {meta.InitStrength.ToStringDot()}");
 
             if (!string.IsNullOrWhiteSpace(meta.Sampler))
-                infos.Add($"{meta.Sampler}");
+                infos.Add(MainUi.UiStrings.Get(meta.Sampler, true, true));
 
             Program.MainForm.LabelImgInfo.Text = $"Image {_currIndex + 1}/{_currentImages.Length} {(infos.Count > 0 ? $" - {string.Join(" - ", infos)}" : "")}";
             Program.MainForm.LabelImgPrompt.Text = !string.IsNullOrWhiteSpace(meta.Prompt) ? meta.Prompt : "No prompt to show.";
