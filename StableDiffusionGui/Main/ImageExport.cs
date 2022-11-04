@@ -61,7 +61,7 @@ namespace StableDiffusionGui.Main
                         foreach (var img in images)
                         {
                             var imgTimeSinceLastWrite = DateTime.Now - img.LastWriteTime;
-                            string prompt = IoUtils.GetImageMetadata(img.FullName).Prompt;
+                            string prompt = IoUtils.GetImageMetadata(img.FullName).CombinedPrompt;
                             int pathBudget = 255 - img.Directory.FullName.Length - 65;
                             string unixTimestamp = ((long)(DateTime.Now - new DateTime(1970, 1, 1)).TotalMilliseconds).ToString();
                             prompt = currTask.IgnoreWildcardsForFilenames && currSettings.ProcessedAndRawPrompts.ContainsKey(prompt) ? currSettings.ProcessedAndRawPrompts[prompt] : prompt;

@@ -15,6 +15,7 @@ namespace StableDiffusionGui.Data
         public string ParsedText { get; set; } = ""; 
         public string Prompt { get; set; } = "";
         public string NegativePrompt { get; set; } = "";
+        public string CombinedPrompt { get { return FormatUtils.GetCombinedPrompt(Prompt, NegativePrompt); } }
         public int Steps { get; set; } = -1;
         public int BatchSize { get; set; } = 1;
         public Size GeneratedResolution { get; set; }

@@ -289,5 +289,10 @@ namespace StableDiffusionGui.MiscUtils
             string asciiString = Encoding.ASCII.GetString(Encoding.ASCII.GetBytes(originalString));
             return originalString.ToList().Where(c => !asciiString.Contains(c)).ToList();
         }
+
+        public static string GetCombinedPrompt (string prompt, string negPrompt)
+        {
+            return $"{prompt.Trim()}{(string.IsNullOrWhiteSpace(negPrompt) ? "" : $" [{negPrompt.Trim()}]")}";
+        }
     }
 }

@@ -51,7 +51,7 @@ namespace StableDiffusionGui.Main
             TtiUtils.WriteModelsYaml(model, vae);
 
             long startSeed = seed;
-            prompts = prompts.Select(p => $"{p.Trim()}{(string.IsNullOrWhiteSpace(negPrompt) ? "" : $" [{negPrompt}]")}").ToArray(); // Apply negative prompt
+            prompts = prompts.Select(p => FormatUtils.GetCombinedPrompt(p, negPrompt)).ToArray(); // Apply negative prompt
 
             List<string> cmds = new List<string>();
 
