@@ -203,9 +203,12 @@ namespace StableDiffusionGui
             UpdateInitImgAndEmbeddingUi();
         }
 
-        public void LoadTtiSettingsIntoUi(string[] prompts)
+        public void LoadTtiSettingsIntoUi(string[] prompts, string negPrompt = "")
         {
             textboxPrompt.Text = string.Join(Environment.NewLine, prompts);
+
+            if (!string.IsNullOrWhiteSpace(negPrompt))
+                textboxPromptNeg.Text = negPrompt;
         }
 
         public void LoadTtiSettingsIntoUi(TtiSettings s)

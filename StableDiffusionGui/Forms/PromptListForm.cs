@@ -121,9 +121,14 @@ namespace StableDiffusionGui.Forms
             if (e.Button == MouseButtons.Right)
             {
                 var focusedItem = promptListView.FocusedItem;
+                bool multiSelect = promptListView.CheckedItems.Count > 1 || promptListView.SelectedItems.Count > 1;
 
                 if (focusedItem != null && focusedItem.Bounds.Contains(e.Location))
                 {
+                    loadPromptIntoGUIToolStripMenuItem.Visible = !multiSelect;
+                    loadPromptAndSettingsIntoGUIToolStripMenuItem.Visible = !multiSelect;
+                    copyPromptToolStripMenuItem.Visible = !multiSelect;
+
                     if (_promptListMode == ListMode.History)
                         menuStripPromptHistory.Show(Cursor.Position);
                 }
@@ -133,7 +138,7 @@ namespace StableDiffusionGui.Forms
         private void loadPromptIntoGUIToolStripMenuItem_Click(object sender, EventArgs e)
         {
             TtiSettings s = (TtiSettings)promptListView.FocusedItem.Tag;
-            Program.MainForm.LoadTtiSettingsIntoUi(s.Prompts);
+            Program.MainForm.LoadTtiSettingsIntoUi(s.Prompts, s.NegativePrompt);
             Close();
         }
 
@@ -181,6 +186,11 @@ namespace StableDiffusionGui.Forms
         {
             TtiSettings s = (TtiSettings)promptListView.FocusedItem.Tag;
             OsUtils.SetClipboard(s.Prompts.FirstOrDefault());
+        }
+
+        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            deleteSelectedToolStripMenuItem_Click(null, null);
         }
     }
 }

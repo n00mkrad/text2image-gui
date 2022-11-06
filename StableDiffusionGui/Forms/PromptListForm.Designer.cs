@@ -42,12 +42,13 @@
             this.menuStripPromptHistory = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.loadPromptIntoGUIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadPromptAndSettingsIntoGUIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyPromptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelEnableHistory = new System.Windows.Forms.Panel();
             this.checkboxEnableHistory = new System.Windows.Forms.CheckBox();
             this.panelFilter = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.textboxFilter = new System.Windows.Forms.TextBox();
-            this.copyPromptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStripDelete.SuspendLayout();
             this.menuStripPromptHistory.SuspendLayout();
             this.panelEnableHistory.SuspendLayout();
@@ -157,9 +158,10 @@
             this.menuStripPromptHistory.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.loadPromptIntoGUIToolStripMenuItem,
             this.loadPromptAndSettingsIntoGUIToolStripMenuItem,
-            this.copyPromptToolStripMenuItem});
+            this.copyPromptToolStripMenuItem,
+            this.deleteToolStripMenuItem});
             this.menuStripPromptHistory.Name = "menuStripPromptHistory";
-            this.menuStripPromptHistory.Size = new System.Drawing.Size(260, 92);
+            this.menuStripPromptHistory.Size = new System.Drawing.Size(260, 114);
             // 
             // loadPromptIntoGUIToolStripMenuItem
             // 
@@ -174,6 +176,13 @@
             this.loadPromptAndSettingsIntoGUIToolStripMenuItem.Size = new System.Drawing.Size(259, 22);
             this.loadPromptAndSettingsIntoGUIToolStripMenuItem.Text = "Load Prompt And Settings Into GUI";
             this.loadPromptAndSettingsIntoGUIToolStripMenuItem.Click += new System.EventHandler(this.loadPromptAndSettingsIntoGUIToolStripMenuItem_Click);
+            // 
+            // copyPromptToolStripMenuItem
+            // 
+            this.copyPromptToolStripMenuItem.Name = "copyPromptToolStripMenuItem";
+            this.copyPromptToolStripMenuItem.Size = new System.Drawing.Size(259, 22);
+            this.copyPromptToolStripMenuItem.Text = "Copy Prompt";
+            this.copyPromptToolStripMenuItem.Click += new System.EventHandler(this.copyPromptToolStripMenuItem_Click);
             // 
             // panelEnableHistory
             // 
@@ -230,12 +239,12 @@
             this.textboxFilter.TabIndex = 5;
             this.textboxFilter.TextChanged += new System.EventHandler(this.textboxFilter_TextChanged);
             // 
-            // copyPromptToolStripMenuItem
+            // deleteToolStripMenuItem
             // 
-            this.copyPromptToolStripMenuItem.Name = "copyPromptToolStripMenuItem";
-            this.copyPromptToolStripMenuItem.Size = new System.Drawing.Size(259, 22);
-            this.copyPromptToolStripMenuItem.Text = "Copy Prompt";
-            this.copyPromptToolStripMenuItem.Click += new System.EventHandler(this.copyPromptToolStripMenuItem_Click);
+            this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(259, 22);
+            this.deleteToolStripMenuItem.Text = "Delete";
+            this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
             // 
             // PromptListForm
             // 
@@ -289,5 +298,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textboxFilter;
         private System.Windows.Forms.ToolStripMenuItem copyPromptToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
     }
 }
