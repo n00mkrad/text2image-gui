@@ -63,14 +63,15 @@ namespace StableDiffusionGui.Main
 
                 for (int i = 0; i < iterations; i++)
                 {
+                    string promptProcessed = PromptWildcardUtils.ApplyWildcards(prompt, iterations);
+                    TextToImage.CurrentTaskSettings.ProcessedAndRawPrompts[FormatUtils.ConvertTextEncoding(promptProcessed)] = prompt; // Save the prompt we stored plus the processed (wildcards etc.) one for later reference
+
                     foreach (float scale in scales)
                     {
                         if (initImages == null) // No init image(s)
                         {
                             List<string> args = new List<string>();
-                            string p = PromptWildcardUtils.ApplyWildcards(prompt, iterations);
-                            TextToImage.CurrentTaskSettings.ProcessedAndRawPrompts[FormatUtils.ConvertTextEncoding(p)] = prompt; // Save the prompt we stored plus the processed (wildcards etc.) one for later reference
-                            args.Add(p.Wrap());
+                            args.Add(promptProcessed.Wrap());
                             args.Add($"-n 1");
                             args.Add($"-s {steps}");
                             args.Add($"-C {scale.ToStringDot()}");
@@ -94,9 +95,7 @@ namespace StableDiffusionGui.Main
                                 foreach (float strength in initStrengths)
                                 {
                                     List<string> args = new List<string>();
-                                    string p = PromptWildcardUtils.ApplyWildcards(prompt, iterations);
-                                    TextToImage.CurrentTaskSettings.ProcessedAndRawPrompts[FormatUtils.ConvertTextEncoding(p)] = prompt; // Save the prompt we stored plus the processed (wildcards etc.) one for later reference
-                                    args.Add(p.Wrap());
+                                    args.Add(promptProcessed.Wrap());
                                     args.Add($"--init_img {initImg.Wrap()} --strength {strength.ToStringDot("0.###")}");
                                     args.Add($"-n 1");
                                     args.Add($"-s {steps}");
