@@ -60,8 +60,9 @@ namespace StableDiffusionGui.Forms
         private void LoadPromptHistory(string filter = "")
         {
             promptListView.Items.Clear();
-            var items = Filter(PromptHistory.History, filter).Select(x => new ListViewItem() { Text = x.ToString(), Tag = x }).Reverse();
+            var items = Filter(PromptHistory.History, filter).Select(settings => new ListViewItem() { Text = settings.ToString(), Tag = settings }).Reverse();
             promptListView.Items.AddRange(items.ToArray());
+            LoadTooltips();
         }
 
         private void LoadQueue(string filter = "")
@@ -69,6 +70,20 @@ namespace StableDiffusionGui.Forms
             promptListView.Items.Clear();
             var items = Filter(MainUi.Queue, filter).Select(x => new ListViewItem() { Text = x.ToString(), Tag = x }).Reverse();
             promptListView.Items.AddRange(items.ToArray());
+            LoadTooltips();
+        }
+
+        private void LoadTooltips ()
+        {
+            foreach(ListViewItem item in promptListView.Items)
+            {
+                TtiSettings s = (TtiSettings)item.Tag;
+
+                if (s.Prompts.FirstOrDefault().Length < 85 && string.IsNullOrWhiteSpace(s.NegativePrompt)) // Do not add tooltips where full prompt is already visible in list
+                    continue;
+
+                item.ToolTipText = $"Prompt:\n{s.Prompts.FirstOrDefault()}{(string.IsNullOrWhiteSpace(s.NegativePrompt) ? "" : $"\n\nNegative Prompt:\n{s.NegativePrompt}")}";
+            }
         }
 
         private IEnumerable<TtiSettings> Filter (IEnumerable<TtiSettings> ttiSettings, string text)
