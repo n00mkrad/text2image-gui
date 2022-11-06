@@ -59,7 +59,7 @@ namespace StableDiffusionGui.Ui
             Show();
         }
 
-        public static void AppendImage (string imagePath, ImgShowMode showMode, bool ignoreTimeout = false)
+        public static void AppendImage(string imagePath, ImgShowMode showMode, bool ignoreTimeout = false)
         {
             List<string> newImgList = new List<string>(_currentImages);
             newImgList.Add(imagePath);
@@ -132,13 +132,15 @@ namespace StableDiffusionGui.Ui
             Show();
         }
 
-        public static void CopyCurrentToFavs ()
+        public static void CopyCurrentToFavs()
         {
             string dir = Directory.CreateDirectory(Config.Get("textboxFavsPath")).FullName;
-            File.Copy(CurrentImagePath, Path.Combine(dir, Path.GetFileName(CurrentImagePath)), true);
+
+            if (File.Exists(CurrentImagePath))
+                File.Copy(CurrentImagePath, Path.Combine(dir, Path.GetFileName(CurrentImagePath)), true);
         }
 
-        public static void OpenCurrent ()
+        public static void OpenCurrent()
         {
             Process.Start(CurrentImagePath);
         }

@@ -101,7 +101,7 @@ namespace StableDiffusionGui
         {
             Clipboard.SetText(text);
             Logger.Log($"Unhandled Error:\n{text}", true);
-            text += "\n\nThe error has been copied to the clipboard. Please inform the developer about this.";
+            text += "\n\n\nThe error has been copied to the clipboard. Please inform the developer about this.";
             UiUtils.ShowMessageBox(text, UiUtils.MessageType.Error);
         }
     }

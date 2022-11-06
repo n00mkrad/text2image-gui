@@ -338,7 +338,11 @@ namespace StableDiffusionGui.Ui
 
         public static void SetSettingsVertScrollbar ()
         {
-            Program.MainForm.PanelSettings.AutoScrollMinSize = new Size(Program.MainForm.PanelSettings.AutoScrollMinSize.Width, Program.MainForm.PanelSettings.Height + 1);
+            try
+            {
+                Program.MainForm.PanelSettings.AutoScrollMinSize = new Size(Program.MainForm.PanelSettings.AutoScrollMinSize.Width, Program.MainForm.PanelSettings.Height + 1);
+            }
+            catch { }
         }
     }
 }
