@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace StableDiffusionGui.Ui
 {
@@ -157,8 +158,16 @@ namespace StableDiffusionGui.Ui
             Move(true);
         }
 
-        public static void DeleteAll()
+        public static void DeleteAll(bool askForConfirmation = true)
         {
+            if (askForConfirmation)
+            {
+                DialogResult dialogResult = UiUtils.ShowMessageBox($"Are you sure you want to delete {_currentImages.Length} generated images?", "Are you sure?", MessageBoxButtons.YesNo);
+
+                if (dialogResult != DialogResult.Yes)
+                    return;
+            }
+
             var parentDirs = _currentImages.Select(x => x.GetParentDirOfFile());
 
             _currentImages.ToList().ForEach(x => IoUtils.TryDeleteIfExists(x));

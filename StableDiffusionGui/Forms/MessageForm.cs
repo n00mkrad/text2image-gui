@@ -120,9 +120,21 @@ namespace Nmkoder.Forms
 
         private void MessageForm_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Escape)
+            if (_btns == MessageBoxButtons.OK)
             {
-                if (_btns == MessageBoxButtons.OK)
+                if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Escape)
+                    btn1_Click(null, null);
+            }
+            else if (_btns == MessageBoxButtons.YesNo)
+            {
+                if (e.KeyCode == Keys.Enter)
+                    btn2_Click(null, null);
+            }
+            else if (_btns == MessageBoxButtons.YesNoCancel)
+            {
+                if (e.KeyCode == Keys.Enter)
+                    btn3_Click(null, null);
+                else if (e.KeyCode == Keys.Escape)
                     btn1_Click(null, null);
             }
         }
