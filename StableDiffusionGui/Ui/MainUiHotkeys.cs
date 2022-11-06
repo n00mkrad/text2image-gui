@@ -12,12 +12,14 @@ namespace StableDiffusionGui.Ui
 {
     internal class MainUiHotkeys
     {
+        private static bool _anyTextboxFocused { get { return Program.MainForm.GetControls().Where(control => control.Focused && control is TextBox).Any(); } }
+
         public static void Handle (Keys keys)
         {
             if (keys == (Keys.Control | Keys.Q)) // Hotkey: Quit
                 Program.MainForm.Close();
 
-            if (keys == (Keys.Control | Keys.V)) // Hotkey: Paste image
+            if (keys == (Keys.Control | Keys.V) && !_anyTextboxFocused) // Hotkey: Paste image
                 MainUi.HandlePaste();
 
             if (keys == (Keys.Control | Keys.G)) // Hotkey: Generate/Cancel
@@ -35,7 +37,7 @@ namespace StableDiffusionGui.Ui
             if (keys == (Keys.Control | Keys.Shift | Keys.Add) || keys == (Keys.Control | Keys.Shift | Keys.Oemplus)) // Hotkey: Toggle negative prompt field size
                 MainUi.SetPromptFieldSize(MainUi.PromptFieldSizeMode.Toggle, true);
 
-            if (keys == (Keys.Control | Keys.C)) // Hotkey: Copy current image
+            if (keys == (Keys.Control | Keys.C) && !_anyTextboxFocused) // Hotkey: Copy current image
                 OsUtils.SetClipboard(Program.MainForm.PictBoxImgViewer.Image);
 
             if (keys == (Keys.Control | Keys.O)) // Hotkey: Open current image
