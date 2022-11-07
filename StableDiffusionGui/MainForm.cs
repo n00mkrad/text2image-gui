@@ -39,6 +39,7 @@ namespace StableDiffusionGui
         public PictureBox PictBoxImgViewer { get { return pictBoxImgViewer; } }
         public Label LabelImgInfo { get { return labelImgInfo; } }
         public Label LabelImgPrompt { get { return labelImgPrompt; } }
+        public Label LabelImgPromptNeg { get { return labelImgPromptNeg; } }
         public Button BtnExpandPromptField { get { return btnExpandPromptField; } }
         public Button BtnExpandPromptNegField { get { return btnExpandPromptNegField; } }
         public Panel PanelSettings { get { return panelSettings; } }
@@ -788,6 +789,11 @@ namespace StableDiffusionGui
         private void labelImgPrompt_Click(object sender, EventArgs e)
         {
             OsUtils.SetClipboard(ImagePreview.CurrentImageMetadata.Prompt);
+        }
+
+        private void labelImgPromptNeg_Click(object sender, EventArgs e)
+        {
+            OsUtils.SetClipboard(ImagePreview.CurrentImageMetadata.NegativePrompt);
         }
 
         private void openCmdInCondaEnvironmentToolStripMenuItem_Click(object sender, EventArgs e)

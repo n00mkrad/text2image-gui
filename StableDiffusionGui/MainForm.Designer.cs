@@ -64,28 +64,6 @@ namespace StableDiffusionGui
             this.patreonBtn = new System.Windows.Forms.Button();
             this.paypalBtn = new System.Windows.Forms.Button();
             this.labelImgPrompt = new System.Windows.Forms.Label();
-            this.checkboxSeamless = new System.Windows.Forms.CheckBox();
-            this.comboxSampler = new System.Windows.Forms.ComboBox();
-            this.checkboxHiresFix = new System.Windows.Forms.CheckBox();
-            this.checkboxLockSeed = new System.Windows.Forms.CheckBox();
-            this.btnSeedResetToRandom = new HTAlt.WinForms.HTButton();
-            this.btnSeedUsePrevious = new HTAlt.WinForms.HTButton();
-            this.upDownSeed = new System.Windows.Forms.NumericUpDown();
-            this.sliderScale = new StableDiffusionGui.Controls.CustomSlider();
-            this.textboxSliderScale = new System.Windows.Forms.TextBox();
-            this.textboxExtraScales = new System.Windows.Forms.TextBox();
-            this.upDownIterations = new System.Windows.Forms.NumericUpDown();
-            this.btnResetMask = new HTAlt.WinForms.HTButton();
-            this.checkboxInpainting = new System.Windows.Forms.CheckBox();
-            this.textboxExtraInitStrengths = new System.Windows.Forms.TextBox();
-            this.sliderInitStrength = new StableDiffusionGui.Controls.CustomSlider();
-            this.textboxSliderInitStrength = new System.Windows.Forms.TextBox();
-            this.btnInitImgBrowse = new HTAlt.WinForms.HTButton();
-            this.btnEmbeddingBrowse = new HTAlt.WinForms.HTButton();
-            this.btnExpandPromptNegField = new System.Windows.Forms.Button();
-            this.textboxPromptNeg = new StableDiffusionGui.Controls.CustomTextbox();
-            this.textboxPrompt = new StableDiffusionGui.Controls.CustomTextbox();
-            this.btnExpandPromptField = new System.Windows.Forms.Button();
             this.menuStripLogs = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.progressBarImg = new HTAlt.WinForms.HTProgressBar();
             this.menuStripRunQueue = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -109,24 +87,35 @@ namespace StableDiffusionGui
             this.upscaleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.faceRestorationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.applyAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.labelImgPromptNeg = new System.Windows.Forms.Label();
             this.panelSettings = new StableDiffusionGui.Controls.CustomPanel();
             this.panelDebugSendStdin = new System.Windows.Forms.Panel();
             this.label12 = new System.Windows.Forms.Label();
             this.textboxCliTest = new System.Windows.Forms.TextBox();
             this.panelSeamless = new System.Windows.Forms.Panel();
+            this.checkboxSeamless = new System.Windows.Forms.CheckBox();
             this.label8 = new System.Windows.Forms.Label();
             this.panelSampler = new System.Windows.Forms.Panel();
             this.label7 = new System.Windows.Forms.Label();
+            this.comboxSampler = new System.Windows.Forms.ComboBox();
             this.panelRes = new System.Windows.Forms.Panel();
+            this.checkboxHiresFix = new System.Windows.Forms.CheckBox();
             this.comboxResH = new System.Windows.Forms.ComboBox();
             this.comboxResW = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.panelSeed = new System.Windows.Forms.Panel();
+            this.checkboxLockSeed = new System.Windows.Forms.CheckBox();
+            this.btnSeedResetToRandom = new HTAlt.WinForms.HTButton();
+            this.btnSeedUsePrevious = new HTAlt.WinForms.HTButton();
             this.label5 = new System.Windows.Forms.Label();
+            this.upDownSeed = new System.Windows.Forms.NumericUpDown();
             this.panelScale = new System.Windows.Forms.Panel();
             this.label4 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.textboxSliderScale = new System.Windows.Forms.TextBox();
+            this.sliderScale = new StableDiffusionGui.Controls.CustomSlider();
+            this.textboxExtraScales = new System.Windows.Forms.TextBox();
             this.panelSteps = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
@@ -134,20 +123,30 @@ namespace StableDiffusionGui
             this.sliderSteps = new StableDiffusionGui.Controls.CustomSlider();
             this.panelIterations = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
+            this.upDownIterations = new System.Windows.Forms.NumericUpDown();
             this.panelInpainting = new System.Windows.Forms.Panel();
+            this.btnResetMask = new HTAlt.WinForms.HTButton();
+            this.checkboxInpainting = new System.Windows.Forms.CheckBox();
             this.label10 = new System.Windows.Forms.Label();
             this.panelInitImgStrength = new System.Windows.Forms.Panel();
             this.label11 = new System.Windows.Forms.Label();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+            this.textboxExtraInitStrengths = new System.Windows.Forms.TextBox();
+            this.textboxSliderInitStrength = new System.Windows.Forms.TextBox();
+            this.sliderInitStrength = new StableDiffusionGui.Controls.CustomSlider();
             this.panelAiInputs = new System.Windows.Forms.Panel();
             this.labelCurrentConcept = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.labelCurrentImage = new System.Windows.Forms.Label();
+            this.btnInitImgBrowse = new HTAlt.WinForms.HTButton();
+            this.btnEmbeddingBrowse = new HTAlt.WinForms.HTButton();
             this.panelPromptNeg = new System.Windows.Forms.Panel();
+            this.btnExpandPromptNegField = new System.Windows.Forms.Button();
+            this.textboxPromptNeg = new StableDiffusionGui.Controls.CustomTextbox();
             this.panelPrompt = new System.Windows.Forms.Panel();
+            this.textboxPrompt = new StableDiffusionGui.Controls.CustomTextbox();
+            this.btnExpandPromptField = new System.Windows.Forms.Button();
             this.menuStripOutputImg.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.upDownSeed)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
             this.menuStripRunQueue.SuspendLayout();
             this.menuStripAddToQueue.SuspendLayout();
             this.menuStripDeleteImages.SuspendLayout();
@@ -160,11 +159,13 @@ namespace StableDiffusionGui
             this.panelSampler.SuspendLayout();
             this.panelRes.SuspendLayout();
             this.panelSeed.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.upDownSeed)).BeginInit();
             this.panelScale.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.panelSteps.SuspendLayout();
             this.tableLayoutPanel6.SuspendLayout();
             this.panelIterations.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
             this.panelInpainting.SuspendLayout();
             this.panelInitImgStrength.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
@@ -180,7 +181,7 @@ namespace StableDiffusionGui
             this.runBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.runBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.25F);
             this.runBtn.ForeColor = System.Drawing.Color.White;
-            this.runBtn.Location = new System.Drawing.Point(680, 614);
+            this.runBtn.Location = new System.Drawing.Point(680, 632);
             this.runBtn.Name = "runBtn";
             this.runBtn.Size = new System.Drawing.Size(120, 40);
             this.runBtn.TabIndex = 100;
@@ -207,7 +208,7 @@ namespace StableDiffusionGui
             this.logBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
             this.logBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.logBox.ForeColor = System.Drawing.Color.Silver;
-            this.logBox.Location = new System.Drawing.Point(12, 596);
+            this.logBox.Location = new System.Drawing.Point(12, 614);
             this.logBox.Multiline = true;
             this.logBox.Name = "logBox";
             this.logBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -220,7 +221,7 @@ namespace StableDiffusionGui
             this.labelImgInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.labelImgInfo.AutoSize = true;
             this.labelImgInfo.ForeColor = System.Drawing.Color.Silver;
-            this.labelImgInfo.Location = new System.Drawing.Point(679, 595);
+            this.labelImgInfo.Location = new System.Drawing.Point(679, 613);
             this.labelImgInfo.Name = "labelImgInfo";
             this.labelImgInfo.Size = new System.Drawing.Size(100, 13);
             this.labelImgInfo.TabIndex = 81;
@@ -265,7 +266,7 @@ namespace StableDiffusionGui
             | System.Windows.Forms.AnchorStyles.Right)));
             this.progressBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.progressBar.BorderThickness = 0;
-            this.progressBar.Location = new System.Drawing.Point(680, 663);
+            this.progressBar.Location = new System.Drawing.Point(680, 681);
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(512, 15);
             this.progressBar.TabIndex = 100;
@@ -367,7 +368,7 @@ namespace StableDiffusionGui
             this.btnDeleteBatch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnDeleteBatch.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnDeleteBatch.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnDeleteBatch.Location = new System.Drawing.Point(1014, 614);
+            this.btnDeleteBatch.Location = new System.Drawing.Point(1014, 632);
             this.btnDeleteBatch.Name = "btnDeleteBatch";
             this.btnDeleteBatch.Size = new System.Drawing.Size(40, 40);
             this.btnDeleteBatch.TabIndex = 114;
@@ -385,7 +386,7 @@ namespace StableDiffusionGui
             this.btnPromptHistory.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnPromptHistory.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnPromptHistory.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnPromptHistory.Location = new System.Drawing.Point(852, 614);
+            this.btnPromptHistory.Location = new System.Drawing.Point(852, 632);
             this.btnPromptHistory.Name = "btnPromptHistory";
             this.btnPromptHistory.Size = new System.Drawing.Size(40, 40);
             this.btnPromptHistory.TabIndex = 112;
@@ -403,7 +404,7 @@ namespace StableDiffusionGui
             this.btnQueue.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnQueue.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnQueue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnQueue.Location = new System.Drawing.Point(806, 614);
+            this.btnQueue.Location = new System.Drawing.Point(806, 632);
             this.btnQueue.Name = "btnQueue";
             this.btnQueue.Size = new System.Drawing.Size(40, 40);
             this.btnQueue.TabIndex = 111;
@@ -494,7 +495,7 @@ namespace StableDiffusionGui
             this.btnOpenOutFolder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnOpenOutFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnOpenOutFolder.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnOpenOutFolder.Location = new System.Drawing.Point(1060, 614);
+            this.btnOpenOutFolder.Location = new System.Drawing.Point(1060, 632);
             this.btnOpenOutFolder.Name = "btnOpenOutFolder";
             this.btnOpenOutFolder.Size = new System.Drawing.Size(40, 40);
             this.btnOpenOutFolder.TabIndex = 94;
@@ -512,7 +513,7 @@ namespace StableDiffusionGui
             this.btnPrevImg.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnPrevImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnPrevImg.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnPrevImg.Location = new System.Drawing.Point(1106, 614);
+            this.btnPrevImg.Location = new System.Drawing.Point(1106, 632);
             this.btnPrevImg.Name = "btnPrevImg";
             this.btnPrevImg.Size = new System.Drawing.Size(40, 40);
             this.btnPrevImg.TabIndex = 82;
@@ -530,7 +531,7 @@ namespace StableDiffusionGui
             this.btnNextImg.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnNextImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnNextImg.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnNextImg.Location = new System.Drawing.Point(1152, 614);
+            this.btnNextImg.Location = new System.Drawing.Point(1152, 632);
             this.btnNextImg.Name = "btnNextImg";
             this.btnNextImg.Size = new System.Drawing.Size(40, 40);
             this.btnNextImg.TabIndex = 80;
@@ -625,453 +626,6 @@ namespace StableDiffusionGui
             this.toolTip.SetToolTip(this.labelImgPrompt, "Shows the prompt of the displayed image. Click to copy.");
             this.labelImgPrompt.Click += new System.EventHandler(this.labelImgPrompt_Click);
             // 
-            // checkboxSeamless
-            // 
-            this.checkboxSeamless.AutoSize = true;
-            this.checkboxSeamless.ForeColor = System.Drawing.Color.White;
-            this.checkboxSeamless.Location = new System.Drawing.Point(233, 10);
-            this.checkboxSeamless.Name = "checkboxSeamless";
-            this.checkboxSeamless.Size = new System.Drawing.Size(15, 14);
-            this.checkboxSeamless.TabIndex = 106;
-            this.toolTip.SetToolTip(this.checkboxSeamless, "Create Outputs That Can Be Tiled, for Backgrounds or Textures");
-            this.checkboxSeamless.UseVisualStyleBackColor = true;
-            // 
-            // comboxSampler
-            // 
-            this.comboxSampler.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.comboxSampler.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboxSampler.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.comboxSampler.ForeColor = System.Drawing.Color.White;
-            this.comboxSampler.FormattingEnabled = true;
-            this.comboxSampler.Location = new System.Drawing.Point(233, 7);
-            this.comboxSampler.Name = "comboxSampler";
-            this.comboxSampler.Size = new System.Drawing.Size(200, 21);
-            this.comboxSampler.TabIndex = 105;
-            this.toolTip.SetToolTip(this.comboxSampler, "Changes how the image is sampled.\r\nEuler Ancestral works very well at low step co" +
-        "unts.");
-            // 
-            // checkboxHiresFix
-            // 
-            this.checkboxHiresFix.AutoSize = true;
-            this.checkboxHiresFix.ForeColor = System.Drawing.Color.White;
-            this.checkboxHiresFix.Location = new System.Drawing.Point(468, 6);
-            this.checkboxHiresFix.Name = "checkboxHiresFix";
-            this.checkboxHiresFix.Padding = new System.Windows.Forms.Padding(3);
-            this.checkboxHiresFix.Size = new System.Drawing.Size(123, 23);
-            this.checkboxHiresFix.TabIndex = 108;
-            this.checkboxHiresFix.Text = "High-Resolution Fix";
-            this.toolTip.SetToolTip(this.checkboxHiresFix, "Avoid duplications in high-resolution images, at the cost of generation speed.");
-            this.checkboxHiresFix.UseVisualStyleBackColor = true;
-            // 
-            // checkboxLockSeed
-            // 
-            this.checkboxLockSeed.AutoSize = true;
-            this.checkboxLockSeed.ForeColor = System.Drawing.Color.White;
-            this.checkboxLockSeed.Location = new System.Drawing.Point(533, 6);
-            this.checkboxLockSeed.Name = "checkboxLockSeed";
-            this.checkboxLockSeed.Padding = new System.Windows.Forms.Padding(3);
-            this.checkboxLockSeed.Size = new System.Drawing.Size(84, 23);
-            this.checkboxLockSeed.TabIndex = 109;
-            this.checkboxLockSeed.Text = "Lock Seed";
-            this.toolTip.SetToolTip(this.checkboxLockSeed, resources.GetString("checkboxLockSeed.ToolTip"));
-            this.checkboxLockSeed.UseVisualStyleBackColor = true;
-            // 
-            // btnSeedResetToRandom
-            // 
-            this.btnSeedResetToRandom.AutoColor = true;
-            this.btnSeedResetToRandom.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnSeedResetToRandom.ButtonImage = null;
-            this.btnSeedResetToRandom.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
-            this.btnSeedResetToRandom.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
-            this.btnSeedResetToRandom.DrawImage = false;
-            this.btnSeedResetToRandom.ForeColor = System.Drawing.Color.White;
-            this.btnSeedResetToRandom.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
-            this.btnSeedResetToRandom.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
-            this.btnSeedResetToRandom.Location = new System.Drawing.Point(445, 6);
-            this.btnSeedResetToRandom.Name = "btnSeedResetToRandom";
-            this.btnSeedResetToRandom.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
-            this.btnSeedResetToRandom.Size = new System.Drawing.Size(79, 23);
-            this.btnSeedResetToRandom.TabIndex = 107;
-            this.btnSeedResetToRandom.TabStop = false;
-            this.btnSeedResetToRandom.Text = "Reset";
-            this.toolTip.SetToolTip(this.btnSeedResetToRandom, "Reset to Random Seed");
-            this.btnSeedResetToRandom.Click += new System.EventHandler(this.btnSeedResetToRandom_Click);
-            // 
-            // btnSeedUsePrevious
-            // 
-            this.btnSeedUsePrevious.AutoColor = true;
-            this.btnSeedUsePrevious.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnSeedUsePrevious.ButtonImage = null;
-            this.btnSeedUsePrevious.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
-            this.btnSeedUsePrevious.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
-            this.btnSeedUsePrevious.DrawImage = false;
-            this.btnSeedUsePrevious.ForeColor = System.Drawing.Color.White;
-            this.btnSeedUsePrevious.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
-            this.btnSeedUsePrevious.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
-            this.btnSeedUsePrevious.Location = new System.Drawing.Point(339, 6);
-            this.btnSeedUsePrevious.Name = "btnSeedUsePrevious";
-            this.btnSeedUsePrevious.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
-            this.btnSeedUsePrevious.Size = new System.Drawing.Size(100, 23);
-            this.btnSeedUsePrevious.TabIndex = 106;
-            this.btnSeedUsePrevious.TabStop = false;
-            this.btnSeedUsePrevious.Text = "Use Previous";
-            this.toolTip.SetToolTip(this.btnSeedUsePrevious, "Use Same Seed as Previous Run");
-            this.btnSeedUsePrevious.Click += new System.EventHandler(this.btnSeedUsePrevious_Click);
-            // 
-            // upDownSeed
-            // 
-            this.upDownSeed.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.upDownSeed.ForeColor = System.Drawing.Color.White;
-            this.upDownSeed.Location = new System.Drawing.Point(233, 8);
-            this.upDownSeed.Maximum = new decimal(new int[] {
-            1410065408,
-            2,
-            0,
-            0});
-            this.upDownSeed.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            -2147483648});
-            this.upDownSeed.Name = "upDownSeed";
-            this.upDownSeed.Size = new System.Drawing.Size(100, 20);
-            this.upDownSeed.TabIndex = 4;
-            this.toolTip.SetToolTip(this.upDownSeed, "Set this to a specific value to reproduce the same image.\r\nImportant: Resolution " +
-        "and sampler need to be identical as well.");
-            this.upDownSeed.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            -2147483648});
-            // 
-            // sliderScale
-            // 
-            this.sliderScale.ActualMaximum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            65536});
-            this.sliderScale.ActualMinimum = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.sliderScale.ActualValue = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.sliderScale.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.sliderScale.BorderRoundRectSize = new System.Drawing.Size(12, 12);
-            this.sliderScale.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.sliderScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
-            this.sliderScale.ForeColor = System.Drawing.Color.Black;
-            this.sliderScale.LargeChange = ((uint)(5u));
-            this.sliderScale.Location = new System.Drawing.Point(0, 0);
-            this.sliderScale.Margin = new System.Windows.Forms.Padding(0);
-            this.sliderScale.Maximum = 20;
-            this.sliderScale.Name = "sliderScale";
-            this.sliderScale.OverlayColor = System.Drawing.Color.White;
-            this.sliderScale.Size = new System.Drawing.Size(314, 35);
-            this.sliderScale.SmallChange = ((uint)(1u));
-            this.sliderScale.TabIndex = 4;
-            this.sliderScale.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
-            this.sliderScale.ThumbSize = new System.Drawing.Size(14, 14);
-            this.toolTip.SetToolTip(this.sliderScale, "Higher tries to match your prompt better, but can get chaotic. 7-12 is a safe ran" +
-        "ger for most things.");
-            this.sliderScale.Value = 0;
-            this.sliderScale.ValueBox = this.textboxSliderScale;
-            this.sliderScale.ValueStep = new decimal(new int[] {
-            5,
-            0,
-            0,
-            65536});
-            // 
-            // textboxSliderScale
-            // 
-            this.textboxSliderScale.AllowDrop = true;
-            this.textboxSliderScale.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.textboxSliderScale.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.textboxSliderScale.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textboxSliderScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textboxSliderScale.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScale.Location = new System.Drawing.Point(314, 9);
-            this.textboxSliderScale.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
-            this.textboxSliderScale.MinimumSize = new System.Drawing.Size(4, 21);
-            this.textboxSliderScale.Name = "textboxSliderScale";
-            this.textboxSliderScale.Size = new System.Drawing.Size(35, 21);
-            this.textboxSliderScale.TabIndex = 93;
-            this.textboxSliderScale.Text = "0";
-            // 
-            // textboxExtraScales
-            // 
-            this.textboxExtraScales.AllowDrop = true;
-            this.textboxExtraScales.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.textboxExtraScales.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.textboxExtraScales.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textboxExtraScales.ForeColor = System.Drawing.Color.White;
-            this.textboxExtraScales.Location = new System.Drawing.Point(352, 7);
-            this.textboxExtraScales.MinimumSize = new System.Drawing.Size(4, 21);
-            this.textboxExtraScales.Name = "textboxExtraScales";
-            this.textboxExtraScales.Size = new System.Drawing.Size(74, 20);
-            this.textboxExtraScales.TabIndex = 3;
-            this.toolTip.SetToolTip(this.textboxExtraScales, resources.GetString("textboxExtraScales.ToolTip"));
-            // 
-            // upDownIterations
-            // 
-            this.upDownIterations.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.upDownIterations.ForeColor = System.Drawing.Color.White;
-            this.upDownIterations.Location = new System.Drawing.Point(233, 8);
-            this.upDownIterations.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.upDownIterations.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.upDownIterations.Name = "upDownIterations";
-            this.upDownIterations.Size = new System.Drawing.Size(100, 20);
-            this.upDownIterations.TabIndex = 2;
-            this.toolTip.SetToolTip(this.upDownIterations, "Amount of images to create for the entered promt.\r\nThe seed will be incremented b" +
-        "y 1 for each image after the first.");
-            this.upDownIterations.Value = new decimal(new int[] {
-            4,
-            0,
-            0,
-            0});
-            // 
-            // btnResetMask
-            // 
-            this.btnResetMask.AutoColor = true;
-            this.btnResetMask.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnResetMask.ButtonImage = null;
-            this.btnResetMask.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
-            this.btnResetMask.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
-            this.btnResetMask.DrawImage = false;
-            this.btnResetMask.ForeColor = System.Drawing.Color.White;
-            this.btnResetMask.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
-            this.btnResetMask.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
-            this.btnResetMask.Location = new System.Drawing.Point(254, 6);
-            this.btnResetMask.Name = "btnResetMask";
-            this.btnResetMask.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
-            this.btnResetMask.Size = new System.Drawing.Size(79, 23);
-            this.btnResetMask.TabIndex = 108;
-            this.btnResetMask.TabStop = false;
-            this.btnResetMask.Text = "Reset Mask";
-            this.toolTip.SetToolTip(this.btnResetMask, "Reset Inpainting Mask");
-            this.btnResetMask.Visible = false;
-            this.btnResetMask.Click += new System.EventHandler(this.btnResetMask_Click);
-            // 
-            // checkboxInpainting
-            // 
-            this.checkboxInpainting.AutoSize = true;
-            this.checkboxInpainting.ForeColor = System.Drawing.Color.White;
-            this.checkboxInpainting.Location = new System.Drawing.Point(233, 9);
-            this.checkboxInpainting.Name = "checkboxInpainting";
-            this.checkboxInpainting.Size = new System.Drawing.Size(15, 14);
-            this.checkboxInpainting.TabIndex = 106;
-            this.toolTip.SetToolTip(this.checkboxInpainting, "Enable Mask-based Inpainting");
-            this.checkboxInpainting.UseVisualStyleBackColor = true;
-            // 
-            // textboxExtraInitStrengths
-            // 
-            this.textboxExtraInitStrengths.AllowDrop = true;
-            this.textboxExtraInitStrengths.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.textboxExtraInitStrengths.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.textboxExtraInitStrengths.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textboxExtraInitStrengths.ForeColor = System.Drawing.Color.White;
-            this.textboxExtraInitStrengths.Location = new System.Drawing.Point(352, 7);
-            this.textboxExtraInitStrengths.MinimumSize = new System.Drawing.Size(4, 21);
-            this.textboxExtraInitStrengths.Name = "textboxExtraInitStrengths";
-            this.textboxExtraInitStrengths.Size = new System.Drawing.Size(74, 20);
-            this.textboxExtraInitStrengths.TabIndex = 91;
-            this.toolTip.SetToolTip(this.textboxExtraInitStrengths, resources.GetString("textboxExtraInitStrengths.ToolTip"));
-            // 
-            // sliderInitStrength
-            // 
-            this.sliderInitStrength.ActualMaximum = new decimal(new int[] {
-            9,
-            0,
-            0,
-            65536});
-            this.sliderInitStrength.ActualMinimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.sliderInitStrength.ActualValue = new decimal(new int[] {
-            3,
-            0,
-            0,
-            65536});
-            this.sliderInitStrength.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.sliderInitStrength.BorderRoundRectSize = new System.Drawing.Size(12, 12);
-            this.sliderInitStrength.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.sliderInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
-            this.sliderInitStrength.ForeColor = System.Drawing.Color.Black;
-            this.sliderInitStrength.LargeChange = ((uint)(2u));
-            this.sliderInitStrength.Location = new System.Drawing.Point(0, 0);
-            this.sliderInitStrength.Margin = new System.Windows.Forms.Padding(0);
-            this.sliderInitStrength.Maximum = 18;
-            this.sliderInitStrength.Minimum = 2;
-            this.sliderInitStrength.Name = "sliderInitStrength";
-            this.sliderInitStrength.OverlayColor = System.Drawing.Color.White;
-            this.sliderInitStrength.Size = new System.Drawing.Size(314, 35);
-            this.sliderInitStrength.SmallChange = ((uint)(1u));
-            this.sliderInitStrength.TabIndex = 4;
-            this.sliderInitStrength.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
-            this.sliderInitStrength.ThumbSize = new System.Drawing.Size(14, 14);
-            this.toolTip.SetToolTip(this.sliderInitStrength, "Lower Value: Result Looks More Like Your Text Prompt\r\nHigher Value: Result Looks " +
-        "More Like Your Image");
-            this.sliderInitStrength.Value = 6;
-            this.sliderInitStrength.ValueBox = this.textboxSliderInitStrength;
-            this.sliderInitStrength.ValueStep = new decimal(new int[] {
-            5,
-            0,
-            0,
-            131072});
-            // 
-            // textboxSliderInitStrength
-            // 
-            this.textboxSliderInitStrength.AllowDrop = true;
-            this.textboxSliderInitStrength.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.textboxSliderInitStrength.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.textboxSliderInitStrength.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textboxSliderInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textboxSliderInitStrength.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderInitStrength.Location = new System.Drawing.Point(314, 9);
-            this.textboxSliderInitStrength.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
-            this.textboxSliderInitStrength.MinimumSize = new System.Drawing.Size(4, 21);
-            this.textboxSliderInitStrength.Name = "textboxSliderInitStrength";
-            this.textboxSliderInitStrength.Size = new System.Drawing.Size(35, 21);
-            this.textboxSliderInitStrength.TabIndex = 94;
-            this.textboxSliderInitStrength.Text = "0,3";
-            // 
-            // btnInitImgBrowse
-            // 
-            this.btnInitImgBrowse.AutoColor = true;
-            this.btnInitImgBrowse.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnInitImgBrowse.ButtonImage = null;
-            this.btnInitImgBrowse.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
-            this.btnInitImgBrowse.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
-            this.btnInitImgBrowse.DrawImage = false;
-            this.btnInitImgBrowse.ForeColor = System.Drawing.Color.White;
-            this.btnInitImgBrowse.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
-            this.btnInitImgBrowse.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
-            this.btnInitImgBrowse.Location = new System.Drawing.Point(233, 6);
-            this.btnInitImgBrowse.Name = "btnInitImgBrowse";
-            this.btnInitImgBrowse.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
-            this.btnInitImgBrowse.Size = new System.Drawing.Size(100, 23);
-            this.btnInitImgBrowse.TabIndex = 1;
-            this.btnInitImgBrowse.TabStop = false;
-            this.btnInitImgBrowse.Text = "Load Image";
-            this.toolTip.SetToolTip(this.btnInitImgBrowse, "Load initialization image");
-            this.btnInitImgBrowse.Click += new System.EventHandler(this.btnInitImgBrowse_Click);
-            // 
-            // btnEmbeddingBrowse
-            // 
-            this.btnEmbeddingBrowse.AutoColor = true;
-            this.btnEmbeddingBrowse.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnEmbeddingBrowse.ButtonImage = null;
-            this.btnEmbeddingBrowse.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
-            this.btnEmbeddingBrowse.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
-            this.btnEmbeddingBrowse.DrawImage = false;
-            this.btnEmbeddingBrowse.ForeColor = System.Drawing.Color.White;
-            this.btnEmbeddingBrowse.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
-            this.btnEmbeddingBrowse.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
-            this.btnEmbeddingBrowse.Location = new System.Drawing.Point(233, 35);
-            this.btnEmbeddingBrowse.Name = "btnEmbeddingBrowse";
-            this.btnEmbeddingBrowse.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
-            this.btnEmbeddingBrowse.Size = new System.Drawing.Size(100, 23);
-            this.btnEmbeddingBrowse.TabIndex = 84;
-            this.btnEmbeddingBrowse.TabStop = false;
-            this.btnEmbeddingBrowse.Text = "Load Concept";
-            this.toolTip.SetToolTip(this.btnEmbeddingBrowse, "Load a concept trained using Textual Inversion");
-            this.btnEmbeddingBrowse.Click += new System.EventHandler(this.btnEmbeddingBrowse_Click);
-            // 
-            // btnExpandPromptNegField
-            // 
-            this.btnExpandPromptNegField.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnExpandPromptNegField.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnExpandPromptNegField.BackgroundImage = global::StableDiffusionGui.Properties.Resources.downArrowIcon;
-            this.btnExpandPromptNegField.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnExpandPromptNegField.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnExpandPromptNegField.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnExpandPromptNegField.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnExpandPromptNegField.Location = new System.Drawing.Point(639, 0);
-            this.btnExpandPromptNegField.Margin = new System.Windows.Forms.Padding(0);
-            this.btnExpandPromptNegField.Name = "btnExpandPromptNegField";
-            this.btnExpandPromptNegField.Size = new System.Drawing.Size(20, 37);
-            this.btnExpandPromptNegField.TabIndex = 87;
-            this.btnExpandPromptNegField.TabStop = false;
-            this.toolTip.SetToolTip(this.btnExpandPromptNegField, "Expand/Collapse Prompt Field");
-            this.btnExpandPromptNegField.UseVisualStyleBackColor = false;
-            this.btnExpandPromptNegField.Click += new System.EventHandler(this.btnExpandPromptNegField_Click);
-            // 
-            // textboxPromptNeg
-            // 
-            this.textboxPromptNeg.AllowDrop = true;
-            this.textboxPromptNeg.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textboxPromptNeg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.textboxPromptNeg.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.textboxPromptNeg.Location = new System.Drawing.Point(3, 0);
-            this.textboxPromptNeg.MinimumSize = new System.Drawing.Size(4, 21);
-            this.textboxPromptNeg.Multiline = true;
-            this.textboxPromptNeg.Name = "textboxPromptNeg";
-            this.textboxPromptNeg.Placeholder = "Enter your negative prompt here...";
-            this.textboxPromptNeg.PlaceholderTextColor = System.Drawing.Color.Silver;
-            this.textboxPromptNeg.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textboxPromptNeg.Size = new System.Drawing.Size(636, 37);
-            this.textboxPromptNeg.TabIndex = 1;
-            this.toolTip.SetToolTip(this.textboxPromptNeg, "Negative text prompt. The AI will try to avoid generating things you describe her" +
-        "e.");
-            // 
-            // textboxPrompt
-            // 
-            this.textboxPrompt.AllowDrop = true;
-            this.textboxPrompt.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textboxPrompt.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.textboxPrompt.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.textboxPrompt.Location = new System.Drawing.Point(3, 0);
-            this.textboxPrompt.Margin = new System.Windows.Forms.Padding(3, 3, 0, 3);
-            this.textboxPrompt.MinimumSize = new System.Drawing.Size(4, 21);
-            this.textboxPrompt.Multiline = true;
-            this.textboxPrompt.Name = "textboxPrompt";
-            this.textboxPrompt.Placeholder = "Enter your prompt here...";
-            this.textboxPrompt.PlaceholderTextColor = System.Drawing.Color.Silver;
-            this.textboxPrompt.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textboxPrompt.Size = new System.Drawing.Size(636, 62);
-            this.textboxPrompt.TabIndex = 0;
-            this.toolTip.SetToolTip(this.textboxPrompt, "Text prompt. The AI will try to generate an image matching this description.");
-            // 
-            // btnExpandPromptField
-            // 
-            this.btnExpandPromptField.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnExpandPromptField.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnExpandPromptField.BackgroundImage = global::StableDiffusionGui.Properties.Resources.downArrowIcon;
-            this.btnExpandPromptField.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnExpandPromptField.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnExpandPromptField.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnExpandPromptField.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnExpandPromptField.Location = new System.Drawing.Point(639, 0);
-            this.btnExpandPromptField.Margin = new System.Windows.Forms.Padding(0);
-            this.btnExpandPromptField.Name = "btnExpandPromptField";
-            this.btnExpandPromptField.Size = new System.Drawing.Size(20, 62);
-            this.btnExpandPromptField.TabIndex = 86;
-            this.btnExpandPromptField.TabStop = false;
-            this.toolTip.SetToolTip(this.btnExpandPromptField, "Expand/Collapse Prompt Field");
-            this.btnExpandPromptField.UseVisualStyleBackColor = false;
-            this.btnExpandPromptField.Click += new System.EventHandler(this.btnExpandPromptField_Click);
-            // 
             // menuStripLogs
             // 
             this.menuStripLogs.ImageScalingSize = new System.Drawing.Size(20, 20);
@@ -1085,7 +639,7 @@ namespace StableDiffusionGui
             | System.Windows.Forms.AnchorStyles.Right)));
             this.progressBarImg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.progressBarImg.BorderThickness = 0;
-            this.progressBarImg.Location = new System.Drawing.Point(680, 585);
+            this.progressBarImg.Location = new System.Drawing.Point(680, 603);
             this.progressBarImg.Name = "progressBarImg";
             this.progressBarImg.Size = new System.Drawing.Size(512, 5);
             this.progressBarImg.TabIndex = 110;
@@ -1218,7 +772,7 @@ namespace StableDiffusionGui
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pictBoxImgViewer.BackgroundImage = global::StableDiffusionGui.Properties.Resources.checkerboard_darkened;
-            this.pictBoxImgViewer.Location = new System.Drawing.Point(680, 78);
+            this.pictBoxImgViewer.Location = new System.Drawing.Point(680, 96);
             this.pictBoxImgViewer.Name = "pictBoxImgViewer";
             this.pictBoxImgViewer.Size = new System.Drawing.Size(512, 512);
             this.pictBoxImgViewer.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -1275,6 +829,20 @@ namespace StableDiffusionGui
             this.applyAllToolStripMenuItem.Text = "Apply All";
             this.applyAllToolStripMenuItem.Click += new System.EventHandler(this.applyAllToolStripMenuItem_Click);
             // 
+            // labelImgPromptNeg
+            // 
+            this.labelImgPromptNeg.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelImgPromptNeg.AutoEllipsis = true;
+            this.labelImgPromptNeg.ForeColor = System.Drawing.Color.Silver;
+            this.labelImgPromptNeg.Location = new System.Drawing.Point(679, 78);
+            this.labelImgPromptNeg.Name = "labelImgPromptNeg";
+            this.labelImgPromptNeg.Size = new System.Drawing.Size(512, 16);
+            this.labelImgPromptNeg.TabIndex = 116;
+            this.labelImgPromptNeg.Text = "No negative prompt to show.";
+            this.toolTip.SetToolTip(this.labelImgPromptNeg, "Shows the prompt of the displayed image. Click to copy.");
+            this.labelImgPromptNeg.Click += new System.EventHandler(this.labelImgPromptNeg_Click);
+            // 
             // panelSettings
             // 
             this.panelSettings.AllowScrolling = true;
@@ -1298,7 +866,7 @@ namespace StableDiffusionGui
             this.panelSettings.Location = new System.Drawing.Point(12, 62);
             this.panelSettings.Name = "panelSettings";
             this.panelSettings.OnlyAllowScrollIfNeeded = true;
-            this.panelSettings.Size = new System.Drawing.Size(662, 528);
+            this.panelSettings.Size = new System.Drawing.Size(662, 546);
             this.panelSettings.TabIndex = 106;
             this.panelSettings.SizeChanged += new System.EventHandler(this.panelSettings_SizeChanged);
             this.panelSettings.Click += new System.EventHandler(this.panel1_Click);
@@ -1350,6 +918,17 @@ namespace StableDiffusionGui
             this.panelSeamless.Size = new System.Drawing.Size(662, 35);
             this.panelSeamless.TabIndex = 9;
             // 
+            // checkboxSeamless
+            // 
+            this.checkboxSeamless.AutoSize = true;
+            this.checkboxSeamless.ForeColor = System.Drawing.Color.White;
+            this.checkboxSeamless.Location = new System.Drawing.Point(233, 10);
+            this.checkboxSeamless.Name = "checkboxSeamless";
+            this.checkboxSeamless.Size = new System.Drawing.Size(15, 14);
+            this.checkboxSeamless.TabIndex = 106;
+            this.toolTip.SetToolTip(this.checkboxSeamless, "Create Outputs That Can Be Tiled, for Backgrounds or Textures");
+            this.checkboxSeamless.UseVisualStyleBackColor = true;
+            // 
             // label8
             // 
             this.label8.AutoSize = true;
@@ -1384,6 +963,20 @@ namespace StableDiffusionGui
             this.label7.TabIndex = 104;
             this.label7.Text = "Sampler";
             // 
+            // comboxSampler
+            // 
+            this.comboxSampler.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.comboxSampler.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboxSampler.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboxSampler.ForeColor = System.Drawing.Color.White;
+            this.comboxSampler.FormattingEnabled = true;
+            this.comboxSampler.Location = new System.Drawing.Point(233, 7);
+            this.comboxSampler.Name = "comboxSampler";
+            this.comboxSampler.Size = new System.Drawing.Size(200, 21);
+            this.comboxSampler.TabIndex = 105;
+            this.toolTip.SetToolTip(this.comboxSampler, "Changes how the image is sampled.\r\nEuler Ancestral works very well at low step co" +
+        "unts.");
+            // 
             // panelRes
             // 
             this.panelRes.Controls.Add(this.checkboxHiresFix);
@@ -1396,6 +989,19 @@ namespace StableDiffusionGui
             this.panelRes.Name = "panelRes";
             this.panelRes.Size = new System.Drawing.Size(662, 35);
             this.panelRes.TabIndex = 5;
+            // 
+            // checkboxHiresFix
+            // 
+            this.checkboxHiresFix.AutoSize = true;
+            this.checkboxHiresFix.ForeColor = System.Drawing.Color.White;
+            this.checkboxHiresFix.Location = new System.Drawing.Point(468, 6);
+            this.checkboxHiresFix.Name = "checkboxHiresFix";
+            this.checkboxHiresFix.Padding = new System.Windows.Forms.Padding(3);
+            this.checkboxHiresFix.Size = new System.Drawing.Size(123, 23);
+            this.checkboxHiresFix.TabIndex = 108;
+            this.checkboxHiresFix.Text = "High-Resolution Fix";
+            this.toolTip.SetToolTip(this.checkboxHiresFix, "Avoid duplications in high-resolution images, at the cost of generation speed.");
+            this.checkboxHiresFix.UseVisualStyleBackColor = true;
             // 
             // comboxResH
             // 
@@ -1458,6 +1064,61 @@ namespace StableDiffusionGui
             this.panelSeed.Size = new System.Drawing.Size(662, 35);
             this.panelSeed.TabIndex = 4;
             // 
+            // checkboxLockSeed
+            // 
+            this.checkboxLockSeed.AutoSize = true;
+            this.checkboxLockSeed.ForeColor = System.Drawing.Color.White;
+            this.checkboxLockSeed.Location = new System.Drawing.Point(533, 6);
+            this.checkboxLockSeed.Name = "checkboxLockSeed";
+            this.checkboxLockSeed.Padding = new System.Windows.Forms.Padding(3);
+            this.checkboxLockSeed.Size = new System.Drawing.Size(84, 23);
+            this.checkboxLockSeed.TabIndex = 109;
+            this.checkboxLockSeed.Text = "Lock Seed";
+            this.toolTip.SetToolTip(this.checkboxLockSeed, resources.GetString("checkboxLockSeed.ToolTip"));
+            this.checkboxLockSeed.UseVisualStyleBackColor = true;
+            // 
+            // btnSeedResetToRandom
+            // 
+            this.btnSeedResetToRandom.AutoColor = true;
+            this.btnSeedResetToRandom.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnSeedResetToRandom.ButtonImage = null;
+            this.btnSeedResetToRandom.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
+            this.btnSeedResetToRandom.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
+            this.btnSeedResetToRandom.DrawImage = false;
+            this.btnSeedResetToRandom.ForeColor = System.Drawing.Color.White;
+            this.btnSeedResetToRandom.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
+            this.btnSeedResetToRandom.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
+            this.btnSeedResetToRandom.Location = new System.Drawing.Point(445, 6);
+            this.btnSeedResetToRandom.Name = "btnSeedResetToRandom";
+            this.btnSeedResetToRandom.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+            this.btnSeedResetToRandom.Size = new System.Drawing.Size(79, 23);
+            this.btnSeedResetToRandom.TabIndex = 107;
+            this.btnSeedResetToRandom.TabStop = false;
+            this.btnSeedResetToRandom.Text = "Reset";
+            this.toolTip.SetToolTip(this.btnSeedResetToRandom, "Reset to Random Seed");
+            this.btnSeedResetToRandom.Click += new System.EventHandler(this.btnSeedResetToRandom_Click);
+            // 
+            // btnSeedUsePrevious
+            // 
+            this.btnSeedUsePrevious.AutoColor = true;
+            this.btnSeedUsePrevious.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnSeedUsePrevious.ButtonImage = null;
+            this.btnSeedUsePrevious.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
+            this.btnSeedUsePrevious.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
+            this.btnSeedUsePrevious.DrawImage = false;
+            this.btnSeedUsePrevious.ForeColor = System.Drawing.Color.White;
+            this.btnSeedUsePrevious.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
+            this.btnSeedUsePrevious.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
+            this.btnSeedUsePrevious.Location = new System.Drawing.Point(339, 6);
+            this.btnSeedUsePrevious.Name = "btnSeedUsePrevious";
+            this.btnSeedUsePrevious.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+            this.btnSeedUsePrevious.Size = new System.Drawing.Size(100, 23);
+            this.btnSeedUsePrevious.TabIndex = 106;
+            this.btnSeedUsePrevious.TabStop = false;
+            this.btnSeedUsePrevious.Text = "Use Previous";
+            this.toolTip.SetToolTip(this.btnSeedUsePrevious, "Use Same Seed as Previous Run");
+            this.btnSeedUsePrevious.Click += new System.EventHandler(this.btnSeedUsePrevious_Click);
+            // 
             // label5
             // 
             this.label5.AutoSize = true;
@@ -1469,6 +1130,32 @@ namespace StableDiffusionGui
             this.label5.Size = new System.Drawing.Size(122, 13);
             this.label5.TabIndex = 92;
             this.label5.Text = "Seed (Empty = Random)";
+            // 
+            // upDownSeed
+            // 
+            this.upDownSeed.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.upDownSeed.ForeColor = System.Drawing.Color.White;
+            this.upDownSeed.Location = new System.Drawing.Point(233, 8);
+            this.upDownSeed.Maximum = new decimal(new int[] {
+            1410065408,
+            2,
+            0,
+            0});
+            this.upDownSeed.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
+            this.upDownSeed.Name = "upDownSeed";
+            this.upDownSeed.Size = new System.Drawing.Size(100, 20);
+            this.upDownSeed.TabIndex = 4;
+            this.toolTip.SetToolTip(this.upDownSeed, "Set this to a specific value to reproduce the same image.\r\nImportant: Resolution " +
+        "and sampler need to be identical as well.");
+            this.upDownSeed.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
             // 
             // panelScale
             // 
@@ -1510,6 +1197,79 @@ namespace StableDiffusionGui
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(429, 35);
             this.tableLayoutPanel1.TabIndex = 91;
+            // 
+            // textboxSliderScale
+            // 
+            this.textboxSliderScale.AllowDrop = true;
+            this.textboxSliderScale.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.textboxSliderScale.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            this.textboxSliderScale.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textboxSliderScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textboxSliderScale.ForeColor = System.Drawing.Color.Silver;
+            this.textboxSliderScale.Location = new System.Drawing.Point(314, 9);
+            this.textboxSliderScale.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
+            this.textboxSliderScale.MinimumSize = new System.Drawing.Size(4, 21);
+            this.textboxSliderScale.Name = "textboxSliderScale";
+            this.textboxSliderScale.Size = new System.Drawing.Size(35, 21);
+            this.textboxSliderScale.TabIndex = 93;
+            this.textboxSliderScale.Text = "0";
+            // 
+            // sliderScale
+            // 
+            this.sliderScale.ActualMaximum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            65536});
+            this.sliderScale.ActualMinimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.sliderScale.ActualValue = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.sliderScale.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            this.sliderScale.BorderRoundRectSize = new System.Drawing.Size(12, 12);
+            this.sliderScale.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sliderScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
+            this.sliderScale.ForeColor = System.Drawing.Color.Black;
+            this.sliderScale.LargeChange = ((uint)(5u));
+            this.sliderScale.Location = new System.Drawing.Point(0, 0);
+            this.sliderScale.Margin = new System.Windows.Forms.Padding(0);
+            this.sliderScale.Maximum = 20;
+            this.sliderScale.Name = "sliderScale";
+            this.sliderScale.OverlayColor = System.Drawing.Color.White;
+            this.sliderScale.Size = new System.Drawing.Size(314, 35);
+            this.sliderScale.SmallChange = ((uint)(1u));
+            this.sliderScale.TabIndex = 4;
+            this.sliderScale.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
+            this.sliderScale.ThumbSize = new System.Drawing.Size(14, 14);
+            this.toolTip.SetToolTip(this.sliderScale, "Higher tries to match your prompt better, but can get chaotic. 7-12 is a safe ran" +
+        "ger for most things.");
+            this.sliderScale.Value = 0;
+            this.sliderScale.ValueBox = this.textboxSliderScale;
+            this.sliderScale.ValueStep = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            // 
+            // textboxExtraScales
+            // 
+            this.textboxExtraScales.AllowDrop = true;
+            this.textboxExtraScales.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.textboxExtraScales.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textboxExtraScales.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textboxExtraScales.ForeColor = System.Drawing.Color.White;
+            this.textboxExtraScales.Location = new System.Drawing.Point(352, 7);
+            this.textboxExtraScales.MinimumSize = new System.Drawing.Size(4, 21);
+            this.textboxExtraScales.Name = "textboxExtraScales";
+            this.textboxExtraScales.Size = new System.Drawing.Size(74, 20);
+            this.textboxExtraScales.TabIndex = 3;
+            this.toolTip.SetToolTip(this.textboxExtraScales, resources.GetString("textboxExtraScales.ToolTip"));
             // 
             // panelSteps
             // 
@@ -1629,6 +1389,32 @@ namespace StableDiffusionGui
             this.label1.TabIndex = 85;
             this.label1.Text = "Amount Of Images To Generate";
             // 
+            // upDownIterations
+            // 
+            this.upDownIterations.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.upDownIterations.ForeColor = System.Drawing.Color.White;
+            this.upDownIterations.Location = new System.Drawing.Point(233, 8);
+            this.upDownIterations.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.upDownIterations.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.upDownIterations.Name = "upDownIterations";
+            this.upDownIterations.Size = new System.Drawing.Size(100, 20);
+            this.upDownIterations.TabIndex = 2;
+            this.toolTip.SetToolTip(this.upDownIterations, "Amount of images to create for the entered promt.\r\nThe seed will be incremented b" +
+        "y 1 for each image after the first.");
+            this.upDownIterations.Value = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            // 
             // panelInpainting
             // 
             this.panelInpainting.Controls.Add(this.btnResetMask);
@@ -1640,6 +1426,39 @@ namespace StableDiffusionGui
             this.panelInpainting.Size = new System.Drawing.Size(662, 35);
             this.panelInpainting.TabIndex = 12;
             this.panelInpainting.Visible = false;
+            // 
+            // btnResetMask
+            // 
+            this.btnResetMask.AutoColor = true;
+            this.btnResetMask.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnResetMask.ButtonImage = null;
+            this.btnResetMask.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
+            this.btnResetMask.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
+            this.btnResetMask.DrawImage = false;
+            this.btnResetMask.ForeColor = System.Drawing.Color.White;
+            this.btnResetMask.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
+            this.btnResetMask.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
+            this.btnResetMask.Location = new System.Drawing.Point(254, 6);
+            this.btnResetMask.Name = "btnResetMask";
+            this.btnResetMask.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+            this.btnResetMask.Size = new System.Drawing.Size(79, 23);
+            this.btnResetMask.TabIndex = 108;
+            this.btnResetMask.TabStop = false;
+            this.btnResetMask.Text = "Reset Mask";
+            this.toolTip.SetToolTip(this.btnResetMask, "Reset Inpainting Mask");
+            this.btnResetMask.Visible = false;
+            this.btnResetMask.Click += new System.EventHandler(this.btnResetMask_Click);
+            // 
+            // checkboxInpainting
+            // 
+            this.checkboxInpainting.AutoSize = true;
+            this.checkboxInpainting.ForeColor = System.Drawing.Color.White;
+            this.checkboxInpainting.Location = new System.Drawing.Point(233, 9);
+            this.checkboxInpainting.Name = "checkboxInpainting";
+            this.checkboxInpainting.Size = new System.Drawing.Size(15, 14);
+            this.checkboxInpainting.TabIndex = 106;
+            this.toolTip.SetToolTip(this.checkboxInpainting, "Enable Mask-based Inpainting");
+            this.checkboxInpainting.UseVisualStyleBackColor = true;
             // 
             // label10
             // 
@@ -1695,6 +1514,80 @@ namespace StableDiffusionGui
             this.tableLayoutPanel4.Size = new System.Drawing.Size(429, 35);
             this.tableLayoutPanel4.TabIndex = 89;
             // 
+            // textboxExtraInitStrengths
+            // 
+            this.textboxExtraInitStrengths.AllowDrop = true;
+            this.textboxExtraInitStrengths.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.textboxExtraInitStrengths.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textboxExtraInitStrengths.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textboxExtraInitStrengths.ForeColor = System.Drawing.Color.White;
+            this.textboxExtraInitStrengths.Location = new System.Drawing.Point(352, 7);
+            this.textboxExtraInitStrengths.MinimumSize = new System.Drawing.Size(4, 21);
+            this.textboxExtraInitStrengths.Name = "textboxExtraInitStrengths";
+            this.textboxExtraInitStrengths.Size = new System.Drawing.Size(74, 20);
+            this.textboxExtraInitStrengths.TabIndex = 91;
+            this.toolTip.SetToolTip(this.textboxExtraInitStrengths, resources.GetString("textboxExtraInitStrengths.ToolTip"));
+            // 
+            // textboxSliderInitStrength
+            // 
+            this.textboxSliderInitStrength.AllowDrop = true;
+            this.textboxSliderInitStrength.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.textboxSliderInitStrength.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            this.textboxSliderInitStrength.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textboxSliderInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textboxSliderInitStrength.ForeColor = System.Drawing.Color.Silver;
+            this.textboxSliderInitStrength.Location = new System.Drawing.Point(314, 9);
+            this.textboxSliderInitStrength.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
+            this.textboxSliderInitStrength.MinimumSize = new System.Drawing.Size(4, 21);
+            this.textboxSliderInitStrength.Name = "textboxSliderInitStrength";
+            this.textboxSliderInitStrength.Size = new System.Drawing.Size(35, 21);
+            this.textboxSliderInitStrength.TabIndex = 94;
+            this.textboxSliderInitStrength.Text = "0,3";
+            // 
+            // sliderInitStrength
+            // 
+            this.sliderInitStrength.ActualMaximum = new decimal(new int[] {
+            9,
+            0,
+            0,
+            65536});
+            this.sliderInitStrength.ActualMinimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.sliderInitStrength.ActualValue = new decimal(new int[] {
+            3,
+            0,
+            0,
+            65536});
+            this.sliderInitStrength.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            this.sliderInitStrength.BorderRoundRectSize = new System.Drawing.Size(12, 12);
+            this.sliderInitStrength.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sliderInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
+            this.sliderInitStrength.ForeColor = System.Drawing.Color.Black;
+            this.sliderInitStrength.LargeChange = ((uint)(2u));
+            this.sliderInitStrength.Location = new System.Drawing.Point(0, 0);
+            this.sliderInitStrength.Margin = new System.Windows.Forms.Padding(0);
+            this.sliderInitStrength.Maximum = 18;
+            this.sliderInitStrength.Minimum = 2;
+            this.sliderInitStrength.Name = "sliderInitStrength";
+            this.sliderInitStrength.OverlayColor = System.Drawing.Color.White;
+            this.sliderInitStrength.Size = new System.Drawing.Size(314, 35);
+            this.sliderInitStrength.SmallChange = ((uint)(1u));
+            this.sliderInitStrength.TabIndex = 4;
+            this.sliderInitStrength.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
+            this.sliderInitStrength.ThumbSize = new System.Drawing.Size(14, 14);
+            this.toolTip.SetToolTip(this.sliderInitStrength, "Lower Value: Result Looks More Like Your Text Prompt\r\nHigher Value: Result Looks " +
+        "More Like Your Image");
+            this.sliderInitStrength.Value = 6;
+            this.sliderInitStrength.ValueBox = this.textboxSliderInitStrength;
+            this.sliderInitStrength.ValueStep = new decimal(new int[] {
+            5,
+            0,
+            0,
+            131072});
+            // 
             // panelAiInputs
             // 
             this.panelAiInputs.Controls.Add(this.labelCurrentConcept);
@@ -1742,6 +1635,48 @@ namespace StableDiffusionGui
             this.labelCurrentImage.Size = new System.Drawing.Size(0, 13);
             this.labelCurrentImage.TabIndex = 91;
             // 
+            // btnInitImgBrowse
+            // 
+            this.btnInitImgBrowse.AutoColor = true;
+            this.btnInitImgBrowse.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnInitImgBrowse.ButtonImage = null;
+            this.btnInitImgBrowse.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
+            this.btnInitImgBrowse.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
+            this.btnInitImgBrowse.DrawImage = false;
+            this.btnInitImgBrowse.ForeColor = System.Drawing.Color.White;
+            this.btnInitImgBrowse.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
+            this.btnInitImgBrowse.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
+            this.btnInitImgBrowse.Location = new System.Drawing.Point(233, 6);
+            this.btnInitImgBrowse.Name = "btnInitImgBrowse";
+            this.btnInitImgBrowse.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+            this.btnInitImgBrowse.Size = new System.Drawing.Size(100, 23);
+            this.btnInitImgBrowse.TabIndex = 1;
+            this.btnInitImgBrowse.TabStop = false;
+            this.btnInitImgBrowse.Text = "Load Image";
+            this.toolTip.SetToolTip(this.btnInitImgBrowse, "Load initialization image");
+            this.btnInitImgBrowse.Click += new System.EventHandler(this.btnInitImgBrowse_Click);
+            // 
+            // btnEmbeddingBrowse
+            // 
+            this.btnEmbeddingBrowse.AutoColor = true;
+            this.btnEmbeddingBrowse.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnEmbeddingBrowse.ButtonImage = null;
+            this.btnEmbeddingBrowse.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
+            this.btnEmbeddingBrowse.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
+            this.btnEmbeddingBrowse.DrawImage = false;
+            this.btnEmbeddingBrowse.ForeColor = System.Drawing.Color.White;
+            this.btnEmbeddingBrowse.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
+            this.btnEmbeddingBrowse.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
+            this.btnEmbeddingBrowse.Location = new System.Drawing.Point(233, 35);
+            this.btnEmbeddingBrowse.Name = "btnEmbeddingBrowse";
+            this.btnEmbeddingBrowse.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+            this.btnEmbeddingBrowse.Size = new System.Drawing.Size(100, 23);
+            this.btnEmbeddingBrowse.TabIndex = 84;
+            this.btnEmbeddingBrowse.TabStop = false;
+            this.btnEmbeddingBrowse.Text = "Load Concept";
+            this.toolTip.SetToolTip(this.btnEmbeddingBrowse, "Load a concept trained using Textual Inversion");
+            this.btnEmbeddingBrowse.Click += new System.EventHandler(this.btnEmbeddingBrowse_Click);
+            // 
             // panelPromptNeg
             // 
             this.panelPromptNeg.Controls.Add(this.btnExpandPromptNegField);
@@ -1752,6 +1687,46 @@ namespace StableDiffusionGui
             this.panelPromptNeg.Padding = new System.Windows.Forms.Padding(3);
             this.panelPromptNeg.Size = new System.Drawing.Size(662, 40);
             this.panelPromptNeg.TabIndex = 16;
+            // 
+            // btnExpandPromptNegField
+            // 
+            this.btnExpandPromptNegField.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnExpandPromptNegField.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnExpandPromptNegField.BackgroundImage = global::StableDiffusionGui.Properties.Resources.downArrowIcon;
+            this.btnExpandPromptNegField.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnExpandPromptNegField.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnExpandPromptNegField.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnExpandPromptNegField.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnExpandPromptNegField.Location = new System.Drawing.Point(639, 0);
+            this.btnExpandPromptNegField.Margin = new System.Windows.Forms.Padding(0);
+            this.btnExpandPromptNegField.Name = "btnExpandPromptNegField";
+            this.btnExpandPromptNegField.Size = new System.Drawing.Size(20, 37);
+            this.btnExpandPromptNegField.TabIndex = 87;
+            this.btnExpandPromptNegField.TabStop = false;
+            this.toolTip.SetToolTip(this.btnExpandPromptNegField, "Expand/Collapse Prompt Field");
+            this.btnExpandPromptNegField.UseVisualStyleBackColor = false;
+            this.btnExpandPromptNegField.Click += new System.EventHandler(this.btnExpandPromptNegField_Click);
+            // 
+            // textboxPromptNeg
+            // 
+            this.textboxPromptNeg.AllowDrop = true;
+            this.textboxPromptNeg.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textboxPromptNeg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textboxPromptNeg.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.textboxPromptNeg.Location = new System.Drawing.Point(3, 0);
+            this.textboxPromptNeg.MinimumSize = new System.Drawing.Size(4, 21);
+            this.textboxPromptNeg.Multiline = true;
+            this.textboxPromptNeg.Name = "textboxPromptNeg";
+            this.textboxPromptNeg.Placeholder = "Enter your negative prompt here...";
+            this.textboxPromptNeg.PlaceholderTextColor = System.Drawing.Color.Silver;
+            this.textboxPromptNeg.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textboxPromptNeg.Size = new System.Drawing.Size(636, 37);
+            this.textboxPromptNeg.TabIndex = 1;
+            this.toolTip.SetToolTip(this.textboxPromptNeg, "Negative text prompt. The AI will try to avoid generating things you describe her" +
+        "e.");
             // 
             // panelPrompt
             // 
@@ -1764,13 +1739,54 @@ namespace StableDiffusionGui
             this.panelPrompt.Size = new System.Drawing.Size(662, 65);
             this.panelPrompt.TabIndex = 15;
             // 
+            // textboxPrompt
+            // 
+            this.textboxPrompt.AllowDrop = true;
+            this.textboxPrompt.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textboxPrompt.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textboxPrompt.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.textboxPrompt.Location = new System.Drawing.Point(3, 0);
+            this.textboxPrompt.Margin = new System.Windows.Forms.Padding(3, 3, 0, 3);
+            this.textboxPrompt.MinimumSize = new System.Drawing.Size(4, 21);
+            this.textboxPrompt.Multiline = true;
+            this.textboxPrompt.Name = "textboxPrompt";
+            this.textboxPrompt.Placeholder = "Enter your prompt here...";
+            this.textboxPrompt.PlaceholderTextColor = System.Drawing.Color.Silver;
+            this.textboxPrompt.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textboxPrompt.Size = new System.Drawing.Size(636, 62);
+            this.textboxPrompt.TabIndex = 0;
+            this.toolTip.SetToolTip(this.textboxPrompt, "Text prompt. The AI will try to generate an image matching this description.");
+            // 
+            // btnExpandPromptField
+            // 
+            this.btnExpandPromptField.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnExpandPromptField.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnExpandPromptField.BackgroundImage = global::StableDiffusionGui.Properties.Resources.downArrowIcon;
+            this.btnExpandPromptField.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnExpandPromptField.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnExpandPromptField.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnExpandPromptField.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnExpandPromptField.Location = new System.Drawing.Point(639, 0);
+            this.btnExpandPromptField.Margin = new System.Windows.Forms.Padding(0);
+            this.btnExpandPromptField.Name = "btnExpandPromptField";
+            this.btnExpandPromptField.Size = new System.Drawing.Size(20, 62);
+            this.btnExpandPromptField.TabIndex = 86;
+            this.btnExpandPromptField.TabStop = false;
+            this.toolTip.SetToolTip(this.btnExpandPromptField, "Expand/Collapse Prompt Field");
+            this.btnExpandPromptField.UseVisualStyleBackColor = false;
+            this.btnExpandPromptField.Click += new System.EventHandler(this.btnExpandPromptField_Click);
+            // 
             // MainForm
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.ClientSize = new System.Drawing.Size(1204, 685);
+            this.ClientSize = new System.Drawing.Size(1204, 703);
+            this.Controls.Add(this.labelImgPromptNeg);
             this.Controls.Add(this.labelImgPrompt);
             this.Controls.Add(this.btnDeleteBatch);
             this.Controls.Add(this.progressBarImg);
@@ -1809,8 +1825,6 @@ namespace StableDiffusionGui
             this.DragEnter += new System.Windows.Forms.DragEventHandler(this.MainForm_DragEnter);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
             this.menuStripOutputImg.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.upDownSeed)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).EndInit();
             this.menuStripRunQueue.ResumeLayout(false);
             this.menuStripAddToQueue.ResumeLayout(false);
             this.menuStripDeleteImages.ResumeLayout(false);
@@ -1828,6 +1842,7 @@ namespace StableDiffusionGui
             this.panelRes.PerformLayout();
             this.panelSeed.ResumeLayout(false);
             this.panelSeed.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.upDownSeed)).EndInit();
             this.panelScale.ResumeLayout(false);
             this.panelScale.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
@@ -1838,6 +1853,7 @@ namespace StableDiffusionGui
             this.tableLayoutPanel6.PerformLayout();
             this.panelIterations.ResumeLayout(false);
             this.panelIterations.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).EndInit();
             this.panelInpainting.ResumeLayout(false);
             this.panelInpainting.PerformLayout();
             this.panelInitImgStrength.ResumeLayout(false);
@@ -1969,6 +1985,7 @@ namespace StableDiffusionGui
         private System.Windows.Forms.Panel panelPrompt;
         private System.Windows.Forms.Panel panelAiInputs;
         private System.Windows.Forms.Button btnExpandPromptNegField;
+        private System.Windows.Forms.Label labelImgPromptNeg;
     }
 }
 
