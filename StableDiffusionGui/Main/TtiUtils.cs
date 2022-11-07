@@ -248,6 +248,7 @@ namespace StableDiffusionGui.Main
                 IoUtils.SetImageMetadata(movePath, meta.ParsedText);
 
                 ImagePreview.AppendImage(movePath, ImagePreview.ImgShowMode.ShowLast, false);
+                // OsUtils.ShowNotification("Stable Diffusion GUI", $"Saved post-processed image as '{Path.GetFileName(movePath)}'.", false, 2.5f); // WHY DOES THIS NOT WORK
                 Logger.Log($"Saved post-processed image as '{Path.GetFileName(movePath)}'.");
             }
             catch (Exception ex)

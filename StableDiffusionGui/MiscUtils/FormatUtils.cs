@@ -45,9 +45,9 @@ namespace StableDiffusionGui.MiscUtils
                 return span.ToString(@"mm\:ss");
 
             if (span.TotalSeconds >= 1f || !allowMs)
-                return span.ToString(@"ss".TrimStart('0').PadLeft(1, '0')) + "s";
+                return span.ToString(@"ss".TrimStart('0')) + "s";
 
-            return span.ToString(@"fff").TrimStart('0').PadLeft(1, '0') + "ms";
+            return span.ToString(@"fff").TrimStart('0') + "ms";
         }
 
         public static string Time(Stopwatch sw)
