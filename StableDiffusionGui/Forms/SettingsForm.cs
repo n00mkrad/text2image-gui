@@ -6,15 +6,12 @@ using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace StableDiffusionGui.Forms
 {
-    public partial class SettingsForm : Form
+    public partial class SettingsForm : CustomForm
     {
         private bool _ready = false;
 
@@ -39,6 +36,23 @@ namespace StableDiffusionGui.Forms
             LoadModels(false, Enums.StableDiffusion.ModelType.Vae);
             LoadSettings();
 
+            TabOrderInit(new List<Control>() {
+                checkboxOptimizedSd,
+                checkboxFullPrecision,
+                checkboxUnloadModel,
+                comboxSdModel, btnRefreshModelsDropdown, btnOpenModelsFolder,
+                comboxSdModelVae, btnRefreshModelsDropdownVae, btnOpenModelsFolderVae,
+                comboxCudaDevice,
+                textboxOutPath, btnOutPathBrowse,
+                checkboxFolderPerPrompt, checkboxOutputIgnoreWildcards, checkboxFolderPerSession,
+                checkboxPromptInFilename, checkboxSeedInFilename, checkboxScaleInFilename, checkboxSamplerInFilename, checkboxModelInFilename,
+                textboxFavsPath, btnFavsPathBrowse,
+                checkboxMultiPromptsSameSeed,
+                checkboxSaveUnprocessedImages,
+                checkboxAdvancedMode,
+                comboxNotify
+            });
+
             Task.Run(() => LoadGpus());
             Opacity = 1;
         }
@@ -53,12 +67,6 @@ namespace StableDiffusionGui.Forms
 
             SaveSettings();
             Program.MainForm.RefreshAfterSettingsChanged();
-        }
-
-        private void SettingsForm_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Escape)
-                Close();
         }
 
         private void LoadModels(bool loadCombox, Enums.StableDiffusion.ModelType type)
