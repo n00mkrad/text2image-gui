@@ -88,10 +88,7 @@ namespace StableDiffusionGui.Forms
 
         private IEnumerable<TtiSettings> Filter (IEnumerable<TtiSettings> ttiSettings, string text)
         {
-            if (!string.IsNullOrWhiteSpace(text))
-                return ttiSettings.Where(x => x.Prompts.FirstOrDefault().Lower().Contains(text.Lower()));
-            else
-                return ttiSettings;
+            return string.IsNullOrWhiteSpace(text) ? ttiSettings : ttiSettings.Where(x => x.Prompts.FirstOrDefault().Lower().Contains(text.Lower()));
         }
 
         private void btnOpenOutFolder_Click(object sender, EventArgs e)
