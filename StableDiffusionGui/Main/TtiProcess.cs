@@ -61,8 +61,6 @@ namespace StableDiffusionGui.Main
 
                 foreach (string prompt in prompts)
                 {
-                    PromptWildcardUtils.Reset();
-
                     List<string> processedPrompts = PromptWildcardUtils.ApplyWildcardsAll(prompt, iterations, false);
                     TextToImage.CurrentTaskSettings.ProcessedAndRawPrompts = processedPrompts.Distinct().ToDictionary(x => x, x => prompt);
 
