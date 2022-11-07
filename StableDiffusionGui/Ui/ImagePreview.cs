@@ -92,8 +92,10 @@ namespace StableDiffusionGui.Ui
             if (meta.Scale >= 0)
                 infos.Add($"Scale {meta.Scale.ToStringDot()}");
 
+            Size res = Program.MainForm.PictBoxImgViewer.Image.Size;
+
             if (!meta.GeneratedResolution.IsEmpty)
-                infos.Add($"{meta.GeneratedResolution.Width}x{meta.GeneratedResolution.Height}");
+                infos.Add($"{meta.GeneratedResolution.Width}x{meta.GeneratedResolution.Height}{(meta.GeneratedResolution == res ? "" : $" => {res.Width}x{res.Height}")}");
 
             if (meta.InitStrength > 0.0001f)
                 infos.Add($"Strength {meta.InitStrength.ToStringDot()}");
