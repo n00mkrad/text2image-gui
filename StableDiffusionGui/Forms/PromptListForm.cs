@@ -26,7 +26,7 @@ namespace StableDiffusionGui.Forms
 
         private void PromptListForm_Load(object sender, EventArgs e)
         {
-                if (_promptListMode == ListMode.History)
+            if (_promptListMode == ListMode.History)
             {
                 Text = "Prompt History";
                 btnAddPromptsToQueue.Visible = false;
@@ -73,9 +73,9 @@ namespace StableDiffusionGui.Forms
             LoadTooltips();
         }
 
-        private void LoadTooltips ()
+        private void LoadTooltips()
         {
-            foreach(ListViewItem item in promptListView.Items)
+            foreach (ListViewItem item in promptListView.Items)
             {
                 TtiSettings s = (TtiSettings)item.Tag;
 
@@ -86,7 +86,7 @@ namespace StableDiffusionGui.Forms
             }
         }
 
-        private IEnumerable<TtiSettings> Filter (IEnumerable<TtiSettings> ttiSettings, string text)
+        private IEnumerable<TtiSettings> Filter(IEnumerable<TtiSettings> ttiSettings, string text)
         {
             return string.IsNullOrWhiteSpace(text) ? ttiSettings : ttiSettings.Where(x => x.Prompts.FirstOrDefault().Lower().Contains(text.Lower()));
         }
