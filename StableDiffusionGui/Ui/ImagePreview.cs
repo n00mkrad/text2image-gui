@@ -160,6 +160,9 @@ namespace StableDiffusionGui.Ui
 
         public static void DeleteAll(bool askForConfirmation = true)
         {
+            if (_currentImages == null || _currentImages.Length < 1)
+                return;
+
             if (askForConfirmation)
             {
                 DialogResult dialogResult = UiUtils.ShowMessageBox($"Are you sure you want to delete {_currentImages.Length} generated images?", "Are you sure?", MessageBoxButtons.YesNo);
