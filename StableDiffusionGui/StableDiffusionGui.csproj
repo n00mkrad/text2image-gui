@@ -250,7 +250,7 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Main\ArgsDreamPy.cs" />
+    <Compile Include="Main\Args.cs" />
     <Compile Include="Main\Constants.cs" />
     <Compile Include="Main\Dreambooth.cs" />
     <Compile Include="Main\DreamboothOutputHandler.cs" />

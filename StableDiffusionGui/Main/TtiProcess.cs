@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using StableDiffusionGui.Io;
+﻿using StableDiffusionGui.Io;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
@@ -9,9 +8,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Management.Automation.Runspaces;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace StableDiffusionGui.Main
 {
@@ -59,6 +56,15 @@ namespace StableDiffusionGui.Main
 
                 List<string> cmds = new List<string>();
 
+                List<string> args = new List<string>();
+                args.Add(Args.InvokeAi.GetDefaultArgsCommand());
+                args.Add(Args.InvokeAi.GetUpscaleArgs());
+                args.Add(Args.InvokeAi.GetFaceRestoreArgs());
+                args.Add($"-n 1");
+                args.Add(seamless ? "--seamless" : "");
+                args.Add(hiresFix ? "--hires_fix" : "");
+                int baseArgsCount = args.Count;
+
                 foreach (string prompt in prompts)
                 {
                     List<string> processedPrompts = PromptWildcardUtils.ApplyWildcardsAll(prompt, iterations, false);
@@ -66,14 +72,8 @@ namespace StableDiffusionGui.Main
 
                     for (int i = 0; i < iterations; i++)
                     {
-                        List<string> args = new List<string>();
-                        args.Add(processedPrompts[i].Wrap());
-                        args.Add(ArgsInvoke.GetDefaultArgsCommand());
-                        args.Add(ArgsInvoke.GetUpscaleArgs());
-                        args.Add(ArgsInvoke.GetFaceRestoreArgs());
-                        args.Add(seamless ? "--seamless" : "");
-                        args.Add(hiresFix ? "--hires_fix" : "");
-                        args.Add($"-n 1");
+                        args = args.Take(baseArgsCount).ToList(); // Reset to base args, to avoid double-adding args
+                        args.Insert(0, processedPrompts[i].Wrap()); // Insert prompt, needs to be first arg
                         args.Add($"-s {steps}");
                         args.Add($"-W {res.Width} -H {res.Height}");
                         args.Add($"-A {sampler}");
@@ -110,10 +110,9 @@ namespace StableDiffusionGui.Main
 
                 Logger.Log($"Running Stable Diffusion - {iterations} Iterations, {steps} Steps, Scales {(scales.Length < 4 ? string.Join(", ", scales.Select(x => x.ToStringDot())) : $"{scales.First()}->{scales.Last()}")}, {res.Width}x{res.Height}, Starting Seed: {startSeed}");
 
-                string precArg = ArgsInvoke.GetPrecisionArg();
-                string embArg = ArgsInvoke.GetEmbeddingArg(embedding);
+                string argsStartup = Args.InvokeAi.GetArgsStartup(embedding);
 
-                string newStartupSettings = $"{model}{vae}{precArg}{embArg}{Config.GetInt("comboxCudaDevice")}"; // Check if startup settings match - If not, we need to restart the process
+                string newStartupSettings = $"{argsStartup}{model}{vae}{Config.GetInt("comboxCudaDevice")}"; // Check if startup settings match - If not, we need to restart the process
 
                 string initsStr = initImages != null ? $" and {initImages.Count} image{(initImages.Count != 1 ? "s" : "")} using {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
                 Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} with {iterations} iteration{(iterations != 1 ? "s" : "")} each and {scales.Length} scale{(scales.Length != 1 ? "s" : "")}{initsStr} each = {cmds.Count} images total.");
@@ -122,21 +121,12 @@ namespace StableDiffusionGui.Main
                 {
                     _lastInvokeStartupSettings = newStartupSettings;
 
-                    if (!string.IsNullOrWhiteSpace(embedding))
-                    {
-                        if (!File.Exists(embedding))
-                            embedding = "";
-                        else
-                            Logger.Log($"Using learned concept: {Path.GetFileName(embedding)}");
-                    }
-
                     Process py = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
                     TextToImage.CurrentTask.Processes.Add(py);
 
                     py.StartInfo.RedirectStandardInput = true;
                     py.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSd()} && call activate.bat {Constants.Dirs.SdEnv} && " +
-                        $"python {Constants.Dirs.RepoSd}/scripts/invoke.py --model default -o {outPath.Wrap(true)} {ArgsInvoke.GetDefaultArgsStartup()} {precArg} " +
-                        $"{embArg} ";
+                        $"python {Constants.Dirs.RepoSd}/scripts/invoke.py -o {outPath.Wrap(true)} {argsStartup}";
 
                     Logger.Log("cmd.exe " + py.StartInfo.Arguments, true);
 
@@ -216,10 +206,10 @@ namespace StableDiffusionGui.Main
             List<string> args = new List<string> { "!fix", imgPath.Wrap(true) };
 
             if (actions.Contains(FixAction.Upscale))
-                args.Add(ArgsInvoke.GetUpscaleArgs(true));
+                args.Add(Args.InvokeAi.GetUpscaleArgs(true));
 
             if (actions.Contains(FixAction.FaceRestoration))
-                args.Add(ArgsInvoke.GetFaceRestoreArgs(true));
+                args.Add(Args.InvokeAi.GetFaceRestoreArgs(true));
 
             await WriteStdIn(string.Join(" ", args), true);
 
@@ -269,14 +259,6 @@ namespace StableDiffusionGui.Main
             string promptFilePath = Path.Combine(Paths.GetSessionDataPath(), "prompts.txt");
             List<string> promptFileLines = new List<string>();
 
-            // int upscaleSetting = Config.GetInt("comboxUpscale");
-            // string upscaling = upscaleSetting == 0 ? "" : $"-U {Math.Pow(2, upscaleSetting)}";
-            // 
-            // float gfpganSetting = Config.GetFloat("sliderGfpgan");
-            // string gfpgan = gfpganSetting > 0.01f ? $"-G {gfpganSetting.ToStringDot("0.00")}" : "";
-
-            int imgs = 0;
-
             foreach (string prompt in prompts)
             {
                 for (int i = 0; i < iterations; i++)
@@ -286,7 +268,6 @@ namespace StableDiffusionGui.Main
                         if (initImages == null) // No init image(s)
                         {
                             promptFileLines.Add($"--prompt {prompt.Wrap()} --ddim_steps {steps} --scale {scale.ToStringDot()} --W {res.Width} --H {res.Height} --seed {seed}");
-                            imgs++;
                         }
                         else // With init image(s)
                         {
@@ -296,7 +277,6 @@ namespace StableDiffusionGui.Main
                                 {
                                     string init = $"--init_img {initImg.Wrap()} --strength {strength.ToStringDot("0.###")}";
                                     promptFileLines.Add($"--prompt {prompt.Wrap()} {init} --ddim_steps {steps} --scale {scale.ToStringDot()} --W {res.Width} --H {res.Height} --seed {seed}");
-                                    imgs++;
                                 }
                             }
                         }
@@ -320,7 +300,7 @@ namespace StableDiffusionGui.Main
             string newStartupSettings = $"opt{modelNoExt}{precArg}{Config.GetInt("comboxCudaDevice")}"; // Check if startup settings match - If not, we need to restart the process
 
             string initsStr = initImages != null ? $" and {initImages.Count} image{(initImages.Count != 1 ? "s" : "")} using {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
-            Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} with {iterations} iteration{(iterations != 1 ? "s" : "")} each and {scales.Length} scale{(scales.Length != 1 ? "s" : "")}{initsStr} each = {imgs} images total.");
+            Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} with {iterations} iteration{(iterations != 1 ? "s" : "")} each and {scales.Length} scale{(scales.Length != 1 ? "s" : "")}{initsStr} each = {promptFileLines.Count} images total.");
 
             if (!IsAiProcessRunning || (IsAiProcessRunning && _lastInvokeStartupSettings != newStartupSettings))
             {
@@ -364,8 +344,6 @@ namespace StableDiffusionGui.Main
             {
                 TextToImage.CurrentTask.Processes.Add(CurrentProcess);
             }
-
-            Finish();
         }
 
         public static async Task RunStableDiffusionCli(string outPath, string vaePath)
@@ -383,9 +361,9 @@ namespace StableDiffusionGui.Main
             string batText = $"@echo off\n" +
                 $"title Stable Diffusion CLI (InvokeAI)\n" +
                 $"cd /D {Paths.GetDataPath().Wrap()}\n" +
-                $"SET PATH={OsUtils.GetTemporaryPathVariable(new string[] { $"./{Constants.Dirs.Conda}", $"./{Constants.Dirs.Conda}/Scripts", $"./{Constants.Dirs.Conda}/condabin", $"./{Constants.Dirs.Conda}/Library/bin" })}\n" +
+                $"{TtiUtils.GetEnvVarsSd()}\n" +
                 $"call activate.bat {Constants.Dirs.Conda}/envs/{Constants.Dirs.SdEnv}\n" +
-                $"python {Constants.Dirs.RepoSd}/scripts/invoke.py --model default -o {outPath.Wrap(true)} {ArgsInvoke.GetPrecisionArg()} {ArgsInvoke.GetDefaultArgsStartup()}";
+                $"python {Constants.Dirs.RepoSd}/scripts/invoke.py -o {outPath.Wrap(true)} {Args.InvokeAi.GetArgsStartup()}";
 
             File.WriteAllText(batPath, batText);
             ProcessManager.FindAndKillOrphans($"*invoke.py*{outPath}*");
@@ -395,9 +373,7 @@ namespace StableDiffusionGui.Main
 
         public static void StartCmdInSdCondaEnv()
         {
-            string c = Constants.Dirs.Conda;
-            string pathVar = OsUtils.GetTemporaryPathVariable(new string[] { $"./{c}", $"./{c}/Scripts", $"./{c}/condabin", $"./{c}/Library/bin" });
-            Process.Start("cmd", $"/K title Environment: {Constants.Dirs.SdEnv} && cd /D {Paths.GetDataPath().Wrap()} && SET PATH={pathVar} && call activate.bat {c}/envs/{Constants.Dirs.SdEnv}");
+            Process.Start("cmd", $"/K title Env: {Constants.Dirs.SdEnv} && cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSd()} && call activate.bat {Constants.Dirs.Conda}/envs/{Constants.Dirs.SdEnv}");
         }
 
         public static async Task<bool> WriteStdIn(string text, bool ignoreCanceled = false, bool newLine = true)
