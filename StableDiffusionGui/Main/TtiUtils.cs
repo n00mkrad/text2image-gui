@@ -109,7 +109,11 @@ namespace StableDiffusionGui.Main
         {
             var mdl = Paths.GetModel(mdlName, false, Enums.StableDiffusion.ModelType.Normal);
             var vae = Paths.GetModel(vaeName, false, Enums.StableDiffusion.ModelType.Vae);
+            WriteModelsYaml(mdl, vae, keyName);
+        }
 
+        public static void WriteModelsYaml(FileInfo mdl, FileInfo vae, string keyName = "default")
+        {
             string text = $"{keyName}:\n" +
                 $"    config: configs/stable-diffusion/v1-inference.yaml\n" +
                 $"    weights: {(mdl == null ? $"unknown{Constants.FileExts.SdModel}" : mdl.FullName.Wrap(true))}\n" +
@@ -162,7 +166,9 @@ namespace StableDiffusionGui.Main
                 OsUtils.SendCtrlC(p.Id);
         }
 
-        public static bool CheckIfSdModelExists()
+        /// <summary> Checks if Stable Diffusion model exists </summary>
+        /// <returns> Model FileInfo, if it exists - null if not </returns>
+        public static FileInfo CheckIfCurrentSdModelExists()
         {
             string savedModelFileName = Config.Get(Config.Key.comboxSdModel);
 
@@ -170,7 +176,7 @@ namespace StableDiffusionGui.Main
             {
                 TextToImage.Cancel($"No Stable Diffusion model file has been set.\nPlease set one in the settings.");
                 new SettingsForm().ShowDialogForm(0.5f);
-                return false;
+                return null;
             }
             else
             {
@@ -179,11 +185,13 @@ namespace StableDiffusionGui.Main
                 if (model == null)
                 {
                     TextToImage.Cancel($"Stable Diffusion model file {savedModelFileName.Wrap()} not found.\nPossibly it was moved, renamed, or deleted.");
-                    return false;
+                    return null;
+                }
+                else
+                {
+                    return model;
                 }
             }
-
-            return true;
         }
 
         public static string GetEnvVarsSd(bool allCudaDevices = false, string baseDir = ".")

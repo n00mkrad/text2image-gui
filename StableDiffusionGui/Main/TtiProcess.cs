@@ -44,12 +44,15 @@ namespace StableDiffusionGui.Main
                 bool lockSeed = paramsDict.Get("lockSeed").FromJson<bool>();
                 string vae = paramsDict.Get("vae").FromJson<string>().NullToEmpty().Replace("None", "");
 
-                if (!TtiUtils.CheckIfSdModelExists())
+                FileInfo modelFile = TtiUtils.CheckIfCurrentSdModelExists();
+                FileInfo vaeFile = Paths.GetModel(vae, false, Enums.StableDiffusion.ModelType.Vae);
+
+                if (modelFile == null)
                     return;
 
-                Dictionary<string, string> initImages = initImgs != null && initImgs.Length > 0 ? await TtiUtils.CreateResizedInitImagesIfNeeded(initImgs.ToList(), res) : null;
+                TtiUtils.WriteModelsYaml(modelFile, vaeFile);
 
-                TtiUtils.WriteModelsYaml(model, vae);
+                Dictionary<string, string> initImages = initImgs != null && initImgs.Length > 0 ? await TtiUtils.CreateResizedInitImagesIfNeeded(initImgs.ToList(), res) : null;
 
                 long startSeed = seed;
                 prompts = prompts.Select(p => FormatUtils.GetCombinedPrompt(p, negPrompt)).ToArray(); // Apply negative prompt
@@ -254,7 +257,9 @@ namespace StableDiffusionGui.Main
             string modelNoExt = Path.ChangeExtension(model, null);
             bool lockSeed = paramsDict.Get("lockSeed").FromJson<bool>();
 
-            if (!TtiUtils.CheckIfSdModelExists())
+            FileInfo modelFile = TtiUtils.CheckIfCurrentSdModelExists();
+
+            if (modelFile == null)
                 return;
 
             Dictionary<string, string> initImages = initImgs != null && initImgs.Length > 0 ? await TtiUtils.CreateResizedInitImagesIfNeeded(initImgs.ToList(), res) : null;
@@ -324,7 +329,7 @@ namespace StableDiffusionGui.Main
                 TextToImage.CurrentTask.Processes.Add(py);
 
                 py.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSd()} && call activate.bat {Constants.Dirs.SdEnv} && " +
-                    $"python {Constants.Dirs.RepoSd}/optimizedSD/optimized_txt2img_loop.py --model {modelNoExt.Wrap()} --outdir {outPath.Wrap(true)} --from_file_loop={promptFilePath.Wrap()} {argsStartup} ";
+                    $"python {Constants.Dirs.RepoSd}/optimizedSD/optimized_txt2img_loop.py --model {modelFile.FullName.Wrap(true)} --outdir {outPath.Wrap(true)} --from_file_loop={promptFilePath.Wrap()} {argsStartup} ";
                 Logger.Log("cmd.exe " + py.StartInfo.Arguments, true);
 
                 if (!OsUtils.ShowHiddenCmd())
@@ -365,10 +370,13 @@ namespace StableDiffusionGui.Main
             if (Program.Busy)
                 return;
 
-            if (!TtiUtils.CheckIfSdModelExists())
+            FileInfo modelFile = TtiUtils.CheckIfCurrentSdModelExists();
+            FileInfo vaeFile = Paths.GetModel(Path.GetFileName(vaePath), false, Enums.StableDiffusion.ModelType.Vae);
+
+            if (modelFile == null)
                 return;
 
-            TtiUtils.WriteModelsYaml(Config.Get(Config.Key.comboxSdModel), vaePath);
+            TtiUtils.WriteModelsYaml(modelFile, vaeFile);
 
             string batPath = Path.Combine(Paths.GetSessionDataPath(), "invoke.bat");
 
