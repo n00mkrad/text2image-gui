@@ -39,5 +39,10 @@
             public static readonly string[] ValidEmbeddings = new string[] { ".pt", ".bin" };
             public const string SdModel = ".ckpt";
         }
+
+        public class Limits
+        {
+            public const int MaxWildcardCombinations = 100000;
+        }
     }
 }

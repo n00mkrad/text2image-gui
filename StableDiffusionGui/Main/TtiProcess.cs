@@ -1,4 +1,5 @@
-﻿using StableDiffusionGui.Io;
+﻿using Newtonsoft.Json.Linq;
+using StableDiffusionGui.Io;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
@@ -10,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Management.Automation.Runspaces;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace StableDiffusionGui.Main
 {
@@ -29,179 +31,166 @@ namespace StableDiffusionGui.Main
 
         public static async Task RunStableDiffusion(string[] prompts, string negPrompt, int iterations, Dictionary<string, string> paramsDict, string outPath)
         {
-            string[] initImgs = paramsDict.Get("initImgs").FromJson<string[]>();
-            string embedding = paramsDict.Get("embedding").FromJson<string>();
-            float[] initStrengths = paramsDict.Get("initStrengths").FromJson<float[]>();
-            int steps = paramsDict.Get("steps").FromJson<int>();
-            float[] scales = paramsDict.Get("scales").FromJson<float[]>();
-            long seed = paramsDict.Get("seed").FromJson<long>();
-            string sampler = paramsDict.Get("sampler").FromJson<string>();
-            Size res = paramsDict.Get("res").FromJson<Size>();
-            bool seamless = paramsDict.Get("seamless").FromJson<bool>();
-            string model = paramsDict.Get("model").FromJson<string>();
-            bool hiresFix = paramsDict.Get("hiresFix").FromJson<bool>();
-            bool lockSeed = paramsDict.Get("lockSeed").FromJson<bool>();
-            string vae = paramsDict.Get("vae").FromJson<string>().NullToEmpty().Replace("None", "");
-
-            if (!TtiUtils.CheckIfSdModelExists())
-                return;
-
-            Dictionary<string, string> initImages = initImgs != null && initImgs.Length > 0 ? await TtiUtils.CreateResizedInitImagesIfNeeded(initImgs.ToList(), res) : null;
-
-            TtiUtils.WriteModelsYaml(model, vae);
-
-            long startSeed = seed;
-            prompts = prompts.Select(p => FormatUtils.GetCombinedPrompt(p, negPrompt)).ToArray(); // Apply negative prompt
-
-            List<string> cmds = new List<string>();
-
-            int imgs = 0;
-
-            foreach (string prompt in prompts)
+            try
             {
-                PromptWildcardUtils.Reset();
+                string[] initImgs = paramsDict.Get("initImgs").FromJson<string[]>();
+                string embedding = paramsDict.Get("embedding").FromJson<string>();
+                float[] initStrengths = paramsDict.Get("initStrengths").FromJson<float[]>();
+                int steps = paramsDict.Get("steps").FromJson<int>();
+                float[] scales = paramsDict.Get("scales").FromJson<float[]>();
+                long seed = paramsDict.Get("seed").FromJson<long>();
+                string sampler = paramsDict.Get("sampler").FromJson<string>();
+                Size res = paramsDict.Get("res").FromJson<Size>();
+                bool seamless = paramsDict.Get("seamless").FromJson<bool>();
+                string model = paramsDict.Get("model").FromJson<string>();
+                bool hiresFix = paramsDict.Get("hiresFix").FromJson<bool>();
+                bool lockSeed = paramsDict.Get("lockSeed").FromJson<bool>();
+                string vae = paramsDict.Get("vae").FromJson<string>().NullToEmpty().Replace("None", "");
 
-                for (int i = 0; i < iterations; i++)
+                if (!TtiUtils.CheckIfSdModelExists())
+                    return;
+
+                Dictionary<string, string> initImages = initImgs != null && initImgs.Length > 0 ? await TtiUtils.CreateResizedInitImagesIfNeeded(initImgs.ToList(), res) : null;
+
+                TtiUtils.WriteModelsYaml(model, vae);
+
+                long startSeed = seed;
+                prompts = prompts.Select(p => FormatUtils.GetCombinedPrompt(p, negPrompt)).ToArray(); // Apply negative prompt
+
+                List<string> cmds = new List<string>();
+
+                foreach (string prompt in prompts)
                 {
-                    string promptProcessed = PromptWildcardUtils.ApplyWildcards(prompt, iterations);
-                    TextToImage.CurrentTaskSettings.ProcessedAndRawPrompts[FormatUtils.ConvertTextEncoding(promptProcessed)] = prompt; // Save the prompt we stored plus the processed (wildcards etc.) one for later reference
+                    PromptWildcardUtils.Reset();
 
-                    foreach (float scale in scales)
+                    List<string> processedPrompts = PromptWildcardUtils.ApplyWildcardsAll(prompt, iterations, false);
+                    TextToImage.CurrentTaskSettings.ProcessedAndRawPrompts = processedPrompts.Distinct().ToDictionary(x => x, x => prompt);
+
+                    for (int i = 0; i < iterations; i++)
                     {
-                        if (initImages == null) // No init image(s)
+                        List<string> args = new List<string>();
+                        args.Add(processedPrompts[i].Wrap());
+                        args.Add(ArgsInvoke.GetDefaultArgsCommand());
+                        args.Add(ArgsInvoke.GetUpscaleArgs());
+                        args.Add(ArgsInvoke.GetFaceRestoreArgs());
+                        args.Add(seamless ? "--seamless" : "");
+                        args.Add(hiresFix ? "--hires_fix" : "");
+                        args.Add($"-n 1");
+                        args.Add($"-s {steps}");
+                        args.Add($"-W {res.Width} -H {res.Height}");
+                        args.Add($"-A {sampler}");
+                        args.Add($"-S {seed}");
+
+                        foreach (float scale in scales)
                         {
-                            List<string> args = new List<string>();
-                            args.Add(promptProcessed.Wrap());
-                            args.Add($"-n 1");
-                            args.Add($"-s {steps}");
                             args.Add($"-C {scale.ToStringDot()}");
-                            args.Add($"-A {sampler}");
-                            args.Add($"-W {res.Width} -H {res.Height}");
-                            args.Add($"-S {seed}");
-                            args.Add(ArgsInvoke.GetUpscaleArgs());
-                            args.Add(ArgsInvoke.GetFaceRestoreArgs());
-                            args.Add(seamless ? "--seamless" : "");
-                            args.Add(hiresFix ? "--hires_fix" : "");
-                            args.Add(ArgsInvoke.GetDefaultArgsCommand());
 
-                            cmds.Add(string.Join(" ", args.Where(x => !string.IsNullOrWhiteSpace(x))));
-
-                            imgs++;
-                        }
-                        else // With init image(s)
-                        {
-                            foreach (string initImg in initImages.Values)
+                            if (initImages == null) // No init image(s)
                             {
-                                foreach (float strength in initStrengths)
+                                cmds.Add(string.Join(" ", args.Where(x => !string.IsNullOrWhiteSpace(x))));
+                            }
+                            else // With init image(s)
+                            {
+                                foreach (string initImg in initImages.Values)
                                 {
-                                    List<string> args = new List<string>();
-                                    args.Add(promptProcessed.Wrap());
-                                    args.Add($"--init_img {initImg.Wrap()} --strength {strength.ToStringDot("0.###")}");
-                                    args.Add($"-n 1");
-                                    args.Add($"-s {steps}");
-                                    args.Add($"-C {scale.ToStringDot()}");
-                                    args.Add($"-A {sampler}");
-                                    args.Add($"-W {res.Width} -H {res.Height}");
-                                    args.Add($"-S {seed}");
-                                    args.Add(ArgsInvoke.GetUpscaleArgs());
-                                    args.Add(ArgsInvoke.GetFaceRestoreArgs());
-                                    args.Add(seamless ? "--seamless" : "");
-                                    args.Add(hiresFix ? "--hires_fix" : "");
-                                    args.Add(ArgsInvoke.GetDefaultArgsCommand());
-
-                                    cmds.Add(string.Join(" ", args.Where(x => !string.IsNullOrWhiteSpace(x))));
-
-                                    imgs++;
+                                    foreach (float strength in initStrengths)
+                                    {
+                                        args.Add($"--init_img {initImg.Wrap()} --strength {strength.ToStringDot("0.###")}");
+                                        cmds.Add(string.Join(" ", args.Where(x => !string.IsNullOrWhiteSpace(x))));
+                                    }
                                 }
                             }
                         }
+
+                        if (!lockSeed)
+                            seed++;
                     }
 
-                    if (!lockSeed)
-                        seed++;
+                    if (Config.GetBool(Config.Key.checkboxMultiPromptsSameSeed))
+                        seed = startSeed;
                 }
 
-                if (Config.GetBool(Config.Key.checkboxMultiPromptsSameSeed))
-                    seed = startSeed;
+                Logger.Log($"Running Stable Diffusion - {iterations} Iterations, {steps} Steps, Scales {(scales.Length < 4 ? string.Join(", ", scales.Select(x => x.ToStringDot())) : $"{scales.First()}->{scales.Last()}")}, {res.Width}x{res.Height}, Starting Seed: {startSeed}");
+
+                string precArg = ArgsInvoke.GetPrecisionArg();
+                string embArg = ArgsInvoke.GetEmbeddingArg(embedding);
+
+                string newStartupSettings = $"{model}{vae}{precArg}{embArg}{Config.GetInt("comboxCudaDevice")}"; // Check if startup settings match - If not, we need to restart the process
+
+                string initsStr = initImages != null ? $" and {initImages.Count} image{(initImages.Count != 1 ? "s" : "")} using {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
+                Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} with {iterations} iteration{(iterations != 1 ? "s" : "")} each and {scales.Length} scale{(scales.Length != 1 ? "s" : "")}{initsStr} each = {cmds.Count} images total.");
+
+                if (!IsAiProcessRunning || (IsAiProcessRunning && _lastInvokeStartupSettings != newStartupSettings))
+                {
+                    _lastInvokeStartupSettings = newStartupSettings;
+
+                    if (!string.IsNullOrWhiteSpace(embedding))
+                    {
+                        if (!File.Exists(embedding))
+                            embedding = "";
+                        else
+                            Logger.Log($"Using learned concept: {Path.GetFileName(embedding)}");
+                    }
+
+                    Process py = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
+                    TextToImage.CurrentTask.Processes.Add(py);
+
+                    py.StartInfo.RedirectStandardInput = true;
+                    py.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSd()} && call activate.bat {Constants.Dirs.SdEnv} && " +
+                        $"python {Constants.Dirs.RepoSd}/scripts/invoke.py --model default -o {outPath.Wrap(true)} {ArgsInvoke.GetDefaultArgsStartup()} {precArg} " +
+                        $"{embArg} ";
+
+                    Logger.Log("cmd.exe " + py.StartInfo.Arguments, true);
+
+                    if (!OsUtils.ShowHiddenCmd())
+                    {
+                        py.OutputDataReceived += (sender, line) => { TtiProcessOutputHandler.LogOutput(line.Data); };
+                        py.ErrorDataReceived += (sender, line) => { TtiProcessOutputHandler.LogOutput(line.Data, true); };
+                    }
+
+                    if (CurrentProcess != null)
+                    {
+                        ProcessExistWasIntentional = true;
+                        OsUtils.KillProcessTree(CurrentProcess.Id);
+                    }
+
+                    TtiProcessOutputHandler.Start();
+
+                    string logMdl = Path.ChangeExtension(model, null).Trunc(!string.IsNullOrWhiteSpace(vae) ? 35 : 80).Wrap();
+                    string logVae = Path.GetFileNameWithoutExtension(vae).Trunc(35).Wrap();
+                    Logger.Log($"Loading Stable Diffusion with model {logMdl}{(string.IsNullOrWhiteSpace(vae) ? "" : $" and VAE {logVae}")}...");
+
+                    CurrentProcess = py;
+                    ProcessExistWasIntentional = false;
+                    py.Start();
+                    OsUtils.AttachOrphanHitman(py);
+                    CurrentStdInWriter = py.StandardInput;
+
+                    if (!OsUtils.ShowHiddenCmd())
+                    {
+                        py.BeginOutputReadLine();
+                        py.BeginErrorReadLine();
+                    }
+
+                    Task.Run(() => CheckStillRunning());
+                }
+                else
+                {
+                    TextToImage.CurrentTask.Processes.Add(CurrentProcess);
+                }
+
+                Logger.Log($"Writing to stdin...", true);
+
+                await WriteStdIn("!reset");
+
+                foreach (string command in cmds)
+                    await WriteStdIn(command);
             }
-
-            Logger.Log($"Running Stable Diffusion - {iterations} Iterations, {steps} Steps, Scales {(scales.Length < 4 ? string.Join(", ", scales.Select(x => x.ToStringDot())) : $"{scales.First()}->{scales.Last()}")}, {res.Width}x{res.Height}, Starting Seed: {startSeed}");
-
-            string precArg = ArgsInvoke.GetPrecisionArg();
-            string embArg = ArgsInvoke.GetEmbeddingArg(embedding);
-
-            string newStartupSettings = $"{model}{vae}{precArg}{embArg}{Config.GetInt("comboxCudaDevice")}"; // Check if startup settings match - If not, we need to restart the process
-
-            string initsStr = initImages != null ? $" and {initImages.Count} image{(initImages.Count != 1 ? "s" : "")} using {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
-            Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} with {iterations} iteration{(iterations != 1 ? "s" : "")} each and {scales.Length} scale{(scales.Length != 1 ? "s" : "")}{initsStr} each = {imgs} images total.");
-
-            if (!IsAiProcessRunning || (IsAiProcessRunning && _lastInvokeStartupSettings != newStartupSettings))
+            catch(Exception ex)
             {
-                _lastInvokeStartupSettings = newStartupSettings;
-
-                if (!string.IsNullOrWhiteSpace(embedding))
-                {
-                    if (!File.Exists(embedding))
-                        embedding = "";
-                    else
-                        Logger.Log($"Using learned concept: {Path.GetFileName(embedding)}");
-                }
-
-                Process py = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
-                TextToImage.CurrentTask.Processes.Add(py);
-
-                py.StartInfo.RedirectStandardInput = true;
-                py.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSd()} && call activate.bat {Constants.Dirs.SdEnv} && " +
-                    $"python {Constants.Dirs.RepoSd}/scripts/invoke.py --model default -o {outPath.Wrap(true)} {ArgsInvoke.GetDefaultArgsStartup()} {precArg} " +
-                    $"{embArg} ";
-
-                Logger.Log("cmd.exe " + py.StartInfo.Arguments, true);
-
-                if (!OsUtils.ShowHiddenCmd())
-                {
-                    py.OutputDataReceived += (sender, line) => { TtiProcessOutputHandler.LogOutput(line.Data); };
-                    py.ErrorDataReceived += (sender, line) => { TtiProcessOutputHandler.LogOutput(line.Data, true); };
-                }
-
-                if (CurrentProcess != null)
-                {
-                    ProcessExistWasIntentional = true;
-                    OsUtils.KillProcessTree(CurrentProcess.Id);
-                }
-
-                TtiProcessOutputHandler.Start();
-
-                string logMdl = Path.ChangeExtension(model, null).Trunc(!string.IsNullOrWhiteSpace(vae) ? 35 : 80).Wrap();
-                string logVae = Path.GetFileNameWithoutExtension(vae).Trunc(35).Wrap();
-                Logger.Log($"Loading Stable Diffusion with model {logMdl}{(string.IsNullOrWhiteSpace(vae) ? "" : $" and VAE {logVae}")}...");
-
-                CurrentProcess = py;
-                ProcessExistWasIntentional = false;
-                py.Start();
-                OsUtils.AttachOrphanHitman(py);
-                CurrentStdInWriter = py.StandardInput;
-
-                if (!OsUtils.ShowHiddenCmd())
-                {
-                    py.BeginOutputReadLine();
-                    py.BeginErrorReadLine();
-                }
-
-                Task.Run(() => CheckStillRunning());
+                Logger.Log($"Unhandled Stable Diffusion Error: {ex.Message}");
+                Logger.Log(ex.StackTrace, true);
             }
-            else
-            {
-                TextToImage.CurrentTask.Processes.Add(CurrentProcess);
-            }
-
-            Logger.Log($"Writing to stdin...", true);
-
-            await WriteStdIn("!reset");
-
-            foreach (string command in cmds)
-                await WriteStdIn(command);
-
-            Finish();
         }
 
         public enum FixAction { Upscale, FaceRestoration }
