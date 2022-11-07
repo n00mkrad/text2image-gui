@@ -54,16 +54,16 @@ namespace StableDiffusionGui.Main
                 long startSeed = seed;
                 prompts = prompts.Select(p => FormatUtils.GetCombinedPrompt(p, negPrompt)).ToArray(); // Apply negative prompt
 
-                List<string> cmds = new List<string>();
+                List<Dictionary<string, string>> cmdsArgs = new List<Dictionary<string, string>>();
 
-                List<string> args = new List<string>();
-                args.Add(Args.InvokeAi.GetDefaultArgsCommand());
-                args.Add(Args.InvokeAi.GetUpscaleArgs());
-                args.Add(Args.InvokeAi.GetFaceRestoreArgs());
-                args.Add($"-n 1");
-                args.Add(seamless ? "--seamless" : "");
-                args.Add(hiresFix ? "--hires_fix" : "");
-                int baseArgsCount = args.Count;
+                Dictionary<string, string> args = new Dictionary<string, string>();
+                args["prompt"] = "";
+                args["default"] = Args.InvokeAi.GetDefaultArgsCommand();
+                args["upscale"] = Args.InvokeAi.GetUpscaleArgs();
+                args["facefix"] = Args.InvokeAi.GetFaceRestoreArgs();
+                args["iters"] = "-n 1";
+                args["seamless"] = seamless ? "--seamless" : "";
+                args["hiresFix"] = hiresFix ? "--hires_fix" : "";
 
                 foreach (string prompt in prompts)
                 {
@@ -72,20 +72,22 @@ namespace StableDiffusionGui.Main
 
                     for (int i = 0; i < iterations; i++)
                     {
-                        args = args.Take(baseArgsCount).ToList(); // Reset to base args, to avoid double-adding args
-                        args.Insert(0, processedPrompts[i].Wrap()); // Insert prompt, needs to be first arg
-                        args.Add($"-s {steps}");
-                        args.Add($"-W {res.Width} -H {res.Height}");
-                        args.Add($"-A {sampler}");
-                        args.Add($"-S {seed}");
+                        args.Remove("initImg");
+                        args.Remove("initStrength");
+                        args["prompt"] = processedPrompts[i].Wrap();
+                        args["steps"] = $"-s {steps}";
+                        args["res"] = $"-W {res.Width} -H {res.Height}";
+                        args["steps"] = $"-s {steps}";
+                        args["sampler"] = $"-A {sampler}";
+                        args["seed"] = $"-S {seed}";
 
                         foreach (float scale in scales)
                         {
-                            args.Add($"-C {scale.ToStringDot()}");
+                            args["scale"] = $"-C {scale.ToStringDot()}";
 
                             if (initImages == null) // No init image(s)
                             {
-                                cmds.Add(string.Join(" ", args.Where(x => !string.IsNullOrWhiteSpace(x))));
+                                cmdsArgs.Add(new Dictionary<string, string>(args));
                             }
                             else // With init image(s)
                             {
@@ -93,8 +95,9 @@ namespace StableDiffusionGui.Main
                                 {
                                     foreach (float strength in initStrengths)
                                     {
-                                        args.Add($"--init_img {initImg.Wrap()} --strength {strength.ToStringDot("0.###")}");
-                                        cmds.Add(string.Join(" ", args.Where(x => !string.IsNullOrWhiteSpace(x))));
+                                        args["initImg"] = $"--init_img {initImg.Wrap()}";
+                                        args["initStrength"] = $"--strength {strength.ToStringDot("0.###")}";
+                                        cmdsArgs.Add(new Dictionary<string, string>(args));
                                     }
                                 }
                             }
@@ -107,6 +110,8 @@ namespace StableDiffusionGui.Main
                     if (Config.GetBool(Config.Key.checkboxMultiPromptsSameSeed))
                         seed = startSeed;
                 }
+
+                List<string> cmds = cmdsArgs.Select(argList => string.Join(" ", argList.Where(argEntry => !string.IsNullOrWhiteSpace(argEntry.Value)).Select(argEntry => argEntry.Value))).ToList();
 
                 Logger.Log($"Running Stable Diffusion - {iterations} Iterations, {steps} Steps, Scales {(scales.Length < 4 ? string.Join(", ", scales.Select(x => x.ToStringDot())) : $"{scales.First()}->{scales.Last()}")}, {res.Width}x{res.Height}, Starting Seed: {startSeed}");
 
@@ -174,7 +179,7 @@ namespace StableDiffusionGui.Main
                 foreach (string command in cmds)
                     await WriteStdIn(command);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logger.Log($"Unhandled Stable Diffusion Error: {ex.Message}");
                 Logger.Log(ex.StackTrace, true);
@@ -263,11 +268,20 @@ namespace StableDiffusionGui.Main
             {
                 for (int i = 0; i < iterations; i++)
                 {
+                    Dictionary<string, string> args = new Dictionary<string, string>();
+                    args["prompt"] = prompt.Wrap();
+                    args["ddim_steps"] = steps.ToString();
+                    args["W"] = res.Width.ToString();
+                    args["H"] = res.Height.ToString();
+                    args["seed"] = seed.ToString();
+
                     foreach (float scale in scales)
                     {
+                        args["scale"] = scale.ToStringDot();
+
                         if (initImages == null) // No init image(s)
                         {
-                            promptFileLines.Add($"--prompt {prompt.Wrap()} --ddim_steps {steps} --scale {scale.ToStringDot()} --W {res.Width} --H {res.Height} --seed {seed}");
+                            promptFileLines.Add(string.Join(" ", args.Where(x => !string.IsNullOrWhiteSpace(x.Value)).Select(x => $"--{x.Key} {x.Value}")));
                         }
                         else // With init image(s)
                         {
@@ -275,8 +289,9 @@ namespace StableDiffusionGui.Main
                             {
                                 foreach (float strength in initStrengths)
                                 {
-                                    string init = $"--init_img {initImg.Wrap()} --strength {strength.ToStringDot("0.###")}";
-                                    promptFileLines.Add($"--prompt {prompt.Wrap()} {init} --ddim_steps {steps} --scale {scale.ToStringDot()} --W {res.Width} --H {res.Height} --seed {seed}");
+                                    args["init_img"] = initImg.Wrap();
+                                    args["strength"] = strength.ToStringDot("0.###");
+                                    promptFileLines.Add(string.Join(" ", args.Where(x => !string.IsNullOrWhiteSpace(x.Value)).Select(x => $"--{x.Key} {x.Value}")));
                                 }
                             }
                         }
@@ -295,9 +310,8 @@ namespace StableDiffusionGui.Main
 
             Logger.Log($"Running Stable Diffusion - {iterations} Iterations, {steps} Steps, Scales {(scales.Length < 4 ? string.Join(", ", scales.Select(x => x.ToStringDot())) : $"{scales.First()}->{scales.Last()}")}, {res.Width}x{res.Height}, Starting Seed: {startSeed}");
 
-            string precArg = $"--precision {(Config.GetBool("checkboxFullPrecision") ? "full" : "autocast")}";
-
-            string newStartupSettings = $"opt{modelNoExt}{precArg}{Config.GetInt("comboxCudaDevice")}"; // Check if startup settings match - If not, we need to restart the process
+            string argsStartup = Args.OptimizedSd.GetDefaultArgsStartup();
+            string newStartupSettings = $"opt{modelNoExt}{argsStartup}{Config.GetInt("comboxCudaDevice")}"; // Check if startup settings match - If not, we need to restart the process
 
             string initsStr = initImages != null ? $" and {initImages.Count} image{(initImages.Count != 1 ? "s" : "")} using {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
             Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} with {iterations} iteration{(iterations != 1 ? "s" : "")} each and {scales.Length} scale{(scales.Length != 1 ? "s" : "")}{initsStr} each = {promptFileLines.Count} images total.");
@@ -310,7 +324,7 @@ namespace StableDiffusionGui.Main
                 TextToImage.CurrentTask.Processes.Add(py);
 
                 py.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSd()} && call activate.bat {Constants.Dirs.SdEnv} && " +
-                    $"python {Constants.Dirs.RepoSd}/optimizedSD/optimized_txt2img_loop.py --model {modelNoExt.Wrap()} --outdir {outPath.Wrap(true)} --from_file_loop={promptFilePath.Wrap()} {precArg} ";
+                    $"python {Constants.Dirs.RepoSd}/optimizedSD/optimized_txt2img_loop.py --model {modelNoExt.Wrap()} --outdir {outPath.Wrap(true)} --from_file_loop={promptFilePath.Wrap()} {argsStartup} ";
                 Logger.Log("cmd.exe " + py.StartInfo.Arguments, true);
 
                 if (!OsUtils.ShowHiddenCmd())

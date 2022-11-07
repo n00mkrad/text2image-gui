@@ -108,8 +108,7 @@ namespace StableDiffusionGui.Main
             {
                 List<string> args = new List<string>();
 
-                args.Add("--gfpgan_dir ../gfpgan");
-                args.Add("--gfpgan_model_path gfpgan.pth");
+                args.Add($"--precision {(Config.GetBool("checkboxFullPrecision") ? "full" : "autocast")}"); // Precision
 
                 return string.Join(" ", args);
             }
