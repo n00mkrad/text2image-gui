@@ -148,6 +148,9 @@
     <Compile Include="Data\TtiTaskInfo.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Extensions\UiExtensions.cs" />
+    <Compile Include="Forms\CustomForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\DreamboothForm.cs">
       <SubType>Form</SubType>
     </Compile>

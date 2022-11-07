@@ -1,6 +1,7 @@
 ﻿using StableDiffusionGui.Extensions;
 using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
+using StableDiffusionGui.Main;
 using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ using System.Windows.Forms;
 
 namespace StableDiffusionGui.Forms
 {
-    public partial class PostProcSettingsForm : Form
+    public partial class PostProcSettingsForm : CustomForm
     {
         public enum UpscaleOption { X2, X3, X4 }
         public enum FaceRestoreOption { Gfpgan, CodeFormer }
@@ -32,7 +33,7 @@ namespace StableDiffusionGui.Forms
 
         private void PostProcSettingsForm_Load(object sender, EventArgs e)
         {
-            
+
         }
 
         private async void PostProcSettingsForm_Shown(object sender, EventArgs e)
@@ -42,7 +43,7 @@ namespace StableDiffusionGui.Forms
             comboxFaceRestoration.FillFromEnum<FaceRestoreOption>(UiStrings);
             LoadSettings();
             UpdateVisibility();
-            titleLabel.Focus();
+            TabOrderInit(new List<Control>() { checkboxUpscaleEnable, comboxUpscale, checkboxFaceRestorationEnable, comboxFaceRestoration, sliderFaceRestoreStrength, sliderCodeformerFidelity });
             await Task.Delay(1);
             Opacity = 1;
 
@@ -60,12 +61,6 @@ namespace StableDiffusionGui.Forms
         private void PostProcSettingsForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             SaveSettings();
-        }
-
-        private void PostProcSettingsForm_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Escape)
-                Close();
         }
 
         void LoadSettings()
