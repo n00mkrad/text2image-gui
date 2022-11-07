@@ -1,5 +1,8 @@
 ﻿using StableDiffusionGui.Data;
 using StableDiffusionGui.Io;
+using StableDiffusionGui.Main;
+using StableDiffusionGui.MiscUtils;
+using StableDiffusionGui.Os;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
@@ -138,7 +141,20 @@ namespace StableDiffusionGui.Ui
             string dir = Directory.CreateDirectory(Config.Get("textboxFavsPath")).FullName;
 
             if (File.Exists(CurrentImagePath))
-                File.Copy(CurrentImagePath, Path.Combine(dir, Path.GetFileName(CurrentImagePath)), true);
+            {
+                string targetPath = Path.Combine(dir, Path.GetFileName(CurrentImagePath));
+
+                try
+                {
+                    File.Copy(CurrentImagePath, targetPath, true);
+                    OsUtils.ShowNotification("Stable Diffusion GUI", $"Copied image to favorites.", false, 1.5f);
+                }
+                catch(Exception ex)
+                {
+                    Logger.Log($"Failed to copy image to favorites: {ex.Message}");
+                    Logger.Log($"Failed to copy '{CurrentImagePath}' => '{targetPath}'\n{ex.StackTrace}", true);
+                }
+            }
         }
 
         public static void OpenCurrent()
