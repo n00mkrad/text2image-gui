@@ -23,7 +23,7 @@ namespace StableDiffusionGui.Controls
         [Browsable(false)]
         private float _defaultPromptFontSize;
 
-        public  string TextNoPlaceholder
+        public string TextNoPlaceholder
         {
             get { return base.Text == Placeholder ? "" : base.Text; }
         }
@@ -68,12 +68,13 @@ namespace StableDiffusionGui.Controls
 
             if (!string.IsNullOrWhiteSpace(Placeholder))
             {
-                if (Text == Placeholder && Focused)
+                if (Text.Trim() == Placeholder && Focused)
                     Text = "";
-                else if (Text == "")
+                else if (Text.Trim() == "")
                     Text = Placeholder;
 
-                ForeColor = Text == Placeholder ? PlaceholderTextColor : _originalTextColor;
+                ForeColor = Text.Trim() == Placeholder ? PlaceholderTextColor : _originalTextColor;
+                Text = Text.Trim();
             }
         }
 

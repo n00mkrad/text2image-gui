@@ -24,7 +24,7 @@ using Paths = StableDiffusionGui.Io.Paths;
 
 namespace StableDiffusionGui
 {
-    public partial class MainForm : Form
+    public partial class MainForm : CustomForm
     {
         [Flags]
         public enum EXECUTION_STATE : uint { ES_AWAYMODE_REQUIRED = 0x00000040, ES_CONTINUOUS = 0x80000000, ES_DISPLAY_REQUIRED = 0x00000002, ES_SYSTEM_REQUIRED = 0x00000001 }
@@ -97,6 +97,20 @@ namespace StableDiffusionGui
             MainUi.DoStartupChecks();
             RefreshAfterSettingsChanged();
             UpdateInitImgAndEmbeddingUi();
+
+            TabOrderInit(new List<Control>() {
+                textboxPrompt, textboxPromptNeg,
+                sliderInitStrength, textboxSliderInitStrength,
+                checkboxInpainting,
+                upDownIterations,
+                sliderSteps, textboxSliderSteps,
+                sliderScale, textboxSliderScale,
+                upDownSeed, checkboxLockSeed,
+                comboxResW, comboxResH, checkboxHiresFix,
+                comboxSampler,
+                checkboxSeamless,
+                runBtn
+            }, false);
 
             await Task.Delay(1); // Don't ask. Just keep it here
             Opacity = 1.0;
