@@ -100,7 +100,7 @@ namespace StableDiffusionGui.Main
                                     args.Add($"-n 1");
                                     args.Add($"-s {steps}");
                                     args.Add($"-C {scale.ToStringDot()}");
-                                    args.Add($"-A ddim");
+                                    args.Add($"-A {sampler}");
                                     args.Add($"-W {res.Width} -H {res.Height}");
                                     args.Add($"-S {seed}");
                                     args.Add(ArgsInvoke.GetUpscaleArgs());
