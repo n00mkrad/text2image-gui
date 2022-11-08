@@ -34,10 +34,10 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (form
 - **Multiple prompts at once:** Enter each prompt on a new line (newline-separated). Word wrapping does not count towards this.
 - **Negative Prompt:** Put words or phrases into this box to tell the AI to exclude those things when generating images.
 - **Emphasis:** Use (parentheses) to make a word/phrase more impactful, or {curly brackets} to do the opposite. You can also use ((multiple)) to increase the effect.
-- **Wildcards:** Randomly fill in words or phrases into the prompt.
+- **Wildcards:** Fill in words or phrases from a list into the prompt.
   - Inline: `photo of a ~car,tree,dog~`.
   - From File: `photo of a ~objects` for loading texts from `objects.txt` in your `Wildcards` folder in the SD GUI root folder.
-  - Order: Use `~` for random/shuffled, `~~` for unchanged order, or `~~~` for sorted (A-Z) mode
+  - Order: Use `~` for random/shuffled, `~~` for unchanged order, or `~~~` for sorted (A-Z) mode.
 
 
 
