@@ -49,18 +49,6 @@ namespace StableDiffusionGui.Ui
 
         public static List<TtiSettings> Queue = new List<TtiSettings>();
 
-        public static Dictionary<string, string> UiStrings = new Dictionary<string, string>
-        {
-            { Enums.StableDiffusion.Sampler.K_Euler_A.ToString(), "Euler Ancestral" },
-            { Enums.StableDiffusion.Sampler.K_Euler.ToString(), "Euler" },
-            { Enums.StableDiffusion.Sampler.K_Lms.ToString(), "LMS" },
-            { Enums.StableDiffusion.Sampler.Ddim.ToString(), "DDIM" },
-            { Enums.StableDiffusion.Sampler.Plms.ToString(), "PLMS" },
-            { Enums.StableDiffusion.Sampler.K_Heun.ToString(), "Heun" },
-            { Enums.StableDiffusion.Sampler.K_Dpm_2.ToString(), "DPM 2" },
-            { Enums.StableDiffusion.Sampler.K_Dpm_2_A.ToString(), "DPM 2 Ancestral" },
-        };
-
         public static List<int> Resolutions { get { return GetNumbers(384, 2048, 64); } }
 
         public static List<int> GetNumbers (int min, int max, int step)

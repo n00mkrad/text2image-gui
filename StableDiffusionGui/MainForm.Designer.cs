@@ -65,7 +65,6 @@ namespace StableDiffusionGui
             this.paypalBtn = new System.Windows.Forms.Button();
             this.labelImgPrompt = new System.Windows.Forms.Label();
             this.labelImgPromptNeg = new System.Windows.Forms.Label();
-            this.checkboxSeamless = new System.Windows.Forms.CheckBox();
             this.comboxSampler = new System.Windows.Forms.ComboBox();
             this.checkboxHiresFix = new System.Windows.Forms.CheckBox();
             this.checkboxLockSeed = new System.Windows.Forms.CheckBox();
@@ -87,6 +86,7 @@ namespace StableDiffusionGui
             this.textboxPromptNeg = new StableDiffusionGui.Controls.CustomTextbox();
             this.textboxPrompt = new StableDiffusionGui.Controls.CustomTextbox();
             this.btnExpandPromptField = new System.Windows.Forms.Button();
+            this.comboxSeamless = new System.Windows.Forms.ComboBox();
             this.menuStripLogs = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.progressBarImg = new HTAlt.WinForms.HTProgressBar();
             this.menuStripRunQueue = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -640,17 +640,6 @@ namespace StableDiffusionGui
             this.toolTip.SetToolTip(this.labelImgPromptNeg, "Shows the prompt of the displayed image. Click to copy.");
             this.labelImgPromptNeg.Click += new System.EventHandler(this.labelImgPromptNeg_Click);
             // 
-            // checkboxSeamless
-            // 
-            this.checkboxSeamless.AutoSize = true;
-            this.checkboxSeamless.ForeColor = System.Drawing.Color.White;
-            this.checkboxSeamless.Location = new System.Drawing.Point(233, 10);
-            this.checkboxSeamless.Name = "checkboxSeamless";
-            this.checkboxSeamless.Size = new System.Drawing.Size(15, 14);
-            this.checkboxSeamless.TabIndex = 106;
-            this.toolTip.SetToolTip(this.checkboxSeamless, "Create Outputs That Can Be Tiled, for Backgrounds or Textures");
-            this.checkboxSeamless.UseVisualStyleBackColor = true;
-            // 
             // comboxSampler
             // 
             this.comboxSampler.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
@@ -1087,6 +1076,20 @@ namespace StableDiffusionGui
             this.btnExpandPromptField.UseVisualStyleBackColor = false;
             this.btnExpandPromptField.Click += new System.EventHandler(this.btnExpandPromptField_Click);
             // 
+            // comboxSeamless
+            // 
+            this.comboxSeamless.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.comboxSeamless.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboxSeamless.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboxSeamless.ForeColor = System.Drawing.Color.White;
+            this.comboxSeamless.FormattingEnabled = true;
+            this.comboxSeamless.Location = new System.Drawing.Point(233, 7);
+            this.comboxSeamless.Name = "comboxSeamless";
+            this.comboxSeamless.Size = new System.Drawing.Size(200, 21);
+            this.comboxSeamless.TabIndex = 107;
+            this.toolTip.SetToolTip(this.comboxSeamless, "Changes how the image is sampled.\r\nEuler Ancestral works very well at low step co" +
+        "unts.");
+            // 
             // menuStripLogs
             // 
             this.menuStripLogs.ImageScalingSize = new System.Drawing.Size(20, 20);
@@ -1357,7 +1360,7 @@ namespace StableDiffusionGui
             // 
             // panelSeamless
             // 
-            this.panelSeamless.Controls.Add(this.checkboxSeamless);
+            this.panelSeamless.Controls.Add(this.comboxSeamless);
             this.panelSeamless.Controls.Add(this.label8);
             this.panelSeamless.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelSeamless.Location = new System.Drawing.Point(0, 450);
@@ -1928,7 +1931,6 @@ namespace StableDiffusionGui
         private HTAlt.WinForms.HTButton btnEmbeddingBrowse;
         private System.Windows.Forms.ToolStripMenuItem useAsInitImageToolStripMenuItem;
         private System.Windows.Forms.Button btnPostProc;
-        private System.Windows.Forms.CheckBox checkboxSeamless;
         private System.Windows.Forms.Label label8;
         private HTAlt.WinForms.HTButton btnSeedUsePrevious;
         private HTAlt.WinForms.HTButton btnSeedResetToRandom;
@@ -1986,6 +1988,7 @@ namespace StableDiffusionGui
         private System.Windows.Forms.Panel panelAiInputs;
         private System.Windows.Forms.Button btnExpandPromptNegField;
         private System.Windows.Forms.Label labelImgPromptNeg;
+        private System.Windows.Forms.ComboBox comboxSeamless;
     }
 }
 

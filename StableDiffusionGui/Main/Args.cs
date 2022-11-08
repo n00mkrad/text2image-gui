@@ -60,6 +60,23 @@ namespace StableDiffusionGui.Main
                 return string.Join(" ", args);
             }
 
+            public static string GetSeamlessArg (Enums.StableDiffusion.SeamlessMode mode)
+            {
+                if (mode == Enums.StableDiffusion.SeamlessMode.Disabled)
+                    return "";
+
+                if (mode == Enums.StableDiffusion.SeamlessMode.SeamlessBoth)
+                    return $"--seamless";
+
+                if (mode == Enums.StableDiffusion.SeamlessMode.SeamlessHor)
+                    return $"--seamless --seamless_axes x";
+                
+                if (mode == Enums.StableDiffusion.SeamlessMode.SeamlessVert)
+                    return $"--seamless --seamless_axes y";
+
+                return "";
+            }
+
             public static string GetEmbeddingArg(string embeddingPath)
             {
                 return File.Exists(embeddingPath) ? $"--embedding_path {embeddingPath.Wrap()}" : "";

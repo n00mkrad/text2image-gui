@@ -88,7 +88,7 @@ namespace StableDiffusionGui
         private async Task Initialize ()
         {
             MainUi.SetSettingsVertScrollbar();
-            SetUiElements();
+            InitializeControls();
             LoadUiElements();
             PromptHistory.Load();
             Setup.FixHardcodedPaths();
@@ -113,7 +113,7 @@ namespace StableDiffusionGui
                 upDownSeed, checkboxLockSeed,
                 comboxResW, comboxResH, checkboxHiresFix,
                 comboxSampler,
-                checkboxSeamless,
+                comboxSeamless,
                 runBtn
             }, false);
 
@@ -126,9 +126,10 @@ namespace StableDiffusionGui
             panelDebugSendStdin.Visible = Debugger.IsAttached;
         }
 
-        private void SetUiElements()
+        private void InitializeControls()
         {
-            comboxSampler.FillFromEnum<Enums.StableDiffusion.Sampler>(MainUi.UiStrings);
+            comboxSampler.FillFromEnum<Enums.StableDiffusion.Sampler>(Strings.MainUiStrings);
+            comboxSeamless.FillFromEnum<Enums.StableDiffusion.SeamlessMode>(Strings.MainUiStrings, 0);
 
             var resItems = MainUi.Resolutions.Where(x => x <= (Config.GetBool("checkboxAdvancedMode") ? 2048 : 1024)).Select(x => x.ToString());
             comboxResW.SetItems(resItems, UiExtensions.SelectMode.Last);
@@ -212,10 +213,10 @@ namespace StableDiffusionGui
             comboxResW.Text = meta.GeneratedResolution.Width.ToString();
             comboxResH.Text = meta.GeneratedResolution.Height.ToString();
             upDownSeed.Value = meta.Seed;
-            comboxSampler.SetIfTextMatches(meta.Sampler, true, MainUi.UiStrings);
+            comboxSampler.SetIfTextMatches(meta.Sampler, true, Strings.MainUiStrings);
             // MainUi.CurrentInitImgPaths = new[] { meta.InitImgName }.Where(x => string.IsNullOrWhiteSpace(x)).ToList(); // Does this even work if we only store the temp path?
             MainUi.CurrentInitImgPaths = null;
-            checkboxSeamless.Checked = meta.Seamless;
+            comboxSeamless.SelectedIndex = meta.Seamless ? 1 : 0; // TODO: Extend Metadata class to include seamless mode
 
             if (meta.InitStrength > 0f)
                 sliderInitStrength.ActualValue = (decimal)meta.InitStrength;
@@ -244,11 +245,11 @@ namespace StableDiffusionGui
                 comboxResW.Text = s.Params.Get("res").FromJson<Size>().Width.ToString();
                 comboxResH.Text = s.Params.Get("res").FromJson<Size>().Height.ToString();
                 upDownSeed.Value = s.Params.Get("seed").FromJson<long>();
-                comboxSampler.SetIfTextMatches(s.Params.Get("sampler").FromJson<string>(), true, MainUi.UiStrings);
+                comboxSampler.SetIfTextMatches(s.Params.Get("sampler").FromJson<string>(), true, Strings.MainUiStrings);
                 MainUi.CurrentInitImgPaths = s.Params.Get("initImgs").FromJson<List<string>>();
                 sliderInitStrength.ActualValue = (decimal)s.Params.Get("initStrengths").FromJson<List<float>>().FirstOrDefault();
                 MainUi.CurrentEmbeddingPath = s.Params.Get("embedding").FromJson<string>();
-                checkboxSeamless.Checked = s.Params.Get("seamless").FromJson<bool>();
+                comboxSeamless.SetIfTextMatches(s.Params.Get("seamless").FromJson<string>(), true, Strings.MainUiStrings);
                 checkboxInpainting.Checked = s.Params.Get("inpainting").FromJson<string>() == "masked";
                 checkboxHiresFix.Checked = s.Params.Get("hiresFix").FromJson<bool>();
                 checkboxLockSeed.Checked = s.Params.Get("lockSeed").FromJson<bool>();
@@ -281,7 +282,7 @@ namespace StableDiffusionGui
                             { "initImgs", MainUi.CurrentInitImgPaths.ToJson() },
                             { "initStrengths", MainUi.GetInitStrengths(textboxExtraInitStrengths.Text).ToJson() },
                             { "embedding", MainUi.CurrentEmbeddingPath.ToJson() },
-                            { "seamless", checkboxSeamless.Checked.ToJson() },
+                            { "seamless", ((Enums.StableDiffusion.SeamlessMode)comboxSeamless.SelectedIndex).ToJson() },
                             { "inpainting", (checkboxInpainting.Checked ? "masked" : "").ToJson() },
                             { "model", Config.Get(Config.Key.comboxSdModel).ToJson() },
                             { "hiresFix", checkboxHiresFix.Checked.ToJson() },

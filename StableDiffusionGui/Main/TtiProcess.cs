@@ -38,7 +38,7 @@ namespace StableDiffusionGui.Main
                 long seed = paramsDict.Get("seed").FromJson<long>();
                 string sampler = paramsDict.Get("sampler").FromJson<string>();
                 Size res = paramsDict.Get("res").FromJson<Size>();
-                bool seamless = paramsDict.Get("seamless").FromJson<bool>();
+                Enums.StableDiffusion.SeamlessMode seamless = paramsDict.Get("seamless").FromJson<Enums.StableDiffusion.SeamlessMode>();
                 string model = paramsDict.Get("model").FromJson<string>();
                 bool hiresFix = paramsDict.Get("hiresFix").FromJson<bool>();
                 bool lockSeed = paramsDict.Get("lockSeed").FromJson<bool>();
@@ -65,7 +65,7 @@ namespace StableDiffusionGui.Main
                 args["upscale"] = Args.InvokeAi.GetUpscaleArgs();
                 args["facefix"] = Args.InvokeAi.GetFaceRestoreArgs();
                 args["iters"] = "-n 1";
-                args["seamless"] = seamless ? "--seamless" : "";
+                args["seamless"] = Args.InvokeAi.GetSeamlessArg(seamless);
                 args["hiresFix"] = hiresFix ? "--hires_fix" : "";
 
                 foreach (string prompt in prompts)
@@ -255,7 +255,7 @@ namespace StableDiffusionGui.Main
             long seed = paramsDict.Get("seed").FromJson<long>();
             string sampler = paramsDict.Get("sampler").FromJson<string>();
             Size res = paramsDict.Get("res").FromJson<Size>();
-            bool seamless = paramsDict.Get("seamless").FromJson<bool>();
+            // bool seamless = paramsDict.Get("seamless").FromJson<bool>();
             string model = paramsDict.Get("model").FromJson<string>();
             string modelNoExt = Path.ChangeExtension(model, null);
             bool lockSeed = paramsDict.Get("lockSeed").FromJson<bool>();
