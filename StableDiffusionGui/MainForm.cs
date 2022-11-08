@@ -86,12 +86,21 @@ namespace StableDiffusionGui
         private async void MainForm_Shown(object sender, EventArgs e)
         {
             Refresh();
+            await Initialize();
+        }
+
+        private async Task Initialize ()
+        {
             MainUi.SetSettingsVertScrollbar();
-            pictBoxImgViewer.MouseWheel += pictBoxImgViewer_MouseWheel;
             SetUiElements();
             LoadUiElements();
             PromptHistory.Load();
             Setup.FixHardcodedPaths();
+
+            pictBoxImgViewer.MouseWheel += (s, e) => { ImagePreview.Move(e.Delta > 0); }; // Scroll on MouseWheel
+            comboxResW.SelectedIndexChanged += (s, e) => { MainUi.SetHiresFixVisible(ComboxResW, ComboxResH, checkboxHiresFix); }; // Show/Hide HiRes Fix depending on chosen res
+            comboxResH.SelectedIndexChanged += (s, e) => { MainUi.SetHiresFixVisible(ComboxResW, ComboxResH, checkboxHiresFix); }; // Show/Hide HiRes Fix depending on chosen res
+
             Task.Run(() => MainUi.SetGpusInWindowTitle());
             upDownSeed.Text = "";
             MainUi.DoStartupChecks();
@@ -593,8 +602,6 @@ namespace StableDiffusionGui
             {
                 string initDir = File.Exists(MainUi.CurrentEmbeddingPath) ? MainUi.CurrentEmbeddingPath.GetParentDirOfFile() : Path.Combine(Paths.GetExeDir(), "ExampleConcepts");
 
-                Logger.Log(initDir);
-
                 CommonOpenFileDialog dialog = new CommonOpenFileDialog { InitialDirectory = initDir, IsFolderPicker = false };
 
                 if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
@@ -696,11 +703,6 @@ namespace StableDiffusionGui
             InpaintingUtils.CurrentMask = null;
         }
 
-        private void pictBoxImgViewer_MouseWheel(object sender, MouseEventArgs e)
-        {
-            ImagePreview.Move(e.Delta > 0);
-        }
-
         private void textboxCliTest_DoubleClick(object sender, EventArgs e)
         {
             TtiProcess.WriteStdIn(textboxCliTest.Text);
@@ -788,15 +790,7 @@ namespace StableDiffusionGui
 
         private void fitWindowSizeToImageSizeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (pictBoxImgViewer.Image.Size == pictBoxImgViewer.Size)
-                return;
-
-            int formWidthWithoutImgViewer = Size.Width - pictBoxImgViewer.Width;
-            int formHeightWithoutImgViewer = Size.Height - pictBoxImgViewer.Height;
-
-            Size targetSize = new Size(pictBoxImgViewer.Image.Width + formWidthWithoutImgViewer, pictBoxImgViewer.Image.Height + formHeightWithoutImgViewer);
-            Size = new Size(targetSize.Width.Clamp(512, int.MaxValue), targetSize.Height.Clamp(512, int.MaxValue));
-
+            MainUi.FitWindowSizeToImageSize();
             CenterToScreen();
         }
 

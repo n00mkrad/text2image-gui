@@ -669,7 +669,7 @@ namespace StableDiffusionGui
             // 
             this.checkboxHiresFix.AutoSize = true;
             this.checkboxHiresFix.ForeColor = System.Drawing.Color.White;
-            this.checkboxHiresFix.Location = new System.Drawing.Point(468, 6);
+            this.checkboxHiresFix.Location = new System.Drawing.Point(439, 6);
             this.checkboxHiresFix.Name = "checkboxHiresFix";
             this.checkboxHiresFix.Padding = new System.Windows.Forms.Padding(3);
             this.checkboxHiresFix.Size = new System.Drawing.Size(123, 23);
@@ -682,7 +682,7 @@ namespace StableDiffusionGui
             // 
             this.checkboxLockSeed.AutoSize = true;
             this.checkboxLockSeed.ForeColor = System.Drawing.Color.White;
-            this.checkboxLockSeed.Location = new System.Drawing.Point(533, 6);
+            this.checkboxLockSeed.Location = new System.Drawing.Point(511, 6);
             this.checkboxLockSeed.Name = "checkboxLockSeed";
             this.checkboxLockSeed.Padding = new System.Windows.Forms.Padding(3);
             this.checkboxLockSeed.Size = new System.Drawing.Size(84, 23);
@@ -702,10 +702,10 @@ namespace StableDiffusionGui
             this.btnSeedResetToRandom.ForeColor = System.Drawing.Color.White;
             this.btnSeedResetToRandom.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
             this.btnSeedResetToRandom.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
-            this.btnSeedResetToRandom.Location = new System.Drawing.Point(445, 6);
+            this.btnSeedResetToRandom.Location = new System.Drawing.Point(425, 6);
             this.btnSeedResetToRandom.Name = "btnSeedResetToRandom";
             this.btnSeedResetToRandom.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
-            this.btnSeedResetToRandom.Size = new System.Drawing.Size(79, 23);
+            this.btnSeedResetToRandom.Size = new System.Drawing.Size(80, 23);
             this.btnSeedResetToRandom.TabIndex = 107;
             this.btnSeedResetToRandom.TabStop = false;
             this.btnSeedResetToRandom.Text = "Reset";
@@ -726,7 +726,7 @@ namespace StableDiffusionGui
             this.btnSeedUsePrevious.Location = new System.Drawing.Point(339, 6);
             this.btnSeedUsePrevious.Name = "btnSeedUsePrevious";
             this.btnSeedUsePrevious.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
-            this.btnSeedUsePrevious.Size = new System.Drawing.Size(100, 23);
+            this.btnSeedUsePrevious.Size = new System.Drawing.Size(80, 23);
             this.btnSeedUsePrevious.TabIndex = 106;
             this.btnSeedUsePrevious.TabStop = false;
             this.btnSeedUsePrevious.Text = "Use Previous";
@@ -810,7 +810,7 @@ namespace StableDiffusionGui
             this.textboxSliderScale.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScale.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScale.Location = new System.Drawing.Point(314, 7);
+            this.textboxSliderScale.Location = new System.Drawing.Point(314, 9);
             this.textboxSliderScale.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScale.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScale.Name = "textboxSliderScale";
@@ -957,7 +957,7 @@ namespace StableDiffusionGui
             this.textboxSliderInitStrength.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderInitStrength.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderInitStrength.Location = new System.Drawing.Point(314, 7);
+            this.textboxSliderInitStrength.Location = new System.Drawing.Point(314, 9);
             this.textboxSliderInitStrength.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderInitStrength.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderInitStrength.Name = "textboxSliderInitStrength";
@@ -1419,9 +1419,9 @@ namespace StableDiffusionGui
             this.comboxResH.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.comboxResH.ForeColor = System.Drawing.Color.White;
             this.comboxResH.FormattingEnabled = true;
-            this.comboxResH.Location = new System.Drawing.Point(360, 7);
+            this.comboxResH.Location = new System.Drawing.Point(348, 7);
             this.comboxResH.Name = "comboxResH";
-            this.comboxResH.Size = new System.Drawing.Size(100, 21);
+            this.comboxResH.Size = new System.Drawing.Size(85, 21);
             this.comboxResH.TabIndex = 107;
             // 
             // comboxResW
@@ -1433,7 +1433,7 @@ namespace StableDiffusionGui
             this.comboxResW.FormattingEnabled = true;
             this.comboxResW.Location = new System.Drawing.Point(233, 7);
             this.comboxResW.Name = "comboxResW";
-            this.comboxResW.Size = new System.Drawing.Size(100, 21);
+            this.comboxResW.Size = new System.Drawing.Size(85, 21);
             this.comboxResW.TabIndex = 106;
             // 
             // label6
@@ -1453,7 +1453,7 @@ namespace StableDiffusionGui
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label9.ForeColor = System.Drawing.Color.White;
-            this.label9.Location = new System.Drawing.Point(342, 10);
+            this.label9.Location = new System.Drawing.Point(328, 10);
             this.label9.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(12, 13);
@@ -1572,7 +1572,7 @@ namespace StableDiffusionGui
             this.textboxSliderSteps.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderSteps.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderSteps.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderSteps.Location = new System.Drawing.Point(394, 7);
+            this.textboxSliderSteps.Location = new System.Drawing.Point(394, 9);
             this.textboxSliderSteps.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderSteps.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderSteps.Name = "textboxSliderSteps";

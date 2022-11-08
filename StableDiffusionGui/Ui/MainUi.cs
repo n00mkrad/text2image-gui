@@ -344,5 +344,22 @@ namespace StableDiffusionGui.Ui
             }
             catch { }
         }
+
+        public static void SetHiresFixVisible (ComboBox w, ComboBox h, CheckBox fix)
+        {
+            fix.Visible = w.GetInt() > 512 && h.GetInt() > 512;
+        }
+
+        public static void FitWindowSizeToImageSize ()
+        {
+            if (Program.MainForm.PictBoxImgViewer.Image.Size == Program.MainForm.PictBoxImgViewer.Size)
+                return;
+
+            int formWidthWithoutImgViewer = Program.MainForm.Size.Width - Program.MainForm.PictBoxImgViewer.Width;
+            int formHeightWithoutImgViewer = Program.MainForm.Size.Height - Program.MainForm.PictBoxImgViewer.Height;
+
+            Size targetSize = new Size(Program.MainForm.PictBoxImgViewer.Image.Width + formWidthWithoutImgViewer, Program.MainForm.PictBoxImgViewer.Image.Height + formHeightWithoutImgViewer);
+            Program.MainForm.Size = new Size(targetSize.Width.Clamp(512, int.MaxValue), targetSize.Height.Clamp(512, int.MaxValue));
+        }
     }
 }
