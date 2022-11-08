@@ -7,7 +7,6 @@ using StableDiffusionGui.Forms;
 using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
-using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
 using System;
@@ -53,8 +52,6 @@ namespace StableDiffusionGui
         #endregion
 
         public bool IsInFocus() { return (ActiveForm == this); }
-
-        private Size _defaultWindowSize;
 
         public MainForm()
         {
@@ -134,9 +131,9 @@ namespace StableDiffusionGui
         {
             comboxSampler.FillFromEnum<Enums.StableDiffusion.Sampler>(MainUi.UiStrings);
 
-            bool adv = Config.GetBool("checkboxAdvancedMode");
-            comboxResW.SetItems(MainUi.Resolutions.Where(x => x <= (adv ? 2048 : 1024)).Select(x => x.ToString()), UiExtensions.SelectMode.Last);
-            comboxResH.SetItems(MainUi.Resolutions.Where(x => x <= (adv ? 2048 : 1024)).Select(x => x.ToString()), UiExtensions.SelectMode.Last);
+            var resItems = MainUi.Resolutions.Where(x => x <= (Config.GetBool("checkboxAdvancedMode") ? 2048 : 1024)).Select(x => x.ToString());
+            comboxResW.SetItems(resItems, UiExtensions.SelectMode.Last);
+            comboxResH.SetItems(resItems, UiExtensions.SelectMode.Last);
         }
 
         private void LoadUiElements()
