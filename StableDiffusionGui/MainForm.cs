@@ -58,7 +58,6 @@ namespace StableDiffusionGui
             InitializeComponent();
             ActiveControl = panelSettings;
             Program.MainForm = this;
-            _defaultWindowSize = Size;
             Opacity = 0;
         }
 
