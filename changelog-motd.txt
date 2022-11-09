@@ -1,3 +1,29 @@
+SD GUI 1.7.0 Changelog:
+- Added support for running multiple init images at once, e.g. for animation frames
+- Added support for wildcards (insert words/phrases into prompt dynamically)
+- Added "Hi-res Fix" which allows better results at higher (>512px) resolutions
+- Added support for loading custom VAE models (can improve image quality)
+- Added support for running upscaling or face restoration manually
+- Added support for all samplers when using an init image (not just DDIM)
+- Added button to resize the window to fit the currently displayed image
+- Added option to save output images in a subfolder per session
+- Added options to use seamless mode only on one axis (horizontal or vertical)
+- Added a label that displays the current image's prompt
+- Added hotkeys: Quick-switch VAE, copy current image, copy image to favorites
+- Added new developer tool: Open CMD in SD Conda environment
+- DreamBooth training: Images can now be automatically resized if they are not 512x512
+- DreamBooth training: Added slider for steps multiplier (0.5x-2x)
+- GUI improvements, prompt and negative prompt are now separate
+- Image viewer now also shows "actual" image resolution (for upscaled images)
+- Sliders now also allow you to type a value instead of dragging the handle
+- Loading image metadata now also works for images generated with automatic1111
+- "Delete All Current Images" now requires a confirmation
+- Improved prompt history/queue UI (show full prompt on hover, and more)
+- Improved GUI rendering, should have less flickering now
+- Fixed bug where model pruning would say "Failed..." even if it was successful
+
+
+
 SD GUI 1.6.0 Changelog:
 - Added Dreambooth training (24 GB VRAM required for now!)
 - Added support for prompt emphasis - () for more, {} for less
@@ -41,30 +67,3 @@ SD GUI 1.5.0 Changelog:
 - Full Precision is now enabled by default on GTX 16 series cards to fix compatibility with them
 - Fixed empty/invalid prompts (e.g. newlines) counting towards the target image amount
 - Some fixes regarding cancelling the generation process and handling crashes
-
-NOTES:
-Low Memory Mode is a low priority for me because it's a separate codebase, adding features is hard.
-Also, the regular mode can now run on 6 GB easily, and even 4 GB if all other GPU apps are closed.
-Apart from that, it's now possible to run the regular mode on CPU, which is slow, but it works.
-
-
-
-SD GUI 1.4.0 Changelog:
-- Stable Diffusion model no longer needs to be reloaded every time new images are generated
-- Added support for mask-based inpainting
-- Added support for loading HuggingFace .bin concepts (textual inversion embeddings)
-- Added prompt queue, allows you to queue up prompts with their settings
-- Added prompt history, allows your to view or load previous prompts
-- Added a progress bar that shows the generation progress of the current image
-- Added option to play sound and/or show notification when finished
-- Added a "Welcome screen" that shows the changelog and patrons
-- Added buttons to use the previous seed or to reset it
-- Added button to expand prompt field to 2x height
-- Added proper support for DPI scaling
-- Post-processing now works with Low Memory Mode
-- Further VRAM optimizations, especially in regular mode
-- Available CUDA GPUs are now listed in window title
-- Windows should not be able to go to sleep while the program runs (untested)
-- Updated GFPGAN model to 1.4
-- Fixed a bug where empty "unknown prompt" folders were created
-- Fixed some issues regarding the python environment
