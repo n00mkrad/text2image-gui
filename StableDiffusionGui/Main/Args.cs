@@ -55,6 +55,7 @@ namespace StableDiffusionGui.Main
                 if (Config.GetBool("checkboxSaveUnprocessedImages"))
                     args.Add("-save_orig");
 
+                args.Add("-n 1");
                 args.Add("-t");
 
                 return string.Join(" ", args);

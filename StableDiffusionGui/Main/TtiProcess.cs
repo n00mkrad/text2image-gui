@@ -57,13 +57,12 @@ namespace StableDiffusionGui.Main
                 long startSeed = seed;
                 prompts = prompts.Select(p => FormatUtils.GetCombinedPrompt(p, negPrompt)).ToArray(); // Apply negative prompt
 
-                List<Dictionary<string, string>> argLists = new List<Dictionary<string, string>>();
-                Dictionary<string, string> args = new Dictionary<string, string>();
+                List<Dictionary<string, string>> argLists = new List<Dictionary<string, string>>(); // List of all args for each command
+                Dictionary<string, string> args = new Dictionary<string, string>(); // List of args for current command
                 args["prompt"] = "";
                 args["default"] = Args.InvokeAi.GetDefaultArgsCommand();
                 args["upscale"] = Args.InvokeAi.GetUpscaleArgs();
                 args["facefix"] = Args.InvokeAi.GetFaceRestoreArgs();
-                args["iters"] = "-n 1";
                 args["seamless"] = Args.InvokeAi.GetSeamlessArg(seamless);
                 args["hiresFix"] = hiresFix ? "--hires_fix" : "";
 
@@ -264,6 +263,8 @@ namespace StableDiffusionGui.Main
                 for (int i = 0; i < iterations; i++)
                 {
                     Dictionary<string, string> args = new Dictionary<string, string>();
+                    args.Remove("init_img");
+                    args.Remove("strength");
                     args["prompt"] = prompt.Wrap();
                     args["ddim_steps"] = steps.ToString();
                     args["W"] = res.Width.ToString();
@@ -272,8 +273,6 @@ namespace StableDiffusionGui.Main
 
                     foreach (float scale in scales)
                     {
-                        args["init_img"] = "";
-                        args["strength"] = "";
                         args["scale"] = scale.ToStringDot();
 
                         if (initImages == null) // No init image(s)
