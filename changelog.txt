@@ -1,3 +1,28 @@
+SD GUI 1.7.0 Changelog:
+- Added support for running multiple init images at once, e.g. for animation frames
+- Added support for wildcards (insert words/phrases into prompt dynamically)
+- Added "Hi-res Fix" which allows better results at higher (>512px) resolutions
+- Added support for loading custom VAE models (can improve image quality)
+- Added support for running upscaling or face restoration manually
+- Added support for all samplers when using an init image (not just DDIM)
+- Added button to resize the window to fit the currently displayed image
+- Added option to save output images in a subfolder per session
+- Added options to use seamless mode only on one axis (horizontal or vertical)
+- Added a label that displays the current image's prompt
+- Added hotkeys: Quick-switch VAE, copy current image, copy image to favorites
+- Added new developer tool: Open CMD in SD Conda environment
+- DreamBooth training: Images can now be automatically resized if they are not 512x512
+- DreamBooth training: Added slider for steps multiplier (0.5x-2x)
+- GUI improvements, prompt and negative prompt are now separate
+- Image viewer now also shows "actual" image resolution (for upscaled images)
+- Sliders now also allow you to type a value instead of dragging the handle
+- Loading image metadata now also works for images generated with automatic1111
+- "Delete All Current Images" now requires a confirmation
+- Improved prompt history/queue UI (show full prompt on hover, and more)
+- Improved GUI rendering, should have less flickering now
+- Fixed bug where model pruning would say "Failed..." even if it was successful
+
+
 SD GUI 1.6.0 Changelog:
 - Added Dreambooth training (24 GB VRAM required for now!)
 - Added support for prompt emphasis - () for more, {} for less
