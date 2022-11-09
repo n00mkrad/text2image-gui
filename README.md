@@ -23,7 +23,7 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (form
 
 - **GPU:** Nvidia GPU with 24GB VRAM, Turing Architecture (2018) or newer
 - **RAM:** 32 GB RAM
-- **Disk:** 12 GB on NVME SSD (another free 25 GB for temporary files recommended)
+- **Disk:** 12 GB on NVME SSD (another free 25 GB for temporary files recommended), **system-managed paging file enabled**
 
 
 
@@ -32,14 +32,23 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (form
 ### Prompt Input
 
 - **Multiple prompts at once:** Enter each prompt on a new line (newline-separated). Word wrapping does not count towards this.
-- **Exclusion Words:** Put words or phrases into [square brackets] to tell the AI to exclude those things when generating images.
-- **Emphasis:** Use (parentheses) to make a word/phrase more impactful, or {curly brackets} to do the opposite. You can also use ((multiple)).
+- **Negative Prompt:** Put words or phrases into this box to tell the AI to exclude those things when generating images.
+  - Alternatively, you can also put the negative prompt into the regular prompt box by wrapping it in [brackets].
+
+- **Emphasis:** Use (parentheses) to make a word/phrase more impactful, or {curly brackets} to do the opposite. You can also use ((multiple)) to increase the effect.
+- **Wildcards:** Fill in words or phrases from a list into the prompt.
+  - Inline: `photo of a ~car,tree,dog~`.
+  - From File: `photo of a ~objects` for loading texts from `objects.txt` in your `Wildcards` folder in the SD GUI root folder.
+  - Order: Use `~` for random/shuffled, `~~` for unchanged order, or `~~~` for sorted (A-Z) mode.
+
 
 
 
 ### Additional Inputs
 
-* **Load Image:** Load an initialization image that will be used together with your text prompt ("img2img")
+* **Load Image(s):** Load an initialization image that will be used together with your text prompt ("img2img")
+  * Loading multiple images means that each image will be processed separately.
+
 * **Load Concept:** Load a Textual Inversion concept to apply a style or use a specific character
 
 
@@ -53,9 +62,11 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (form
   * No performance impact, no matter the value.
 * **Seed:** Starting value for the image generation. Allows you to create the exact same image again by using the same seed.
   * When using the same seed, the image will only be identical if you also use the same sampler and resolution (and other settings).
+  * Lock Seed Option: Disable incrementing the seed by 1 for each image. Only useful in combination with wildcards.
 * **Resolution:** Adjust image size. Only values that are divisible by 64 are possible. Sizes above 512x512 can lead to repeated patterns.
   * Higher resolution images require more VRAM and are slower to generate.
-
+  * High-Resolution Fix: Enable this to avoid getting repeated patterns at high resolutions (~768px+). Can reduce fidelity though.
+  
 * **Sampler:** Changes the way images are sampled. Euler Ancestral is the default because it's fast and tends to look good even with few steps.
 * **Generate Seamless Images:** Generates seamless/tileable images, very useful for making game textures or repeating backgrounds.
 
@@ -78,9 +89,15 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (form
 * **Unload Model After Each Generation:** Completely unload Stable Diffusion after images are generated.
 * **Stable Diffusion Model File:** Select the model file to use for image generation.
   * Included models are located in `Data/models`. You can add more folder paths by clicking on "Folders...".
+* **Stable Diffusion VAE:** Select external VAE (Variational Autoencoder) model. VAEs can improve image quality.
 * **CUDA Device:** Allows your to specify the GPU to run the AI on, or set it to run on the CPU (very slow).
 * **Image Output Folder:** Set the folder where your generated images will be saved.
-* **Create a Subfolder for Each Prompt:** If enabled, images will be saved in a folder named after their prompt.
+* **Output Subfolder Options:**
+  * Subfolder Per Prompt: Save images in a subfolder for each prompt. Negative prompt is excluded from the folder name.
+  * Ignore Wildcards: Use wildcard name (as in prompt input) instead of the replaced text in file/folder names.
+  * Subfolder Per Session: Save images in a subfolder for each session (every time the program is started).
+
+* **Favorites Folder:** Specify your favorites folder, where your favorite images will be copied to (right-click image viewer or use Ctrl+D)
 * **Metadata to Include in Filename:** Specify which information should be included in the filename.
 * **When Running Multiple Prompts, Use Same Starting Seed for All of Them:** If enabled, the seed resets to the starting value for every new prompt. If disabled, the seed will be incremented by 1 after each iteration, being sequential until all prompts/iterations have been generated.
 * **When Post-Processing Is Enabled, Also Save Un-Processed Image:** When enabled, both the "raw" and the post-processed image will be saved.
@@ -109,7 +126,8 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (form
 
 ### Developer Tools Button (Top Bar)
 
-* **Open Dream.py CLI:** Use Stable Diffusion in command-line interface
+* **Open Stable Diffusion CLI:** Use Stable Diffusion in command-line interface
+* **Open CMD in Conda Environment:** Opens a CMD window with the built-in conda python environment activated.
 * **Merge Models:** Allows you to merge/blend two models. The percentage numbers represent their respective weight.
 * **Prune Models:** Allows you to reduce the size of models by removing data that's not needed for image generation.
 * **View Log In Realtime:** Opens a separate window that shows all log output, including messages that are not shown in the normal log box.
@@ -139,13 +157,18 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (form
 
 - **CTRL+G:** Run Image Generation (or Cancel if already running)
 - **CTRL+M:** Show Model Quick Switcher (Once it's open, use ESC to Cancel or Enter to confirm)
+- **CTRL+Shift+M:** Show VAE Quick Switcher
 - **CTRL+PLUS:** Toggle Prompt Textbox Size
+- **CTRL+Shift+PLUS:** Toggle Negative Prompt Textbox Size
 - **CTLR+DEL:** Delete currently viewed image
 - **CTRL+SHIFT+DEL:** Delete all generated images (of the current batch)
 - **CTRL+O:** Open currently viewed image
 - **CTRL+SHIFT+O:** Show current image in its folder
-- **CTRL+V:** Paste Image (If clipboard contains a bitmap)
+- **CTRL+C:** Copy currently viewed image to clipboard
+- **CTRL+D:** Copy currently viewed image to favorites
+- **CTRL+V:** Paste image (If clipboard contains a bitmap)
 - **CTRL+Q:** Quit
-- **CTRL+Scroll:** Change font size (only while mouse is over prompt text field)
+- **CTRL+Scroll:** Change textbox font size (only works while the textbox is being used)
 - **F1:** Open Help (Currently links to GitHub Readme)
 - **F12:** Open Settings
+- **ESC:** Remove focus from currently focused GUI element (e.g. get out of the prompt textbox)

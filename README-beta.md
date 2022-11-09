@@ -33,6 +33,8 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (form
 
 - **Multiple prompts at once:** Enter each prompt on a new line (newline-separated). Word wrapping does not count towards this.
 - **Negative Prompt:** Put words or phrases into this box to tell the AI to exclude those things when generating images.
+  - Alternatively, you can also put the negative prompt into the regular prompt box by wrapping it in [brackets].
+
 - **Emphasis:** Use (parentheses) to make a word/phrase more impactful, or {curly brackets} to do the opposite. You can also use ((multiple)) to increase the effect.
 - **Wildcards:** Fill in words or phrases from a list into the prompt.
   - Inline: `photo of a ~car,tree,dog~`.
