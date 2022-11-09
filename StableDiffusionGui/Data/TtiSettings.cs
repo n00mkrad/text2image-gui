@@ -63,15 +63,6 @@ namespace StableDiffusionGui.Data
 
         public override string ToString()
         {
-            try // Old format
-            {
-                string init = !string.IsNullOrWhiteSpace(Params["initImg"]) ? $" - With Image" : "";
-                string emb = !string.IsNullOrWhiteSpace(Params["embedding"]) ? $" - With Concept" : "";
-                string extraPrompts = Prompts.Length > 1 ? $" (+{Prompts.Length - 1})" : "";
-                return $"\"{Prompts.FirstOrDefault().Trunc(85)}\"{extraPrompts} - {Iterations} Images - {Params["steps"]} Steps - Seed {Params["seed"]} - {Params["res"]} - {Params["sampler"]}{init}{emb}";
-            }
-            catch { }
-
             try // New format
             {
                 Size s = Params["res"].FromJson<Size>();
@@ -81,9 +72,20 @@ namespace StableDiffusionGui.Data
                 string extraPrompts = Prompts.Length > 1 ? $" (+{Prompts.Length - 1})" : "";
                 return $"\"{Prompts.FirstOrDefault().Trunc(85)}\"{extraPrompts} - {Iterations} Images - {Params["steps"].FromJson<int>()} Steps - Seed {Params["seed"].FromJson<long>()} - {s.Width}x{s.Height} - {Params["sampler"].FromJson<string>()}{init}{emb}";
             }
-            catch { }
-
-            return "";
+            catch
+            {
+                try // Old format
+                {
+                    string init = !string.IsNullOrWhiteSpace(Params["initImg"]) ? $" - With Image" : "";
+                    string emb = !string.IsNullOrWhiteSpace(Params["embedding"]) ? $" - With Concept" : "";
+                    string extraPrompts = Prompts.Length > 1 ? $" (+{Prompts.Length - 1})" : "";
+                    return $"\"{Prompts.FirstOrDefault().Trunc(85)}\"{extraPrompts} - {Iterations} Images - {Params["steps"]} Steps - Seed {Params["seed"]} - {Params["res"]} - {Params["sampler"]}{init}{emb}";
+                }
+                catch
+                {
+                    return "";
+                }
+            }
         }
     }
 }
