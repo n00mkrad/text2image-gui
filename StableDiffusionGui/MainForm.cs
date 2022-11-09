@@ -806,6 +806,8 @@ namespace StableDiffusionGui
             TtiProcess.StartCmdInSdCondaEnv();
         }
 
+        #region Post-Processing
+
         public void ShowPostProcessMenu()
         {
             menuStripPostProcess.Show(Cursor.Position);
@@ -825,6 +827,8 @@ namespace StableDiffusionGui
         {
             await TtiProcess.InvokeAiFix(ImagePreview.CurrentImagePath, new[] { TtiProcess.FixAction.Upscale, TtiProcess.FixAction.FaceRestoration }.ToList());
         }
+
+        #endregion
 
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
