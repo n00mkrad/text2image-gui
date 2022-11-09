@@ -64,6 +64,7 @@ namespace StableDiffusionGui
         private void MainForm_Load(object sender, EventArgs e)
         {
             CheckForIllegalCrossThreadCalls = false;
+            AllowEscClose = false;
             Logger.Textbox = logBox;
             MinimumSize = Size;
         }
