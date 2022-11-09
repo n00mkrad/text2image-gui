@@ -16,18 +16,9 @@ namespace StableDiffusionGui.Forms
         public enum UpscaleOption { X2, X3, X4 }
         public enum FaceRestoreOption { Gfpgan, CodeFormer }
 
-        public Dictionary<string, string> UiStrings = new Dictionary<string, string>();
-
         public PostProcSettingsForm()
         {
             Opacity = 0;
-
-            UiStrings.Add(UpscaleOption.X2.ToString(), "2x");
-            UiStrings.Add(UpscaleOption.X3.ToString(), "3x");
-            UiStrings.Add(UpscaleOption.X4.ToString(), "4x");
-            UiStrings.Add(FaceRestoreOption.Gfpgan.ToString(), "GFPGAN");
-            UiStrings.Add(FaceRestoreOption.CodeFormer.ToString(), "CodeFormer");
-
             InitializeComponent();
         }
 
@@ -39,8 +30,8 @@ namespace StableDiffusionGui.Forms
         private async void PostProcSettingsForm_Shown(object sender, EventArgs e)
         {
             Refresh();
-            comboxUpscale.FillFromEnum<UpscaleOption>(UiStrings);
-            comboxFaceRestoration.FillFromEnum<FaceRestoreOption>(UiStrings);
+            comboxUpscale.FillFromEnum<UpscaleOption>(Strings.PostProcSettingsUiStrings);
+            comboxFaceRestoration.FillFromEnum<FaceRestoreOption>(Strings.PostProcSettingsUiStrings);
             LoadSettings();
             UpdateVisibility();
             TabOrderInit(new List<Control>() { checkboxUpscaleEnable, comboxUpscale, checkboxFaceRestorationEnable, comboxFaceRestoration, sliderFaceRestoreStrength, sliderCodeformerFidelity });
@@ -67,6 +58,7 @@ namespace StableDiffusionGui.Forms
         {
             ConfigParser.LoadGuiElement(checkboxUpscaleEnable);
             ConfigParser.LoadComboxIndex(comboxUpscale);
+            ConfigParser.LoadGuiElement(sliderUpscaleStrength);
             ConfigParser.LoadGuiElement(checkboxFaceRestorationEnable);
             ConfigParser.LoadComboxIndex(comboxFaceRestoration);
             ConfigParser.LoadGuiElement(sliderFaceRestoreStrength);
@@ -77,6 +69,7 @@ namespace StableDiffusionGui.Forms
         {
             ConfigParser.SaveGuiElement(checkboxUpscaleEnable);
             ConfigParser.SaveComboxIndex(comboxUpscale);
+            ConfigParser.SaveGuiElement(sliderUpscaleStrength);
             ConfigParser.SaveGuiElement(checkboxFaceRestorationEnable);
             ConfigParser.SaveComboxIndex(comboxFaceRestoration);
             ConfigParser.SaveGuiElement(sliderFaceRestoreStrength);

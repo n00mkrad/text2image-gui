@@ -62,6 +62,13 @@
             this.label5 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label8 = new System.Windows.Forms.Label();
+            this.panelUpscaleStrength = new System.Windows.Forms.TableLayoutPanel();
+            this.panel17 = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel10 = new System.Windows.Forms.TableLayoutPanel();
+            this.textboxSliderUpscaleStrength = new System.Windows.Forms.TextBox();
+            this.sliderUpscaleStrength = new StableDiffusionGui.Controls.CustomSlider();
+            this.panel18 = new System.Windows.Forms.Panel();
+            this.label9 = new System.Windows.Forms.Label();
             this.panelUpscaling = new System.Windows.Forms.Panel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.panel8 = new System.Windows.Forms.Panel();
@@ -97,6 +104,10 @@
             this.panel15.SuspendLayout();
             this.panel16.SuspendLayout();
             this.panel2.SuspendLayout();
+            this.panelUpscaleStrength.SuspendLayout();
+            this.panel17.SuspendLayout();
+            this.tableLayoutPanel10.SuspendLayout();
+            this.panel18.SuspendLayout();
             this.panelUpscaling.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel8.SuspendLayout();
@@ -131,19 +142,20 @@
             this.panel1.Controls.Add(this.panelFaceRestorationMethod);
             this.panel1.Controls.Add(this.panelFaceRestorationEnable);
             this.panel1.Controls.Add(this.panel2);
+            this.panel1.Controls.Add(this.panelUpscaleStrength);
             this.panel1.Controls.Add(this.panelUpscaling);
             this.panel1.Controls.Add(this.panelUpscaleEnable);
             this.panel1.Controls.Add(this.panel11);
             this.panel1.Location = new System.Drawing.Point(12, 62);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(560, 287);
+            this.panel1.Size = new System.Drawing.Size(560, 322);
             this.panel1.TabIndex = 0;
             // 
             // panelCodeformerFidelity
             // 
             this.panelCodeformerFidelity.Controls.Add(this.tableLayoutPanel5);
             this.panelCodeformerFidelity.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelCodeformerFidelity.Location = new System.Drawing.Point(0, 245);
+            this.panelCodeformerFidelity.Location = new System.Drawing.Point(0, 280);
             this.panelCodeformerFidelity.Name = "panelCodeformerFidelity";
             this.panelCodeformerFidelity.Size = new System.Drawing.Size(560, 35);
             this.panelCodeformerFidelity.TabIndex = 0;
@@ -202,7 +214,7 @@
             this.textboxSliderCodeformerFidelity.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderCodeformerFidelity.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderCodeformerFidelity.Name = "textboxSliderCodeformerFidelity";
-            this.textboxSliderCodeformerFidelity.Size = new System.Drawing.Size(45, 17);
+            this.textboxSliderCodeformerFidelity.Size = new System.Drawing.Size(45, 21);
             this.textboxSliderCodeformerFidelity.TabIndex = 0;
             this.textboxSliderCodeformerFidelity.Text = "0,2";
             // 
@@ -274,7 +286,7 @@
             // 
             this.panelFaceRestorationStrength.Controls.Add(this.tableLayoutPanel2);
             this.panelFaceRestorationStrength.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelFaceRestorationStrength.Location = new System.Drawing.Point(0, 210);
+            this.panelFaceRestorationStrength.Location = new System.Drawing.Point(0, 245);
             this.panelFaceRestorationStrength.Name = "panelFaceRestorationStrength";
             this.panelFaceRestorationStrength.Size = new System.Drawing.Size(560, 35);
             this.panelFaceRestorationStrength.TabIndex = 1;
@@ -333,7 +345,7 @@
             this.textboxSliderFaceRestoreStrength.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderFaceRestoreStrength.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderFaceRestoreStrength.Name = "textboxSliderFaceRestoreStrength";
-            this.textboxSliderFaceRestoreStrength.Size = new System.Drawing.Size(45, 17);
+            this.textboxSliderFaceRestoreStrength.Size = new System.Drawing.Size(45, 21);
             this.textboxSliderFaceRestoreStrength.TabIndex = 0;
             this.textboxSliderFaceRestoreStrength.Text = "0,05";
             // 
@@ -404,7 +416,7 @@
             // 
             this.panelFaceRestorationMethod.Controls.Add(this.tableLayoutPanel3);
             this.panelFaceRestorationMethod.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelFaceRestorationMethod.Location = new System.Drawing.Point(0, 175);
+            this.panelFaceRestorationMethod.Location = new System.Drawing.Point(0, 210);
             this.panelFaceRestorationMethod.Name = "panelFaceRestorationMethod";
             this.panelFaceRestorationMethod.Size = new System.Drawing.Size(560, 35);
             this.panelFaceRestorationMethod.TabIndex = 2;
@@ -471,7 +483,7 @@
             // 
             this.panelFaceRestorationEnable.Controls.Add(this.tableLayoutPanel8);
             this.panelFaceRestorationEnable.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelFaceRestorationEnable.Location = new System.Drawing.Point(0, 140);
+            this.panelFaceRestorationEnable.Location = new System.Drawing.Point(0, 175);
             this.panelFaceRestorationEnable.Name = "panelFaceRestorationEnable";
             this.panelFaceRestorationEnable.Size = new System.Drawing.Size(560, 35);
             this.panelFaceRestorationEnable.TabIndex = 3;
@@ -535,7 +547,7 @@
             // 
             this.panel2.Controls.Add(this.label8);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel2.Location = new System.Drawing.Point(0, 105);
+            this.panel2.Location = new System.Drawing.Point(0, 140);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(560, 35);
             this.panel2.TabIndex = 4;
@@ -550,6 +562,127 @@
             this.label8.Size = new System.Drawing.Size(126, 16);
             this.label8.TabIndex = 0;
             this.label8.Text = "Face Restoration";
+            // 
+            // panelUpscaleStrength
+            // 
+            this.panelUpscaleStrength.ColumnCount = 2;
+            this.panelUpscaleStrength.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.panelUpscaleStrength.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.panelUpscaleStrength.Controls.Add(this.panel17, 0, 0);
+            this.panelUpscaleStrength.Controls.Add(this.panel18, 0, 0);
+            this.panelUpscaleStrength.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelUpscaleStrength.Location = new System.Drawing.Point(0, 105);
+            this.panelUpscaleStrength.Name = "panelUpscaleStrength";
+            this.panelUpscaleStrength.RowCount = 1;
+            this.panelUpscaleStrength.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.panelUpscaleStrength.Size = new System.Drawing.Size(560, 35);
+            this.panelUpscaleStrength.TabIndex = 0;
+            // 
+            // panel17
+            // 
+            this.panel17.Controls.Add(this.tableLayoutPanel10);
+            this.panel17.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel17.Location = new System.Drawing.Point(283, 3);
+            this.panel17.Name = "panel17";
+            this.panel17.Size = new System.Drawing.Size(274, 29);
+            this.panel17.TabIndex = 0;
+            // 
+            // tableLayoutPanel10
+            // 
+            this.tableLayoutPanel10.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel10.ColumnCount = 2;
+            this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 45F));
+            this.tableLayoutPanel10.Controls.Add(this.textboxSliderUpscaleStrength, 0, 0);
+            this.tableLayoutPanel10.Controls.Add(this.sliderUpscaleStrength, 0, 0);
+            this.tableLayoutPanel10.Location = new System.Drawing.Point(3, 6);
+            this.tableLayoutPanel10.Margin = new System.Windows.Forms.Padding(6);
+            this.tableLayoutPanel10.Name = "tableLayoutPanel10";
+            this.tableLayoutPanel10.RowCount = 1;
+            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 21F));
+            this.tableLayoutPanel10.Size = new System.Drawing.Size(268, 21);
+            this.tableLayoutPanel10.TabIndex = 0;
+            // 
+            // textboxSliderUpscaleStrength
+            // 
+            this.textboxSliderUpscaleStrength.AllowDrop = true;
+            this.textboxSliderUpscaleStrength.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            this.textboxSliderUpscaleStrength.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textboxSliderUpscaleStrength.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textboxSliderUpscaleStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textboxSliderUpscaleStrength.ForeColor = System.Drawing.Color.Silver;
+            this.textboxSliderUpscaleStrength.Location = new System.Drawing.Point(223, 1);
+            this.textboxSliderUpscaleStrength.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
+            this.textboxSliderUpscaleStrength.MinimumSize = new System.Drawing.Size(4, 21);
+            this.textboxSliderUpscaleStrength.Name = "textboxSliderUpscaleStrength";
+            this.textboxSliderUpscaleStrength.Size = new System.Drawing.Size(45, 21);
+            this.textboxSliderUpscaleStrength.TabIndex = 0;
+            this.textboxSliderUpscaleStrength.Text = "0,05";
+            // 
+            // sliderUpscaleStrength
+            // 
+            this.sliderUpscaleStrength.ActualMaximum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.sliderUpscaleStrength.ActualMinimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.sliderUpscaleStrength.ActualValue = new decimal(new int[] {
+            5,
+            0,
+            0,
+            131072});
+            this.sliderUpscaleStrength.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            this.sliderUpscaleStrength.BorderRoundRectSize = new System.Drawing.Size(12, 12);
+            this.sliderUpscaleStrength.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sliderUpscaleStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
+            this.sliderUpscaleStrength.ForeColor = System.Drawing.Color.Black;
+            this.sliderUpscaleStrength.LargeChange = ((uint)(4u));
+            this.sliderUpscaleStrength.Location = new System.Drawing.Point(0, 0);
+            this.sliderUpscaleStrength.Margin = new System.Windows.Forms.Padding(0);
+            this.sliderUpscaleStrength.Maximum = 20;
+            this.sliderUpscaleStrength.Name = "sliderUpscaleStrength";
+            this.sliderUpscaleStrength.OverlayColor = System.Drawing.Color.White;
+            this.sliderUpscaleStrength.Size = new System.Drawing.Size(223, 21);
+            this.sliderUpscaleStrength.SmallChange = ((uint)(1u));
+            this.sliderUpscaleStrength.TabIndex = 1;
+            this.sliderUpscaleStrength.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
+            this.sliderUpscaleStrength.ThumbSize = new System.Drawing.Size(14, 14);
+            this.toolTip.SetToolTip(this.sliderUpscaleStrength, "0 = No Effect, 1 = Full Effect");
+            this.sliderUpscaleStrength.Value = 1;
+            this.sliderUpscaleStrength.ValueBox = this.textboxSliderUpscaleStrength;
+            this.sliderUpscaleStrength.ValueStep = new decimal(new int[] {
+            5,
+            0,
+            0,
+            131072});
+            // 
+            // panel18
+            // 
+            this.panel18.Controls.Add(this.label9);
+            this.panel18.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel18.Location = new System.Drawing.Point(3, 3);
+            this.panel18.Name = "panel18";
+            this.panel18.Size = new System.Drawing.Size(274, 29);
+            this.panel18.TabIndex = 1;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.ForeColor = System.Drawing.Color.White;
+            this.label9.Location = new System.Drawing.Point(5, 8);
+            this.label9.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(97, 13);
+            this.label9.TabIndex = 0;
+            this.label9.Text = "Upscaling Strength";
             // 
             // panelUpscaling
             // 
@@ -717,7 +850,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.ClientSize = new System.Drawing.Size(584, 361);
+            this.ClientSize = new System.Drawing.Size(584, 396);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.titleLabel);
             this.ForeColor = System.Drawing.Color.White;
@@ -760,6 +893,12 @@
             this.panel16.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            this.panelUpscaleStrength.ResumeLayout(false);
+            this.panel17.ResumeLayout(false);
+            this.tableLayoutPanel10.ResumeLayout(false);
+            this.tableLayoutPanel10.PerformLayout();
+            this.panel18.ResumeLayout(false);
+            this.panel18.PerformLayout();
             this.panelUpscaling.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.panel8.ResumeLayout(false);
@@ -827,5 +966,12 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox textboxSliderCodeformerFidelity;
         private System.Windows.Forms.TextBox textboxSliderFaceRestoreStrength;
+        private System.Windows.Forms.TableLayoutPanel panelUpscaleStrength;
+        private System.Windows.Forms.Panel panel17;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel10;
+        private System.Windows.Forms.TextBox textboxSliderUpscaleStrength;
+        private Controls.CustomSlider sliderUpscaleStrength;
+        private System.Windows.Forms.Panel panel18;
+        private System.Windows.Forms.Label label9;
     }
 }

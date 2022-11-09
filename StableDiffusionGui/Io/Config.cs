@@ -265,6 +265,7 @@ namespace StableDiffusionGui.Io
             if (keyStr.MatchesWildcard("checkbox*InFilename")) return WriteDefault(key, true.ToString());
             if (keyStr == "checkboxOutputIgnoreWildcards") return WriteDefault(key, true.ToString());
             if (keyStr == "sliderFaceRestoreStrength") return WriteDefault(key, 0.8f.ToString());
+            if (keyStr == "sliderUpscaleStrength") return WriteDefault(key, 1.0f.ToString());
 
             if (key == Key.none)
                 return WriteDefault(keyStr, "");

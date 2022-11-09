@@ -116,7 +116,7 @@ namespace StableDiffusionGui.Main
                 if (upscaleSetting == Forms.PostProcSettingsForm.UpscaleOption.X3) factor = 3;
                 if (upscaleSetting == Forms.PostProcSettingsForm.UpscaleOption.X4) factor = 4;
 
-                return $"-U {factor}";
+                return $"-U {factor} {Config.GetFloat("sliderUpscaleStrength").ToStringDot("0.###")}";
             }
         }
 
