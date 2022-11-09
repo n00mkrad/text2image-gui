@@ -20,6 +20,7 @@
             public const string Wildcards = "Wildcards";
             public const string SdEnv = "ldo";
             public const string Conda = "mb";
+            public const string Cache = "cache";
         }
 
         public class Bins

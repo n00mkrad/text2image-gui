@@ -310,7 +310,7 @@ namespace StableDiffusionGui.Os
             newPaths.AddRange(additionalPaths);
             newPaths.AddRange(paths.Where(x => x.Lower().Replace("\\", "/").StartsWith("c:/windows")).ToList());
 
-            return string.Join(";", newPaths) + ";";
+            return string.Join(";", newPaths.Select(x => x.Replace("\\", "/"))) + ";";
         }
 
         public static void AttachOrphanHitman(Process p)

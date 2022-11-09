@@ -196,20 +196,36 @@ namespace StableDiffusionGui.Main
 
         public static string GetEnvVarsSd(bool allCudaDevices = false, string baseDir = ".")
         {
-            string path = OsUtils.GetTemporaryPathVariable(new string[] { $"{baseDir}/{Constants.Dirs.Conda}", $"{baseDir}/{Constants.Dirs.Conda}/Scripts", $"{baseDir}/{Constants.Dirs.Conda}/condabin", $"{baseDir}/{Constants.Dirs.Conda}/Library/bin" });
+            List<string> cmds = new List<string>();
+
+            string path = OsUtils.GetTemporaryPathVariable(new string[] {
+               Path.Combine(baseDir, Constants.Dirs.Conda),
+               Path.Combine(baseDir, Constants.Dirs.Conda, "Scripts"),
+               Path.Combine(baseDir, Constants.Dirs.Conda, "condabin"),
+               Path.Combine(baseDir, Constants.Dirs.Conda, "Scripts"),
+               Path.Combine(baseDir, Constants.Dirs.Conda, "Library", "bin"),
+               Path.Combine(baseDir, Constants.Dirs.Conda, "Scripts"),
+            });
+
+            cmds.Add($"SET PATH={path}");
 
             int cudaDeviceOpt = Config.GetInt("comboxCudaDevice");
-            string devicesArg = ""; // Don't set env var if cudaDeviceOpt == 0 (=> automatic)
 
             if (!allCudaDevices && cudaDeviceOpt > 0)
             {
                 if (cudaDeviceOpt == 1) // CPU
-                    devicesArg = $" && SET CUDA_VISIBLE_DEVICES=\"\""; // Set env var to empty string
+                    cmds.Add(@"SET CUDA_VISIBLE_DEVICES="""); // Set to empty list
                 else
-                    devicesArg = $" && SET CUDA_VISIBLE_DEVICES={cudaDeviceOpt - 2}"; // Set env var to selected GPU ID (-2 because the first two options are Automatic and CPU)
+                    cmds.Add($"SET CUDA_VISIBLE_DEVICES={cudaDeviceOpt - 2}"); // Set env var to selected GPU ID (-2 because the first two options are Automatic and CPU)
             }
 
-            return $"SET PATH={path}{devicesArg}";
+            if (!Directory.Exists(Path.Combine(Environment.ExpandEnvironmentVariables("%USERPROFILE%"), ".cache", "huggingface", "transformers")))
+                cmds.Add($"SET \"TRANSFORMERS_CACHE={Path.Combine(Paths.GetDataPath(), Constants.Dirs.Cache, "trfm")}\"");
+
+            if (!Directory.Exists(Path.Combine(Environment.ExpandEnvironmentVariables("%USERPROFILE%"), ".cache", "torch")))
+                cmds.Add($"SET \"TORCH_HOME={Path.Combine(Paths.GetDataPath(), Constants.Dirs.Cache, "torch")}\"");
+
+            return string.Join(" && ", cmds);
         }
 
         public static bool ModelFilesizeValid(string path, Enums.StableDiffusion.ModelType type = Enums.StableDiffusion.ModelType.Normal)

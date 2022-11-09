@@ -214,7 +214,7 @@
             this.textboxSliderCodeformerFidelity.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderCodeformerFidelity.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderCodeformerFidelity.Name = "textboxSliderCodeformerFidelity";
-            this.textboxSliderCodeformerFidelity.Size = new System.Drawing.Size(45, 21);
+            this.textboxSliderCodeformerFidelity.Size = new System.Drawing.Size(45, 17);
             this.textboxSliderCodeformerFidelity.TabIndex = 0;
             this.textboxSliderCodeformerFidelity.Text = "0,2";
             // 
@@ -345,7 +345,7 @@
             this.textboxSliderFaceRestoreStrength.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderFaceRestoreStrength.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderFaceRestoreStrength.Name = "textboxSliderFaceRestoreStrength";
-            this.textboxSliderFaceRestoreStrength.Size = new System.Drawing.Size(45, 21);
+            this.textboxSliderFaceRestoreStrength.Size = new System.Drawing.Size(45, 17);
             this.textboxSliderFaceRestoreStrength.TabIndex = 0;
             this.textboxSliderFaceRestoreStrength.Text = "0,05";
             // 
@@ -617,7 +617,7 @@
             this.textboxSliderUpscaleStrength.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderUpscaleStrength.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderUpscaleStrength.Name = "textboxSliderUpscaleStrength";
-            this.textboxSliderUpscaleStrength.Size = new System.Drawing.Size(45, 21);
+            this.textboxSliderUpscaleStrength.Size = new System.Drawing.Size(45, 17);
             this.textboxSliderUpscaleStrength.TabIndex = 0;
             this.textboxSliderUpscaleStrength.Text = "0,05";
             // 
