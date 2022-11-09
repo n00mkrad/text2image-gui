@@ -57,8 +57,7 @@ namespace StableDiffusionGui.Main
                 long startSeed = seed;
                 prompts = prompts.Select(p => FormatUtils.GetCombinedPrompt(p, negPrompt)).ToArray(); // Apply negative prompt
 
-                List<Dictionary<string, string>> cmdsArgs = new List<Dictionary<string, string>>();
-
+                List<Dictionary<string, string>> argLists = new List<Dictionary<string, string>>();
                 Dictionary<string, string> args = new Dictionary<string, string>();
                 args["prompt"] = "";
                 args["default"] = Args.InvokeAi.GetDefaultArgsCommand();
@@ -90,7 +89,7 @@ namespace StableDiffusionGui.Main
 
                             if (initImages == null) // No init image(s)
                             {
-                                cmdsArgs.Add(new Dictionary<string, string>(args));
+                                argLists.Add(new Dictionary<string, string>(args));
                             }
                             else // With init image(s)
                             {
@@ -100,7 +99,7 @@ namespace StableDiffusionGui.Main
                                     {
                                         args["initImg"] = $"--init_img {initImg.Wrap()}";
                                         args["initStrength"] = $"--strength {strength.ToStringDot("0.###")}";
-                                        cmdsArgs.Add(new Dictionary<string, string>(args));
+                                        argLists.Add(new Dictionary<string, string>(args));
                                     }
                                 }
                             }
@@ -114,7 +113,7 @@ namespace StableDiffusionGui.Main
                         seed = startSeed;
                 }
 
-                List<string> cmds = cmdsArgs.Select(argList => string.Join(" ", argList.Where(argEntry => !string.IsNullOrWhiteSpace(argEntry.Value)).Select(argEntry => argEntry.Value))).ToList();
+                List<string> cmds = argLists.Select(argList => string.Join(" ", argList.Where(argEntry => !string.IsNullOrWhiteSpace(argEntry.Value)).Select(argEntry => argEntry.Value))).ToList();
 
                 Logger.Log($"Running Stable Diffusion - {iterations} Iterations, {steps} Steps, Scales {(scales.Length < 4 ? string.Join(", ", scales.Select(x => x.ToStringDot())) : $"{scales.First()}->{scales.Last()}")}, {res.Width}x{res.Height}, Starting Seed: {startSeed}");
 
@@ -134,7 +133,7 @@ namespace StableDiffusionGui.Main
 
                     py.StartInfo.RedirectStandardInput = true;
                     py.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSd()} && call activate.bat {Constants.Dirs.SdEnv} && " +
-                        $"python {Constants.Dirs.RepoSd}/scripts/invoke.py -o {outPath.Wrap(true)} {argsStartup}";
+                        $"python \"{Constants.Dirs.RepoSd}/scripts/invoke.py\" -o {outPath.Wrap(true)} {argsStartup}";
 
                     Logger.Log("cmd.exe " + py.StartInfo.Arguments, true);
 
@@ -258,8 +257,7 @@ namespace StableDiffusionGui.Main
 
             long startSeed = seed;
 
-            string promptFilePath = Path.Combine(Paths.GetSessionDataPath(), "prompts.txt");
-            List<string> promptFileLines = new List<string>();
+            List<Dictionary<string, string>> argLists = new List<Dictionary<string, string>>();
 
             foreach (string prompt in prompts)
             {
@@ -274,11 +272,13 @@ namespace StableDiffusionGui.Main
 
                     foreach (float scale in scales)
                     {
+                        args["init_img"] = "";
+                        args["strength"] = "";
                         args["scale"] = scale.ToStringDot();
 
                         if (initImages == null) // No init image(s)
                         {
-                            promptFileLines.Add(string.Join(" ", args.Where(x => !string.IsNullOrWhiteSpace(x.Value)).Select(x => $"--{x.Key} {x.Value}")));
+                            argLists.Add(new Dictionary<string, string>(args));
                         }
                         else // With init image(s)
                         {
@@ -288,7 +288,7 @@ namespace StableDiffusionGui.Main
                                 {
                                     args["init_img"] = initImg.Wrap();
                                     args["strength"] = strength.ToStringDot("0.###");
-                                    promptFileLines.Add(string.Join(" ", args.Where(x => !string.IsNullOrWhiteSpace(x.Value)).Select(x => $"--{x.Key} {x.Value}")));
+                                    argLists.Add(new Dictionary<string, string>(args));
                                 }
                             }
                         }
@@ -301,6 +301,9 @@ namespace StableDiffusionGui.Main
                 if (Config.GetBool(Config.Key.checkboxMultiPromptsSameSeed))
                     seed = startSeed;
             }
+
+            List<string> promptFileLines = argLists.Select(argList => string.Join(" ", argList.Where(arg => !string.IsNullOrWhiteSpace(arg.Value)).Select(arg => $"--{arg.Key} {arg.Value}"))).ToList();
+            string promptFilePath = Path.Combine(Paths.GetSessionDataPath(), "prompts.txt");
 
             IoUtils.TryDeleteIfExists(promptFilePath); // idk if this is needed, but the line below MIGHT append something so better make sure the previous prompts are deleted
             File.WriteAllLines(promptFilePath, promptFileLines);
@@ -321,7 +324,7 @@ namespace StableDiffusionGui.Main
                 TextToImage.CurrentTask.Processes.Add(py);
 
                 py.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSd()} && call activate.bat {Constants.Dirs.SdEnv} && " +
-                    $"python {Constants.Dirs.RepoSd}/optimizedSD/optimized_txt2img_loop.py --model {modelFile.FullName.Wrap(true)} --outdir {outPath.Wrap(true)} --from_file_loop={promptFilePath.Wrap()} {argsStartup} ";
+                    $"python \"{Constants.Dirs.RepoSd}/optimizedSD/optimized_txt2img_loop.py\" --model {modelFile.FullName.Wrap(true)} --outdir {outPath.Wrap(true)} --from_file_loop={promptFilePath.Wrap(true)} {argsStartup} ";
                 Logger.Log("cmd.exe " + py.StartInfo.Arguments, true);
 
                 if (!OsUtils.ShowHiddenCmd())
