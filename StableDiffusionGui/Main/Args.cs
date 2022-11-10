@@ -51,7 +51,7 @@ namespace StableDiffusionGui.Main
 
                 if (HwInfo.GetFreeRamGb > 6f && !Config.GetBool("disableModelCaching")) // Disable caching if there's <6GB free, no matter the total RAM
                 {
-                    maxCachedModels = (int)Math.Floor((HwInfo.GetTotalRamGb - 12f) / 4f); // >16GB => 1 - >20GB => 2 - >24GB => 3 - >24GB => 4 - ...
+                    maxCachedModels = (int)Math.Floor((HwInfo.GetTotalRamGb - 11f) / 4f); // >16GB => 1 - >20GB => 2 - >24GB => 3 - >24GB => 4 - ...
                     Logger.Log($"InvokeAI model caching: Cache up to {maxCachedModels} models in RAM", true);
                 }
 
