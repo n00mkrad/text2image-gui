@@ -127,10 +127,8 @@ namespace StableDiffusionGui.Main
                     TextToImage.CurrentTask.ImgCount += 1;
                     Program.MainForm.SetProgress((int)Math.Round(((float)TextToImage.CurrentTask.ImgCount / TextToImage.CurrentTask.TargetImgCount) * 100f));
 
-                    int lastMsPerImg = $"{split[1].Remove(".").Remove("s")}".GetInt();
+                    int lastMsPerImg = $"{split[1].Remove(".").Remove("s")}0".GetInt();
                     int remainingMs = (TextToImage.CurrentTask.TargetImgCount - TextToImage.CurrentTask.ImgCount) * lastMsPerImg;
-
-                    string lastLine = Logger.LastUiLine;
 
                     Logger.Log($"Generated 1 image in {split[1]} ({TextToImage.CurrentTask.ImgCount}/{TextToImage.CurrentTask.TargetImgCount})" +
                         $"{(TextToImage.CurrentTask.ImgCount > 1 && remainingMs > 1000 ? $" - ETA: {FormatUtils.Time(remainingMs, false)}" : "")}", false, replace || Logger.LastUiLine.MatchesWildcard("*Generated*image*in*"));
