@@ -1,4 +1,5 @@
 ﻿using Microsoft.WindowsAPICodePack.Dialogs;
+using StableDiffusionGui.Data;
 using StableDiffusionGui.Extensions;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
@@ -135,7 +136,7 @@ namespace StableDiffusionGui.Forms
                 return;
             }
 
-            FileInfo baseModel = Paths.GetModel(comboxBaseModel.Text);
+            Model baseModel = Paths.GetModel(comboxBaseModel.Text);
 
             if (baseModel == null)
             {

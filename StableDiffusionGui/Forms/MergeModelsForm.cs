@@ -1,4 +1,5 @@
-﻿using StableDiffusionGui.Extensions;
+﻿using StableDiffusionGui.Data;
+using StableDiffusionGui.Extensions;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.Os;
@@ -68,8 +69,8 @@ namespace StableDiffusionGui.Forms
         {
             try
             {
-                FileInfo model1 = Paths.GetModel(comboxModel1.Text);
-                FileInfo model2 = Paths.GetModel(comboxModel2.Text);
+                Model model1 = Paths.GetModel(comboxModel1.Text);
+                Model model2 = Paths.GetModel(comboxModel2.Text);
 
                 Logger.ClearLogBox();
                 Logger.Log($"Merging models '{Path.GetFileNameWithoutExtension(model1.Name)}' ({PercentModel1}%) and '{Path.GetFileNameWithoutExtension(model2.Name)}' ({PercentModel2}%)...");

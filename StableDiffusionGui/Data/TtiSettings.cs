@@ -8,8 +8,6 @@ using System.Windows;
 
 namespace StableDiffusionGui.Data
 {
-    public enum Implementation { StableDiffusion, StableDiffusionOptimized }
-
     public class TtiSettings
     {
         public Implementation Implementation { get; set; } = Implementation.StableDiffusion;

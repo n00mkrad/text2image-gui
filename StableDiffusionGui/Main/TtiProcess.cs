@@ -1,4 +1,5 @@
-﻿using StableDiffusionGui.Io;
+﻿using StableDiffusionGui.Data;
+using StableDiffusionGui.Io;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
@@ -48,8 +49,8 @@ namespace StableDiffusionGui.Main
 
                 var cachedModels = Paths.GetModels(Enums.StableDiffusion.ModelType.Normal);
                 var cachedModelsVae = Paths.GetModels(Enums.StableDiffusion.ModelType.Vae);
-                FileInfo modelFile = TtiUtils.CheckIfCurrentSdModelExists();
-                FileInfo vaeFile = Paths.GetModel(cachedModelsVae, vae, false, Enums.StableDiffusion.ModelType.Vae);
+                Model modelFile = TtiUtils.CheckIfCurrentSdModelExists();
+                Model vaeFile = Paths.GetModel(cachedModelsVae, vae, false, Enums.StableDiffusion.ModelType.Vae);
 
                 if (modelFile == null)
                     return;
@@ -209,7 +210,7 @@ namespace StableDiffusionGui.Main
             string modelNoExt = Path.ChangeExtension(model, null);
             bool lockSeed = paramsDict.Get("lockSeed").FromJson<bool>();
 
-            FileInfo modelFile = TtiUtils.CheckIfCurrentSdModelExists();
+            Model modelFile = TtiUtils.CheckIfCurrentSdModelExists();
 
             if (modelFile == null)
                 return;
@@ -328,8 +329,8 @@ namespace StableDiffusionGui.Main
 
             var cachedModels = Paths.GetModels(Enums.StableDiffusion.ModelType.Normal);
             var cachedModelsVae = Paths.GetModels(Enums.StableDiffusion.ModelType.Vae);
-            FileInfo modelFile = TtiUtils.CheckIfCurrentSdModelExists();
-            FileInfo vaeFile = Paths.GetModel(cachedModelsVae, Path.GetFileName(vaePath), false, Enums.StableDiffusion.ModelType.Vae);
+            Model modelFile = TtiUtils.CheckIfCurrentSdModelExists();
+            Model vaeFile = Paths.GetModel(cachedModelsVae, Path.GetFileName(vaePath), false, Enums.StableDiffusion.ModelType.Vae);
 
             if (modelFile == null)
                 return;

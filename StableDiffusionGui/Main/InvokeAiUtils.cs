@@ -1,4 +1,5 @@
-﻿using StableDiffusionGui.Io;
+﻿using StableDiffusionGui.Data;
+using StableDiffusionGui.Io;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,7 +18,7 @@ namespace StableDiffusionGui.Main
             WriteModelsYaml(mdl, vae, keyName);
         }
 
-        public static void WriteModelsYaml(FileInfo mdl, FileInfo vae, string keyName = "default")
+        public static void WriteModelsYaml(Model mdl, Model vae, string keyName = "default")
         {
             string text = $"{keyName}:\n" +
                 $"    config: configs/stable-diffusion/v1-inference.yaml\n" +
@@ -31,7 +32,7 @@ namespace StableDiffusionGui.Main
             File.WriteAllText(Path.Combine(Paths.GetDataPath(), Constants.Dirs.RepoSd, "configs", "models.yaml"), text);
         }
 
-        public static void WriteModelsYamlAll(FileInfo selectedMdl, FileInfo selectedVae, List<FileInfo> cachedModels = null, List<FileInfo> cachedModelsVae = null)
+        public static void WriteModelsYamlAll(Model selectedMdl, Model selectedVae, List<Model> cachedModels = null, List<Model> cachedModelsVae = null)
         {
             if (cachedModels == null || cachedModels.Count < 1)
                 cachedModels = Paths.GetModels(Enums.StableDiffusion.ModelType.Normal);
@@ -43,11 +44,11 @@ namespace StableDiffusionGui.Main
 
             cachedModelsVae.Insert(0, null); // Insert null entry, for looping
 
-            foreach (FileInfo mdl in cachedModels)
+            foreach (Model mdl in cachedModels)
             {
                 bool inpaint = mdl.Name.MatchesWildcard("*-inpainting.*");
 
-                foreach (FileInfo vae in cachedModelsVae)
+                foreach (Model vae in cachedModelsVae)
                 {
                     text += $"{GetMdlNameForYaml(mdl, vae)}:\n" +
                     $"    config: configs/stable-diffusion/{(inpaint ? "v1-inpainting-inference.yaml" : "v1-inference")}.yaml\n" +
@@ -63,7 +64,7 @@ namespace StableDiffusionGui.Main
             File.WriteAllText(Path.Combine(Paths.GetDataPath(), Constants.Dirs.RepoSd, "configs", "models.yaml"), text);
         }
 
-        private static bool IsModelDefault(FileInfo mdl, FileInfo vae, FileInfo selectedMdl, FileInfo selectedVae)
+        private static bool IsModelDefault(Model mdl, Model vae, Model selectedMdl, Model selectedVae)
         {
             if (mdl == null || selectedMdl == null)
                 return false;
@@ -79,7 +80,7 @@ namespace StableDiffusionGui.Main
             return mdlMatch && vaeMatch;
         }
 
-        public static string GetMdlNameForYaml(FileInfo mdl, FileInfo vae)
+        public static string GetMdlNameForYaml(Model mdl, Model vae)
         {
             return $"{mdl.Name}{(vae == null ? "-noVae" : $"-{vae.Name}")}";
         }

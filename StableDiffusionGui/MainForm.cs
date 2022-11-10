@@ -270,7 +270,7 @@ namespace StableDiffusionGui
         {
             TtiSettings settings = new TtiSettings
             {
-                Implementation = Config.GetBool("checkboxOptimizedSd") ? Implementation.StableDiffusionOptimized : Implementation.StableDiffusion,
+                Implementation = Config.GetBool("checkboxOptimizedSd") ? Enums.StableDiffusion.Implementation.StableDiffusionOptimized : Enums.StableDiffusion.Implementation.StableDiffusion,
                 Prompts = textboxPrompt.TextNoPlaceholder.SplitIntoLines().Where(x => !string.IsNullOrWhiteSpace(x)).ToArray(),
                 NegativePrompt = textboxPromptNeg.TextNoPlaceholder.Trim().Replace(Environment.NewLine, " "),
                 Iterations = (int)upDownIterations.Value,
@@ -506,7 +506,7 @@ namespace StableDiffusionGui
                 {
                     reGenerateImageWithCurrentSettingsToolStripMenuItem.Visible = !Program.Busy;
                     useAsInitImageToolStripMenuItem.Visible = !Program.Busy;
-                    postProcessImageToolStripMenuItem.Visible = !Program.Busy && TextToImage.CurrentTaskSettings.Implementation == Implementation.StableDiffusion;
+                    postProcessImageToolStripMenuItem.Visible = !Program.Busy && TextToImage.CurrentTaskSettings.Implementation == Enums.StableDiffusion.Implementation.StableDiffusion;
                     menuStripOutputImg.Show(Cursor.Position);
                 }
             }

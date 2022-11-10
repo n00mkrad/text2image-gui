@@ -144,6 +144,7 @@
     </Compile>
     <Compile Include="Data\Gpu.cs" />
     <Compile Include="Data\ImageMetadata.cs" />
+    <Compile Include="Data\Model.cs" />
     <Compile Include="Data\TtiSettings.cs" />
     <Compile Include="Data\TtiTaskInfo.cs" />
     <Compile Include="ExtensionMethods.cs" />
@@ -241,6 +242,7 @@
     <Compile Include="Forms\WelcomeForm.Designer.cs">
       <DependentUpon>WelcomeForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Implementations\SdOnnx.cs" />
     <Compile Include="Installation\InstallationStatus.cs" />
     <Compile Include="Installation\Setup.cs" />
     <Compile Include="Io\Config.cs" />

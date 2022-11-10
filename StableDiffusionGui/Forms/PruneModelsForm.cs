@@ -1,4 +1,5 @@
-﻿using StableDiffusionGui.Extensions;
+﻿using StableDiffusionGui.Data;
+using StableDiffusionGui.Extensions;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.Os;
@@ -60,7 +61,7 @@ namespace StableDiffusionGui.Forms
             try
             {
                 bool fp16 = (Enums.Models.Format)comboxPrunePrecision.SelectedIndex == Enums.Models.Format.Fp16;
-                FileInfo model = Paths.GetModel(comboxModel.Text);
+                Model model = Paths.GetModel(comboxModel.Text);
 
                 Logger.ClearLogBox();
                 Logger.Log($"Pruning model '{Path.GetFileNameWithoutExtension(model.Name)}' and saving as fp{(fp16 ? "16" : "32")} checkpoint...");

@@ -1,4 +1,5 @@
 ﻿using ImageMagick;
+using StableDiffusionGui.Data;
 using StableDiffusionGui.Extensions;
 using StableDiffusionGui.Forms;
 using StableDiffusionGui.Io;
@@ -148,7 +149,7 @@ namespace StableDiffusionGui.Main
 
         /// <summary> Checks if Stable Diffusion model exists </summary>
         /// <returns> Model FileInfo, if it exists - null if not </returns>
-        public static FileInfo CheckIfCurrentSdModelExists(List<FileInfo> cachedModels = null)
+        public static Model CheckIfCurrentSdModelExists(List<Model> cachedModels = null)
         {
             string modelFilename = Config.Get(Config.Key.comboxSdModel);
 
@@ -213,15 +214,23 @@ namespace StableDiffusionGui.Main
             if (!File.Exists(path))
                 return false;
 
-            return ModelFilesizeValid(new FileInfo(path));
+            return ModelFilesizeValid(new FileInfo(path).Length);
         }
 
-        public static bool ModelFilesizeValid(FileInfo file, Enums.StableDiffusion.ModelType type = Enums.StableDiffusion.ModelType.Normal)
+        public static bool ModelFilesizeValid(Model model, Enums.StableDiffusion.ModelType type = Enums.StableDiffusion.ModelType.Normal)
+        {
+            if (!File.Exists(model.FullName))
+                return false;
+
+            return ModelFilesizeValid(model.Size);
+        }
+
+        public static bool ModelFilesizeValid(long size, Enums.StableDiffusion.ModelType type = Enums.StableDiffusion.ModelType.Normal)
         {
             try
             {
                 if (type == Enums.StableDiffusion.ModelType.Normal)
-                    return file.Length > 2010000000;
+                    return size > 2010000000;
             }
             catch
             {

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using StableDiffusionGui.Data;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
 using System;
@@ -77,10 +78,9 @@ namespace StableDiffusionGui.Io
             return path;
         }
 
-        public static List<FileInfo> GetModels(ModelType type = ModelType.Normal, string pattern = null)
+        public static List<Model> GetModels(ModelType type = ModelType.Normal, Implementation implementation = Implementation.StableDiffusion)
         {
-            pattern = pattern ?? $"*{Constants.FileExts.SdModel}";  
-            List<FileInfo> list = new List<FileInfo>();
+            List<Model> list = new List<Model>();
 
             try
             {
@@ -89,15 +89,21 @@ namespace StableDiffusionGui.Io
                 List<string> customModelDirsList = Config.Get($"CustomModelDirs{type}").FromJson<List<string>>();
                 mdlFolders.AddRange(customModelDirsList, out mdlFolders);
 
-                foreach (string folderPath in mdlFolders)
-                    list.AddRange(IoUtils.GetFileInfosSorted(folderPath, false, pattern).ToList());
+                if (implementation == Implementation.StableDiffusion || implementation == Implementation.StableDiffusionOptimized)
+                {
+                    var fileList = new List<FileInfo>();
 
-                if (type == ModelType.Normal && !Config.GetBool("disableModelFilesizeValidation"))
-                    list = list.Where(mdl => TtiUtils.ModelFilesizeValid(mdl, type)).ToList();
+                    foreach (string folderPath in mdlFolders)
+                        fileList.AddRange(IoUtils.GetFileInfosSorted(folderPath, false, $"*{Constants.FileExts.SdModel}").ToList());
 
-                list = list.Distinct().OrderBy(x => x.Name).ToList();
+                    if (type == ModelType.Normal && !Config.GetBool("disableModelFilesizeValidation"))
+                        fileList = fileList.Where(mdl => TtiUtils.ModelFilesizeValid(mdl.Length, type)).ToList();
 
-                return list;
+                    list = fileList.Select(f => new Model(f, new[] { Implementation.StableDiffusion, Implementation.StableDiffusionOptimized } )).ToList();
+                    list = list.Distinct().OrderBy(x => x.Name).ToList();
+
+                    return list;
+                }
             }
             catch (Exception ex)
             {
@@ -108,12 +114,12 @@ namespace StableDiffusionGui.Io
             return list;
         }
 
-        public static FileInfo GetModel(string filename, bool anyExtension = false, ModelType type = ModelType.Normal)
+        public static Model GetModel(string filename, bool anyExtension = false, ModelType type = ModelType.Normal)
         {
             return GetModels(type).Where(x => x.Name == filename).FirstOrDefault();
         }
 
-        public static FileInfo GetModel(List<FileInfo> cachedModels, string filename, bool anyExtension = false, ModelType type = ModelType.Normal)
+        public static Model GetModel(List<Model> cachedModels, string filename, bool anyExtension = false, ModelType type = ModelType.Normal)
         {
             return cachedModels.Where(x => x.Name == filename).FirstOrDefault();
         }
