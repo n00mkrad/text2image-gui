@@ -16,7 +16,7 @@ namespace StableDiffusionGui
 {
     public static class Program
     {
-        public static bool Debug { get { return Debugger.IsAttached || UserArgs["debug"].Lower() == true.ToString().Lower(); } }
+        public static bool Debug { get { return Debugger.IsAttached || UserArgs.Get("debug").Lower() == true.ToString().Lower(); } }
 
         public static List<string> Args = new List<string>(); // All args
         public static Dictionary<string, string> UserArgs = new Dictionary<string, string>(); // User args (excludes 1st which is the path) as key/value pairs
@@ -67,8 +67,6 @@ namespace StableDiffusionGui
                 }
                 catch { }
             }
-
-            Console.WriteLine("Args parsed.");
         }
 
         public static void Cleanup()
