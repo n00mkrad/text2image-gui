@@ -143,7 +143,7 @@ namespace StableDiffusionGui.Main
                 return "";
         }
 
-        public static List<string> GetSessionLogLastLines(string filename, int linesCount = 5, bool stripTimestamp = false)
+        public static List<string> GetLastLines(string filename, int linesCount = 5, bool stripTimestamp = false)
         {
             var lines = GetSessionLog(filename).SplitIntoLines();
 

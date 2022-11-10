@@ -148,7 +148,7 @@ namespace StableDiffusionGui.Main
 
                 if (CurrentTaskSettings.Implementation == Implementation.StableDiffusion)
                 {
-                    if (Logger.GetSessionLogLastLines(Constants.Lognames.Sd, 15).Where(x => x.MatchesWildcard("*step */*")).Any()) // Only attempt a soft cancel if we've been generating anything
+                    if (Logger.GetLastLines(Constants.Lognames.Sd, 15).Where(x => x.MatchesWildcard("*step */*")).Any()) // Only attempt a soft cancel if we've been generating anything
                         await WaitForDreamPyCancel();
                     else // This condition should be true if we cancel while it's still initializing, so we can just force kill the process
                         TtiProcess.Kill();
@@ -176,7 +176,7 @@ namespace StableDiffusionGui.Main
 
             while (true)
             {
-                var lines = Logger.GetSessionLogLastLines(Constants.Lognames.Sd, 5);
+                var lines = Logger.GetLastLines(Constants.Lognames.Sd, 5);
                 lines = lines.Where(x => x.MatchesRegex(@"\[(?:(?!\]\s+\[)(?:.|\n))*\]\s+\[(?:(?!\]\:)(?:.|\n))*\]\:")).ToList();
                 Dictionary<string, TimeSpan> linesWithAge = new Dictionary<string, TimeSpan>();
 

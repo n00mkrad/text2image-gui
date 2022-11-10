@@ -32,8 +32,11 @@ namespace StableDiffusionGui.Main
             {
                 bool replace = ellipsis || Logger.LastUiLine.MatchesWildcard("*Generated*image*in*");
 
-                if (!TextToImage.Canceled && line.Contains("Setting Sampler"))
-                    Logger.Log("Generating...");
+                if (!TextToImage.Canceled && line.StartsWith(">> Setting Sampler to "))
+                {
+                    bool cached = Logger.GetLastLines(Constants.Lognames.Sd, 3).Where(x => x.Contains("Retrieving model ")).Any();
+                    Logger.Log($"Model {(cached ? " retrieved from RAM cache" : "loaded")}.", false, ellipsis);
+                }
 
                 if (!TextToImage.Canceled && line.MatchesWildcard("step */*"))
                 {
@@ -60,7 +63,7 @@ namespace StableDiffusionGui.Main
                         $"{(TextToImage.CurrentTask.ImgCount > 1 && remainingMs > 1000 ? $" - ETA: {FormatUtils.Time(remainingMs, false)}" : "")}", false, replace || Logger.LastUiLine.MatchesWildcard("*Generated*image*in*"));
                 }
 
-                if (line.Contains(": !fix") && Logger.GetSessionLogLastLines(Constants.Lognames.Sd, 2, true).FirstOrDefault() == "Outputs:")
+                if (line.Contains(": !fix") && Logger.GetLastLines(Constants.Lognames.Sd, 2, true).FirstOrDefault() == "Outputs:")
                 {
                     string pathSource = line.Split(": !fix \"")[1].Split("\" -")[0];
                     string pathOut = line.Substring(line.IndexOf("] ") + 2).Split(": !fix \"")[0];
@@ -112,7 +115,7 @@ namespace StableDiffusionGui.Main
                     Logger.Log($"Concept keyword: <{line.Split("Added terms: *, ").LastOrDefault()}>", false, ellipsis);
             }
 
-            string lastLogLines = string.Join("\n", Logger.GetSessionLogLastLines(Constants.Lognames.Sd, 6));
+            string lastLogLines = string.Join("\n", Logger.GetLastLines(Constants.Lognames.Sd, 6));
 
             if (!_hasErrored && line.Contains("CUDA out of memory"))
             {

@@ -258,6 +258,8 @@
     <Compile Include="Main\Dreambooth.cs" />
     <Compile Include="Main\DreamboothOutputHandler.cs" />
     <Compile Include="Main\Enums.cs" />
+    <Compile Include="Main\InvokeAi.cs" />
+    <Compile Include="Main\InvokeAiUtils.cs" />
     <Compile Include="Main\Logger.cs" />
     <Compile Include="Main\ImageExport.cs" />
     <Compile Include="Main\PromptHistory.cs" />

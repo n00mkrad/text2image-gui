@@ -37,7 +37,7 @@ namespace StableDiffusionGui.Main
             if (line.Contains("Training:") && line.Contains("?it/s"))
                 Logger.Log($"Starting training...", false, replace);
 
-            string lastLogLines = string.Join("\n", Logger.GetSessionLogLastLines(Constants.Lognames.Dreambooth, 6));
+            string lastLogLines = string.Join("\n", Logger.GetLastLines(Constants.Lognames.Dreambooth, 6));
 
             if (line.Contains("global_step=") && !lastLogLines.Contains("Saving"))
             {

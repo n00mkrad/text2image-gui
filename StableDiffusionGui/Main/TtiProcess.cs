@@ -54,7 +54,7 @@ namespace StableDiffusionGui.Main
                 if (modelFile == null)
                     return;
 
-                TtiUtils.WriteModelsYamlAll(modelFile, vaeFile, cachedModels);
+                InvokeAiUtils.WriteModelsYamlAll(modelFile, vaeFile, cachedModels, cachedModelsVae);
 
                 Dictionary<string, string> initImages = initImgs != null && initImgs.Length > 0 ? await TtiUtils.CreateResizedInitImagesIfNeeded(initImgs.ToList(), res) : null;
 
@@ -123,7 +123,7 @@ namespace StableDiffusionGui.Main
 
                 string argsStartup = Args.InvokeAi.GetArgsStartup(embedding);
 
-                string newStartupSettings = $"{argsStartup}{model}{vae}{Config.GetInt("comboxCudaDevice")}"; // Check if startup settings match - If not, we need to restart the process
+                string newStartupSettings = $"{argsStartup}{Config.GetInt("comboxCudaDevice")}"; // Check if startup settings match - If not, we need to restart the process
 
                 string initsStr = initImages != null ? $" and {initImages.Count} image{(initImages.Count != 1 ? "s" : "")} using {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
                 Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} with {iterations} iteration{(iterations != 1 ? "s" : "")} each and {scales.Length} scale{(scales.Length != 1 ? "s" : "")}{initsStr} each = {cmds.Count} images total.");
@@ -175,6 +175,7 @@ namespace StableDiffusionGui.Main
                 }
                 else
                 {
+                    await InvokeAi.SwitchModel(InvokeAiUtils.GetMdlNameForYaml(modelFile, vaeFile));
                     TextToImage.CurrentTask.Processes.Add(CurrentProcess);
                 }
 
@@ -189,50 +190,6 @@ namespace StableDiffusionGui.Main
             {
                 Logger.Log($"Unhandled Stable Diffusion Error: {ex.Message}");
                 Logger.Log(ex.StackTrace, true);
-            }
-        }
-
-        public enum FixAction { Upscale, FaceRestoration }
-
-        /// <summary> Run InvokeAI post-processing (!fix), with log timeout </summary>
-        /// <returns> Successful or not </returns>
-        public static async Task<bool> InvokeAiFix(string imgPath, List<FixAction> actions)
-        {
-            if (Program.Busy)
-            {
-                UiUtils.ShowMessageBox("Can't run post-processing while the program is still busy.");
-                return false;
-            }
-
-            if (CurrentStdInWriter == null)
-            {
-                UiUtils.ShowMessageBox("Can't run post-processing when Stable Diffusion is not loaded.");
-                return false;
-            }
-
-            try
-            {
-                Program.MainForm.SetWorking(Program.BusyState.PostProcessing, false);
-
-                Logger.Log($"InvokeAI !fix: {string.Join(", ", actions.Select(x => x.ToString()))}", true);
-
-                List<string> args = new List<string> { "!fix", imgPath.Wrap(true) };
-
-                if (actions.Contains(FixAction.Upscale))
-                    args.Add(Args.InvokeAi.GetUpscaleArgs(true));
-
-                if (actions.Contains(FixAction.FaceRestoration))
-                    args.Add(Args.InvokeAi.GetFaceRestoreArgs(true));
-
-                await WriteStdIn(string.Join(" ", args), true);
-                return true;
-            }
-            catch(Exception ex)
-            {
-                Logger.Log($"Error: {ex.Message}");
-                Logger.Log(ex.StackTrace);
-                Program.MainForm.SetWorking(Program.BusyState.Standby);
-                return false;
             }
         }
 
@@ -377,7 +334,7 @@ namespace StableDiffusionGui.Main
             if (modelFile == null)
                 return;
 
-            TtiUtils.WriteModelsYamlAll(modelFile, vaeFile, cachedModels, cachedModelsVae);
+            InvokeAiUtils.WriteModelsYamlAll(modelFile, vaeFile, cachedModels, cachedModelsVae);
 
             string batPath = Path.Combine(Paths.GetSessionDataPath(), "invoke.bat");
 
@@ -461,7 +418,7 @@ namespace StableDiffusionGui.Main
             }
             else
             {
-                string log = "...\n" + string.Join("\n", Logger.GetSessionLogLastLines(Constants.Lognames.Sd, 8));
+                string log = "...\n" + string.Join("\n", Logger.GetLastLines(Constants.Lognames.Sd, 8));
                 TextToImage.Cancel($"Process has exited unexpectedly.\n\nOutput:\n{log}");
             }
         }

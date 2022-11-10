@@ -819,17 +819,17 @@ namespace StableDiffusionGui
 
         private async void upscaleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            await TtiProcess.InvokeAiFix(ImagePreview.CurrentImagePath, new[] { TtiProcess.FixAction.Upscale }.ToList());
+            await InvokeAi.RunFix(ImagePreview.CurrentImagePath, new[] { InvokeAi.FixAction.Upscale }.ToList());
         }
 
         private async void applyFaceRestorationToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            await TtiProcess.InvokeAiFix(ImagePreview.CurrentImagePath, new[] { TtiProcess.FixAction.FaceRestoration }.ToList());
+            await InvokeAi.RunFix(ImagePreview.CurrentImagePath, new[] { InvokeAi.FixAction.FaceRestoration }.ToList());
         }
 
         private async void applyAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            await TtiProcess.InvokeAiFix(ImagePreview.CurrentImagePath, new[] { TtiProcess.FixAction.Upscale, TtiProcess.FixAction.FaceRestoration }.ToList());
+            await InvokeAi.RunFix(ImagePreview.CurrentImagePath, new[] { InvokeAi.FixAction.Upscale, InvokeAi.FixAction.FaceRestoration }.ToList());
         }
 
         #endregion
