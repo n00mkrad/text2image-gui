@@ -14,8 +14,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
 using Path = System.IO.Path;
 using Paths = StableDiffusionGui.Io.Paths;
