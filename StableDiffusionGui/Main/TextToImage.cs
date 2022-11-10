@@ -142,9 +142,12 @@ namespace StableDiffusionGui.Main
 
             Logger.Log($"Canceling. Manual: {manual} - Implementation: {(CurrentTaskSettings != null ? CurrentTaskSettings.Implementation.ToString() : "None")} - Force Kill: {forceKill}", true);
 
+            if (CurrentTaskSettings.Implementation == Enums.StableDiffusion.Implementation.OptimizedSd)
+                forceKill = true;
+
             if (!forceKill && TtiProcess.IsAiProcessRunning)
             {
-                if (CurrentTaskSettings.Implementation == Enums.StableDiffusion.Implementation.OptimizedSd)
+                if (CurrentTaskSettings.Implementation == Enums.StableDiffusion.Implementation.DiffusersOnnx)
                 {
                     IoUtils.TryDeleteIfExists(Path.Combine(Paths.GetSessionDataPath(), "prompts.txt"));
                     TtiUtils.SoftCancelDreamPy();
@@ -189,7 +192,16 @@ namespace StableDiffusionGui.Main
                     if (linesWithAge.ContainsKey(line))
                         continue;
 
-                    linesWithAge.Add(line, (DateTime.Now - DateTime.ParseExact(line.Split('[')[2].Split(']')[0], "MM-dd-yyyy HH:mm:ss", CultureInfo.InvariantCulture)));
+                    try
+                    {
+                        linesWithAge.Add(line, (DateTime.Now - DateTime.ParseExact(line.Split('[')[2].Split(']')[0], "MM-dd-yyyy HH:mm:ss", CultureInfo.InvariantCulture)));
+                    }
+                    catch
+                    {
+                        string msg = $"Failed to parse date in log line:\n{line}\n\n.Please tell the developer about this message!\nIt has been copied to the clipboard.";
+                        OsUtils.SetClipboard(msg);
+                        UiUtils.ShowMessageBox(msg, UiUtils.MessageType.Error, Nmkoder.Forms.MessageForm.FontSize.Big);
+                    }
                 }
 
                 linesWithAge = linesWithAge.Where(x => x.Value.TotalMilliseconds >= 0).ToDictionary(p => p.Key, p => p.Value);
