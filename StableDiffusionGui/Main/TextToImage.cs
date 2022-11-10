@@ -141,12 +141,12 @@ namespace StableDiffusionGui.Main
 
             Logger.Log($"Canceling. Manual: {manual} - Implementation: {(CurrentTaskSettings != null ? CurrentTaskSettings.Implementation.ToString() : "None")} - Force Kill: {forceKill}", true);
 
-            if (CurrentTaskSettings.Implementation == Enums.StableDiffusion.Implementation.OptimizedSd)
+            if (CurrentTaskSettings.Implementation == Enums.StableDiffusion.Implementation.DiffusersOnnx)
                 forceKill = true;
 
             if (!forceKill && TtiProcess.IsAiProcessRunning)
             {
-                if (CurrentTaskSettings.Implementation == Enums.StableDiffusion.Implementation.DiffusersOnnx)
+                if (CurrentTaskSettings.Implementation == Enums.StableDiffusion.Implementation.OptimizedSd)
                 {
                     IoUtils.TryDeleteIfExists(Path.Combine(Paths.GetSessionDataPath(), "prompts.txt"));
                     TtiUtils.SoftCancelDreamPy();
