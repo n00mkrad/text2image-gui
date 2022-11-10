@@ -16,6 +16,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
 namespace StableDiffusionGui.Ui
 {
@@ -335,7 +336,7 @@ namespace StableDiffusionGui.Ui
 
         public static void SetHiresFixVisible (ComboBox w, ComboBox h, CheckBox fix)
         {
-            fix.Visible = w.GetInt() > 512 && h.GetInt() > 512;
+            fix.Visible = w.GetInt() > 512 && h.GetInt() > 512 && (Implementation)Config.GetInt("comboxImplementation") == Implementation.InvokeAi;
         }
 
         public static void FitWindowSizeToImageSize ()

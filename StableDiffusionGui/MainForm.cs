@@ -19,6 +19,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static StableDiffusionGui.Main.Enums.StableDiffusion;
 using Paths = StableDiffusionGui.Io.Paths;
 
 namespace StableDiffusionGui
@@ -162,14 +163,13 @@ namespace StableDiffusionGui
 
         public void RefreshAfterSettingsChanged()
         {
-            bool opt = Config.GetBool("checkboxOptimizedSd");
-
-            btnEmbeddingBrowse.Visible = !opt; // Disable embedding browse btn when using optimizedSD
-            panelSampler.Visible = !opt; // Disable sampler selection if using optimized mode
-            panelSeamless.Visible = !opt; // Disable seamless option when using optimizedSD
+            var imp = (Implementation)Config.GetInt("comboxImplementation");
+            panelPromptNeg.Visible = imp == Implementation.InvokeAi;
+            btnEmbeddingBrowse.Enabled = imp == Implementation.InvokeAi;
+            panelSampler.Visible = imp == Implementation.InvokeAi;
+            panelSeamless.Visible = imp == Implementation.InvokeAi;
 
             bool adv = Config.GetBool("checkboxAdvancedMode");
-
             upDownIterations.Maximum = !adv ? 1000 : 10000;
             sliderSteps.ActualMaximum = !adv ? 120 : 500;
             sliderSteps.ValueStep = !adv ? 5 : 1;
@@ -589,7 +589,7 @@ namespace StableDiffusionGui
             if (Program.Busy)
                 return;
 
-            if (Config.GetBool("checkboxOptimizedSd"))
+            if ((Implementation)Config.GetInt("comboxImplementation") == Implementation.OptimizedSd)
             {
                 Logger.Log("Not supported in Low Memory Mode.");
                 return;
@@ -641,7 +641,7 @@ namespace StableDiffusionGui
 
         private void btnPostProc_Click(object sender, EventArgs e)
         {
-            if (Config.GetBool("checkboxOptimizedSd"))
+            if ((Implementation)Config.GetInt("comboxImplementation") == Implementation.OptimizedSd)
             {
                 UiUtils.ShowMessageBox("Post-processing is not available when using Low Memory Mode.");
                 return;
