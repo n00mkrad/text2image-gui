@@ -103,6 +103,8 @@ namespace StableDiffusionGui.Implementations
                 string initsStr = initImages != null ? $" and {initImages.Count} image{(initImages.Count != 1 ? "s" : "")} using {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
                 Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} with {iterations} iteration{(iterations != 1 ? "s" : "")} each and {scales.Length} scale{(scales.Length != 1 ? "s" : "")}{initsStr} each = {argLists.Count} images total.");
 
+                PatchDiffusersIfNeeded();
+
                 Process py = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
                 TextToImage.CurrentTask.Processes.Add(py);
 
@@ -145,6 +147,42 @@ namespace StableDiffusionGui.Implementations
             {
                 Logger.Log($"Unhandled Stable Diffusion Error: {ex.Message}");
                 Logger.Log(ex.StackTrace, true);
+            }
+        }
+
+        private static void PatchDiffusersIfNeeded ()
+        {
+            string marker = "# PATCHED BY NMKD SD GUI";
+
+            string diffusersPath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.Conda, "envs", Constants.Dirs.SdEnv, "Lib", "site-packages", "diffusers");
+            string t2iPipelinePath = Path.Combine(diffusersPath, "pipelines", "stable_diffusion", "pipeline_onnx_stable_diffusion.py");
+            string i2iPipelinePath = Path.Combine(diffusersPath, "pipelines", "stable_diffusion", "pipeline_onnx_stable_diffusion_img2img.py");
+
+            string t2iText = File.ReadAllText(t2iPipelinePath);
+
+            if (t2iText.SplitIntoLines()[0].Trim() != marker)
+            {
+                t2iText = t2iText.Replace("    safety_checker: OnnxRuntimeModel", "    # safety_checker: OnnxRuntimeModel");
+                t2iText = t2iText.Replace("    safety_checker=safety_checker", "    # safety_checker=safety_checker");
+                t2iText = t2iText.Replace("    safety_checker_input = self.feature_extractor(", "    pass # safety_checker_input = self.feature_extractor(");
+                t2iText = t2iText.Replace("    image, has_nsfw_concept = self.safety_checker(", "    pass # image, has_nsfw_concept = self.safety_checker(");
+                t2iText = t2iText.Replace("has_nsfw_concept", "False");
+                File.WriteAllText(t2iPipelinePath, $"{marker}{Environment.NewLine}{t2iText}");
+                Logger.Log($"Patched {Path.GetFileName(t2iPipelinePath)}", true);
+            }
+
+            string i2iText = File.ReadAllText(i2iPipelinePath);
+
+            if (i2iText.SplitIntoLines()[0].Trim() != marker)
+            {
+                i2iText = i2iText.Replace("    safety_checker: OnnxRuntimeModel", "    # safety_checker: OnnxRuntimeModel");
+                i2iText = i2iText.Replace("    safety_checker=safety_checker", "    # safety_checker=safety_checker");
+                i2iText = i2iText.Replace("    safety_checker_input = self.feature_extractor(", "    pass # safety_checker_input = self.feature_extractor(");
+                i2iText = i2iText.Replace("    image, has_nsfw_concept = self.safety_checker(", "    pass # image, has_nsfw_concept = self.safety_checker(");
+                i2iText = i2iText.Replace("    if self.safety_checker is not None", "    if False");
+                i2iText = i2iText.Replace("    if safety_checker is None", "    if False");
+                File.WriteAllText(i2iPipelinePath, $"{marker}{Environment.NewLine}{i2iText}");
+                Logger.Log($"Patched {Path.GetFileName(i2iPipelinePath)}", true);
             }
         }
     }
