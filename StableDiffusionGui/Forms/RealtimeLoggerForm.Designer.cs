@@ -34,9 +34,10 @@
             // 
             // logBox
             // 
-            this.logBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            this.logBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
             this.logBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.logBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.logBox.Font = new System.Drawing.Font("Cascadia Mono SemiBold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.logBox.ForeColor = System.Drawing.Color.Silver;
             this.logBox.Location = new System.Drawing.Point(0, 0);
             this.logBox.Multiline = true;
