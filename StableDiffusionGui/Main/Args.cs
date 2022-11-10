@@ -16,13 +16,14 @@ namespace StableDiffusionGui.Main
                 return $"{(Config.GetBool("checkboxFullPrecision") ? "--precision float32" : "")}";
             }
 
-            public static string GetArgsStartup(string embedding = "")
+            public static string GetArgsStartup(string embedding = "", string model = "")
             {
                 bool lowVram = GpuUtils.CachedGpus.Count > 0 && GpuUtils.CachedGpus.First().VramGb < 7.9f;
 
                 List<string> args = new List<string>();
 
-                args.Add("--model default");
+                if(!string.IsNullOrWhiteSpace(model))
+                args.Add($"--model {model}");
 
                 args.Add(GetPrecisionArg());
                 args.Add(GetEmbeddingArg(embedding));

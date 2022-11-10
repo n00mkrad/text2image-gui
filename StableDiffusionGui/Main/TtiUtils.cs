@@ -13,6 +13,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using Path = System.IO.Path;
 using Paths = StableDiffusionGui.Io.Paths;
@@ -126,6 +127,30 @@ namespace StableDiffusionGui.Main
             File.WriteAllText(Path.Combine(Paths.GetDataPath(), Constants.Dirs.RepoSd, "configs", "models.yaml"), text);
         }
 
+        public static void WriteModelsYamlAll(FileInfo selectedMdl, FileInfo vae, List<FileInfo> cachedModels = null)
+        {
+            if (cachedModels == null || cachedModels.Count < 1)
+                cachedModels = Paths.GetModels(Enums.StableDiffusion.ModelType.Normal);
+
+            string text = "";
+
+            foreach(FileInfo mdl in cachedModels)
+            {
+                bool inpaint = mdl.Name.MatchesWildcard("*-inpainting.*");
+
+                text += $"{Path.GetFileNameWithoutExtension(mdl.Name)}:\n" +
+               $"    config: configs/stable-diffusion/{(inpaint ? "v1-inpainting-inference.yaml" : "v1-inference")}.yaml\n" +
+               $"    weights: {mdl.FullName.Wrap(true)}\n" +
+               $"    {(vae != null && File.Exists(vae.FullName) ? $"vae: {vae.FullName.Wrap(true)}" : "")}\n" +
+               $"    description: {mdl.Name}{(inpaint ? " Inpainting" : "")} Model\n" +
+               $"    width: 512\n" +
+               $"    height: 512\n" +
+               $"    default: {(mdl.FullName == selectedMdl.FullName).ToString().Lower()}\n\n";
+            }
+
+            File.WriteAllText(Path.Combine(Paths.GetDataPath(), Constants.Dirs.RepoSd, "configs", "models.yaml"), text);
+        }
+
         public static void ShowPromptWarnings(List<string> prompts)
         {
             string longest = prompts.OrderByDescending(s => s.Length).First();
@@ -168,11 +193,11 @@ namespace StableDiffusionGui.Main
 
         /// <summary> Checks if Stable Diffusion model exists </summary>
         /// <returns> Model FileInfo, if it exists - null if not </returns>
-        public static FileInfo CheckIfCurrentSdModelExists()
+        public static FileInfo CheckIfCurrentSdModelExists(List<FileInfo> cachedModels = null)
         {
-            string savedModelFileName = Config.Get(Config.Key.comboxSdModel);
+            string modelFilename = Config.Get(Config.Key.comboxSdModel);
 
-            if (string.IsNullOrWhiteSpace(savedModelFileName))
+            if (string.IsNullOrWhiteSpace(modelFilename))
             {
                 TextToImage.Cancel($"No Stable Diffusion model file has been set.\nPlease set one in the settings.");
                 new SettingsForm().ShowDialogForm(0.5f);
@@ -180,11 +205,11 @@ namespace StableDiffusionGui.Main
             }
             else
             {
-                var model = Paths.GetModel(savedModelFileName);
+                var model = cachedModels == null ? Paths.GetModel(modelFilename) : Paths.GetModel(cachedModels, modelFilename);
 
                 if (model == null)
                 {
-                    TextToImage.Cancel($"Stable Diffusion model file {savedModelFileName.Wrap()} not found.\nPossibly it was moved, renamed, or deleted.");
+                    TextToImage.Cancel($"Stable Diffusion model file {modelFilename.Wrap()} not found.\nPossibly it was moved, renamed, or deleted.");
                     return null;
                 }
                 else

@@ -46,13 +46,15 @@ namespace StableDiffusionGui.Main
                 float perlin =          parameters.FromJson<float>("perlin");
                 int threshold =         parameters.FromJson<int>("threshold");
 
+                var cachedModels = Paths.GetModels(Enums.StableDiffusion.ModelType.Normal);
+                var cachedModelsVae = Paths.GetModels(Enums.StableDiffusion.ModelType.Vae);
                 FileInfo modelFile = TtiUtils.CheckIfCurrentSdModelExists();
-                FileInfo vaeFile = Paths.GetModel(vae, false, Enums.StableDiffusion.ModelType.Vae);
+                FileInfo vaeFile = Paths.GetModel(cachedModelsVae, vae, false, Enums.StableDiffusion.ModelType.Vae);
 
                 if (modelFile == null)
                     return;
 
-                TtiUtils.WriteModelsYaml(modelFile, vaeFile);
+                TtiUtils.WriteModelsYamlAll(modelFile, vaeFile, cachedModels);
 
                 Dictionary<string, string> initImages = initImgs != null && initImgs.Length > 0 ? await TtiUtils.CreateResizedInitImagesIfNeeded(initImgs.ToList(), res) : null;
 

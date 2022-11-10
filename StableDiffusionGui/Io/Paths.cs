@@ -112,5 +112,10 @@ namespace StableDiffusionGui.Io
         {
             return GetModels(type).Where(x => x.Name == filename).FirstOrDefault();
         }
+
+        public static FileInfo GetModel(List<FileInfo> cachedModels, string filename, bool anyExtension = false, ModelType type = ModelType.Normal)
+        {
+            return cachedModels.Where(x => x.Name == filename).FirstOrDefault();
+        }
     }
 }
