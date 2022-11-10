@@ -77,10 +77,10 @@ namespace StableDiffusionGui.Main
 
                 List<Task> tasks = new List<Task>();
 
-                if (s.Implementation == Enums.StableDiffusion.Implementation.StableDiffusion)
+                if (s.Implementation == Enums.StableDiffusion.Implementation.InvokeAi)
                     tasks.Add(TtiProcess.RunStableDiffusion(s.Prompts, s.NegativePrompt, s.Iterations, s.Params, tempOutDir));
 
-                if (s.Implementation == Enums.StableDiffusion.Implementation.StableDiffusionOptimized)
+                if (s.Implementation == Enums.StableDiffusion.Implementation.OptimizedSd)
                     tasks.Add(TtiProcess.RunStableDiffusionOpt(s.Prompts, s.Iterations, s.Params, tempOutDir));
 
                 tasks.Add(ImageExport.ExportLoop(tempOutDir, CurrentTask.ImgCount, s.GetTargetImgCount(), true));
@@ -140,13 +140,13 @@ namespace StableDiffusionGui.Main
 
             if (!forceKill && TtiProcess.IsAiProcessRunning)
             {
-                if (CurrentTaskSettings.Implementation == Enums.StableDiffusion.Implementation.StableDiffusionOptimized)
+                if (CurrentTaskSettings.Implementation == Enums.StableDiffusion.Implementation.OptimizedSd)
                 {
                     IoUtils.TryDeleteIfExists(Path.Combine(Paths.GetSessionDataPath(), "prompts.txt"));
                     TtiUtils.SoftCancelDreamPy();
                 }
 
-                if (CurrentTaskSettings.Implementation == Enums.StableDiffusion.Implementation.StableDiffusion)
+                if (CurrentTaskSettings.Implementation == Enums.StableDiffusion.Implementation.InvokeAi)
                 {
                     if (Logger.GetLastLines(Constants.Lognames.Sd, 15).Where(x => x.MatchesWildcard("*step */*")).Any()) // Only attempt a soft cancel if we've been generating anything
                         await WaitForDreamPyCancel();

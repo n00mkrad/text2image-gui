@@ -28,7 +28,7 @@ namespace StableDiffusionGui.Main
 
             bool ellipsis = Logger.LastUiLine.Contains("...");
 
-            if (TextToImage.CurrentTaskSettings != null && TextToImage.CurrentTaskSettings.Implementation == Enums.StableDiffusion.Implementation.StableDiffusion)
+            if (TextToImage.CurrentTaskSettings != null && TextToImage.CurrentTaskSettings.Implementation == Enums.StableDiffusion.Implementation.InvokeAi)
             {
                 bool replace = ellipsis || Logger.LastUiLine.MatchesWildcard("*Generated*image*in*");
 
@@ -71,7 +71,7 @@ namespace StableDiffusionGui.Main
                 }
             }
 
-            if (TextToImage.CurrentTaskSettings != null && TextToImage.CurrentTaskSettings.Implementation == Enums.StableDiffusion.Implementation.StableDiffusionOptimized)
+            if (TextToImage.CurrentTaskSettings != null && TextToImage.CurrentTaskSettings.Implementation == Enums.StableDiffusion.Implementation.OptimizedSd)
             {
                 bool replace = ellipsis || Logger.LastUiLine.MatchesWildcard("*Generated*image*in*");
 

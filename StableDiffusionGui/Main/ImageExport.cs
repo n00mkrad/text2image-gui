@@ -41,7 +41,7 @@ namespace StableDiffusionGui.Main
                     var files = IoUtils.GetFileInfosSorted(imagesDir, false, "*.png");
                     bool running = IoUtils.GetFileInfosSorted(Paths.GetSessionDataPath(), false, "prompts*.*").Any();
 
-                    if (currSettings.Implementation == Enums.StableDiffusion.Implementation.StableDiffusion)
+                    if (currSettings.Implementation == Enums.StableDiffusion.Implementation.InvokeAi)
                         running = (currTask.ImgCount - startingImgCount) < targetImgCount;
 
                     if (!running && !files.Any())
@@ -54,7 +54,7 @@ namespace StableDiffusionGui.Main
                     images = images.Where(x => !IoUtils.IsFileLocked(x)).ToList(); // Ignore files that are still in use
                     images = images.Where(x => (DateTime.Now - x.LastWriteTime).TotalMilliseconds >= _minimumImageAgeMs).ToList(); // Wait a certain time to make sure python is done writing to it
 
-                    if (currSettings.Implementation == Enums.StableDiffusion.Implementation.StableDiffusion)
+                    if (currSettings.Implementation == Enums.StableDiffusion.Implementation.InvokeAi)
                     {
                         string log = Logger.GetSessionLog(Constants.Lognames.Sd);
                         images = images.Where(img => log.Contains(img.Name)).ToList(); // Only take image if it was written into SD log. Avoids copying too early (post-proc etc)

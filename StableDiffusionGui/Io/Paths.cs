@@ -78,7 +78,7 @@ namespace StableDiffusionGui.Io
             return path;
         }
 
-        public static List<Model> GetModels(ModelType type = ModelType.Normal, Implementation implementation = Implementation.StableDiffusion)
+        public static List<Model> GetModels(ModelType type = ModelType.Normal, Implementation implementation = Implementation.InvokeAi)
         {
             List<Model> list = new List<Model>();
 
@@ -89,7 +89,7 @@ namespace StableDiffusionGui.Io
                 List<string> customModelDirsList = Config.Get($"CustomModelDirs{type}").FromJson<List<string>>();
                 mdlFolders.AddRange(customModelDirsList, out mdlFolders);
 
-                if (implementation == Implementation.StableDiffusion || implementation == Implementation.StableDiffusionOptimized)
+                if (implementation == Implementation.InvokeAi || implementation == Implementation.OptimizedSd)
                 {
                     var fileList = new List<FileInfo>();
 
@@ -99,7 +99,7 @@ namespace StableDiffusionGui.Io
                     if (type == ModelType.Normal && !Config.GetBool("disableModelFilesizeValidation"))
                         fileList = fileList.Where(mdl => TtiUtils.ModelFilesizeValid(mdl.Length, type)).ToList();
 
-                    list = fileList.Select(f => new Model(f, new[] { Implementation.StableDiffusion, Implementation.StableDiffusionOptimized } )).ToList();
+                    list = fileList.Select(f => new Model(f, new[] { Implementation.InvokeAi, Implementation.OptimizedSd } )).ToList();
                     list = list.Distinct().OrderBy(x => x.Name).ToList();
 
                     return list;

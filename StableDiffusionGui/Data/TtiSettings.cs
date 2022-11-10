@@ -10,7 +10,7 @@ namespace StableDiffusionGui.Data
 {
     public class TtiSettings
     {
-        public Implementation Implementation { get; set; } = Implementation.StableDiffusion;
+        public Implementation Implementation { get; set; } = Implementation.InvokeAi;
         public string[] Prompts { get; set; } = new string[] { "" };
         public string NegativePrompt { get; set; } = "";
         public int Iterations { get; set; } = 1;
