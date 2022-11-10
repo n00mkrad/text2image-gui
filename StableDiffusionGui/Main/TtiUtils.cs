@@ -127,25 +127,33 @@ namespace StableDiffusionGui.Main
             File.WriteAllText(Path.Combine(Paths.GetDataPath(), Constants.Dirs.RepoSd, "configs", "models.yaml"), text);
         }
 
-        public static void WriteModelsYamlAll(FileInfo selectedMdl, FileInfo vae, List<FileInfo> cachedModels = null)
+        public static void WriteModelsYamlAll(FileInfo selectedMdl, FileInfo selectedVae, List<FileInfo> cachedModels = null, List<FileInfo> cachedModelsVae = null)
         {
             if (cachedModels == null || cachedModels.Count < 1)
                 cachedModels = Paths.GetModels(Enums.StableDiffusion.ModelType.Normal);
 
+            if (cachedModelsVae == null || cachedModelsVae.Count < 1)
+                cachedModelsVae = Paths.GetModels(Enums.StableDiffusion.ModelType.Vae);
+
             string text = "";
 
-            foreach(FileInfo mdl in cachedModels)
+            cachedModelsVae.Insert(0, null); // Insert null entry, for looping
+
+            foreach (FileInfo mdl in cachedModels)
             {
                 bool inpaint = mdl.Name.MatchesWildcard("*-inpainting.*");
 
-                text += $"{Path.GetFileNameWithoutExtension(mdl.Name)}:\n" +
-               $"    config: configs/stable-diffusion/{(inpaint ? "v1-inpainting-inference.yaml" : "v1-inference")}.yaml\n" +
-               $"    weights: {mdl.FullName.Wrap(true)}\n" +
-               $"    {(vae != null && File.Exists(vae.FullName) ? $"vae: {vae.FullName.Wrap(true)}" : "")}\n" +
-               $"    description: {mdl.Name}{(inpaint ? " Inpainting" : "")} Model\n" +
-               $"    width: 512\n" +
-               $"    height: 512\n" +
-               $"    default: {(mdl.FullName == selectedMdl.FullName).ToString().Lower()}\n\n";
+                foreach (FileInfo vae in cachedModelsVae)
+                {
+                    text += $"{mdl.Name}{(vae == null ? "-noVae" : $"-{vae.Name}")}:\n" +
+                    $"    config: configs/stable-diffusion/{(inpaint ? "v1-inpainting-inference.yaml" : "v1-inference")}.yaml\n" +
+                    $"    weights: {mdl.FullName.Wrap(true)}\n" +
+                    $"{(vae != null && File.Exists(vae.FullName) ? $"    vae: {vae.FullName.Wrap(true)}\n" : "")}" +
+                    $"    description: {mdl.Name}\n" +
+                    $"    width: 512\n" +
+                    $"    height: 512\n" +
+                    $"    default: {(mdl.FullName == selectedMdl.FullName && (vae == null ? selectedVae == null : vae.FullName == selectedVae.FullName)).ToString().Lower()}\n\n";
+                }
             }
 
             File.WriteAllText(Path.Combine(Paths.GetDataPath(), Constants.Dirs.RepoSd, "configs", "models.yaml"), text);

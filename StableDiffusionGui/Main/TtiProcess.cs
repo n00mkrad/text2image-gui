@@ -369,13 +369,15 @@ namespace StableDiffusionGui.Main
             if (Program.Busy)
                 return;
 
+            var cachedModels = Paths.GetModels(Enums.StableDiffusion.ModelType.Normal);
+            var cachedModelsVae = Paths.GetModels(Enums.StableDiffusion.ModelType.Vae);
             FileInfo modelFile = TtiUtils.CheckIfCurrentSdModelExists();
-            FileInfo vaeFile = Paths.GetModel(Path.GetFileName(vaePath), false, Enums.StableDiffusion.ModelType.Vae);
+            FileInfo vaeFile = Paths.GetModel(cachedModelsVae, Path.GetFileName(vaePath), false, Enums.StableDiffusion.ModelType.Vae);
 
             if (modelFile == null)
                 return;
 
-            TtiUtils.WriteModelsYaml(modelFile, vaeFile);
+            TtiUtils.WriteModelsYamlAll(modelFile, vaeFile, cachedModels, cachedModelsVae);
 
             string batPath = Path.Combine(Paths.GetSessionDataPath(), "invoke.bat");
 
