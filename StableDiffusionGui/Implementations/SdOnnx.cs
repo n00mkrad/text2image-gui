@@ -128,11 +128,11 @@ namespace StableDiffusionGui.Implementations
 
                 Logger.Log($"Loading Stable Diffusion (ONNX) with model {Path.ChangeExtension(model, null).Trunc(80).Wrap()}...");
 
-                TtiProcess.CurrentProcess = py;
                 TtiProcess.ProcessExistWasIntentional = false;
                 py.Start();
+                TtiProcess.CurrentProcess = py;
                 OsUtils.AttachOrphanHitman(py);
-
+                    
                 if (!OsUtils.ShowHiddenCmd())
                 {
                     py.BeginOutputReadLine();

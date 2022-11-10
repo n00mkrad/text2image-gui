@@ -4,6 +4,7 @@ using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -39,8 +40,10 @@ namespace StableDiffusionGui.Main
                 try
                 {
                     var files = IoUtils.GetFileInfosSorted(imagesDir, false, "*.png");
-                    bool running = IoUtils.GetFileInfosSorted(Paths.GetSessionDataPath(), false, "prompts*.*").Any();
+                    bool running = TtiProcess.CurrentProcess != null && !TtiProcess.CurrentProcess.HasExited;
 
+                    if (currSettings.Implementation == Enums.StableDiffusion.Implementation.OptimizedSd)
+                        running = IoUtils.GetFileInfosSorted(Paths.GetSessionDataPath(), false, "prompts*.*").Any();
                     if (currSettings.Implementation == Enums.StableDiffusion.Implementation.InvokeAi)
                         running = (currTask.ImgCount - startingImgCount) < targetImgCount;
 
@@ -114,11 +117,6 @@ namespace StableDiffusionGui.Main
             }
 
             Logger.Log("ExportLoop END", true);
-        }
-
-        private string GetOutputSubDir ()
-        {
-            return "";
         }
 
         private static void OverlayMaskIfExists(string imgPath, bool copyMetadata = true)
