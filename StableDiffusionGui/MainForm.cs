@@ -164,7 +164,7 @@ namespace StableDiffusionGui
         public void RefreshAfterSettingsChanged()
         {
             var imp = (Implementation)Config.GetInt("comboxImplementation");
-            panelPromptNeg.Visible = imp == Implementation.InvokeAi;
+            panelPromptNeg.Visible = imp != Implementation.OptimizedSd;
             btnEmbeddingBrowse.Enabled = imp == Implementation.InvokeAi;
             panelSampler.Visible = imp == Implementation.InvokeAi;
             panelSeamless.Visible = imp == Implementation.InvokeAi;
