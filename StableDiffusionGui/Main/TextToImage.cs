@@ -102,11 +102,10 @@ namespace StableDiffusionGui.Main
         public static void Done()
         {
             TimeSpan timeTaken = DateTime.Now - CurrentTask.StartTime;
-            int imgCount = CurrentTask.ImgCount; // ImagePreview.SetImages(CurrentTask.OutPath, true, CurrentTask.TargetImgCount);
 
-            if (imgCount > 0)
+            if (CurrentTask.ImgCount > 0)
             {
-                Logger.Log($"Done! Generated {imgCount} images in {FormatUtils.Time(timeTaken, false)}.");
+                Logger.Log($"Done! Generated {CurrentTask.ImgCount} images in {FormatUtils.Time(timeTaken, false)}.");
             }
             else
             {
@@ -122,7 +121,7 @@ namespace StableDiffusionGui.Main
                 OsUtils.PlayPingSound(true);
 
             if (notifyMode == NotifyMode.Both || notifyMode == NotifyMode.Notification)
-                OsUtils.ShowNotification("Stable Diffusion GUI", $"Image generation has finished.\nGenerated {imgCount} images in {FormatUtils.Time(timeTaken, false)}.", true);
+                OsUtils.ShowNotification("Stable Diffusion GUI", $"Image generation has finished.\nGenerated {CurrentTask.ImgCount} images in {FormatUtils.Time(timeTaken, false)}.", true);
 
             if (Config.GetBool("checkboxUnloadModel"))
                 TtiProcess.Kill();

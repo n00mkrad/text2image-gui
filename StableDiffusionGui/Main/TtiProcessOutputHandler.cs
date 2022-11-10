@@ -40,7 +40,8 @@ namespace StableDiffusionGui.Main
 
                 if (!TextToImage.Canceled && line.MatchesWildcard("step */*"))
                 {
-                    Logger.LogIfLastLineDoesNotContainMsg($"Generating...");
+                    if (!Logger.LastUiLine.MatchesWildcard("*Generated*image*in*"))
+                        Logger.LogIfLastLineDoesNotContainMsg($"Generating...");
 
                     int[] stepsCurrentTarget = line.Split("step ")[1].Split('/').Select(x => x.GetInt()).ToArray();
                     int percent = (((float)stepsCurrentTarget[0] / stepsCurrentTarget[1]) * 100f).RoundToInt();
@@ -57,8 +58,6 @@ namespace StableDiffusionGui.Main
 
                     int lastMsPerImg = $"{split[1].Remove(".").Remove("s")}0".GetInt();
                     int remainingMs = (TextToImage.CurrentTask.TargetImgCount - TextToImage.CurrentTask.ImgCount) * lastMsPerImg;
-
-                    string lastLine = Logger.LastUiLine;
 
                     Logger.Log($"Generated {split[0].GetInt()} image in {split[1]} ({TextToImage.CurrentTask.ImgCount}/{TextToImage.CurrentTask.TargetImgCount})" +
                         $"{(TextToImage.CurrentTask.ImgCount > 1 && remainingMs > 1000 ? $" - ETA: {FormatUtils.Time(remainingMs, false)}" : "")}", false, replace || Logger.LastUiLine.MatchesWildcard("*Generated*image*in*"));
@@ -104,19 +103,37 @@ namespace StableDiffusionGui.Main
 
             if (TextToImage.CurrentTaskSettings != null && TextToImage.CurrentTaskSettings.Implementation == Enums.StableDiffusion.Implementation.DiffusersOnnx)
             {
+                bool replace = ellipsis || Logger.LastUiLine.MatchesWildcard("*Image*generated*in*");
+
                 if (line.StartsWith("Model loaded"))
                 {
                     Logger.Log($"{line}", false, ellipsis);
                 }
 
-                if (line.MatchesWildcard("*%|*| *"))
+                if (!TextToImage.Canceled && line.MatchesWildcard("*%|*| *"))
                 {
-                    Logger.LogIfLastLineDoesNotContainMsg($"Generating...");
+                    if (!Logger.LastUiLine.MatchesWildcard("*Generated*image*in*"))
+                        Logger.LogIfLastLineDoesNotContainMsg($"Generating...");
 
                     int percent = line.Split("%|")[0].GetInt();
 
                     if (percent > 0 && percent <= 100)
                         Program.MainForm.SetProgressImg(percent);
+                }
+
+                if (!TextToImage.Canceled && line.Contains("Image generated in "))
+                {
+                    var split = line.Split("Image generated in ");
+                    TextToImage.CurrentTask.ImgCount += 1;
+                    Program.MainForm.SetProgress((int)Math.Round(((float)TextToImage.CurrentTask.ImgCount / TextToImage.CurrentTask.TargetImgCount) * 100f));
+
+                    int lastMsPerImg = $"{split[1].Remove(".").Remove("s")}".GetInt();
+                    int remainingMs = (TextToImage.CurrentTask.TargetImgCount - TextToImage.CurrentTask.ImgCount) * lastMsPerImg;
+
+                    string lastLine = Logger.LastUiLine;
+
+                    Logger.Log($"Generated 1 image in {split[1]} ({TextToImage.CurrentTask.ImgCount}/{TextToImage.CurrentTask.TargetImgCount})" +
+                        $"{(TextToImage.CurrentTask.ImgCount > 1 && remainingMs > 1000 ? $" - ETA: {FormatUtils.Time(remainingMs, false)}" : "")}", false, replace || Logger.LastUiLine.MatchesWildcard("*Generated*image*in*"));
                 }
             }
 
