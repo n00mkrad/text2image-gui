@@ -269,6 +269,7 @@
     <Compile Include="MiscUtils\Parser.cs" />
     <Compile Include="MiscUtils\PromptWildcardUtils.cs" />
     <Compile Include="Os\GpuUtils.cs" />
+    <Compile Include="Os\HwInfo.cs" />
     <Compile Include="Os\ProcessManager.cs" />
     <Compile Include="Os\SdGuiProcess.cs" />
     <Compile Include="Ui\GetWebInfo.cs" />

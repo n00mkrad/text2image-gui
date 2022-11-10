@@ -1,6 +1,7 @@
 ﻿using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Os;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -22,8 +23,8 @@ namespace StableDiffusionGui.Main
 
                 List<string> args = new List<string>();
 
-                if(!string.IsNullOrWhiteSpace(model))
-                args.Add($"--model {model}");
+                if (!string.IsNullOrWhiteSpace(model))
+                    args.Add($"--model {model}");
 
                 args.Add(GetPrecisionArg());
                 args.Add(GetEmbeddingArg(embedding));
@@ -40,11 +41,21 @@ namespace StableDiffusionGui.Main
                     }
                 }
 
-                if(!args.Contains("--no_restore"))
+                if (!args.Contains("--no_restore"))
                 {
                     args.Add("--gfpgan_dir ../gfpgan");
                     args.Add("--gfpgan_model_path gfpgan.pth");
                 }
+
+                int maxCachedModels = 0;
+
+                if (HwInfo.GetFreeRamGb > 6f && !Config.GetBool("disableModelCaching")) // Disable caching if there's <6GB free, no matter the total RAM
+                {
+                    maxCachedModels = (int)Math.Floor((HwInfo.GetTotalRamGb - 12f) / 4f); // >16GB => 1 - >20GB => 2 - >24GB => 3 - >24GB => 4 - ...
+                    Logger.Log($"InvokeAI model caching: Cache up to {maxCachedModels} models in RAM", true);
+                }
+
+                args.Add($"--max_loaded_models {maxCachedModels + 1}"); // Add 1 because the arg counts the VRAM loaded model as well
 
                 return string.Join(" ", args);
             }
@@ -62,7 +73,7 @@ namespace StableDiffusionGui.Main
                 return string.Join(" ", args);
             }
 
-            public static string GetSeamlessArg (Enums.StableDiffusion.SeamlessMode mode)
+            public static string GetSeamlessArg(Enums.StableDiffusion.SeamlessMode mode)
             {
                 if (mode == Enums.StableDiffusion.SeamlessMode.Disabled)
                     return "";
@@ -72,7 +83,7 @@ namespace StableDiffusionGui.Main
 
                 if (mode == Enums.StableDiffusion.SeamlessMode.SeamlessHor)
                     return $"--seamless --seamless_axes x";
-                
+
                 if (mode == Enums.StableDiffusion.SeamlessMode.SeamlessVert)
                     return $"--seamless --seamless_axes y";
 
