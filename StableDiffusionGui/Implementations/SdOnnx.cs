@@ -55,7 +55,7 @@ namespace StableDiffusionGui.Implementations
                     for (int i = 0; i < iterations; i++)
                     {
                         args["initImg"] = "";
-                        args["initStrength"] = "";
+                        args["initStrength"] = "0";
                         args["prompt"] = processedPrompts[i];
                         args["negprompt"] = negPrompt;
                         args["steps"] = $"{steps}";
