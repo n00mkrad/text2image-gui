@@ -54,8 +54,8 @@ namespace StableDiffusionGui.Implementations
 
                     for (int i = 0; i < iterations; i++)
                     {
-                        args.Remove("initImg");
-                        args.Remove("initStrength");
+                        args["initImg"] = "";
+                        args["initStrength"] = "";
                         args["prompt"] = processedPrompts[i];
                         args["negprompt"] = negPrompt;
                         args["steps"] = $"{steps}";
@@ -77,8 +77,8 @@ namespace StableDiffusionGui.Implementations
                                 {
                                     foreach (float strength in initStrengths)
                                     {
-                                        args["initImg"] = $"--init_img {initImg.Wrap()}";
-                                        args["initStrength"] = $"--strength {strength.ToStringDot("0.###")}";
+                                        args["initImg"] = initImg;
+                                        args["initStrength"] = strength.ToStringDot("0.###");
                                         argLists.Add(new Dictionary<string, string>(args));
                                     }
                                 }
@@ -106,9 +106,11 @@ namespace StableDiffusionGui.Implementations
                 Process py = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
                 TextToImage.CurrentTask.Processes.Add(py);
 
+                string i2iArg = initImgs != null && initImgs.Length > 0 ? "-i" : "";
+
                 py.StartInfo.RedirectStandardInput = true;
                 py.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSd()} && call activate.bat {Constants.Dirs.SdEnv} && " +
-                    $"python \"{Constants.Dirs.RepoSd}/sd_onnx/sd_onnx.py\" -m {modelDir.FullName.Wrap(true)} -j {jsonPath.Wrap(true)} -o {outPath.Wrap(true)}";
+                    $"python \"{Constants.Dirs.RepoSd}/sd_onnx/sd_onnx.py\" -m {modelDir.FullName.Wrap(true)} -j {jsonPath.Wrap(true)} -o {outPath.Wrap(true)} {i2iArg}";
 
                 Logger.Log("cmd.exe " + py.StartInfo.Arguments, true);
 

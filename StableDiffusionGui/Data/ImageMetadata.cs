@@ -129,8 +129,8 @@ namespace StableDiffusionGui.Data
                     else if (s.StartsWith("-f") && !s.Contains("fnformat"))
                         InitStrength = 1f - s.Remove(0, 2).GetFloat();
 
-                    else if (s.StartsWith("-IF"))
-                        InitImgName = s.Remove(0, 3).Trim();
+                    else if (s.StartsWith("-I"))
+                        InitImgName = s.Remove(0, 2).Trim();
 
                     else if (s == "-seamless")
                         Seamless = true;
