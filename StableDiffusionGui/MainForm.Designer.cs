@@ -146,6 +146,12 @@ namespace StableDiffusionGui
             this.labelCurrentImage = new System.Windows.Forms.Label();
             this.panelPromptNeg = new System.Windows.Forms.Panel();
             this.panelPrompt = new System.Windows.Forms.Panel();
+            this.panelDebugPerlinThresh = new System.Windows.Forms.Panel();
+            this.label13 = new System.Windows.Forms.Label();
+            this.textboxPerlin = new System.Windows.Forms.TextBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.textboxThresh = new System.Windows.Forms.TextBox();
             this.menuStripOutputImg.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.upDownSeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
@@ -172,6 +178,7 @@ namespace StableDiffusionGui
             this.panelAiInputs.SuspendLayout();
             this.panelPromptNeg.SuspendLayout();
             this.panelPrompt.SuspendLayout();
+            this.panelDebugPerlinThresh.SuspendLayout();
             this.SuspendLayout();
             // 
             // runBtn
@@ -776,7 +783,7 @@ namespace StableDiffusionGui
             this.sliderScale.Maximum = 20;
             this.sliderScale.Name = "sliderScale";
             this.sliderScale.OverlayColor = System.Drawing.Color.White;
-            this.sliderScale.Size = new System.Drawing.Size(314, 35);
+            this.sliderScale.Size = new System.Drawing.Size(297, 35);
             this.sliderScale.SmallChange = ((uint)(1u));
             this.sliderScale.TabIndex = 4;
             this.sliderScale.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
@@ -799,7 +806,7 @@ namespace StableDiffusionGui
             this.textboxSliderScale.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScale.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScale.Location = new System.Drawing.Point(314, 7);
+            this.textboxSliderScale.Location = new System.Drawing.Point(297, 9);
             this.textboxSliderScale.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScale.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScale.Name = "textboxSliderScale";
@@ -814,10 +821,10 @@ namespace StableDiffusionGui
             this.textboxExtraScales.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textboxExtraScales.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textboxExtraScales.ForeColor = System.Drawing.Color.White;
-            this.textboxExtraScales.Location = new System.Drawing.Point(352, 7);
+            this.textboxExtraScales.Location = new System.Drawing.Point(335, 7);
             this.textboxExtraScales.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxExtraScales.Name = "textboxExtraScales";
-            this.textboxExtraScales.Size = new System.Drawing.Size(74, 20);
+            this.textboxExtraScales.Size = new System.Drawing.Size(74, 21);
             this.textboxExtraScales.TabIndex = 3;
             this.toolTip.SetToolTip(this.textboxExtraScales, resources.GetString("textboxExtraScales.ToolTip"));
             // 
@@ -887,10 +894,10 @@ namespace StableDiffusionGui
             this.textboxExtraInitStrengths.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textboxExtraInitStrengths.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textboxExtraInitStrengths.ForeColor = System.Drawing.Color.White;
-            this.textboxExtraInitStrengths.Location = new System.Drawing.Point(352, 7);
+            this.textboxExtraInitStrengths.Location = new System.Drawing.Point(335, 7);
             this.textboxExtraInitStrengths.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxExtraInitStrengths.Name = "textboxExtraInitStrengths";
-            this.textboxExtraInitStrengths.Size = new System.Drawing.Size(74, 20);
+            this.textboxExtraInitStrengths.Size = new System.Drawing.Size(74, 21);
             this.textboxExtraInitStrengths.TabIndex = 91;
             this.toolTip.SetToolTip(this.textboxExtraInitStrengths, resources.GetString("textboxExtraInitStrengths.ToolTip"));
             // 
@@ -923,7 +930,7 @@ namespace StableDiffusionGui
             this.sliderInitStrength.Minimum = 2;
             this.sliderInitStrength.Name = "sliderInitStrength";
             this.sliderInitStrength.OverlayColor = System.Drawing.Color.White;
-            this.sliderInitStrength.Size = new System.Drawing.Size(314, 35);
+            this.sliderInitStrength.Size = new System.Drawing.Size(297, 35);
             this.sliderInitStrength.SmallChange = ((uint)(1u));
             this.sliderInitStrength.TabIndex = 4;
             this.sliderInitStrength.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
@@ -946,7 +953,7 @@ namespace StableDiffusionGui
             this.textboxSliderInitStrength.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderInitStrength.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderInitStrength.Location = new System.Drawing.Point(314, 7);
+            this.textboxSliderInitStrength.Location = new System.Drawing.Point(297, 9);
             this.textboxSliderInitStrength.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderInitStrength.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderInitStrength.Name = "textboxSliderInitStrength";
@@ -1006,7 +1013,7 @@ namespace StableDiffusionGui
             this.btnExpandPromptNegField.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnExpandPromptNegField.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnExpandPromptNegField.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnExpandPromptNegField.Location = new System.Drawing.Point(639, 0);
+            this.btnExpandPromptNegField.Location = new System.Drawing.Point(622, 0);
             this.btnExpandPromptNegField.Margin = new System.Windows.Forms.Padding(0);
             this.btnExpandPromptNegField.Name = "btnExpandPromptNegField";
             this.btnExpandPromptNegField.Size = new System.Drawing.Size(20, 37);
@@ -1031,7 +1038,7 @@ namespace StableDiffusionGui
             this.textboxPromptNeg.Placeholder = "Enter your negative prompt here...";
             this.textboxPromptNeg.PlaceholderTextColor = System.Drawing.Color.Silver;
             this.textboxPromptNeg.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textboxPromptNeg.Size = new System.Drawing.Size(636, 37);
+            this.textboxPromptNeg.Size = new System.Drawing.Size(619, 37);
             this.textboxPromptNeg.TabIndex = 1;
             this.toolTip.SetToolTip(this.textboxPromptNeg, "Negative text prompt. The AI will try to avoid generating things you describe her" +
         "e.");
@@ -1052,7 +1059,7 @@ namespace StableDiffusionGui
             this.textboxPrompt.Placeholder = "Enter your prompt here...";
             this.textboxPrompt.PlaceholderTextColor = System.Drawing.Color.Silver;
             this.textboxPrompt.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textboxPrompt.Size = new System.Drawing.Size(636, 62);
+            this.textboxPrompt.Size = new System.Drawing.Size(619, 62);
             this.textboxPrompt.TabIndex = 0;
             this.toolTip.SetToolTip(this.textboxPrompt, "Text prompt. The AI will try to generate an image matching this description.");
             // 
@@ -1066,7 +1073,7 @@ namespace StableDiffusionGui
             this.btnExpandPromptField.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnExpandPromptField.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnExpandPromptField.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnExpandPromptField.Location = new System.Drawing.Point(639, 0);
+            this.btnExpandPromptField.Location = new System.Drawing.Point(622, 0);
             this.btnExpandPromptField.Margin = new System.Windows.Forms.Padding(0);
             this.btnExpandPromptField.Name = "btnExpandPromptField";
             this.btnExpandPromptField.Size = new System.Drawing.Size(20, 62);
@@ -1299,6 +1306,7 @@ namespace StableDiffusionGui
             this.panelSettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.panelSettings.AutoScroll = true;
+            this.panelSettings.Controls.Add(this.panelDebugPerlinThresh);
             this.panelSettings.Controls.Add(this.panelDebugSendStdin);
             this.panelSettings.Controls.Add(this.panelSeamless);
             this.panelSettings.Controls.Add(this.panelSampler);
@@ -1328,7 +1336,7 @@ namespace StableDiffusionGui
             this.panelDebugSendStdin.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelDebugSendStdin.Location = new System.Drawing.Point(0, 485);
             this.panelDebugSendStdin.Name = "panelDebugSendStdin";
-            this.panelDebugSendStdin.Size = new System.Drawing.Size(662, 35);
+            this.panelDebugSendStdin.Size = new System.Drawing.Size(645, 35);
             this.panelDebugSendStdin.TabIndex = 14;
             this.panelDebugSendStdin.Visible = false;
             // 
@@ -1337,7 +1345,7 @@ namespace StableDiffusionGui
             this.label12.AutoSize = true;
             this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label12.ForeColor = System.Drawing.Color.White;
-            this.label12.Location = new System.Drawing.Point(2, 10);
+            this.label12.Location = new System.Drawing.Point(2, 11);
             this.label12.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(172, 13);
@@ -1354,7 +1362,7 @@ namespace StableDiffusionGui
             this.textboxCliTest.Location = new System.Drawing.Point(233, 7);
             this.textboxCliTest.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxCliTest.Name = "textboxCliTest";
-            this.textboxCliTest.Size = new System.Drawing.Size(426, 20);
+            this.textboxCliTest.Size = new System.Drawing.Size(409, 21);
             this.textboxCliTest.TabIndex = 4;
             this.textboxCliTest.DoubleClick += new System.EventHandler(this.textboxCliTest_DoubleClick);
             // 
@@ -1365,7 +1373,7 @@ namespace StableDiffusionGui
             this.panelSeamless.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelSeamless.Location = new System.Drawing.Point(0, 450);
             this.panelSeamless.Name = "panelSeamless";
-            this.panelSeamless.Size = new System.Drawing.Size(662, 35);
+            this.panelSeamless.Size = new System.Drawing.Size(645, 35);
             this.panelSeamless.TabIndex = 9;
             // 
             // label8
@@ -1373,7 +1381,7 @@ namespace StableDiffusionGui
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label8.ForeColor = System.Drawing.Color.White;
-            this.label8.Location = new System.Drawing.Point(2, 10);
+            this.label8.Location = new System.Drawing.Point(2, 11);
             this.label8.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(182, 13);
@@ -1387,7 +1395,7 @@ namespace StableDiffusionGui
             this.panelSampler.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelSampler.Location = new System.Drawing.Point(0, 415);
             this.panelSampler.Name = "panelSampler";
-            this.panelSampler.Size = new System.Drawing.Size(662, 35);
+            this.panelSampler.Size = new System.Drawing.Size(645, 35);
             this.panelSampler.TabIndex = 6;
             // 
             // label7
@@ -1395,7 +1403,7 @@ namespace StableDiffusionGui
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.ForeColor = System.Drawing.Color.White;
-            this.label7.Location = new System.Drawing.Point(2, 10);
+            this.label7.Location = new System.Drawing.Point(2, 11);
             this.label7.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(45, 13);
@@ -1412,7 +1420,7 @@ namespace StableDiffusionGui
             this.panelRes.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelRes.Location = new System.Drawing.Point(0, 380);
             this.panelRes.Name = "panelRes";
-            this.panelRes.Size = new System.Drawing.Size(662, 35);
+            this.panelRes.Size = new System.Drawing.Size(645, 35);
             this.panelRes.TabIndex = 5;
             // 
             // comboxResH
@@ -1444,7 +1452,7 @@ namespace StableDiffusionGui
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.ForeColor = System.Drawing.Color.White;
-            this.label6.Location = new System.Drawing.Point(2, 10);
+            this.label6.Location = new System.Drawing.Point(2, 11);
             this.label6.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(136, 13);
@@ -1473,7 +1481,7 @@ namespace StableDiffusionGui
             this.panelSeed.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelSeed.Location = new System.Drawing.Point(0, 345);
             this.panelSeed.Name = "panelSeed";
-            this.panelSeed.Size = new System.Drawing.Size(662, 35);
+            this.panelSeed.Size = new System.Drawing.Size(645, 35);
             this.panelSeed.TabIndex = 4;
             // 
             // label5
@@ -1481,7 +1489,7 @@ namespace StableDiffusionGui
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.ForeColor = System.Drawing.Color.White;
-            this.label5.Location = new System.Drawing.Point(2, 10);
+            this.label5.Location = new System.Drawing.Point(2, 11);
             this.label5.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(122, 13);
@@ -1495,7 +1503,7 @@ namespace StableDiffusionGui
             this.panelScale.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelScale.Location = new System.Drawing.Point(0, 310);
             this.panelScale.Name = "panelScale";
-            this.panelScale.Size = new System.Drawing.Size(662, 35);
+            this.panelScale.Size = new System.Drawing.Size(645, 35);
             this.panelScale.TabIndex = 3;
             // 
             // label4
@@ -1503,7 +1511,7 @@ namespace StableDiffusionGui
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.ForeColor = System.Drawing.Color.White;
-            this.label4.Location = new System.Drawing.Point(2, 10);
+            this.label4.Location = new System.Drawing.Point(2, 11);
             this.label4.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(149, 13);
@@ -1526,7 +1534,7 @@ namespace StableDiffusionGui
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(429, 35);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(412, 35);
             this.tableLayoutPanel1.TabIndex = 91;
             // 
             // panelSteps
@@ -1536,7 +1544,7 @@ namespace StableDiffusionGui
             this.panelSteps.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelSteps.Location = new System.Drawing.Point(0, 275);
             this.panelSteps.Name = "panelSteps";
-            this.panelSteps.Size = new System.Drawing.Size(662, 35);
+            this.panelSteps.Size = new System.Drawing.Size(645, 35);
             this.panelSteps.TabIndex = 2;
             // 
             // label3
@@ -1544,7 +1552,7 @@ namespace StableDiffusionGui
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.Color.White;
-            this.label3.Location = new System.Drawing.Point(2, 10);
+            this.label3.Location = new System.Drawing.Point(2, 11);
             this.label3.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(89, 13);
@@ -1564,7 +1572,7 @@ namespace StableDiffusionGui
             this.tableLayoutPanel6.Name = "tableLayoutPanel6";
             this.tableLayoutPanel6.RowCount = 1;
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel6.Size = new System.Drawing.Size(429, 35);
+            this.tableLayoutPanel6.Size = new System.Drawing.Size(412, 35);
             this.tableLayoutPanel6.TabIndex = 88;
             // 
             // textboxSliderSteps
@@ -1575,7 +1583,7 @@ namespace StableDiffusionGui
             this.textboxSliderSteps.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderSteps.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderSteps.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderSteps.Location = new System.Drawing.Point(394, 7);
+            this.textboxSliderSteps.Location = new System.Drawing.Point(377, 9);
             this.textboxSliderSteps.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderSteps.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderSteps.Name = "textboxSliderSteps";
@@ -1611,7 +1619,7 @@ namespace StableDiffusionGui
             this.sliderSteps.Maximum = 20;
             this.sliderSteps.Name = "sliderSteps";
             this.sliderSteps.OverlayColor = System.Drawing.Color.White;
-            this.sliderSteps.Size = new System.Drawing.Size(394, 35);
+            this.sliderSteps.Size = new System.Drawing.Size(377, 35);
             this.sliderSteps.SmallChange = ((uint)(1u));
             this.sliderSteps.TabIndex = 13;
             this.sliderSteps.Text = "sliderSteps";
@@ -1632,7 +1640,7 @@ namespace StableDiffusionGui
             this.panelIterations.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelIterations.Location = new System.Drawing.Point(0, 240);
             this.panelIterations.Name = "panelIterations";
-            this.panelIterations.Size = new System.Drawing.Size(662, 35);
+            this.panelIterations.Size = new System.Drawing.Size(645, 35);
             this.panelIterations.TabIndex = 1;
             // 
             // label1
@@ -1640,7 +1648,7 @@ namespace StableDiffusionGui
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.White;
-            this.label1.Location = new System.Drawing.Point(2, 10);
+            this.label1.Location = new System.Drawing.Point(2, 11);
             this.label1.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(157, 13);
@@ -1655,7 +1663,7 @@ namespace StableDiffusionGui
             this.panelInpainting.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelInpainting.Location = new System.Drawing.Point(0, 205);
             this.panelInpainting.Name = "panelInpainting";
-            this.panelInpainting.Size = new System.Drawing.Size(662, 35);
+            this.panelInpainting.Size = new System.Drawing.Size(645, 35);
             this.panelInpainting.TabIndex = 12;
             this.panelInpainting.Visible = false;
             // 
@@ -1664,7 +1672,7 @@ namespace StableDiffusionGui
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label10.ForeColor = System.Drawing.Color.White;
-            this.label10.Location = new System.Drawing.Point(2, 10);
+            this.label10.Location = new System.Drawing.Point(2, 11);
             this.label10.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(94, 13);
@@ -1678,7 +1686,7 @@ namespace StableDiffusionGui
             this.panelInitImgStrength.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelInitImgStrength.Location = new System.Drawing.Point(0, 170);
             this.panelInitImgStrength.Name = "panelInitImgStrength";
-            this.panelInitImgStrength.Size = new System.Drawing.Size(662, 35);
+            this.panelInitImgStrength.Size = new System.Drawing.Size(645, 35);
             this.panelInitImgStrength.TabIndex = 8;
             this.panelInitImgStrength.Visible = false;
             // 
@@ -1687,7 +1695,7 @@ namespace StableDiffusionGui
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label11.ForeColor = System.Drawing.Color.White;
-            this.label11.Location = new System.Drawing.Point(2, 10);
+            this.label11.Location = new System.Drawing.Point(2, 11);
             this.label11.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(189, 13);
@@ -1710,7 +1718,7 @@ namespace StableDiffusionGui
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             this.tableLayoutPanel4.RowCount = 1;
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(429, 35);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(412, 35);
             this.tableLayoutPanel4.TabIndex = 89;
             // 
             // panelAiInputs
@@ -1723,7 +1731,7 @@ namespace StableDiffusionGui
             this.panelAiInputs.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelAiInputs.Location = new System.Drawing.Point(0, 105);
             this.panelAiInputs.Name = "panelAiInputs";
-            this.panelAiInputs.Size = new System.Drawing.Size(662, 65);
+            this.panelAiInputs.Size = new System.Drawing.Size(645, 65);
             this.panelAiInputs.TabIndex = 17;
             // 
             // labelCurrentConcept
@@ -1742,7 +1750,7 @@ namespace StableDiffusionGui
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(2, 10);
+            this.label2.Location = new System.Drawing.Point(2, 11);
             this.label2.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(106, 13);
@@ -1768,7 +1776,7 @@ namespace StableDiffusionGui
             this.panelPromptNeg.Location = new System.Drawing.Point(0, 65);
             this.panelPromptNeg.Name = "panelPromptNeg";
             this.panelPromptNeg.Padding = new System.Windows.Forms.Padding(3);
-            this.panelPromptNeg.Size = new System.Drawing.Size(662, 40);
+            this.panelPromptNeg.Size = new System.Drawing.Size(645, 40);
             this.panelPromptNeg.TabIndex = 16;
             // 
             // panelPrompt
@@ -1779,8 +1787,86 @@ namespace StableDiffusionGui
             this.panelPrompt.Location = new System.Drawing.Point(0, 0);
             this.panelPrompt.Name = "panelPrompt";
             this.panelPrompt.Padding = new System.Windows.Forms.Padding(3);
-            this.panelPrompt.Size = new System.Drawing.Size(662, 65);
+            this.panelPrompt.Size = new System.Drawing.Size(645, 65);
             this.panelPrompt.TabIndex = 15;
+            // 
+            // panelDebugPerlinThresh
+            // 
+            this.panelDebugPerlinThresh.Controls.Add(this.textboxThresh);
+            this.panelDebugPerlinThresh.Controls.Add(this.label15);
+            this.panelDebugPerlinThresh.Controls.Add(this.label14);
+            this.panelDebugPerlinThresh.Controls.Add(this.label13);
+            this.panelDebugPerlinThresh.Controls.Add(this.textboxPerlin);
+            this.panelDebugPerlinThresh.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelDebugPerlinThresh.Location = new System.Drawing.Point(0, 520);
+            this.panelDebugPerlinThresh.Name = "panelDebugPerlinThresh";
+            this.panelDebugPerlinThresh.Size = new System.Drawing.Size(645, 35);
+            this.panelDebugPerlinThresh.TabIndex = 18;
+            this.panelDebugPerlinThresh.Visible = false;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label13.ForeColor = System.Drawing.Color.White;
+            this.label13.Location = new System.Drawing.Point(2, 11);
+            this.label13.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(144, 13);
+            this.label13.TabIndex = 105;
+            this.label13.Text = "Set Perlin Noise + Threshold ";
+            // 
+            // textboxPerlin
+            // 
+            this.textboxPerlin.AllowDrop = true;
+            this.textboxPerlin.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textboxPerlin.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textboxPerlin.ForeColor = System.Drawing.Color.White;
+            this.textboxPerlin.Location = new System.Drawing.Point(299, 7);
+            this.textboxPerlin.MinimumSize = new System.Drawing.Size(4, 21);
+            this.textboxPerlin.Name = "textboxPerlin";
+            this.textboxPerlin.Size = new System.Drawing.Size(100, 21);
+            this.textboxPerlin.TabIndex = 4;
+            this.textboxPerlin.Text = "0.0";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label14.ForeColor = System.Drawing.Color.White;
+            this.label14.Location = new System.Drawing.Point(230, 11);
+            this.label14.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(63, 13);
+            this.label14.TabIndex = 106;
+            this.label14.Text = "Perlin Noise";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label15.ForeColor = System.Drawing.Color.White;
+            this.label15.Location = new System.Drawing.Point(410, 11);
+            this.label15.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(54, 13);
+            this.label15.TabIndex = 107;
+            this.label15.Text = "Threshold";
+            // 
+            // textboxThresh
+            // 
+            this.textboxThresh.AllowDrop = true;
+            this.textboxThresh.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textboxThresh.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textboxThresh.ForeColor = System.Drawing.Color.White;
+            this.textboxThresh.Location = new System.Drawing.Point(470, 7);
+            this.textboxThresh.MinimumSize = new System.Drawing.Size(4, 21);
+            this.textboxThresh.Name = "textboxThresh";
+            this.textboxThresh.Size = new System.Drawing.Size(100, 21);
+            this.textboxThresh.TabIndex = 108;
+            this.textboxThresh.Text = "0";
             // 
             // MainForm
             // 
@@ -1869,6 +1955,8 @@ namespace StableDiffusionGui
             this.panelPromptNeg.PerformLayout();
             this.panelPrompt.ResumeLayout(false);
             this.panelPrompt.PerformLayout();
+            this.panelDebugPerlinThresh.ResumeLayout(false);
+            this.panelDebugPerlinThresh.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1989,6 +2077,12 @@ namespace StableDiffusionGui
         private System.Windows.Forms.Button btnExpandPromptNegField;
         private System.Windows.Forms.Label labelImgPromptNeg;
         private System.Windows.Forms.ComboBox comboxSeamless;
+        private System.Windows.Forms.Panel panelDebugPerlinThresh;
+        private System.Windows.Forms.TextBox textboxThresh;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.TextBox textboxPerlin;
     }
 }
 

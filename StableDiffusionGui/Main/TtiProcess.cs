@@ -26,23 +26,25 @@ namespace StableDiffusionGui.Main
 
         private static string _lastInvokeStartupSettings;
 
-        public static async Task RunStableDiffusion(string[] prompts, string negPrompt, int iterations, Dictionary<string, string> paramsDict, string outPath)
+        public static async Task RunStableDiffusion(string[] prompts, string negPrompt, int iterations, Dictionary<string, string> parameters, string outPath)
         {
             try
             {
-                string[] initImgs = paramsDict.Get("initImgs").FromJson<string[]>();
-                string embedding = paramsDict.Get("embedding").FromJson<string>();
-                float[] initStrengths = paramsDict.Get("initStrengths").FromJson<float[]>();
-                int steps = paramsDict.Get("steps").FromJson<int>();
-                float[] scales = paramsDict.Get("scales").FromJson<float[]>();
-                long seed = paramsDict.Get("seed").FromJson<long>();
-                string sampler = paramsDict.Get("sampler").FromJson<string>();
-                Size res = paramsDict.Get("res").FromJson<Size>();
-                Enums.StableDiffusion.SeamlessMode seamless = paramsDict.Get("seamless").FromJson<Enums.StableDiffusion.SeamlessMode>();
-                string model = paramsDict.Get("model").FromJson<string>();
-                bool hiresFix = paramsDict.Get("hiresFix").FromJson<bool>();
-                bool lockSeed = paramsDict.Get("lockSeed").FromJson<bool>();
-                string vae = paramsDict.Get("vae").FromJson<string>().NullToEmpty().Replace("None", "");
+                string[] initImgs =     parameters.FromJson<string[]>("initImgs");
+                string embedding =      parameters.FromJson<string>("embedding");
+                float[] initStrengths = parameters.FromJson<float[]>("initStrengths");
+                int steps =             parameters.FromJson<int>("steps");
+                float[] scales =        parameters.FromJson<float[]>("scales");
+                long seed =             parameters.FromJson<long>("seed");
+                string sampler =        parameters.FromJson<string>("sampler");
+                Size res =              parameters.FromJson<Size>("res");
+                var seamless =          parameters.FromJson<Enums.StableDiffusion.SeamlessMode>("seamless");
+                string model =          parameters.FromJson<string>("model");
+                bool hiresFix =         parameters.FromJson<bool>("hiresFix");
+                bool lockSeed =         parameters.FromJson<bool>("lockSeed");
+                string vae =            parameters.FromJson<string>("vae").NullToEmpty().Replace("None", "");
+                float perlin =          parameters.FromJson<float>("perlin");
+                int threshold =         parameters.FromJson<int>("threshold");
 
                 FileInfo modelFile = TtiUtils.CheckIfCurrentSdModelExists();
                 FileInfo vaeFile = Paths.GetModel(vae, false, Enums.StableDiffusion.ModelType.Vae);
@@ -78,9 +80,10 @@ namespace StableDiffusionGui.Main
                         args["prompt"] = processedPrompts[i].Wrap();
                         args["steps"] = $"-s {steps}";
                         args["res"] = $"-W {res.Width} -H {res.Height}";
-                        args["steps"] = $"-s {steps}";
                         args["sampler"] = $"-A {sampler}";
                         args["seed"] = $"-S {seed}";
+                        args["perlin"] = $"--perlin {perlin.ToStringDot()}";
+                        args["threshold"] = $"--threshold {threshold}";
 
                         foreach (float scale in scales)
                         {

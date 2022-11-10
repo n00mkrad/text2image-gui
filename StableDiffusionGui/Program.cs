@@ -3,7 +3,10 @@ using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Ui;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -13,6 +16,11 @@ namespace StableDiffusionGui
 {
     public static class Program
     {
+        public static bool Debug { get { return Debugger.IsAttached || UserArgs["debug"].Lower() == true.ToString().Lower(); } }
+
+        public static List<string> Args = new List<string>(); // All args
+        public static Dictionary<string, string> UserArgs = new Dictionary<string, string>(); // User args (excludes 1st which is the path) as key/value pairs
+
         public static NmkdStopwatch SwTimeSinceProgramStart = new NmkdStopwatch();
 
         public enum BusyState { Standby, Installation, ImageGeneration, Script, Dreambooth, PostProcessing, Other }
@@ -24,8 +32,10 @@ namespace StableDiffusionGui
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
+            HandleArgs(args);
+
             Config.Init();
             Paths.Init();
 
@@ -39,6 +49,26 @@ namespace StableDiffusionGui
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());
+        }
+
+        static void HandleArgs(string[] args)
+        {
+            Args = args.Select(x => x.Trim()).Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+
+            foreach (string arg in Args)
+            {
+                try
+                {
+                    if (!(arg.StartsWith("-") && arg.Length > 1 && arg[1] != '-')) // Required arg syntax: Starts with hypen, no double hyphen, more than 1 char
+                        continue;
+
+                    var split = arg.Substring(1).Split('=').Take(2).ToArray(); // Split into key+value, ignore if more than one '='
+                    UserArgs.Add(split[0], split[1]); // Add key+value
+                }
+                catch { }
+            }
+
+            Console.WriteLine("Args parsed.");
         }
 
         public static void Cleanup()
@@ -82,7 +112,7 @@ namespace StableDiffusionGui
             }
         }
 
-        private static void OnApplicationExit (object sender, EventArgs e)
+        private static void OnApplicationExit(object sender, EventArgs e)
         {
             // ...
         }

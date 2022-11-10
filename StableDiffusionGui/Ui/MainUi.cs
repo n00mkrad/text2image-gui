@@ -58,7 +58,7 @@ namespace StableDiffusionGui.Ui
 
         public static void DoStartupChecks ()
         {
-            if (!Debugger.IsAttached)
+            if (!Program.Debug)
             {
                 string dir = Paths.GetExeDir();
 

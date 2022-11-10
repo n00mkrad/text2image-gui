@@ -21,7 +21,7 @@ namespace StableDiffusionGui.MiscUtils
 
         public static List<string> ApplyWildcardsAll(string prompt, int iterations, bool runAllCombinations)
         {
-            bool verboseLog = iterations == 1 || Debugger.IsAttached;
+            bool verboseLog = iterations == 1 || Program.Debug;
             List<string> outList = new List<string>();
 
             try

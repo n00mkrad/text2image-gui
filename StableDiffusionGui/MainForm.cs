@@ -121,10 +121,11 @@ namespace StableDiffusionGui
             await Task.Delay(1); // Don't ask. Just keep it here
             Opacity = 1.0;
 
-            if (!Debugger.IsAttached)
+            if (!Program.Debug)
                 new WelcomeForm().ShowDialogForm(0f);
 
-            panelDebugSendStdin.Visible = Debugger.IsAttached;
+            panelDebugSendStdin.Visible = Program.Debug;
+            panelDebugPerlinThresh.Visible = Program.Debug;
         }
 
         private void InitializeControls()
@@ -289,6 +290,8 @@ namespace StableDiffusionGui
                             { "hiresFix", checkboxHiresFix.Checked.ToJson() },
                             { "lockSeed", checkboxLockSeed.Checked.ToJson() },
                             { "vae", Config.Get(Config.Key.comboxSdModelVae).ToJson() },
+                            { "perlin", textboxPerlin.GetFloat().ToJson() },
+                            { "threshold", textboxThresh.GetInt().ToJson() },
                         },
             };
 

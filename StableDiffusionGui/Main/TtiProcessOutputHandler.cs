@@ -126,7 +126,7 @@ namespace StableDiffusionGui.Main
                 UiUtils.ShowMessageBox($"Your model file seems to be damaged or incomplete!\n\n{line}", UiUtils.MessageType.Error);
             }
 
-            if (!_hasErrored && line.Contains("usage: "))
+            if (!_hasErrored && line.StartsWith("usage: "))
             {
                 _hasErrored = true;
                 UiUtils.ShowMessageBox($"Invalid CLI syntax.", UiUtils.MessageType.Error);

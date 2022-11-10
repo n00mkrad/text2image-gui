@@ -456,6 +456,11 @@ namespace StableDiffusionGui
             return s.ToLowerInvariant();
         }
 
+        public static T FromJson<T> (this Dictionary<string, string> jsonDict, string key)
+        {
+            return jsonDict.Get(key).FromJson<T>();
+        }
+
         public static T FromJson<T> (this string s)
         {
             try
