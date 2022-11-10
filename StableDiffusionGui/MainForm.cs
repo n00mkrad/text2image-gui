@@ -270,7 +270,7 @@ namespace StableDiffusionGui
         {
             TtiSettings settings = new TtiSettings
             {
-                Implementation = Config.GetBool("checkboxOptimizedSd") ? Enums.StableDiffusion.Implementation.OptimizedSd : Enums.StableDiffusion.Implementation.InvokeAi,
+                Implementation = (Enums.StableDiffusion.Implementation)Config.GetInt("comboxImplementation"),
                 Prompts = textboxPrompt.TextNoPlaceholder.SplitIntoLines().Where(x => !string.IsNullOrWhiteSpace(x)).ToArray(),
                 NegativePrompt = textboxPromptNeg.TextNoPlaceholder.Trim().Replace(Environment.NewLine, " "),
                 Iterations = (int)upDownIterations.Value,

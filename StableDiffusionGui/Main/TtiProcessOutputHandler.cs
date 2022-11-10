@@ -40,8 +40,9 @@ namespace StableDiffusionGui.Main
 
                 if (!TextToImage.Canceled && line.MatchesWildcard("step */*"))
                 {
-                    int[] stepsCurrentTarget = line.Split("step ")[1].Split('/').Select(x => x.GetInt()).ToArray();
+                    Logger.LogIfLastLineDoesNotContainMsg($"Generating...");
 
+                    int[] stepsCurrentTarget = line.Split("step ")[1].Split('/').Select(x => x.GetInt()).ToArray();
                     int percent = (((float)stepsCurrentTarget[0] / stepsCurrentTarget[1]) * 100f).RoundToInt();
 
                     if (percent > 0 && percent <= 100)
@@ -101,6 +102,23 @@ namespace StableDiffusionGui.Main
                 }
             }
 
+            if (TextToImage.CurrentTaskSettings != null && TextToImage.CurrentTaskSettings.Implementation == Enums.StableDiffusion.Implementation.DiffusersOnnx)
+            {
+                if (line.StartsWith("Model loaded"))
+                {
+                    Logger.Log($"{line}", false, ellipsis);
+                }
+
+                if (line.MatchesWildcard("*%|*| *"))
+                {
+                    Logger.LogIfLastLineDoesNotContainMsg($"Generating...");
+
+                    int percent = line.Split("%|")[0].GetInt();
+
+                    if (percent > 0 && percent <= 100)
+                        Program.MainForm.SetProgressImg(percent);
+                }
+            }
 
             if (line.MatchesWildcard("*%|*/*[*B/s]*") && !line.Lower().Contains("it/s") && !line.Lower().Contains("s/it"))
             {

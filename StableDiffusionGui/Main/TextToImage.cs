@@ -1,4 +1,5 @@
 ﻿using StableDiffusionGui.Data;
+using StableDiffusionGui.Implementations;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
@@ -82,6 +83,9 @@ namespace StableDiffusionGui.Main
 
                 if (s.Implementation == Enums.StableDiffusion.Implementation.OptimizedSd)
                     tasks.Add(TtiProcess.RunStableDiffusionOpt(s.Prompts, s.Iterations, s.Params, tempOutDir));
+
+                if (s.Implementation == Enums.StableDiffusion.Implementation.DiffusersOnnx)
+                    tasks.Add(SdOnnx.Run(s.Prompts, s.NegativePrompt, s.Iterations, s.Params, tempOutDir));
 
                 tasks.Add(ImageExport.ExportLoop(tempOutDir, CurrentTask.ImgCount, s.GetTargetImgCount(), true));
 

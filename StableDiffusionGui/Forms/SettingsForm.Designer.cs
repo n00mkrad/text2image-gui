@@ -32,12 +32,20 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsForm));
             this.titleLabel = new System.Windows.Forms.Label();
             this.parentPanel = new System.Windows.Forms.Panel();
+            this.panelNotify = new System.Windows.Forms.Panel();
+            this.notificationPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.panel14 = new System.Windows.Forms.Panel();
+            this.comboxNotify = new System.Windows.Forms.ComboBox();
+            this.panel15 = new System.Windows.Forms.Panel();
+            this.label12 = new System.Windows.Forms.Label();
             this.panelAdvancedMode = new System.Windows.Forms.Panel();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.panel16 = new System.Windows.Forms.Panel();
             this.checkboxAdvancedMode = new System.Windows.Forms.CheckBox();
             this.panel17 = new System.Windows.Forms.Panel();
             this.label6 = new System.Windows.Forms.Label();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.label17 = new System.Windows.Forms.Label();
             this.panelSaveUnprocessedImages = new System.Windows.Forms.Panel();
             this.panel29 = new System.Windows.Forms.Panel();
             this.panel30 = new System.Windows.Forms.Panel();
@@ -54,6 +62,13 @@
             this.checkboxMultiPromptsSameSeed = new System.Windows.Forms.CheckBox();
             this.panel22 = new System.Windows.Forms.Panel();
             this.label8 = new System.Windows.Forms.Label();
+            this.panelFavsDir = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel13 = new System.Windows.Forms.TableLayoutPanel();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.textboxFavsPath = new System.Windows.Forms.TextBox();
+            this.btnFavsPathBrowse = new HTAlt.WinForms.HTButton();
+            this.panel35 = new System.Windows.Forms.Panel();
+            this.label16 = new System.Windows.Forms.Label();
             this.panelPromptInFilename = new System.Windows.Forms.Panel();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.panel19 = new System.Windows.Forms.Panel();
@@ -115,35 +130,25 @@
             this.checkboxFullPrecision = new System.Windows.Forms.CheckBox();
             this.panel7 = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
-            this.panelOptimizedSd = new System.Windows.Forms.Panel();
+            this.panelImplementation = new System.Windows.Forms.Panel();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.panel12 = new System.Windows.Forms.Panel();
-            this.checkboxOptimizedSd = new System.Windows.Forms.CheckBox();
+            this.comboxImplementation = new System.Windows.Forms.ComboBox();
             this.panel13 = new System.Windows.Forms.Panel();
             this.label4 = new System.Windows.Forms.Label();
             this.panel11 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.notificationPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.panel15 = new System.Windows.Forms.Panel();
-            this.label12 = new System.Windows.Forms.Label();
-            this.panel14 = new System.Windows.Forms.Panel();
-            this.comboxNotify = new System.Windows.Forms.ComboBox();
-            this.panelNotify = new System.Windows.Forms.Panel();
-            this.panelFavsDir = new System.Windows.Forms.Panel();
-            this.tableLayoutPanel13 = new System.Windows.Forms.TableLayoutPanel();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.textboxFavsPath = new System.Windows.Forms.TextBox();
-            this.btnFavsPathBrowse = new HTAlt.WinForms.HTButton();
-            this.panel35 = new System.Windows.Forms.Panel();
-            this.label16 = new System.Windows.Forms.Label();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.label17 = new System.Windows.Forms.Label();
             this.parentPanel.SuspendLayout();
+            this.panelNotify.SuspendLayout();
+            this.notificationPanel.SuspendLayout();
+            this.panel14.SuspendLayout();
+            this.panel15.SuspendLayout();
             this.panelAdvancedMode.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
             this.panel16.SuspendLayout();
             this.panel17.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.panelSaveUnprocessedImages.SuspendLayout();
             this.panel29.SuspendLayout();
             this.panel30.SuspendLayout();
@@ -156,6 +161,10 @@
             this.tableLayoutPanel6.SuspendLayout();
             this.panel6.SuspendLayout();
             this.panel22.SuspendLayout();
+            this.panelFavsDir.SuspendLayout();
+            this.tableLayoutPanel13.SuspendLayout();
+            this.panel2.SuspendLayout();
+            this.panel35.SuspendLayout();
             this.panelPromptInFilename.SuspendLayout();
             this.tableLayoutPanel5.SuspendLayout();
             this.panel19.SuspendLayout();
@@ -189,20 +198,11 @@
             this.tableLayoutPanel1.SuspendLayout();
             this.panel8.SuspendLayout();
             this.panel7.SuspendLayout();
-            this.panelOptimizedSd.SuspendLayout();
+            this.panelImplementation.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             this.panel12.SuspendLayout();
             this.panel13.SuspendLayout();
             this.panel11.SuspendLayout();
-            this.notificationPanel.SuspendLayout();
-            this.panel15.SuspendLayout();
-            this.panel14.SuspendLayout();
-            this.panelNotify.SuspendLayout();
-            this.panelFavsDir.SuspendLayout();
-            this.tableLayoutPanel13.SuspendLayout();
-            this.panel2.SuspendLayout();
-            this.panel35.SuspendLayout();
-            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // titleLabel
@@ -238,12 +238,84 @@
             this.parentPanel.Controls.Add(this.panelSdModel);
             this.parentPanel.Controls.Add(this.panelUnloadModel);
             this.parentPanel.Controls.Add(this.panelFullPrecision);
-            this.parentPanel.Controls.Add(this.panelOptimizedSd);
+            this.parentPanel.Controls.Add(this.panelImplementation);
             this.parentPanel.Controls.Add(this.panel11);
             this.parentPanel.Location = new System.Drawing.Point(12, 62);
             this.parentPanel.Name = "parentPanel";
             this.parentPanel.Size = new System.Drawing.Size(820, 637);
             this.parentPanel.TabIndex = 14;
+            // 
+            // panelNotify
+            // 
+            this.panelNotify.Controls.Add(this.notificationPanel);
+            this.panelNotify.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelNotify.Location = new System.Drawing.Point(0, 575);
+            this.panelNotify.Name = "panelNotify";
+            this.panelNotify.Size = new System.Drawing.Size(820, 35);
+            this.panelNotify.TabIndex = 22;
+            // 
+            // notificationPanel
+            // 
+            this.notificationPanel.ColumnCount = 2;
+            this.notificationPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.notificationPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.notificationPanel.Controls.Add(this.panel14, 0, 0);
+            this.notificationPanel.Controls.Add(this.panel15, 0, 0);
+            this.notificationPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.notificationPanel.Location = new System.Drawing.Point(0, 0);
+            this.notificationPanel.Name = "notificationPanel";
+            this.notificationPanel.RowCount = 1;
+            this.notificationPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.notificationPanel.Size = new System.Drawing.Size(820, 35);
+            this.notificationPanel.TabIndex = 1;
+            // 
+            // panel14
+            // 
+            this.panel14.Controls.Add(this.comboxNotify);
+            this.panel14.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel14.Location = new System.Drawing.Point(413, 3);
+            this.panel14.Name = "panel14";
+            this.panel14.Size = new System.Drawing.Size(404, 29);
+            this.panel14.TabIndex = 88;
+            // 
+            // comboxNotify
+            // 
+            this.comboxNotify.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboxNotify.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.comboxNotify.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboxNotify.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboxNotify.ForeColor = System.Drawing.Color.White;
+            this.comboxNotify.FormattingEnabled = true;
+            this.comboxNotify.Items.AddRange(new object[] {
+            "Disabled",
+            "Play Sound",
+            "Show Notification",
+            "Play Sound and Show Notification"});
+            this.comboxNotify.Location = new System.Drawing.Point(0, 4);
+            this.comboxNotify.Name = "comboxNotify";
+            this.comboxNotify.Size = new System.Drawing.Size(401, 21);
+            this.comboxNotify.TabIndex = 106;
+            // 
+            // panel15
+            // 
+            this.panel15.Controls.Add(this.label12);
+            this.panel15.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel15.Location = new System.Drawing.Point(3, 3);
+            this.panel15.Name = "panel15";
+            this.panel15.Size = new System.Drawing.Size(404, 29);
+            this.panel15.TabIndex = 87;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label12.ForeColor = System.Drawing.Color.White;
+            this.label12.Location = new System.Drawing.Point(5, 8);
+            this.label12.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(217, 13);
+            this.label12.TabIndex = 85;
+            this.label12.Text = "Notify When Image Generation Has Finished";
             // 
             // panelAdvancedMode
             // 
@@ -308,6 +380,26 @@
             this.label6.Size = new System.Drawing.Size(247, 13);
             this.label6.TabIndex = 85;
             this.label6.Text = "Advanced Mode (Unlock Higher Values for Sliders)";
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.label17);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel1.Location = new System.Drawing.Point(0, 500);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(820, 40);
+            this.panel1.TabIndex = 27;
+            // 
+            // label17
+            // 
+            this.label17.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label17.AutoSize = true;
+            this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label17.Location = new System.Drawing.Point(5, 19);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(145, 16);
+            this.label17.TabIndex = 1;
+            this.label17.Text = "Application Settings";
             // 
             // panelSaveUnprocessedImages
             // 
@@ -472,6 +564,96 @@
             this.label8.Size = new System.Drawing.Size(352, 13);
             this.label8.TabIndex = 85;
             this.label8.Text = "When Running Multiple Prompts, Use Same Starting Seed for All of Them";
+            // 
+            // panelFavsDir
+            // 
+            this.panelFavsDir.Controls.Add(this.tableLayoutPanel13);
+            this.panelFavsDir.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelFavsDir.Location = new System.Drawing.Point(0, 395);
+            this.panelFavsDir.Name = "panelFavsDir";
+            this.panelFavsDir.Size = new System.Drawing.Size(820, 35);
+            this.panelFavsDir.TabIndex = 26;
+            // 
+            // tableLayoutPanel13
+            // 
+            this.tableLayoutPanel13.ColumnCount = 2;
+            this.tableLayoutPanel13.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel13.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel13.Controls.Add(this.panel2, 0, 0);
+            this.tableLayoutPanel13.Controls.Add(this.panel35, 0, 0);
+            this.tableLayoutPanel13.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel13.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel13.Name = "tableLayoutPanel13";
+            this.tableLayoutPanel13.RowCount = 1;
+            this.tableLayoutPanel13.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel13.Size = new System.Drawing.Size(820, 35);
+            this.tableLayoutPanel13.TabIndex = 1;
+            // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.textboxFavsPath);
+            this.panel2.Controls.Add(this.btnFavsPathBrowse);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel2.Location = new System.Drawing.Point(413, 3);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(404, 29);
+            this.panel2.TabIndex = 88;
+            // 
+            // textboxFavsPath
+            // 
+            this.textboxFavsPath.AllowDrop = true;
+            this.textboxFavsPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.textboxFavsPath.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textboxFavsPath.ForeColor = System.Drawing.Color.White;
+            this.textboxFavsPath.Location = new System.Drawing.Point(0, 3);
+            this.textboxFavsPath.MinimumSize = new System.Drawing.Size(4, 21);
+            this.textboxFavsPath.Name = "textboxFavsPath";
+            this.textboxFavsPath.Size = new System.Drawing.Size(320, 20);
+            this.textboxFavsPath.TabIndex = 2;
+            this.textboxFavsPath.WordWrap = false;
+            // 
+            // btnFavsPathBrowse
+            // 
+            this.btnFavsPathBrowse.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.btnFavsPathBrowse.AutoColor = true;
+            this.btnFavsPathBrowse.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnFavsPathBrowse.ButtonImage = null;
+            this.btnFavsPathBrowse.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
+            this.btnFavsPathBrowse.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
+            this.btnFavsPathBrowse.DrawImage = false;
+            this.btnFavsPathBrowse.ForeColor = System.Drawing.Color.White;
+            this.btnFavsPathBrowse.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
+            this.btnFavsPathBrowse.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
+            this.btnFavsPathBrowse.Location = new System.Drawing.Point(326, 2);
+            this.btnFavsPathBrowse.Name = "btnFavsPathBrowse";
+            this.btnFavsPathBrowse.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+            this.btnFavsPathBrowse.Size = new System.Drawing.Size(75, 23);
+            this.btnFavsPathBrowse.TabIndex = 3;
+            this.btnFavsPathBrowse.TabStop = false;
+            this.btnFavsPathBrowse.Text = "Browse...";
+            this.toolTip.SetToolTip(this.btnFavsPathBrowse, "Browse for an Image Output Folder");
+            this.btnFavsPathBrowse.Click += new System.EventHandler(this.btnFavsPathBrowse_Click);
+            // 
+            // panel35
+            // 
+            this.panel35.Controls.Add(this.label16);
+            this.panel35.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel35.Location = new System.Drawing.Point(3, 3);
+            this.panel35.Name = "panel35";
+            this.panel35.Size = new System.Drawing.Size(404, 29);
+            this.panel35.TabIndex = 87;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label16.ForeColor = System.Drawing.Color.White;
+            this.label16.Location = new System.Drawing.Point(5, 8);
+            this.label16.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(82, 13);
+            this.label16.TabIndex = 85;
+            this.label16.Text = "Favorites Folder";
             // 
             // panelPromptInFilename
             // 
@@ -723,7 +905,7 @@
             this.textboxOutPath.Location = new System.Drawing.Point(0, 3);
             this.textboxOutPath.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxOutPath.Name = "textboxOutPath";
-            this.textboxOutPath.Size = new System.Drawing.Size(320, 21);
+            this.textboxOutPath.Size = new System.Drawing.Size(320, 20);
             this.textboxOutPath.TabIndex = 2;
             this.textboxOutPath.WordWrap = false;
             // 
@@ -1207,14 +1389,14 @@
             this.label2.TabIndex = 84;
             this.label2.Text = "Use Full Precision (Useless in Most Cases, but May Fix GTX 16-Series Cards)";
             // 
-            // panelOptimizedSd
+            // panelImplementation
             // 
-            this.panelOptimizedSd.Controls.Add(this.tableLayoutPanel3);
-            this.panelOptimizedSd.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelOptimizedSd.Location = new System.Drawing.Point(0, 40);
-            this.panelOptimizedSd.Name = "panelOptimizedSd";
-            this.panelOptimizedSd.Size = new System.Drawing.Size(820, 35);
-            this.panelOptimizedSd.TabIndex = 13;
+            this.panelImplementation.Controls.Add(this.tableLayoutPanel3);
+            this.panelImplementation.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelImplementation.Location = new System.Drawing.Point(0, 40);
+            this.panelImplementation.Name = "panelImplementation";
+            this.panelImplementation.Size = new System.Drawing.Size(820, 35);
+            this.panelImplementation.TabIndex = 13;
             // 
             // tableLayoutPanel3
             // 
@@ -1233,22 +1415,26 @@
             // 
             // panel12
             // 
-            this.panel12.Controls.Add(this.checkboxOptimizedSd);
+            this.panel12.Controls.Add(this.comboxImplementation);
             this.panel12.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel12.Location = new System.Drawing.Point(413, 3);
             this.panel12.Name = "panel12";
             this.panel12.Size = new System.Drawing.Size(404, 29);
             this.panel12.TabIndex = 86;
             // 
-            // checkboxOptimizedSd
+            // comboxImplementation
             // 
-            this.checkboxOptimizedSd.AutoSize = true;
-            this.checkboxOptimizedSd.Location = new System.Drawing.Point(5, 5);
-            this.checkboxOptimizedSd.Name = "checkboxOptimizedSd";
-            this.checkboxOptimizedSd.Size = new System.Drawing.Size(15, 14);
-            this.checkboxOptimizedSd.TabIndex = 86;
-            this.checkboxOptimizedSd.UseVisualStyleBackColor = true;
-            this.checkboxOptimizedSd.CheckedChanged += new System.EventHandler(this.checkboxOptimizedSd_CheckedChanged);
+            this.comboxImplementation.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboxImplementation.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.comboxImplementation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboxImplementation.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboxImplementation.ForeColor = System.Drawing.Color.White;
+            this.comboxImplementation.FormattingEnabled = true;
+            this.comboxImplementation.Location = new System.Drawing.Point(2, 4);
+            this.comboxImplementation.Name = "comboxImplementation";
+            this.comboxImplementation.Size = new System.Drawing.Size(401, 21);
+            this.comboxImplementation.TabIndex = 107;
+            this.comboxImplementation.SelectedIndexChanged += new System.EventHandler(this.comboxImplementation_SelectedIndexChanged);
             // 
             // panel13
             // 
@@ -1267,9 +1453,9 @@
             this.label4.Location = new System.Drawing.Point(5, 8);
             this.label4.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(311, 13);
+            this.label4.Size = new System.Drawing.Size(165, 13);
             this.label4.TabIndex = 84;
-            this.label4.Text = "Low Memory Mode (For <6 GB GPUs - Disables Some Features!)";
+            this.label4.Text = "Image Generation Implementation";
             // 
             // panel11
             // 
@@ -1298,188 +1484,6 @@
             this.toolTip.InitialDelay = 200;
             this.toolTip.ReshowDelay = 40;
             // 
-            // notificationPanel
-            // 
-            this.notificationPanel.ColumnCount = 2;
-            this.notificationPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.notificationPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.notificationPanel.Controls.Add(this.panel14, 0, 0);
-            this.notificationPanel.Controls.Add(this.panel15, 0, 0);
-            this.notificationPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.notificationPanel.Location = new System.Drawing.Point(0, 0);
-            this.notificationPanel.Name = "notificationPanel";
-            this.notificationPanel.RowCount = 1;
-            this.notificationPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.notificationPanel.Size = new System.Drawing.Size(820, 35);
-            this.notificationPanel.TabIndex = 1;
-            // 
-            // panel15
-            // 
-            this.panel15.Controls.Add(this.label12);
-            this.panel15.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel15.Location = new System.Drawing.Point(3, 3);
-            this.panel15.Name = "panel15";
-            this.panel15.Size = new System.Drawing.Size(404, 29);
-            this.panel15.TabIndex = 87;
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.ForeColor = System.Drawing.Color.White;
-            this.label12.Location = new System.Drawing.Point(5, 8);
-            this.label12.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(217, 13);
-            this.label12.TabIndex = 85;
-            this.label12.Text = "Notify When Image Generation Has Finished";
-            // 
-            // panel14
-            // 
-            this.panel14.Controls.Add(this.comboxNotify);
-            this.panel14.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel14.Location = new System.Drawing.Point(413, 3);
-            this.panel14.Name = "panel14";
-            this.panel14.Size = new System.Drawing.Size(404, 29);
-            this.panel14.TabIndex = 88;
-            // 
-            // comboxNotify
-            // 
-            this.comboxNotify.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.comboxNotify.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.comboxNotify.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboxNotify.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.comboxNotify.ForeColor = System.Drawing.Color.White;
-            this.comboxNotify.FormattingEnabled = true;
-            this.comboxNotify.Items.AddRange(new object[] {
-            "Disabled",
-            "Play Sound",
-            "Show Notification",
-            "Play Sound and Show Notification"});
-            this.comboxNotify.Location = new System.Drawing.Point(0, 4);
-            this.comboxNotify.Name = "comboxNotify";
-            this.comboxNotify.Size = new System.Drawing.Size(401, 21);
-            this.comboxNotify.TabIndex = 106;
-            // 
-            // panelNotify
-            // 
-            this.panelNotify.Controls.Add(this.notificationPanel);
-            this.panelNotify.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelNotify.Location = new System.Drawing.Point(0, 575);
-            this.panelNotify.Name = "panelNotify";
-            this.panelNotify.Size = new System.Drawing.Size(820, 35);
-            this.panelNotify.TabIndex = 22;
-            // 
-            // panelFavsDir
-            // 
-            this.panelFavsDir.Controls.Add(this.tableLayoutPanel13);
-            this.panelFavsDir.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelFavsDir.Location = new System.Drawing.Point(0, 395);
-            this.panelFavsDir.Name = "panelFavsDir";
-            this.panelFavsDir.Size = new System.Drawing.Size(820, 35);
-            this.panelFavsDir.TabIndex = 26;
-            // 
-            // tableLayoutPanel13
-            // 
-            this.tableLayoutPanel13.ColumnCount = 2;
-            this.tableLayoutPanel13.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel13.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel13.Controls.Add(this.panel2, 0, 0);
-            this.tableLayoutPanel13.Controls.Add(this.panel35, 0, 0);
-            this.tableLayoutPanel13.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel13.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel13.Name = "tableLayoutPanel13";
-            this.tableLayoutPanel13.RowCount = 1;
-            this.tableLayoutPanel13.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel13.Size = new System.Drawing.Size(820, 35);
-            this.tableLayoutPanel13.TabIndex = 1;
-            // 
-            // panel2
-            // 
-            this.panel2.Controls.Add(this.textboxFavsPath);
-            this.panel2.Controls.Add(this.btnFavsPathBrowse);
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel2.Location = new System.Drawing.Point(413, 3);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(404, 29);
-            this.panel2.TabIndex = 88;
-            // 
-            // textboxFavsPath
-            // 
-            this.textboxFavsPath.AllowDrop = true;
-            this.textboxFavsPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.textboxFavsPath.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.textboxFavsPath.ForeColor = System.Drawing.Color.White;
-            this.textboxFavsPath.Location = new System.Drawing.Point(0, 3);
-            this.textboxFavsPath.MinimumSize = new System.Drawing.Size(4, 21);
-            this.textboxFavsPath.Name = "textboxFavsPath";
-            this.textboxFavsPath.Size = new System.Drawing.Size(320, 21);
-            this.textboxFavsPath.TabIndex = 2;
-            this.textboxFavsPath.WordWrap = false;
-            // 
-            // btnFavsPathBrowse
-            // 
-            this.btnFavsPathBrowse.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.btnFavsPathBrowse.AutoColor = true;
-            this.btnFavsPathBrowse.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnFavsPathBrowse.ButtonImage = null;
-            this.btnFavsPathBrowse.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
-            this.btnFavsPathBrowse.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
-            this.btnFavsPathBrowse.DrawImage = false;
-            this.btnFavsPathBrowse.ForeColor = System.Drawing.Color.White;
-            this.btnFavsPathBrowse.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
-            this.btnFavsPathBrowse.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
-            this.btnFavsPathBrowse.Location = new System.Drawing.Point(326, 2);
-            this.btnFavsPathBrowse.Name = "btnFavsPathBrowse";
-            this.btnFavsPathBrowse.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
-            this.btnFavsPathBrowse.Size = new System.Drawing.Size(75, 23);
-            this.btnFavsPathBrowse.TabIndex = 3;
-            this.btnFavsPathBrowse.TabStop = false;
-            this.btnFavsPathBrowse.Text = "Browse...";
-            this.toolTip.SetToolTip(this.btnFavsPathBrowse, "Browse for an Image Output Folder");
-            this.btnFavsPathBrowse.Click += new System.EventHandler(this.btnFavsPathBrowse_Click);
-            // 
-            // panel35
-            // 
-            this.panel35.Controls.Add(this.label16);
-            this.panel35.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel35.Location = new System.Drawing.Point(3, 3);
-            this.panel35.Name = "panel35";
-            this.panel35.Size = new System.Drawing.Size(404, 29);
-            this.panel35.TabIndex = 87;
-            // 
-            // label16
-            // 
-            this.label16.AutoSize = true;
-            this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label16.ForeColor = System.Drawing.Color.White;
-            this.label16.Location = new System.Drawing.Point(5, 8);
-            this.label16.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(82, 13);
-            this.label16.TabIndex = 85;
-            this.label16.Text = "Favorites Folder";
-            // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.label17);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Location = new System.Drawing.Point(0, 500);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(820, 40);
-            this.panel1.TabIndex = 27;
-            // 
-            // label17
-            // 
-            this.label17.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.label17.AutoSize = true;
-            this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label17.Location = new System.Drawing.Point(5, 19);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(145, 16);
-            this.label17.TabIndex = 1;
-            this.label17.Text = "Application Settings";
-            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1504,12 +1508,19 @@
             this.Load += new System.EventHandler(this.SettingsForm_Load);
             this.Shown += new System.EventHandler(this.SettingsForm_Shown);
             this.parentPanel.ResumeLayout(false);
+            this.panelNotify.ResumeLayout(false);
+            this.notificationPanel.ResumeLayout(false);
+            this.panel14.ResumeLayout(false);
+            this.panel15.ResumeLayout(false);
+            this.panel15.PerformLayout();
             this.panelAdvancedMode.ResumeLayout(false);
             this.tableLayoutPanel4.ResumeLayout(false);
             this.panel16.ResumeLayout(false);
             this.panel16.PerformLayout();
             this.panel17.ResumeLayout(false);
             this.panel17.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.panelSaveUnprocessedImages.ResumeLayout(false);
             this.panel29.ResumeLayout(false);
             this.panel30.ResumeLayout(false);
@@ -1526,6 +1537,12 @@
             this.panel6.PerformLayout();
             this.panel22.ResumeLayout(false);
             this.panel22.PerformLayout();
+            this.panelFavsDir.ResumeLayout(false);
+            this.tableLayoutPanel13.ResumeLayout(false);
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
+            this.panel35.ResumeLayout(false);
+            this.panel35.PerformLayout();
             this.panelPromptInFilename.ResumeLayout(false);
             this.tableLayoutPanel5.ResumeLayout(false);
             this.panel19.ResumeLayout(false);
@@ -1573,27 +1590,13 @@
             this.panel8.PerformLayout();
             this.panel7.ResumeLayout(false);
             this.panel7.PerformLayout();
-            this.panelOptimizedSd.ResumeLayout(false);
+            this.panelImplementation.ResumeLayout(false);
             this.tableLayoutPanel3.ResumeLayout(false);
             this.panel12.ResumeLayout(false);
-            this.panel12.PerformLayout();
             this.panel13.ResumeLayout(false);
             this.panel13.PerformLayout();
             this.panel11.ResumeLayout(false);
             this.panel11.PerformLayout();
-            this.notificationPanel.ResumeLayout(false);
-            this.panel15.ResumeLayout(false);
-            this.panel15.PerformLayout();
-            this.panel14.ResumeLayout(false);
-            this.panelNotify.ResumeLayout(false);
-            this.panelFavsDir.ResumeLayout(false);
-            this.tableLayoutPanel13.ResumeLayout(false);
-            this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
-            this.panel35.ResumeLayout(false);
-            this.panel35.PerformLayout();
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1603,7 +1606,7 @@
 
         private System.Windows.Forms.Label titleLabel;
         private System.Windows.Forms.Panel parentPanel;
-        private System.Windows.Forms.Panel panelOptimizedSd;
+        private System.Windows.Forms.Panel panelImplementation;
         private System.Windows.Forms.Panel panelPromptSubfolders;
         private System.Windows.Forms.Panel panelFullPrecision;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
@@ -1622,7 +1625,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
         private System.Windows.Forms.Panel panel12;
-        private System.Windows.Forms.CheckBox checkboxOptimizedSd;
         private System.Windows.Forms.Panel panel13;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
@@ -1710,5 +1712,6 @@
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.ComboBox comboxImplementation;
     }
 }

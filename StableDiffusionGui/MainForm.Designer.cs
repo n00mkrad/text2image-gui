@@ -111,6 +111,12 @@ namespace StableDiffusionGui
             this.faceRestorationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.applyAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelSettings = new StableDiffusionGui.Controls.CustomPanel();
+            this.panelDebugPerlinThresh = new System.Windows.Forms.Panel();
+            this.textboxThresh = new System.Windows.Forms.TextBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
+            this.textboxPerlin = new System.Windows.Forms.TextBox();
             this.panelDebugSendStdin = new System.Windows.Forms.Panel();
             this.label12 = new System.Windows.Forms.Label();
             this.textboxCliTest = new System.Windows.Forms.TextBox();
@@ -146,12 +152,6 @@ namespace StableDiffusionGui
             this.labelCurrentImage = new System.Windows.Forms.Label();
             this.panelPromptNeg = new System.Windows.Forms.Panel();
             this.panelPrompt = new System.Windows.Forms.Panel();
-            this.panelDebugPerlinThresh = new System.Windows.Forms.Panel();
-            this.label13 = new System.Windows.Forms.Label();
-            this.textboxPerlin = new System.Windows.Forms.TextBox();
-            this.label14 = new System.Windows.Forms.Label();
-            this.label15 = new System.Windows.Forms.Label();
-            this.textboxThresh = new System.Windows.Forms.TextBox();
             this.menuStripOutputImg.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.upDownSeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
@@ -162,6 +162,7 @@ namespace StableDiffusionGui
             ((System.ComponentModel.ISupportInitialize)(this.pictBoxImgViewer)).BeginInit();
             this.menuStripPostProcess.SuspendLayout();
             this.panelSettings.SuspendLayout();
+            this.panelDebugPerlinThresh.SuspendLayout();
             this.panelDebugSendStdin.SuspendLayout();
             this.panelSeamless.SuspendLayout();
             this.panelSampler.SuspendLayout();
@@ -178,7 +179,6 @@ namespace StableDiffusionGui
             this.panelAiInputs.SuspendLayout();
             this.panelPromptNeg.SuspendLayout();
             this.panelPrompt.SuspendLayout();
-            this.panelDebugPerlinThresh.SuspendLayout();
             this.SuspendLayout();
             // 
             // runBtn
@@ -824,7 +824,7 @@ namespace StableDiffusionGui
             this.textboxExtraScales.Location = new System.Drawing.Point(335, 7);
             this.textboxExtraScales.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxExtraScales.Name = "textboxExtraScales";
-            this.textboxExtraScales.Size = new System.Drawing.Size(74, 21);
+            this.textboxExtraScales.Size = new System.Drawing.Size(74, 20);
             this.textboxExtraScales.TabIndex = 3;
             this.toolTip.SetToolTip(this.textboxExtraScales, resources.GetString("textboxExtraScales.ToolTip"));
             // 
@@ -897,7 +897,7 @@ namespace StableDiffusionGui
             this.textboxExtraInitStrengths.Location = new System.Drawing.Point(335, 7);
             this.textboxExtraInitStrengths.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxExtraInitStrengths.Name = "textboxExtraInitStrengths";
-            this.textboxExtraInitStrengths.Size = new System.Drawing.Size(74, 21);
+            this.textboxExtraInitStrengths.Size = new System.Drawing.Size(74, 20);
             this.textboxExtraInitStrengths.TabIndex = 91;
             this.toolTip.SetToolTip(this.textboxExtraInitStrengths, resources.GetString("textboxExtraInitStrengths.ToolTip"));
             // 
@@ -1329,6 +1329,84 @@ namespace StableDiffusionGui
             this.panelSettings.SizeChanged += new System.EventHandler(this.panelSettings_SizeChanged);
             this.panelSettings.Click += new System.EventHandler(this.panel1_Click);
             // 
+            // panelDebugPerlinThresh
+            // 
+            this.panelDebugPerlinThresh.Controls.Add(this.textboxThresh);
+            this.panelDebugPerlinThresh.Controls.Add(this.label15);
+            this.panelDebugPerlinThresh.Controls.Add(this.label14);
+            this.panelDebugPerlinThresh.Controls.Add(this.label13);
+            this.panelDebugPerlinThresh.Controls.Add(this.textboxPerlin);
+            this.panelDebugPerlinThresh.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelDebugPerlinThresh.Location = new System.Drawing.Point(0, 520);
+            this.panelDebugPerlinThresh.Name = "panelDebugPerlinThresh";
+            this.panelDebugPerlinThresh.Size = new System.Drawing.Size(645, 35);
+            this.panelDebugPerlinThresh.TabIndex = 18;
+            this.panelDebugPerlinThresh.Visible = false;
+            // 
+            // textboxThresh
+            // 
+            this.textboxThresh.AllowDrop = true;
+            this.textboxThresh.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textboxThresh.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textboxThresh.ForeColor = System.Drawing.Color.White;
+            this.textboxThresh.Location = new System.Drawing.Point(470, 7);
+            this.textboxThresh.MinimumSize = new System.Drawing.Size(4, 21);
+            this.textboxThresh.Name = "textboxThresh";
+            this.textboxThresh.Size = new System.Drawing.Size(100, 20);
+            this.textboxThresh.TabIndex = 108;
+            this.textboxThresh.Text = "0";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label15.ForeColor = System.Drawing.Color.White;
+            this.label15.Location = new System.Drawing.Point(410, 11);
+            this.label15.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(54, 13);
+            this.label15.TabIndex = 107;
+            this.label15.Text = "Threshold";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label14.ForeColor = System.Drawing.Color.White;
+            this.label14.Location = new System.Drawing.Point(230, 11);
+            this.label14.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(63, 13);
+            this.label14.TabIndex = 106;
+            this.label14.Text = "Perlin Noise";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label13.ForeColor = System.Drawing.Color.White;
+            this.label13.Location = new System.Drawing.Point(2, 11);
+            this.label13.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(144, 13);
+            this.label13.TabIndex = 105;
+            this.label13.Text = "Set Perlin Noise + Threshold ";
+            // 
+            // textboxPerlin
+            // 
+            this.textboxPerlin.AllowDrop = true;
+            this.textboxPerlin.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textboxPerlin.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textboxPerlin.ForeColor = System.Drawing.Color.White;
+            this.textboxPerlin.Location = new System.Drawing.Point(299, 7);
+            this.textboxPerlin.MinimumSize = new System.Drawing.Size(4, 21);
+            this.textboxPerlin.Name = "textboxPerlin";
+            this.textboxPerlin.Size = new System.Drawing.Size(100, 20);
+            this.textboxPerlin.TabIndex = 4;
+            this.textboxPerlin.Text = "0.0";
+            // 
             // panelDebugSendStdin
             // 
             this.panelDebugSendStdin.Controls.Add(this.label12);
@@ -1362,7 +1440,7 @@ namespace StableDiffusionGui
             this.textboxCliTest.Location = new System.Drawing.Point(233, 7);
             this.textboxCliTest.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxCliTest.Name = "textboxCliTest";
-            this.textboxCliTest.Size = new System.Drawing.Size(409, 21);
+            this.textboxCliTest.Size = new System.Drawing.Size(409, 20);
             this.textboxCliTest.TabIndex = 4;
             this.textboxCliTest.DoubleClick += new System.EventHandler(this.textboxCliTest_DoubleClick);
             // 
@@ -1790,84 +1868,6 @@ namespace StableDiffusionGui
             this.panelPrompt.Size = new System.Drawing.Size(645, 65);
             this.panelPrompt.TabIndex = 15;
             // 
-            // panelDebugPerlinThresh
-            // 
-            this.panelDebugPerlinThresh.Controls.Add(this.textboxThresh);
-            this.panelDebugPerlinThresh.Controls.Add(this.label15);
-            this.panelDebugPerlinThresh.Controls.Add(this.label14);
-            this.panelDebugPerlinThresh.Controls.Add(this.label13);
-            this.panelDebugPerlinThresh.Controls.Add(this.textboxPerlin);
-            this.panelDebugPerlinThresh.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelDebugPerlinThresh.Location = new System.Drawing.Point(0, 520);
-            this.panelDebugPerlinThresh.Name = "panelDebugPerlinThresh";
-            this.panelDebugPerlinThresh.Size = new System.Drawing.Size(645, 35);
-            this.panelDebugPerlinThresh.TabIndex = 18;
-            this.panelDebugPerlinThresh.Visible = false;
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.ForeColor = System.Drawing.Color.White;
-            this.label13.Location = new System.Drawing.Point(2, 11);
-            this.label13.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(144, 13);
-            this.label13.TabIndex = 105;
-            this.label13.Text = "Set Perlin Noise + Threshold ";
-            // 
-            // textboxPerlin
-            // 
-            this.textboxPerlin.AllowDrop = true;
-            this.textboxPerlin.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textboxPerlin.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.textboxPerlin.ForeColor = System.Drawing.Color.White;
-            this.textboxPerlin.Location = new System.Drawing.Point(299, 7);
-            this.textboxPerlin.MinimumSize = new System.Drawing.Size(4, 21);
-            this.textboxPerlin.Name = "textboxPerlin";
-            this.textboxPerlin.Size = new System.Drawing.Size(100, 21);
-            this.textboxPerlin.TabIndex = 4;
-            this.textboxPerlin.Text = "0.0";
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label14.ForeColor = System.Drawing.Color.White;
-            this.label14.Location = new System.Drawing.Point(230, 11);
-            this.label14.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(63, 13);
-            this.label14.TabIndex = 106;
-            this.label14.Text = "Perlin Noise";
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label15.ForeColor = System.Drawing.Color.White;
-            this.label15.Location = new System.Drawing.Point(410, 11);
-            this.label15.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(54, 13);
-            this.label15.TabIndex = 107;
-            this.label15.Text = "Threshold";
-            // 
-            // textboxThresh
-            // 
-            this.textboxThresh.AllowDrop = true;
-            this.textboxThresh.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textboxThresh.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.textboxThresh.ForeColor = System.Drawing.Color.White;
-            this.textboxThresh.Location = new System.Drawing.Point(470, 7);
-            this.textboxThresh.MinimumSize = new System.Drawing.Size(4, 21);
-            this.textboxThresh.Name = "textboxThresh";
-            this.textboxThresh.Size = new System.Drawing.Size(100, 21);
-            this.textboxThresh.TabIndex = 108;
-            this.textboxThresh.Text = "0";
-            // 
             // MainForm
             // 
             this.AllowDrop = true;
@@ -1923,6 +1923,8 @@ namespace StableDiffusionGui
             ((System.ComponentModel.ISupportInitialize)(this.pictBoxImgViewer)).EndInit();
             this.menuStripPostProcess.ResumeLayout(false);
             this.panelSettings.ResumeLayout(false);
+            this.panelDebugPerlinThresh.ResumeLayout(false);
+            this.panelDebugPerlinThresh.PerformLayout();
             this.panelDebugSendStdin.ResumeLayout(false);
             this.panelDebugSendStdin.PerformLayout();
             this.panelSeamless.ResumeLayout(false);
@@ -1955,8 +1957,6 @@ namespace StableDiffusionGui
             this.panelPromptNeg.PerformLayout();
             this.panelPrompt.ResumeLayout(false);
             this.panelPrompt.PerformLayout();
-            this.panelDebugPerlinThresh.ResumeLayout(false);
-            this.panelDebugPerlinThresh.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 

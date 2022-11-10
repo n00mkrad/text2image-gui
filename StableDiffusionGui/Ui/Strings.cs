@@ -36,5 +36,12 @@ namespace StableDiffusionGui.Ui
             { FaceRestoreOption.Gfpgan.ToString(), "GFPGAN"},
             { FaceRestoreOption.CodeFormer.ToString(), "CodeFormer"}
         };
+
+        public static Dictionary<string, string> SettingsUiStrings = new Dictionary<string, string>
+        {
+            { Enums.StableDiffusion.Implementation.InvokeAi.ToString(), "Stable Diffusion (InvokeAI - CUDA)" },
+            { Enums.StableDiffusion.Implementation.OptimizedSd.ToString(), "Stable Diffusion (OptimizedSD - CUDA)" },
+            { Enums.StableDiffusion.Implementation.DiffusersOnnx.ToString(), "Stable Diffusion (ONNX - DirectML)" },
+        };
     }
 }

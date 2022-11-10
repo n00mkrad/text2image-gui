@@ -8,11 +8,14 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
 namespace StableDiffusionGui.Forms
 {
     public partial class SettingsForm : CustomForm
     {
+        private Implementation CurrImplementation { get { return (Implementation)comboxImplementation.SelectedIndex; } }
+
         private bool _ready = false;
 
         public SettingsForm()
@@ -32,12 +35,13 @@ namespace StableDiffusionGui.Forms
         private void SettingsForm_Shown(object sender, EventArgs e)
         {
             Refresh();
-            LoadModels(false, Enums.StableDiffusion.ModelType.Normal);
-            LoadModels(false, Enums.StableDiffusion.ModelType.Vae);
+            comboxImplementation.FillFromEnum<Implementation>(Strings.SettingsUiStrings);
+            // LoadModels(false, ModelType.Normal);
+            // LoadModels(false, ModelType.Vae);
             LoadSettings();
 
             TabOrderInit(new List<Control>() {
-                checkboxOptimizedSd,
+                comboxImplementation,
                 checkboxFullPrecision,
                 checkboxUnloadModel,
                 comboxSdModel, btnRefreshModelsDropdown, btnOpenModelsFolder,
@@ -69,19 +73,24 @@ namespace StableDiffusionGui.Forms
             Program.MainForm.RefreshAfterSettingsChanged();
         }
 
-        private void LoadModels(bool loadCombox, Enums.StableDiffusion.ModelType type)
+        private void LoadModels(bool loadCombox, ModelType type)
         {
-            var combox = type == Enums.StableDiffusion.ModelType.Normal ? comboxSdModel : comboxSdModelVae;
+            var combox = type == ModelType.Normal ? comboxSdModel : comboxSdModelVae;
 
             combox.Items.Clear();
 
-            if (type == Enums.StableDiffusion.ModelType.Vae)
+            if (type == ModelType.Vae)
                 combox.Items.Add("None");
 
-            Paths.GetModels(type).ForEach(x => combox.Items.Add(x.Name));
+            Paths.GetModels(type, CurrImplementation).ForEach(x => combox.Items.Add(x.Name));
 
             if (loadCombox)
+            {
                 ConfigParser.LoadGuiElement(combox);
+
+                if (combox.Items.Count > 0 && combox.SelectedIndex == -1)
+                    combox.SelectedIndex = 0;
+            }
         }
 
         private async Task LoadGpus()
@@ -105,7 +114,7 @@ namespace StableDiffusionGui.Forms
 
         void LoadSettings()
         {
-            ConfigParser.LoadGuiElement(checkboxOptimizedSd);
+            ConfigParser.LoadComboxIndex(comboxImplementation);
             ConfigParser.LoadGuiElement(checkboxFullPrecision);
             ConfigParser.LoadGuiElement(checkboxFolderPerPrompt);
             ConfigParser.LoadGuiElement(checkboxOutputIgnoreWildcards);
@@ -129,7 +138,7 @@ namespace StableDiffusionGui.Forms
 
         void SaveSettings()
         {
-            ConfigParser.SaveGuiElement(checkboxOptimizedSd);
+            ConfigParser.SaveComboxIndex(comboxImplementation);
             ConfigParser.SaveGuiElement(checkboxFullPrecision);
             ConfigParser.SaveGuiElement(checkboxFolderPerPrompt);
             ConfigParser.SaveGuiElement(checkboxOutputIgnoreWildcards);
@@ -161,31 +170,31 @@ namespace StableDiffusionGui.Forms
 
         private void btnOpenModelsFolder_Click(object sender, EventArgs e)
         {
-            new ModelFoldersForm(Enums.StableDiffusion.ModelType.Normal).ShowDialogForm();
-            LoadModels(true, Enums.StableDiffusion.ModelType.Normal);
+            new ModelFoldersForm(ModelType.Normal).ShowDialogForm();
+            LoadModels(true, ModelType.Normal);
         }
 
         private void btnOpenModelsFolderVae_Click(object sender, EventArgs e)
         {
-            new ModelFoldersForm(Enums.StableDiffusion.ModelType.Vae).ShowDialogForm();
-            LoadModels(true, Enums.StableDiffusion.ModelType.Vae);
+            new ModelFoldersForm(ModelType.Vae).ShowDialogForm();
+            LoadModels(true, ModelType.Vae);
         }
 
         private void checkboxOptimizedSd_CheckedChanged(object sender, EventArgs e)
         {
-            if (_ready && checkboxOptimizedSd.Checked)
+            if (_ready && CurrImplementation == Implementation.OptimizedSd)
                 UiUtils.ShowMessageBox($"Warning: Low Memory Mode disables several features, such as custom samplers or seamless mode.\n" +
             $"Only keep this option enabled if your GPU has less than 6 GB of memory.");
         }
 
         private void btnRefreshModelsDropdown_Click(object sender, EventArgs e)
         {
-            LoadModels(true, Enums.StableDiffusion.ModelType.Normal);
+            LoadModels(true, ModelType.Normal);
         }
 
         private void btnRefreshModelsDropdownVae_Click(object sender, EventArgs e)
         {
-            LoadModels(true, Enums.StableDiffusion.ModelType.Vae);
+            LoadModels(true, ModelType.Vae);
         }
 
         private void btnFavsPathBrowse_Click(object sender, EventArgs e)
@@ -194,6 +203,14 @@ namespace StableDiffusionGui.Forms
 
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
                 textboxFavsPath.Text = dialog.FileName;
+        }
+
+        private void comboxImplementation_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            panelVae.Visible = CurrImplementation == Implementation.InvokeAi;
+            panelCudaDevice.Visible = CurrImplementation != Implementation.DiffusersOnnx;
+            LoadModels(true, ModelType.Normal);
+            LoadModels(true, ModelType.Vae);
         }
     }
 }

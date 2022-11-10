@@ -16,6 +16,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
+using static StableDiffusionGui.Main.Enums.StableDiffusion;
 using Path = System.IO.Path;
 using Paths = StableDiffusionGui.Io.Paths;
 
@@ -151,9 +152,10 @@ namespace StableDiffusionGui.Main
         /// <returns> Model FileInfo, if it exists - null if not </returns>
         public static Model CheckIfCurrentSdModelExists(List<Model> cachedModels = null)
         {
-            string modelFilename = Config.Get(Config.Key.comboxSdModel);
+            string name = Config.Get(Config.Key.comboxSdModel);
+            var imp = (Implementation)Config.GetInt("comboxImplementation");
 
-            if (string.IsNullOrWhiteSpace(modelFilename))
+            if (string.IsNullOrWhiteSpace(name))
             {
                 TextToImage.Cancel($"No Stable Diffusion model file has been set.\nPlease set one in the settings.");
                 new SettingsForm().ShowDialogForm(0.5f);
@@ -161,11 +163,11 @@ namespace StableDiffusionGui.Main
             }
             else
             {
-                var model = cachedModels == null ? Paths.GetModel(modelFilename) : Paths.GetModel(cachedModels, modelFilename);
+                var model = cachedModels == null ? Paths.GetModel(name, false, ModelType.Normal, imp) : Paths.GetModel(cachedModels, name, false, ModelType.Normal, imp);
 
                 if (model == null)
                 {
-                    TextToImage.Cancel($"Stable Diffusion model file {modelFilename.Wrap()} not found.\nPossibly it was moved, renamed, or deleted.");
+                    TextToImage.Cancel($"Stable Diffusion model file {name.Wrap()} not found.\nPossibly it was moved, renamed, or deleted.");
                     return null;
                 }
                 else

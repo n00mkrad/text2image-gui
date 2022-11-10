@@ -8,6 +8,7 @@ namespace StableDiffusionGui.Forms
     public partial class ModelQuickSelectForm : Form
     {
         private Enums.StableDiffusion.ModelType _modelType;
+        private Enums.StableDiffusion.Implementation _implementation;
 
         public ModelQuickSelectForm(Enums.StableDiffusion.ModelType modelType)
         {
@@ -29,6 +30,8 @@ namespace StableDiffusionGui.Forms
             else if (_modelType == Enums.StableDiffusion.ModelType.Vae)
                 comboxModel.Name = Config.Key.comboxSdModelVae.ToString();
 
+            _implementation = (Enums.StableDiffusion.Implementation)Config.GetInt("comboxImplementation");
+
             LoadModels(true);
             comboxModel.DroppedDown = true;
         }
@@ -42,7 +45,7 @@ namespace StableDiffusionGui.Forms
             if (_modelType == Enums.StableDiffusion.ModelType.Vae)
                 comboxModel.Items.Add("None");
 
-            Paths.GetModels(_modelType).ForEach(x => comboxModel.Items.Add(x.Name));
+            Paths.GetModels(_modelType, _implementation).ForEach(x => comboxModel.Items.Add(x.Name));
 
             if (loadCombox)
                 ConfigParser.LoadGuiElement(comboxModel);
@@ -69,7 +72,7 @@ namespace StableDiffusionGui.Forms
             if (comboxModel.Text == "None")
                 return true;
 
-            return Paths.GetModel(comboxModel.Text.Trim(), false, _modelType) != null;
+            return Paths.GetModel(comboxModel.Text.Trim(), false, _modelType, _implementation) != null;
         }
     }
 }

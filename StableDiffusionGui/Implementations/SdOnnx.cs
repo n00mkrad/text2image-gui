@@ -32,21 +32,20 @@ namespace StableDiffusionGui.Implementations
                 string model = parameters.FromJson<string>("model");
                 bool lockSeed = parameters.FromJson<bool>("lockSeed");
 
-                var cachedModels = Paths.GetModels(Enums.StableDiffusion.ModelType.Normal);
-                Model modelFile = TtiUtils.CheckIfCurrentSdModelExists();
+                var cachedModels = Paths.GetModels(Enums.StableDiffusion.ModelType.Normal, Enums.StableDiffusion.Implementation.DiffusersOnnx);
+                Model modelDir = TtiUtils.CheckIfCurrentSdModelExists();
 
-                if (modelFile == null)
+                if (modelDir == null)
                     return;
 
                 Dictionary<string, string> initImages = initImgs != null && initImgs.Length > 0 ? await TtiUtils.CreateResizedInitImagesIfNeeded(initImgs.ToList(), res) : null;
 
                 long startSeed = seed;
-                prompts = prompts.Select(p => FormatUtils.GetCombinedPrompt(p, negPrompt)).ToArray(); // Apply negative prompt
 
                 List<Dictionary<string, string>> argLists = new List<Dictionary<string, string>>(); // List of all args for each command
                 Dictionary<string, string> args = new Dictionary<string, string>(); // List of args for current command
                 args["prompt"] = "";
-                args["default"] = Args.InvokeAi.GetDefaultArgsCommand();
+                args["default"] = "";
 
                 foreach (string prompt in prompts)
                 {
@@ -57,14 +56,16 @@ namespace StableDiffusionGui.Implementations
                     {
                         args.Remove("initImg");
                         args.Remove("initStrength");
-                        args["prompt"] = processedPrompts[i].Wrap();
-                        args["steps"] = $"-s {steps}";
-                        args["res"] = $"-W {res.Width} -H {res.Height}";
-                        args["seed"] = $"-S {seed}";
+                        args["prompt"] = processedPrompts[i];
+                        args["negprompt"] = negPrompt;
+                        args["steps"] = $"{steps}";
+                        args["w"] = $"{res.Width}";
+                        args["h"] = $"{res.Height}";
+                        args["seed"] = $"{seed}";
 
                         foreach (float scale in scales)
                         {
-                            args["scale"] = $"-C {scale.ToStringDot()}";
+                            args["scale"] = $"{scale.ToStringDot()}";
 
                             if (initImages == null) // No init image(s)
                             {
@@ -92,18 +93,51 @@ namespace StableDiffusionGui.Implementations
                         seed = startSeed;
                 }
 
-                List<string> cmds = argLists.Select(argList => string.Join(" ", argList.Where(argEntry => !string.IsNullOrWhiteSpace(argEntry.Value)).Select(argEntry => argEntry.Value))).ToList();
+                string jsonPath = Path.Combine(Paths.GetSessionDataPath(), "prompts-onnx.json");
+                File.WriteAllText(jsonPath, argLists.ToJson(Newtonsoft.Json.Formatting.Indented));
 
                 Logger.Log($"Running Stable Diffusion - {iterations} Iterations, {steps} Steps, Scales {(scales.Length < 4 ? string.Join(", ", scales.Select(x => x.ToStringDot())) : $"{scales.First()}->{scales.Last()}")}, {res.Width}x{res.Height}, Starting Seed: {startSeed}");
 
-                string argsStartup = Args.InvokeAi.GetArgsStartup(embedding);
-
-                string newStartupSettings = $"{argsStartup}{Config.GetInt("comboxCudaDevice")}"; // Check if startup settings match - If not, we need to restart the process
+                //string argsStartup = Args.InvokeAi.GetArgsStartup(embedding);
 
                 string initsStr = initImages != null ? $" and {initImages.Count} image{(initImages.Count != 1 ? "s" : "")} using {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
-                Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} with {iterations} iteration{(iterations != 1 ? "s" : "")} each and {scales.Length} scale{(scales.Length != 1 ? "s" : "")}{initsStr} each = {cmds.Count} images total.");
+                Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} with {iterations} iteration{(iterations != 1 ? "s" : "")} each and {scales.Length} scale{(scales.Length != 1 ? "s" : "")}{initsStr} each = {argLists.Count} images total.");
 
-                
+                Process py = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
+                TextToImage.CurrentTask.Processes.Add(py);
+
+                py.StartInfo.RedirectStandardInput = true;
+                py.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSd()} && call activate.bat {Constants.Dirs.SdEnv} && " +
+                    $"python \"{Constants.Dirs.RepoSd}/sd_onnx/sd_onnx.py\" -m {modelDir.FullName.Wrap(true)} -j {jsonPath.Wrap(true)} -o {outPath.Wrap(true)}";
+
+                Logger.Log("cmd.exe " + py.StartInfo.Arguments, true);
+
+                if (!OsUtils.ShowHiddenCmd())
+                {
+                    py.OutputDataReceived += (sender, line) => { TtiProcessOutputHandler.LogOutput(line.Data); };
+                    py.ErrorDataReceived += (sender, line) => { TtiProcessOutputHandler.LogOutput(line.Data, true); };
+                }
+
+                if (TtiProcess.CurrentProcess != null)
+                {
+                    TtiProcess.ProcessExistWasIntentional = true;
+                    OsUtils.KillProcessTree(TtiProcess.CurrentProcess.Id);
+                }
+
+                TtiProcessOutputHandler.Start();
+
+                Logger.Log($"Loading Stable Diffusion (ONNX) with model {Path.ChangeExtension(model, null).Trunc(80).Wrap()}...");
+
+                TtiProcess.CurrentProcess = py;
+                TtiProcess.ProcessExistWasIntentional = false;
+                py.Start();
+                OsUtils.AttachOrphanHitman(py);
+
+                if (!OsUtils.ShowHiddenCmd())
+                {
+                    py.BeginOutputReadLine();
+                    py.BeginErrorReadLine();
+                }
             }
             catch (Exception ex)
             {

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
 namespace StableDiffusionGui.Io
@@ -101,8 +102,24 @@ namespace StableDiffusionGui.Io
 
                     list = fileList.Select(f => new Model(f, new[] { Implementation.InvokeAi, Implementation.OptimizedSd } )).ToList();
                     list = list.Distinct().OrderBy(x => x.Name).ToList();
+                }
+                else if (implementation == Implementation.DiffusersOnnx)
+                {
+                    var dirList = new List<DirectoryInfo>();
 
-                    return list;
+                    foreach (string folderPath in mdlFolders)
+                        dirList.AddRange(Directory.GetDirectories(folderPath, "*", SearchOption.TopDirectoryOnly).Select(x => new DirectoryInfo(x)).ToList());
+
+                    foreach(DirectoryInfo dir in new List<DirectoryInfo>(dirList)) // Filter for valid model folders
+                    {
+                        List<string> subDirs = dir.GetDirectories().Select(d => d.Name).ToList();
+
+                        if (!(new[] { "unet", "text_encoder", "vae_decoder", "vae_encoder", "tokenizer" }.All(d => subDirs.Contains(d))))
+                            dirList.Remove(dir);
+                    }
+
+                    list = dirList.Select(f => new Model(f, new[] { Implementation.DiffusersOnnx })).ToList();
+                    list = list.Distinct().OrderBy(x => x.Name).ToList();
                 }
             }
             catch (Exception ex)
@@ -114,12 +131,12 @@ namespace StableDiffusionGui.Io
             return list;
         }
 
-        public static Model GetModel(string filename, bool anyExtension = false, ModelType type = ModelType.Normal)
+        public static Model GetModel(string filename, bool anyExtension = false, ModelType type = ModelType.Normal, Implementation imp = Implementation.InvokeAi)
         {
-            return GetModels(type).Where(x => x.Name == filename).FirstOrDefault();
+            return GetModels(type, imp).Where(x => x.Name == filename).FirstOrDefault();
         }
 
-        public static Model GetModel(List<Model> cachedModels, string filename, bool anyExtension = false, ModelType type = ModelType.Normal)
+        public static Model GetModel(List<Model> cachedModels, string filename, bool anyExtension = false, ModelType type = ModelType.Normal, Implementation imp = Implementation.InvokeAi)
         {
             return cachedModels.Where(x => x.Name == filename).FirstOrDefault();
         }

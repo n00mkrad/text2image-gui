@@ -40,5 +40,12 @@ namespace StableDiffusionGui.Data
 
             CompatibleImplementations = compatibleImplementations.ToArray();
         }
+
+        public Model(DirectoryInfo dir, IEnumerable<Enums.StableDiffusion.Implementation> compatibleImplementations)
+        {
+            _dir = dir;
+
+            CompatibleImplementations = compatibleImplementations.ToArray();
+        }
     }
 }
