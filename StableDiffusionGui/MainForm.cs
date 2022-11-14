@@ -171,7 +171,7 @@ namespace StableDiffusionGui
             panelSeamless.Visible = imp == Implementation.InvokeAi;
 
             bool adv = Config.GetBool("checkboxAdvancedMode");
-            upDownIterations.Maximum = !adv ? 1000 : 10000;
+            upDownIterations.Maximum = !adv ? 10000 : 100000;
             sliderSteps.ActualMaximum = !adv ? 120 : 500;
             sliderSteps.ValueStep = !adv ? 5 : 1;
             sliderScale.ActualMaximum = !adv ? 25 : 50;
