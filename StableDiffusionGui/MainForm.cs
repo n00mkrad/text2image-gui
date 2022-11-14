@@ -87,7 +87,7 @@ namespace StableDiffusionGui
             await Initialize();
         }
 
-        private async Task Initialize ()
+        private async Task Initialize()
         {
             MainUi.SetSettingsVertScrollbar();
             InitializeControls();
@@ -99,6 +99,7 @@ namespace StableDiffusionGui
             comboxResW.SelectedIndexChanged += (s, e) => { MainUi.SetHiresFixVisible(ComboxResW, ComboxResH, checkboxHiresFix); }; // Show/Hide HiRes Fix depending on chosen res
             comboxResH.SelectedIndexChanged += (s, e) => { MainUi.SetHiresFixVisible(ComboxResW, ComboxResH, checkboxHiresFix); }; // Show/Hide HiRes Fix depending on chosen res
 
+            MainUi.LoadAutocompleteData(promptAutocomplete, new[] { textboxPrompt, textboxPromptNeg });
             Task.Run(() => MainUi.SetGpusInWindowTitle());
             upDownSeed.Text = "";
             MainUi.DoStartupChecks();
@@ -851,6 +852,25 @@ namespace StableDiffusionGui
         private void MainForm_SizeChanged(object sender, EventArgs e)
         {
             MainUi.SetSettingsVertScrollbar();
+        }
+
+        private async void textboxPrompt_TextChanged(object sender, EventArgs e)
+        {
+            await Task.Delay(1);
+
+            if (textboxPrompt.Text.LastOrDefault() == '~' && promptAutocomplete == null)
+            {
+                promptAutocomplete = MainUi.ShowAutocompleteMenu((TextBox)FocusedControl);
+            }
+            else if (textboxPrompt.Text == null || textboxPrompt.Text.Length <= 0 || textboxPrompt.Text.LastOrDefault() == ' ')
+            {
+                if (promptAutocomplete != null)
+                {
+                    promptAutocomplete.Close();
+                    promptAutocomplete.Dispose();
+                    promptAutocomplete = null;
+                }
+            }
         }
     }
 }

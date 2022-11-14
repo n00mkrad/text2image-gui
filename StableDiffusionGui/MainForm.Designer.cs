@@ -152,6 +152,7 @@ namespace StableDiffusionGui
             this.labelCurrentImage = new System.Windows.Forms.Label();
             this.panelPromptNeg = new System.Windows.Forms.Panel();
             this.panelPrompt = new System.Windows.Forms.Panel();
+            this.promptAutocomplete = new AutocompleteMenuNS.AutocompleteMenu();
             this.menuStripOutputImg.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.upDownSeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
@@ -212,6 +213,7 @@ namespace StableDiffusionGui
             // logBox
             // 
             this.logBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.promptAutocomplete.SetAutocompleteMenu(this.logBox, null);
             this.logBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
             this.logBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.logBox.ForeColor = System.Drawing.Color.Silver;
@@ -803,11 +805,12 @@ namespace StableDiffusionGui
             // 
             this.textboxSliderScale.AllowDrop = true;
             this.textboxSliderScale.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.promptAutocomplete.SetAutocompleteMenu(this.textboxSliderScale, null);
             this.textboxSliderScale.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.textboxSliderScale.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScale.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScale.Location = new System.Drawing.Point(297, 7);
+            this.textboxSliderScale.Location = new System.Drawing.Point(297, 9);
             this.textboxSliderScale.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScale.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScale.Name = "textboxSliderScale";
@@ -819,6 +822,7 @@ namespace StableDiffusionGui
             // 
             this.textboxExtraScales.AllowDrop = true;
             this.textboxExtraScales.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.promptAutocomplete.SetAutocompleteMenu(this.textboxExtraScales, null);
             this.textboxExtraScales.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textboxExtraScales.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textboxExtraScales.ForeColor = System.Drawing.Color.White;
@@ -892,6 +896,7 @@ namespace StableDiffusionGui
             // 
             this.textboxExtraInitStrengths.AllowDrop = true;
             this.textboxExtraInitStrengths.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.promptAutocomplete.SetAutocompleteMenu(this.textboxExtraInitStrengths, null);
             this.textboxExtraInitStrengths.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textboxExtraInitStrengths.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textboxExtraInitStrengths.ForeColor = System.Drawing.Color.White;
@@ -950,11 +955,12 @@ namespace StableDiffusionGui
             // 
             this.textboxSliderInitStrength.AllowDrop = true;
             this.textboxSliderInitStrength.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.promptAutocomplete.SetAutocompleteMenu(this.textboxSliderInitStrength, null);
             this.textboxSliderInitStrength.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.textboxSliderInitStrength.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderInitStrength.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderInitStrength.Location = new System.Drawing.Point(297, 7);
+            this.textboxSliderInitStrength.Location = new System.Drawing.Point(297, 9);
             this.textboxSliderInitStrength.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderInitStrength.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderInitStrength.Name = "textboxSliderInitStrength";
@@ -1030,6 +1036,7 @@ namespace StableDiffusionGui
             this.textboxPromptNeg.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.promptAutocomplete.SetAutocompleteMenu(this.textboxPromptNeg, null);
             this.textboxPromptNeg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textboxPromptNeg.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.textboxPromptNeg.Location = new System.Drawing.Point(3, 0);
@@ -1050,6 +1057,7 @@ namespace StableDiffusionGui
             this.textboxPrompt.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.promptAutocomplete.SetAutocompleteMenu(this.textboxPrompt, null);
             this.textboxPrompt.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textboxPrompt.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.textboxPrompt.Location = new System.Drawing.Point(3, 0);
@@ -1063,6 +1071,7 @@ namespace StableDiffusionGui
             this.textboxPrompt.Size = new System.Drawing.Size(619, 62);
             this.textboxPrompt.TabIndex = 0;
             this.toolTip.SetToolTip(this.textboxPrompt, "Text prompt. The AI will try to generate an image matching this description.");
+            this.textboxPrompt.TextChanged += new System.EventHandler(this.textboxPrompt_TextChanged);
             // 
             // btnExpandPromptField
             // 
@@ -1349,6 +1358,7 @@ namespace StableDiffusionGui
             this.textboxThresh.AllowDrop = true;
             this.textboxThresh.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.promptAutocomplete.SetAutocompleteMenu(this.textboxThresh, null);
             this.textboxThresh.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textboxThresh.ForeColor = System.Drawing.Color.White;
             this.textboxThresh.Location = new System.Drawing.Point(470, 7);
@@ -1399,6 +1409,7 @@ namespace StableDiffusionGui
             this.textboxPerlin.AllowDrop = true;
             this.textboxPerlin.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.promptAutocomplete.SetAutocompleteMenu(this.textboxPerlin, null);
             this.textboxPerlin.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textboxPerlin.ForeColor = System.Drawing.Color.White;
             this.textboxPerlin.Location = new System.Drawing.Point(299, 7);
@@ -1436,6 +1447,7 @@ namespace StableDiffusionGui
             this.textboxCliTest.AllowDrop = true;
             this.textboxCliTest.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.promptAutocomplete.SetAutocompleteMenu(this.textboxCliTest, null);
             this.textboxCliTest.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textboxCliTest.ForeColor = System.Drawing.Color.White;
             this.textboxCliTest.Location = new System.Drawing.Point(233, 7);
@@ -1658,11 +1670,12 @@ namespace StableDiffusionGui
             // 
             this.textboxSliderSteps.AllowDrop = true;
             this.textboxSliderSteps.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.promptAutocomplete.SetAutocompleteMenu(this.textboxSliderSteps, null);
             this.textboxSliderSteps.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.textboxSliderSteps.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderSteps.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderSteps.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderSteps.Location = new System.Drawing.Point(377, 7);
+            this.textboxSliderSteps.Location = new System.Drawing.Point(377, 9);
             this.textboxSliderSteps.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderSteps.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderSteps.Name = "textboxSliderSteps";
@@ -1868,6 +1881,20 @@ namespace StableDiffusionGui
             this.panelPrompt.Padding = new System.Windows.Forms.Padding(3);
             this.panelPrompt.Size = new System.Drawing.Size(645, 65);
             this.panelPrompt.TabIndex = 15;
+            // 
+            // promptAutocomplete
+            // 
+            this.promptAutocomplete.AllowsTabKey = true;
+            this.promptAutocomplete.AppearInterval = 250;
+            this.promptAutocomplete.Colors = ((AutocompleteMenuNS.Colors)(resources.GetObject("promptAutocomplete.Colors")));
+            this.promptAutocomplete.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.promptAutocomplete.ImageList = null;
+            this.promptAutocomplete.Items = new string[0];
+            this.promptAutocomplete.LeftPadding = 0;
+            this.promptAutocomplete.MaximumSize = new System.Drawing.Size(400, 150);
+            this.promptAutocomplete.MinFragmentLength = 100;
+            this.promptAutocomplete.SearchPattern = "[\\w\\.-]";
+            this.promptAutocomplete.TargetControlWrapper = null;
             // 
             // MainForm
             // 
@@ -2084,6 +2111,7 @@ namespace StableDiffusionGui
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.TextBox textboxPerlin;
+        public AutocompleteMenuNS.AutocompleteMenu promptAutocomplete;
     }
 }
 

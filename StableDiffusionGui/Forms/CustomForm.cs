@@ -7,6 +7,8 @@ namespace StableDiffusionGui.Forms
 {
     public class CustomForm : Form
     {
+        public Control FocusedControl { get { return this.GetControls().Where(c => c.Focused).FirstOrDefault(); } }
+
         public bool AllowEscClose { get; set; } = true;
 
         private List<Control> _tabOrderedControls;
@@ -25,7 +27,7 @@ namespace StableDiffusionGui.Forms
             if (_tabOrderedControls == null || _tabOrderedControls.Count <= 0)
                 return;
 
-            var focused = this.GetControls().Where(c => c.Focused).FirstOrDefault();
+            var focused = FocusedControl;
 
             if (_tabOrderedControls.Contains(focused))
             {
@@ -54,7 +56,7 @@ namespace StableDiffusionGui.Forms
             if (e.KeyCode == Keys.Escape && AllowEscClose)
                 Close();
 
-            if (e.KeyCode == Keys.Tab)
+            if (e.KeyCode == Keys.Tab && !(FocusedControl is TextBox))
                 TabOrderNext();
         }
     }

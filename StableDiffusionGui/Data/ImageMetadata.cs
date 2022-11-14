@@ -126,7 +126,7 @@ namespace StableDiffusionGui.Data
                     else if (s.StartsWith("-S"))
                         Seed = s.Remove(0, 2).GetLong();
 
-                    else if (s.StartsWith("-f") && !s.Contains("fnformat"))
+                    else if (s.StartsWith("-f") && !s.StartsWith("-fnformat") && !s.StartsWith("-ft"))
                         InitStrength = 1f - s.Remove(0, 2).GetFloat();
 
                     else if (s.StartsWith("-I"))
