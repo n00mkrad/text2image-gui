@@ -65,7 +65,7 @@ namespace StableDiffusionGui.Forms
                     valid = false;
                 }
 
-                Data.Gpu gpu = cudaDeviceOpt == (int)Enums.Cuda.Device.Automatic ? gpus[0] : gpus[cudaDeviceOpt - 2];
+                Gpu gpu = gpus.Count > 0 ? (cudaDeviceOpt == (int)Enums.Cuda.Device.Automatic) ? gpus[0] : gpus[cudaDeviceOpt - 2] : null;
 
                 if (valid && gpu.VramGb < 23f)
                 {
