@@ -112,7 +112,7 @@ namespace StableDiffusionGui.Implementations
 
                 py.StartInfo.RedirectStandardInput = true;
                 py.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSd()} && call activate.bat {Constants.Dirs.SdEnv} && " +
-                    $"python \"{Constants.Dirs.RepoSd}/sd_onnx/sd_onnx.py\" -m {modelDir.FullName.Wrap(true)} -j {jsonPath.Wrap(true)} -o {outPath.Wrap(true)} {i2iArg}";
+                    $"python \"{Constants.Dirs.SdRepo}/sd_onnx/sd_onnx.py\" -m {modelDir.FullName.Wrap(true)} -j {jsonPath.Wrap(true)} -o {outPath.Wrap(true)} {i2iArg}";
 
                 Logger.Log("cmd.exe " + py.StartInfo.Arguments, true);
 

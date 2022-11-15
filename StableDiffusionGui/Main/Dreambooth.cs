@@ -32,7 +32,7 @@ namespace StableDiffusionGui.Main
                 Logger.ClearLogBox();
 
                 TtiProcess.ProcessExistWasIntentional = true;
-                ProcessManager.FindAndKillOrphans($"*{Constants.Dirs.RepoSd}*.py*{Paths.SessionTimestamp}*");
+                ProcessManager.FindAndKillOrphans($"*{Constants.Dirs.SdRepo}*.py*{Paths.SessionTimestamp}*");
 
                 bool showCmd = _useVisibleCmdWindow || OsUtils.ShowHiddenCmd();
 
@@ -51,7 +51,7 @@ namespace StableDiffusionGui.Main
                 string outPath = Path.Combine(Paths.GetModelsPath(), $"dreambooth-{className}-{CurrentTargetSteps}step-{timestamp}{Constants.FileExts.SdModel}");
 
                 Process db = OsUtils.NewProcess(!showCmd);
-                db.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSd()} && call activate.bat {Constants.Dirs.Conda}/envs/{Constants.Dirs.SdEnv} && python {Constants.Dirs.RepoSd}/db/main.py -t " +
+                db.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSd()} && call activate.bat {Constants.Dirs.Conda}/envs/{Constants.Dirs.SdEnv} && python {Constants.Dirs.SdRepo}/db/main.py -t " +
                     $"--base {configPath.Wrap(true)} " +
                     $"--actual_resume {baseModel.FullName.Wrap(true)} " +
                     $"--name {name.Wrap()} " +
@@ -60,7 +60,7 @@ namespace StableDiffusionGui.Main
                     $"--data_root {trainImgDir.FullName.Wrap(true)} " +
                     $"--reg_data_root {trainImgDir.FullName.Wrap(true)} " +
                     $"--class_word {className.Wrap()} " +
-                    $"&& python {Constants.Dirs.RepoSd}/scripts/prune_model.py -i {Path.Combine(logDir, "checkpoints", "last.ckpt").Wrap(true)} -o {outPath.Wrap(true)}";
+                    $"&& python {Constants.Dirs.SdRepo}/scripts/prune_model.py -i {Path.Combine(logDir, "checkpoints", "last.ckpt").Wrap(true)} -o {outPath.Wrap(true)}";
 
                 if (!showCmd)
                 {
@@ -101,7 +101,7 @@ namespace StableDiffusionGui.Main
 
         private static async Task<string> WriteConfig (string logDir, DirectoryInfo trainDir, Enums.Dreambooth.TrainPreset preset, float userlrMult, float userStepsMult)
         {
-            string configPath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.RepoSd, Constants.Dirs.Dreambooth, "configs", "stable-diffusion", "v1-finetune_unfrozen.yaml");
+            string configPath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdRepo, Constants.Dirs.Dreambooth, "configs", "stable-diffusion", "v1-finetune_unfrozen.yaml");
             var configLines = File.ReadAllLines(configPath).ToArray();
 
             var values = GetStepsAndLoggerIntervalAndLrMultiplier(preset);

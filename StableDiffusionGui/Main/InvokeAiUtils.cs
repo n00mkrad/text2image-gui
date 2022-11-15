@@ -29,7 +29,7 @@ namespace StableDiffusionGui.Main
                 $"    height: 512\n" +
                 $"    default: true";
 
-            File.WriteAllText(Path.Combine(Paths.GetDataPath(), Constants.Dirs.RepoSd, "configs", "models.yaml"), text);
+            File.WriteAllText(Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdRepo, "configs", "models.yaml"), text);
         }
 
         public static void WriteModelsYamlAll(Model selectedMdl, Model selectedVae, List<Model> cachedModels = null, List<Model> cachedModelsVae = null)
@@ -61,7 +61,7 @@ namespace StableDiffusionGui.Main
                 }
             }
 
-            File.WriteAllText(Path.Combine(Paths.GetDataPath(), Constants.Dirs.RepoSd, "configs", "models.yaml"), text);
+            File.WriteAllText(Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdRepo, "configs", "models.yaml"), text);
         }
 
         private static bool IsModelDefault(Model mdl, Model vae, Model selectedMdl, Model selectedVae)

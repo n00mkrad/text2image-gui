@@ -302,7 +302,7 @@ namespace StableDiffusionGui.Os
             p.WaitForExit();
         }
 
-        public static string GetTemporaryPathVariable(IEnumerable<string> additionalPaths)
+        public static string GetPathVar(IEnumerable<string> additionalPaths)
         {
             var paths = Environment.GetEnvironmentVariable("PATH").Split(';');
             List<string> newPaths = new List<string>();

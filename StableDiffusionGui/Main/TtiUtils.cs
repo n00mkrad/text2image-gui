@@ -175,20 +175,28 @@ namespace StableDiffusionGui.Main
             }
         }
 
-        public static string GetEnvVarsSd(bool allCudaDevices = false, string baseDir = ".")
+        public static string GetEnvVarsSd(bool allCudaDevices = false, string baseDir = ".", bool useConda = false)
         {
             List<string> cmds = new List<string>();
 
-            string path = OsUtils.GetTemporaryPathVariable(new string[] {
-               Path.Combine(baseDir, Constants.Dirs.Conda),
-               Path.Combine(baseDir, Constants.Dirs.Conda, "Scripts"),
-               Path.Combine(baseDir, Constants.Dirs.Conda, "condabin"),
-               Path.Combine(baseDir, Constants.Dirs.Conda, "Scripts"),
-               Path.Combine(baseDir, Constants.Dirs.Conda, "Library", "bin"),
-               Path.Combine(baseDir, Constants.Dirs.Conda, "Scripts"),
-            });
+            if (useConda)
+            {
+                string p = OsUtils.GetPathVar(new string[] {
+                    Path.Combine(baseDir, Constants.Dirs.Conda),
+                    Path.Combine(baseDir, Constants.Dirs.Conda, "Scripts"),
+                    Path.Combine(baseDir, Constants.Dirs.Conda, "condabin"),
+                    Path.Combine(baseDir, Constants.Dirs.Conda, "Scripts"),
+                    Path.Combine(baseDir, Constants.Dirs.Conda, "Library", "bin"),
+                    Path.Combine(baseDir, Constants.Dirs.Conda, "Scripts"),
+                });
 
-            cmds.Add($"SET PATH={path}");
+                cmds.Add($"SET PATH={p}");
+            }
+            else
+            {
+                string p = OsUtils.GetPathVar(new string[] { $@".\{Constants.Dirs.SdVenv}\Scripts", $@".\{Constants.Dirs.Python}\Scripts", $@".\{Constants.Dirs.Python}", $@".\{Constants.Dirs.Git}\cmd" });
+                cmds.Add($"SET PATH={p}");
+            }
 
             int cudaDeviceOpt = Config.GetInt("comboxCudaDevice");
 

@@ -73,7 +73,7 @@ namespace StableDiffusionGui.Forms
 
                 Process p = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
                 p.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSd()} && call activate.bat {Constants.Dirs.Conda}/envs/{Constants.Dirs.SdEnv} && " +
-                    $"python {Constants.Dirs.RepoSd}/scripts/prune_model.py -i {model.FullName.Wrap()} -o {outPath.Wrap(true)} {(fp16 ? "-half" : "")}";
+                    $"python {Constants.Dirs.SdRepo}/scripts/prune_model.py -i {model.FullName.Wrap()} -o {outPath.Wrap(true)} {(fp16 ? "-half" : "")}";
 
                 if (!OsUtils.ShowHiddenCmd())
                 {

@@ -137,8 +137,8 @@ namespace StableDiffusionGui.Main
                     TextToImage.CurrentTask.Processes.Add(py);
 
                     py.StartInfo.RedirectStandardInput = true;
-                    py.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSd()} && call activate.bat {Constants.Dirs.SdEnv} && " +
-                        $"python \"{Constants.Dirs.RepoSd}/scripts/invoke.py\" -o {outPath.Wrap(true)} {argsStartup}";
+                    py.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSd()} && " +
+                        $"python \"{Constants.Dirs.SdRepo}/scripts/invoke.py\" -o {outPath.Wrap(true)} {argsStartup}";
 
                     Logger.Log("cmd.exe " + py.StartInfo.Arguments, true);
 
@@ -286,7 +286,7 @@ namespace StableDiffusionGui.Main
                 TextToImage.CurrentTask.Processes.Add(py);
 
                 py.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSd()} && call activate.bat {Constants.Dirs.SdEnv} && " +
-                    $"python \"{Constants.Dirs.RepoSd}/optimizedSD/optimized_txt2img_loop.py\" --model {modelFile.FullName.Wrap(true)} --outdir {outPath.Wrap(true)} --from_file_loop={promptFilePath.Wrap(true)} {argsStartup} ";
+                    $"python \"{Constants.Dirs.SdRepo}/optimizedSD/optimized_txt2img_loop.py\" --model {modelFile.FullName.Wrap(true)} --outdir {outPath.Wrap(true)} --from_file_loop={promptFilePath.Wrap(true)} {argsStartup} ";
                 Logger.Log("cmd.exe " + py.StartInfo.Arguments, true);
 
                 if (!OsUtils.ShowHiddenCmd())
@@ -343,8 +343,7 @@ namespace StableDiffusionGui.Main
                 $"title Stable Diffusion CLI (InvokeAI)\n" +
                 $"cd /D {Paths.GetDataPath().Wrap()}\n" +
                 $"{TtiUtils.GetEnvVarsSd()}\n" +
-                $"call activate.bat {Constants.Dirs.Conda}/envs/{Constants.Dirs.SdEnv}\n" +
-                $"python {Constants.Dirs.RepoSd}/scripts/invoke.py -o {outPath.Wrap(true)} {Args.InvokeAi.GetArgsStartup()}";
+                $"python {Constants.Dirs.SdRepo}/scripts/invoke.py -o {outPath.Wrap(true)} {Args.InvokeAi.GetArgsStartup()}";
 
             File.WriteAllText(batPath, batText);
             ProcessManager.FindAndKillOrphans($"*invoke.py*{outPath}*");

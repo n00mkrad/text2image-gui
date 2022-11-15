@@ -51,7 +51,7 @@ namespace StableDiffusionGui.Installation
                     await InstallUpscalers();
                 }
 
-                RemoveGitFiles(GetDataSubPath(Constants.Dirs.RepoSd));
+                RemoveGitFiles(GetDataSubPath(Constants.Dirs.SdRepo));
 
                 await Task.Delay(500);
 
@@ -73,24 +73,71 @@ namespace StableDiffusionGui.Installation
             Program.MainForm.SetWorking(Program.BusyState.Standby);
         }
 
+        public static async Task SetupVenv()
+        {
+            bool clean = IoUtils.TryDeleteIfExists(GetDataSubPath(Constants.Dirs.SdVenv));
+
+            if (!clean)
+            {
+                Logger.Log("Failed to install python environment: Can't delete existing folder.");
+                return;
+            }
+
+            string repoPath = GetDataSubPath(Constants.Dirs.SdRepo);
+            string batPath = Path.Combine(repoPath, "install.bat");
+
+            File.WriteAllText(batPath,
+                $"@echo off\n" +
+                $"cd /D {Paths.GetDataPath().Wrap()}\n" +
+                $"SET PATH={OsUtils.GetPathVar(new string[] { $@".\{Constants.Dirs.SdVenv}\Scripts", $@".\{Constants.Dirs.Python}\Scripts", $@".\{Constants.Dirs.Python}", $@".\{Constants.Dirs.Git}\cmd" })}\n" +
+                $"virtualenv {Constants.Dirs.SdVenv}\n" +
+                $"{Constants.Dirs.SdRepo}\\install-venv-deps.bat\n" +
+                //$"{Constants.Dirs.SdRepo}\\install-venv-deps-onnx.bat\n" +
+                $""
+            );
+
+            Logger.Log("Running python environment installation script...");
+
+            Process p = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd(), batPath);
+
+            if (!OsUtils.ShowHiddenCmd())
+            {
+                p.OutputDataReceived += (sender, line) => { HandleInstallScriptOutput(line.Data, false, false); };
+                p.ErrorDataReceived += (sender, line) => { HandleInstallScriptOutput(line.Data, false, true); };
+            }
+
+            p.Start();
+
+            if (!OsUtils.ShowHiddenCmd())
+            {
+                p.BeginOutputReadLine();
+                p.BeginErrorReadLine();
+            }
+
+            while (!p.HasExited) await Task.Delay(1);
+
+            Logger.Log("Cleaning up...");
+            IoUtils.TryDeleteIfExists(Path.Combine(Environment.ExpandEnvironmentVariables("%LOCALAPPDATA%"), "pip", "cache"));
+            RemoveGitFiles(GetDataSubPath(Constants.Dirs.SdRepo));
+            Logger.Log("Done.");
+        }
+
         public static async Task SetupPythonEnv()
         {
-            string repoPath = GetDataSubPath(Constants.Dirs.RepoSd);
+            string repoPath = GetDataSubPath(Constants.Dirs.SdRepo);
             string batPath = Path.Combine(repoPath, "install.bat");
 
             List<string> l = new List<string>();
 
             l.Add($"@echo off");
             l.Add($"");
-            l.Add($"cd {repoPath.Wrap()}");
-            l.Add($"");
-            l.Add($"echo Working dir: %cd%");
+            l.Add($"cd /D {repoPath.Wrap()}");
             l.Add($"");
             l.Add($"SET CONDA_ROOT_PATH=..\\{Constants.Dirs.Conda}");
             // l.Add($"SET PYTHONHOME=..\\{Constants.Dirs.Conda}");
             l.Add($"SET CONDA_SCRIPTS_PATH=..\\{Constants.Dirs.Conda}\\Scripts");
             l.Add($"");
-            l.Add($"SET PATH={OsUtils.GetTemporaryPathVariable(new string[] { $"..\\{Constants.Dirs.Conda}", $"..\\{Constants.Dirs.Conda}\\Scripts", $"..\\{Constants.Dirs.Conda}\\condabin", $"..\\{Constants.Dirs.Conda}\\Library\\bin" })}");
+            l.Add($"SET PATH={OsUtils.GetPathVar(new string[] { $"..\\{Constants.Dirs.Conda}", $"..\\{Constants.Dirs.Conda}\\Scripts", $"..\\{Constants.Dirs.Conda}\\condabin", $"..\\{Constants.Dirs.Conda}\\Library\\bin" })}");
             l.Add($"");
             l.Add($"_conda env create -f environment.yml -p \"%CONDA_ROOT_PATH%\\envs\\{Constants.Dirs.SdEnv}\"");
             l.Add($"_conda env update --file environment.yml --prune -p \"%CONDA_ROOT_PATH%\\envs\\{Constants.Dirs.SdEnv}\"");
@@ -106,8 +153,8 @@ namespace StableDiffusionGui.Installation
 
             if (!OsUtils.ShowHiddenCmd())
             {
-                p.OutputDataReceived += (sender, line) => { HandleInstallScriptOutput(line.Data, false); };
-                p.ErrorDataReceived += (sender, line) => { HandleInstallScriptOutput(line.Data, true); };
+                p.OutputDataReceived += (sender, line) => { HandleInstallScriptOutput(line.Data, true, false); };
+                p.ErrorDataReceived += (sender, line) => { HandleInstallScriptOutput(line.Data, true, true); };
             }
 
             p.Start();
@@ -120,11 +167,11 @@ namespace StableDiffusionGui.Installation
 
             while (!p.HasExited) await Task.Delay(1);
 
-            RemoveGitFiles(GetDataSubPath(Constants.Dirs.RepoSd));
+            RemoveGitFiles(GetDataSubPath(Constants.Dirs.SdRepo));
             Logger.Log("Done.");
         }
 
-        private static void HandleInstallScriptOutput(string log, bool stderr)
+        private static void HandleInstallScriptOutput(string log, bool conda, bool stderr)
         {
             if (string.IsNullOrWhiteSpace(log))
                 return;
@@ -133,7 +180,12 @@ namespace StableDiffusionGui.Installation
 
             Logger.Log($"{log.Remove("PRINTME ")}", !log.Contains("PRINTME "), false, Constants.Lognames.Installer);
 
-            if (log.EndsWith("%") && log.Contains(" | "))
+            if (!conda && log.StartsWith("Collecting "))
+            {
+                Logger.Log($"Installing {log.Split("Collecting ").First().Split("=").First().Trim()}...", false, Logger.LastUiLine.EndsWith("..."));
+            }
+
+            if (conda && log.EndsWith("%") && log.Contains(" | "))
             {
                 var split = log.Split(" | ");
                 Logger.Log($"Installing {split.First().Trim()} ({split.Last().Trim()})", false, Logger.LastUiLine.EndsWith("%)"));
@@ -175,7 +227,7 @@ namespace StableDiffusionGui.Installation
         {
             TtiProcess.ProcessExistWasIntentional = true;
             ProcessManager.FindAndKillOrphans($"*invoke.py*{Paths.SessionTimestamp}*");
-            await CloneSdRepo($"https://github.com/{GitFile}", GetDataSubPath(Constants.Dirs.RepoSd));
+            await CloneSdRepo($"https://github.com/{GitFile}", GetDataSubPath(Constants.Dirs.SdRepo));
         }
 
         public static async Task CloneSdRepo(string url, string dir, string branch = "main", string commit = "")
@@ -206,7 +258,8 @@ namespace StableDiffusionGui.Installation
 
                 Logger.Log($"Done cloning repository.");
 
-                await SetupPythonEnv();
+                await SetupVenv();
+                // await SetupPythonEnv();
             }
             catch (Exception ex)
             {
@@ -226,7 +279,7 @@ namespace StableDiffusionGui.Installation
 
             foreach (var dir in dirs)
             {
-                if(dir.Name == ".git")
+                if (dir.Name == ".git")
                     IoUtils.TryDeleteIfExists(dir.FullName);
             }
 
@@ -305,8 +358,8 @@ namespace StableDiffusionGui.Installation
 
         public static async Task RemoveRepo()
         {
-            IoUtils.SetAttributes(GetDataSubPath(Constants.Dirs.RepoSd), FileAttributes.Normal);
-            await IoUtils.TryDeleteIfExistsAsync(GetDataSubPath(Constants.Dirs.RepoSd));
+            IoUtils.SetAttributes(GetDataSubPath(Constants.Dirs.SdRepo), FileAttributes.Normal);
+            await IoUtils.TryDeleteIfExistsAsync(GetDataSubPath(Constants.Dirs.SdRepo));
         }
 
         public static async Task RemoveEnv()
@@ -318,7 +371,71 @@ namespace StableDiffusionGui.Installation
 
         #region Utils
 
-        public static void FixHardcodedPaths()
+        public static void FixHardcodedPathsVenv()
+        {
+            try
+            {
+                Logger.Log($"Fixing pyenv paths...", true);
+
+                string pyvenvCfgPath = Path.Combine(GetDataSubPath(Constants.Dirs.SdVenv), "pyvenv.cfg");
+                var pyvenvCfgLines = File.ReadAllLines(pyvenvCfgPath);
+
+                for (int i = 0; i < pyvenvCfgLines.Length; i++)
+                {
+                    if (pyvenvCfgLines[i].StartsWith("home = ")) pyvenvCfgLines[i] = $"home = {GetDataSubPath(Constants.Dirs.Python)}"; // Python installation
+                    if (pyvenvCfgLines[i].StartsWith("base-prefix = ")) pyvenvCfgLines[i] = $"base-prefix = {GetDataSubPath(Constants.Dirs.Python)}"; // Python installation
+                    if (pyvenvCfgLines[i].StartsWith("base-exec-prefix = ")) pyvenvCfgLines[i] = $"base-exec-prefix = {GetDataSubPath(Constants.Dirs.Python)}"; // Python installation
+                    if (pyvenvCfgLines[i].StartsWith("base-executable = ")) pyvenvCfgLines[i] = $"base-executable = {Path.Combine(GetDataSubPath(Constants.Dirs.Python), "python.exe")}"; // Python executable
+                }
+
+                Logger.Log($"Fixed pyvenv.cfg", true);
+
+                string sitePkgsDir = Path.Combine(GetDataSubPath(Constants.Dirs.SdVenv), "Lib", "site-packages");
+                var eggLinks = IoUtils.GetFileInfosSorted(sitePkgsDir, false, "*.egg-link");
+
+                List<string> easyInstallPaths = new List<string>();
+
+                foreach (FileInfo eggLink in eggLinks)
+                {
+                    string nameNoExt = Path.GetFileNameWithoutExtension(eggLink.FullName);
+
+                    if (nameNoExt == "invoke-ai")
+                    {
+                        string path = Path.Combine(GetDataSubPath(Constants.Dirs.SdRepo));
+                        File.WriteAllText(eggLink.FullName, path + "\n.");
+                    }
+                    else
+                    {
+                        string path = Path.Combine(GetDataSubPath(Constants.Dirs.SdVenv), "src", nameNoExt);
+                        File.WriteAllText(eggLink.FullName, path + "\n.");
+                    }
+                }
+
+                Logger.Log($"Fixed egg-link files", true);
+
+                var easyInstallPth = Path.Combine(sitePkgsDir, "easy-install.pth");
+
+                if (File.Exists(easyInstallPth))
+                {
+                    var easyInstallLines = File.ReadAllLines(easyInstallPth);
+
+                    string basePath = easyInstallLines.Where(l => l.Trim().EndsWith($@"\{Constants.Dirs.SdRepo}")).FirstOrDefault().Split($@"\{Constants.Dirs.SdRepo}").First();
+                    string newBasePath = Paths.GetDataPath().Lower().Replace("/", @"\");
+
+                    List<string> newLines = easyInstallLines.Select(l => l.Replace(basePath, newBasePath).Replace(@"\\", @"\")).ToList();
+
+                    File.WriteAllLines(easyInstallPth, newLines);
+                    Logger.Log($"Fixed easy-install.pth.", true);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Log($"Error fixing paths: {ex.Message}");
+                Logger.Log($"{ex.StackTrace}", true);
+            }
+        }
+
+        public static void FixHardcodedPathsConda()
         {
             try
             {
@@ -335,12 +452,12 @@ namespace StableDiffusionGui.Installation
 
                     if (nameNoExt == "latent-diffusion")
                     {
-                        string path = Path.Combine(GetDataSubPath(Constants.Dirs.RepoSd));
+                        string path = Path.Combine(GetDataSubPath(Constants.Dirs.SdRepo));
                         File.WriteAllText(eggLink.FullName, path + "\n.");
                     }
                     else
                     {
-                        string path = Path.Combine(GetDataSubPath(Constants.Dirs.RepoSd), "src", nameNoExt);
+                        string path = Path.Combine(GetDataSubPath(Constants.Dirs.SdRepo), "src", nameNoExt);
                         File.WriteAllText(eggLink.FullName, path + "\n.");
                     }
 
@@ -354,7 +471,7 @@ namespace StableDiffusionGui.Installation
                     var easyInstallLines = File.ReadAllLines(easyInstallPth);
                     List<string> newLines = new List<string>();
 
-                    string splitText = $@"data\{Constants.Dirs.RepoSd}";
+                    string splitText = $@"data\{Constants.Dirs.SdRepo}";
                     string newBasePath = Paths.GetExeDir().Lower().Replace("/", @"\");
 
                     Logger.Log($"easy-install.pth new lines:", true);
@@ -370,7 +487,7 @@ namespace StableDiffusionGui.Installation
                     Logger.Log($"Fixed easy-install.pth.", true);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logger.Log($"Error validating installation: {ex.Message}");
                 Logger.Log($"{ex.StackTrace}", true);

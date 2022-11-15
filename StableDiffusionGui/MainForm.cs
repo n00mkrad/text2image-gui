@@ -93,7 +93,7 @@ namespace StableDiffusionGui
             InitializeControls();
             LoadUiElements();
             PromptHistory.Load();
-            Setup.FixHardcodedPaths();
+            Setup.FixHardcodedPathsVenv();
 
             pictBoxImgViewer.MouseWheel += (s, e) => { ImagePreview.Move(e.Delta > 0); }; // Scroll on MouseWheel
             comboxResW.SelectedIndexChanged += (s, e) => { MainUi.SetHiresFixVisible(ComboxResW, ComboxResH, checkboxHiresFix); }; // Show/Hide HiRes Fix depending on chosen res
