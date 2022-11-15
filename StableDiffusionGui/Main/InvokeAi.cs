@@ -61,7 +61,10 @@ namespace StableDiffusionGui.Main
         public static async Task SwitchModel (string modelNameInYaml)
         {
             NmkdStopwatch timeoutSw = new NmkdStopwatch();
+            await TtiProcess.WriteStdIn($"!reset");
             await TtiProcess.WriteStdIn($"!switch {modelNameInYaml}");
+
+            Logger.Log("SwitchModel waiting...", true);
 
             while (true)
             {
