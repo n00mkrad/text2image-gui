@@ -149,7 +149,7 @@ namespace StableDiffusionGui.Main
                 if (CurrentTaskSettings.Implementation == Enums.StableDiffusion.Implementation.OptimizedSd)
                 {
                     IoUtils.TryDeleteIfExists(Path.Combine(Paths.GetSessionDataPath(), "prompts.txt"));
-                    TtiUtils.SoftCancelDreamPy();
+                    // TtiUtils.SoftCancelDreamPy();
                 }
 
                 if (CurrentTaskSettings.Implementation == Enums.StableDiffusion.Implementation.InvokeAi)

@@ -4,6 +4,7 @@ using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -133,14 +134,16 @@ namespace StableDiffusionGui.Main
                 {
                     _lastInvokeStartupSettings = newStartupSettings;
 
-                    Process py = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
-                    TextToImage.CurrentTask.Processes.Add(py);
-
+                    Process py = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd(), Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdVenv, "Scripts", "python.exe"));
                     py.StartInfo.RedirectStandardInput = true;
-                    py.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSd()} && " +
-                        $"python \"{Constants.Dirs.SdRepo}/scripts/invoke.py\" -o {outPath.Wrap(true)} {argsStartup}";
+                    py.StartInfo.WorkingDirectory = Paths.GetDataPath();
+                    py.StartInfo.Arguments = $"\"{Constants.Dirs.SdRepo}/scripts/invoke.py\" -o {outPath.Wrap(true)} {argsStartup}";
 
-                    Logger.Log("cmd.exe " + py.StartInfo.Arguments, true);
+                    foreach (var pair in TtiUtils.GetEnvVarsSd(false, Paths.GetDataPath()))
+                        py.StartInfo.EnvironmentVariables[pair.Key] = pair.Value;
+
+                    TextToImage.CurrentTask.Processes.Add(py);
+                    Logger.Log($"{py.StartInfo.FileName} {py.StartInfo.Arguments}", true);
 
                     if (!OsUtils.ShowHiddenCmd())
                     {
@@ -162,6 +165,7 @@ namespace StableDiffusionGui.Main
 
                     CurrentProcess = py;
                     ProcessExistWasIntentional = false;
+
                     py.Start();
                     OsUtils.AttachOrphanHitman(py);
                     CurrentStdInWriter = py.StandardInput;
@@ -196,16 +200,13 @@ namespace StableDiffusionGui.Main
 
         public static async Task RunStableDiffusionOpt(string[] prompts, int iterations, Dictionary<string, string> paramsDict, string outPath)
         {
-            // NOTE: Currently not implemented: Embeddings, Samplers, Seamless Mode
+            // NOTE: Currently not implemented: Embeddings, Samplers, Seamless Mode, ...
             string[] initImgs = paramsDict.Get("initImgs").FromJson<string[]>();
-            string embedding = paramsDict.Get("embedding").FromJson<string>();
             float[] initStrengths = paramsDict.Get("initStrengths").FromJson<float[]>();
             int steps = paramsDict.Get("steps").FromJson<int>();
             float[] scales = paramsDict.Get("scales").FromJson<float[]>();
             long seed = paramsDict.Get("seed").FromJson<long>();
-            string sampler = paramsDict.Get("sampler").FromJson<string>();
             Size res = paramsDict.Get("res").FromJson<Size>();
-            // bool seamless = paramsDict.Get("seamless").FromJson<bool>();
             string model = paramsDict.Get("model").FromJson<string>();
             string modelNoExt = Path.ChangeExtension(model, null);
             bool lockSeed = paramsDict.Get("lockSeed").FromJson<bool>();
@@ -282,12 +283,16 @@ namespace StableDiffusionGui.Main
             {
                 _lastInvokeStartupSettings = newStartupSettings;
 
-                Process py = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
-                TextToImage.CurrentTask.Processes.Add(py);
+                Process py = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd(), Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdVenv, "Scripts", "python.exe"));
+                py.StartInfo.RedirectStandardInput = true;
+                py.StartInfo.WorkingDirectory = Paths.GetDataPath();
+                py.StartInfo.Arguments = $"\"{Constants.Dirs.SdRepo}/optimizedSD/optimized_txt2img_loop.py\" --model {modelFile.FullName.Wrap(true)} --outdir {outPath.Wrap(true)} --from_file_loop={promptFilePath.Wrap(true)} {argsStartup}";
 
-                py.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSd()} && call activate.bat {Constants.Dirs.SdEnv} && " +
-                    $"python \"{Constants.Dirs.SdRepo}/optimizedSD/optimized_txt2img_loop.py\" --model {modelFile.FullName.Wrap(true)} --outdir {outPath.Wrap(true)} --from_file_loop={promptFilePath.Wrap(true)} {argsStartup} ";
-                Logger.Log("cmd.exe " + py.StartInfo.Arguments, true);
+                foreach (var pair in TtiUtils.GetEnvVarsSd(false, Paths.GetDataPath()))
+                    py.StartInfo.EnvironmentVariables[pair.Key] = pair.Value;
+
+                TextToImage.CurrentTask.Processes.Add(py);
+                Logger.Log($"{py.StartInfo.FileName} {py.StartInfo.Arguments}", true);
 
                 if (!OsUtils.ShowHiddenCmd())
                 {
@@ -342,7 +347,7 @@ namespace StableDiffusionGui.Main
             string batText = $"@echo off\n" +
                 $"title Stable Diffusion CLI (InvokeAI)\n" +
                 $"cd /D {Paths.GetDataPath().Wrap()}\n" +
-                $"{TtiUtils.GetEnvVarsSd()}\n" +
+                $"{TtiUtils.GetEnvVarsSdCommand()}\n" +
                 $"python {Constants.Dirs.SdRepo}/scripts/invoke.py -o {outPath.Wrap(true)} {Args.InvokeAi.GetArgsStartup()}";
 
             File.WriteAllText(batPath, batText);
@@ -353,7 +358,7 @@ namespace StableDiffusionGui.Main
 
         public static void StartCmdInSdCondaEnv()
         {
-            Process.Start("cmd", $"/K title Env: {Constants.Dirs.SdEnv} && cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSd()} && call activate.bat {Constants.Dirs.Conda}/envs/{Constants.Dirs.SdEnv}");
+            Process.Start("cmd", $"/K title Env: {Constants.Dirs.SdEnv} && cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand()} && call activate.bat {Constants.Dirs.Conda}/envs/{Constants.Dirs.SdEnv}");
         }
 
         public static async Task<bool> WriteStdIn(string text, bool ignoreCanceled = false, bool newLine = true)

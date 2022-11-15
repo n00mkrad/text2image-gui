@@ -126,22 +126,12 @@ namespace StableDiffusionGui.Main
                 UiUtils.ShowMessageBox($"{(prompts.Count > 1 ? "One of your prompts" : "Your prompt")} does not contain a concept placeholder (*).\n\nIt will not use your loaded concept.");
         }
 
-        // public static string GetCudaDevice(string arg)
-        // {
-        //     int opt = Config.GetInt("comboxCudaDevice");
-        // 
-        //     if (opt == 0)
-        //         return "";
-        //     else if (opt == 1)
-        //         return $"{arg} cpu";
-        //     else
-        //         return $"{arg} cuda:{opt - 2}";
-        // }
-
         public static void SoftCancelDreamPy()
         {
-            var childProcesses = OsUtils.GetChildProcesses(TtiProcess.CurrentProcess);
+            OsUtils.SendCtrlC(TtiProcess.CurrentProcess.Id);
 
+            var childProcesses = OsUtils.GetChildProcesses(TtiProcess.CurrentProcess);
+            
             foreach (System.Diagnostics.Process p in childProcesses)
                 OsUtils.SendCtrlC(p.Id);
         }
@@ -175,9 +165,9 @@ namespace StableDiffusionGui.Main
             }
         }
 
-        public static string GetEnvVarsSd(bool allCudaDevices = false, string baseDir = ".", bool useConda = false)
+        public static Dictionary<string, string> GetEnvVarsSd(bool allCudaDevices = false, string baseDir = ".", bool useConda = false)
         {
-            List<string> cmds = new List<string>();
+            var envVars = new Dictionary<string, string>();
 
             if (useConda)
             {
@@ -190,12 +180,18 @@ namespace StableDiffusionGui.Main
                     Path.Combine(baseDir, Constants.Dirs.Conda, "Scripts"),
                 });
 
-                cmds.Add($"SET PATH={p}");
+                envVars["PATH"] = p;
             }
             else
             {
-                string p = OsUtils.GetPathVar(new string[] { $@".\{Constants.Dirs.SdVenv}\Scripts", $@".\{Constants.Dirs.Python}\Scripts", $@".\{Constants.Dirs.Python}", $@".\{Constants.Dirs.Git}\cmd" });
-                cmds.Add($"SET PATH={p}");
+                string p = OsUtils.GetPathVar(new string[] {
+                    Path.Combine(baseDir, Constants.Dirs.SdVenv, "Scripts"), 
+                    Path.Combine(baseDir, Constants.Dirs.Python, "Scripts"), 
+                    Path.Combine(baseDir, Constants.Dirs.Python), 
+                    Path.Combine(baseDir, Constants.Dirs.Git, "cmd")
+                });
+
+                envVars["PATH"] = p;
             }
 
             int cudaDeviceOpt = Config.GetInt("comboxCudaDevice");
@@ -203,17 +199,24 @@ namespace StableDiffusionGui.Main
             if (!allCudaDevices && cudaDeviceOpt > 0)
             {
                 if (cudaDeviceOpt == 1) // CPU
-                    cmds.Add(@"SET CUDA_VISIBLE_DEVICES="""); // Set to empty list
+                    envVars["CUDA_VISIBLE_DEVICES"] = ""; // Set to empty list
                 else
-                    cmds.Add($"SET CUDA_VISIBLE_DEVICES={cudaDeviceOpt - 2}"); // Set env var to selected GPU ID (-2 because the first two options are Automatic and CPU)
+                    envVars["CUDA_VISIBLE_DEVICES"] = $"{cudaDeviceOpt - 2}"; // Set env var to selected GPU ID (-2 because the first two options are Automatic and CPU)
             }
 
             if (!Directory.Exists(Path.Combine(Environment.ExpandEnvironmentVariables("%USERPROFILE%"), ".cache", "huggingface", "transformers")))
-                cmds.Add($"SET \"TRANSFORMERS_CACHE={Path.Combine(Paths.GetDataPath(), Constants.Dirs.Cache, "trfm")}\"");
+                envVars["TRANSFORMERS_CACHE"] = Path.Combine(Paths.GetDataPath(), Constants.Dirs.Cache, "trfm");
 
             if (!Directory.Exists(Path.Combine(Environment.ExpandEnvironmentVariables("%USERPROFILE%"), ".cache", "torch")))
-                cmds.Add($"SET \"TORCH_HOME={Path.Combine(Paths.GetDataPath(), Constants.Dirs.Cache, "torch")}\"");
+                envVars["TORCH_HOME"] = Path.Combine(Paths.GetDataPath(), Constants.Dirs.Cache, "torch");
 
+            return envVars;
+        }
+
+        public static string GetEnvVarsSdCommand(bool allCudaDevices = false, string baseDir = ".", bool useConda = false)
+        {
+            Dictionary<string, string> envVars = GetEnvVarsSd(allCudaDevices, baseDir, useConda);
+            List<string> cmds = envVars.Select(x => $"SET \"{x.Key}={x.Value}\"").ToList();
             return string.Join(" && ", cmds);
         }
 

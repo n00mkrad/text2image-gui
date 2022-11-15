@@ -72,7 +72,7 @@
             this.checkedListBoxStatus.ForeColor = System.Drawing.Color.White;
             this.checkedListBoxStatus.FormattingEnabled = true;
             this.checkedListBoxStatus.Items.AddRange(new object[] {
-            "Conda (Included)",
+            "Base Binaries (Included)",
             "Python Environment (Included)",
             "Stable Diffusion Code",
             "Stable Diffusion Model File",

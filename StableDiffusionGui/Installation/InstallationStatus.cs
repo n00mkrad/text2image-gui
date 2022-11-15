@@ -8,8 +8,20 @@ namespace StableDiffusionGui.Installation
 {
     internal class InstallationStatus
     {
-        public static bool IsInstalledBasic { get { return HasConda() && HasSdRepo() && HasSdEnv() && HasSdModel(); } }
+        public static bool IsInstalledBasic { get { return HasBins() && HasSdRepo() && HasSdEnv() && HasSdModel(); } }
         public static bool IsInstalledAll { get { return IsInstalledBasic && HasSdUpscalers(); } }
+
+        public static bool HasBins()
+        {
+            bool hasPy = File.Exists(Path.Combine(Paths.GetDataPath(), Constants.Dirs.Python, "python.exe"));
+            bool hasGit = File.Exists(Path.Combine(Paths.GetDataPath(), Constants.Dirs.Git, "cmd", "git.exe"));
+            bool hasWkl = File.Exists(Path.Combine(Paths.GetDataPath(), Constants.Dirs.Bins, $"{Constants.Bins.WindowsKill}.exe"));
+            bool hasOk = File.Exists(Path.Combine(Paths.GetDataPath(), Constants.Dirs.Bins, $"{Constants.Bins.OrphanHitman}.exe"));
+
+            Logger.Log($"HasBins - Has Python: {hasPy} - Has Git: {hasGit} - Has WKL: {hasWkl} - Has OK: {hasOk}", true);
+
+            return hasPy && hasGit && hasWkl && hasOk;
+        }
 
         public static bool HasConda ()
         {
@@ -34,20 +46,27 @@ namespace StableDiffusionGui.Installation
             return hasDreamScript;
         }
 
-        public static bool HasSdEnv()
+        public static bool HasSdEnv(bool conda = false)
         {
-            string pyExePath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.Conda, "envs", Constants.Dirs.SdEnv, "python.exe");
-            bool hasPyExe = File.Exists(pyExePath);
+            if (conda)
+            {
+                bool hasPyExe = File.Exists(Path.Combine(Paths.GetDataPath(), Constants.Dirs.Conda, "envs", Constants.Dirs.SdEnv, "python.exe"));
+                bool hasTorch = Directory.Exists(Path.Combine(Paths.GetDataPath(), Constants.Dirs.Conda, "envs", Constants.Dirs.SdEnv, "Lib", "site-packages", "torch"));
+                bool hasBin = Directory.Exists(Path.Combine(Paths.GetDataPath(), Constants.Dirs.Conda, "envs", Constants.Dirs.SdEnv, "Library", "bin"));
 
-            string torchPath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.Conda, "envs", Constants.Dirs.SdEnv, "Lib", "site-packages", "torch");
-            bool hasTorch = Directory.Exists(torchPath);
+                Logger.Log($"HasSdEnv - Has Python Exe: {hasPyExe} - Has Pytorch: {hasTorch} - Has bin: {hasBin}", true);
 
-            string binPath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.Conda, "envs", Constants.Dirs.SdEnv, "Library", "bin");
-            bool hasBin = Directory.Exists(binPath);
+                return hasPyExe && hasTorch && hasBin;
+            }
+            else
+            {
+                bool hasPy = File.Exists(Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdVenv, "Scripts", "python.exe"));
+                bool hasTorch = Directory.Exists(Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdVenv, "Lib", "site-packages", "torch"));
 
-            Logger.Log($"HasSdEnv - Has Python Exe: {hasPyExe} - Has Pytorch: {hasTorch} - Has bin: {hasBin}", true);
+                Logger.Log($"HasSdEnv - Has Python Exe: {hasPy} - Has Pytorch: {hasTorch}", true);
 
-            return hasPyExe && hasTorch && hasBin;
+                return hasPy && hasTorch;
+            }
         }
 
         public static bool HasSdModel ()
@@ -55,10 +74,10 @@ namespace StableDiffusionGui.Installation
             return Paths.GetModels().Count() > 0;
         }
 
-        public static bool HasSdUpscalers()
+        public static bool HasSdUpscalers(bool conda = false)
         {
-            string esrganPath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.Conda, "envs", Constants.Dirs.SdEnv, "Lib", "site-packages", "basicsr");
-            bool hasEsrgan = Directory.Exists(esrganPath);
+            string envPath = conda ? Path.Combine(Paths.GetDataPath(), Constants.Dirs.Conda, "envs", Constants.Dirs.SdEnv) : Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdVenv);
+            bool hasEsrgan = Directory.Exists(Path.Combine(envPath, "Lib", "site-packages", "basicsr"));
 
             string gfpPath = Path.Combine(Paths.GetDataPath(), "gfpgan");
             string gfpMdlPath = Path.Combine(Paths.GetDataPath(), "gfpgan", "gfpgan.pth");

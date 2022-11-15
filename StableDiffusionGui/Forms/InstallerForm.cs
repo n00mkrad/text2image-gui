@@ -42,6 +42,9 @@ namespace StableDiffusionGui.Forms
                 if (text.Contains("conda"))
                     checkedListBoxStatus.SetItemChecked(i, InstallationStatus.HasConda());
 
+                if (text.Contains("binaries"))
+                    checkedListBoxStatus.SetItemChecked(i, InstallationStatus.HasBins());
+
                 if (text.Contains("env"))
                     checkedListBoxStatus.SetItemChecked(i, InstallationStatus.HasSdEnv());
 

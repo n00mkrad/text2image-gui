@@ -474,9 +474,14 @@ namespace StableDiffusionGui
             }
         }
 
-        public static string ToJson(this object o, Formatting format = Formatting.None)
+        public static string ToJson(this object o, bool indent = false, bool ignoreErrors = true)
         {
-            return JsonConvert.SerializeObject(o, format);
+            var settings = new JsonSerializerSettings();
+
+            if (ignoreErrors)
+                settings.Error = (s, e) => { e.ErrorContext.Handled = true; };
+
+            return JsonConvert.SerializeObject(o, indent ? Formatting.Indented : Formatting.None, settings);
         }
 
         public static void AddRange<T> (this List<T> listIn, IEnumerable<T> itemsToAdd, out List<T> listOut)

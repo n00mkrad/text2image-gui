@@ -94,7 +94,7 @@ namespace StableDiffusionGui.Implementations
                 }
 
                 string jsonPath = Path.Combine(Paths.GetSessionDataPath(), "prompts-onnx.json");
-                File.WriteAllText(jsonPath, argLists.ToJson(Newtonsoft.Json.Formatting.Indented));
+                File.WriteAllText(jsonPath, argLists.ToJson(true));
 
                 Logger.Log($"Running Stable Diffusion - {iterations} Iterations, {steps} Steps, Scales {(scales.Length < 4 ? string.Join(", ", scales.Select(x => x.ToStringDot())) : $"{scales.First()}->{scales.Last()}")}, {res.Width}x{res.Height}, Starting Seed: {startSeed}");
 
@@ -111,7 +111,7 @@ namespace StableDiffusionGui.Implementations
                 string i2iArg = initImgs != null && initImgs.Length > 0 ? "-i" : "";
 
                 py.StartInfo.RedirectStandardInput = true;
-                py.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSd()} && call activate.bat {Constants.Dirs.SdEnv} && " +
+                py.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand()} && call activate.bat {Constants.Dirs.SdEnv} && " +
                     $"python \"{Constants.Dirs.SdRepo}/sd_onnx/sd_onnx.py\" -m {modelDir.FullName.Wrap(true)} -j {jsonPath.Wrap(true)} -o {outPath.Wrap(true)} {i2iArg}";
 
                 Logger.Log("cmd.exe " + py.StartInfo.Arguments, true);
