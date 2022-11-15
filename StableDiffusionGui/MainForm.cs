@@ -132,8 +132,8 @@ namespace StableDiffusionGui
 
         private void InitializeControls()
         {
-            comboxSampler.FillFromEnum<Enums.StableDiffusion.Sampler>(Strings.MainUiStrings);
-            comboxSeamless.FillFromEnum<Enums.StableDiffusion.SeamlessMode>(Strings.MainUiStrings, 0);
+            comboxSampler.FillFromEnum<Sampler>(Strings.MainUiStrings);
+            comboxSeamless.FillFromEnum<SeamlessMode>(Strings.MainUiStrings, 0);
 
             var resItems = MainUi.Resolutions.Where(x => x <= (Config.GetBool("checkboxAdvancedMode") ? 2048 : 1024)).Select(x => x.ToString());
             comboxResW.SetItems(resItems, UiExtensions.SelectMode.Last);
@@ -271,7 +271,7 @@ namespace StableDiffusionGui
         {
             TtiSettings settings = new TtiSettings
             {
-                Implementation = (Enums.StableDiffusion.Implementation)Config.GetInt("comboxImplementation"),
+                Implementation = (Implementation)Config.GetInt("comboxImplementation"),
                 Prompts = textboxPrompt.TextNoPlaceholder.SplitIntoLines().Where(x => !string.IsNullOrWhiteSpace(x)).ToArray(),
                 NegativePrompt = textboxPromptNeg.TextNoPlaceholder.Trim().Replace(Environment.NewLine, " "),
                 Iterations = (int)upDownIterations.Value,
@@ -281,11 +281,11 @@ namespace StableDiffusionGui
                             { "scales", MainUi.GetScales(textboxExtraScales.Text).ToJson() },
                             { "res", new Size(ComboxResW.Text.GetInt(), ComboxResH.Text.GetInt()).ToJson() },
                             { "seed", (upDownSeed.Value < 0 ? new Random().Next(0, int.MaxValue) : ((long)upDownSeed.Value)).ToJson() },
-                            { "sampler", ((Enums.StableDiffusion.Sampler)comboxSampler.SelectedIndex).ToString().Lower().ToJson() },
+                            { "sampler", ((Sampler)comboxSampler.SelectedIndex).ToString().Lower().ToJson() },
                             { "initImgs", MainUi.CurrentInitImgPaths.ToJson() },
                             { "initStrengths", MainUi.GetInitStrengths(textboxExtraInitStrengths.Text).ToJson() },
                             { "embedding", MainUi.CurrentEmbeddingPath.ToJson() },
-                            { "seamless", ((Enums.StableDiffusion.SeamlessMode)comboxSeamless.SelectedIndex).ToJson() },
+                            { "seamless", ((SeamlessMode)comboxSeamless.SelectedIndex).ToJson() },
                             { "inpainting", (checkboxInpainting.Checked ? "masked" : "").ToJson() },
                             { "model", Config.Get(Config.Key.comboxSdModel).ToJson() },
                             { "hiresFix", checkboxHiresFix.Checked.ToJson() },
@@ -507,7 +507,7 @@ namespace StableDiffusionGui
                 {
                     reGenerateImageWithCurrentSettingsToolStripMenuItem.Visible = !Program.Busy;
                     useAsInitImageToolStripMenuItem.Visible = !Program.Busy;
-                    postProcessImageToolStripMenuItem.Visible = !Program.Busy && TextToImage.CurrentTaskSettings.Implementation == Enums.StableDiffusion.Implementation.InvokeAi;
+                    postProcessImageToolStripMenuItem.Visible = !Program.Busy && TextToImage.CurrentTaskSettings.Implementation == Implementation.InvokeAi;
                     menuStripOutputImg.Show(Cursor.Position);
                 }
             }

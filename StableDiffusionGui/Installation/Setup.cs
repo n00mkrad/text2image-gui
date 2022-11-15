@@ -51,7 +51,7 @@ namespace StableDiffusionGui.Installation
                     await InstallUpscalers();
                 }
 
-                RemoveGitFiles(GetDataSubPath(Constants.Dirs.SdRepo));
+                RemoveGitFiles();
 
                 await Task.Delay(500);
 
@@ -90,7 +90,7 @@ namespace StableDiffusionGui.Installation
                 $"@echo off\n" +
                 $"cd /D {Paths.GetDataPath().Wrap()}\n" +
                 $"SET PATH={OsUtils.GetPathVar(new string[] { $@".\{Constants.Dirs.SdVenv}\Scripts", $@".\{Constants.Dirs.Python}\Scripts", $@".\{Constants.Dirs.Python}", $@".\{Constants.Dirs.Git}\cmd" })}\n" +
-                $"virtualenv {Constants.Dirs.SdVenv}\n" +
+                $"python -m virtualenv {Constants.Dirs.SdVenv}\n" +
                 $"{Constants.Dirs.SdRepo}\\install-venv-deps.bat\n" +
                 //$"{Constants.Dirs.SdRepo}\\install-venv-deps-onnx.bat\n" +
                 $""
@@ -118,7 +118,7 @@ namespace StableDiffusionGui.Installation
 
             Logger.Log("Cleaning up...");
             IoUtils.TryDeleteIfExists(Path.Combine(Environment.ExpandEnvironmentVariables("%LOCALAPPDATA%"), "pip", "cache"));
-            RemoveGitFiles(GetDataSubPath(Constants.Dirs.SdRepo));
+            RemoveGitFiles();
             Logger.Log("Done.");
         }
 
@@ -167,7 +167,7 @@ namespace StableDiffusionGui.Installation
 
             while (!p.HasExited) await Task.Delay(1);
 
-            RemoveGitFiles(GetDataSubPath(Constants.Dirs.SdRepo));
+            RemoveGitFiles();
             Logger.Log("Done.");
         }
 
@@ -182,7 +182,7 @@ namespace StableDiffusionGui.Installation
 
             if (!conda && log.StartsWith("Collecting "))
             {
-                Logger.Log($"Installing {log.Split("Collecting ").First().Split("=").First().Trim()}...", false, Logger.LastUiLine.EndsWith("..."));
+                Logger.Log($"Installing {log.Split("Collecting ")[1].Split("=")[0].Split("<")[0].Split(">")[0].Split("!")[0].Trim()}...", false, Logger.LastUiLine.EndsWith("..."));
             }
 
             if (conda && log.EndsWith("%") && log.Contains(" | "))
@@ -242,19 +242,32 @@ namespace StableDiffusionGui.Installation
                     Directory.Delete(dir, true);
                 }
 
-                Task t = Task.Run(() => { Repository.Clone(url, dir, new CloneOptions() { BranchName = branch }); });
+                // Task t = Task.Run(() => { Repository.Clone(url, dir, new CloneOptions() { BranchName = branch }); });
+                // 
+                // while (!t.IsCompleted)
+                //     await Task.Delay(1);
 
-                while (!t.IsCompleted)
-                    await Task.Delay(1);
+                string gitDir = Path.Combine(Paths.GetDataPath(), Constants.Dirs.Git, "cmd");
+                string gitExe = Path.Combine(Paths.GetDataPath(), Constants.Dirs.Git, "cmd", "git.exe");
+                Process p = OsUtils.NewProcess(true);
+                p.StartInfo.EnvironmentVariables["PATH"] = TtiUtils.GetEnvVarsSd(true, Paths.GetDataPath()).First().Value;
+                p.StartInfo.Arguments = $"/C git clone --single-branch --branch {branch} {url} {dir.Wrap(true)} {(string.IsNullOrWhiteSpace(commit) ? "" : $"&& cd /D {dir.Wrap()} && git checkout {commit}")}";
+                Logger.Log($"{p.StartInfo.FileName} {p.StartInfo.Arguments}");
+                p.OutputDataReceived += (sender, line) => { HandleInstallScriptOutput($"[git] {line.Data}", false, false); };
+                p.ErrorDataReceived += (sender, line) => { HandleInstallScriptOutput($"[git] {line.Data}", false, true); };
+                p.Start();
+                p.BeginOutputReadLine();
+                p.BeginErrorReadLine();
+                while (!p.HasExited) await Task.Delay(1);
 
-                if (!string.IsNullOrWhiteSpace(commit))
-                {
-                    using (var localRepo = new Repository(dir))
-                    {
-                        var localCommit = localRepo.Lookup<Commit>(commit);
-                        Commands.Checkout(localRepo, localCommit);
-                    }
-                }
+                // if (!string.IsNullOrWhiteSpace(commit))
+                // {
+                //     using (var localRepo = new Repository(dir))
+                //     {
+                //         var localCommit = localRepo.Lookup<Commit>(commit);
+                //         Commands.Checkout(localRepo, localCommit);
+                //     }
+                // }
 
                 Logger.Log($"Done cloning repository.");
 
@@ -268,26 +281,38 @@ namespace StableDiffusionGui.Installation
             }
         }
 
-        public static void RemoveGitFiles(string rootPath)
+        public static void RemoveGitFiles()
         {
-            List<DirectoryInfo> dirs = new List<DirectoryInfo>();
-
-            dirs.AddRange(Directory.GetDirectories(rootPath, "*", SearchOption.AllDirectories).Select(x => new DirectoryInfo(x)));
-
-            new DirectoryInfo(rootPath).Attributes = FileAttributes.Normal;
-            IoUtils.SetAttributes(rootPath, FileAttributes.Normal);
-
-            foreach (var dir in dirs)
+            try
             {
-                if (dir.Name == ".git")
-                    IoUtils.TryDeleteIfExists(dir.FullName);
+                string repoPath = GetDataSubPath(Constants.Dirs.SdRepo);
+                string venvSrcPath = Path.Combine(GetDataSubPath(Constants.Dirs.SdVenv), "src");
+
+                List<DirectoryInfo> dirs = new List<DirectoryInfo>();
+
+                dirs.AddRange(Directory.GetDirectories(repoPath, "*", SearchOption.AllDirectories).Select(x => new DirectoryInfo(x)));
+                dirs.AddRange(Directory.GetDirectories(venvSrcPath, "*", SearchOption.AllDirectories).Select(x => new DirectoryInfo(x)));
+
+                new DirectoryInfo(repoPath).Attributes = FileAttributes.Normal;
+                IoUtils.SetAttributes(repoPath, FileAttributes.Normal);
+
+                new DirectoryInfo(venvSrcPath).Attributes = FileAttributes.Normal;
+                IoUtils.SetAttributes(venvSrcPath, FileAttributes.Normal);
+
+                foreach (var dir in dirs)
+                {
+                    if (dir.Name == ".git")
+                        IoUtils.TryDeleteIfExists(dir.FullName);
+                }
+
+                var unneededDirs = new List<string> { "docs", "assets" };
+                unneededDirs.ForEach(dir => IoUtils.TryDeleteIfExists(Path.Combine(repoPath, dir)));
+
+                var unneededFileTypes = new List<string> { "jpg", "jpeg", "png", "gif", "ipynb", "ttf" };
+                unneededFileTypes.ForEach(ext => IoUtils.GetFilesSorted(repoPath, true, $"*.{ext}").ToList().ForEach(x => IoUtils.TryDeleteIfExists(x)));
+                unneededFileTypes.ForEach(ext => IoUtils.GetFilesSorted(venvSrcPath, true, $"*.{ext}").ToList().ForEach(x => IoUtils.TryDeleteIfExists(x)));
             }
-
-            var unneededDirs = new List<string> { "docs", "assets" };
-            unneededDirs.ForEach(dir => IoUtils.TryDeleteIfExists(Path.Combine(rootPath, dir)));
-
-            var unneededFileTypes = new List<string> { "jpg", "jpeg", "png", "gif", "ipynb", "ttf" };
-            unneededFileTypes.ForEach(ext => IoUtils.GetFilesSorted(rootPath, true, $"*.{ext}").ToList().ForEach(x => IoUtils.TryDeleteIfExists(x)));
+            catch { }
         }
 
         #endregion
@@ -387,6 +412,8 @@ namespace StableDiffusionGui.Installation
                     if (pyvenvCfgLines[i].StartsWith("base-exec-prefix = ")) pyvenvCfgLines[i] = $"base-exec-prefix = {GetDataSubPath(Constants.Dirs.Python)}"; // Python installation
                     if (pyvenvCfgLines[i].StartsWith("base-executable = ")) pyvenvCfgLines[i] = $"base-executable = {Path.Combine(GetDataSubPath(Constants.Dirs.Python), "python.exe")}"; // Python executable
                 }
+
+                File.WriteAllLines(pyvenvCfgPath, pyvenvCfgLines);
 
                 Logger.Log($"Fixed pyvenv.cfg", true);
 

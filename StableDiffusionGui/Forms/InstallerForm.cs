@@ -82,7 +82,7 @@ namespace StableDiffusionGui.Forms
             this.Enabled = false;
             Program.MainForm.SetWorking(Program.BusyState.Installation);
             await Setup.CloneSdRepo();
-            Setup.RemoveGitFiles(Setup.GetDataSubPath(Constants.Dirs.SdRepo));
+            Setup.RemoveGitFiles();
             UpdateStatus();
             Program.MainForm.SetWorking(Program.BusyState.Standby);
             this.Enabled = true;

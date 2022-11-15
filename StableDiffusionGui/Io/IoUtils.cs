@@ -308,8 +308,8 @@ namespace StableDiffusionGui.Io
         {
             try
             {
-                if (path == null)
-                    return false;
+                if ((IsPathDirectory(path) && !Directory.Exists(path)) || (!IsPathDirectory(path) && !File.Exists(path)))
+                    return true;
 
                 DeleteIfExists(path);
                 return true;
