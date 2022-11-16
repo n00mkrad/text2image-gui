@@ -1,5 +1,4 @@
-﻿using LibGit2Sharp;
-using StableDiffusionGui.Io;
+﻿using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
@@ -8,7 +7,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Security.Policy;
 using System.Threading.Tasks;
+using static StableDiffusionGui.Main.Constants;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TreeView;
 
 namespace StableDiffusionGui.Installation
 {
@@ -235,40 +237,7 @@ namespace StableDiffusionGui.Installation
             try
             {
                 Logger.Log("Cloning repository...");
-
-                if (Directory.Exists(dir))
-                {
-                    IoUtils.SetAttributes(dir, FileAttributes.Normal);
-                    Directory.Delete(dir, true);
-                }
-
-                // Task t = Task.Run(() => { Repository.Clone(url, dir, new CloneOptions() { BranchName = branch }); });
-                // 
-                // while (!t.IsCompleted)
-                //     await Task.Delay(1);
-
-                string gitDir = Path.Combine(Paths.GetDataPath(), Constants.Dirs.Git, "cmd");
-                string gitExe = Path.Combine(Paths.GetDataPath(), Constants.Dirs.Git, "cmd", "git.exe");
-                Process p = OsUtils.NewProcess(true);
-                p.StartInfo.EnvironmentVariables["PATH"] = TtiUtils.GetEnvVarsSd(true, Paths.GetDataPath()).First().Value;
-                p.StartInfo.Arguments = $"/C git clone --single-branch --branch {branch} {url} {dir.Wrap(true)} {(string.IsNullOrWhiteSpace(commit) ? "" : $"&& cd /D {dir.Wrap()} && git checkout {commit}")}";
-                Logger.Log($"{p.StartInfo.FileName} {p.StartInfo.Arguments}");
-                p.OutputDataReceived += (sender, line) => { HandleInstallScriptOutput($"[git] {line.Data}", false, false); };
-                p.ErrorDataReceived += (sender, line) => { HandleInstallScriptOutput($"[git] {line.Data}", false, true); };
-                p.Start();
-                p.BeginOutputReadLine();
-                p.BeginErrorReadLine();
-                while (!p.HasExited) await Task.Delay(1);
-
-                // if (!string.IsNullOrWhiteSpace(commit))
-                // {
-                //     using (var localRepo = new Repository(dir))
-                //     {
-                //         var localCommit = localRepo.Lookup<Commit>(commit);
-                //         Commands.Checkout(localRepo, localCommit);
-                //     }
-                // }
-
+                await Clone(url, dir, commit, branch);
                 Logger.Log($"Done cloning repository.");
 
                 await SetupVenv();
@@ -279,6 +248,28 @@ namespace StableDiffusionGui.Installation
                 Logger.Log($"Failed to clone repository: {ex.Message}");
                 Logger.Log($"{ex.StackTrace}", true);
             }
+        }
+
+        public static async Task Clone (string gitUrl, string dir, string commit = "", string branch = "main")
+        {
+            if (Directory.Exists(dir))
+            {
+                IoUtils.SetAttributes(dir, FileAttributes.Normal);
+                Directory.Delete(dir, true);
+            }
+
+            string gitDir = Path.Combine(Paths.GetDataPath(), Constants.Dirs.Git, "cmd");
+            string gitExe = Path.Combine(Paths.GetDataPath(), Constants.Dirs.Git, "cmd", "git.exe");
+            Process p = OsUtils.NewProcess(true);
+            p.StartInfo.EnvironmentVariables["PATH"] = TtiUtils.GetEnvVarsSd(true, Paths.GetDataPath()).First().Value;
+            p.StartInfo.Arguments = $"/C git clone --single-branch --branch {branch} {gitUrl} {dir.Wrap(true)} {(string.IsNullOrWhiteSpace(commit) ? "" : $"&& cd /D {dir.Wrap()} && git checkout {commit}")}";
+            Logger.Log($"{p.StartInfo.FileName} {p.StartInfo.Arguments}");
+            p.OutputDataReceived += (sender, line) => { HandleInstallScriptOutput($"[git] {line.Data}", false, false); };
+            p.ErrorDataReceived += (sender, line) => { HandleInstallScriptOutput($"[git] {line.Data}", false, true); };
+            p.Start();
+            p.BeginOutputReadLine();
+            p.BeginErrorReadLine();
+            while (!p.HasExited) await Task.Delay(1);
         }
 
         public static void RemoveGitFiles()
@@ -328,19 +319,7 @@ namespace StableDiffusionGui.Installation
                 string gfpganPath = GetDataSubPath("gfpgan");
                 IoUtils.SetAttributes(gfpganPath, FileAttributes.Normal);
 
-                if (Directory.Exists(gfpganPath))
-                    Directory.Delete(gfpganPath, true);
-
-                Task t = Task.Run(() => { Repository.Clone(@"https://github.com/TencentARC/GFPGAN.git", gfpganPath, new CloneOptions() { BranchName = "master" }); });
-
-                while (!t.IsCompleted)
-                    await Task.Delay(1);
-
-                using (var localRepo = new Repository(gfpganPath))
-                {
-                    var localCommit = localRepo.Lookup<Commit>("2eac2033893ca7f427f4035d80fe95b92649ac56");
-                    Commands.Checkout(localRepo, localCommit);
-                }
+                await Clone("https://github.com/TencentARC/GFPGAN.git", gfpganPath, "2eac2033893ca7f427f4035d80fe95b92649ac56", "master");
 
                 if (print) Logger.Log("Downloading GFPGAN model file...", ReplaceUiLogLine);
                 string gfpGanMdlPath = Path.Combine(gfpganPath, "gfpgan.pth");
@@ -355,7 +334,7 @@ namespace StableDiffusionGui.Installation
 
                 string codeformerPath = GetDataSubPath("codeformer");
                 Directory.CreateDirectory(codeformerPath);
-                if (print) Logger.Log("Downloading Codeformer model file...", ReplaceUiLogLine);
+                if (print) Logger.Log("Downloading CodeFormer model file...", ReplaceUiLogLine);
                 string codeformerMdlPath = Path.Combine(codeformerPath, "codeformer.pth");
                 IoUtils.TryDeleteIfExists(codeformerMdlPath);
                 Process procCodeformerDl = OsUtils.NewProcess(true);

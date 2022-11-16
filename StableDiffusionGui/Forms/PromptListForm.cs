@@ -1,5 +1,4 @@
-﻿using LibGit2Sharp;
-using StableDiffusionGui.Data;
+﻿using StableDiffusionGui.Data;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.Os;

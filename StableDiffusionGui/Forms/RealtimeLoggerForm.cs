@@ -32,7 +32,7 @@ namespace StableDiffusionGui.Forms
         private void RealtimeLoggerForm_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyData == (Keys.Escape))
-                Close();
+                BeginInvoke(new MethodInvoker(Close));
         }
     }
 }
