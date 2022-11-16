@@ -1,11 +1,13 @@
 ﻿using Microsoft.WindowsAPICodePack.Dialogs;
 using StableDiffusionGui.Extensions;
+using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
@@ -36,8 +38,11 @@ namespace StableDiffusionGui.Forms
         {
             Refresh();
             comboxImplementation.FillFromEnum<Implementation>(Strings.SettingsUiStrings);
-            // LoadModels(false, ModelType.Normal);
-            // LoadModels(false, ModelType.Vae);
+            comboxImplementation.Items.Cast<string>().ToList().ForEach(i => {  });
+
+            foreach(string s in new List<string>(comboxImplementation.Items.Cast<string>()))
+                if (!EnabledFeatures.Implementation((Implementation)comboxImplementation.Items.Cast<string>().ToList().IndexOf(s))) comboxImplementation.Items.Remove(s);
+
             LoadSettings();
 
             TabOrderInit(new List<Control>() {

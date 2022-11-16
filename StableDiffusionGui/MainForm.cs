@@ -856,6 +856,9 @@ namespace StableDiffusionGui
 
         private async void textboxPrompt_TextChanged(object sender, EventArgs e)
         {
+            if (!EnabledFeatures.WildcardAutocomplete)
+                return;
+
             await Task.Delay(1);
 
             if (textboxPrompt.Text.LastOrDefault() == '~' && promptAutocomplete == null)

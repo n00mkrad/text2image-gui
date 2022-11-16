@@ -245,6 +245,7 @@
       <DependentUpon>WelcomeForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Implementations\SdOnnx.cs" />
+    <Compile Include="Installation\EnabledFeatures.cs" />
     <Compile Include="Installation\InstallationStatus.cs" />
     <Compile Include="Installation\Setup.cs" />
     <Compile Include="Io\Config.cs" />
