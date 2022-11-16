@@ -68,6 +68,7 @@ namespace StableDiffusionGui
             AllowEscClose = false;
             Logger.Textbox = logBox;
             MinimumSize = Size;
+            Text = $"Stable Diffusion GUI {Program.Version}";
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
