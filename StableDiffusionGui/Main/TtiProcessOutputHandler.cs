@@ -14,7 +14,7 @@ namespace StableDiffusionGui.Main
     {
         private static bool _hasErrored = false;
 
-        public static void Start()
+        public static void Reset()
         {
             _hasErrored = false;
         }
@@ -68,6 +68,12 @@ namespace StableDiffusionGui.Main
                     string pathSource = line.Split(": !fix \"")[1].Split("\" -")[0];
                     string pathOut = line.Substring(line.IndexOf("] ") + 2).Split(": !fix \"")[0];
                     TtiUtils.ExportPostprocessedImage(pathSource, pathOut);
+                }
+
+                if (!_hasErrored && line.Contains("An error occurred while processing your prompt"))
+                {
+                    Logger.Log(line);
+                    _hasErrored = true;
                 }
             }
 

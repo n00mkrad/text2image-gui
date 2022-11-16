@@ -134,6 +134,9 @@ namespace StableDiffusionGui.Main
 
         public static async void Cancel(string reason = "", bool showMsgBox = true)
         {
+            if (Canceled)
+                return;
+
             Canceled = true;
 
             bool manual = reason.Lower().Contains("manually");

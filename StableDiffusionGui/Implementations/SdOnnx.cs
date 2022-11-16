@@ -128,7 +128,7 @@ namespace StableDiffusionGui.Implementations
                     OsUtils.KillProcessTree(TtiProcess.CurrentProcess.Id);
                 }
 
-                TtiProcessOutputHandler.Start();
+                TtiProcessOutputHandler.Reset();
 
                 Logger.Log($"Loading Stable Diffusion (ONNX) with model {Path.ChangeExtension(model, null).Trunc(80).Wrap()}...");
 

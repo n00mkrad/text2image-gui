@@ -157,7 +157,7 @@ namespace StableDiffusionGui.Main
                         OsUtils.KillProcessTree(CurrentProcess.Id);
                     }
 
-                    TtiProcessOutputHandler.Start();
+                    TtiProcessOutputHandler.Reset();
 
                     string logMdl = Path.ChangeExtension(model, null).Trunc(!string.IsNullOrWhiteSpace(vae) ? 35 : 80).Wrap();
                     string logVae = Path.GetFileNameWithoutExtension(vae).Trunc(35).Wrap();
@@ -180,6 +180,7 @@ namespace StableDiffusionGui.Main
                 }
                 else
                 {
+                    TtiProcessOutputHandler.Reset();
                     await InvokeAi.SwitchModel(InvokeAiUtils.GetMdlNameForYaml(modelFile, vaeFile));
                     TextToImage.CurrentTask.Processes.Add(CurrentProcess);
                 }
@@ -306,7 +307,7 @@ namespace StableDiffusionGui.Main
                     OsUtils.KillProcessTree(CurrentProcess.Id);
                 }
 
-                TtiProcessOutputHandler.Start();
+                TtiProcessOutputHandler.Reset();
                 Logger.Log($"Loading Stable Diffusion with model {modelNoExt.Wrap()}...");
                 CurrentProcess = py;
                 ProcessExistWasIntentional = false;
