@@ -263,7 +263,7 @@ namespace StableDiffusionGui.Installation
             Process p = OsUtils.NewProcess(true);
             p.StartInfo.EnvironmentVariables["PATH"] = TtiUtils.GetEnvVarsSd(true, Paths.GetDataPath()).First().Value;
             p.StartInfo.Arguments = $"/C git clone --single-branch --branch {branch} {gitUrl} {dir.Wrap(true)} {(string.IsNullOrWhiteSpace(commit) ? "" : $"&& cd /D {dir.Wrap()} && git checkout {commit}")}";
-            Logger.Log($"{p.StartInfo.FileName} {p.StartInfo.Arguments}");
+            Logger.Log($"{p.StartInfo.FileName} {p.StartInfo.Arguments}", true);
             p.OutputDataReceived += (sender, line) => { HandleInstallScriptOutput($"[git] {line.Data}", false, false); };
             p.ErrorDataReceived += (sender, line) => { HandleInstallScriptOutput($"[git] {line.Data}", false, true); };
             p.Start();

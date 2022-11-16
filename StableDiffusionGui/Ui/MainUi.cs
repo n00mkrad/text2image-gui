@@ -368,7 +368,6 @@ namespace StableDiffusionGui.Ui
                 // autoCompleteStrings.AddRange(IoUtils.GetFileInfosSorted(Path.Combine(Paths.GetExeDir(), "Wildcards")).Select(x => $"~~{x.NameNoExt()}"));
                 // autoCompleteStrings.AddRange(IoUtils.GetFileInfosSorted(Path.Combine(Paths.GetExeDir(), "Wildcards")).Select(x => $"~~~{x.NameNoExt()}"));
 
-                Logger.Log("LoadAutocompleteData");
                 menu.Items = autoCompleteStrings.ToArray();
             }
         }
