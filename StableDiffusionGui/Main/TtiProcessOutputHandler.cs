@@ -65,9 +65,16 @@ namespace StableDiffusionGui.Main
 
                 if (line.Contains(": !fix") && Logger.GetLastLines(Constants.Lognames.Sd, 2, true).FirstOrDefault() == "Outputs:")
                 {
-                    string pathSource = line.Split(": !fix \"")[1].Split("\" -")[0];
-                    string pathOut = line.Substring(line.IndexOf("] ") + 2).Split(": !fix \"")[0];
-                    TtiUtils.ExportPostprocessedImage(pathSource, pathOut);
+                    try
+                    {
+                        string pathSource = line.Split(": !fix ")[1].Split(".png ")[0] + ".png";
+                        string pathOut = line.Substring(line.IndexOf("] ") + 2).Split(": !fix ")[0];
+                        TtiUtils.ExportPostprocessedImage(pathSource, pathOut);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Log($"Error parsing !fix log message: {ex.Message}\n{ex.StackTrace}", true);
+                    }
                 }
 
                 if (!_hasErrored && line.Contains("An error occurred while processing your prompt"))
