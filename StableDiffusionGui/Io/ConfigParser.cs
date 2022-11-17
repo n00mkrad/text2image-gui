@@ -85,15 +85,9 @@ namespace StableDiffusionGui.Io
 
         public enum SaveValueAs { Unchanged, Multiplied, Divided }
 
-        public static void LoadGuiElement(HTAlt.WinForms.HTSlider slider, SaveValueAs convertMode = SaveValueAs.Unchanged, float convertValue = 1f)
+        public static void LoadGuiElement(HTAlt.WinForms.HTSlider slider)
         {
             var value = Config.GetFloat(slider.Name);
-
-            if (convertMode == SaveValueAs.Multiplied)
-                value = value / convertValue;
-
-            if (convertMode == SaveValueAs.Divided)
-                value = value * convertValue;
 
             if (slider is CustomSlider)
                 ((CustomSlider)slider).ActualValue = (decimal)value.Clamp((float)((CustomSlider)slider).ActualMinimum, (float)((CustomSlider)slider).ActualMaximum);

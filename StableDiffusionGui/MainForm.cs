@@ -92,6 +92,7 @@ namespace StableDiffusionGui
         {
             MainUi.SetSettingsVertScrollbar();
             InitializeControls();
+            RefreshAfterSettingsChanged();
             LoadUiElements();
             PromptHistory.Load();
             Setup.FixHardcodedPathsVenv();
@@ -104,7 +105,6 @@ namespace StableDiffusionGui
             Task.Run(() => MainUi.SetGpusInWindowTitle());
             upDownSeed.Text = "";
             MainUi.DoStartupChecks();
-            RefreshAfterSettingsChanged();
             UpdateInitImgAndEmbeddingUi();
 
             TabOrderInit(new List<Control>() {
