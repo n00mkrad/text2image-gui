@@ -7,10 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Security.Policy;
 using System.Threading.Tasks;
-using static StableDiffusionGui.Main.Constants;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TreeView;
 
 namespace StableDiffusionGui.Installation
 {
@@ -232,7 +229,7 @@ namespace StableDiffusionGui.Installation
             await CloneSdRepo($"https://github.com/{GitFile}", GetDataSubPath(Constants.Dirs.SdRepo));
         }
 
-        public static async Task CloneSdRepo(string url, string dir, string branch = "main", string commit = "")
+        public static async Task CloneSdRepo(string url, string dir, string branch = "main", string commit = "e0dac3eaf0cb496efed6b751ddf6b87681d5f7d4")
         {
             try
             {
