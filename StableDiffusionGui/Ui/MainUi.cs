@@ -204,13 +204,15 @@ namespace StableDiffusionGui.Ui
         public static string SanitizePrompt (string prompt)
         {
             //prompt = new Regex(@"[^a-zA-Z0-9 -!*,.:()_\-]").Replace(prompt, "");
-            prompt = prompt.Replace(" -", " ");
+            prompt = prompt.Replace(" -", " "); // Don't allow leading hyphens (might be misunderstood as args)
 
             while (prompt.StartsWith("-"))
-                prompt = prompt.Substring(1);
+                prompt = prompt.Substring(1); // Remove leading hypens
             
             while (prompt.EndsWith("-"))
-                prompt = prompt.Remove(prompt.Length - 1);
+                prompt = prompt.Remove(prompt.Length - 1); // Remove trailing hypens
+
+            prompt = InvokeAiUtils.ConvertOldAttentionSyntax(prompt); // Convert old (multi-bracket) emphasis/attention syntax to new one (with +/-)
 
             return prompt;
         }

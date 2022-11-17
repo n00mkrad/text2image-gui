@@ -6,7 +6,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using static System.Resources.ResXFileRef;
 
 namespace StableDiffusionGui.Main
 {
@@ -87,6 +89,37 @@ namespace StableDiffusionGui.Main
         public static string GetMdlNameForYaml(Model mdl, Model vae)
         {
             return $"{mdl.Name}{(vae == null ? "-noVae" : $"-{vae.Name}")}";
+        }
+
+        public static string ConvertOldAttentionSyntax(string prompt)
+        {
+            if (!prompt.Contains("(") && !prompt.Contains("{")) // Skip if no parentheses/curly brackets were used
+                return prompt;
+
+            if (prompt.Contains(")+") || prompt.Contains(")-") || Regex.Matches(prompt, @"\)\d.\d+").Count >= 1) // Assume new syntax is already used
+                return prompt;
+
+            var parentheses = Regex.Matches(prompt, @"\(((?>[^()]+|\((?<n>)|\)(?<-n>))+(?(n)(?!)))\)");
+
+            for (int i = 0; i < parentheses.Count; i++)
+            {
+                string match = parentheses[i].Value;
+                int count = match.Where(c => c == ')').Count();
+                string converted = $"({match.Remove("(").Remove(")")}){new string('+', count)}";
+                prompt = prompt.Replace(match, converted);
+            }
+            
+            var curlyBrackets = Regex.Matches(prompt, @"\{((?>[^{}]+|\{(?<n>)|\}(?<-n>))+(?(n)(?!)))\}");
+            
+            for (int i = 0; i < curlyBrackets.Count; i++)
+            {
+                string match = curlyBrackets[i].Value;
+                int count = match.Where(c => c == '}').Count();
+                string converted = $"({match.Remove("{").Remove("}")}){new string('-', count)}";
+                prompt = prompt.Replace(match, converted);
+            }
+
+            return prompt;
         }
     }
 }
