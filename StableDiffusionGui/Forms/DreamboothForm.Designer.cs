@@ -234,8 +234,8 @@
             this.sliderSteps.TabIndex = 4;
             this.sliderSteps.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
             this.sliderSteps.ThumbSize = new System.Drawing.Size(14, 14);
-            this.toolTip.SetToolTip(this.sliderSteps, "A higher learning rate can help the model learn faster, but if it\\\'s too high it " +
-        "will overfit and the model becomes less flexible.");
+            this.toolTip.SetToolTip(this.sliderSteps, "More steps can help the model learn better, but if it\'s too high it will overfit " +
+        "and the model becomes less flexible.");
             this.sliderSteps.Value = 10;
             this.sliderSteps.ValueBox = this.textBox1;
             this.sliderSteps.ValueStep = new decimal(new int[] {
@@ -364,8 +364,8 @@
             this.sliderLrMultiplier.TabIndex = 4;
             this.sliderLrMultiplier.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
             this.sliderLrMultiplier.ThumbSize = new System.Drawing.Size(14, 14);
-            this.toolTip.SetToolTip(this.sliderLrMultiplier, "A higher learning rate can help the model learn faster, but if it\\\'s too high it " +
-        "will overfit and the model becomes less flexible.");
+            this.toolTip.SetToolTip(this.sliderLrMultiplier, "A higher learning rate can help the model learn faster, but if it\'s too high it w" +
+        "ill overfit and the model becomes less flexible.");
             this.sliderLrMultiplier.Value = 10;
             this.sliderLrMultiplier.ValueBox = this.textboxSliderLrMultiplier;
             this.sliderLrMultiplier.ValueStep = new decimal(new int[] {
