@@ -199,7 +199,7 @@ namespace StableDiffusionGui.Main
             if (!allCudaDevices && cudaDeviceOpt > 0)
             {
                 if (cudaDeviceOpt == 1) // CPU
-                    envVars["CUDA_VISIBLE_DEVICES"] = ""; // Set to empty list
+                    envVars["CUDA_VISIBLE_DEVICES"] = "-1";
                 else
                     envVars["CUDA_VISIBLE_DEVICES"] = $"{cudaDeviceOpt - 2}"; // Set env var to selected GPU ID (-2 because the first two options are Automatic and CPU)
             }
