@@ -1,5 +1,6 @@
 ﻿using StableDiffusionGui.Data;
 using StableDiffusionGui.Io;
+using StableDiffusionGui.MiscUtils;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,6 +12,8 @@ namespace StableDiffusionGui.Main
 {
     internal class InvokeAiUtils
     {
+        public static string ModelsYamlPath { get { return Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdRepo, "configs", "models.yaml"); } }
+
         public static void WriteModelsYaml(string mdlName, string vaeName = "", string keyName = "default")
         {
             var mdl = Paths.GetModel(mdlName, false, Enums.StableDiffusion.ModelType.Normal);
@@ -29,7 +32,7 @@ namespace StableDiffusionGui.Main
                 $"    height: 512\n" +
                 $"    default: true";
 
-            File.WriteAllText(Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdRepo, "configs", "models.yaml"), text);
+            File.WriteAllText(ModelsYamlPath, text);
         }
 
         public static void WriteModelsYamlAll(Model selectedMdl, Model selectedVae, List<Model> cachedModels = null, List<Model> cachedModelsVae = null)
@@ -46,6 +49,7 @@ namespace StableDiffusionGui.Main
 
             foreach (Model mdl in cachedModels)
             {
+
                 bool inpaint = mdl.Name.MatchesWildcard("*-inpainting.*");
 
                 foreach (Model vae in cachedModelsVae)
@@ -61,7 +65,7 @@ namespace StableDiffusionGui.Main
                 }
             }
 
-            File.WriteAllText(Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdRepo, "configs", "models.yaml"), text);
+            File.WriteAllText(ModelsYamlPath, text);
         }
 
         private static bool IsModelDefault(Model mdl, Model vae, Model selectedMdl, Model selectedVae)

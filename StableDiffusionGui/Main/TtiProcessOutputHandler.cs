@@ -27,6 +27,7 @@ namespace StableDiffusionGui.Main
             Logger.Log(line, true, false, Constants.Lognames.Sd);
 
             bool ellipsis = Logger.LastUiLine.Contains("...");
+            string errMsg = "";
 
             if (TextToImage.CurrentTaskSettings != null && TextToImage.CurrentTaskSettings.Implementation == Enums.StableDiffusion.Implementation.InvokeAi)
             {
@@ -80,6 +81,12 @@ namespace StableDiffusionGui.Main
                 if (!_hasErrored && line.Contains("An error occurred while processing your prompt"))
                 {
                     Logger.Log(line);
+                    _hasErrored = true;
+                }
+
+                if (!_hasErrored && line.Trim().EndsWith(" is not a known model name. Please check your models.yaml file"))
+                {
+                    errMsg = $"Failed to switch models:\n\n{line}";
                     _hasErrored = true;
                 }
             }
@@ -166,35 +173,40 @@ namespace StableDiffusionGui.Main
             if (!_hasErrored && line.Contains("CUDA out of memory"))
             {
                 _hasErrored = true;
-                UiUtils.ShowMessageBox($"Your GPU ran out of VRAM! Try a lower resolution.\n\n{line.Split("If reserved memory is").FirstOrDefault()}", UiUtils.MessageType.Error);
+                errMsg = $"Your GPU ran out of VRAM! Try a lower resolution.\n\n{line.Split("If reserved memory is").FirstOrDefault()}";
             }
 
             if (!_hasErrored && (line.Contains("PytorchStreamReader failed reading zip archive") || line.Contains("UnpicklingError")))
             {
                 _hasErrored = true;
-                UiUtils.ShowMessageBox($"Your model file seems to be damaged or incomplete!\n\n{line}", UiUtils.MessageType.Error);
+                errMsg = $"Your model file seems to be damaged or incomplete!\n\n{line}";
             }
 
             if (!_hasErrored && line.StartsWith("usage: "))
             {
                 _hasErrored = true;
-                UiUtils.ShowMessageBox($"Invalid CLI syntax.", UiUtils.MessageType.Error);
+                errMsg = $"Invalid CLI syntax.";
             }
 
             if (!_hasErrored && line.Lower().Contains("illegal memory access"))
             {
                 _hasErrored = true;
-                UiUtils.ShowMessageBox($"Your GPU appears to be unstable! If you have an overclock enabled, please disable it!\n\n{line}", UiUtils.MessageType.Error);
+                errMsg = $"Your GPU appears to be unstable! If you have an overclock enabled, please disable it!\n\n{line}";
             }
 
             if (!_hasErrored && (line.Contains("RuntimeError") || line.Contains("ImportError") || line.Contains("OSError") || line.Contains("KeyError") || line.Contains("ModuleNotFoundError")))
             {
                 _hasErrored = true;
-                UiUtils.ShowMessageBox($"Python Error:\n\n{line}", UiUtils.MessageType.Error);
+                errMsg = $"Python Error:\n\n{line}";
             }
 
             if (_hasErrored)
+            {
                 TextToImage.Cancel();
+                
+                if(!string.IsNullOrWhiteSpace(errMsg))
+                    Task.Run(() => UiUtils.ShowMessageBox(errMsg, UiUtils.MessageType.Error));
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using StableDiffusionGui.Data;
+﻿using Force.Crc32;
+using StableDiffusionGui.Data;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
@@ -710,6 +711,49 @@ namespace StableDiffusionGui.Io
             }
 
             return false;
+        }
+
+        public enum Hash { MD5, CRC32 }
+        public static string GetHash(string path, Hash hashType, bool log = true)
+        {
+            string hashStr = "";
+            NmkdStopwatch sw = new NmkdStopwatch();
+
+            if (IsPathDirectory(path))
+            {
+                Logger.Log($"Path '{path}' is directory! Returning empty hash.", true);
+                return hashStr;
+            }
+            try
+            {
+                var stream = File.OpenRead(path);
+
+                if (hashType == Hash.MD5)
+                {
+                    MD5 md5 = MD5.Create();
+                    var hash = md5.ComputeHash(stream);
+                    hashStr = BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
+                }
+
+                if (hashType == Hash.CRC32)
+                {
+                    var crc = new Crc32Algorithm();
+                    var crc32bytes = crc.ComputeHash(stream);
+                    hashStr = BitConverter.ToUInt32(crc32bytes, 0).ToString();
+                }
+
+                stream.Close();
+            }
+            catch (Exception e)
+            {
+                Logger.Log($"Error getting file hash for {Path.GetFileName(path)}: {e.Message}", true);
+                return "";
+            }
+
+            if (log)
+                Logger.Log($"Computed {hashType} for '{Path.GetFileNameWithoutExtension(path).Trunc(40) + Path.GetExtension(path)}' ({GetFilesizeStr(path)}): {hashStr} ({sw})", true);
+
+            return hashStr;
         }
     }
 }

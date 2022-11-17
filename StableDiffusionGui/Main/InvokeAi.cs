@@ -90,6 +90,9 @@ namespace StableDiffusionGui.Main
             {
                 await Task.Delay(10);
 
+                if (Logger.GetLastLines(Constants.Lognames.Sd, 15, true).Where(l => l.Trim().EndsWith($" is not a known model name. Please check your models.yaml file")).Any())
+                    break;
+
                 if (Logger.GetLastLines(Constants.Lognames.Sd, 15, true).Where(l => l.Contains($" {modelNameInYaml} from ")).Any())
                     break;
 
