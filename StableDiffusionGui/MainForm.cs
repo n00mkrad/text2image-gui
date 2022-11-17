@@ -786,11 +786,6 @@ namespace StableDiffusionGui
             new RealtimeLoggerForm().Show();
         }
 
-        private void trainDreamBoothModelToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            new DreamboothForm().ShowDialogForm();
-        }
-
         private void fitWindowSizeToImageSizeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MainUi.FitWindowSizeToImageSize();
@@ -875,6 +870,11 @@ namespace StableDiffusionGui
                     promptAutocomplete = null;
                 }
             }
+        }
+
+        private void btnDreambooth_Click(object sender, EventArgs e)
+        {
+            new DreamboothForm().ShowDialogForm();
         }
     }
 }
