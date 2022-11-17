@@ -802,9 +802,9 @@ namespace StableDiffusionGui
             OsUtils.SetClipboard(ImagePreview.CurrentImageMetadata.NegativePrompt);
         }
 
-        private void openCmdInCondaEnvironmentToolStripMenuItem_Click(object sender, EventArgs e)
+        private void openCmdInPythonEnvironmentToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            TtiProcess.StartCmdInSdCondaEnv();
+            TtiProcess.StartCmdInSdEnv(false);
         }
 
         #region Post-Processing

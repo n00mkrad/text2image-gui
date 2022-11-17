@@ -83,7 +83,7 @@ namespace StableDiffusionGui
             this.deleteAllCurrentImagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStripDevTools = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.openCliToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openCmdInCondaEnvironmentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openCmdInPythonEnvironmentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openModelMergeToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openModelPruningTrimmingToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewLogInRealtimeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -903,46 +903,46 @@ namespace StableDiffusionGui
             this.menuStripDevTools.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStripDevTools.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openCliToolStripMenuItem,
-            this.openCmdInCondaEnvironmentToolStripMenuItem,
+            this.openCmdInPythonEnvironmentToolStripMenuItem,
             this.openModelMergeToolToolStripMenuItem,
             this.openModelPruningTrimmingToolToolStripMenuItem,
             this.viewLogInRealtimeToolStripMenuItem});
             this.menuStripDevTools.Name = "menuStripDevTools";
             this.menuStripDevTools.ShowImageMargin = false;
-            this.menuStripDevTools.Size = new System.Drawing.Size(231, 114);
+            this.menuStripDevTools.Size = new System.Drawing.Size(234, 136);
             // 
             // openCliToolStripMenuItem
             // 
             this.openCliToolStripMenuItem.Name = "openCliToolStripMenuItem";
-            this.openCliToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
+            this.openCliToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
             this.openCliToolStripMenuItem.Text = "Open Stable Diffusion CLI";
             this.openCliToolStripMenuItem.Click += new System.EventHandler(this.openDreampyCLIToolStripMenuItem_Click);
             // 
-            // openCmdInCondaEnvironmentToolStripMenuItem
+            // openCmdInPythonEnvironmentToolStripMenuItem
             // 
-            this.openCmdInCondaEnvironmentToolStripMenuItem.Name = "openCmdInCondaEnvironmentToolStripMenuItem";
-            this.openCmdInCondaEnvironmentToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
-            this.openCmdInCondaEnvironmentToolStripMenuItem.Text = "Open CMD in Conda Environment";
-            this.openCmdInCondaEnvironmentToolStripMenuItem.Click += new System.EventHandler(this.openCmdInCondaEnvironmentToolStripMenuItem_Click);
+            this.openCmdInPythonEnvironmentToolStripMenuItem.Name = "openCmdInPythonEnvironmentToolStripMenuItem";
+            this.openCmdInPythonEnvironmentToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
+            this.openCmdInPythonEnvironmentToolStripMenuItem.Text = "Open CMD in Python Environment";
+            this.openCmdInPythonEnvironmentToolStripMenuItem.Click += new System.EventHandler(this.openCmdInPythonEnvironmentToolStripMenuItem_Click);
             // 
             // openModelMergeToolToolStripMenuItem
             // 
             this.openModelMergeToolToolStripMenuItem.Name = "openModelMergeToolToolStripMenuItem";
-            this.openModelMergeToolToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
+            this.openModelMergeToolToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
             this.openModelMergeToolToolStripMenuItem.Text = "Merge Models";
             this.openModelMergeToolToolStripMenuItem.Click += new System.EventHandler(this.openModelMergeToolToolStripMenuItem_Click);
             // 
             // openModelPruningTrimmingToolToolStripMenuItem
             // 
             this.openModelPruningTrimmingToolToolStripMenuItem.Name = "openModelPruningTrimmingToolToolStripMenuItem";
-            this.openModelPruningTrimmingToolToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
+            this.openModelPruningTrimmingToolToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
             this.openModelPruningTrimmingToolToolStripMenuItem.Text = "Prune (Trim) Models";
             this.openModelPruningTrimmingToolToolStripMenuItem.Click += new System.EventHandler(this.openModelPruningTrimmingToolToolStripMenuItem_Click);
             // 
             // viewLogInRealtimeToolStripMenuItem
             // 
             this.viewLogInRealtimeToolStripMenuItem.Name = "viewLogInRealtimeToolStripMenuItem";
-            this.viewLogInRealtimeToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
+            this.viewLogInRealtimeToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
             this.viewLogInRealtimeToolStripMenuItem.Text = "View Log In Realtime";
             this.viewLogInRealtimeToolStripMenuItem.Click += new System.EventHandler(this.viewLogInRealtimeToolStripMenuItem_Click);
             // 
@@ -2101,7 +2101,7 @@ namespace StableDiffusionGui
         private System.Windows.Forms.Label labelImgPrompt;
         private System.Windows.Forms.Panel panelDebugSendStdin;
         private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.ToolStripMenuItem openCmdInCondaEnvironmentToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openCmdInPythonEnvironmentToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem copyToFavoritesToolStripMenuItem;
         private System.Windows.Forms.ContextMenuStrip menuStripPostProcess;
         private System.Windows.Forms.ToolStripMenuItem upscaleToolStripMenuItem;

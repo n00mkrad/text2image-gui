@@ -357,9 +357,18 @@ namespace StableDiffusionGui.Main
             OsUtils.AttachOrphanHitman(cli);
         }
 
-        public static void StartCmdInSdCondaEnv()
+        public static void StartCmdInSdEnv(bool conda)
         {
-            Process.Start("cmd", $"/K title Env: {Constants.Dirs.SdEnv} && cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand()} && call activate.bat {Constants.Dirs.Conda}/envs/{Constants.Dirs.SdEnv}");
+            if (conda)
+            {
+                Process.Start("cmd", $"/K title Env: {Constants.Dirs.SdEnv} && cd /D {Paths.GetDataPath().Wrap()} && " +
+                    $"{TtiUtils.GetEnvVarsSdCommand(true, Paths.GetDataPath())} && call activate.bat {Constants.Dirs.Conda}/envs/{Constants.Dirs.SdEnv}");
+            }
+            else
+            {
+                Process.Start("cmd", $"/K title Env: {Constants.Dirs.SdVenv} && cd /D {Paths.GetDataPath().Wrap()} && " +
+                    $"{TtiUtils.GetEnvVarsSdCommand(true, Paths.GetDataPath())}");
+            }
         }
 
         public static async Task<bool> WriteStdIn(string text, bool ignoreCanceled = false, bool newLine = true)
