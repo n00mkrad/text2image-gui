@@ -15,13 +15,14 @@ using static StableDiffusionGui.Main.Enums.Dreambooth;
 
 namespace StableDiffusionGui.Forms
 {
-    public partial class DreamboothForm : Form
+    public partial class DreamboothForm : CustomForm
     {
         private Dictionary<string, string> _uiStrings = new Dictionary<string, string>();
 
         public DreamboothForm()
         {
             InitializeComponent();
+            AllowTextboxTab = false;
         }
 
         private void DreamboothForm_Load(object sender, EventArgs e)
@@ -39,6 +40,11 @@ namespace StableDiffusionGui.Forms
         private async void DreamboothForm_Shown(object sender, EventArgs e)
         {
             Refresh();
+
+            TabOrderInit(new List<Control>() {
+                comboxBaseModel, comboxTrainPreset, textboxTrainImgsDir, textboxClassName, sliderLrMultiplier, sliderSteps
+            });
+
             await PerformChecks();
         }
 

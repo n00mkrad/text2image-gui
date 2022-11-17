@@ -9,6 +9,7 @@ namespace StableDiffusionGui.Forms
     {
         public Control FocusedControl { get { return this.GetControls().Where(c => c.Focused).FirstOrDefault(); } }
 
+        public bool AllowTextboxTab { get; set; } = true;
         public bool AllowEscClose { get; set; } = true;
 
         private List<Control> _tabOrderedControls;
@@ -56,7 +57,7 @@ namespace StableDiffusionGui.Forms
             if (e.KeyCode == Keys.Escape && AllowEscClose)
                 Close();
 
-            if (e.KeyCode == Keys.Tab && !(FocusedControl is TextBox))
+            if (e.KeyCode == Keys.Tab && !(FocusedControl is TextBox && AllowTextboxTab))
                 TabOrderNext();
         }
     }
