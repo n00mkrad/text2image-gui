@@ -4,7 +4,7 @@
     {
         public class Lognames
         {
-            public const string Session = "sessionlog";
+            public const string General = "general";
             public const string Installer = "installer";
             public const string Sd = "sd";
             public const string Prune = "prune";

@@ -43,7 +43,7 @@ namespace StableDiffusionGui.Main
 
         private static ConcurrentQueue<Entry> logQueue = new ConcurrentQueue<Entry>();
 
-        public static void Log(string msg, bool hidden = false, bool replaceLastLine = false, string filename = Constants.Lognames.Session)
+        public static void Log(string msg, bool hidden = false, bool replaceLastLine = false, string filename = Constants.Lognames.General)
         {
             if (string.IsNullOrWhiteSpace(msg))
                 return;
@@ -110,7 +110,7 @@ namespace StableDiffusionGui.Main
         public static void LogToFile(string logStr, bool noLineBreak, string filename)
         {
             if (string.IsNullOrWhiteSpace(filename))
-                filename = Constants.Lognames.Session;
+                filename = Constants.Lognames.General;
 
             if (Path.GetExtension(filename) != ".txt")
                 filename = Path.ChangeExtension(filename, "txt");
@@ -162,7 +162,7 @@ namespace StableDiffusionGui.Main
         public static void WriteToFile(string content, bool append, string filename)
         {
             if (string.IsNullOrWhiteSpace(filename))
-                filename = Constants.Lognames.Session;
+                filename = Constants.Lognames.General;
 
             if (Path.GetExtension(filename) != ".txt")
                 filename = Path.ChangeExtension(filename, "txt");
