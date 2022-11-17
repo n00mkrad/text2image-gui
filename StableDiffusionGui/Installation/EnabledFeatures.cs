@@ -5,8 +5,8 @@ namespace StableDiffusionGui.Installation
 {
     internal class EnabledFeatures
     {
-        public static bool Onnx { get { return true; } }
-        public static bool WildcardAutocomplete { get { return true; } }
+        public static bool InvokeAiModelCaching { get { return false; } }
+        public static bool WildcardAutocomplete { get { return false; } }
 
         public static bool Implementation (Enums.StableDiffusion.Implementation implementation)
         {
