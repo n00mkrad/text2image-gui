@@ -193,8 +193,8 @@ namespace StableDiffusionGui
                 textboxPrompt.Text = textboxPrompt.Text.Replace("*", $"<{conceptName.Trim()}>");
             }
 
-            var lines = textboxPrompt.Text.SplitIntoLines();
-            textboxPrompt.Text = string.Join(Environment.NewLine, lines.Select(x => MainUi.SanitizePrompt(x)));
+            textboxPrompt.Text = string.Join(Environment.NewLine, textboxPrompt.Text.SplitIntoLines().Select(x => MainUi.SanitizePrompt(x)));
+            textboxPromptNeg.Text = MainUi.SanitizePrompt(textboxPromptNeg.Text);
 
             if (upDownSeed.Text == "")
                 SetSeed();
