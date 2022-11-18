@@ -249,7 +249,7 @@ namespace StableDiffusionGui.Io
             }
 
             if (key == Key.checkboxMultiPromptsSameSeed) return WriteDefault(key, "True");
-            if (key == Key.sliderInitStrength) return WriteDefault(key, "10");
+            if (key == Key.sliderInitStrength) return WriteDefault(key, "0.5");
             if (keyStr == "comboxResW") return WriteDefault(key, "512");
             if (keyStr == "comboxResH") return WriteDefault(key, "512");
             if (key == Key.sliderSteps) return WriteDefault(key, "25");
