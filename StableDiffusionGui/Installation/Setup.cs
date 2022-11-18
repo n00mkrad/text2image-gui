@@ -422,7 +422,7 @@ namespace StableDiffusionGui.Installation
                 {
                     var easyInstallLines = File.ReadAllLines(easyInstallPth);
 
-                    string basePath = easyInstallLines.Where(l => l.Trim().EndsWith($@"\{Constants.Dirs.SdRepo}")).FirstOrDefault().Split($@"\{Constants.Dirs.SdRepo}").First();
+                    string basePath = String.Join($@"\{Constants.Dirs.SdRepo}", easyInstallLines.Where(l => l.Trim().EndsWith($@"\{Constants.Dirs.SdRepo}")).FirstOrDefault().Split($@"\{Constants.Dirs.SdRepo}").Reverse().Skip(1).Reverse());
                     string newBasePath = Paths.GetDataPath().Lower().Replace("/", @"\");
 
                     List<string> newLines = easyInstallLines.Select(l => l.Replace(basePath, newBasePath).Replace(@"\\", @"\")).ToList();
