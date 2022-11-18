@@ -24,12 +24,14 @@ namespace StableDiffusionGui.Ui
     internal class MainUi
     {
         private static List<string> _currentInitImgPaths;
-        public static List<string> CurrentInitImgPaths {
+        public static List<string> CurrentInitImgPaths
+        {
             get => _currentInitImgPaths;
-            set {
+            set
+            {
                 _currentInitImgPaths = value;
 
-                if(value != null && value.Count() > 0)
+                if (value != null && value.Count() > 0)
                     Logger.Log(value.Count() == 1 ? $"Now using initialization image {Path.GetFileName(value[0]).Wrap()}." : $"Now using {value.Count()} initialization images.");
 
                 if (InpaintingUtils.CurrentMask != null)
@@ -39,11 +41,13 @@ namespace StableDiffusionGui.Ui
                 }
             }
         }
-        
+
         private static string _currentEmbeddingPath;
-        public static string CurrentEmbeddingPath {
+        public static string CurrentEmbeddingPath
+        {
             get => _currentEmbeddingPath;
-            set {
+            set
+            {
                 _currentEmbeddingPath = value;
                 Logger.Log(string.IsNullOrWhiteSpace(value) ? "" : $"Now using learned concept {Path.GetFileName(value).Wrap()}.");
             }
@@ -53,12 +57,12 @@ namespace StableDiffusionGui.Ui
 
         public static List<int> Resolutions { get { return GetNumbers(384, 2048, 64); } }
 
-        public static List<int> GetNumbers (int min, int max, int step)
+        public static List<int> GetNumbers(int min, int max, int step)
         {
             return Enumerable.Range(min, (max - min) + 1).Where(x => x % step == 0).ToList();
         }
 
-        public static void DoStartupChecks ()
+        public static void DoStartupChecks()
         {
             if (!Program.Debug)
             {
@@ -160,7 +164,7 @@ namespace StableDiffusionGui.Ui
             if (paths.Count < 1)
                 return;
 
-            if(CurrentInitImgPaths != null)
+            if (CurrentInitImgPaths != null)
             {
                 bool oldIs1 = CurrentInitImgPaths.Count == 1;
                 bool newIs1 = paths.Count == 1;
@@ -182,7 +186,7 @@ namespace StableDiffusionGui.Ui
             Program.MainForm.UpdateInitImgAndEmbeddingUi();
         }
 
-        public static void HandlePaste ()
+        public static void HandlePaste()
         {
             try
             {
@@ -201,7 +205,7 @@ namespace StableDiffusionGui.Ui
             }
         }
 
-        public static string SanitizePrompt (string prompt)
+        public static string SanitizePrompt(string prompt)
         {
             //prompt = new Regex(@"[^a-zA-Z0-9 -!*,.:()_\-]").Replace(prompt, "");
             prompt = prompt.Replace(" -", " "); // Don't allow leading hyphens (might be misunderstood as args)
@@ -262,7 +266,7 @@ namespace StableDiffusionGui.Ui
 
                 List<float> incrementStrengths = new List<float>();
 
-                if(valFrom < valTo)
+                if (valFrom < valTo)
                 {
                     for (float f = valFrom; f < (valTo + 0.01f); f += step)
                         incrementStrengths.Add(1f - f);
@@ -286,7 +290,7 @@ namespace StableDiffusionGui.Ui
 
         public enum PromptFieldSizeMode { Expand, Collapse, Toggle }
 
-        public static void SetPromptFieldSize (PromptFieldSizeMode sizeMode = PromptFieldSizeMode.Toggle, bool negativePromptField = false)
+        public static void SetPromptFieldSize(PromptFieldSizeMode sizeMode = PromptFieldSizeMode.Toggle, bool negativePromptField = false)
         {
             var form = Program.MainForm;
             var panel = negativePromptField ? form.TextboxPromptNeg.Parent : form.TextboxPrompt.Parent;
@@ -325,7 +329,7 @@ namespace StableDiffusionGui.Ui
             Logger.Log($"Detected {gpus.Count.ToString().Replace("0", "no")} CUDA-capable GPU{(gpus.Count != 1 ? "s" : "")}.");
         }
 
-        public static void SetSettingsVertScrollbar ()
+        public static void SetSettingsVertScrollbar()
         {
             try
             {
@@ -334,12 +338,12 @@ namespace StableDiffusionGui.Ui
             catch { }
         }
 
-        public static void SetHiresFixVisible (ComboBox w, ComboBox h, CheckBox fix)
+        public static void SetHiresFixVisible(ComboBox w, ComboBox h, CheckBox fix)
         {
             fix.Visible = w.GetInt() > 512 && h.GetInt() > 512 && (Implementation)Config.GetInt("comboxImplementation") == Implementation.InvokeAi;
         }
 
-        public static void FitWindowSizeToImageSize ()
+        public static void FitWindowSizeToImageSize()
         {
             if (Program.MainForm.PictBoxImgViewer.Image.Size == Program.MainForm.PictBoxImgViewer.Size)
                 return;
@@ -356,9 +360,9 @@ namespace StableDiffusionGui.Ui
             LoadAutocompleteData(menu, new[] { textbox });
         }
 
-        public static void LoadAutocompleteData (AutocompleteMenuNS.AutocompleteMenu menu, IEnumerable<TextBox> textboxes)
+        public static void LoadAutocompleteData(AutocompleteMenuNS.AutocompleteMenu menu, IEnumerable<TextBox> textboxes)
         {
-            foreach(TextBox textbox in textboxes)
+            foreach (TextBox textbox in textboxes)
             {
                 List<string> autoCompleteStrings = new List<string>();
 
@@ -371,14 +375,14 @@ namespace StableDiffusionGui.Ui
             }
         }
 
-        public static string[] GetAutocompleteStrings ()
+        public static string[] GetAutocompleteStrings()
         {
             List<string> strings = new List<string>();
             strings.AddRange(IoUtils.GetFileInfosSorted(Path.Combine(Paths.GetExeDir(), "Wildcards")).Select(x => $"{x.NameNoExt()}"));
             return strings.ToArray();
         }
 
-        public static AutocompleteMenuNS.AutocompleteMenu ShowAutocompleteMenu (TextBox textbox)
+        public static AutocompleteMenuNS.AutocompleteMenu ShowAutocompleteMenu(TextBox textbox)
         {
             var menu = MakeAutocompleteMenu(textbox.Font);
             menu.Show(textbox, true);
