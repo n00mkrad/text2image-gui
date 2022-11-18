@@ -193,7 +193,7 @@ namespace StableDiffusionGui.Ui
 
                 string savePath = Path.Combine(Paths.GetSessionDataPath(), "clipboard.png");
                 clipboardImg.Save(savePath);
-                MainUi.HandleDroppedFiles(new string[] { savePath });
+                HandleDroppedFiles(new string[] { savePath });
             }
             catch (Exception ex)
             {
