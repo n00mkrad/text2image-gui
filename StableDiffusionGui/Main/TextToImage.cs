@@ -144,7 +144,7 @@ namespace StableDiffusionGui.Main
 
             Logger.Log($"Canceling. Manual: {manual} - Implementation: {(CurrentTaskSettings != null ? CurrentTaskSettings.Implementation.ToString() : "None")} - Force Kill: {forceKill}", true);
 
-            if (CurrentTaskSettings.Implementation == Enums.StableDiffusion.Implementation.DiffusersOnnx)
+            if (CurrentTaskSettings != null && CurrentTaskSettings.Implementation == Enums.StableDiffusion.Implementation.DiffusersOnnx)
                 forceKill = true;
 
             if (!forceKill && TtiProcess.IsAiProcessRunning)

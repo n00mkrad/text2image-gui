@@ -254,7 +254,7 @@ namespace StableDiffusionGui
                 sliderInitStrength.ActualValue = (decimal)s.Params.Get("initStrengths").FromJson<List<float>>().FirstOrDefault();
                 MainUi.CurrentEmbeddingPath = s.Params.Get("embedding").FromJson<string>();
                 comboxSeamless.SetIfTextMatches(s.Params.Get("seamless").FromJson<string>(), true, Strings.MainUiStrings);
-                checkboxInpainting.Checked = s.Params.Get("inpainting").FromJson<string>() == "masked";
+                checkboxInpainting.Checked = s.Params.Get("inpainting").FromJson<InpaintMode>() == InpaintMode.ImageMask;
                 checkboxHiresFix.Checked = s.Params.Get("hiresFix").FromJson<bool>();
                 checkboxLockSeed.Checked = s.Params.Get("lockSeed").FromJson<bool>();
             }
@@ -287,7 +287,7 @@ namespace StableDiffusionGui
                             { "initStrengths", MainUi.GetInitStrengths(textboxExtraInitStrengths.Text).ToJson() },
                             { "embedding", MainUi.CurrentEmbeddingPath.ToJson() },
                             { "seamless", ((SeamlessMode)comboxSeamless.SelectedIndex).ToJson() },
-                            { "inpainting", (checkboxInpainting.Checked ? "masked" : "").ToJson() },
+                            { "inpainting", (checkboxInpainting.Checked ? InpaintMode.ImageMask : InpaintMode.Disabled).ToJson() },
                             { "model", Config.Get(Config.Key.comboxSdModel).ToJson() },
                             { "hiresFix", checkboxHiresFix.Checked.ToJson() },
                             { "lockSeed", checkboxLockSeed.Checked.ToJson() },

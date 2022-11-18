@@ -40,11 +40,11 @@ namespace StableDiffusionGui.Ui
                 return false;
             }
 
-            if (settings.Params["inpainting"].FromJson<string>() == "masked")
+            if (settings.Params["inpainting"].FromJson<Enums.StableDiffusion.InpaintMode>() == Enums.StableDiffusion.InpaintMode.ImageMask)
             {
                 if (initImgs.Count > 1)
                 {
-                    Logger.Log($"Inpainting is currently only available when using a single image as input, but you are currently using {initImgs.Count}.");
+                    Logger.Log($"Inpainting is currently only available when using a single image as input, but you are using {initImgs.Count}.");
                     return false;
                 }
 
