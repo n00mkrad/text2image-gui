@@ -126,7 +126,7 @@ namespace StableDiffusionGui.Main
                 UiUtils.ShowMessageBox($"{(prompts.Count > 1 ? "One of your prompts" : "Your prompt")} does not contain a concept placeholder (*).\n\nIt will not use your loaded concept.");
         }
 
-        public static void SoftCancelDreamPy()
+        public static void SoftCancelInvokeAi()
         {
             OsUtils.SendCtrlC(TtiProcess.CurrentProcess.Id);
 

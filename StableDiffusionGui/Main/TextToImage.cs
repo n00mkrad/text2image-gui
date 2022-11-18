@@ -160,7 +160,7 @@ namespace StableDiffusionGui.Main
                     List<string> lastLogLines = Logger.GetLastLines(Constants.Lognames.Sd, 15);
 
                     if (lastLogLines.Where(x => x.MatchesWildcard("*step */*") || x.Contains("error occurred")).Any()) // Only attempt a soft cancel if we've been generating anything
-                        await WaitForDreamPyCancel();
+                        await WaitForInvokeAiCancel();
                     else // This condition should be true if we cancel while it's still initializing, so we can just force kill the process
                         TtiProcess.Kill();
                 }
@@ -176,11 +176,11 @@ namespace StableDiffusionGui.Main
                 UiUtils.ShowMessageBox($"Canceled:\n\n{reason}");
         }
 
-        public static async Task WaitForDreamPyCancel()
+        public static async Task WaitForInvokeAiCancel()
         {
             Program.MainForm.RunBtn.Enabled = false;
             DateTime cancelTime = DateTime.Now;
-            TtiUtils.SoftCancelDreamPy();
+            TtiUtils.SoftCancelInvokeAi();
             await Task.Delay(100);
 
             KeyValuePair<string, TimeSpan> previousLastLine = new KeyValuePair<string, TimeSpan>();
@@ -220,7 +220,7 @@ namespace StableDiffusionGui.Main
                     bool linesChanged = !string.IsNullOrWhiteSpace(previousLastLine.Key) && lastLine.Key != previousLastLine.Key && lastLine.Value.TotalMilliseconds < 500;
 
                     if (linesChanged && !lastLine.Key.Contains("skipped")) // If lines changed (= still outputting), send ctrl+c again
-                        TtiUtils.SoftCancelDreamPy();
+                        TtiUtils.SoftCancelInvokeAi();
 
                     previousLastLine = lastLine;
                 }
