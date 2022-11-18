@@ -208,9 +208,6 @@ namespace StableDiffusionGui.Ui
 
             while (prompt.StartsWith("-"))
                 prompt = prompt.Substring(1); // Remove leading hypens
-            
-            while (prompt.EndsWith("-"))
-                prompt = prompt.Remove(prompt.Length - 1); // Remove trailing hypens
 
             prompt = InvokeAiUtils.ConvertOldAttentionSyntax(prompt); // Convert old (multi-bracket) emphasis/attention syntax to new one (with +/-)
 
