@@ -26,6 +26,9 @@ namespace StableDiffusionGui.Ui
             { Enums.StableDiffusion.SeamlessMode.SeamlessBoth.ToString(), "Seamless on All Sides" },
             { Enums.StableDiffusion.SeamlessMode.SeamlessHor.ToString(), "Seamless on Left/Right Edges" },
             { Enums.StableDiffusion.SeamlessMode.SeamlessVert.ToString(), "Seamless on Top/Bottom Edges" },
+            // Inpaint Modes
+            { Enums.StableDiffusion.InpaintMode.ImageMask.ToString(), "Image Mask (Draw Mask)" },
+            { Enums.StableDiffusion.InpaintMode.TextMask.ToString(), "Text Mask (Describe what you want to replace)" },
         };
 
         public static Dictionary<string, string> PostProcSettingsUiStrings = new Dictionary<string, string>
