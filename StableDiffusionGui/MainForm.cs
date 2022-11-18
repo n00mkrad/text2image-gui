@@ -135,6 +135,7 @@ namespace StableDiffusionGui
         {
             comboxSampler.FillFromEnum<Sampler>(Strings.MainUiStrings);
             comboxSeamless.FillFromEnum<SeamlessMode>(Strings.MainUiStrings, 0);
+            comboxInpaintMode.FillFromEnum<InpaintMode>(Strings.MainUiStrings, 0);
 
             var resItems = MainUi.Resolutions.Where(x => x <= (Config.GetBool("checkboxAdvancedMode") ? 2048 : 1024)).Select(x => x.ToString());
             comboxResW.SetItems(resItems, UiExtensions.SelectMode.Last);
@@ -287,7 +288,8 @@ namespace StableDiffusionGui
                             { "initStrengths", MainUi.GetInitStrengths(textboxExtraInitStrengths.Text).ToJson() },
                             { "embedding", MainUi.CurrentEmbeddingPath.ToJson() },
                             { "seamless", ((SeamlessMode)comboxSeamless.SelectedIndex).ToJson() },
-                            { "inpainting", (checkboxInpainting.Checked ? InpaintMode.ImageMask : InpaintMode.Disabled).ToJson() },
+                            { "inpainting", ((InpaintMode)comboxInpaintMode.SelectedIndex).ToJson() },
+                            { "clipSegMask", textboxClipsegMask.Text.Trim().ToJson() },
                             { "model", Config.Get(Config.Key.comboxSdModel).ToJson() },
                             { "hiresFix", checkboxHiresFix.Checked.ToJson() },
                             { "lockSeed", checkboxLockSeed.Checked.ToJson() },

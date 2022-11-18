@@ -153,6 +153,8 @@ namespace StableDiffusionGui
             this.promptAutocomplete = new AutocompleteMenuNS.AutocompleteMenu();
             this.pictBoxImgViewer = new System.Windows.Forms.PictureBox();
             this.separator = new System.Windows.Forms.Button();
+            this.comboxInpaintMode = new System.Windows.Forms.ComboBox();
+            this.textboxClipsegMask = new System.Windows.Forms.TextBox();
             this.menuStripOutputImg.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.upDownSeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
@@ -206,7 +208,7 @@ namespace StableDiffusionGui
             this.titleLabel.Location = new System.Drawing.Point(11, 9);
             this.titleLabel.Margin = new System.Windows.Forms.Padding(3, 0, 3, 10);
             this.titleLabel.Name = "titleLabel";
-            this.titleLabel.Size = new System.Drawing.Size(367, 40);
+            this.titleLabel.Size = new System.Drawing.Size(366, 40);
             this.titleLabel.TabIndex = 11;
             this.titleLabel.Text = "NMKD Stable Diffusion GUI";
             // 
@@ -557,7 +559,7 @@ namespace StableDiffusionGui
             this.textboxSliderScale.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScale.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScale.Location = new System.Drawing.Point(297, 9);
+            this.textboxSliderScale.Location = new System.Drawing.Point(297, 7);
             this.textboxSliderScale.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScale.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScale.Name = "textboxSliderScale";
@@ -707,7 +709,7 @@ namespace StableDiffusionGui
             this.textboxSliderInitStrength.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderInitStrength.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderInitStrength.Location = new System.Drawing.Point(297, 9);
+            this.textboxSliderInitStrength.Location = new System.Drawing.Point(297, 7);
             this.textboxSliderInitStrength.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderInitStrength.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderInitStrength.Name = "textboxSliderInitStrength";
@@ -1654,7 +1656,7 @@ namespace StableDiffusionGui
             this.textboxSliderSteps.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderSteps.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderSteps.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderSteps.Location = new System.Drawing.Point(377, 9);
+            this.textboxSliderSteps.Location = new System.Drawing.Point(377, 7);
             this.textboxSliderSteps.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderSteps.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderSteps.Name = "textboxSliderSteps";
@@ -1728,6 +1730,8 @@ namespace StableDiffusionGui
             // 
             // panelInpainting
             // 
+            this.panelInpainting.Controls.Add(this.textboxClipsegMask);
+            this.panelInpainting.Controls.Add(this.comboxInpaintMode);
             this.panelInpainting.Controls.Add(this.btnResetMask);
             this.panelInpainting.Controls.Add(this.checkboxInpainting);
             this.panelInpainting.Controls.Add(this.label10);
@@ -1905,6 +1909,32 @@ namespace StableDiffusionGui
             this.separator.TabIndex = 75;
             this.separator.TabStop = false;
             this.separator.UseVisualStyleBackColor = false;
+            // 
+            // comboxInpaintMode
+            // 
+            this.comboxInpaintMode.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.comboxInpaintMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboxInpaintMode.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboxInpaintMode.ForeColor = System.Drawing.Color.White;
+            this.comboxInpaintMode.FormattingEnabled = true;
+            this.comboxInpaintMode.Location = new System.Drawing.Point(339, 7);
+            this.comboxInpaintMode.Name = "comboxInpaintMode";
+            this.comboxInpaintMode.Size = new System.Drawing.Size(200, 21);
+            this.comboxInpaintMode.TabIndex = 109;
+            // 
+            // textboxClipsegMask
+            // 
+            this.textboxClipsegMask.AllowDrop = true;
+            this.textboxClipsegMask.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.promptAutocomplete.SetAutocompleteMenu(this.textboxClipsegMask, null);
+            this.textboxClipsegMask.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textboxClipsegMask.ForeColor = System.Drawing.Color.White;
+            this.textboxClipsegMask.Location = new System.Drawing.Point(545, 7);
+            this.textboxClipsegMask.MinimumSize = new System.Drawing.Size(4, 21);
+            this.textboxClipsegMask.Name = "textboxClipsegMask";
+            this.textboxClipsegMask.Size = new System.Drawing.Size(97, 21);
+            this.textboxClipsegMask.TabIndex = 110;
             // 
             // MainForm
             // 
@@ -2123,6 +2153,8 @@ namespace StableDiffusionGui
         private System.Windows.Forms.TextBox textboxPerlin;
         public AutocompleteMenuNS.AutocompleteMenu promptAutocomplete;
         private System.Windows.Forms.Button btnDreambooth;
+        private System.Windows.Forms.TextBox textboxClipsegMask;
+        private System.Windows.Forms.ComboBox comboxInpaintMode;
     }
 }
 

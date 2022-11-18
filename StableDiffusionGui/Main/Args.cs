@@ -12,11 +12,6 @@ namespace StableDiffusionGui.Main
     {
         public class InvokeAi
         {
-            public static string GetPrecisionArg()
-            {
-                return $"{(Config.GetBool("checkboxFullPrecision") ? "--precision float32" : "")}";
-            }
-
             public static string GetArgsStartup(string embedding = "", string model = "")
             {
                 bool lowVram = GpuUtils.CachedGpus.Count > 0 && GpuUtils.CachedGpus.First().VramGb < 7.9f;
@@ -26,7 +21,9 @@ namespace StableDiffusionGui.Main
                 if (!string.IsNullOrWhiteSpace(model))
                     args.Add($"--model {model}");
 
-                args.Add(GetPrecisionArg());
+                if (Config.GetBool("checkboxFullPrecision"))
+                    args.Add("--precision float32");
+
                 args.Add(GetEmbeddingArg(embedding));
 
                 if (lowVram)

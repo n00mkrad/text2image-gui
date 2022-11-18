@@ -11,6 +11,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
 namespace StableDiffusionGui.Main
 {
@@ -32,26 +33,28 @@ namespace StableDiffusionGui.Main
         {
             try
             {
-                string[] initImgs =     parameters.FromJson<string[]>("initImgs");
-                string embedding =      parameters.FromJson<string>("embedding");
-                float[] initStrengths = parameters.FromJson<float[]>("initStrengths");
-                int steps =             parameters.FromJson<int>("steps");
-                float[] scales =        parameters.FromJson<float[]>("scales");
-                long seed =             parameters.FromJson<long>("seed");
-                string sampler =        parameters.FromJson<string>("sampler");
-                Size res =              parameters.FromJson<Size>("res");
-                var seamless =          parameters.FromJson<Enums.StableDiffusion.SeamlessMode>("seamless");
-                string model =          parameters.FromJson<string>("model");
-                bool hiresFix =         parameters.FromJson<bool>("hiresFix");
-                bool lockSeed =         parameters.FromJson<bool>("lockSeed");
-                string vae =            parameters.FromJson<string>("vae").NullToEmpty().Replace("None", "");
-                float perlin =          parameters.FromJson<float>("perlin");
-                int threshold =         parameters.FromJson<int>("threshold");
+                string[] initImgs =     parameters.FromJson<string[]>("initImgs"); // List of init images
+                string embedding =      parameters.FromJson<string>("embedding"); // Textual Inversion embedding file
+                float[] initStrengths = parameters.FromJson<float[]>("initStrengths"); // List of init strength values to run
+                int steps =             parameters.FromJson<int>("steps"); // Diffusion steps
+                float[] scales =        parameters.FromJson<float[]>("scales"); // List of CFG scale values to run
+                long seed =             parameters.FromJson<long>("seed"); // Initial seed
+                string sampler =        parameters.FromJson<string>("sampler"); // Sampler
+                Size res =              parameters.FromJson<Size>("res"); // Image resolution
+                var seamless =          parameters.FromJson<SeamlessMode>("seamless"); // Seamless generation mode
+                string model =          parameters.FromJson<string>("model"); // Model name
+                bool hiresFix =         parameters.FromJson<bool>("hiresFix"); // Enable high-resolution fix
+                bool lockSeed =         parameters.FromJson<bool>("lockSeed"); // Lock seed (disable auto-increment)
+                string vae =            parameters.FromJson<string>("vae").NullToEmpty().Replace("None", ""); // VAE model name
+                float perlin =          parameters.FromJson<float>("perlin"); // Perlin noise blend value
+                int threshold =         parameters.FromJson<int>("threshold"); // Threshold value
+                InpaintMode inpaint =   parameters.FromJson<InpaintMode>("inpainting"); // Inpainting mode
+                string clipSegMask =    parameters.FromJson<string>("clipSegMask"); // ClipSeg text-based masking prompt
 
-                var cachedModels = Paths.GetModels(Enums.StableDiffusion.ModelType.Normal);
-                var cachedModelsVae = Paths.GetModels(Enums.StableDiffusion.ModelType.Vae);
+                var cachedModels = Paths.GetModels(ModelType.Normal);
+                var cachedModelsVae = Paths.GetModels(ModelType.Vae);
                 Model modelFile = TtiUtils.CheckIfCurrentSdModelExists();
-                Model vaeFile = Paths.GetModel(cachedModelsVae, vae, false, Enums.StableDiffusion.ModelType.Vae);
+                Model vaeFile = Paths.GetModel(cachedModelsVae, vae, false, ModelType.Vae);
 
                 if (modelFile == null)
                     return;
@@ -88,6 +91,7 @@ namespace StableDiffusionGui.Main
                         args["seed"] = $"-S {seed}";
                         args["perlin"] = $"--perlin {perlin.ToStringDot()}";
                         args["threshold"] = $"--threshold {threshold}";
+                        args["clipSegMask"] = inpaint == InpaintMode.TextMask ? $"-tm {clipSegMask}" : "";
 
                         foreach (float scale in scales)
                         {
@@ -334,10 +338,10 @@ namespace StableDiffusionGui.Main
             if (Program.Busy)
                 return;
 
-            var cachedModels = Paths.GetModels(Enums.StableDiffusion.ModelType.Normal);
-            var cachedModelsVae = Paths.GetModels(Enums.StableDiffusion.ModelType.Vae);
+            var cachedModels = Paths.GetModels(ModelType.Normal);
+            var cachedModelsVae = Paths.GetModels(ModelType.Vae);
             Model modelFile = TtiUtils.CheckIfCurrentSdModelExists();
-            Model vaeFile = Paths.GetModel(cachedModelsVae, Path.GetFileName(vaePath), false, Enums.StableDiffusion.ModelType.Vae);
+            Model vaeFile = Paths.GetModel(cachedModelsVae, Path.GetFileName(vaePath), false, ModelType.Vae);
 
             if (modelFile == null)
                 return;
