@@ -110,6 +110,8 @@ namespace StableDiffusionGui.Main
             if (prompt.Contains(")+") || prompt.Contains(")-") || Regex.Matches(prompt, @"\)\d.\d+").Count >= 1) // Assume new syntax is already used
                 return prompt;
 
+            prompt = prompt.Replace("\\(", "escapedParenthesisOpen").Replace("\\)", "escapedParenthesisClose");
+
             var parentheses = Regex.Matches(prompt, @"\(((?>[^()]+|\((?<n>)|\)(?<-n>))+(?(n)(?!)))\)");
 
             for (int i = 0; i < parentheses.Count; i++)
@@ -129,6 +131,8 @@ namespace StableDiffusionGui.Main
                 string converted = $"({match.Remove("{").Remove("}")}){new string('-', count)}";
                 prompt = prompt.Replace(match, converted);
             }
+
+            prompt = prompt.Replace("escapedParenthesisOpen", "\\(").Replace("escapedParenthesisClose", "\\)");
 
             return prompt;
         }
