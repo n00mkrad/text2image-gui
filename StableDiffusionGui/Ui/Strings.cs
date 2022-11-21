@@ -16,6 +16,8 @@ namespace StableDiffusionGui.Ui
             // Samplers
             { Enums.StableDiffusion.Sampler.K_Euler_A.ToString(), "Euler Ancestral" },
             { Enums.StableDiffusion.Sampler.K_Euler.ToString(), "Euler" },
+            { Enums.StableDiffusion.Sampler.K_Dpmpp_2.ToString(), "DPM++ 2" },
+            { Enums.StableDiffusion.Sampler.K_Dpmpp_2_A.ToString(), "DPM++ 2 Ancestral" },
             { Enums.StableDiffusion.Sampler.K_Lms.ToString(), "LMS" },
             { Enums.StableDiffusion.Sampler.Ddim.ToString(), "DDIM" },
             { Enums.StableDiffusion.Sampler.Plms.ToString(), "PLMS" },
