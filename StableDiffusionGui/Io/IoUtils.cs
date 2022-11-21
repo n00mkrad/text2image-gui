@@ -713,20 +713,30 @@ namespace StableDiffusionGui.Io
             return false;
         }
 
+        public static Stream StringToStream(string s)
+        {
+            var stream = new MemoryStream();
+            var writer = new StreamWriter(stream);
+            writer.Write(s);
+            writer.Flush();
+            stream.Position = 0;
+            return stream;
+        }
+
         public enum Hash { MD5, CRC32 }
-        public static string GetHash(string path, Hash hashType, bool log = true)
+        public static string GetHash(string pathOrString, Hash hashType, bool log = true)
         {
             string hashStr = "";
             NmkdStopwatch sw = new NmkdStopwatch();
 
-            if (IsPathDirectory(path))
+            if (Directory.Exists(pathOrString))
             {
-                Logger.Log($"Path '{path}' is directory! Returning empty hash.", true);
+                Logger.Log($"Path '{pathOrString}' is directory! Returning empty hash.", true);
                 return hashStr;
             }
             try
             {
-                var stream = File.OpenRead(path);
+                var stream = File.Exists(pathOrString) ? File.OpenRead(pathOrString) : StringToStream(pathOrString);
 
                 if (hashType == Hash.MD5)
                 {
@@ -746,12 +756,12 @@ namespace StableDiffusionGui.Io
             }
             catch (Exception e)
             {
-                Logger.Log($"Error getting file hash for {Path.GetFileName(path)}: {e.Message}", true);
+                Logger.Log($"Error getting file hash for {Path.GetFileName(pathOrString)}: {e.Message}", true);
                 return "";
             }
 
             if (log)
-                Logger.Log($"Computed {hashType} for '{Path.GetFileNameWithoutExtension(path).Trunc(40) + Path.GetExtension(path)}' ({GetFilesizeStr(path)}): {hashStr} ({sw})", true);
+                Logger.Log($"Computed {hashType} for '{Path.GetFileNameWithoutExtension(pathOrString).Trunc(40) + Path.GetExtension(pathOrString)}' ({GetFilesizeStr(pathOrString)}): {hashStr} ({sw})", true);
 
             return hashStr;
         }

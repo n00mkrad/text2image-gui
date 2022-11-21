@@ -91,6 +91,17 @@ namespace StableDiffusionGui.Main
             return $"{mdl.Name}{(vae == null ? "-noVae" : $"-{vae.Name}")}";
         }
 
+        public static string GetModelsYamlHash (IoUtils.Hash hashType = IoUtils.Hash.CRC32, bool ignoreDefaultKey = true)
+        {
+            var lines = File.ReadAllLines(ModelsYamlPath);
+
+            if (ignoreDefaultKey)
+                lines = lines.Where(l => !l.Contains("    default: ")).ToArray();
+
+            string contentStr = string.Join(Environment.NewLine, lines);
+            return IoUtils.GetHash(contentStr, hashType, false);
+        }
+
         public static string ConvertOldAttentionSyntax(string prompt)
         {
             if (!prompt.Contains("(") && !prompt.Contains("{")) // Skip if no parentheses/curly brackets were used
