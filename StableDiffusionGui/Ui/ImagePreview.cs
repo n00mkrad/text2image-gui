@@ -81,9 +81,9 @@ namespace StableDiffusionGui.Ui
                 return;
             }
 
-            Program.MainForm.PictBoxImgViewer.Text = "";
-            Program.MainForm.PictBoxImgViewer.Image = IoUtils.GetImage(_currentImages[_currIndex]);
-            ImagePopup.UpdateSlideshow(Program.MainForm.PictBoxImgViewer.Image);
+            Program.MainForm.pictBoxImgViewer.Text = "";
+            Program.MainForm.pictBoxImgViewer.Image = IoUtils.GetImage(_currentImages[_currIndex]);
+            ImagePopup.UpdateSlideshow(Program.MainForm.pictBoxImgViewer.Image);
 
             ImageMetadata meta = CurrentImageMetadata;
 
@@ -95,7 +95,7 @@ namespace StableDiffusionGui.Ui
             if (meta.Scale >= 0)
                 infos.Add($"Scale {meta.Scale.ToStringDot()}");
 
-            Size res = Program.MainForm.PictBoxImgViewer.Image.Size;
+            Size res = Program.MainForm.pictBoxImgViewer.Image.Size;
 
             if (!meta.GeneratedResolution.IsEmpty)
                 infos.Add($"{meta.GeneratedResolution.Width}x{meta.GeneratedResolution.Height}{(meta.GeneratedResolution == res ? "" : $" => {res.Width}x{res.Height}")}");
@@ -106,28 +106,28 @@ namespace StableDiffusionGui.Ui
             if (!string.IsNullOrWhiteSpace(meta.Sampler))
                 infos.Add(Strings.MainUiStrings.Get(meta.Sampler, true, true));
 
-            Program.MainForm.LabelImgInfo.Text = $"Image {_currIndex + 1}/{_currentImages.Length} {(infos.Count > 0 ? $" - {string.Join(" - ", infos)}" : "")}";
-            Program.MainForm.LabelImgPrompt.Text = !string.IsNullOrWhiteSpace(meta.Prompt) ? meta.Prompt : _strNoPrompt;
-            Program.MainForm.LabelImgPromptNeg.Text = !string.IsNullOrWhiteSpace(meta.NegativePrompt) ? meta.NegativePrompt : _strNoPromptNeg;
-            Program.MainForm.ToolTip.SetToolTip(Program.MainForm.LabelImgPrompt, $"{Program.MainForm.LabelImgPrompt.Text}\n\nClick to copy.");
-            Program.MainForm.ToolTip.SetToolTip(Program.MainForm.LabelImgPromptNeg, $"{Program.MainForm.LabelImgPromptNeg.Text}\n\nClick to copy.");
+            Program.MainForm.labelImgInfo.Text = $"Image {_currIndex + 1}/{_currentImages.Length} {(infos.Count > 0 ? $" - {string.Join(" - ", infos)}" : "")}";
+            Program.MainForm.labelImgPrompt.Text = !string.IsNullOrWhiteSpace(meta.Prompt) ? meta.Prompt : _strNoPrompt;
+            Program.MainForm.labelImgPromptNeg.Text = !string.IsNullOrWhiteSpace(meta.NegativePrompt) ? meta.NegativePrompt : _strNoPromptNeg;
+            Program.MainForm.toolTip.SetToolTip(Program.MainForm.labelImgPrompt, $"{Program.MainForm.labelImgPrompt.Text}\n\nClick to copy.");
+            Program.MainForm.toolTip.SetToolTip(Program.MainForm.labelImgPromptNeg, $"{Program.MainForm.labelImgPromptNeg.Text}\n\nClick to copy.");
             UpdatePromptLabelColors();
         }
 
         public static void Clear()
         {
-            Program.MainForm.PictBoxImgViewer.Text = "";
-            Program.MainForm.PictBoxImgViewer.Image = null;
-            Program.MainForm.LabelImgInfo.Text = "No images to show.";
-            Program.MainForm.LabelImgPrompt.Text = _strNoPrompt;
-            Program.MainForm.LabelImgPromptNeg.Text = _strNoPromptNeg;
+            Program.MainForm.pictBoxImgViewer.Text = "";
+            Program.MainForm.pictBoxImgViewer.Image = null;
+            Program.MainForm.labelImgInfo.Text = "No images to show.";
+            Program.MainForm.labelImgPrompt.Text = _strNoPrompt;
+            Program.MainForm.labelImgPromptNeg.Text = _strNoPromptNeg;
             UpdatePromptLabelColors();
         }
 
         public static void UpdatePromptLabelColors ()
         {
-            Program.MainForm.LabelImgPrompt.ForeColor = Program.MainForm.LabelImgPrompt.Text == _strNoPrompt ? Color.Silver : Color.PaleGreen;
-            Program.MainForm.LabelImgPromptNeg.ForeColor = Program.MainForm.LabelImgPromptNeg.Text == _strNoPromptNeg ? Color.Silver : Color.LightCoral;
+            Program.MainForm.labelImgPrompt.ForeColor = Program.MainForm.labelImgPrompt.Text == _strNoPrompt ? Color.Silver : Color.PaleGreen;
+            Program.MainForm.labelImgPromptNeg.ForeColor = Program.MainForm.labelImgPromptNeg.Text == _strNoPromptNeg ? Color.Silver : Color.LightCoral;
         }
 
         public static void Move(bool previous = false)

@@ -178,7 +178,7 @@ namespace StableDiffusionGui.Main
 
         public static async Task WaitForInvokeAiCancel()
         {
-            Program.MainForm.RunBtn.Enabled = false;
+            Program.MainForm.runBtn.Enabled = false;
             DateTime cancelTime = DateTime.Now;
             TtiUtils.SoftCancelInvokeAi();
             await Task.Delay(100);
@@ -229,7 +229,7 @@ namespace StableDiffusionGui.Main
             }
 
             await TtiProcess.WriteStdIn("!reset", true);
-            Program.MainForm.RunBtn.Enabled = true;
+            Program.MainForm.runBtn.Enabled = true;
         }
     }
 }

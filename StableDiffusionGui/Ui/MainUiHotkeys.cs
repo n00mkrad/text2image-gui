@@ -23,7 +23,7 @@ namespace StableDiffusionGui.Ui
                 MainUi.HandlePaste();
 
             if (keys == (Keys.Control | Keys.G)) // Hotkey: Generate/Cancel
-                Program.MainForm.RunBtn.PerformClick();
+                Program.MainForm.runBtn.PerformClick();
 
             if (keys == (Keys.Control | Keys.Delete) && !InputUtils.IsKeyPressed(Key.Back)) // Hotkey: Delete generated image
                 ImagePreview.DeleteCurrent();
@@ -38,7 +38,7 @@ namespace StableDiffusionGui.Ui
                 MainUi.SetPromptFieldSize(MainUi.PromptFieldSizeMode.Toggle, true);
 
             if (keys == (Keys.Control | Keys.C) && !_anyTextboxFocused) // Hotkey: Copy current image
-                OsUtils.SetClipboard(Program.MainForm.PictBoxImgViewer.Image);
+                OsUtils.SetClipboard(Program.MainForm.pictBoxImgViewer.Image);
 
             if (keys == (Keys.Control | Keys.O)) // Hotkey: Open current image
                 ImagePreview.OpenCurrent();
@@ -51,13 +51,13 @@ namespace StableDiffusionGui.Ui
 
             if (keys == (Keys.Control | Keys.M)) // Hotkey: Model quick switcher
             {
-                Program.MainForm.PanelSettings.Focus();
+                Program.MainForm.panelSettings.Focus();
                 new ModelQuickSelectForm(Enums.StableDiffusion.ModelType.Normal).ShowDialogForm(0f);
             }
 
             if (keys == (Keys.Control | Keys.Shift | Keys.M)) // Hotkey: VAE quick switcher
             {
-                Program.MainForm.PanelSettings.Focus();
+                Program.MainForm.panelSettings.Focus();
                 new ModelQuickSelectForm(Enums.StableDiffusion.ModelType.Vae).ShowDialogForm(0f);
             }
 
@@ -71,7 +71,7 @@ namespace StableDiffusionGui.Ui
                 new SettingsForm().ShowDialogForm(0.5f);
 
             if (keys == Keys.Escape) // Hotkey: Remove focus from focused control
-                Program.MainForm.PanelSettings.Focus();
+                Program.MainForm.panelSettings.Focus();
         }
     }
 }

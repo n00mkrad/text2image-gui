@@ -220,7 +220,7 @@ namespace StableDiffusionGui.Ui
 
         public static List<float> GetScales(string customScalesText)
         {
-            List<float> scales = new List<float> { Program.MainForm.SliderScale.ActualValueFloat };
+            List<float> scales = new List<float> { Program.MainForm.sliderScale.ActualValueFloat };
 
             if (customScalesText.MatchesWildcard("* > * : *"))
             {
@@ -255,7 +255,7 @@ namespace StableDiffusionGui.Ui
 
         public static List<float> GetInitStrengths(string customStrengthsText)
         {
-            List<float> strengths = new List<float> { 1f - Program.MainForm.SliderStrength.ActualValueFloat };
+            List<float> strengths = new List<float> { 1f - Program.MainForm.sliderInitStrength.ActualValueFloat };
 
             if (customStrengthsText.MatchesWildcard("* > * : *"))
             {
@@ -292,9 +292,8 @@ namespace StableDiffusionGui.Ui
 
         public static void SetPromptFieldSize(PromptFieldSizeMode sizeMode = PromptFieldSizeMode.Toggle, bool negativePromptField = false)
         {
-            var form = Program.MainForm;
-            var panel = negativePromptField ? form.TextboxPromptNeg.Parent : form.TextboxPrompt.Parent;
-            var btn = negativePromptField ? form.BtnExpandPromptNegField : form.BtnExpandPromptField;
+            var panel = negativePromptField ? Program.MainForm.textboxPromptNeg.Parent : Program.MainForm.textboxPrompt.Parent;
+            var btn = negativePromptField ? Program.MainForm.btnExpandPromptNegField : Program.MainForm.btnExpandPromptField;
             int smallHeight = negativePromptField ? 40 : 65;
 
             if (sizeMode == PromptFieldSizeMode.Toggle)
@@ -333,7 +332,7 @@ namespace StableDiffusionGui.Ui
         {
             try
             {
-                Program.MainForm.PanelSettings.AutoScrollMinSize = new Size(Program.MainForm.PanelSettings.AutoScrollMinSize.Width, Program.MainForm.PanelSettings.Height + 1);
+                Program.MainForm.panelSettings.AutoScrollMinSize = new Size(Program.MainForm.panelSettings.AutoScrollMinSize.Width, Program.MainForm.panelSettings.Height + 1);
             }
             catch { }
         }
@@ -345,13 +344,13 @@ namespace StableDiffusionGui.Ui
 
         public static void FitWindowSizeToImageSize()
         {
-            if (Program.MainForm.PictBoxImgViewer.Image.Size == Program.MainForm.PictBoxImgViewer.Size)
+            if (Program.MainForm.pictBoxImgViewer.Image.Size == Program.MainForm.pictBoxImgViewer.Size)
                 return;
 
-            int formWidthWithoutImgViewer = Program.MainForm.Size.Width - Program.MainForm.PictBoxImgViewer.Width;
-            int formHeightWithoutImgViewer = Program.MainForm.Size.Height - Program.MainForm.PictBoxImgViewer.Height;
+            int formWidthWithoutImgViewer = Program.MainForm.Size.Width - Program.MainForm.pictBoxImgViewer.Width;
+            int formHeightWithoutImgViewer = Program.MainForm.Size.Height - Program.MainForm.pictBoxImgViewer.Height;
 
-            Size targetSize = new Size(Program.MainForm.PictBoxImgViewer.Image.Width + formWidthWithoutImgViewer, Program.MainForm.PictBoxImgViewer.Image.Height + formHeightWithoutImgViewer);
+            Size targetSize = new Size(Program.MainForm.pictBoxImgViewer.Image.Width + formWidthWithoutImgViewer, Program.MainForm.pictBoxImgViewer.Image.Height + formHeightWithoutImgViewer);
             Program.MainForm.Size = new Size(targetSize.Width.Clamp(512, int.MaxValue), targetSize.Height.Clamp(512, int.MaxValue));
         }
 
@@ -394,7 +393,7 @@ namespace StableDiffusionGui.Ui
             AutocompleteMenuNS.AutocompleteMenu menu = new AutocompleteMenuNS.AutocompleteMenu();
             menu.AllowsTabKey = true;
             menu.AppearInterval = 250;
-            menu.Colors = ((AutocompleteMenuNS.Colors)(new ResourceManager(typeof(MainForm)).GetObject("promptAutocomplete.Colors")));
+            menu.Colors = ((AutocompleteMenuNS.Colors)(new ResourceManager(typeof(StableDiffusionGui.MainForm)).GetObject("promptAutocomplete.Colors")));
             menu.Font = font;
             menu.Items = GetAutocompleteStrings();
             menu.LeftPadding = 0;

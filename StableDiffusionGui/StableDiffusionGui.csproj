@@ -285,6 +285,7 @@
     <Compile Include="Ui\GetWebInfo.cs" />
     <Compile Include="Ui\ImagePopup.cs" />
     <Compile Include="Ui\InpaintUi.cs" />
+    <Compile Include="Ui\MainForm\Settings.cs" />
     <Compile Include="Ui\MainUi.cs" />
     <Compile Include="Main\TextToImage.cs" />
     <Compile Include="Main\TtiProcess.cs" />

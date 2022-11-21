@@ -18,5 +18,15 @@ namespace StableDiffusionGui.Installation
                 default: return true; 
             }
         }
+
+        public static bool Sampler(Enums.StableDiffusion.Sampler sampler)
+        {
+            switch (sampler)
+            {
+                case Enums.StableDiffusion.Sampler.K_Dpmpp_2: return false;
+                case Enums.StableDiffusion.Sampler.K_Dpmpp_2_A: return false;
+                default: return true;
+            }
+        }
     }
 }

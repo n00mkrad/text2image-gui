@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace StableDiffusionGui.Controls
 {
-    internal class CustomTextbox : TextBox
+    public class CustomTextbox : TextBox
     {
         [Category("Custom")]
         public string Placeholder { get; set; } = "";

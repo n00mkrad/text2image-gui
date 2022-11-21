@@ -91,7 +91,7 @@ namespace StableDiffusionGui.Main
                         args["seed"] = $"-S {seed}";
                         args["perlin"] = $"--perlin {perlin.ToStringDot()}";
                         args["threshold"] = $"--threshold {threshold}";
-                        args["clipSegMask"] = inpaint == InpaintMode.TextMask ? $"-tm {clipSegMask.Wrap()}" : "";
+                        args["clipSegMask"] = (inpaint == InpaintMode.TextMask && !string.IsNullOrWhiteSpace(clipSegMask)) ? $"-tm {clipSegMask.Wrap()}" : "";
 
                         foreach (float scale in scales)
                         {

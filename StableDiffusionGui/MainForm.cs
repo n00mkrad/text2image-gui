@@ -31,33 +31,12 @@ namespace StableDiffusionGui
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         static extern EXECUTION_STATE SetThreadExecutionState(EXECUTION_STATE esFlags); // This should prevent Windows from going to sleep
 
-        #region References
-
-        public Button RunBtn { get { return runBtn; } }
-        public TextBox TextboxPrompt { get { return textboxPrompt; } }
-        public TextBox TextboxPromptNeg { get { return textboxPromptNeg; } }
-        public PictureBox PictBoxImgViewer { get { return pictBoxImgViewer; } }
-        public Label LabelImgInfo { get { return labelImgInfo; } }
-        public Label LabelImgPrompt { get { return labelImgPrompt; } }
-        public Label LabelImgPromptNeg { get { return labelImgPromptNeg; } }
-        public Button BtnExpandPromptField { get { return btnExpandPromptField; } }
-        public Button BtnExpandPromptNegField { get { return btnExpandPromptNegField; } }
-        public Panel PanelSettings { get { return panelSettings; } }
-        public CustomSlider SliderStrength { get { return sliderInitStrength; } }
-        public CustomSlider SliderSteps { get { return sliderSteps; } }
-        public CustomSlider SliderScale { get { return sliderScale; } }
-        public ComboBox ComboxResW { get { return comboxResW; } }
-        public ComboBox ComboxResH { get { return comboxResH; } }
-        public ToolTip ToolTip { get { return toolTip; } }
-
-        #endregion
-
         public bool IsInFocus() { return (ActiveForm == this); }
 
         public MainForm()
         {
             InitializeComponent();
-            ActiveControl = panelSettings;
+            AllowTextboxTab = false;
             Program.MainForm = this;
             Opacity = 0;
         }
@@ -98,8 +77,8 @@ namespace StableDiffusionGui
             Setup.PatchFiles();
 
             pictBoxImgViewer.MouseWheel += (s, e) => { ImagePreview.Move(e.Delta > 0); }; // Scroll on MouseWheel
-            comboxResW.SelectedIndexChanged += (s, e) => { MainUi.SetHiresFixVisible(ComboxResW, ComboxResH, checkboxHiresFix); }; // Show/Hide HiRes Fix depending on chosen res
-            comboxResH.SelectedIndexChanged += (s, e) => { MainUi.SetHiresFixVisible(ComboxResW, ComboxResH, checkboxHiresFix); }; // Show/Hide HiRes Fix depending on chosen res
+            comboxResW.SelectedIndexChanged += (s, e) => { MainUi.SetHiresFixVisible(comboxResW, comboxResH, checkboxHiresFix); }; // Show/Hide HiRes Fix depending on chosen res
+            comboxResH.SelectedIndexChanged += (s, e) => { MainUi.SetHiresFixVisible(comboxResW, comboxResH, checkboxHiresFix); }; // Show/Hide HiRes Fix depending on chosen res
 
             MainUi.LoadAutocompleteData(promptAutocomplete, new[] { textboxPrompt, textboxPromptNeg });
             Task.Run(() => MainUi.SetGpusInWindowTitle());
@@ -110,7 +89,7 @@ namespace StableDiffusionGui
             TabOrderInit(new List<Control>() {
                 textboxPrompt, textboxPromptNeg,
                 sliderInitStrength, textboxSliderInitStrength,
-                checkboxInpainting,
+                comboxInpaintMode, textboxClipsegMask,
                 upDownIterations,
                 sliderSteps, textboxSliderSteps,
                 sliderScale, textboxSliderScale,
@@ -255,7 +234,7 @@ namespace StableDiffusionGui
                 sliderInitStrength.ActualValue = (decimal)s.Params.Get("initStrengths").FromJson<List<float>>().FirstOrDefault();
                 MainUi.CurrentEmbeddingPath = s.Params.Get("embedding").FromJson<string>();
                 comboxSeamless.SetIfTextMatches(s.Params.Get("seamless").FromJson<string>(), true, Strings.MainUiStrings);
-                checkboxInpainting.Checked = s.Params.Get("inpainting").FromJson<InpaintMode>() == InpaintMode.ImageMask;
+                comboxInpaintMode.SelectedIndex = (int)s.Params.Get("inpainting").FromJson<InpaintMode>();
                 checkboxHiresFix.Checked = s.Params.Get("hiresFix").FromJson<bool>();
                 checkboxLockSeed.Checked = s.Params.Get("lockSeed").FromJson<bool>();
             }
@@ -279,9 +258,9 @@ namespace StableDiffusionGui
                 Iterations = (int)upDownIterations.Value,
                 Params = new Dictionary<string, string>
                         {
-                            { "steps", SliderSteps.ActualValueInt.ToJson() },
+                            { "steps", sliderSteps.ActualValueInt.ToJson() },
                             { "scales", MainUi.GetScales(textboxExtraScales.Text).ToJson() },
-                            { "res", new Size(ComboxResW.Text.GetInt(), ComboxResH.Text.GetInt()).ToJson() },
+                            { "res", new Size(comboxResW.Text.GetInt(), comboxResH.Text.GetInt()).ToJson() },
                             { "seed", (upDownSeed.Value < 0 ? new Random().Next(0, int.MaxValue) : ((long)upDownSeed.Value)).ToJson() },
                             { "sampler", ((Sampler)comboxSampler.SelectedIndex).ToString().Lower().ToJson() },
                             { "initImgs", MainUi.CurrentInitImgPaths.ToJson() },
@@ -877,6 +856,11 @@ namespace StableDiffusionGui
         private void btnDreambooth_Click(object sender, EventArgs e)
         {
             new DreamboothForm().ShowDialogForm();
+        }
+
+        private void comboxInpaintMode_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // textboxClipsegMask.Visible = 
         }
     }
 }

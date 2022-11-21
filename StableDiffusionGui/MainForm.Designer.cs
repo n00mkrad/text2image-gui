@@ -62,7 +62,6 @@ namespace StableDiffusionGui
             this.textboxExtraScales = new System.Windows.Forms.TextBox();
             this.upDownIterations = new System.Windows.Forms.NumericUpDown();
             this.btnResetMask = new HTAlt.WinForms.HTButton();
-            this.checkboxInpainting = new System.Windows.Forms.CheckBox();
             this.textboxExtraInitStrengths = new System.Windows.Forms.TextBox();
             this.sliderInitStrength = new StableDiffusionGui.Controls.CustomSlider();
             this.textboxSliderInitStrength = new System.Windows.Forms.TextBox();
@@ -140,6 +139,8 @@ namespace StableDiffusionGui
             this.panelIterations = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.panelInpainting = new System.Windows.Forms.Panel();
+            this.textboxClipsegMask = new System.Windows.Forms.TextBox();
+            this.comboxInpaintMode = new System.Windows.Forms.ComboBox();
             this.label10 = new System.Windows.Forms.Label();
             this.panelInitImgStrength = new System.Windows.Forms.Panel();
             this.label11 = new System.Windows.Forms.Label();
@@ -153,8 +154,6 @@ namespace StableDiffusionGui
             this.promptAutocomplete = new AutocompleteMenuNS.AutocompleteMenu();
             this.pictBoxImgViewer = new System.Windows.Forms.PictureBox();
             this.separator = new System.Windows.Forms.Button();
-            this.comboxInpaintMode = new System.Windows.Forms.ComboBox();
-            this.textboxClipsegMask = new System.Windows.Forms.TextBox();
             this.menuStripOutputImg.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.upDownSeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
@@ -208,7 +207,7 @@ namespace StableDiffusionGui
             this.titleLabel.Location = new System.Drawing.Point(11, 9);
             this.titleLabel.Margin = new System.Windows.Forms.Padding(3, 0, 3, 10);
             this.titleLabel.Name = "titleLabel";
-            this.titleLabel.Size = new System.Drawing.Size(366, 40);
+            this.titleLabel.Size = new System.Drawing.Size(367, 40);
             this.titleLabel.TabIndex = 11;
             this.titleLabel.Text = "NMKD Stable Diffusion GUI";
             // 
@@ -619,7 +618,7 @@ namespace StableDiffusionGui
             this.btnResetMask.ForeColor = System.Drawing.Color.White;
             this.btnResetMask.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
             this.btnResetMask.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
-            this.btnResetMask.Location = new System.Drawing.Point(254, 6);
+            this.btnResetMask.Location = new System.Drawing.Point(439, 6);
             this.btnResetMask.Name = "btnResetMask";
             this.btnResetMask.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
             this.btnResetMask.Size = new System.Drawing.Size(79, 23);
@@ -629,17 +628,6 @@ namespace StableDiffusionGui
             this.toolTip.SetToolTip(this.btnResetMask, "Reset Inpainting Mask");
             this.btnResetMask.Visible = false;
             this.btnResetMask.Click += new System.EventHandler(this.btnResetMask_Click);
-            // 
-            // checkboxInpainting
-            // 
-            this.checkboxInpainting.AutoSize = true;
-            this.checkboxInpainting.ForeColor = System.Drawing.Color.White;
-            this.checkboxInpainting.Location = new System.Drawing.Point(233, 9);
-            this.checkboxInpainting.Name = "checkboxInpainting";
-            this.checkboxInpainting.Size = new System.Drawing.Size(15, 14);
-            this.checkboxInpainting.TabIndex = 106;
-            this.toolTip.SetToolTip(this.checkboxInpainting, "Enable Mask-based Inpainting");
-            this.checkboxInpainting.UseVisualStyleBackColor = true;
             // 
             // textboxExtraInitStrengths
             // 
@@ -1733,7 +1721,6 @@ namespace StableDiffusionGui
             this.panelInpainting.Controls.Add(this.textboxClipsegMask);
             this.panelInpainting.Controls.Add(this.comboxInpaintMode);
             this.panelInpainting.Controls.Add(this.btnResetMask);
-            this.panelInpainting.Controls.Add(this.checkboxInpainting);
             this.panelInpainting.Controls.Add(this.label10);
             this.panelInpainting.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelInpainting.Location = new System.Drawing.Point(0, 205);
@@ -1741,6 +1728,33 @@ namespace StableDiffusionGui
             this.panelInpainting.Size = new System.Drawing.Size(645, 35);
             this.panelInpainting.TabIndex = 12;
             this.panelInpainting.Visible = false;
+            // 
+            // textboxClipsegMask
+            // 
+            this.textboxClipsegMask.AllowDrop = true;
+            this.textboxClipsegMask.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.promptAutocomplete.SetAutocompleteMenu(this.textboxClipsegMask, null);
+            this.textboxClipsegMask.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textboxClipsegMask.ForeColor = System.Drawing.Color.White;
+            this.textboxClipsegMask.Location = new System.Drawing.Point(440, 7);
+            this.textboxClipsegMask.MinimumSize = new System.Drawing.Size(4, 21);
+            this.textboxClipsegMask.Name = "textboxClipsegMask";
+            this.textboxClipsegMask.Size = new System.Drawing.Size(202, 21);
+            this.textboxClipsegMask.TabIndex = 110;
+            // 
+            // comboxInpaintMode
+            // 
+            this.comboxInpaintMode.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.comboxInpaintMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboxInpaintMode.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboxInpaintMode.ForeColor = System.Drawing.Color.White;
+            this.comboxInpaintMode.FormattingEnabled = true;
+            this.comboxInpaintMode.Location = new System.Drawing.Point(233, 7);
+            this.comboxInpaintMode.Name = "comboxInpaintMode";
+            this.comboxInpaintMode.Size = new System.Drawing.Size(200, 21);
+            this.comboxInpaintMode.TabIndex = 109;
+            this.comboxInpaintMode.SelectedIndexChanged += new System.EventHandler(this.comboxInpaintMode_SelectedIndexChanged);
             // 
             // label10
             // 
@@ -1910,32 +1924,6 @@ namespace StableDiffusionGui
             this.separator.TabStop = false;
             this.separator.UseVisualStyleBackColor = false;
             // 
-            // comboxInpaintMode
-            // 
-            this.comboxInpaintMode.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.comboxInpaintMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboxInpaintMode.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.comboxInpaintMode.ForeColor = System.Drawing.Color.White;
-            this.comboxInpaintMode.FormattingEnabled = true;
-            this.comboxInpaintMode.Location = new System.Drawing.Point(339, 7);
-            this.comboxInpaintMode.Name = "comboxInpaintMode";
-            this.comboxInpaintMode.Size = new System.Drawing.Size(200, 21);
-            this.comboxInpaintMode.TabIndex = 109;
-            // 
-            // textboxClipsegMask
-            // 
-            this.textboxClipsegMask.AllowDrop = true;
-            this.textboxClipsegMask.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.promptAutocomplete.SetAutocompleteMenu(this.textboxClipsegMask, null);
-            this.textboxClipsegMask.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.textboxClipsegMask.ForeColor = System.Drawing.Color.White;
-            this.textboxClipsegMask.Location = new System.Drawing.Point(545, 7);
-            this.textboxClipsegMask.MinimumSize = new System.Drawing.Size(4, 21);
-            this.textboxClipsegMask.Name = "textboxClipsegMask";
-            this.textboxClipsegMask.Size = new System.Drawing.Size(97, 21);
-            this.textboxClipsegMask.TabIndex = 110;
-            // 
             // MainForm
             // 
             this.AllowDrop = true;
@@ -2032,44 +2020,28 @@ namespace StableDiffusionGui
         }
 
         #endregion
-        private System.Windows.Forms.Button runBtn;
         private System.Windows.Forms.Label titleLabel;
         private System.Windows.Forms.Button discordBtn;
         private System.Windows.Forms.Button patreonBtn;
         private System.Windows.Forms.Button paypalBtn;
-        private System.Windows.Forms.Button installerBtn;
-        private System.Windows.Forms.TextBox logBox;
-        private System.Windows.Forms.Button btnNextImg;
-        private System.Windows.Forms.Label labelImgInfo;
-        private System.Windows.Forms.Button btnPrevImg;
         private System.Windows.Forms.Label label2;
-        private CustomTextbox textboxPrompt;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.NumericUpDown upDownIterations;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private CustomSlider sliderScale;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.NumericUpDown upDownSeed;
-        private System.Windows.Forms.Button btnOpenOutFolder;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label9;
         private CircularProgressBar.CircularProgressBar progressCircle;
         private HTAlt.WinForms.HTProgressBar progressBar;
         private System.Windows.Forms.TextBox textboxExtraScales;
         private System.Windows.Forms.Button separator;
-        private System.Windows.Forms.ContextMenuStrip menuStripOutputImg;
         private System.Windows.Forms.ToolStripMenuItem openFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openOutputFolderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem copyImageToClipboardToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem copySeedToClipboardToolStripMenuItem;
-        private System.Windows.Forms.Button cliButton;
-        private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.ComboBox comboxSampler;
-        private CustomPanel panelSettings;
         private System.Windows.Forms.Panel panelSteps;
         private System.Windows.Forms.Panel panelIterations;
         private System.Windows.Forms.Panel panelSampler;
@@ -2078,83 +2050,98 @@ namespace StableDiffusionGui
         private System.Windows.Forms.Panel panelScale;
         private System.Windows.Forms.Panel panelSeamless;
         private System.Windows.Forms.Panel panelInitImgStrength;
-        private HTAlt.WinForms.HTButton btnInitImgBrowse;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
-        private StableDiffusionGui.Controls.CustomSlider sliderInitStrength;
-        private System.Windows.Forms.Button btnDebug;
-        private System.Windows.Forms.Button btnSettings;
         private System.Windows.Forms.TextBox textboxExtraInitStrengths;
-        private HTAlt.WinForms.HTButton btnEmbeddingBrowse;
         private System.Windows.Forms.ToolStripMenuItem useAsInitImageToolStripMenuItem;
-        private System.Windows.Forms.Button btnPostProc;
         private System.Windows.Forms.Label label8;
-        private HTAlt.WinForms.HTButton btnSeedUsePrevious;
-        private HTAlt.WinForms.HTButton btnSeedResetToRandom;
-        private System.Windows.Forms.ContextMenuStrip menuStripLogs;
-        private HTAlt.WinForms.HTProgressBar progressBarImg;
-        private System.Windows.Forms.Button btnExpandPromptField;
-        private System.Windows.Forms.Button btnQueue;
-        private System.Windows.Forms.Button btnPromptHistory;
-        private System.Windows.Forms.ContextMenuStrip menuStripRunQueue;
         private System.Windows.Forms.ToolStripMenuItem generateCurrentPromptToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem generateAllQueuedPromptsToolStripMenuItem;
         private System.Windows.Forms.Panel panelInpainting;
-        private System.Windows.Forms.CheckBox checkboxInpainting;
         private System.Windows.Forms.Label label10;
         private HTAlt.WinForms.HTButton btnResetMask;
-        private System.Windows.Forms.PictureBox pictBoxImgViewer;
-        private System.Windows.Forms.TextBox textboxCliTest;
-        private System.Windows.Forms.ContextMenuStrip menuStripAddToQueue;
         private System.Windows.Forms.ToolStripMenuItem addCurrentSettingsToQueueToolStripMenuItem;
         private System.Windows.Forms.Label labelCurrentConcept;
         private System.Windows.Forms.Label labelCurrentImage;
         private System.Windows.Forms.ToolStripMenuItem reGenerateImageWithCurrentSettingsToolStripMenuItem;
-        private System.Windows.Forms.Button btnDeleteBatch;
-        private System.Windows.Forms.ContextMenuStrip menuStripDeleteImages;
         private System.Windows.Forms.ToolStripMenuItem deleteThisImageToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteAllCurrentImagesToolStripMenuItem;
-        private System.Windows.Forms.ContextMenuStrip menuStripDevTools;
         private System.Windows.Forms.ToolStripMenuItem openCliToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openModelMergeToolToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openModelPruningTrimmingToolToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewLogInRealtimeToolStripMenuItem;
         private System.Windows.Forms.TextBox textboxSliderSteps;
-        private CustomSlider sliderSteps;
         private System.Windows.Forms.TextBox textboxSliderScale;
         private System.Windows.Forms.TextBox textboxSliderInitStrength;
-        private System.Windows.Forms.ComboBox comboxResH;
-        private System.Windows.Forms.ComboBox comboxResW;
-        private System.Windows.Forms.CheckBox checkboxHiresFix;
         private System.Windows.Forms.ToolStripMenuItem fitWindowSizeToImageSizeToolStripMenuItem;
-        private System.Windows.Forms.CheckBox checkboxLockSeed;
-        private System.Windows.Forms.Label labelImgPrompt;
         private System.Windows.Forms.Panel panelDebugSendStdin;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.ToolStripMenuItem openCmdInPythonEnvironmentToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem copyToFavoritesToolStripMenuItem;
-        private System.Windows.Forms.ContextMenuStrip menuStripPostProcess;
         private System.Windows.Forms.ToolStripMenuItem upscaleToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem faceRestorationToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem applyAllToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem postProcessImageToolStripMenuItem;
         private System.Windows.Forms.Panel panelPromptNeg;
-        private CustomTextbox textboxPromptNeg;
         private System.Windows.Forms.Panel panelPrompt;
         private System.Windows.Forms.Panel panelAiInputs;
-        private System.Windows.Forms.Button btnExpandPromptNegField;
-        private System.Windows.Forms.Label labelImgPromptNeg;
-        private System.Windows.Forms.ComboBox comboxSeamless;
         private System.Windows.Forms.Panel panelDebugPerlinThresh;
-        private System.Windows.Forms.TextBox textboxThresh;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.TextBox textboxPerlin;
         public AutocompleteMenuNS.AutocompleteMenu promptAutocomplete;
-        private System.Windows.Forms.Button btnDreambooth;
-        private System.Windows.Forms.TextBox textboxClipsegMask;
-        private System.Windows.Forms.ComboBox comboxInpaintMode;
+        public System.Windows.Forms.ComboBox comboxSampler;
+        public CustomTextbox textboxPrompt;
+        public System.Windows.Forms.NumericUpDown upDownIterations;
+        public CustomSlider sliderScale;
+        public System.Windows.Forms.NumericUpDown upDownSeed;
+        public HTAlt.WinForms.HTButton btnInitImgBrowse;
+        public CustomSlider sliderInitStrength;
+        public HTAlt.WinForms.HTButton btnEmbeddingBrowse;
+        public HTAlt.WinForms.HTButton btnSeedUsePrevious;
+        public HTAlt.WinForms.HTButton btnSeedResetToRandom;
+        public System.Windows.Forms.Button btnExpandPromptField;
+        public CustomSlider sliderSteps;
+        public System.Windows.Forms.CheckBox checkboxLockSeed;
+        public System.Windows.Forms.Label labelImgPrompt;
+        public CustomTextbox textboxPromptNeg;
+        public System.Windows.Forms.Button btnExpandPromptNegField;
+        public System.Windows.Forms.Label labelImgPromptNeg;
+        public System.Windows.Forms.TextBox textboxClipsegMask;
+        public System.Windows.Forms.ComboBox comboxInpaintMode;
+        public System.Windows.Forms.TextBox textboxCliTest;
+        public System.Windows.Forms.ComboBox comboxResH;
+        public System.Windows.Forms.ComboBox comboxResW;
+        public System.Windows.Forms.CheckBox checkboxHiresFix;
+        public System.Windows.Forms.ComboBox comboxSeamless;
+        public System.Windows.Forms.TextBox textboxThresh;
+        public System.Windows.Forms.TextBox textboxPerlin;
+        public System.Windows.Forms.Button runBtn;
+        public System.Windows.Forms.Button installerBtn;
+        public System.Windows.Forms.TextBox logBox;
+        public System.Windows.Forms.Button btnNextImg;
+        public System.Windows.Forms.Label labelImgInfo;
+        public System.Windows.Forms.Button btnPrevImg;
+        public System.Windows.Forms.Button btnOpenOutFolder;
+        public System.Windows.Forms.Button cliButton;
+        public System.Windows.Forms.Button btnDebug;
+        public System.Windows.Forms.Button btnSettings;
+        public System.Windows.Forms.Button btnPostProc;
+        public HTAlt.WinForms.HTProgressBar progressBarImg;
+        public System.Windows.Forms.Button btnQueue;
+        public System.Windows.Forms.Button btnPromptHistory;
+        public System.Windows.Forms.PictureBox pictBoxImgViewer;
+        public System.Windows.Forms.Button btnDeleteBatch;
+        public System.Windows.Forms.Button btnDreambooth;
+        public System.Windows.Forms.ContextMenuStrip menuStripOutputImg;
+        public System.Windows.Forms.ToolTip toolTip;
+        public System.Windows.Forms.ContextMenuStrip menuStripLogs;
+        public System.Windows.Forms.ContextMenuStrip menuStripRunQueue;
+        public System.Windows.Forms.ContextMenuStrip menuStripAddToQueue;
+        public System.Windows.Forms.ContextMenuStrip menuStripDeleteImages;
+        public System.Windows.Forms.ContextMenuStrip menuStripDevTools;
+        public System.Windows.Forms.ContextMenuStrip menuStripPostProcess;
+        public CustomPanel panelSettings;
     }
 }
 

@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace StableDiffusionGui.Controls
 {
-    internal class CustomPanel : Panel
+    public class CustomPanel : Panel
     {
         public bool _allowScrolling = false;
         public bool _ctrlDisablesScrolling = false;
