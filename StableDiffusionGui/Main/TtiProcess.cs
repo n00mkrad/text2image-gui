@@ -130,13 +130,15 @@ namespace StableDiffusionGui.Main
                 string modelsChecksumStartup = IoUtils.GetHash(InvokeAiUtils.ModelsYamlPath, IoUtils.Hash.CRC32, false);
                 string argsStartup = Args.InvokeAi.GetArgsStartup(embedding);
 
-                string newStartupSettings = $"{argsStartup}{modelsChecksumStartup}{Config.GetInt("comboxCudaDevice")}"; // Check if startup settings match - If not, we need to restart the process
+                string newStartupSettings = $"{argsStartup} {modelsChecksumStartup} {Config.GetInt("comboxCudaDevice")}"; // Check if startup settings match - If not, we need to restart the process
 
                 string initsStr = initImages != null ? $" and {initImages.Count} image{(initImages.Count != 1 ? "s" : "")} using {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
                 Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} with {iterations} iteration{(iterations != 1 ? "s" : "")} each and {scales.Length} scale{(scales.Length != 1 ? "s" : "")}{initsStr} each = {cmds.Count} images total.");
 
                 if (!IsAiProcessRunning || (IsAiProcessRunning && _lastInvokeStartupSettings != newStartupSettings))
                 {
+                    Logger.Log($"(Re)starting InvokeAI. Process running: {IsAiProcessRunning} - Prev startup string: '{_lastInvokeStartupSettings}' - New startup string: '{newStartupSettings}'", true);
+
                     _lastInvokeStartupSettings = newStartupSettings;
 
                     Process py = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd(), Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdVenv, "Scripts", "python.exe"));
@@ -280,7 +282,7 @@ namespace StableDiffusionGui.Main
             Logger.Log($"Running Stable Diffusion - {iterations} Iterations, {steps} Steps, Scales {(scales.Length < 4 ? string.Join(", ", scales.Select(x => x.ToStringDot())) : $"{scales.First()}->{scales.Last()}")}, {res.Width}x{res.Height}, Starting Seed: {startSeed}");
 
             string argsStartup = Args.OptimizedSd.GetDefaultArgsStartup();
-            string newStartupSettings = $"opt{modelNoExt}{argsStartup}{Config.GetInt("comboxCudaDevice")}"; // Check if startup settings match - If not, we need to restart the process
+            string newStartupSettings = $"opt {modelNoExt} {argsStartup} {Config.GetInt("comboxCudaDevice")}"; // Check if startup settings match - If not, we need to restart the process
 
             string initsStr = initImages != null ? $" and {initImages.Count} image{(initImages.Count != 1 ? "s" : "")} using {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
             Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} with {iterations} iteration{(iterations != 1 ? "s" : "")} each and {scales.Length} scale{(scales.Length != 1 ? "s" : "")}{initsStr} each = {promptFileLines.Count} images total.");
