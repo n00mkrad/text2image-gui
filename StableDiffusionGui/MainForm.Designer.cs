@@ -2042,14 +2042,6 @@ namespace StableDiffusionGui
         private System.Windows.Forms.ToolStripMenuItem copyImageToClipboardToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem copySeedToClipboardToolStripMenuItem;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Panel panelSteps;
-        private System.Windows.Forms.Panel panelIterations;
-        private System.Windows.Forms.Panel panelSampler;
-        private System.Windows.Forms.Panel panelRes;
-        private System.Windows.Forms.Panel panelSeed;
-        private System.Windows.Forms.Panel panelScale;
-        private System.Windows.Forms.Panel panelSeamless;
-        private System.Windows.Forms.Panel panelInitImgStrength;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         private System.Windows.Forms.TextBox textboxExtraInitStrengths;
@@ -2057,7 +2049,6 @@ namespace StableDiffusionGui
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.ToolStripMenuItem generateCurrentPromptToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem generateAllQueuedPromptsToolStripMenuItem;
-        private System.Windows.Forms.Panel panelInpainting;
         private System.Windows.Forms.Label label10;
         private HTAlt.WinForms.HTButton btnResetMask;
         private System.Windows.Forms.ToolStripMenuItem addCurrentSettingsToQueueToolStripMenuItem;
@@ -2074,7 +2065,6 @@ namespace StableDiffusionGui
         private System.Windows.Forms.TextBox textboxSliderScale;
         private System.Windows.Forms.TextBox textboxSliderInitStrength;
         private System.Windows.Forms.ToolStripMenuItem fitWindowSizeToImageSizeToolStripMenuItem;
-        private System.Windows.Forms.Panel panelDebugSendStdin;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.ToolStripMenuItem openCmdInPythonEnvironmentToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem copyToFavoritesToolStripMenuItem;
@@ -2082,10 +2072,6 @@ namespace StableDiffusionGui
         private System.Windows.Forms.ToolStripMenuItem faceRestorationToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem applyAllToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem postProcessImageToolStripMenuItem;
-        private System.Windows.Forms.Panel panelPromptNeg;
-        private System.Windows.Forms.Panel panelPrompt;
-        private System.Windows.Forms.Panel panelAiInputs;
-        private System.Windows.Forms.Panel panelDebugPerlinThresh;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label13;
@@ -2142,6 +2128,20 @@ namespace StableDiffusionGui
         public System.Windows.Forms.ContextMenuStrip menuStripDevTools;
         public System.Windows.Forms.ContextMenuStrip menuStripPostProcess;
         public CustomPanel panelSettings;
+        public System.Windows.Forms.Panel panelSteps;
+        public System.Windows.Forms.Panel panelIterations;
+        public System.Windows.Forms.Panel panelSampler;
+        public System.Windows.Forms.Panel panelRes;
+        public System.Windows.Forms.Panel panelSeed;
+        public System.Windows.Forms.Panel panelScale;
+        public System.Windows.Forms.Panel panelSeamless;
+        public System.Windows.Forms.Panel panelInitImgStrength;
+        public System.Windows.Forms.Panel panelInpainting;
+        public System.Windows.Forms.Panel panelDebugSendStdin;
+        public System.Windows.Forms.Panel panelAiInputs;
+        public System.Windows.Forms.Panel panelDebugPerlinThresh;
+        public System.Windows.Forms.Panel panelPromptNeg;
+        public System.Windows.Forms.Panel panelPrompt;
     }
 }
 

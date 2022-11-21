@@ -26,10 +26,10 @@ namespace StableDiffusionGui.Ui
                 Program.MainForm.runBtn.PerformClick();
 
             if (keys == (Keys.Control | Keys.Delete) && !InputUtils.IsKeyPressed(Key.Back)) // Hotkey: Delete generated image
-                ImagePreview.DeleteCurrent();
+                MainForm.ImageViewer.DeleteCurrent();
 
             if (keys == (Keys.Control | Keys.Shift | Keys.Delete) && !InputUtils.IsKeyPressed(Key.Back)) // Hotkey: Delete all generated images
-                ImagePreview.DeleteAll();
+                MainForm.ImageViewer.DeleteAll();
 
             if (keys == (Keys.Control | Keys.Add) || keys == (Keys.Control | Keys.Oemplus)) // Hotkey: Toggle prompt field size
                 MainUi.SetPromptFieldSize(MainUi.PromptFieldSizeMode.Toggle, false);
@@ -41,13 +41,13 @@ namespace StableDiffusionGui.Ui
                 OsUtils.SetClipboard(Program.MainForm.pictBoxImgViewer.Image);
 
             if (keys == (Keys.Control | Keys.O)) // Hotkey: Open current image
-                ImagePreview.OpenCurrent();
+                MainForm.ImageViewer.OpenCurrent();
 
             if (keys == (Keys.Control | Keys.Shift | Keys.O)) // Hotkey: Open folder of current image
-                ImagePreview.OpenFolderOfCurrent();
+                MainForm.ImageViewer.OpenFolderOfCurrent();
 
             if (keys == (Keys.Control | Keys.D)) // Hotkey: Copy current image to favs
-                ImagePreview.CopyCurrentToFavs();
+                MainForm.ImageViewer.CopyCurrentToFavs();
 
             if (keys == (Keys.Control | Keys.M)) // Hotkey: Model quick switcher
             {

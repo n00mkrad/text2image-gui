@@ -145,13 +145,13 @@ namespace StableDiffusionGui.Forms
             {
                 if (e.KeyCode == Keys.Left)
                 {
-                    ImagePreview.Move(true);
+                    Ui.MainForm.ImageViewer.Move(true);
                     return;
                 }
 
                 if (e.KeyCode == Keys.Right)
                 {
-                    ImagePreview.Move();
+                    Ui.MainForm.ImageViewer.Move();
                     return;
                 }
             }

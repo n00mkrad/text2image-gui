@@ -37,11 +37,7 @@ namespace StableDiffusionGui.Forms
         private void SettingsForm_Shown(object sender, EventArgs e)
         {
             Refresh();
-            comboxImplementation.FillFromEnum<Implementation>(Strings.SettingsUiStrings);
-            comboxImplementation.Items.Cast<string>().ToList().ForEach(i => {  });
-
-            foreach(string s in new List<string>(comboxImplementation.Items.Cast<string>()))
-                if (!EnabledFeatures.Implementation((Implementation)comboxImplementation.Items.Cast<string>().ToList().IndexOf(s))) comboxImplementation.Items.Remove(s);
+            comboxImplementation.FillFromEnum<Implementation>(Strings.Implementation, -1, EnabledFeatures.DisabledImplementations);
 
             LoadSettings();
 
@@ -75,7 +71,7 @@ namespace StableDiffusionGui.Forms
             }
 
             SaveSettings();
-            Program.MainForm.RefreshAfterSettingsChanged();
+            Ui.MainForm.FormControls.RefreshUiAfterSettingsChanged();
         }
 
         private void LoadModels(bool loadCombox, ModelType type)

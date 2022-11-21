@@ -1,22 +1,18 @@
 ﻿using StableDiffusionGui.Data;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
-using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlTypes;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace StableDiffusionGui.Ui
+namespace StableDiffusionGui.Ui.MainForm
 {
-    internal class ImagePreview
+    internal class ImageViewer
     {
         public enum ImgShowMode { DontShow, ShowFirst, ShowLast }
 
@@ -104,7 +100,7 @@ namespace StableDiffusionGui.Ui
                 infos.Add($"Strength {meta.InitStrength.ToStringDot()}");
 
             if (!string.IsNullOrWhiteSpace(meta.Sampler))
-                infos.Add(Strings.MainUiStrings.Get(meta.Sampler, true, true));
+                infos.Add(Strings.Samplers.Get(meta.Sampler, true, true));
 
             Program.MainForm.labelImgInfo.Text = $"Image {_currIndex + 1}/{_currentImages.Length} {(infos.Count > 0 ? $" - {string.Join(" - ", infos)}" : "")}";
             Program.MainForm.labelImgPrompt.Text = !string.IsNullOrWhiteSpace(meta.Prompt) ? meta.Prompt : _strNoPrompt;

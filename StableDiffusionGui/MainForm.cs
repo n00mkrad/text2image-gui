@@ -9,6 +9,7 @@ using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
+using StableDiffusionGui.Ui.MainForm;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -52,7 +53,7 @@ namespace StableDiffusionGui
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            SaveUiElements();
+            FormControls.Save();
 
             if (Program.Busy)
             {
@@ -70,13 +71,13 @@ namespace StableDiffusionGui
         private async Task Initialize()
         {
             MainUi.SetSettingsVertScrollbar();
-            InitializeControls();
-            RefreshAfterSettingsChanged();
-            LoadUiElements();
+            FormControls.InitializeControls();
+            FormControls.RefreshUiAfterSettingsChanged();
+            FormControls.Load();
             PromptHistory.Load();
             Setup.PatchFiles();
 
-            pictBoxImgViewer.MouseWheel += (s, e) => { ImagePreview.Move(e.Delta > 0); }; // Scroll on MouseWheel
+            pictBoxImgViewer.MouseWheel += (s, e) => { ImageViewer.Move(e.Delta > 0); }; // Scroll on MouseWheel
             comboxResW.SelectedIndexChanged += (s, e) => { MainUi.SetHiresFixVisible(comboxResW, comboxResH, checkboxHiresFix); }; // Show/Hide HiRes Fix depending on chosen res
             comboxResH.SelectedIndexChanged += (s, e) => { MainUi.SetHiresFixVisible(comboxResW, comboxResH, checkboxHiresFix); }; // Show/Hide HiRes Fix depending on chosen res
 
@@ -108,56 +109,6 @@ namespace StableDiffusionGui
 
             panelDebugSendStdin.Visible = Program.Debug;
             panelDebugPerlinThresh.Visible = Program.Debug;
-        }
-
-        private void InitializeControls()
-        {
-            comboxSampler.FillFromEnum<Sampler>(Strings.MainUiStrings);
-            comboxSeamless.FillFromEnum<SeamlessMode>(Strings.MainUiStrings, 0);
-            comboxInpaintMode.FillFromEnum<InpaintMode>(Strings.MainUiStrings, 0);
-
-            var resItems = MainUi.Resolutions.Where(x => x <= (Config.GetBool("checkboxAdvancedMode") ? 2048 : 1024)).Select(x => x.ToString());
-            comboxResW.SetItems(resItems, UiExtensions.SelectMode.Last);
-            comboxResH.SetItems(resItems, UiExtensions.SelectMode.Last);
-        }
-
-        private void LoadUiElements()
-        {
-            ConfigParser.LoadGuiElement(upDownIterations);
-            ConfigParser.LoadGuiElement(sliderSteps);
-            ConfigParser.LoadGuiElement(sliderScale);
-            ConfigParser.LoadGuiElement(comboxResH);
-            ConfigParser.LoadGuiElement(comboxResW);
-            ConfigParser.LoadComboxIndex(comboxSampler);
-            ConfigParser.LoadGuiElement(sliderInitStrength);
-        }
-
-        private void SaveUiElements()
-        {
-            ConfigParser.SaveGuiElement(upDownIterations);
-            ConfigParser.SaveGuiElement(sliderSteps);
-            ConfigParser.SaveGuiElement(sliderScale);
-            ConfigParser.SaveGuiElement(comboxResH);
-            ConfigParser.SaveGuiElement(comboxResW);
-            ConfigParser.SaveComboxIndex(comboxSampler);
-            ConfigParser.SaveGuiElement(sliderInitStrength);
-        }
-
-        public void RefreshAfterSettingsChanged()
-        {
-            var imp = (Implementation)Config.GetInt("comboxImplementation");
-            panelPromptNeg.Visible = imp != Implementation.OptimizedSd;
-            btnEmbeddingBrowse.Enabled = imp == Implementation.InvokeAi;
-            panelSampler.Visible = imp == Implementation.InvokeAi;
-            panelSeamless.Visible = imp == Implementation.InvokeAi;
-
-            bool adv = Config.GetBool("checkboxAdvancedMode");
-            upDownIterations.Maximum = !adv ? 10000 : 100000;
-            sliderSteps.ActualMaximum = !adv ? 120 : 500;
-            sliderSteps.ValueStep = !adv ? 5 : 1;
-            sliderScale.ActualMaximum = !adv ? 25 : 50;
-            comboxResW.SetItems(MainUi.Resolutions.Where(x => x <= (adv ? 2048 : 1024)).Select(x => x.ToString()), UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.Last);
-            comboxResH.SetItems(MainUi.Resolutions.Where(x => x <= (adv ? 2048 : 1024)).Select(x => x.ToString()), UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.Last);
         }
 
         private void installerBtn_Click(object sender, EventArgs e)
@@ -197,7 +148,7 @@ namespace StableDiffusionGui
             comboxResW.Text = meta.GeneratedResolution.Width.ToString();
             comboxResH.Text = meta.GeneratedResolution.Height.ToString();
             upDownSeed.Value = meta.Seed;
-            comboxSampler.SetIfTextMatches(meta.Sampler, true, Strings.MainUiStrings);
+            comboxSampler.SetIfTextMatches(meta.Sampler, true, Strings.Samplers);
             // MainUi.CurrentInitImgPaths = new[] { meta.InitImgName }.Where(x => string.IsNullOrWhiteSpace(x)).ToList(); // Does this even work if we only store the temp path?
             MainUi.CurrentInitImgPaths = null;
             comboxSeamless.SelectedIndex = meta.Seamless ? 1 : 0; // TODO: Extend Metadata class to include seamless mode
@@ -229,11 +180,11 @@ namespace StableDiffusionGui
                 comboxResW.Text = s.Params.Get("res").FromJson<Size>().Width.ToString();
                 comboxResH.Text = s.Params.Get("res").FromJson<Size>().Height.ToString();
                 upDownSeed.Value = s.Params.Get("seed").FromJson<long>();
-                comboxSampler.SetIfTextMatches(s.Params.Get("sampler").FromJson<string>(), true, Strings.MainUiStrings);
+                comboxSampler.SetIfTextMatches(s.Params.Get("sampler").FromJson<string>(), true, Strings.Samplers);
                 MainUi.CurrentInitImgPaths = s.Params.Get("initImgs").FromJson<List<string>>();
                 sliderInitStrength.ActualValue = (decimal)s.Params.Get("initStrengths").FromJson<List<float>>().FirstOrDefault();
                 MainUi.CurrentEmbeddingPath = s.Params.Get("embedding").FromJson<string>();
-                comboxSeamless.SetIfTextMatches(s.Params.Get("seamless").FromJson<string>(), true, Strings.MainUiStrings);
+                comboxSeamless.SetIfTextMatches(s.Params.Get("seamless").FromJson<string>(), true, Strings.SeamlessMode);
                 comboxInpaintMode.SelectedIndex = (int)s.Params.Get("inpainting").FromJson<InpaintMode>();
                 checkboxHiresFix.Checked = s.Params.Get("hiresFix").FromJson<bool>();
                 checkboxLockSeed.Checked = s.Params.Get("lockSeed").FromJson<bool>();
@@ -397,12 +348,12 @@ namespace StableDiffusionGui
 
         private void btnPrevImg_Click(object sender, EventArgs e)
         {
-            ImagePreview.Move(true);
+            ImageViewer.Move(true);
         }
 
         private void btnNextImg_Click(object sender, EventArgs e)
         {
-            ImagePreview.Move(false);
+            ImageViewer.Move(false);
         }
 
         private void btnOpenOutFolder_Click(object sender, EventArgs e)
@@ -433,12 +384,12 @@ namespace StableDiffusionGui
 
         private void openFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ImagePreview.OpenCurrent();
+            ImageViewer.OpenCurrent();
         }
 
         private void openOutputFolderToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ImagePreview.OpenFolderOfCurrent();
+            ImageViewer.OpenFolderOfCurrent();
         }
 
         private void copyImageToClipboardToolStripMenuItem_Click(object sender, EventArgs e)
@@ -448,7 +399,7 @@ namespace StableDiffusionGui
 
         private void copySeedToClipboardToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OsUtils.SetClipboard(ImagePreview.CurrentImageMetadata.Seed.ToString());
+            OsUtils.SetClipboard(ImageViewer.CurrentImageMetadata.Seed.ToString());
         }
 
         private void useAsInitImageToolStripMenuItem_Click(object sender, EventArgs e)
@@ -459,12 +410,12 @@ namespace StableDiffusionGui
                 return;
             }
 
-            MainUi.HandleDroppedFiles(new string[] { ImagePreview.CurrentImagePath });
+            MainUi.HandleDroppedFiles(new string[] { ImageViewer.CurrentImagePath });
         }
 
         private void copyToFavoritesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ImagePreview.CopyCurrentToFavs();
+            ImageViewer.CopyCurrentToFavs();
         }
 
         private void postProcessImageToolStripMenuItem_Click(object sender, EventArgs e)
@@ -485,7 +436,7 @@ namespace StableDiffusionGui
 
             if (((MouseEventArgs)e).Button == MouseButtons.Right)
             {
-                if (!string.IsNullOrWhiteSpace(ImagePreview.CurrentImagePath) && File.Exists(ImagePreview.CurrentImagePath))
+                if (!string.IsNullOrWhiteSpace(ImageViewer.CurrentImagePath) && File.Exists(ImageViewer.CurrentImagePath))
                 {
                     reGenerateImageWithCurrentSettingsToolStripMenuItem.Visible = !Program.Busy;
                     useAsInitImageToolStripMenuItem.Visible = !Program.Busy;
@@ -564,7 +515,7 @@ namespace StableDiffusionGui
             labelCurrentImage.Text = !img2img ? "No initialization image loaded." : (MainUi.CurrentInitImgPaths.Count == 1 ? $"Currently using {Path.GetFileName(MainUi.CurrentInitImgPaths[0]).Trunc(30)}" : $"Currently using {MainUi.CurrentInitImgPaths.Count} images.");
             labelCurrentConcept.Text = string.IsNullOrWhiteSpace(MainUi.CurrentEmbeddingPath) ? "No trained concept loaded." : $"Currently using {Path.GetFileName(MainUi.CurrentEmbeddingPath).Trunc(30)}";
 
-            RefreshAfterSettingsChanged();
+            Ui.MainForm.FormControls.RefreshUiAfterSettingsChanged();
         }
 
         private void btnEmbeddingBrowse_Click(object sender, EventArgs e)
@@ -717,7 +668,7 @@ namespace StableDiffusionGui
 
             var prevSeedVal = upDownSeed.Value;
             var prevIterVal = upDownIterations.Value;
-            upDownSeed.Value = ImagePreview.CurrentImageMetadata.Seed;
+            upDownSeed.Value = ImageViewer.CurrentImageMetadata.Seed;
             upDownIterations.Value = 1;
             runBtn_Click(null, null);
             SetSeed((long)prevSeedVal);
@@ -731,12 +682,12 @@ namespace StableDiffusionGui
 
         private void deleteThisImageToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ImagePreview.DeleteCurrent();
+            ImageViewer.DeleteCurrent();
         }
 
         private void deleteAllCurrentImagesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ImagePreview.DeleteAll();
+            ImageViewer.DeleteAll();
         }
 
         private void openDreampyCLIToolStripMenuItem_Click(object sender, EventArgs e)
@@ -775,12 +726,12 @@ namespace StableDiffusionGui
 
         private void labelImgPrompt_Click(object sender, EventArgs e)
         {
-            OsUtils.SetClipboard(ImagePreview.CurrentImageMetadata.Prompt);
+            OsUtils.SetClipboard(ImageViewer.CurrentImageMetadata.Prompt);
         }
 
         private void labelImgPromptNeg_Click(object sender, EventArgs e)
         {
-            OsUtils.SetClipboard(ImagePreview.CurrentImageMetadata.NegativePrompt);
+            OsUtils.SetClipboard(ImageViewer.CurrentImageMetadata.NegativePrompt);
         }
 
         private void openCmdInPythonEnvironmentToolStripMenuItem_Click(object sender, EventArgs e)
@@ -797,17 +748,17 @@ namespace StableDiffusionGui
 
         private async void upscaleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            await InvokeAi.RunFix(ImagePreview.CurrentImagePath, new[] { InvokeAi.FixAction.Upscale }.ToList());
+            await InvokeAi.RunFix(ImageViewer.CurrentImagePath, new[] { InvokeAi.FixAction.Upscale }.ToList());
         }
 
         private async void applyFaceRestorationToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            await InvokeAi.RunFix(ImagePreview.CurrentImagePath, new[] { InvokeAi.FixAction.FaceRestoration }.ToList());
+            await InvokeAi.RunFix(ImageViewer.CurrentImagePath, new[] { InvokeAi.FixAction.FaceRestoration }.ToList());
         }
 
         private async void applyAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            await InvokeAi.RunFix(ImagePreview.CurrentImagePath, new[] { InvokeAi.FixAction.Upscale, InvokeAi.FixAction.FaceRestoration }.ToList());
+            await InvokeAi.RunFix(ImageViewer.CurrentImagePath, new[] { InvokeAi.FixAction.Upscale, InvokeAi.FixAction.FaceRestoration }.ToList());
         }
 
         #endregion
@@ -860,7 +811,7 @@ namespace StableDiffusionGui
 
         private void comboxInpaintMode_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // textboxClipsegMask.Visible = 
+            textboxClipsegMask.Visible = (InpaintMode)comboxInpaintMode.SelectedIndex == InpaintMode.TextMask;
         }
     }
 }

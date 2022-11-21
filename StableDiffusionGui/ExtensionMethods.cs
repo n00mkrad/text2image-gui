@@ -395,13 +395,16 @@ namespace StableDiffusionGui
                 return "";
         }
 
-        public static void FillFromEnum<TEnum>(this ComboBox comboBox, Dictionary<string, string> stringMap = null, int defaultIndex = -1) where TEnum : Enum
+        public static void FillFromEnum<TEnum>(this ComboBox comboBox, Dictionary<string, string> stringMap = null, int defaultIndex = -1, List<TEnum> exclusionList = null) where TEnum : Enum
         {
             if (stringMap == null)
                 stringMap = new Dictionary<string, string>();
 
+            if (exclusionList == null)
+                exclusionList = new List<TEnum>();
+
             comboBox.Items.Clear();
-            comboBox.Items.AddRange(Enum.GetValues(typeof(TEnum)).Cast<TEnum>().Select(x => stringMap.Get(x.ToString(), true)).ToArray());
+            comboBox.Items.AddRange(Enum.GetValues(typeof(TEnum)).Cast<TEnum>().Except(exclusionList).Select(x => stringMap.Get(x.ToString(), true)).ToArray());
 
             if (defaultIndex >= 0)
                 comboBox.SelectedIndex = defaultIndex;

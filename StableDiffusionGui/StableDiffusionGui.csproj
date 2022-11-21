@@ -285,7 +285,7 @@
     <Compile Include="Ui\GetWebInfo.cs" />
     <Compile Include="Ui\ImagePopup.cs" />
     <Compile Include="Ui\InpaintUi.cs" />
-    <Compile Include="Ui\MainForm\Settings.cs" />
+    <Compile Include="Ui\MainForm\FormControls.cs" />
     <Compile Include="Ui\MainUi.cs" />
     <Compile Include="Main\TextToImage.cs" />
     <Compile Include="Main\TtiProcess.cs" />
@@ -294,7 +294,7 @@
     <Compile Include="Os\OsUtils.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Ui\ImagePreview.cs" />
+    <Compile Include="Ui\MainForm\ImageViewer.cs" />
     <Compile Include="Ui\MainUiHotkeys.cs" />
     <Compile Include="Ui\Strings.cs" />
     <Compile Include="Ui\UiUtils.cs" />
