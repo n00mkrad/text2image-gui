@@ -372,12 +372,13 @@ namespace StableDiffusionGui.Installation
 
         #region Utils
 
-        public static void FixHardcodedPathsVenv()
+        public static void PatchFiles()
         {
             try
             {
-                Logger.Log($"Fixing pyenv paths...", true);
+                #region virtualenv (pyvenv.cfg)
 
+                Logger.Log($"Fixing pyenv paths...", true);
                 string pyvenvCfgPath = Path.Combine(GetDataSubPath(Constants.Dirs.SdVenv), "pyvenv.cfg");
                 var pyvenvCfgLines = File.ReadAllLines(pyvenvCfgPath);
 
@@ -390,8 +391,10 @@ namespace StableDiffusionGui.Installation
                 }
 
                 File.WriteAllLines(pyvenvCfgPath, pyvenvCfgLines);
-
                 Logger.Log($"Fixed pyvenv.cfg", true);
+
+                #endregion
+                #region virtualenv (egg-link files)
 
                 string sitePkgsDir = Path.Combine(GetDataSubPath(Constants.Dirs.SdVenv), "Lib", "site-packages");
                 var eggLinks = IoUtils.GetFileInfosSorted(sitePkgsDir, false, "*.egg-link");
@@ -416,6 +419,9 @@ namespace StableDiffusionGui.Installation
 
                 Logger.Log($"Fixed egg-link files", true);
 
+                #endregion
+                #region virtualenv (easy-install.pth)
+
                 var easyInstallPth = Path.Combine(sitePkgsDir, "easy-install.pth");
 
                 if (File.Exists(easyInstallPth))
@@ -430,10 +436,24 @@ namespace StableDiffusionGui.Installation
                     File.WriteAllLines(easyInstallPth, newLines);
                     Logger.Log($"Fixed easy-install.pth.", true);
                 }
+
+                #endregion
+                #region CLIP
+
+                string marker = "# PATCHED BY NMKD SD GUI"; // String to mark files as patched
+                string clipPyPath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdVenv, "src", "clip", "clip", "clip.py"); // Path to the main clip script to modify
+                var clipPyLines = File.ReadAllLines(clipPyPath).Where(l => !l.Contains(marker)).ToList(); // All lines, but exclude the marked one to avoid double-patching it
+                string dlLine = clipPyLines.Where(l => l.Trim().StartsWith("model_path = _download(_MODELS[name], download_root or")).FirstOrDefault(); // Find the target line
+                int indentSpaces = dlLine.TakeWhile(char.IsWhiteSpace).Count(); // Count how many spaces there are (python indentation matters!!)
+                string clipCacheDir = Path.Combine(Paths.GetDataPath(), Constants.Dirs.Cache.Root, Constants.Dirs.Cache.Clip); // Our custom cache directory
+                clipPyLines.Insert(clipPyLines.IndexOf(dlLine), $"{new string(' ', indentSpaces)}download_root = {clipCacheDir.Wrap(true)} {marker}"); // Insert a line overwriting the download dir
+                File.WriteAllLines(clipPyPath, clipPyLines); // Save patched file.
+
+                #endregion
             }
             catch (Exception ex)
             {
-                Logger.Log($"Error fixing paths: {ex.Message}");
+                Logger.Log($"Error patching files: {ex.Message}");
                 Logger.Log($"{ex.StackTrace}", true);
             }
         }

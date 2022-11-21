@@ -20,10 +20,17 @@
             public const string Wildcards = "Wildcards";
             public const string SdEnv = "ldo";
             public const string Conda = "mb";
-            public const string Cache = "cache";
             public const string SdVenv = "venv";
             public const string Python = "py";
             public const string Git = "git";
+
+            public class Cache
+            {
+                public const string Root = "cache";
+                public const string Transformers = "trfm";
+                public const string TorchHub = "torch";
+                public const string Clip = "clip";
+            }
         }
 
         public class Bins
