@@ -72,7 +72,7 @@ namespace StableDiffusionGui.Data
                 string init = initImgs != null && initImgs.Count > 0 ? $" - With Image(s)" : "";
                 string emb = !string.IsNullOrWhiteSpace(Params["embedding"].FromJson<string>()) ? $" - With Concept" : "";
                 string extraPrompts = Prompts.Length > 1 ? $" (+{Prompts.Length - 1})" : "";
-                return $"\"{Prompts.FirstOrDefault().Trunc(85)}\"{extraPrompts} - {Iterations} Images - {Params["steps"].FromJson<int>()} Steps - Seed {Params["seed"].FromJson<long>()} - {s.Width}x{s.Height} - {Params["sampler"].FromJson<string>()}{init}{emb}";
+                return $"\"{Prompts.FirstOrDefault().Trunc(85)}\"{extraPrompts} - {Iterations} Images - {Params["steps"].FromJson<int[]>().FirstOrDefault()} Steps - Seed {Params["seed"].FromJson<long>()} - {s.Width}x{s.Height} - {Params["sampler"].FromJson<string>()}{init}{emb}";
             }
             catch
             {
