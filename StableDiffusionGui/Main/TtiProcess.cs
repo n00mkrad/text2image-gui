@@ -137,7 +137,7 @@ namespace StableDiffusionGui.Main
                 string newStartupSettings = $"{argsStartup} {modelsChecksumStartup} {Config.GetInt("comboxCudaDevice")}"; // Check if startup settings match - If not, we need to restart the process
 
                 string initsStr = initImages != null ? $" and {initImages.Count} image{(initImages.Count != 1 ? "s" : "")} using {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
-                Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} with {iterations} iteration{(iterations != 1 ? "s" : "")} each and {scales.Length} scale{(scales.Length != 1 ? "s" : "")}{initsStr} each = {cmds.Count} images total.");
+                Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} * {iterations} image{(iterations != 1 ? "s" : "")} * {steps.Length} step count{(steps.Length != 1 ? "s" : "")} * {scales.Length} scale{(scales.Length != 1 ? "s" : "")}{initsStr} = {cmds.Count} images total.");
 
                 if (!IsAiProcessRunning || (IsAiProcessRunning && _lastInvokeStartupSettings != newStartupSettings))
                 {
@@ -293,7 +293,7 @@ namespace StableDiffusionGui.Main
             string newStartupSettings = $"opt {modelNoExt} {argsStartup} {Config.GetInt("comboxCudaDevice")}"; // Check if startup settings match - If not, we need to restart the process
 
             string initsStr = initImages != null ? $" and {initImages.Count} image{(initImages.Count != 1 ? "s" : "")} using {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
-            Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} with {iterations} iteration{(iterations != 1 ? "s" : "")} each and {scales.Length} scale{(scales.Length != 1 ? "s" : "")}{initsStr} each = {promptFileLines.Count} images total.");
+            Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} * {iterations} image{(iterations != 1 ? "s" : "")} * {steps.Length} step count{(steps.Length != 1 ? "s" : "")} * {scales.Length} scale{(scales.Length != 1 ? "s" : "")}{initsStr} = {promptFileLines.Count} images total.");
 
             if (!IsAiProcessRunning || (IsAiProcessRunning && _lastInvokeStartupSettings != newStartupSettings))
             {

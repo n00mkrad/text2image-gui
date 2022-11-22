@@ -88,6 +88,9 @@ namespace StableDiffusionGui.Ui.MainForm
             if (meta.Seed >= 0)
                 infos.Add($"Seed {meta.Seed}");
 
+            if (meta.Steps >= 0)
+                infos.Add($"{meta.Steps} Steps");
+
             if (meta.Scale >= 0)
                 infos.Add($"Scale {meta.Scale.ToStringDot()}");
 
