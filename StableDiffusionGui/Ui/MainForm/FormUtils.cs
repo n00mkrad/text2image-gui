@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
@@ -137,5 +138,56 @@ namespace StableDiffusionGui.Ui.MainForm
 
             F.progressBarImg.Visible = imageGen;
         }
+
+        public static async Task Run(bool fromQueue = false)
+        {
+            try
+            {
+                if (Program.Busy)
+                {
+                    TextToImage.Cancel();
+                    return;
+                }
+                else
+                {
+                    TextToImage.Canceled = false;
+
+                    if (!MainUi.IsInstalledWithWarning())
+                        return;
+
+                    Logger.ClearLogBox();
+                    F.CleanPrompt();
+                    FormControls.UpdateInitImgAndEmbeddingUi();
+                    InpaintingUtils.DeleteMaskedImage();
+
+                    if (fromQueue)
+                    {
+                        if (MainUi.Queue.Where(x => x != null).Count() < 0)
+                        {
+                            TextToImage.Cancel("Queue is empty.");
+                            return;
+                        }
+
+                        await TextToImage.RunTti(MainUi.Queue.AsEnumerable().Reverse().ToList()); // Reverse list to use top entries first
+                    }
+                    else
+                    {
+                        if (string.IsNullOrWhiteSpace(F.textboxPrompt.Text))
+                        {
+                            TextToImage.Cancel("No prompt was entered.");
+                            return;
+                        }
+
+                        FormControls.Save();
+                        await TextToImage.RunTti(FormParsing.GetCurrentTtiSettings());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Log($"{ex.Message}\n{ex.StackTrace}");
+            }
+        }
+
     }
 }

@@ -149,20 +149,20 @@ namespace StableDiffusionGui.Forms
         private void loadPromptIntoGUIToolStripMenuItem_Click(object sender, EventArgs e)
         {
             TtiSettings s = (TtiSettings)promptListView.FocusedItem.Tag;
-            Program.MainForm.LoadTtiSettingsIntoUi(s.Prompts, s.NegativePrompt);
+            Ui.MainForm.FormParsing.LoadTtiSettingsIntoUi(s.Prompts, s.NegativePrompt);
             Close();
         }
 
         private void loadPromptAndSettingsIntoGUIToolStripMenuItem_Click(object sender, EventArgs e)
         {
             TtiSettings s = (TtiSettings)promptListView.FocusedItem.Tag;
-            Program.MainForm.LoadTtiSettingsIntoUi(s);
+            Ui.MainForm.FormParsing.LoadTtiSettingsIntoUi(s);
             Close();
         }
 
         private void btnAddPromptsToQueue_Click(object sender, EventArgs e)
         {
-            var settings = Program.MainForm.GetCurrentTtiSettings();
+            var settings = Ui.MainForm.FormParsing.GetCurrentTtiSettings();
 
             if (!settings.Prompts.Where(x => !string.IsNullOrWhiteSpace(x)).Any())
                 return;

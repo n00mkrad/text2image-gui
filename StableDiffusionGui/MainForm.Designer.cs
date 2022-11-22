@@ -2032,7 +2032,6 @@ namespace StableDiffusionGui
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.TextBox textboxExtraScales;
         private System.Windows.Forms.Button separator;
         public System.Windows.Forms.ToolStripMenuItem openFileToolStripMenuItem;
         public System.Windows.Forms.ToolStripMenuItem openOutputFolderToolStripMenuItem;
@@ -2041,7 +2040,6 @@ namespace StableDiffusionGui
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
-        private System.Windows.Forms.TextBox textboxExtraInitStrengths;
         public System.Windows.Forms.ToolStripMenuItem useAsInitImageToolStripMenuItem;
         private System.Windows.Forms.Label label8;
         public System.Windows.Forms.ToolStripMenuItem generateCurrentPromptToolStripMenuItem;
@@ -2141,6 +2139,8 @@ namespace StableDiffusionGui
         public System.Windows.Forms.Label labelCurrentImage;
         public HTAlt.WinForms.HTProgressBar progressBar;
         public CircularProgressBar.CircularProgressBar progressCircle;
+        public System.Windows.Forms.TextBox textboxExtraScales;
+        public System.Windows.Forms.TextBox textboxExtraInitStrengths;
     }
 }
 

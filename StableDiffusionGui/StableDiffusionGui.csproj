@@ -286,6 +286,7 @@
     <Compile Include="Ui\ImagePopup.cs" />
     <Compile Include="Ui\InpaintUi.cs" />
     <Compile Include="Ui\MainForm\FormControls.cs" />
+    <Compile Include="Ui\MainForm\FormParsing.cs" />
     <Compile Include="Ui\MainForm\FormUtils.cs" />
     <Compile Include="Ui\MainUi.cs" />
     <Compile Include="Main\TextToImage.cs" />

@@ -130,7 +130,7 @@ namespace StableDiffusionGui.Ui
                     if (imgForm.Action == ImageLoadForm.ImageAction.InitImage)
                         AddInitImages(paths.ToList());
                     else if (imgForm.Action == ImageLoadForm.ImageAction.LoadSettings)
-                        Program.MainForm.LoadMetadataIntoUi(imgForm.CurrentMetadata);
+                        Ui.MainForm.FormParsing.LoadMetadataIntoUi(imgForm.CurrentMetadata);
                     else if (imgForm.Action == ImageLoadForm.ImageAction.CopyPrompt)
                         OsUtils.SetClipboard(imgForm.CurrentMetadata.Prompt);
                 }

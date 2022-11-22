@@ -1,8 +1,4 @@
-﻿using Microsoft.WindowsAPICodePack.Dialogs;
-using Microsoft.WindowsAPICodePack.Taskbar;
-using StableDiffusionGui.Controls;
-using StableDiffusionGui.Data;
-using StableDiffusionGui.Extensions;
+﻿using StableDiffusionGui.Extensions;
 using StableDiffusionGui.Forms;
 using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
@@ -14,14 +10,12 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
-using Paths = StableDiffusionGui.Io.Paths;
 
 namespace StableDiffusionGui
 {
@@ -139,100 +133,7 @@ namespace StableDiffusionGui
                 upDownSeed.Text = "";
         }
 
-        public void LoadMetadataIntoUi(ImageMetadata meta)
-        {
-            textboxPrompt.Text = meta.Prompt;
-            textboxPromptNeg.Text = meta.NegativePrompt;
-            sliderSteps.ActualValue = meta.Steps;
-            sliderScale.ActualValue = (decimal)meta.Scale;
-            comboxResW.Text = meta.GeneratedResolution.Width.ToString();
-            comboxResH.Text = meta.GeneratedResolution.Height.ToString();
-            upDownSeed.Value = meta.Seed;
-            comboxSampler.SetIfTextMatches(meta.Sampler, true, Strings.Samplers);
-            // MainUi.CurrentInitImgPaths = new[] { meta.InitImgName }.Where(x => string.IsNullOrWhiteSpace(x)).ToList(); // Does this even work if we only store the temp path?
-            MainUi.CurrentInitImgPaths = null;
-            comboxSeamless.SelectedIndex = meta.Seamless ? 1 : 0; // TODO: Extend Metadata class to include seamless mode
-
-            if (meta.InitStrength > 0f)
-                sliderInitStrength.ActualValue = (decimal)meta.InitStrength;
-
-            FormControls.UpdateInitImgAndEmbeddingUi();
-        }
-
-        public void LoadTtiSettingsIntoUi(string[] prompts, string negPrompt = "")
-        {
-            textboxPrompt.Text = string.Join(Environment.NewLine, prompts);
-
-            if (!string.IsNullOrWhiteSpace(negPrompt))
-                textboxPromptNeg.Text = negPrompt;
-        }
-
-        public void LoadTtiSettingsIntoUi(TtiSettings s)
-        {
-            textboxPrompt.Text = string.Join(Environment.NewLine, s.Prompts);
-            textboxPromptNeg.Text = s.NegativePrompt;
-            upDownIterations.Value = s.Iterations;
-
-            try
-            {
-                sliderSteps.ActualValue = s.Params.Get("steps").FromJson<int>();
-                sliderScale.ActualValue = (decimal)s.Params.Get("scales").FromJson<List<float>>().FirstOrDefault();
-                comboxResW.Text = s.Params.Get("res").FromJson<Size>().Width.ToString();
-                comboxResH.Text = s.Params.Get("res").FromJson<Size>().Height.ToString();
-                upDownSeed.Value = s.Params.Get("seed").FromJson<long>();
-                comboxSampler.SetIfTextMatches(s.Params.Get("sampler").FromJson<string>(), true, Strings.Samplers);
-                MainUi.CurrentInitImgPaths = s.Params.Get("initImgs").FromJson<List<string>>();
-                sliderInitStrength.ActualValue = (decimal)s.Params.Get("initStrengths").FromJson<List<float>>().FirstOrDefault();
-                MainUi.CurrentEmbeddingPath = s.Params.Get("embedding").FromJson<string>();
-                comboxSeamless.SetIfTextMatches(s.Params.Get("seamless").FromJson<string>(), true, Strings.SeamlessMode);
-                comboxInpaintMode.SelectedIndex = (int)s.Params.Get("inpainting").FromJson<InpaintMode>();
-                checkboxHiresFix.Checked = s.Params.Get("hiresFix").FromJson<bool>();
-                checkboxLockSeed.Checked = s.Params.Get("lockSeed").FromJson<bool>();
-            }
-            catch (Exception ex)
-            {
-                Logger.Log($"Failed to load generation settings. This can happen when you try to load prompts from an older version. ({ex.Message})");
-                Logger.Log(ex.StackTrace, true);
-            }
-
-
-            FormControls.UpdateInitImgAndEmbeddingUi();
-        }
-
-        public TtiSettings GetCurrentTtiSettings()
-        {
-            TtiSettings settings = new TtiSettings
-            {
-                Implementation = (Implementation)Config.GetInt("comboxImplementation"),
-                Prompts = textboxPrompt.TextNoPlaceholder.SplitIntoLines().Where(x => !string.IsNullOrWhiteSpace(x)).ToArray(),
-                NegativePrompt = textboxPromptNeg.TextNoPlaceholder.Trim().Replace(Environment.NewLine, " "),
-                Iterations = (int)upDownIterations.Value,
-                Params = new Dictionary<string, string>
-                        {
-                            { "steps", sliderSteps.ActualValueInt.ToJson() },
-                            { "scales", MainUi.GetScales(textboxExtraScales.Text).ToJson() },
-                            { "res", new Size(comboxResW.Text.GetInt(), comboxResH.Text.GetInt()).ToJson() },
-                            { "seed", (upDownSeed.Value < 0 ? new Random().Next(0, int.MaxValue) : ((long)upDownSeed.Value)).ToJson() },
-                            { "sampler", ((Sampler)comboxSampler.SelectedIndex).ToString().Lower().ToJson() },
-                            { "initImgs", MainUi.CurrentInitImgPaths.ToJson() },
-                            { "initStrengths", MainUi.GetInitStrengths(textboxExtraInitStrengths.Text).ToJson() },
-                            { "embedding", MainUi.CurrentEmbeddingPath.ToJson() },
-                            { "seamless", ((SeamlessMode)comboxSeamless.SelectedIndex).ToJson() },
-                            { "inpainting", ((InpaintMode)comboxInpaintMode.SelectedIndex).ToJson() },
-                            { "clipSegMask", textboxClipsegMask.Text.Trim().ToJson() },
-                            { "model", Config.Get(Config.Key.comboxSdModel).ToJson() },
-                            { "hiresFix", checkboxHiresFix.Checked.ToJson() },
-                            { "lockSeed", checkboxLockSeed.Checked.ToJson() },
-                            { "vae", Config.Get(Config.Key.comboxSdModelVae).ToJson() },
-                            { "perlin", textboxPerlin.GetFloat().ToJson() },
-                            { "threshold", textboxThresh.GetInt().ToJson() },
-                        },
-            };
-
-            return settings;
-        }
-
-        public void runBtn_Click(object sender, EventArgs e)
+        public async void runBtn_Click(object sender, EventArgs e)
         {
             if (Program.Busy)
             {
@@ -247,56 +148,7 @@ namespace StableDiffusionGui
             }
             else
             {
-                Run();
-            }
-        }
-
-        public void Run(bool fromQueue = false)
-        {
-            try
-            {
-                if (Program.Busy)
-                {
-                    TextToImage.Cancel();
-                    return;
-                }
-                else
-                {
-                    TextToImage.Canceled = false;
-
-                    if (!MainUi.IsInstalledWithWarning())
-                        return;
-
-                    Logger.ClearLogBox();
-                    CleanPrompt();
-                    FormControls.UpdateInitImgAndEmbeddingUi();
-                    InpaintingUtils.DeleteMaskedImage();
-
-                    if (fromQueue)
-                    {
-                        if (MainUi.Queue.Where(x => x != null).Count() < 0)
-                        {
-                            TextToImage.Cancel("Queue is empty.");
-                            return;
-                        }
-
-                        TextToImage.RunTti(MainUi.Queue.AsEnumerable().Reverse().ToList()); // Reverse list to use top entries first
-                    }
-                    else
-                    {
-                        if (string.IsNullOrWhiteSpace(textboxPrompt.Text))
-                        {
-                            TextToImage.Cancel("No prompt was entered.");
-                            return;
-                        }
-
-                        TextToImage.RunTti(GetCurrentTtiSettings());
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Log($"{ex.Message}\n{ex.StackTrace}");
+                await FormUtils.Run();
             }
         }
 
@@ -476,14 +328,14 @@ namespace StableDiffusionGui
             new PromptListForm(PromptListForm.ListMode.Queue).ShowDialogForm();
         }
 
-        private void generateCurrentPromptToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void generateCurrentPromptToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Run();
+            await FormUtils.Run();
         }
 
-        private void generateAllQueuedPromptsToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void generateAllQueuedPromptsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Run(true);
+            await FormUtils.Run(true);
         }
 
         public void UpdateInpaintUi()
@@ -504,7 +356,7 @@ namespace StableDiffusionGui
 
         private void addCurrentSettingsToQueueToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var settings = GetCurrentTtiSettings();
+            var settings = FormParsing.GetCurrentTtiSettings();
 
             if (settings.Prompts.Where(x => !string.IsNullOrWhiteSpace(x)).Any())
                 MainUi.Queue.Add(settings);
