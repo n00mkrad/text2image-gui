@@ -36,6 +36,9 @@ namespace StableDiffusionGui.Implementations
             if (modelFile == null)
                 return;
 
+            await OptimizedSdUtils.RunPickleScan(modelFile);
+            if (TextToImage.Canceled) return;
+
             Dictionary<string, string> initImages = initImgs != null && initImgs.Length > 0 ? await TtiUtils.CreateResizedInitImagesIfNeeded(initImgs.ToList(), res) : null;
 
             long startSeed = seed;

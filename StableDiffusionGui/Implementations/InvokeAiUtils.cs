@@ -51,7 +51,7 @@ namespace StableDiffusionGui.Implementations
             {
                 Logger.Log($"Preparing model files...");
 
-                var pickleScanResults = await VerifyModelsWithPseudoHash(cachedModels.Concat(cachedModelsVae));
+                var pickleScanResults = await TtiUtils.VerifyModelsWithPseudoHash(cachedModels.Concat(cachedModelsVae));
                 var cachedModelsUnsafe = cachedModels.Concat(cachedModelsVae).Where(m => !pickleScanResults[IoUtils.GetPseudoHash(m.FullName)]).ToList();
 
                 cachedModels = cachedModels.Except(cachedModelsUnsafe).ToList();
@@ -89,26 +89,6 @@ namespace StableDiffusionGui.Implementations
             }
 
             File.WriteAllText(ModelsYamlPath, text);
-        }
-
-        private static async Task<Dictionary<string, bool>> VerifyModelsWithPseudoHash(IEnumerable<Model> models)
-        {
-            var safeModels = Config.Get("safeModels").FromJson<Dictionary<string, bool>>();
-
-            if (safeModels == null)
-                safeModels = new Dictionary<string, bool>();
-
-            foreach (Model m in models)
-            {
-                string pseudoHash = IoUtils.GetPseudoHash(m.FullName);
-                bool safe = safeModels.ContainsKey(pseudoHash) ? safeModels[pseudoHash] : await OsUtils.ScanPickle(m.FullName);
-
-                if (safe) // Only save safe models to force re-checking of unsafe models
-                    safeModels[pseudoHash] = safe;
-            }
-
-            Config.Set("safeModels", safeModels.ToJson());
-            return safeModels;
         }
 
         private static bool IsModelDefault(Model mdl, Model vae, Model selectedMdl, Model selectedVae)

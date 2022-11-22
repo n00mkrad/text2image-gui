@@ -304,5 +304,25 @@ namespace StableDiffusionGui.Main
 
             return $"{pathNoExt}{separator}{counter}{ext}";
         }
+
+        public static async Task<Dictionary<string, bool>> VerifyModelsWithPseudoHash(IEnumerable<Model> models)
+        {
+            var safeModels = Config.Get("safeModels").FromJson<Dictionary<string, bool>>();
+
+            if (safeModels == null)
+                safeModels = new Dictionary<string, bool>();
+
+            foreach (Model m in models)
+            {
+                string pseudoHash = IoUtils.GetPseudoHash(m.FullName);
+                bool safe = safeModels.ContainsKey(pseudoHash) ? safeModels[pseudoHash] : await OsUtils.ScanPickle(m.FullName);
+
+                if (safe) // Only save safe models to force re-checking of unsafe models
+                    safeModels[pseudoHash] = safe;
+            }
+
+            Config.Set("safeModels", safeModels.ToJson());
+            return safeModels;
+        }
     }
 }
