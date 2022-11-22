@@ -85,7 +85,7 @@ namespace StableDiffusionGui
             Task.Run(() => MainUi.SetGpusInWindowTitle());
             upDownSeed.Text = "";
             MainUi.DoStartupChecks();
-            UpdateInitImgAndEmbeddingUi();
+            FormControls.UpdateInitImgAndEmbeddingUi();
 
             TabOrderInit(new List<Control>() {
                 textboxPrompt, textboxPromptNeg,
@@ -156,7 +156,7 @@ namespace StableDiffusionGui
             if (meta.InitStrength > 0f)
                 sliderInitStrength.ActualValue = (decimal)meta.InitStrength;
 
-            UpdateInitImgAndEmbeddingUi();
+            FormControls.UpdateInitImgAndEmbeddingUi();
         }
 
         public void LoadTtiSettingsIntoUi(string[] prompts, string negPrompt = "")
@@ -196,7 +196,7 @@ namespace StableDiffusionGui
             }
 
 
-            UpdateInitImgAndEmbeddingUi();
+            FormControls.UpdateInitImgAndEmbeddingUi();
         }
 
         public TtiSettings GetCurrentTtiSettings()
@@ -232,7 +232,7 @@ namespace StableDiffusionGui
             return settings;
         }
 
-        private void runBtn_Click(object sender, EventArgs e)
+        public void runBtn_Click(object sender, EventArgs e)
         {
             if (Program.Busy)
             {
@@ -269,7 +269,7 @@ namespace StableDiffusionGui
 
                     Logger.ClearLogBox();
                     CleanPrompt();
-                    UpdateInitImgAndEmbeddingUi();
+                    FormControls.UpdateInitImgAndEmbeddingUi();
                     InpaintingUtils.DeleteMaskedImage();
 
                     if (fromQueue)
@@ -300,50 +300,14 @@ namespace StableDiffusionGui
             }
         }
 
-        public void SetWorking(Program.BusyState state, bool allowCancel = true)
-        {
-            Logger.Log($"SetWorking({state})", true);
-            Program.State = state;
-            SetProgress(-1);
-
-            bool imageGen = state == Program.BusyState.ImageGeneration;
-
-            runBtn.Text = imageGen ? "Cancel" : "Generate!";
-            runBtn.ForeColor = imageGen ? Color.IndianRed : Color.White;
-            Control[] controlsToDisable = new Control[] { };
-            Control[] controlsToHide = new Control[] { };
-            progressCircle.Visible = state != Program.BusyState.Standby;
-
-            foreach (Control c in controlsToDisable)
-                c.Enabled = !imageGen;
-
-            foreach (Control c in controlsToHide)
-                c.Visible = !imageGen;
-
-            if (!imageGen)
-                SetProgressImg(0);
-
-            progressBarImg.Visible = imageGen;
-        }
-
         public void SetProgress(int percent, bool taskbarProgress = true)
         {
-            percent = percent.Clamp(0, 100);
-            progressBar.Value = percent;
-            progressBar.Refresh();
-
-            if (taskbarProgress)
-                TaskbarManager.Instance.SetProgressValue(percent, 100);
+            FormControls.SetProgress(percent, taskbarProgress, progressBar);
         }
 
         public void SetProgressImg(int percent, bool taskbarProgress = false)
         {
-            percent = percent.Clamp(0, 100);
-            progressBarImg.Value = percent;
-            progressBarImg.Refresh();
-
-            if (taskbarProgress)
-                TaskbarManager.Instance.SetProgressValue(percent, 100);
+            FormControls.SetProgress(percent, taskbarProgress, progressBarImg);
         }
 
         private void btnPrevImg_Click(object sender, EventArgs e)
@@ -432,23 +396,7 @@ namespace StableDiffusionGui
 
         private void pictBoxImgViewer_Click(object sender, EventArgs e)
         {
-            pictBoxImgViewer.Focus();
-
-            if (((MouseEventArgs)e).Button == MouseButtons.Right)
-            {
-                if (!string.IsNullOrWhiteSpace(ImageViewer.CurrentImagePath) && File.Exists(ImageViewer.CurrentImagePath))
-                {
-                    reGenerateImageWithCurrentSettingsToolStripMenuItem.Visible = !Program.Busy;
-                    useAsInitImageToolStripMenuItem.Visible = !Program.Busy;
-                    postProcessImageToolStripMenuItem.Visible = !Program.Busy && TextToImage.CurrentTaskSettings.Implementation == Implementation.InvokeAi;
-                    menuStripOutputImg.Show(Cursor.Position);
-                }
-            }
-            else
-            {
-                if (pictBoxImgViewer.Image != null)
-                    ImagePopup.Show(pictBoxImgViewer.Image, ImagePopupForm.SizeMode.Percent100);
-            }
+            FormControls.HandleImageViewerClick(((MouseEventArgs)e).Button == MouseButtons.Right);
         }
 
         #region Drag N Drop
@@ -469,103 +417,19 @@ namespace StableDiffusionGui
 
         private void btnInitImgBrowse_Click(object sender, EventArgs e)
         {
-            if (Program.Busy)
-                return;
-
-            if (MainUi.CurrentInitImgPaths != null)
-            {
-                MainUi.CurrentInitImgPaths = null;
-            }
-            else
-            {
-                CommonOpenFileDialog dialog = new CommonOpenFileDialog { InitialDirectory = MainUi.CurrentInitImgPaths?[0].GetParentDirOfFile(), IsFolderPicker = false, Multiselect = true };
-
-                if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
-                {
-                    var paths = dialog.FileNames.Where(path => Constants.FileExts.ValidImages.Contains(Path.GetExtension(path).Lower()));
-
-                    if (paths.Count() > 0)
-                        MainUi.HandleDroppedFiles(paths.ToArray(), true);
-                    else
-                        UiUtils.ShowMessageBox(dialog.FileNames.Count() == 1 ? "Invalid file type." : "None of the selected files are valid.");
-                }
-            }
-
-            UpdateInitImgAndEmbeddingUi();
-        }
-
-        public void UpdateInitImgAndEmbeddingUi()
-        {
-            TtiUtils.CleanInitImageList();
-
-            if (!string.IsNullOrWhiteSpace(MainUi.CurrentEmbeddingPath) && !File.Exists(MainUi.CurrentEmbeddingPath))
-            {
-                MainUi.CurrentEmbeddingPath = "";
-                Logger.Log($"Concept was cleared because the file no longer exists.");
-            }
-
-            bool img2img = MainUi.CurrentInitImgPaths != null;
-            panelInpainting.Visible = img2img;
-            panelInitImgStrength.Visible = img2img;
-            btnInitImgBrowse.Text = img2img ? $"Clear Image{(MainUi.CurrentInitImgPaths.Count == 1 ? "" : "s")}" : "Load Image(s)";
-
-            bool embeddingExists = File.Exists(MainUi.CurrentEmbeddingPath);
-            btnEmbeddingBrowse.Text = embeddingExists ? "Clear Concept" : "Load Concept";
-
-            labelCurrentImage.Text = !img2img ? "No initialization image loaded." : (MainUi.CurrentInitImgPaths.Count == 1 ? $"Currently using {Path.GetFileName(MainUi.CurrentInitImgPaths[0]).Trunc(30)}" : $"Currently using {MainUi.CurrentInitImgPaths.Count} images.");
-            labelCurrentConcept.Text = string.IsNullOrWhiteSpace(MainUi.CurrentEmbeddingPath) ? "No trained concept loaded." : $"Currently using {Path.GetFileName(MainUi.CurrentEmbeddingPath).Trunc(30)}";
-
-            Ui.MainForm.FormControls.RefreshUiAfterSettingsChanged();
+            FormUtils.BrowseInitImage();
         }
 
         private void btnEmbeddingBrowse_Click(object sender, EventArgs e)
         {
-            if (Program.Busy)
-                return;
-
-            if ((Implementation)Config.GetInt("comboxImplementation") == Implementation.OptimizedSd)
-            {
-                Logger.Log("Not supported in Low Memory Mode.");
-                return;
-            }
-
-            if (!string.IsNullOrWhiteSpace(MainUi.CurrentEmbeddingPath))
-            {
-                MainUi.CurrentEmbeddingPath = "";
-            }
-            else
-            {
-                string initDir = File.Exists(MainUi.CurrentEmbeddingPath) ? MainUi.CurrentEmbeddingPath.GetParentDirOfFile() : Path.Combine(Paths.GetExeDir(), "ExampleConcepts");
-
-                CommonOpenFileDialog dialog = new CommonOpenFileDialog { InitialDirectory = initDir, IsFolderPicker = false };
-
-                if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
-                {
-                    if (Constants.FileExts.ValidEmbeddings.Contains(Path.GetExtension(dialog.FileName.Lower())))
-                        MainUi.CurrentEmbeddingPath = dialog.FileName;
-                    else
-                        UiUtils.ShowMessageBox("Invalid file type.");
-                }
-            }
-
-            UpdateInitImgAndEmbeddingUi();
+            FormUtils.BrowseEmbedding();
         }
 
         #endregion
 
         private void btnDebug_Click(object sender, EventArgs e)
         {
-            menuStripLogs.Items.Clear();
-            var openLogs = menuStripLogs.Items.Add($"Open Logs Folder");
-            openLogs.Click += (s, ea) => { Process.Start("explorer", Paths.GetLogPath().Wrap()); };
-
-            foreach (var log in Logger.SessionLogs)
-            {
-                ToolStripItem newItem = menuStripLogs.Items.Add($"Copy {log.Key}");
-                newItem.Click += (s, ea) => { OsUtils.SetClipboard(Logger.SessionLogs[log.Key]); };
-            }
-
-            menuStripLogs.Show(Cursor.Position);
+            FormControls.OpenLogsMenu();
         }
 
         private void btnSettings_Click(object sender, EventArgs e)
@@ -575,13 +439,7 @@ namespace StableDiffusionGui
 
         private void btnPostProc_Click(object sender, EventArgs e)
         {
-            if ((Implementation)Config.GetInt("comboxImplementation") == Implementation.OptimizedSd)
-            {
-                UiUtils.ShowMessageBox("Post-processing is not available when using Low Memory Mode.");
-                return;
-            }
-
-            new PostProcSettingsForm().ShowDialogForm();
+            FormUtils.TryOpenPostProcessingSettings();
         }
 
         private void btnExpandPromptField_Click(object sender, EventArgs e)
@@ -660,19 +518,7 @@ namespace StableDiffusionGui
 
         private void reGenerateImageWithCurrentSettingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (Program.Busy)
-            {
-                UiUtils.ShowMessageBox("Please wait until the current process has finished.");
-                return;
-            }
-
-            var prevSeedVal = upDownSeed.Value;
-            var prevIterVal = upDownIterations.Value;
-            upDownSeed.Value = ImageViewer.CurrentImageMetadata.Seed;
-            upDownIterations.Value = 1;
-            runBtn_Click(null, null);
-            SetSeed((long)prevSeedVal);
-            upDownIterations.Value = prevIterVal;
+            FormUtils.RegenerateImageWithCurrentSettings();
         }
 
         private void btnDeleteBatch_Click(object sender, EventArgs e)
@@ -780,28 +626,6 @@ namespace StableDiffusionGui
         private void MainForm_SizeChanged(object sender, EventArgs e)
         {
             MainUi.SetSettingsVertScrollbar();
-        }
-
-        private async void textboxPrompt_TextChanged(object sender, EventArgs e)
-        {
-            if (!EnabledFeatures.WildcardAutocomplete)
-                return;
-
-            await Task.Delay(1);
-
-            if (textboxPrompt.Text.LastOrDefault() == '~' && promptAutocomplete == null)
-            {
-                promptAutocomplete = MainUi.ShowAutocompleteMenu((TextBox)FocusedControl);
-            }
-            else if (textboxPrompt.Text == null || textboxPrompt.Text.Length <= 0 || textboxPrompt.Text.LastOrDefault() == ' ')
-            {
-                if (promptAutocomplete != null)
-                {
-                    promptAutocomplete.Close();
-                    promptAutocomplete.Dispose();
-                    promptAutocomplete = null;
-                }
-            }
         }
 
         private void btnDreambooth_Click(object sender, EventArgs e)

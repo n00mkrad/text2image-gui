@@ -11,8 +11,8 @@ namespace StableDiffusionGui.Installation
         public static bool InvokeAiModelCaching { get { return false; } }
         public static bool WildcardAutocomplete { get { return false; } }
 
-        public static List<Implementation> DisabledImplementations { get { return new[] { Implementation.DiffusersOnnx }.ToList();  } }
-        public static List<Sampler> DisabledSamplers { get { return new[] { Sampler.K_Dpmpp_2, Sampler.K_Dpmpp_2_A }.ToList();  } }
-        public static List<InpaintMode> DisabledInpaintModes { get { return new[] { InpaintMode.ImageMask }.ToList();  } }
+        public static List<Implementation> DisabledImplementations { get { return new List<Implementation>() { Implementation.DiffusersOnnx }; } }
+        public static List<Sampler> DisabledSamplers { get { return new List<Sampler>() { Sampler.K_Dpmpp_2, Sampler.K_Dpmpp_2_A }; } }
+        public static List<InpaintMode> DisabledInpaintModes { get { return new List<InpaintMode>() { InpaintMode.ImageMask }; } }
     }
 }

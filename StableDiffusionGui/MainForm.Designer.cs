@@ -558,7 +558,7 @@ namespace StableDiffusionGui
             this.textboxSliderScale.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScale.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScale.Location = new System.Drawing.Point(297, 7);
+            this.textboxSliderScale.Location = new System.Drawing.Point(297, 9);
             this.textboxSliderScale.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScale.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScale.Name = "textboxSliderScale";
@@ -697,7 +697,7 @@ namespace StableDiffusionGui
             this.textboxSliderInitStrength.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderInitStrength.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderInitStrength.Location = new System.Drawing.Point(297, 7);
+            this.textboxSliderInitStrength.Location = new System.Drawing.Point(297, 9);
             this.textboxSliderInitStrength.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderInitStrength.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderInitStrength.Name = "textboxSliderInitStrength";
@@ -788,7 +788,6 @@ namespace StableDiffusionGui
             this.textboxPrompt.Size = new System.Drawing.Size(619, 62);
             this.textboxPrompt.TabIndex = 0;
             this.toolTip.SetToolTip(this.textboxPrompt, "Text prompt. The AI will try to generate an image matching this description.");
-            this.textboxPrompt.TextChanged += new System.EventHandler(this.textboxPrompt_TextChanged);
             // 
             // comboxSeamless
             // 
@@ -1644,7 +1643,7 @@ namespace StableDiffusionGui
             this.textboxSliderSteps.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderSteps.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderSteps.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderSteps.Location = new System.Drawing.Point(377, 7);
+            this.textboxSliderSteps.Location = new System.Drawing.Point(377, 9);
             this.textboxSliderSteps.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderSteps.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderSteps.Name = "textboxSliderSteps";
@@ -2033,45 +2032,41 @@ namespace StableDiffusionGui
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label9;
-        private CircularProgressBar.CircularProgressBar progressCircle;
-        private HTAlt.WinForms.HTProgressBar progressBar;
         private System.Windows.Forms.TextBox textboxExtraScales;
         private System.Windows.Forms.Button separator;
-        private System.Windows.Forms.ToolStripMenuItem openFileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem openOutputFolderToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem copyImageToClipboardToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem copySeedToClipboardToolStripMenuItem;
+        public System.Windows.Forms.ToolStripMenuItem openFileToolStripMenuItem;
+        public System.Windows.Forms.ToolStripMenuItem openOutputFolderToolStripMenuItem;
+        public System.Windows.Forms.ToolStripMenuItem copyImageToClipboardToolStripMenuItem;
+        public System.Windows.Forms.ToolStripMenuItem copySeedToClipboardToolStripMenuItem;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         private System.Windows.Forms.TextBox textboxExtraInitStrengths;
-        private System.Windows.Forms.ToolStripMenuItem useAsInitImageToolStripMenuItem;
+        public System.Windows.Forms.ToolStripMenuItem useAsInitImageToolStripMenuItem;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.ToolStripMenuItem generateCurrentPromptToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem generateAllQueuedPromptsToolStripMenuItem;
+        public System.Windows.Forms.ToolStripMenuItem generateCurrentPromptToolStripMenuItem;
+        public System.Windows.Forms.ToolStripMenuItem generateAllQueuedPromptsToolStripMenuItem;
         private System.Windows.Forms.Label label10;
         private HTAlt.WinForms.HTButton btnResetMask;
-        private System.Windows.Forms.ToolStripMenuItem addCurrentSettingsToQueueToolStripMenuItem;
-        private System.Windows.Forms.Label labelCurrentConcept;
-        private System.Windows.Forms.Label labelCurrentImage;
-        private System.Windows.Forms.ToolStripMenuItem reGenerateImageWithCurrentSettingsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem deleteThisImageToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem deleteAllCurrentImagesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem openCliToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem openModelMergeToolToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem openModelPruningTrimmingToolToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem viewLogInRealtimeToolStripMenuItem;
+        public System.Windows.Forms.ToolStripMenuItem addCurrentSettingsToQueueToolStripMenuItem;
+        public System.Windows.Forms.ToolStripMenuItem reGenerateImageWithCurrentSettingsToolStripMenuItem;
+        public System.Windows.Forms.ToolStripMenuItem deleteThisImageToolStripMenuItem;
+        public System.Windows.Forms.ToolStripMenuItem deleteAllCurrentImagesToolStripMenuItem;
+        public System.Windows.Forms.ToolStripMenuItem openCliToolStripMenuItem;
+        public System.Windows.Forms.ToolStripMenuItem openModelMergeToolToolStripMenuItem;
+        public System.Windows.Forms.ToolStripMenuItem openModelPruningTrimmingToolToolStripMenuItem;
+        public System.Windows.Forms.ToolStripMenuItem viewLogInRealtimeToolStripMenuItem;
         private System.Windows.Forms.TextBox textboxSliderSteps;
         private System.Windows.Forms.TextBox textboxSliderScale;
         private System.Windows.Forms.TextBox textboxSliderInitStrength;
-        private System.Windows.Forms.ToolStripMenuItem fitWindowSizeToImageSizeToolStripMenuItem;
+        public System.Windows.Forms.ToolStripMenuItem fitWindowSizeToImageSizeToolStripMenuItem;
         private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.ToolStripMenuItem openCmdInPythonEnvironmentToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem copyToFavoritesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem upscaleToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem faceRestorationToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem applyAllToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem postProcessImageToolStripMenuItem;
+        public System.Windows.Forms.ToolStripMenuItem openCmdInPythonEnvironmentToolStripMenuItem;
+        public System.Windows.Forms.ToolStripMenuItem copyToFavoritesToolStripMenuItem;
+        public System.Windows.Forms.ToolStripMenuItem upscaleToolStripMenuItem;
+        public System.Windows.Forms.ToolStripMenuItem faceRestorationToolStripMenuItem;
+        public System.Windows.Forms.ToolStripMenuItem applyAllToolStripMenuItem;
+        public System.Windows.Forms.ToolStripMenuItem postProcessImageToolStripMenuItem;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label13;
@@ -2142,6 +2137,10 @@ namespace StableDiffusionGui
         public System.Windows.Forms.Panel panelDebugPerlinThresh;
         public System.Windows.Forms.Panel panelPromptNeg;
         public System.Windows.Forms.Panel panelPrompt;
+        public System.Windows.Forms.Label labelCurrentConcept;
+        public System.Windows.Forms.Label labelCurrentImage;
+        public HTAlt.WinForms.HTProgressBar progressBar;
+        public CircularProgressBar.CircularProgressBar progressCircle;
     }
 }
 

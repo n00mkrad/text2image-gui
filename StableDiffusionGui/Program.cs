@@ -70,6 +70,13 @@ namespace StableDiffusionGui
             }
         }
 
+        public static void SetState(BusyState state)
+        {
+            Logger.Log($"SetWorking({state})", true);
+            State = state;
+            Ui.MainForm.FormUtils.UpdateBusyState();
+        }
+
         public static void Cleanup()
         {
             int keepLogsDays = 4;

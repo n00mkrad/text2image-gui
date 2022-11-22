@@ -34,7 +34,7 @@ namespace StableDiffusionGui.Main
 
             try
             {
-                Program.MainForm.SetWorking(Program.BusyState.PostProcessing, false);
+                Program.SetState(Program.BusyState.PostProcessing);
 
                 Logger.Log($"InvokeAI !fix: {string.Join(", ", actions.Select(x => x.ToString()))}", true);
 
@@ -53,7 +53,7 @@ namespace StableDiffusionGui.Main
             {
                 Logger.Log($"Error: {ex.Message}");
                 Logger.Log(ex.StackTrace);
-                Program.MainForm.SetWorking(Program.BusyState.Standby);
+                Program.SetState(Program.BusyState.Standby);
                 return false;
             }
         }

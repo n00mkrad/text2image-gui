@@ -153,7 +153,7 @@ namespace StableDiffusionGui.Forms
                 return;
             }
 
-            Program.MainForm.SetWorking(Program.BusyState.Dreambooth);
+            Program.SetState(Program.BusyState.Dreambooth);
             btnStart.Text = "Cancel";
 
             DirectoryInfo trainImgDir = new DirectoryInfo(textboxTrainImgsDir.Text.Trim());
@@ -164,7 +164,7 @@ namespace StableDiffusionGui.Forms
 
             string outPath = await Dreambooth.RunTraining(baseModel, trainImgDir, className, preset, sliderLrMultiplier.ActualValueFloat, stepsMultiplier);
 
-            Program.MainForm.SetWorking(Program.BusyState.Standby);
+            Program.SetState(Program.BusyState.Standby);
             btnStart.Text = "Start Training";
 
             if (File.Exists(outPath))

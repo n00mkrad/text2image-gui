@@ -7,6 +7,7 @@ using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Properties;
+using StableDiffusionGui.Ui.MainForm;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -142,7 +143,7 @@ namespace StableDiffusionGui.Ui
                         CurrentEmbeddingPath = paths[0];
                 }
 
-                Program.MainForm.UpdateInitImgAndEmbeddingUi();
+                FormControls.UpdateInitImgAndEmbeddingUi();
             }
             else
             {
@@ -183,7 +184,7 @@ namespace StableDiffusionGui.Ui
                 CurrentInitImgPaths = paths;
             }
 
-            Program.MainForm.UpdateInitImgAndEmbeddingUi();
+            FormControls.UpdateInitImgAndEmbeddingUi();
         }
 
         public static void HandlePaste()

@@ -36,7 +36,7 @@ namespace StableDiffusionGui.Main
             if (batches == null || batches.Count < 1)
                 return;
 
-            Program.MainForm.SetWorking(Program.BusyState.ImageGeneration);
+            Program.SetState(Program.BusyState.ImageGeneration);
 
             CurrentTask = new TtiTaskInfo
             {
@@ -113,7 +113,7 @@ namespace StableDiffusionGui.Main
                 Logger.Log($"No images generated. {(logCopySuccess ? "Log was copied to clipboard." : "")}");
             }
 
-            Program.MainForm.SetWorking(Program.BusyState.Standby);
+            Program.SetState(Program.BusyState.Standby);
 
             NotifyMode notifyMode = (NotifyMode)Config.GetInt("comboxNotify");
 

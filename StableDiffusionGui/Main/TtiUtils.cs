@@ -273,7 +273,7 @@ namespace StableDiffusionGui.Main
                 Logger.Log($"From '{processedImgPath}' to '{movePath}' - Trace:\n{ex.StackTrace}", true);
             }
 
-            Program.MainForm.SetWorking(Program.BusyState.Standby);
+            Program.SetState(Program.BusyState.Standby);
         }
 
         private static string GetUniquePath(string preferredPath, string separator = "", int maxTries = 1000)

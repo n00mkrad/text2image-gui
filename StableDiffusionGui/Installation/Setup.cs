@@ -23,7 +23,7 @@ namespace StableDiffusionGui.Installation
 
             try
             {
-                Program.MainForm.SetWorking(Program.BusyState.Installation);
+                Program.SetState(Program.BusyState.Installation);
 
                 if (force || !InstallationStatus.HasSdRepo() || !InstallationStatus.HasSdEnv())
                 {
@@ -69,7 +69,7 @@ namespace StableDiffusionGui.Installation
                 Logger.Log($"Install error: {ex.Message}\n{ex.StackTrace}");
             }
 
-            Program.MainForm.SetWorking(Program.BusyState.Standby);
+            Program.SetState(Program.BusyState.Standby);
         }
 
         public static async Task SetupVenv()

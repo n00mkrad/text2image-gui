@@ -80,11 +80,11 @@ namespace StableDiffusionGui.Forms
         private async void btnClone_Click(object sender, EventArgs e)
         {
             this.Enabled = false;
-            Program.MainForm.SetWorking(Program.BusyState.Installation);
+            Program.SetState(Program.BusyState.Installation);
             await Setup.CloneSdRepo();
             Setup.RemoveGitFiles();
             UpdateStatus();
-            Program.MainForm.SetWorking(Program.BusyState.Standby);
+            Program.SetState(Program.BusyState.Standby);
             this.Enabled = true;
         }
 
