@@ -1,13 +1,10 @@
 ﻿using Microsoft.WindowsAPICodePack.Dialogs;
 using StableDiffusionGui.Extensions;
 using StableDiffusionGui.Forms;
-using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
-using StableDiffusionGui.Os;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;

@@ -438,7 +438,7 @@ namespace StableDiffusionGui.Installation
                 }
 
                 #endregion
-                #region CLIP
+                #region CLIP Cache
 
                 string marker = "# PATCHED BY NMKD SD GUI"; // String to mark files as patched
                 string clipPyPath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdVenv, "src", "clip", "clip", "clip.py"); // Path to the main clip script to modify

@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
@@ -84,25 +83,25 @@ namespace StableDiffusionGui.Ui.MainForm
                 NegativePrompt = F.textboxPromptNeg.TextNoPlaceholder.Trim().Replace(Environment.NewLine, " "),
                 Iterations = (int)F.upDownIterations.Value,
                 Params = new Dictionary<string, string>
-                        {
-                            { "steps", F.sliderSteps.ActualValueInt.ToJson() },
-                            { "scales", MainUi.GetScales(F.textboxExtraScales.Text).ToJson() },
-                            { "res", new Size(F.comboxResW.Text.GetInt(), F.comboxResH.Text.GetInt()).ToJson() },
-                            { "seed", (F.upDownSeed.Value < 0 ? new Random().Next(0, int.MaxValue) : ((long)F.upDownSeed.Value)).ToJson() },
-                            { "sampler", ((Sampler)F.comboxSampler.SelectedIndex).ToString().Lower().ToJson() },
-                            { "initImgs", MainUi.CurrentInitImgPaths.ToJson() },
-                            { "initStrengths", MainUi.GetInitStrengths(F.textboxExtraInitStrengths.Text).ToJson() },
-                            { "embedding", MainUi.CurrentEmbeddingPath.ToJson() },
-                            { "seamless", ((SeamlessMode)F.comboxSeamless.SelectedIndex).ToJson() },
-                            { "inpainting", ((InpaintMode)F.comboxInpaintMode.SelectedIndex).ToJson() },
-                            { "clipSegMask", F.textboxClipsegMask.Text.Trim().ToJson() },
-                            { "model", Config.Get(Config.Key.comboxSdModel).ToJson() },
-                            { "hiresFix", F.checkboxHiresFix.Checked.ToJson() },
-                            { "lockSeed", F.checkboxLockSeed.Checked.ToJson() },
-                            { "vae", Config.Get(Config.Key.comboxSdModelVae).ToJson() },
-                            { "perlin", F.textboxPerlin.GetFloat().ToJson() },
-                            { "threshold", F.textboxThresh.GetInt().ToJson() },
-                        },
+                {
+                    { "steps", F.sliderSteps.ActualValueInt.ToJson() },
+                    { "scales", MainUi.GetScales(F.textboxExtraScales.Text).ToJson() },
+                    { "res", new Size(F.comboxResW.Text.GetInt(), F.comboxResH.Text.GetInt()).ToJson() },
+                    { "seed", (F.upDownSeed.Value < 0 ? new Random().Next(0, int.MaxValue) : ((long)F.upDownSeed.Value)).ToJson() },
+                    { "sampler", ((Sampler)F.comboxSampler.SelectedIndex).ToString().Lower().ToJson() },
+                    { "initImgs", MainUi.CurrentInitImgPaths.ToJson() },
+                    { "initStrengths", MainUi.GetInitStrengths(F.textboxExtraInitStrengths.Text).ToJson() },
+                    { "embedding", MainUi.CurrentEmbeddingPath.ToJson() },
+                    { "seamless", ((SeamlessMode)F.comboxSeamless.SelectedIndex).ToJson() },
+                    { "inpainting", ((InpaintMode)F.comboxInpaintMode.SelectedIndex).ToJson() },
+                    { "clipSegMask", F.textboxClipsegMask.Text.Trim().ToJson() },
+                    { "model", Config.Get(Config.Key.comboxSdModel).ToJson() },
+                    { "hiresFix", F.checkboxHiresFix.Checked.ToJson() },
+                    { "lockSeed", F.checkboxLockSeed.Checked.ToJson() },
+                    { "vae", Config.Get(Config.Key.comboxSdModelVae).ToJson() },
+                    { "perlin", F.textboxPerlin.GetFloat().ToJson() },
+                    { "threshold", F.textboxThresh.GetInt().ToJson() },
+                },
             };
 
             return settings;
