@@ -22,7 +22,7 @@ namespace StableDiffusionGui.Implementations
         {
             // NOTE: Currently not implemented: Embeddings, Samplers, Seamless Mode, ...
             string[] initImgs = parameters.Get("initImgs").FromJson<string[]>();
-            float[] initStrengths = parameters.Get("initStrengths").FromJson<float[]>();
+            float[] initStrengths = parameters.Get("initStrengths").FromJson<float[]>().Select(n => 1f - n).ToArray();
             int[] steps = parameters.FromJson<int[]>("steps");
             float[] scales = parameters.Get("scales").FromJson<float[]>();
             long seed = parameters.Get("seed").FromJson<long>();

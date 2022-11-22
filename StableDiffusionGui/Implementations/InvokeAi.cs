@@ -5,7 +5,6 @@ using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -26,7 +25,7 @@ namespace StableDiffusionGui.Implementations
             {
                 string[] initImgs = parameters.FromJson<string[]>("initImgs"); // List of init images
                 string embedding = parameters.FromJson<string>("embedding"); // Textual Inversion embedding file
-                float[] initStrengths = parameters.FromJson<float[]>("initStrengths"); // List of init strength values to run
+                float[] initStrengths = parameters.FromJson<float[]>("initStrengths").Select(n => 1f - n).ToArray(); ; // List of init strength values to run
                 int[] steps = parameters.FromJson<int[]>("steps"); // List of diffusion step counts
                 float[] scales = parameters.FromJson<float[]>("scales"); // List of CFG scale values to run
                 long seed = parameters.FromJson<long>("seed"); // Initial seed
