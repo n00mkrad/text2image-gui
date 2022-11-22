@@ -259,6 +259,8 @@
     <Compile Include="Forms\WelcomeForm.Designer.cs">
       <DependentUpon>WelcomeForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Implementations\OptimizedSd.cs" />
+    <Compile Include="Implementations\OptimizedSdUtils.cs" />
     <Compile Include="Implementations\SdOnnx.cs" />
     <Compile Include="Installation\EnabledFeatures.cs" />
     <Compile Include="Installation\InstallationStatus.cs" />
@@ -278,8 +280,8 @@
     <Compile Include="Main\Dreambooth.cs" />
     <Compile Include="Main\DreamboothOutputHandler.cs" />
     <Compile Include="Main\Enums.cs" />
-    <Compile Include="Main\InvokeAi.cs" />
-    <Compile Include="Main\InvokeAiUtils.cs" />
+    <Compile Include="Implementations\InvokeAi.cs" />
+    <Compile Include="Implementations\InvokeAiUtils.cs" />
     <Compile Include="Main\Logger.cs" />
     <Compile Include="Main\ImageExport.cs" />
     <Compile Include="Main\PromptHistory.cs" />

@@ -2,6 +2,7 @@
 using StableDiffusionGui.Data;
 using StableDiffusionGui.Extensions;
 using StableDiffusionGui.Forms;
+using StableDiffusionGui.Implementations;
 using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
@@ -398,7 +399,7 @@ namespace StableDiffusionGui
             if (Program.Busy || !MainUi.IsInstalledWithWarning())
                 return;
 
-            TtiProcess.RunStableDiffusionCli(Config.Get(Config.Key.textboxOutPath), Config.Get(Config.Key.comboxSdModelVae));
+            InvokeAi.RunCli(Config.Get(Config.Key.textboxOutPath), Config.Get(Config.Key.comboxSdModelVae));
         }
 
         private void openModelMergeToolToolStripMenuItem_Click(object sender, EventArgs e)
@@ -439,7 +440,7 @@ namespace StableDiffusionGui
 
         private void openCmdInPythonEnvironmentToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            TtiProcess.StartCmdInSdEnv(false);
+            InvokeAi.StartCmdInSdEnv(false);
         }
 
         #region Post-Processing

@@ -10,7 +10,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace StableDiffusionGui.Main
 {
@@ -79,10 +78,10 @@ namespace StableDiffusionGui.Main
                 List<Task> tasks = new List<Task>();
 
                 if (s.Implementation == Enums.StableDiffusion.Implementation.InvokeAi)
-                    tasks.Add(TtiProcess.RunStableDiffusion(s.Prompts, s.NegativePrompt, s.Iterations, s.Params, tempOutDir));
+                    tasks.Add(InvokeAi.Run(s.Prompts, s.NegativePrompt, s.Iterations, s.Params, tempOutDir));
 
                 if (s.Implementation == Enums.StableDiffusion.Implementation.OptimizedSd)
-                    tasks.Add(TtiProcess.RunStableDiffusionOpt(s.Prompts, s.Iterations, s.Params, tempOutDir));
+                    tasks.Add(OptimizedSd.Run(s.Prompts, s.Iterations, s.Params, tempOutDir));
 
                 if (s.Implementation == Enums.StableDiffusion.Implementation.DiffusersOnnx)
                     tasks.Add(SdOnnx.Run(s.Prompts, s.NegativePrompt, s.Iterations, s.Params, tempOutDir));

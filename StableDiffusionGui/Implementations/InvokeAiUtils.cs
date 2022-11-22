@@ -1,5 +1,6 @@
 ﻿using StableDiffusionGui.Data;
 using StableDiffusionGui.Io;
+using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using System;
@@ -10,12 +11,10 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace StableDiffusionGui.Main
+namespace StableDiffusionGui.Implementations
 {
     internal class InvokeAiUtils
     {
-        private string _lastModelsYamlChecksum = "";
-
         public static string ModelsYamlPath { get { return Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdRepo, "configs", "models.yaml"); } }
 
         public static void WriteModelsYaml(string mdlName, string vaeName = "", string keyName = "default")
