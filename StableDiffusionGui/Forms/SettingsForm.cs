@@ -181,13 +181,6 @@ namespace StableDiffusionGui.Forms
             LoadModels(true, ModelType.Vae);
         }
 
-        private void checkboxOptimizedSd_CheckedChanged(object sender, EventArgs e)
-        {
-            if (_ready && CurrImplementation == Implementation.OptimizedSd)
-                UiUtils.ShowMessageBox($"Warning: Low Memory Mode disables several features, such as custom samplers or seamless mode.\n" +
-            $"Only keep this option enabled if your GPU has less than 6 GB of memory.");
-        }
-
         private void btnRefreshModelsDropdown_Click(object sender, EventArgs e)
         {
             LoadModels(true, ModelType.Normal);
@@ -215,6 +208,10 @@ namespace StableDiffusionGui.Forms
 
             LoadModels(true, ModelType.Normal);
             LoadModels(true, ModelType.Vae);
+
+            if (_ready && CurrImplementation != Implementation.InvokeAi)
+                UiUtils.ShowMessageBox($"Warning: This implementation disables several features.\n" +
+            $"Only use it if you need it due to compatibility or hardware limitations.");
         }
     }
 }

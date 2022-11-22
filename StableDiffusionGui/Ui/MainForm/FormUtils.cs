@@ -23,9 +23,11 @@ namespace StableDiffusionGui.Ui.MainForm
             if (Program.Busy)
                 return;
 
-            if ((Implementation)Config.GetInt("comboxImplementation") == Implementation.OptimizedSd)
+            var imp = (Implementation)Config.GetInt("comboxImplementation");
+
+            if (imp == Implementation.OptimizedSd)
             {
-                Logger.Log("Not supported in Low Memory Mode.");
+                Logger.Log($"Not supported with your current implementation ({Strings.Implementation.Get(imp.ToString(), true)}).");
                 return;
             }
 
@@ -97,9 +99,11 @@ namespace StableDiffusionGui.Ui.MainForm
 
         public static void TryOpenPostProcessingSettings()
         {
-            if ((Implementation)Config.GetInt("comboxImplementation") == Implementation.OptimizedSd)
+            var imp = (Implementation)Config.GetInt("comboxImplementation");
+
+            if (imp == Implementation.OptimizedSd)
             {
-                UiUtils.ShowMessageBox("Post-processing is not available when using Low Memory Mode.");
+                UiUtils.ShowMessageBox($"Post-processing is not available with your current implementation ({Strings.Implementation.Get(imp.ToString(), true)}).");
                 return;
             }
 
