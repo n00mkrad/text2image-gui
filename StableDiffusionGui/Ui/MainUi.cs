@@ -246,9 +246,9 @@ namespace StableDiffusionGui.Ui
                 if (incrementValues.Count > 0)
                     values = incrementValues;
             }
-            else
+            else if (!string.IsNullOrWhiteSpace(text))
             {
-                values.AddRange(text.Split(",").Select(x => x.GetFloat()).Where(x => x >= 0.05f));
+                values = text.Split(",").Select(x => x.GetFloat()).Where(x => x >= 0.05f).ToList();
             }
 
             return values;
