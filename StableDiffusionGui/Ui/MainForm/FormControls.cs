@@ -23,7 +23,7 @@ namespace StableDiffusionGui.Ui.MainForm
 
         public static void InitializeControls()
         {
-            F.comboxSampler.FillFromEnum<Sampler>(Strings.Samplers, 0, EnabledFeatures.DisabledSamplers);
+            F.comboxSampler.FillFromEnum<Sampler>(Strings.Samplers, 0);
             F.comboxSeamless.FillFromEnum<SeamlessMode>(Strings.SeamlessMode, 0);
             F.comboxInpaintMode.FillFromEnum<InpaintMode>(Strings.InpaintMode, 0, EnabledFeatures.DisabledInpaintModes);
 
