@@ -59,7 +59,8 @@ namespace StableDiffusionGui.Main
                 if (modelFile == null)
                     return;
 
-                InvokeAiUtils.WriteModelsYamlAll(modelFile, vaeFile, cachedModels, cachedModelsVae);
+                await InvokeAiUtils.WriteModelsYamlAll(modelFile, vaeFile, cachedModels, cachedModelsVae);
+                if (TextToImage.Canceled) return;
 
                 Dictionary<string, string> initImages = initImgs != null && initImgs.Length > 0 ? await TtiUtils.CreateResizedInitImagesIfNeeded(initImgs.ToList(), res) : null;
 
@@ -129,7 +130,7 @@ namespace StableDiffusionGui.Main
 
                 List<string> cmds = argLists.Select(argList => string.Join(" ", argList.Where(argEntry => !string.IsNullOrWhiteSpace(argEntry.Value)).Select(argEntry => argEntry.Value))).ToList();
 
-                Logger.Log($"Running Stable Diffusion - {iterations} Iterations, {steps} Steps, Scales {(scales.Length < 4 ? string.Join(", ", scales.Select(x => x.ToStringDot())) : $"{scales.First()}->{scales.Last()}")}, {res.Width}x{res.Height}, Starting Seed: {startSeed}");
+                Logger.Log($"Running Stable Diffusion - {iterations} Iterations, {steps.Length} Steps, Scales {(scales.Length < 4 ? string.Join(", ", scales.Select(x => x.ToStringDot())) : $"{scales.First()}->{scales.Last()}")}, {res.Width}x{res.Height}, Starting Seed: {startSeed}", false, Logger.LastUiLine.EndsWith("..."));
 
                 string modelsChecksumStartup = InvokeAiUtils.GetModelsYamlHash();
                 string argsStartup = Args.InvokeAi.GetArgsStartup(embedding);
@@ -287,7 +288,7 @@ namespace StableDiffusionGui.Main
             IoUtils.TryDeleteIfExists(promptFilePath); // idk if this is needed, but the line below MIGHT append something so better make sure the previous prompts are deleted
             File.WriteAllLines(promptFilePath, promptFileLines);
 
-            Logger.Log($"Running Stable Diffusion - {iterations} Iterations, {steps} Steps, Scales {(scales.Length < 4 ? string.Join(", ", scales.Select(x => x.ToStringDot())) : $"{scales.First()}->{scales.Last()}")}, {res.Width}x{res.Height}, Starting Seed: {startSeed}");
+            Logger.Log($"Running Stable Diffusion - {iterations} Iterations, {steps.Length} Steps, Scales {(scales.Length < 4 ? string.Join(", ", scales.Select(x => x.ToStringDot())) : $"{scales.First()}->{scales.Last()}")}, {res.Width}x{res.Height}, Starting Seed: {startSeed}");
 
             string argsStartup = Args.OptimizedSd.GetDefaultArgsStartup();
             string newStartupSettings = $"opt {modelNoExt} {argsStartup} {Config.GetInt("comboxCudaDevice")}"; // Check if startup settings match - If not, we need to restart the process
@@ -356,7 +357,8 @@ namespace StableDiffusionGui.Main
             if (modelFile == null)
                 return;
 
-            InvokeAiUtils.WriteModelsYamlAll(modelFile, vaeFile, cachedModels, cachedModelsVae);
+            await InvokeAiUtils.WriteModelsYamlAll(modelFile, vaeFile, cachedModels, cachedModelsVae);
+            if (TextToImage.Canceled) return;
 
             string batPath = Path.Combine(Paths.GetSessionDataPath(), "invoke.bat");
 

@@ -1,15 +1,16 @@
-﻿using Microsoft.VisualBasic.Devices;
+﻿using Dasync.Collections;
+using Microsoft.VisualBasic.Devices;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
+using StableDiffusionGui.MiscUtils;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Management;
-using System.Security.Cryptography;
 using System.Security.Principal;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Tulpep.NotificationWindow;
@@ -18,15 +19,15 @@ namespace StableDiffusionGui.Os
 {
     internal class OsUtils
     {
-        public static string GetProcStdOut(Process proc, bool includeStdErr = false, ProcessPriorityClass priority = ProcessPriorityClass.BelowNormal)
+        public static string GetProcStdOut(Process process, bool includeStdErr = false, ProcessPriorityClass priority = ProcessPriorityClass.BelowNormal)
         {
             if (includeStdErr)
-                proc.StartInfo.Arguments += " 2>&1";
+                process.StartInfo.Arguments += " 2>&1";
 
-            proc.Start();
-            proc.PriorityClass = priority;
-            string output = proc.StandardOutput.ReadToEnd();
-            proc.WaitForExit();
+            process.Start();
+            process.PriorityClass = priority;
+            string output = process.StandardOutput.ReadToEnd();
+            process.WaitForExit();
             return output;
         }
 
@@ -249,16 +250,16 @@ namespace StableDiffusionGui.Os
             popup.Popup();
         }
 
-        public static void PlayPingSound (bool onlyIfWindowIsInBackground = false)
+        public static void PlayPingSound(bool onlyIfWindowIsInBackground = false)
         {
             if (onlyIfWindowIsInBackground && Program.MainForm.IsInFocus())
                 return;
 
-            System.IO.Stream stream = Properties.Resources.notify;
+            Stream stream = Properties.Resources.notify;
             new System.Media.SoundPlayer(stream).Play();
         }
 
-        public static bool SetClipboard (object data)
+        public static bool SetClipboard(object data)
         {
             try
             {
@@ -268,7 +269,7 @@ namespace StableDiffusionGui.Os
                 Clipboard.SetDataObject(data);
                 return true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logger.Log($"Error setting clipboard data: {ex.Message}");
                 return false;
@@ -292,7 +293,7 @@ namespace StableDiffusionGui.Os
             }
         }
 
-        public static void SendCtrlC (int pid)
+        public static void SendCtrlC(int pid)
         {
             string exePath = Path.Combine(Paths.GetBinPath(), $"{Constants.Bins.WindowsKill}.exe");
             Process p = NewProcess(true, exePath);
@@ -319,6 +320,31 @@ namespace StableDiffusionGui.Os
             Process hitmanProc = NewProcess(true, exePath);
             hitmanProc.StartInfo.Arguments = $"-parent-pid={Process.GetCurrentProcess().Id} -child-pid={p.Id}";
             hitmanProc.Start();
+        }
+
+        /// <summary> Uses the python package picklescan to check for malware in a pickled file </summary>
+        /// <returns> If file is safe </returns>
+        public static async Task<bool> ScanPickle(string path)
+        {
+            Process p = NewProcess(true);
+            p.StartInfo.EnvironmentVariables["PATH"] = TtiUtils.GetEnvVarsSd(true, Paths.GetDataPath()).First().Value;
+            p.StartInfo.Arguments = $"/C python -m picklescan -p {path.Wrap(true)}";
+            string output = await Task.Run(() => GetProcStdOut(p, true));
+            bool safe = output.Contains("Infected files: 0") && output.Contains("Dangerous globals: 0");
+            Logger.Log($"Pickle Scanner: '{path}' safe: {safe}", true);
+            return safe;
+        }
+
+        public static async Task<Dictionary<string, bool>> ScanPickles(IEnumerable<string> paths)
+        {
+            var scanResults = new ConcurrentBag<Tuple<string, bool>>();
+
+            await paths.ParallelForEachAsync(async path =>
+            {
+                scanResults.Add(new Tuple<string, bool>(path, await ScanPickle(path)));
+            }, maxDegreeOfParallelism: Environment.ProcessorCount);
+
+            return scanResults.ToDictionary(x => x.Item1, x => x.Item2);
         }
     }
 }

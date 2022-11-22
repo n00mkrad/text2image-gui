@@ -765,5 +765,15 @@ namespace StableDiffusionGui.Io
 
             return hashStr;
         }
+
+        public static string GetPseudoHash(string path)
+        {
+            return GetPseudoHash(new FileInfo(path));
+        }
+
+        public static string GetPseudoHash (FileInfo f)
+        {
+            return GetHash($"{f.FullName}{f.Length}", Hash.CRC32, false);
+        }
     }
 }

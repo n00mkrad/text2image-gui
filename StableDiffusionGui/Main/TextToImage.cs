@@ -173,7 +173,7 @@ namespace StableDiffusionGui.Main
             Logger.LogIfLastLineDoesNotContainMsg("Canceled.");
 
             if (!string.IsNullOrWhiteSpace(reason) && showMsgBox)
-                UiUtils.ShowMessageBox($"Canceled:\n\n{reason}");
+                Task.Run(() => UiUtils.ShowMessageBox($"Canceled:\n\n{reason}"));
         }
 
         public static async Task WaitForInvokeAiCancel()

@@ -100,7 +100,7 @@ namespace StableDiffusionGui.Implementations
                 string jsonPath = Path.Combine(Paths.GetSessionDataPath(), "prompts-onnx.json");
                 File.WriteAllText(jsonPath, argLists.ToJson(true));
 
-                Logger.Log($"Running Stable Diffusion - {iterations} Iterations, {steps} Steps, Scales {(scales.Length < 4 ? string.Join(", ", scales.Select(x => x.ToStringDot())) : $"{scales.First()}->{scales.Last()}")}, {res.Width}x{res.Height}, Starting Seed: {startSeed}");
+                Logger.Log($"Running Stable Diffusion - {iterations} Iterations, {steps.Length} Steps, Scales {(scales.Length < 4 ? string.Join(", ", scales.Select(x => x.ToStringDot())) : $"{scales.First()}->{scales.Last()}")}, {res.Width}x{res.Height}, Starting Seed: {startSeed}");
 
                 //string argsStartup = Args.InvokeAi.GetArgsStartup(embedding);
 
