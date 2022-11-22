@@ -87,6 +87,7 @@ namespace StableDiffusionGui
             this.discordBtn = new System.Windows.Forms.Button();
             this.patreonBtn = new System.Windows.Forms.Button();
             this.paypalBtn = new System.Windows.Forms.Button();
+            this.textboxClipsegMask = new System.Windows.Forms.TextBox();
             this.menuStripLogs = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.progressBarImg = new HTAlt.WinForms.HTProgressBar();
             this.menuStripRunQueue = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -139,7 +140,6 @@ namespace StableDiffusionGui
             this.panelIterations = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.panelInpainting = new System.Windows.Forms.Panel();
-            this.textboxClipsegMask = new System.Windows.Forms.TextBox();
             this.comboxInpaintMode = new System.Windows.Forms.ComboBox();
             this.label10 = new System.Windows.Forms.Label();
             this.panelInitImgStrength = new System.Windows.Forms.Panel();
@@ -154,6 +154,7 @@ namespace StableDiffusionGui
             this.promptAutocomplete = new AutocompleteMenuNS.AutocompleteMenu();
             this.pictBoxImgViewer = new System.Windows.Forms.PictureBox();
             this.separator = new System.Windows.Forms.Button();
+            this.textboxExtraSteps = new System.Windows.Forms.TextBox();
             this.menuStripOutputImg.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.upDownSeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
@@ -534,7 +535,7 @@ namespace StableDiffusionGui
             this.sliderScale.Maximum = 20;
             this.sliderScale.Name = "sliderScale";
             this.sliderScale.OverlayColor = System.Drawing.Color.White;
-            this.sliderScale.Size = new System.Drawing.Size(297, 35);
+            this.sliderScale.Size = new System.Drawing.Size(302, 35);
             this.sliderScale.SmallChange = ((uint)(1u));
             this.sliderScale.TabIndex = 4;
             this.sliderScale.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
@@ -558,7 +559,7 @@ namespace StableDiffusionGui
             this.textboxSliderScale.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScale.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScale.Location = new System.Drawing.Point(297, 9);
+            this.textboxSliderScale.Location = new System.Drawing.Point(302, 9);
             this.textboxSliderScale.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScale.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScale.Name = "textboxSliderScale";
@@ -574,10 +575,10 @@ namespace StableDiffusionGui
             this.textboxExtraScales.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textboxExtraScales.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textboxExtraScales.ForeColor = System.Drawing.Color.White;
-            this.textboxExtraScales.Location = new System.Drawing.Point(335, 7);
+            this.textboxExtraScales.Location = new System.Drawing.Point(340, 7);
             this.textboxExtraScales.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxExtraScales.Name = "textboxExtraScales";
-            this.textboxExtraScales.Size = new System.Drawing.Size(74, 21);
+            this.textboxExtraScales.Size = new System.Drawing.Size(69, 21);
             this.textboxExtraScales.TabIndex = 3;
             this.toolTip.SetToolTip(this.textboxExtraScales, resources.GetString("textboxExtraScales.ToolTip"));
             // 
@@ -637,10 +638,10 @@ namespace StableDiffusionGui
             this.textboxExtraInitStrengths.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textboxExtraInitStrengths.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textboxExtraInitStrengths.ForeColor = System.Drawing.Color.White;
-            this.textboxExtraInitStrengths.Location = new System.Drawing.Point(335, 7);
+            this.textboxExtraInitStrengths.Location = new System.Drawing.Point(340, 7);
             this.textboxExtraInitStrengths.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxExtraInitStrengths.Name = "textboxExtraInitStrengths";
-            this.textboxExtraInitStrengths.Size = new System.Drawing.Size(74, 21);
+            this.textboxExtraInitStrengths.Size = new System.Drawing.Size(69, 21);
             this.textboxExtraInitStrengths.TabIndex = 91;
             this.toolTip.SetToolTip(this.textboxExtraInitStrengths, resources.GetString("textboxExtraInitStrengths.ToolTip"));
             // 
@@ -673,7 +674,7 @@ namespace StableDiffusionGui
             this.sliderInitStrength.Minimum = 2;
             this.sliderInitStrength.Name = "sliderInitStrength";
             this.sliderInitStrength.OverlayColor = System.Drawing.Color.White;
-            this.sliderInitStrength.Size = new System.Drawing.Size(297, 35);
+            this.sliderInitStrength.Size = new System.Drawing.Size(302, 35);
             this.sliderInitStrength.SmallChange = ((uint)(1u));
             this.sliderInitStrength.TabIndex = 4;
             this.sliderInitStrength.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
@@ -697,7 +698,7 @@ namespace StableDiffusionGui
             this.textboxSliderInitStrength.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderInitStrength.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderInitStrength.Location = new System.Drawing.Point(297, 9);
+            this.textboxSliderInitStrength.Location = new System.Drawing.Point(302, 7);
             this.textboxSliderInitStrength.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderInitStrength.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderInitStrength.Name = "textboxSliderInitStrength";
@@ -1113,6 +1114,21 @@ namespace StableDiffusionGui
             this.toolTip.SetToolTip(this.paypalBtn, "Donate One-Time via PayPal");
             this.paypalBtn.UseVisualStyleBackColor = false;
             this.paypalBtn.Click += new System.EventHandler(this.paypalBtn_Click);
+            // 
+            // textboxClipsegMask
+            // 
+            this.textboxClipsegMask.AllowDrop = true;
+            this.textboxClipsegMask.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.promptAutocomplete.SetAutocompleteMenu(this.textboxClipsegMask, null);
+            this.textboxClipsegMask.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textboxClipsegMask.ForeColor = System.Drawing.Color.White;
+            this.textboxClipsegMask.Location = new System.Drawing.Point(440, 7);
+            this.textboxClipsegMask.MinimumSize = new System.Drawing.Size(4, 21);
+            this.textboxClipsegMask.Name = "textboxClipsegMask";
+            this.textboxClipsegMask.Size = new System.Drawing.Size(202, 21);
+            this.textboxClipsegMask.TabIndex = 110;
+            this.toolTip.SetToolTip(this.textboxClipsegMask, "Describe what objects you want to replace");
             // 
             // menuStripLogs
             // 
@@ -1584,7 +1600,7 @@ namespace StableDiffusionGui
             this.tableLayoutPanel1.ColumnCount = 3;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 75F));
             this.tableLayoutPanel1.Controls.Add(this.textboxSliderScale, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.sliderScale, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.textboxExtraScales, 2, 0);
@@ -1622,9 +1638,11 @@ namespace StableDiffusionGui
             // 
             this.tableLayoutPanel6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel6.ColumnCount = 2;
+            this.tableLayoutPanel6.ColumnCount = 3;
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 75F));
+            this.tableLayoutPanel6.Controls.Add(this.textboxExtraSteps, 0, 0);
             this.tableLayoutPanel6.Controls.Add(this.textboxSliderSteps, 0, 0);
             this.tableLayoutPanel6.Controls.Add(this.sliderSteps, 0, 0);
             this.tableLayoutPanel6.Location = new System.Drawing.Point(233, 0);
@@ -1643,7 +1661,7 @@ namespace StableDiffusionGui
             this.textboxSliderSteps.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderSteps.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderSteps.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderSteps.Location = new System.Drawing.Point(377, 9);
+            this.textboxSliderSteps.Location = new System.Drawing.Point(302, 9);
             this.textboxSliderSteps.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderSteps.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderSteps.Name = "textboxSliderSteps";
@@ -1679,7 +1697,7 @@ namespace StableDiffusionGui
             this.sliderSteps.Maximum = 20;
             this.sliderSteps.Name = "sliderSteps";
             this.sliderSteps.OverlayColor = System.Drawing.Color.White;
-            this.sliderSteps.Size = new System.Drawing.Size(377, 35);
+            this.sliderSteps.Size = new System.Drawing.Size(302, 35);
             this.sliderSteps.SmallChange = ((uint)(1u));
             this.sliderSteps.TabIndex = 13;
             this.sliderSteps.Text = "sliderSteps";
@@ -1727,20 +1745,6 @@ namespace StableDiffusionGui
             this.panelInpainting.Size = new System.Drawing.Size(645, 35);
             this.panelInpainting.TabIndex = 12;
             this.panelInpainting.Visible = false;
-            // 
-            // textboxClipsegMask
-            // 
-            this.textboxClipsegMask.AllowDrop = true;
-            this.textboxClipsegMask.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.promptAutocomplete.SetAutocompleteMenu(this.textboxClipsegMask, null);
-            this.textboxClipsegMask.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.textboxClipsegMask.ForeColor = System.Drawing.Color.White;
-            this.textboxClipsegMask.Location = new System.Drawing.Point(440, 7);
-            this.textboxClipsegMask.MinimumSize = new System.Drawing.Size(4, 21);
-            this.textboxClipsegMask.Name = "textboxClipsegMask";
-            this.textboxClipsegMask.Size = new System.Drawing.Size(202, 21);
-            this.textboxClipsegMask.TabIndex = 110;
             // 
             // comboxInpaintMode
             // 
@@ -1797,7 +1801,7 @@ namespace StableDiffusionGui
             this.tableLayoutPanel4.ColumnCount = 3;
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 75F));
             this.tableLayoutPanel4.Controls.Add(this.textboxExtraInitStrengths, 2, 0);
             this.tableLayoutPanel4.Controls.Add(this.textboxSliderInitStrength, 0, 0);
             this.tableLayoutPanel4.Controls.Add(this.sliderInitStrength, 0, 0);
@@ -1922,6 +1926,21 @@ namespace StableDiffusionGui
             this.separator.TabIndex = 75;
             this.separator.TabStop = false;
             this.separator.UseVisualStyleBackColor = false;
+            // 
+            // textboxExtraSteps
+            // 
+            this.textboxExtraSteps.AllowDrop = true;
+            this.textboxExtraSteps.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.promptAutocomplete.SetAutocompleteMenu(this.textboxExtraSteps, null);
+            this.textboxExtraSteps.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textboxExtraSteps.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textboxExtraSteps.ForeColor = System.Drawing.Color.White;
+            this.textboxExtraSteps.Location = new System.Drawing.Point(340, 7);
+            this.textboxExtraSteps.MinimumSize = new System.Drawing.Size(4, 21);
+            this.textboxExtraSteps.Name = "textboxExtraSteps";
+            this.textboxExtraSteps.Size = new System.Drawing.Size(69, 21);
+            this.textboxExtraSteps.TabIndex = 93;
+            this.toolTip.SetToolTip(this.textboxExtraSteps, resources.GetString("textboxExtraSteps.ToolTip"));
             // 
             // MainForm
             // 
@@ -2141,6 +2160,7 @@ namespace StableDiffusionGui
         public CircularProgressBar.CircularProgressBar progressCircle;
         public System.Windows.Forms.TextBox textboxExtraScales;
         public System.Windows.Forms.TextBox textboxExtraInitStrengths;
+        public System.Windows.Forms.TextBox textboxExtraSteps;
     }
 }
 

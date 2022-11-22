@@ -33,23 +33,23 @@ namespace StableDiffusionGui.Main
         {
             try
             {
-                string[] initImgs =     parameters.FromJson<string[]>("initImgs"); // List of init images
-                string embedding =      parameters.FromJson<string>("embedding"); // Textual Inversion embedding file
+                string[] initImgs = parameters.FromJson<string[]>("initImgs"); // List of init images
+                string embedding = parameters.FromJson<string>("embedding"); // Textual Inversion embedding file
                 float[] initStrengths = parameters.FromJson<float[]>("initStrengths"); // List of init strength values to run
-                int steps =             parameters.FromJson<int>("steps"); // Diffusion steps
-                float[] scales =        parameters.FromJson<float[]>("scales"); // List of CFG scale values to run
-                long seed =             parameters.FromJson<long>("seed"); // Initial seed
-                string sampler =        parameters.FromJson<string>("sampler"); // Sampler
-                Size res =              parameters.FromJson<Size>("res"); // Image resolution
-                var seamless =          parameters.FromJson<SeamlessMode>("seamless"); // Seamless generation mode
-                string model =          parameters.FromJson<string>("model"); // Model name
-                bool hiresFix =         parameters.FromJson<bool>("hiresFix"); // Enable high-resolution fix
-                bool lockSeed =         parameters.FromJson<bool>("lockSeed"); // Lock seed (disable auto-increment)
-                string vae =            parameters.FromJson<string>("vae").NullToEmpty().Replace("None", ""); // VAE model name
-                float perlin =          parameters.FromJson<float>("perlin"); // Perlin noise blend value
-                int threshold =         parameters.FromJson<int>("threshold"); // Threshold value
-                InpaintMode inpaint =   parameters.FromJson<InpaintMode>("inpainting"); // Inpainting mode
-                string clipSegMask =    parameters.FromJson<string>("clipSegMask"); // ClipSeg text-based masking prompt
+                int[] steps = parameters.FromJson<int[]>("steps"); // List of diffusion step counts
+                float[] scales = parameters.FromJson<float[]>("scales"); // List of CFG scale values to run
+                long seed = parameters.FromJson<long>("seed"); // Initial seed
+                string sampler = parameters.FromJson<string>("sampler"); // Sampler
+                Size res = parameters.FromJson<Size>("res"); // Image resolution
+                var seamless = parameters.FromJson<SeamlessMode>("seamless"); // Seamless generation mode
+                string model = parameters.FromJson<string>("model"); // Model name
+                bool hiresFix = parameters.FromJson<bool>("hiresFix"); // Enable high-resolution fix
+                bool lockSeed = parameters.FromJson<bool>("lockSeed"); // Lock seed (disable auto-increment)
+                string vae = parameters.FromJson<string>("vae").NullToEmpty().Replace("None", ""); // VAE model name
+                float perlin = parameters.FromJson<float>("perlin"); // Perlin noise blend value
+                int threshold = parameters.FromJson<int>("threshold"); // Threshold value
+                InpaintMode inpaint = parameters.FromJson<InpaintMode>("inpainting"); // Inpainting mode
+                string clipSegMask = parameters.FromJson<string>("clipSegMask"); // ClipSeg text-based masking prompt
 
                 var cachedModels = Paths.GetModels(ModelType.Normal);
                 var cachedModelsVae = Paths.GetModels(ModelType.Vae);
@@ -85,7 +85,6 @@ namespace StableDiffusionGui.Main
                         args.Remove("initImg");
                         args.Remove("initStrength");
                         args["prompt"] = processedPrompts[i].Wrap();
-                        args["steps"] = $"-s {steps}";
                         args["res"] = $"-W {res.Width} -H {res.Height}";
                         args["sampler"] = $"-A {sampler}";
                         args["seed"] = $"-S {seed}";
@@ -97,19 +96,24 @@ namespace StableDiffusionGui.Main
                         {
                             args["scale"] = $"-C {scale.ToStringDot()}";
 
-                            if (initImages == null) // No init image(s)
+                            foreach (int stepCount in steps)
                             {
-                                argLists.Add(new Dictionary<string, string>(args));
-                            }
-                            else // With init image(s)
-                            {
-                                foreach (string initImg in initImages.Values)
+                                args["steps"] = $"-s {stepCount}";
+
+                                if (initImages == null) // No init image(s)
                                 {
-                                    foreach (float strength in initStrengths)
+                                    argLists.Add(new Dictionary<string, string>(args));
+                                }
+                                else // With init image(s)
+                                {
+                                    foreach (string initImg in initImages.Values)
                                     {
-                                        args["initImg"] = $"--init_img {initImg.Wrap()}";
-                                        args["initStrength"] = $"--strength {strength.ToStringDot("0.###")}";
-                                        argLists.Add(new Dictionary<string, string>(args));
+                                        foreach (float strength in initStrengths)
+                                        {
+                                            args["initImg"] = $"--init_img {initImg.Wrap()}";
+                                            args["initStrength"] = $"--strength {strength.ToStringDot("0.###")}";
+                                            argLists.Add(new Dictionary<string, string>(args));
+                                        }
                                     }
                                 }
                             }
@@ -206,18 +210,18 @@ namespace StableDiffusionGui.Main
             }
         }
 
-        public static async Task RunStableDiffusionOpt(string[] prompts, int iterations, Dictionary<string, string> paramsDict, string outPath)
+        public static async Task RunStableDiffusionOpt(string[] prompts, int iterations, Dictionary<string, string> parameters, string outPath)
         {
             // NOTE: Currently not implemented: Embeddings, Samplers, Seamless Mode, ...
-            string[] initImgs = paramsDict.Get("initImgs").FromJson<string[]>();
-            float[] initStrengths = paramsDict.Get("initStrengths").FromJson<float[]>();
-            int steps = paramsDict.Get("steps").FromJson<int>();
-            float[] scales = paramsDict.Get("scales").FromJson<float[]>();
-            long seed = paramsDict.Get("seed").FromJson<long>();
-            Size res = paramsDict.Get("res").FromJson<Size>();
-            string model = paramsDict.Get("model").FromJson<string>();
+            string[] initImgs = parameters.Get("initImgs").FromJson<string[]>();
+            float[] initStrengths = parameters.Get("initStrengths").FromJson<float[]>();
+            int[] steps = parameters.FromJson<int[]>("steps");
+            float[] scales = parameters.Get("scales").FromJson<float[]>();
+            long seed = parameters.Get("seed").FromJson<long>();
+            Size res = parameters.Get("res").FromJson<Size>();
+            string model = parameters.Get("model").FromJson<string>();
             string modelNoExt = Path.ChangeExtension(model, null);
-            bool lockSeed = paramsDict.Get("lockSeed").FromJson<bool>();
+            bool lockSeed = parameters.Get("lockSeed").FromJson<bool>();
 
             Model modelFile = TtiUtils.CheckIfCurrentSdModelExists();
 
@@ -238,7 +242,6 @@ namespace StableDiffusionGui.Main
                     args.Remove("init_img");
                     args.Remove("strength");
                     args["prompt"] = prompt.Wrap();
-                    args["ddim_steps"] = steps.ToString();
                     args["W"] = res.Width.ToString();
                     args["H"] = res.Height.ToString();
                     args["seed"] = seed.ToString();
@@ -247,19 +250,24 @@ namespace StableDiffusionGui.Main
                     {
                         args["scale"] = scale.ToStringDot();
 
-                        if (initImages == null) // No init image(s)
+                        foreach (int stepCount in steps)
                         {
-                            argLists.Add(new Dictionary<string, string>(args));
-                        }
-                        else // With init image(s)
-                        {
-                            foreach (string initImg in initImages.Values)
+                            args["ddim_steps"] = stepCount.ToString();
+
+                            if (initImages == null) // No init image(s)
                             {
-                                foreach (float strength in initStrengths)
+                                argLists.Add(new Dictionary<string, string>(args));
+                            }
+                            else // With init image(s)
+                            {
+                                foreach (string initImg in initImages.Values)
                                 {
-                                    args["init_img"] = initImg.Wrap();
-                                    args["strength"] = strength.ToStringDot("0.###");
-                                    argLists.Add(new Dictionary<string, string>(args));
+                                    foreach (float strength in initStrengths)
+                                    {
+                                        args["init_img"] = initImg.Wrap();
+                                        args["strength"] = strength.ToStringDot("0.###");
+                                        argLists.Add(new Dictionary<string, string>(args));
+                                    }
                                 }
                             }
                         }

@@ -219,74 +219,39 @@ namespace StableDiffusionGui.Ui
             return prompt;
         }
 
-        public static List<float> GetScales(string customScalesText)
+        public static List<float> GetExtraValues(string text, float sliderValue)
         {
-            List<float> scales = new List<float> { Program.MainForm.sliderScale.ActualValueFloat };
+            var values = new List<float>() { sliderValue };
 
-            if (customScalesText.MatchesWildcard("* > * : *"))
+            if (text.MatchesWildcard("* > * : *"))
             {
-                var splitMinMax = customScalesText.Trim().Split(':')[0].Split('>');
+                var splitMinMax = text.Trim().Split(':')[0].Split('>');
                 float valFrom = splitMinMax[0].GetFloat();
                 float valTo = splitMinMax[1].Trim().GetFloat();
-                float step = customScalesText.Split(':').Last().GetFloat();
+                float step = text.Split(':').Last().GetFloat();
 
-                List<float> incrementScales = new List<float>();
+                List<float> incrementValues = new List<float>();
 
                 if (valFrom < valTo)
                 {
                     for (float f = valFrom; f < (valTo + 0.01f); f += step)
-                        incrementScales.Add(f);
+                        incrementValues.Add(f);
                 }
                 else
                 {
                     for (float f = valFrom; f >= (valTo - 0.01f); f -= step)
-                        incrementScales.Add(f);
+                        incrementValues.Add(f);
                 }
 
-                if (incrementScales.Count > 0)
-                    scales = incrementScales; // Replace list, don't use the regular scale slider at all in this mode
+                if (incrementValues.Count > 0)
+                    values = incrementValues;
             }
             else
             {
-                scales.AddRange(customScalesText.Replace(" ", "").Split(",").Select(x => x.GetFloat()).Where(x => x > 0.05f));
+                values.AddRange(text.Split(",").Select(x => x.GetFloat()).Where(x => x >= 0.05f));
             }
 
-            return scales;
-        }
-
-        public static List<float> GetInitStrengths(string customStrengthsText)
-        {
-            List<float> strengths = new List<float> { 1f - Program.MainForm.sliderInitStrength.ActualValueFloat };
-
-            if (customStrengthsText.MatchesWildcard("* > * : *"))
-            {
-                var splitMinMax = customStrengthsText.Trim().Split(':')[0].Split('>');
-                float valFrom = splitMinMax[0].GetFloat();
-                float valTo = splitMinMax[1].Trim().GetFloat();
-                float step = customStrengthsText.Split(':').Last().GetFloat();
-
-                List<float> incrementStrengths = new List<float>();
-
-                if (valFrom < valTo)
-                {
-                    for (float f = valFrom; f < (valTo + 0.01f); f += step)
-                        incrementStrengths.Add(1f - f);
-                }
-                else
-                {
-                    for (float f = valFrom; f >= (valTo - 0.01f); f -= step)
-                        incrementStrengths.Add(1f - f);
-                }
-
-                if (incrementStrengths.Count > 0)
-                    strengths = incrementStrengths; // Replace list, don't use the regular scale slider at all in this mode
-            }
-            else
-            {
-                strengths.AddRange(customStrengthsText.Replace(" ", "").Split(",").Select(x => x.GetFloat()).Where(x => x > 0.05f).Select(x => 1f - x));
-            }
-
-            return strengths;
+            return values;
         }
 
         public enum PromptFieldSizeMode { Expand, Collapse, Toggle }

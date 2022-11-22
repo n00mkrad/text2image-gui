@@ -188,6 +188,17 @@ will run scales 0.2 to 0.6 with steps of 0.1.</value>
   <metadata name="menuStripPostProcess.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 56</value>
   </metadata>
+  <data name="textboxExtraSteps.ToolTip" xml:space="preserve">
+    <value>Here you can enter additional step counts to run per image.
+
+Basic Syntax:
+20,40,60
+will run with step counts 20, 40 and 60.
+
+Incremental Syntax:
+20 &gt; 60 : 10
+will run with step counts 20 to 60 with increments of 10.</value>
+  </data>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>72</value>
   </metadata>

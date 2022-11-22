@@ -50,7 +50,7 @@ namespace StableDiffusionGui.Ui.MainForm
 
             try
             {
-                F.sliderSteps.ActualValue = s.Params.Get("steps").FromJson<int>();
+                F.sliderSteps.ActualValue = (decimal)s.Params.Get("steps").FromJson<List<float>>().FirstOrDefault();
                 F.sliderScale.ActualValue = (decimal)s.Params.Get("scales").FromJson<List<float>>().FirstOrDefault();
                 F.comboxResW.Text = s.Params.Get("res").FromJson<Size>().Width.ToString();
                 F.comboxResH.Text = s.Params.Get("res").FromJson<Size>().Height.ToString();
@@ -84,13 +84,13 @@ namespace StableDiffusionGui.Ui.MainForm
                 Iterations = (int)F.upDownIterations.Value,
                 Params = new Dictionary<string, string>
                 {
-                    { "steps", F.sliderSteps.ActualValueInt.ToJson() },
-                    { "scales", MainUi.GetScales(F.textboxExtraScales.Text).ToJson() },
+                    { "steps", MainUi.GetExtraValues(F.textboxExtraSteps.Text, F.sliderSteps.ActualValueFloat).Select(x => (int)x).ToArray().ToJson() },
+                    { "scales", MainUi.GetExtraValues(F.textboxExtraScales.Text, F.sliderScale.ActualValueFloat).ToJson() },
                     { "res", new Size(F.comboxResW.Text.GetInt(), F.comboxResH.Text.GetInt()).ToJson() },
                     { "seed", (F.upDownSeed.Value < 0 ? new Random().Next(0, int.MaxValue) : ((long)F.upDownSeed.Value)).ToJson() },
                     { "sampler", ((Sampler)F.comboxSampler.SelectedIndex).ToString().Lower().ToJson() },
                     { "initImgs", MainUi.CurrentInitImgPaths.ToJson() },
-                    { "initStrengths", MainUi.GetInitStrengths(F.textboxExtraInitStrengths.Text).ToJson() },
+                    { "initStrengths", MainUi.GetExtraValues(F.textboxExtraInitStrengths.Text, F.sliderInitStrength.ActualValueFloat).ToJson() },
                     { "embedding", MainUi.CurrentEmbeddingPath.ToJson() },
                     { "seamless", ((SeamlessMode)F.comboxSeamless.SelectedIndex).ToJson() },
                     { "inpainting", ((InpaintMode)F.comboxInpaintMode.SelectedIndex).ToJson() },

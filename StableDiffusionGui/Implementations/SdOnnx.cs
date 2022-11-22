@@ -23,7 +23,7 @@ namespace StableDiffusionGui.Implementations
                 string[] initImgs = parameters.FromJson<string[]>("initImgs");
                 string embedding = parameters.FromJson<string>("embedding");
                 float[] initStrengths = parameters.FromJson<float[]>("initStrengths");
-                int steps = parameters.FromJson<int>("steps");
+                int[] steps = parameters.FromJson<int[]>("steps");
                 float[] scales = parameters.FromJson<float[]>("scales");
                 long seed = parameters.FromJson<long>("seed");
                 string sampler = parameters.FromJson<string>("sampler");
@@ -58,7 +58,6 @@ namespace StableDiffusionGui.Implementations
                         args["initStrength"] = "0";
                         args["prompt"] = processedPrompts[i];
                         args["negprompt"] = negPrompt;
-                        args["steps"] = $"{steps}";
                         args["w"] = $"{res.Width}";
                         args["h"] = $"{res.Height}";
                         args["seed"] = $"{seed}";
@@ -67,19 +66,24 @@ namespace StableDiffusionGui.Implementations
                         {
                             args["scale"] = $"{scale.ToStringDot()}";
 
-                            if (initImages == null) // No init image(s)
+                            foreach (int stepCount in steps)
                             {
-                                argLists.Add(new Dictionary<string, string>(args));
-                            }
-                            else // With init image(s)
-                            {
-                                foreach (string initImg in initImages.Values)
+                                args["steps"] = $"{stepCount}";
+
+                                if (initImages == null) // No init image(s)
                                 {
-                                    foreach (float strength in initStrengths)
+                                    argLists.Add(new Dictionary<string, string>(args));
+                                }
+                                else // With init image(s)
+                                {
+                                    foreach (string initImg in initImages.Values)
                                     {
-                                        args["initImg"] = initImg;
-                                        args["initStrength"] = strength.ToStringDot("0.###");
-                                        argLists.Add(new Dictionary<string, string>(args));
+                                        foreach (float strength in initStrengths)
+                                        {
+                                            args["initImg"] = initImg;
+                                            args["initStrength"] = strength.ToStringDot("0.###");
+                                            argLists.Add(new Dictionary<string, string>(args));
+                                        }
                                     }
                                 }
                             }
@@ -136,7 +140,7 @@ namespace StableDiffusionGui.Implementations
                 py.Start();
                 TtiProcess.CurrentProcess = py;
                 OsUtils.AttachOrphanHitman(py);
-                    
+
                 if (!OsUtils.ShowHiddenCmd())
                 {
                     py.BeginOutputReadLine();
@@ -150,7 +154,7 @@ namespace StableDiffusionGui.Implementations
             }
         }
 
-        private static void PatchDiffusersIfNeeded ()
+        private static void PatchDiffusersIfNeeded()
         {
             string marker = "# PATCHED BY NMKD SD GUI";
 

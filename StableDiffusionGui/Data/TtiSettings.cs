@@ -31,19 +31,23 @@ namespace StableDiffusionGui.Data
                     {
                         foreach (float scale in Params["scales"].FromJson<List<float>>())
                         {
-                            List<string> initImages = Params["initImgs"].FromJson<List<string>>();
+                            foreach (int stepCount in Params["steps"].FromJson<List<int>>())
+                            {
 
-                            if (initImages == null || initImages.Count < 1) // No init image(s)
-                            {
-                                count++;
-                            }
-                            else // With init image(s)
-                            {
-                                foreach (string initImg in initImages)
+                                List<string> initImages = Params["initImgs"].FromJson<List<string>>();
+
+                                if (initImages == null || initImages.Count < 1) // No init image(s)
                                 {
-                                    foreach (float strength in Params["initStrengths"].FromJson<List<float>>())
+                                    count++;
+                                }
+                                else // With init image(s)
+                                {
+                                    foreach (string initImg in initImages)
                                     {
-                                        count++;
+                                        foreach (float strength in Params["initStrengths"].FromJson<List<float>>())
+                                        {
+                                            count++;
+                                        }
                                     }
                                 }
                             }
