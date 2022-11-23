@@ -700,6 +700,9 @@ namespace StableDiffusionGui.Io
         {
             try
             {
+                if (file == null)
+                    return false;
+
                 using (FileStream stream = file.Open(FileMode.Open, FileAccess.Read, FileShare.None))
                 {
                     stream.Close();
