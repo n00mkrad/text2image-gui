@@ -49,7 +49,15 @@ namespace StableDiffusionGui.Main
                 return;
 
             logQueue.Enqueue(new Entry(msg, hidden, replaceLastLine, filename));
-            ShowNext();
+        }
+
+        public static async Task QueueLoop ()
+        {
+            while (true)
+            {
+                if(logQueue.Count >= 1)
+                    ShowNext();
+            }
         }
 
         public static void ShowNext()
