@@ -1,4 +1,5 @@
-﻿using StableDiffusionGui.Data;
+﻿using StableDiffusionGui.Controls;
+using StableDiffusionGui.Data;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using System;
@@ -6,6 +7,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
 namespace StableDiffusionGui.Ui.MainForm
@@ -50,14 +52,14 @@ namespace StableDiffusionGui.Ui.MainForm
 
             try
             {
-                F.sliderSteps.ActualValue = (decimal)s.Params.Get("steps").FromJson<List<float>>().FirstOrDefault();
-                F.sliderScale.ActualValue = (decimal)s.Params.Get("scales").FromJson<List<float>>().FirstOrDefault();
+                SetSliderValues(s.Params.FromJson<List<float>>("steps"), true, F.sliderSteps, F.textboxExtraSteps);
+                SetSliderValues(s.Params.FromJson<List<float>>("scales"), true, F.sliderScale, F.textboxExtraScales);
                 F.comboxResW.Text = s.Params.Get("res").FromJson<Size>().Width.ToString();
                 F.comboxResH.Text = s.Params.Get("res").FromJson<Size>().Height.ToString();
                 F.upDownSeed.Value = s.Params.Get("seed").FromJson<long>();
                 F.comboxSampler.SetIfTextMatches(s.Params.Get("sampler").FromJson<string>(), true, Strings.Samplers);
                 MainUi.CurrentInitImgPaths = s.Params.Get("initImgs").FromJson<List<string>>();
-                F.sliderInitStrength.ActualValue = (decimal)s.Params.Get("initStrengths").FromJson<List<float>>().FirstOrDefault();
+                SetSliderValues(s.Params.FromJson<List<float>>("initStrengths"), true, F.sliderInitStrength, F.textboxExtraInitStrengths);
                 MainUi.CurrentEmbeddingPath = s.Params.Get("embedding").FromJson<string>();
                 F.comboxSeamless.SetIfTextMatches(s.Params.Get("seamless").FromJson<string>(), true, Strings.SeamlessMode);
                 F.comboxInpaintMode.SelectedIndex = (int)s.Params.Get("inpainting").FromJson<InpaintMode>();
@@ -70,8 +72,20 @@ namespace StableDiffusionGui.Ui.MainForm
                 Logger.Log(ex.StackTrace, true);
             }
 
-
             FormControls.UpdateInitImgAndEmbeddingUi();
+        }
+
+        /// <summary> Set values that have a single slider value and optionally an advanced syntax entry textbox </summary>
+        private static void SetSliderValues(IEnumerable<float> values, bool toInt, CustomSlider slider, TextBox extraValuesTextbox = null)
+        {
+            if(values.Count() == 1)
+            {
+                slider.ActualValue = toInt ? (int)values.First() : (decimal)values.First();
+            }
+            else if (extraValuesTextbox != null)
+            {
+                extraValuesTextbox.Text = string.Join(",", toInt ? values.Select(x => ((int)x).ToString()) : values.Select(x => x.ToString()));
+            }
         }
 
         public static TtiSettings GetCurrentTtiSettings()
