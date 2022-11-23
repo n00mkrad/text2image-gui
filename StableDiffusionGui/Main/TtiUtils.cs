@@ -7,6 +7,7 @@ using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -26,7 +27,7 @@ namespace StableDiffusionGui.Main
         {
             Logger.Log($"Importing initialization images...");
 
-            Dictionary<string, string> sourceAndImportedPaths = initImgPaths.ToDictionary(x => x, x => ""); // Dictionary key = original path, Value is imported path
+            var sourceAndImportedPaths = new ConcurrentDictionary<string, string>(initImgPaths.ToDictionary(x => x, x => ""));
             int imgsSucessful = 0;
             int imgsResized = 0;
 
@@ -67,7 +68,7 @@ namespace StableDiffusionGui.Main
                 await Task.Delay(1);
 
             Logger.Log($"Imported {imgsSucessful} images{(imgsResized > 0 ? $" - {imgsResized} were resized to {targetSize.Width}x{targetSize.Height}" : "")}.", false, Logger.LastUiLine.EndsWith("..."));
-            return sourceAndImportedPaths;
+            return new Dictionary<string, string>(sourceAndImportedPaths);
         }
 
         /// <returns> Amount of removed images </returns>
