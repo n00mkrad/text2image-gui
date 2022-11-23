@@ -142,21 +142,7 @@ namespace StableDiffusionGui
 
         public async void runBtn_Click(object sender, EventArgs e)
         {
-            if (Program.Busy)
-            {
-                TextToImage.CancelManually();
-                return;
-            }
-
-            if (MainUi.Queue.Count > 0)
-            {
-                generateAllQueuedPromptsToolStripMenuItem.Text = $"Generate Queued Prompts ({MainUi.Queue.Count})";
-                menuStripRunQueue.Show(Cursor.Position);
-            }
-            else
-            {
-                await FormUtils.Run();
-            }
+            await FormUtils.TryRun();
         }
 
         public void SetProgress(int percent, bool taskbarProgress = true)
@@ -227,13 +213,7 @@ namespace StableDiffusionGui
 
         private void useAsInitImageToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (Program.Busy)
-            {
-                UiUtils.ShowMessageBox("Please wait until the generation has finished.");
-                return;
-            }
-
-            MainUi.HandleDroppedFiles(new string[] { ImageViewer.CurrentImagePath });
+            FormUtils.TryUseCurrentImgAsInitImg();
         }
 
         private void copyToFavoritesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -375,9 +355,9 @@ namespace StableDiffusionGui
                 menuStripAddToQueue.Show(Cursor.Position);
         }
 
-        private void reGenerateImageWithCurrentSettingsToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void reGenerateImageWithCurrentSettingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FormUtils.RegenerateImageWithCurrentSettings();
+            await FormUtils.RegenerateImageWithCurrentSettings();
         }
 
         private void btnDeleteBatch_Click(object sender, EventArgs e)

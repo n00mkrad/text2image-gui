@@ -80,7 +80,7 @@ namespace StableDiffusionGui.Ui.MainForm
             FormControls.UpdateInitImgAndEmbeddingUi();
         }
 
-        public static void RegenerateImageWithCurrentSettings()
+        public static async Task RegenerateImageWithCurrentSettings()
         {
             if (Program.Busy)
             {
@@ -92,7 +92,7 @@ namespace StableDiffusionGui.Ui.MainForm
             var prevIterVal = F.upDownIterations.Value;
             F.upDownSeed.Value = ImageViewer.CurrentImageMetadata.Seed;
             F.upDownIterations.Value = 1;
-            F.runBtn_Click(null, null);
+            await TryRun();
             F.SetSeed((long)prevSeedVal);
             F.upDownIterations.Value = prevIterVal;
         }
@@ -138,6 +138,25 @@ namespace StableDiffusionGui.Ui.MainForm
                 F.SetProgressImg(0);
 
             F.progressBarImg.Visible = imageGen;
+        }
+
+        public static async Task TryRun ()
+        {
+            if (Program.Busy)
+            {
+                TextToImage.CancelManually();
+                return;
+            }
+
+            if (MainUi.Queue.Count > 0)
+            {
+                F.generateAllQueuedPromptsToolStripMenuItem.Text = $"Generate Queued Prompts ({MainUi.Queue.Count})";
+                F.menuStripRunQueue.Show(Cursor.Position);
+            }
+            else
+            {
+                await Run();
+            }
         }
 
         public static async Task Run(bool fromQueue = false)
@@ -188,6 +207,17 @@ namespace StableDiffusionGui.Ui.MainForm
             {
                 Logger.Log($"{ex.Message}\n{ex.StackTrace}");
             }
+        }
+
+        public static void TryUseCurrentImgAsInitImg()
+        {
+            if (Program.Busy)
+            {
+                UiUtils.ShowMessageBox("Please wait until the generation has finished.");
+                return;
+            }
+
+            MainUi.HandleDroppedFiles(new string[] { ImageViewer.CurrentImagePath });
         }
 
     }
