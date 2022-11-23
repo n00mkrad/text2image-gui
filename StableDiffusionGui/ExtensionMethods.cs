@@ -94,6 +94,9 @@ namespace StableDiffusionGui
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(str))
+                    return false;
+
                 return bool.Parse(str);
             }
             catch
