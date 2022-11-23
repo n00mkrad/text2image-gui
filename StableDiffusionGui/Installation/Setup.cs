@@ -192,11 +192,13 @@ namespace StableDiffusionGui.Installation
                     Logger.Log($"Installing packages...", false, Logger.LastUiLine.EndsWith("..."));
                 }
             }
-
-            if (conda && log.EndsWith("%") && log.Contains(" | "))
+            else
             {
-                var split = log.Split(" | ");
-                Logger.Log($"Installing {split.First().Trim()} ({split.Last().Trim()})", false, Logger.LastUiLine.EndsWith("%)"));
+                if (log.EndsWith("%") && log.Contains(" | "))
+                {
+                    var split = log.Split(" | ");
+                    Logger.Log($"Installing {split.First().Trim()} ({split.Last().Trim()})", false, Logger.LastUiLine.EndsWith("%)"));
+                }
             }
         }
 
@@ -247,7 +249,6 @@ namespace StableDiffusionGui.Installation
                 Logger.Log($"Done cloning repository.");
 
                 await SetupVenv();
-                // await SetupPythonEnv();
             }
             catch (Exception ex)
             {
@@ -483,65 +484,6 @@ namespace StableDiffusionGui.Installation
             catch (Exception ex)
             {
                 Logger.Log($"Error patching files: {ex.Message}");
-                Logger.Log($"{ex.StackTrace}", true);
-            }
-        }
-
-        public static void FixHardcodedPathsConda()
-        {
-            try
-            {
-                Logger.Log($"Fixing hardcoded paths in python files...", true);
-
-                string parentDir = Path.Combine(GetDataSubPath(Constants.Dirs.Conda), "envs", Constants.Dirs.SdEnv, "Lib", "site-packages");
-                var eggLinks = IoUtils.GetFileInfosSorted(parentDir, false, "*.egg-link");
-
-                List<string> easyInstallPaths = new List<string>();
-
-                foreach (FileInfo eggLink in eggLinks)
-                {
-                    string nameNoExt = Path.GetFileNameWithoutExtension(eggLink.FullName);
-
-                    if (nameNoExt == "latent-diffusion")
-                    {
-                        string path = Path.Combine(GetDataSubPath(Constants.Dirs.SdRepo));
-                        File.WriteAllText(eggLink.FullName, path + "\n.");
-                    }
-                    else
-                    {
-                        string path = Path.Combine(GetDataSubPath(Constants.Dirs.SdRepo), "src", nameNoExt);
-                        File.WriteAllText(eggLink.FullName, path + "\n.");
-                    }
-
-                    Logger.Log($"Fixed egg-link file {eggLink.FullName}.", true);
-                }
-
-                var easyInstallPth = Path.Combine(parentDir, "easy-install.pth");
-
-                if (File.Exists(easyInstallPth))
-                {
-                    var easyInstallLines = File.ReadAllLines(easyInstallPth);
-                    List<string> newLines = new List<string>();
-
-                    string splitText = $@"data\{Constants.Dirs.SdRepo}";
-                    string newBasePath = Paths.GetExeDir().Lower().Replace("/", @"\");
-
-                    Logger.Log($"easy-install.pth new lines:", true);
-
-                    foreach (string line in easyInstallLines.Select(x => x.Lower()))
-                    {
-                        var split = line.Split(splitText);
-                        newLines.Add(newBasePath + splitText + split.Last());
-                        Logger.Log(newLines.Last(), true);
-                    }
-
-                    File.WriteAllLines(easyInstallPth, newLines);
-                    Logger.Log($"Fixed easy-install.pth.", true);
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Log($"Error validating installation: {ex.Message}");
                 Logger.Log($"{ex.StackTrace}", true);
             }
         }
