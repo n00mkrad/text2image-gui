@@ -458,10 +458,9 @@ namespace StableDiffusionGui.Installation
                     {
                         if (lines[i].StartsWith("MAPPING = {"))
                         {
-                            lines[i] = lines[i].Replace("': '", "': ");
-                            lines[i] = lines[i].Replace("'}", @""")}");
-                            lines[i] = lines[i].Replace(@"MAPPING = {", @"import os; import sys; MAPPING = {");
-                            lines[i] = lines[i].Replace(Paths.GetDataPath().Replace(@"\", @"\\") + @"\\", @"os.path.join(sys.path[0], "".."", "".."", """);
+                            string name = lines[i].Split('\'')[1].Split('\'')[0];
+                            string relPath = lines[i].Split('\'')[3].Split(@"\\Data").Reverse().Take(1).Reverse().First().TrimStart('\\');
+                            lines[i] = $"import os; import sys; MAPPING = {{'{name}': os.path.join(sys.path[0], \"..\", \"..\", \"{relPath}\")}}";
                         }
                     }
 
