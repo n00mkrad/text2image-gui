@@ -179,9 +179,18 @@ namespace StableDiffusionGui.Installation
 
             Logger.Log($"{log.Remove("PRINTME ")}", !log.Contains("PRINTME "), false, Constants.Lognames.Installer);
 
-            if (!conda && log.StartsWith("Collecting "))
+
+            if (!conda)
             {
-                Logger.Log($"Installing {log.Split("Collecting ")[1].Split("=")[0].Split("<")[0].Split(">")[0].Split("!")[0].Trim()}...", false, Logger.LastUiLine.EndsWith("..."));
+                if (log.StartsWith("Collecting "))
+                {
+                    Logger.Log($"Installing {log.Split("Collecting ")[1].Split("=")[0].Split("<")[0].Split(">")[0].Split("!")[0].Trim()}...", false, Logger.LastUiLine.EndsWith("..."));
+                }
+
+                if (log.StartsWith("Installing collected packages: "))
+                {
+                    Logger.Log($"Installing packages...", false, Logger.LastUiLine.EndsWith("..."));
+                }
             }
 
             if (conda && log.EndsWith("%") && log.Contains(" | "))
@@ -229,7 +238,7 @@ namespace StableDiffusionGui.Installation
             await CloneSdRepo($"https://github.com/{GitFile}", GetDataSubPath(Constants.Dirs.SdRepo));
         }
 
-        public static async Task CloneSdRepo(string url, string dir, string branch = "main", string commit = "2cd6d58595774efaaf26afcf7acbca016d29bae4")
+        public static async Task CloneSdRepo(string url, string dir, string branch = "main", string commit = "1c470c922c43a55510b3dcfb207a505e8049c0fe")
         {
             try
             {
@@ -437,6 +446,27 @@ namespace StableDiffusionGui.Installation
                     Logger.Log($"Fixed easy-install.pth.", true);
                 }
 
+                #endregion
+                #region Finders (k-diffusion)
+                var finderFiles = IoUtils.GetFileInfosSorted(sitePkgsDir, false, "*_finder.py");
+
+                foreach (var file in finderFiles)
+                {
+                    var lines = File.ReadAllLines(file.FullName);
+                    
+                    for(int i = 0; i < lines.Length; i++)
+                    {
+                        if (lines[i].StartsWith("MAPPING = {"))
+                        {
+                            lines[i] = lines[i].Replace("': '", "': ");
+                            lines[i] = lines[i].Replace("'}", @""")}");
+                            lines[i] = lines[i].Replace(@"MAPPING = {", @"import os; import sys; MAPPING = {");
+                            lines[i] = lines[i].Replace(Paths.GetDataPath().Replace(@"\", @"\\") + @"\\", @"os.path.join(sys.path[0], "".."", "".."", """);
+                        }
+                    }
+
+                    File.WriteAllLines(file.FullName, lines);
+                }
                 #endregion
                 #region CLIP Cache
 
