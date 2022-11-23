@@ -304,11 +304,6 @@ namespace StableDiffusionGui.Ui
             catch { }
         }
 
-        public static void SetHiresFixVisible(ComboBox w, ComboBox h, CheckBox fix)
-        {
-            fix.Visible = w.GetInt() > 512 && h.GetInt() > 512 && (Implementation)Config.GetInt("comboxImplementation") == Implementation.InvokeAi;
-        }
-
         public static void FitWindowSizeToImageSize()
         {
             if (Program.MainForm.pictBoxImgViewer.Image.Size == Program.MainForm.pictBoxImgViewer.Size)

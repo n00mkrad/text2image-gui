@@ -79,8 +79,8 @@ namespace StableDiffusionGui
             Setup.PatchFiles();
 
             pictBoxImgViewer.MouseWheel += (s, e) => { ImageViewer.Move(e.Delta > 0); }; // Scroll on MouseWheel
-            comboxResW.SelectedIndexChanged += (s, e) => { MainUi.SetHiresFixVisible(comboxResW, comboxResH, checkboxHiresFix); }; // Show/Hide HiRes Fix depending on chosen res
-            comboxResH.SelectedIndexChanged += (s, e) => { MainUi.SetHiresFixVisible(comboxResW, comboxResH, checkboxHiresFix); }; // Show/Hide HiRes Fix depending on chosen res
+            comboxResW.SelectedIndexChanged += (s, e) => { FormControls.SetHiresFixVisible(); }; // Show/Hide HiRes Fix depending on chosen res
+            comboxResH.SelectedIndexChanged += (s, e) => { FormControls.SetHiresFixVisible(); }; // Show/Hide HiRes Fix depending on chosen res
 
             MainUi.LoadAutocompleteData(promptAutocomplete, new[] { textboxPrompt, textboxPromptNeg });
             Task.Run(() => MainUi.SetGpusInWindowTitle());

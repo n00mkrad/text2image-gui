@@ -110,7 +110,7 @@ namespace StableDiffusionGui.Ui.MainForm
                     { "inpainting", ((InpaintMode)F.comboxInpaintMode.SelectedIndex).ToJson() },
                     { "clipSegMask", F.textboxClipsegMask.Text.Trim().ToJson() },
                     { "model", Config.Get(Config.Key.comboxSdModel).ToJson() },
-                    { "hiresFix", F.checkboxHiresFix.Checked.ToJson() },
+                    { "hiresFix", (F.checkboxHiresFix.Visible && F.checkboxHiresFix.Checked).ToJson() },
                     { "lockSeed", F.checkboxLockSeed.Checked.ToJson() },
                     { "vae", Config.Get(Config.Key.comboxSdModelVae).ToJson() },
                     { "perlin", F.textboxPerlin.GetFloat().ToJson() },
