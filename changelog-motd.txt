@@ -9,6 +9,7 @@ SD GUI 1.7.1 Changelog:
 - Fixed issues with post-processing after generation
 - Fixed negative prompt input being visible when using Low Memory Mode
 - Fixed certain sliders loading invalid values after restarting the program
+- Reduced installation size and optimized code
 
 
 
