@@ -78,13 +78,16 @@ namespace StableDiffusionGui.Ui.MainForm
         /// <summary> Set values that have a single slider value and optionally an advanced syntax entry textbox </summary>
         private static void SetSliderValues(IEnumerable<float> values, bool toInt, CustomSlider slider, TextBox extraValuesTextbox = null)
         {
-            if(values.Count() == 1)
+            if (values.Count() == 1)
             {
                 slider.ActualValue = toInt ? (int)values.First() : (decimal)values.First();
             }
             else if (extraValuesTextbox != null)
             {
-                extraValuesTextbox.Text = string.Join(",", toInt ? values.Select(x => ((int)x).ToString()) : values.Select(x => x.ToString()));
+                var v = toInt ? values.Select(x => ((int)x).ToString()) : values.Select(x => x.ToString());
+
+                if (v.Count() > 1)
+                    extraValuesTextbox.Text = string.Join(",", v);
             }
         }
 
