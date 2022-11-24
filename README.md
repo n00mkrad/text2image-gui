@@ -35,7 +35,11 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (form
 - **Negative Prompt:** Put words or phrases into this box to tell the AI to exclude those things when generating images.
   - Alternatively, you can also put the negative prompt into the regular prompt box by wrapping it in [brackets].
 
-- **Emphasis:** Use (parentheses) to make a word/phrase more impactful, or {curly brackets} to do the opposite. You can also use ((multiple)) to increase the effect.
+- **Emphasis:** Use `+` after a word/phrase to make it more impactful, or `-` to do the opposite. You can also use to increase the effect. Wrap your phrase in parentheses if you want to apply it to more than one word.
+  - Each plus/minus applies a multiplier of 1.1. So two `+++` would be 1.1^3 = 1.331, and so on.
+  - You can also type the strength manually after parentheses, e.g. `a (huge)1.33 dog` instead of `a huge+++ dog`
+  - Examples: `a green++ tree`, `a (big green)+ tree with orange- leaves (in the woods)++`
+
 - **Wildcards:** Fill in words or phrases from a list into the prompt.
   - Inline: `photo of a ~car,tree,dog~`.
   - From File: `photo of a ~objects` for loading texts from `objects.txt` in your `Wildcards` folder in the SD GUI root folder.
