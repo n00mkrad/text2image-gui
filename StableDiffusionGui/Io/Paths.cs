@@ -101,7 +101,6 @@ namespace StableDiffusionGui.Io
                         fileList = fileList.Where(mdl => TtiUtils.ModelFilesizeValid(mdl.Length, type)).ToList();
 
                     list = fileList.Select(f => new Model(f, new[] { Implementation.InvokeAi, Implementation.OptimizedSd } )).ToList();
-                    list = list.Distinct().OrderBy(x => x.Name).ToList();
                 }
                 else if (implementation == Implementation.DiffusersOnnx)
                 {
@@ -119,7 +118,6 @@ namespace StableDiffusionGui.Io
                     }
 
                     list = dirList.Select(f => new Model(f, new[] { Implementation.DiffusersOnnx })).ToList();
-                    list = list.Distinct().OrderBy(x => x.Name).ToList();
                 }
             }
             catch (Exception ex)
@@ -128,7 +126,7 @@ namespace StableDiffusionGui.Io
                 Logger.Log(ex.StackTrace, true);
             }
 
-            return list;
+            return list.DistinctBy(x => x.Name).OrderBy(x => x.Name).ToList();
         }
 
         public static Model GetModel(string filename, bool anyExtension = false, ModelType type = ModelType.Normal, Implementation imp = Implementation.InvokeAi)
