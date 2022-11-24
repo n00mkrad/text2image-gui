@@ -143,32 +143,35 @@
   <metadata name="menuStripOutputImg.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <metadata name="toolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>185, 17</value>
+  </metadata>
   <data name="checkboxLockSeed.ToolTip" xml:space="preserve">
     <value>When checked, the seed will not be incremented by 1 after each image.
 This is only useful in specific situations, for example when using randomized wildcards in the prompt.
 Otherwise, you will get the same image over and over.</value>
   </data>
-  <data name="textboxExtraScales.ToolTip" xml:space="preserve">
-    <value>Here you can enter additional scales to run per image.
-
-Basic Syntax:
-10,12,14
-will run your chosen scale as well as scale 10, 12 and 14.
-
-Incremental Syntax:
-10 &gt; 14 : 0.5
-will run scales 10 to 14 with steps of 0.5.</value>
-  </data>
   <data name="textboxExtraInitStrengths.ToolTip" xml:space="preserve">
-    <value>Here you can enter additional strength values to run per image.
+    <value>Here you can enter custom strength values to run per image.
 
 Basic Syntax:
 0.2,0.4,0.6
-will run your chosen scale as well as scale 0.2, 0.4 and 0.6.
+will run strengths 0.2, 0.4 and 0.6.
 
 Incremental Syntax:
 0.2 &gt; 0.6 : 0.1
-will run scales 0.2 to 0.6 with steps of 0.1.</value>
+will run strengths 0.2 to 0.6 with steps of 0.1.</value>
+  </data>
+  <data name="textboxExtraSteps.ToolTip" xml:space="preserve">
+    <value>Here you can enter custom step counts to run per image.
+
+Basic Syntax:
+20,40,60
+will run with step counts 20, 40 and 60.
+
+Incremental Syntax:
+20 &gt; 60 : 10
+will run with step counts 20 to 60 with increments of 10.</value>
   </data>
   <metadata name="menuStripLogs.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>275, 17</value>
@@ -188,17 +191,6 @@ will run scales 0.2 to 0.6 with steps of 0.1.</value>
   <metadata name="menuStripPostProcess.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 56</value>
   </metadata>
-  <data name="textboxExtraSteps.ToolTip" xml:space="preserve">
-    <value>Here you can enter additional step counts to run per image.
-
-Basic Syntax:
-20,40,60
-will run with step counts 20, 40 and 60.
-
-Incremental Syntax:
-20 &gt; 60 : 10
-will run with step counts 20 to 60 with increments of 10.</value>
-  </data>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>72</value>
   </metadata>

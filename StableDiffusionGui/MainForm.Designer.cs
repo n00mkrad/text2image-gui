@@ -88,6 +88,7 @@ namespace StableDiffusionGui
             this.patreonBtn = new System.Windows.Forms.Button();
             this.paypalBtn = new System.Windows.Forms.Button();
             this.textboxClipsegMask = new System.Windows.Forms.TextBox();
+            this.textboxExtraSteps = new System.Windows.Forms.TextBox();
             this.menuStripLogs = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.progressBarImg = new HTAlt.WinForms.HTProgressBar();
             this.menuStripRunQueue = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -154,7 +155,6 @@ namespace StableDiffusionGui
             this.promptAutocomplete = new AutocompleteMenuNS.AutocompleteMenu();
             this.pictBoxImgViewer = new System.Windows.Forms.PictureBox();
             this.separator = new System.Windows.Forms.Button();
-            this.textboxExtraSteps = new System.Windows.Forms.TextBox();
             this.menuStripOutputImg.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.upDownSeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
@@ -559,7 +559,7 @@ namespace StableDiffusionGui
             this.textboxSliderScale.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScale.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScale.Location = new System.Drawing.Point(302, 9);
+            this.textboxSliderScale.Location = new System.Drawing.Point(302, 7);
             this.textboxSliderScale.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScale.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScale.Name = "textboxSliderScale";
@@ -580,7 +580,9 @@ namespace StableDiffusionGui
             this.textboxExtraScales.Name = "textboxExtraScales";
             this.textboxExtraScales.Size = new System.Drawing.Size(69, 21);
             this.textboxExtraScales.TabIndex = 3;
-            this.toolTip.SetToolTip(this.textboxExtraScales, resources.GetString("textboxExtraScales.ToolTip"));
+            this.toolTip.SetToolTip(this.textboxExtraScales, "Here you can custom additional scales to run per image.\r\n\r\nBasic Syntax:\r\n10,12,1" +
+        "4\r\nwill run scales 10, 12 and 14.\r\n\r\nIncremental Syntax:\r\n10 > 14 : 0.5\r\nwill ru" +
+        "n scales 10 to 14 with steps of 0.5.");
             // 
             // upDownIterations
             // 
@@ -698,7 +700,7 @@ namespace StableDiffusionGui
             this.textboxSliderInitStrength.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderInitStrength.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderInitStrength.Location = new System.Drawing.Point(302, 7);
+            this.textboxSliderInitStrength.Location = new System.Drawing.Point(302, 9);
             this.textboxSliderInitStrength.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderInitStrength.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderInitStrength.Name = "textboxSliderInitStrength";
@@ -1129,6 +1131,21 @@ namespace StableDiffusionGui
             this.textboxClipsegMask.Size = new System.Drawing.Size(202, 21);
             this.textboxClipsegMask.TabIndex = 110;
             this.toolTip.SetToolTip(this.textboxClipsegMask, "Describe what objects you want to replace");
+            // 
+            // textboxExtraSteps
+            // 
+            this.textboxExtraSteps.AllowDrop = true;
+            this.textboxExtraSteps.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.promptAutocomplete.SetAutocompleteMenu(this.textboxExtraSteps, null);
+            this.textboxExtraSteps.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textboxExtraSteps.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textboxExtraSteps.ForeColor = System.Drawing.Color.White;
+            this.textboxExtraSteps.Location = new System.Drawing.Point(340, 7);
+            this.textboxExtraSteps.MinimumSize = new System.Drawing.Size(4, 21);
+            this.textboxExtraSteps.Name = "textboxExtraSteps";
+            this.textboxExtraSteps.Size = new System.Drawing.Size(69, 21);
+            this.textboxExtraSteps.TabIndex = 93;
+            this.toolTip.SetToolTip(this.textboxExtraSteps, resources.GetString("textboxExtraSteps.ToolTip"));
             // 
             // menuStripLogs
             // 
@@ -1661,7 +1678,7 @@ namespace StableDiffusionGui
             this.textboxSliderSteps.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderSteps.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderSteps.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderSteps.Location = new System.Drawing.Point(302, 9);
+            this.textboxSliderSteps.Location = new System.Drawing.Point(302, 7);
             this.textboxSliderSteps.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderSteps.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderSteps.Name = "textboxSliderSteps";
@@ -1926,21 +1943,6 @@ namespace StableDiffusionGui
             this.separator.TabIndex = 75;
             this.separator.TabStop = false;
             this.separator.UseVisualStyleBackColor = false;
-            // 
-            // textboxExtraSteps
-            // 
-            this.textboxExtraSteps.AllowDrop = true;
-            this.textboxExtraSteps.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.promptAutocomplete.SetAutocompleteMenu(this.textboxExtraSteps, null);
-            this.textboxExtraSteps.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.textboxExtraSteps.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textboxExtraSteps.ForeColor = System.Drawing.Color.White;
-            this.textboxExtraSteps.Location = new System.Drawing.Point(340, 7);
-            this.textboxExtraSteps.MinimumSize = new System.Drawing.Size(4, 21);
-            this.textboxExtraSteps.Name = "textboxExtraSteps";
-            this.textboxExtraSteps.Size = new System.Drawing.Size(69, 21);
-            this.textboxExtraSteps.TabIndex = 93;
-            this.toolTip.SetToolTip(this.textboxExtraSteps, resources.GetString("textboxExtraSteps.ToolTip"));
             // 
             // MainForm
             // 

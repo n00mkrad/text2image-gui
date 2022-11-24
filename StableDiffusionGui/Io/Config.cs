@@ -132,7 +132,7 @@ namespace StableDiffusionGui.Io
             }
             catch (Exception e)
             {
-                Logger.Log($"Failed to get {keyStr.Wrap()} from config! {e.Message}");
+                Logger.Log($"Failed to get {keyStr.Wrap()} from config! {e.Message}", true);
             }
 
             return null;
