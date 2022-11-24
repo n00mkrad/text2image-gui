@@ -5,6 +5,7 @@ using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -38,7 +39,7 @@ namespace StableDiffusionGui.Implementations
                 if (modelDir == null)
                     return;
 
-                Dictionary<string, string> initImages = initImgs != null && initImgs.Length > 0 ? await TtiUtils.CreateResizedInitImagesIfNeeded(initImgs.ToList(), res) : null;
+                OrderedDictionary initImages = initImgs != null && initImgs.Length > 0 ? await TtiUtils.CreateResizedInitImagesIfNeeded(initImgs.ToList(), res) : null;
 
                 long startSeed = seed;
 

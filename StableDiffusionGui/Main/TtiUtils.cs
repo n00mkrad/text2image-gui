@@ -9,6 +9,7 @@ using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -23,7 +24,7 @@ namespace StableDiffusionGui.Main
 {
     internal class TtiUtils
     {
-        public static async Task<Dictionary<string, string>> CreateResizedInitImagesIfNeeded(List<string> initImgPaths, Size targetSize, bool print = false)
+        public static async Task<OrderedDictionary> CreateResizedInitImagesIfNeeded(List<string> initImgPaths, Size targetSize, bool print = false)
         {
             Logger.Log($"Importing initialization images...");
 
@@ -32,9 +33,10 @@ namespace StableDiffusionGui.Main
             int imgsResized = 0;
 
             var opts = new ParallelOptions() { MaxDegreeOfParallelism = Environment.ProcessorCount };
-            Task parallelTask = Task.Run(async () => Parallel.For(0, sourceAndImportedPaths.Count, opts, async index =>
+            Task parallelTask = Task.Run(async () => Parallel.For(0, sourceAndImportedPaths.Count, opts, async i =>
             {
-                var pair = sourceAndImportedPaths.ElementAt(index);
+                var pair = sourceAndImportedPaths.ElementAt(i);
+                int index = initImgPaths.IndexOf(pair.Key);
                 MagickImage img = new MagickImage(pair.Key) { Format = MagickFormat.Png24, Quality = 30 };
 
                 if (img.Width == targetSize.Width && img.Height == targetSize.Height) // Size already matches
@@ -68,7 +70,13 @@ namespace StableDiffusionGui.Main
                 await Task.Delay(1);
 
             Logger.Log($"Imported {imgsSucessful} images{(imgsResized > 0 ? $" - {imgsResized} were resized to {targetSize.Width}x{targetSize.Height}" : "")}.", false, Logger.LastUiLine.EndsWith("..."));
-            return new Dictionary<string, string>(sourceAndImportedPaths);
+
+            var sorted = new OrderedDictionary();
+
+            for (int i = 0; i < initImgPaths.Count(); i++)
+                sorted.Add(initImgPaths[i], sourceAndImportedPaths[initImgPaths[i]]); // Add images in the correct order, since multithreading messes the order up
+
+            return sorted;
         }
 
         /// <returns> Amount of removed images </returns>
