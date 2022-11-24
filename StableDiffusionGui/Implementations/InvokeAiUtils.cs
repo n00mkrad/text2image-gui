@@ -77,8 +77,10 @@ namespace StableDiffusionGui.Implementations
 
                 foreach (Model vae in cachedModelsVae)
                 {
+                    string configFile = File.Exists(mdl.FullName + ".yaml") ? (mdl.FullName + ".yaml").Wrap(true) : $"configs/stable-diffusion/{(inpaint ? "v1-inpainting-inference.yaml" : "v1-inference")}.yaml";
+
                     text += $"{GetMdlNameForYaml(mdl, vae)}:\n" +
-                    $"    config: configs/stable-diffusion/{(inpaint ? "v1-inpainting-inference.yaml" : "v1-inference")}.yaml\n" +
+                    $"    config: {configFile}\n" +
                     $"    weights: {mdl.FullName.Wrap(true)}\n" +
                     $"{(vae != null && File.Exists(vae.FullName) ? $"    vae: {vae.FullName.Wrap(true)}\n" : "")}" +
                     $"    description: {mdl.Name}\n" +
