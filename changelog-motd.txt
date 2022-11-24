@@ -1,3 +1,17 @@
+SD GUI 1.7.1 Changelog:
+- Added DPM++2 and DPM++2A samplers
+- Added advanced syntax for step count (run same image with different step counts)
+- New prompt attention syntax - Use (text)++ instead of ((text)), etc.
+- Added automatic conversion of old attention syntax to new syntax
+- Security: Added pickle malware scanner (checks model files automatically)
+- Minor UI improvements, DreamBooth now has a dedicated button
+- Fixed issues with pytorch not working correctly (No CUDA GPU detected)
+- Fixed issues with post-processing after generation
+- Fixed negative prompt input being visible when using Low Memory Mode
+- Fixed certain sliders loading invalid values after restarting the program
+
+
+
 SD GUI 1.7.0 Changelog:
 - Added support for running multiple init images at once, e.g. for animation frames
 - Added support for wildcards (insert words/phrases into prompt dynamically)
