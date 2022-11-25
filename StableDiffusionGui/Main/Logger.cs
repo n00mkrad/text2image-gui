@@ -18,12 +18,13 @@ namespace StableDiffusionGui.Main
         public static TextBox TextboxDebug;
         private static string _file;
         public static long Id;
-
         public static Dictionary<string, string> SessionLogs = new Dictionary<string, string>();
-        private static string _lastUi = "";
-        public static string LastUiLine { get { return _lastUi; } }
-        private static string _lastLog = "";
-        public static string LastLogLine { get { return _lastLog; } }
+        private static string _lastUiLine = "";
+        public static string LastUiLine { get { return _lastUiLine; } }
+        private static string _lastFileLine = "";
+        public static string LastFileLine { get { return _lastFileLine; } }
+        private static string _lastLogLine = "";
+        public static string LastLogLine { get { return _lastLogLine; } }
         private static Dictionary<string, DT> _lastEntryTimestampPerLog = new Dictionary<string, DT>();
 
         public class Entry
@@ -94,13 +95,16 @@ namespace StableDiffusionGui.Main
 
             string msg = entry.Message;
 
-            if (msg == LastUiLine)
+            bool repeated = msg == LastLogLine;
+            bool repeatedUi = msg == LastLogLine;
+
+            if (repeatedUi)
                 entry.Hidden = true; // Never show the same line twice in UI, but log it to file
 
-            _lastLog = msg;
+            _lastLogLine = msg;
 
             if (!entry.Hidden)
-                _lastUi = msg;
+                _lastUiLine = msg;
 
             _lastEntryTimestampPerLog[entry.LogName] = DT.Now;
 
@@ -116,19 +120,23 @@ namespace StableDiffusionGui.Main
                 }
             }
             catch { }
+
             msg = msg.Replace("\n", Environment.NewLine);
 
             if (!entry.Hidden && Textbox != null && !Textbox.IsDisposed)
                 Textbox.AppendText((Textbox.Text.Length > 1 ? Environment.NewLine : "") + msg);
 
+            if (repeated)
+                msg = "\"";
+
             if (entry.ReplaceLastLine)
             {
                 Textbox.Resume();
-                msg = "[REPL] " + msg;
+                msg = $"[REPL] {msg}";
             }
 
             if (!entry.Hidden)
-                msg = "[UI] " + msg;
+                msg = $"[UI] {msg}";
 
             if (TextboxDebug != null && !TextboxDebug.IsDisposed)
                 TextboxDebug.AppendText($"[{entry.LogName}] {msg}{Environment.NewLine}");
@@ -154,6 +162,7 @@ namespace StableDiffusionGui.Main
                 SessionLogs[filename] = (SessionLogs.ContainsKey(filename) ? SessionLogs[filename] : "") + appendStr;
                 File.AppendAllText(_file, appendStr);
                 Id++;
+                _lastFileLine = logStr;
             }
             catch
             {
@@ -220,7 +229,7 @@ namespace StableDiffusionGui.Main
 
         public static string GetLastLine(bool includeHidden = false)
         {
-            return includeHidden ? _lastLog : _lastUi;
+            return includeHidden ? _lastLogLine : _lastUiLine;
         }
 
         public static void RemoveLastLine()
