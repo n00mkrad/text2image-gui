@@ -145,6 +145,9 @@
       <HintPath>packages\XmpCore.6.1.10.1\lib\net35\XmpCore.dll</HintPath>
     </Reference>
     <Reference Include="System.Management.Automation" />
+    <Reference Include="ZetaLongPaths, Version=1.0.16.0, Culture=neutral, PublicKeyToken=b764f59068f31f38, processorArchitecture=MSIL">
+      <HintPath>packages\ZetaLongPaths.1.0.16\lib\net452-full\ZetaLongPaths.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controls\CustomComboBox.cs">

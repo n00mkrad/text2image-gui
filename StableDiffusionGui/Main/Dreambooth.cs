@@ -12,6 +12,7 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ZetaLongPaths;
 
 namespace StableDiffusionGui.Main
 {
@@ -23,7 +24,7 @@ namespace StableDiffusionGui.Main
 
         public static int CurrentTargetSteps;
 
-        public static async Task<string> RunTraining(Model baseModel, DirectoryInfo trainImgDir, string className, Enums.Dreambooth.TrainPreset preset, float lrMult = 1f, float stepsMult = 1f)
+        public static async Task<string> RunTraining(Model baseModel, ZlpDirectoryInfo trainImgDir, string className, Enums.Dreambooth.TrainPreset preset, float lrMult = 1f, float stepsMult = 1f)
         {
             CurrentTargetSteps = 0;
 
@@ -99,7 +100,7 @@ namespace StableDiffusionGui.Main
             Program.MainForm.SetProgress(0);
         }
 
-        private static async Task<string> WriteConfig (string logDir, DirectoryInfo trainDir, Enums.Dreambooth.TrainPreset preset, float userlrMult, float userStepsMult)
+        private static async Task<string> WriteConfig (string logDir, ZlpDirectoryInfo trainDir, Enums.Dreambooth.TrainPreset preset, float userlrMult, float userStepsMult)
         {
             string configPath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdRepo, Constants.Dirs.Dreambooth, "configs", "stable-diffusion", "v1-finetune_unfrozen.yaml");
             var configLines = File.ReadAllLines(configPath).ToArray();

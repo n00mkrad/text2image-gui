@@ -4,6 +4,7 @@ using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Properties;
+using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -15,6 +16,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ZetaLongPaths;
 
 namespace StableDiffusionGui.Io
 {
@@ -104,25 +106,25 @@ namespace StableDiffusionGui.Io
         public static void CopyDir(string sourceDirectory, string targetDirectory, bool move = false)
         {
             Directory.CreateDirectory(targetDirectory);
-            DirectoryInfo source = new DirectoryInfo(sourceDirectory);
-            DirectoryInfo target = new DirectoryInfo(targetDirectory);
+            ZlpDirectoryInfo source = new ZlpDirectoryInfo(sourceDirectory);
+            ZlpDirectoryInfo target = new ZlpDirectoryInfo(targetDirectory);
             CopyWork(source, target, move);
         }
 
-        private static void CopyWork(DirectoryInfo source, DirectoryInfo target, bool move)
+        private static void CopyWork(ZlpDirectoryInfo source, ZlpDirectoryInfo target, bool move)
         {
-            DirectoryInfo[] directories = source.GetDirectories();
-            foreach (DirectoryInfo directoryInfo in directories)
+            ZlpDirectoryInfo[] directories = source.GetDirectories();
+            foreach (ZlpDirectoryInfo directoryInfo in directories)
             {
                 CopyWork(directoryInfo, target.CreateSubdirectory(directoryInfo.Name), move);
             }
-            FileInfo[] files = source.GetFiles();
-            foreach (FileInfo fileInfo in files)
+            ZlpFileInfo[] files = source.GetFiles();
+            foreach (ZlpFileInfo fileInfo in files)
             {
                 if (move)
                     fileInfo.MoveTo(Path.Combine(target.FullName, fileInfo.Name));
                 else
-                    fileInfo.CopyTo(Path.Combine(target.FullName, fileInfo.Name), overwrite: true);
+                    fileInfo.CopyTo(Path.Combine(target.FullName, fileInfo.Name), true);
             }
         }
 
@@ -145,15 +147,15 @@ namespace StableDiffusionGui.Io
         public static void ReplaceInFilenamesDir(string dir, string textToFind, string textToReplace, bool recursive = true, string wildcard = "*")
         {
             int counter = 1;
-            DirectoryInfo d = new DirectoryInfo(dir);
-            FileInfo[] files;
+            var dirInfo = new ZlpDirectoryInfo(dir);
+            ZlpFileInfo[] files;
 
             if (recursive)
-                files = d.GetFiles(wildcard, SearchOption.AllDirectories);
+                files = dirInfo.GetFiles(wildcard, SearchOption.AllDirectories);
             else
-                files = d.GetFiles(wildcard, SearchOption.TopDirectoryOnly);
+                files = dirInfo.GetFiles(wildcard, SearchOption.TopDirectoryOnly);
 
-            foreach (FileInfo file in files)
+            foreach (ZlpFileInfo file in files)
             {
                 ReplaceInFilename(file.FullName, textToFind, textToReplace);
                 counter++;
@@ -177,15 +179,8 @@ namespace StableDiffusionGui.Io
         {
             try
             {
-                DirectoryInfo d = new DirectoryInfo(path);
-                FileInfo[] files = null;
-
-                if (recursive)
-                    files = d.GetFiles(wildcard, SearchOption.AllDirectories);
-                else
-                    files = d.GetFiles(wildcard, SearchOption.TopDirectoryOnly);
-
-                return files.Length;
+                var dirInfo = new ZlpDirectoryInfo(path);
+                return dirInfo.GetFiles(wildcard, recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly).Length;
             }
             catch
             {
@@ -226,32 +221,6 @@ namespace StableDiffusionGui.Io
             }
 
             return true;
-        }
-
-        public static async Task RenameCounterDir(string path, int startAt = 0, int zPad = 8, bool inverse = false)
-        {
-            Stopwatch sw = new Stopwatch();
-            sw.Restart();
-            int counter = startAt;
-            DirectoryInfo d = new DirectoryInfo(path);
-            FileInfo[] files = d.GetFiles();
-            var filesSorted = files.OrderBy(n => n);
-
-            if (inverse)
-                filesSorted.Reverse();
-
-            foreach (FileInfo file in files)
-            {
-                string dir = new DirectoryInfo(file.FullName).Parent.FullName;
-                File.Move(file.FullName, Path.Combine(dir, counter.ToString().PadLeft(zPad, '0') + Path.GetExtension(file.FullName)));
-                counter++;
-
-                if (sw.ElapsedMilliseconds > 100)
-                {
-                    await Task.Delay(1);
-                    sw.Restart();
-                }
-            }
         }
 
         /// <summary>
@@ -522,22 +491,22 @@ namespace StableDiffusionGui.Io
             return GetFilesSorted(path, false, "*");
         }
 
-        public static FileInfo[] GetFileInfosSorted(string path, bool recursive = false, string pattern = "*")
+        public static ZlpFileInfo[] GetFileInfosSorted(string path, bool recursive = false, string pattern = "*")
         {
             try
             {
                 if (path == null || !Directory.Exists(path))
-                    return new FileInfo[0];
+                    return new ZlpFileInfo[0];
 
 
                 SearchOption opt = recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
-                DirectoryInfo dir = new DirectoryInfo(path);
+                var dir = new ZlpDirectoryInfo(path);
                 return dir.GetFiles(pattern, opt).OrderBy(x => x.Name).ToArray();
             }
             catch (Exception ex)
             {
                 Logger.Log($"GetFileInfosSorted error: {ex.Message}");
-                return new FileInfo[0];
+                return new ZlpFileInfo[0];
             }
         }
 
@@ -571,13 +540,13 @@ namespace StableDiffusionGui.Io
 
                 foreach (string file in files)
                 {
-                    try { size += new FileInfo(file).Length; } catch { size += 0; }
+                    try { size += new ZlpFileInfo(file).Length; } catch { size += 0; }
                 }
 
                 if (!recursive)
                     return size;
 
-                foreach (DirectoryInfo dir in new DirectoryInfo(path).GetDirectories()) // Add subdirectory sizes
+                foreach (ZlpDirectoryInfo dir in new ZlpDirectoryInfo(path).GetDirectories()) // Add subdirectory sizes
                     size += GetDirSize(dir.FullName, true, extensionWhitelist, includeFilesWithoutExt);
             }
             catch (Exception e)
@@ -592,7 +561,7 @@ namespace StableDiffusionGui.Io
         {
             try
             {
-                return new FileInfo(path).Length;
+                return new ZlpFileInfo(path).Length;
             }
             catch
             {
@@ -652,7 +621,7 @@ namespace StableDiffusionGui.Io
 
         public static string[] GetUniqueExtensions(string path, bool recursive = false)
         {
-            FileInfo[] fileInfos = GetFileInfosSorted(path, recursive);
+            ZlpFileInfo[] fileInfos = GetFileInfosSorted(path, recursive);
             List<string> exts = fileInfos.Select(x => x.Extension).ToList();
             return exts.Select(x => x).Distinct().ToArray();
         }
@@ -675,7 +644,7 @@ namespace StableDiffusionGui.Io
             p.WaitForExit();
         }
 
-        public static bool SetAttributes(string rootDir, FileAttributes newAttributes, bool recursive = true)
+        public static bool SetAttributes(string rootDir, ZetaLongPaths.Native.FileAttributes newAttributes, bool recursive = true)
         {
             try
             {
@@ -694,6 +663,19 @@ namespace StableDiffusionGui.Io
                 return false;
 
             return IsFileLocked(new FileInfo(filePath));
+        }
+
+        public static bool IsFileLocked(ZlpFileInfo file)
+        {
+            if (file.FullName.Length <= 256)
+            {
+                return IsFileLocked(new FileInfo(file.FullName));
+            }
+            else
+            {
+                ShowPathLengthErr(file.FullName);
+                return false;
+            }
         }
 
         public static bool IsFileLocked(FileInfo file)
@@ -771,12 +753,24 @@ namespace StableDiffusionGui.Io
 
         public static string GetPseudoHash(string path)
         {
-            return GetPseudoHash(new FileInfo(path));
+            return GetPseudoHash(new ZlpFileInfo(path));
         }
 
-        public static string GetPseudoHash (FileInfo f)
+        public static string GetPseudoHash(ZlpFileInfo f, bool crc32 = true)
         {
-            return GetHash($"{f.FullName}{f.Length}", Hash.CRC32, false);
+            if (crc32)
+                return GetHash($"{f.FullName}{f.Length}", Hash.CRC32, false);
+            else
+                return $"{f.FullName}{f.Length}";
+        }
+
+        public static void ShowPathLengthErr(string path, bool cancel = true)
+        {
+            Task.Run(() => UiUtils.ShowMessageBox($"The path of the following file is too long!\n\n{path} ({path.Length} characters)\n\n" +
+                $"For compatibility reasons, please ensure all file paths are no longer than 256 characters!"));
+
+            if (cancel)
+                TextToImage.Cancel("File with invalid path detected.", false);
         }
     }
 }

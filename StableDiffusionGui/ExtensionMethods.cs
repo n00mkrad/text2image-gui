@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using System.Management.Automation;
 using Newtonsoft.Json;
 using StableDiffusionGui.Main;
+using ZetaLongPaths;
 
 namespace StableDiffusionGui
 {
@@ -146,7 +147,7 @@ namespace StableDiffusionGui
         {
             try
             {
-                return new FileInfo(path).Directory.FullName;
+                return new ZlpFileInfo (path).Directory.FullName;
             }
             catch (Exception ex)
             {
@@ -506,9 +507,14 @@ namespace StableDiffusionGui
                 return s;
         }
 
-        public static string NameNoExt (this FileInfo fi)
+        public static string NameNoExt(this FileInfo file)
         {
-            return Path.GetFileNameWithoutExtension(fi.Name);
+            return Path.GetFileNameWithoutExtension(file.Name);
+        }
+
+        public static string NameNoExt (this ZlpFileInfo file)
+        {
+            return Path.GetFileNameWithoutExtension(file.Name);
         }
 
         public static IEnumerable<TSource> DistinctBy<TSource, TKey> (this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)

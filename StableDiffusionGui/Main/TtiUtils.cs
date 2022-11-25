@@ -16,6 +16,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using ZetaLongPaths;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
 using Path = System.IO.Path;
 using Paths = StableDiffusionGui.Io.Paths;
@@ -154,7 +155,7 @@ namespace StableDiffusionGui.Main
         }
 
         /// <summary> Checks if Stable Diffusion model exists </summary>
-        /// <returns> Model FileInfo, if it exists - null if not </returns>
+        /// <returns> Model ZlpFileInfo , if it exists - null if not </returns>
         public static Model CheckIfCurrentSdModelExists(List<Model> cachedModels = null)
         {
             string name = Config.Get(Config.Key.comboxSdModel);
@@ -242,7 +243,7 @@ namespace StableDiffusionGui.Main
             if (!File.Exists(path))
                 return false;
 
-            return ModelFilesizeValid(new FileInfo(path).Length);
+            return ModelFilesizeValid(new ZlpFileInfo(path).Length);
         }
 
         public static bool ModelFilesizeValid(Model model, Enums.StableDiffusion.ModelType type = Enums.StableDiffusion.ModelType.Normal)

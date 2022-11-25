@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using ZetaLongPaths;
 
 namespace StableDiffusionGui.Installation
 {
@@ -226,7 +227,7 @@ namespace StableDiffusionGui.Installation
                 await Task.Delay(1);
 
             if (File.Exists(mdlPath))
-                Logger.Log($"Model file downloaded ({FormatUtils.Bytes(new FileInfo(mdlPath).Length)}).");
+                Logger.Log($"Model file downloaded ({FormatUtils.Bytes(new ZlpFileInfo(mdlPath).Length)}).");
             else
                 Logger.Log($"Failed to download model file due to an unknown error. Check the log files.");
         }
@@ -261,7 +262,7 @@ namespace StableDiffusionGui.Installation
         {
             if (Directory.Exists(dir))
             {
-                IoUtils.SetAttributes(dir, FileAttributes.Normal);
+                IoUtils.SetAttributes(dir, ZetaLongPaths.Native.FileAttributes.Normal);
                 Directory.Delete(dir, true);
             }
 
@@ -286,16 +287,16 @@ namespace StableDiffusionGui.Installation
                 string repoPath = GetDataSubPath(Constants.Dirs.SdRepo);
                 string venvSrcPath = Path.Combine(GetDataSubPath(Constants.Dirs.SdVenv), "src");
 
-                List<DirectoryInfo> dirs = new List<DirectoryInfo>();
+                var dirs = new List<ZlpDirectoryInfo>();
 
-                dirs.AddRange(Directory.GetDirectories(repoPath, "*", SearchOption.AllDirectories).Select(x => new DirectoryInfo(x)));
-                dirs.AddRange(Directory.GetDirectories(venvSrcPath, "*", SearchOption.AllDirectories).Select(x => new DirectoryInfo(x)));
+                dirs.AddRange(Directory.GetDirectories(repoPath, "*", SearchOption.AllDirectories).Select(x => new ZlpDirectoryInfo(x)));
+                dirs.AddRange(Directory.GetDirectories(venvSrcPath, "*", SearchOption.AllDirectories).Select(x => new ZlpDirectoryInfo(x)));
 
-                new DirectoryInfo(repoPath).Attributes = FileAttributes.Normal;
-                IoUtils.SetAttributes(repoPath, FileAttributes.Normal);
+                new ZlpDirectoryInfo(repoPath).Attributes = ZetaLongPaths.Native.FileAttributes.Normal;
+                IoUtils.SetAttributes(repoPath, ZetaLongPaths.Native.FileAttributes.Normal);
 
-                new DirectoryInfo(venvSrcPath).Attributes = FileAttributes.Normal;
-                IoUtils.SetAttributes(venvSrcPath, FileAttributes.Normal);
+                new ZlpDirectoryInfo(venvSrcPath).Attributes = ZetaLongPaths.Native.FileAttributes.Normal;
+                IoUtils.SetAttributes(venvSrcPath, ZetaLongPaths.Native.FileAttributes.Normal);
 
                 foreach (var dir in dirs)
                 {
@@ -324,7 +325,7 @@ namespace StableDiffusionGui.Installation
                 if (print) Logger.Log("Installing GFPGAN...", ReplaceUiLogLine);
 
                 string gfpganPath = GetDataSubPath("gfpgan");
-                IoUtils.SetAttributes(gfpganPath, FileAttributes.Normal);
+                IoUtils.SetAttributes(gfpganPath, ZetaLongPaths.Native.FileAttributes.Normal);
 
                 await Clone("https://github.com/TencentARC/GFPGAN.git", gfpganPath, "2eac2033893ca7f427f4035d80fe95b92649ac56", "master");
 
@@ -369,7 +370,7 @@ namespace StableDiffusionGui.Installation
 
         public static async Task RemoveRepo()
         {
-            IoUtils.SetAttributes(GetDataSubPath(Constants.Dirs.SdRepo), FileAttributes.Normal);
+            IoUtils.SetAttributes(GetDataSubPath(Constants.Dirs.SdRepo), ZetaLongPaths.Native.FileAttributes.Normal);
             await IoUtils.TryDeleteIfExistsAsync(GetDataSubPath(Constants.Dirs.SdRepo));
         }
 
@@ -411,7 +412,7 @@ namespace StableDiffusionGui.Installation
 
                 List<string> easyInstallPaths = new List<string>();
 
-                foreach (FileInfo eggLink in eggLinks)
+                foreach (ZlpFileInfo eggLink in eggLinks)
                 {
                     string nameNoExt = Path.GetFileNameWithoutExtension(eggLink.FullName);
 

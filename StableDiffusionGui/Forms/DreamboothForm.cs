@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ZetaLongPaths;
 using static StableDiffusionGui.Main.Enums.Dreambooth;
 
 namespace StableDiffusionGui.Forms
@@ -156,7 +157,7 @@ namespace StableDiffusionGui.Forms
             Program.SetState(Program.BusyState.Dreambooth);
             btnStart.Text = "Cancel";
 
-            DirectoryInfo trainImgDir = new DirectoryInfo(textboxTrainImgsDir.Text.Trim());
+            ZlpDirectoryInfo trainImgDir = new ZlpDirectoryInfo(textboxTrainImgsDir.Text.Trim());
             string className = string.Join("_", textboxClassName.Text.Trim().Split(Path.GetInvalidFileNameChars())).Trunc(50, false);
             textboxClassName.Text = className;
             TrainPreset preset = (TrainPreset)comboxTrainPreset.SelectedIndex;

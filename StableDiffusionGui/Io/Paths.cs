@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using ZetaLongPaths;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
 namespace StableDiffusionGui.Io
@@ -92,7 +93,7 @@ namespace StableDiffusionGui.Io
 
                 if (implementation == Implementation.InvokeAi || implementation == Implementation.OptimizedSd)
                 {
-                    var fileList = new List<FileInfo>();
+                    var fileList = new List<ZlpFileInfo>();
 
                     foreach (string folderPath in mdlFolders)
                         fileList.AddRange(IoUtils.GetFileInfosSorted(folderPath, false, $"*{Constants.FileExts.SdModel}").ToList());
@@ -104,12 +105,12 @@ namespace StableDiffusionGui.Io
                 }
                 else if (implementation == Implementation.DiffusersOnnx)
                 {
-                    var dirList = new List<DirectoryInfo>();
+                    var dirList = new List<ZlpDirectoryInfo>();
 
                     foreach (string folderPath in mdlFolders)
-                        dirList.AddRange(Directory.GetDirectories(folderPath, "*", SearchOption.TopDirectoryOnly).Select(x => new DirectoryInfo(x)).ToList());
+                        dirList.AddRange(Directory.GetDirectories(folderPath, "*", SearchOption.TopDirectoryOnly).Select(x => new ZlpDirectoryInfo(x)).ToList());
 
-                    foreach(DirectoryInfo dir in new List<DirectoryInfo>(dirList)) // Filter for valid model folders
+                    foreach(ZlpDirectoryInfo dir in new List<ZlpDirectoryInfo>(dirList)) // Filter for valid model folders
                     {
                         List<string> subDirs = dir.GetDirectories().Select(d => d.Name).ToList();
 
