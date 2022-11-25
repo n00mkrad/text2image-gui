@@ -56,18 +56,18 @@ namespace StableDiffusionGui.Main
                 LogName = logName;
             }
 
-            public string ToString(bool includeIndex, bool includeTimestamp, bool includeLogName = false)
+            public string ToString(bool includeId, bool includeTimestamp, bool includeLogName = false)
             {
                 var chunks = new List<string>();
 
-                if (includeIndex)
+                if (includeId)
                     chunks.Add($"[{Id.ToString().PadLeft(8, '0')}]");
 
                 if (includeTimestamp)
                     chunks.Add($"[{DateTime.Now.ToString("MM-dd-yyyy HH:mm:ss")}]:");
 
                 if (includeLogName)
-                    chunks.Add($"[{LogName}]");
+                    chunks.Add($"[{Path.ChangeExtension(LogName, null)}]");
 
                 chunks.Add(Message);
 
@@ -121,10 +121,12 @@ namespace StableDiffusionGui.Main
                 return;
 
             entry.Id = _currentId;
+            _currentId++;
             entry.TimeDequeue = DateTime.Now;
             entry.RepeatedMessage = entry.Message == LastLogLine;
             entry.RepeatedUiMessage = entry.Message == LastLogLine;
-            _currentId++;
+
+            entry.LogName = AddTxt(entry.LogName);
 
             if (entry.RepeatedUiMessage)
                 entry.Hidden = true; // Never show the same line twice in UI, but log it to file
@@ -166,8 +168,7 @@ namespace StableDiffusionGui.Main
             if (string.IsNullOrWhiteSpace(filename))
                 filename = Lognames.General;
 
-            if (Path.GetExtension(filename) != ".txt")
-                filename = Path.ChangeExtension(filename, "txt");
+            filename = AddTxt(filename);
 
             try
             {
@@ -184,8 +185,7 @@ namespace StableDiffusionGui.Main
 
         public static List<Entry> GetSessionLogEntries(string filename)
         {
-            if (!filename.Contains(".txt"))
-                filename = Path.ChangeExtension(filename, "txt");
+            filename = AddTxt(filename);
 
             if (SessionLogs.ContainsKey(filename))
                 return SessionLogs.GetPopulate(filename, new List<Entry>());
@@ -195,28 +195,37 @@ namespace StableDiffusionGui.Main
 
         public static string GetSessionLog(string filename)
         {
-            if (!filename.Contains(".txt"))
-                filename = Path.ChangeExtension(filename, "txt");
+            filename = AddTxt(filename);
 
-            if (SessionLogs.ContainsKey(filename))
-                return EntriesToString(SessionLogs.GetPopulate(filename, new List<Entry>()));
+            if (SessionLogs.Get(filename, null) != null)
+                return EntriesToString(SessionLogs.Get(filename, new List<Entry>()));
             else
                 return "";
         }
 
-        public static string EntriesToString(IEnumerable<Entry> entries, bool includeIndex = false, bool includeTimestamp = false, bool includeLogName = false)
+        public static string EntriesToString(IEnumerable<Entry> entries, bool includeId = false, bool includeTimestamp = false, bool includeLogName = false)
         {
             string s = "";
+            var snapshot = new List<Entry>(entries);
 
-            foreach (Entry e in entries)
-                s += $"{(s == "" ? "" : Environment.NewLine)}{e.ToString(includeIndex, includeTimestamp, includeLogName)}";
+            foreach (Entry e in snapshot)
+                s += $"{(s == "" ? "" : Environment.NewLine)}{e.ToString(includeId, includeTimestamp, includeLogName)}";
 
             return s;
         }
 
-        public static List<string> GetLastLines(string filename, int linesCount = 5, bool stripTimestamp = false)
+        public static List<string> GetLastLines(string filename, int linesCount = 5, bool includeId = false, bool includeTimestamp = false)
         {
-            return SessionLogs.GetPopulate(filename, new List<Entry>()).AsEnumerable().Reverse().Take(linesCount).Reverse().Select(l => l.ToString(false, !stripTimestamp, false)).ToList();
+            filename = AddTxt(filename);
+            var snapshot = SessionLogs.Clone();
+            return snapshot.GetNoNull(filename, new List<Entry>()).AsEnumerable().Reverse().Take(linesCount).Reverse().Select(l => l.ToString(includeId, includeTimestamp, false)).ToList();
+        }
+
+        public static List<Entry> GetLastEntries(string filename, int entriesCount = 5)
+        {
+            filename = AddTxt(filename);
+            var snapshot = SessionLogs.Clone();
+            return snapshot.GetNoNull(filename, new List<Entry>()).AsEnumerable().Reverse().Take(entriesCount).Reverse().ToList();
         }
 
         public static void LogIfLastLineDoesNotContainMsg(string s, bool hidden = false, bool replaceLastLine = false, string filename = "")
@@ -246,6 +255,11 @@ namespace StableDiffusionGui.Main
         public static void RemoveLastLine()
         {
             Textbox.Text = Textbox.Text.Remove(Textbox.Text.LastIndexOf(Environment.NewLine));
+        }
+
+        public static string AddTxt(string name)
+        {
+            return name.EndsWith(".txt") ? name : $"{name}.txt"; // Add .txt if it's not already there
         }
     }
 }

@@ -67,7 +67,7 @@ namespace StableDiffusionGui.Main
                         $"{(TextToImage.CurrentTask.ImgCount > 1 && remainingMs > 1000 ? $" - ETA: {FormatUtils.Time(remainingMs, false)}" : "")}", false, replace || Logger.LastUiLine.MatchesWildcard("*Generated*image*in*"));
                 }
 
-                if (line.Contains(": !fix") && Logger.GetLastLines(Constants.Lognames.Sd, 2, true).FirstOrDefault() == "Outputs:")
+                if (line.Contains(": !fix") && Logger.GetLastLines(Constants.Lognames.Sd, 2).FirstOrDefault() == "Outputs:")
                 {
                     try
                     {

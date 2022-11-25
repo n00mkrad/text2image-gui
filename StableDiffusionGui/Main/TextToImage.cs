@@ -6,7 +6,6 @@ using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -186,26 +185,11 @@ namespace StableDiffusionGui.Main
 
             while (true)
             {
-                var lines = Logger.GetLastLines(Constants.Lognames.Sd, 5);
-                lines = lines.Where(x => x.MatchesRegex(@"\[(?:(?!\]\s+\[)(?:.|\n))*\]\s+\[(?:(?!\]\:)(?:.|\n))*\]\:")).ToList();
+                var entries = Logger.GetLastEntries(Constants.Lognames.Sd, 5);
                 Dictionary<string, TimeSpan> linesWithAge = new Dictionary<string, TimeSpan>();
 
-                foreach(string line in lines)
-                {
-                    if (linesWithAge.ContainsKey(line))
-                        continue;
-
-                    try
-                    {
-                        linesWithAge.Add(line, (DateTime.Now - DateTime.ParseExact(line.Split('[')[2].Split(']')[0], "MM-dd-yyyy HH:mm:ss", CultureInfo.InvariantCulture)));
-                    }
-                    catch
-                    {
-                        string msg = $"Failed to parse date in log line:\n{line}\n\n.Please tell the developer about this message!\nIt has been copied to the clipboard.";
-                        OsUtils.SetClipboard(msg);
-                        UiUtils.ShowMessageBox(msg, UiUtils.MessageType.Error, Nmkoder.Forms.MessageForm.FontSize.Big);
-                    }
-                }
+                foreach(Logger.Entry entry in entries)
+                    linesWithAge[entry.Message] = DateTime.Now - entry.TimeDequeue;
 
                 linesWithAge = linesWithAge.Where(x => x.Value.TotalMilliseconds >= 0).ToDictionary(p => p.Key, p => p.Value);
 

@@ -37,5 +37,23 @@ namespace StableDiffusionGui.Data
         {
             base[key] = value;
         }
+
+        public void CloneTo (ref EasyDict<TKey, TValue> dict)
+        {
+            dict = new EasyDict<TKey, TValue>();
+
+            foreach(KeyValuePair<TKey, TValue> kvp in this)
+                dict.Add(kvp.Key, kvp.Value);
+        }
+
+        public EasyDict<TKey, TValue> Clone()
+        {
+            var dict = new EasyDict<TKey, TValue>();
+
+            foreach (KeyValuePair<TKey, TValue> kvp in this)
+                dict.Add(kvp.Key, kvp.Value);
+
+            return dict;
+        }
     }
 }

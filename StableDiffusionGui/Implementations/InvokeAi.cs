@@ -304,7 +304,7 @@ namespace StableDiffusionGui.Implementations
             while (true)
             {
                 await Task.Delay(1);
-                var last2 = Logger.GetLastLines(Constants.Lognames.Sd, 2, true).Select(l => l.Split("invoke> ").Last().Trim());
+                var last2 = Logger.GetLastLines(Constants.Lognames.Sd, 2).Select(l => l.Split("invoke> ").Last().Trim());
 
                 if (last2.Where(l => l.StartsWith($"New model is current model")).Any())
                     return;
@@ -325,10 +325,10 @@ namespace StableDiffusionGui.Implementations
             {
                 await Task.Delay(10);
 
-                if (Logger.GetLastLines(Constants.Lognames.Sd, 15, true).Where(l => l.Trim().EndsWith($" is not a known model name. Please check your models.yaml file")).Any())
+                if (Logger.GetLastLines(Constants.Lognames.Sd, 15).Where(l => l.Trim().EndsWith($" is not a known model name. Please check your models.yaml file")).Any())
                     break;
 
-                if (Logger.GetLastLines(Constants.Lognames.Sd, 15, true).Where(l => l.Contains($" {modelNameInYaml} from ")).Any())
+                if (Logger.GetLastLines(Constants.Lognames.Sd, 15).Where(l => l.Contains($" {modelNameInYaml} from ")).Any())
                     break;
 
                 if (timeoutSw.ElapsedMs > 60000)
@@ -342,7 +342,7 @@ namespace StableDiffusionGui.Implementations
             {
                 await Task.Delay(10);
 
-                if (Logger.GetLastLines(Constants.Lognames.Sd, 5, true).Where(l => l.StartsWith(">> Setting Sampler to ")).Any())
+                if (Logger.GetLastLines(Constants.Lognames.Sd, 5).Where(l => l.StartsWith(">> Setting Sampler to ")).Any())
                     break;
 
                 if (timeoutSw.ElapsedMs > 60000)
