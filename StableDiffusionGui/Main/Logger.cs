@@ -1,4 +1,5 @@
-﻿using StableDiffusionGui.Extensions;
+﻿using StableDiffusionGui.Data;
+using StableDiffusionGui.Extensions;
 using StableDiffusionGui.Io;
 using System;
 using System.Collections.Concurrent;
@@ -7,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static StableDiffusionGui.Main.Constants;
 
 namespace StableDiffusionGui.Main
 {
@@ -15,15 +17,17 @@ namespace StableDiffusionGui.Main
         public static TextBox Textbox;
         public static TextBox TextboxDebug;
 
-        private static long _currentId;
-
-        public static Dictionary<string, List<Entry>> SessionLogs = new Dictionary<string, List<Entry>>();
+        public static EasyDict<string, List<Entry>> SessionLogs = new EasyDict<string, List<Entry>>();
         private static string _lastUiLine = "";
         public static string LastUiLine { get { return _lastUiLine; } }
         private static string _lastFileLine = "";
         public static string LastFileLine { get { return _lastFileLine; } }
         private static string _lastLogLine = "";
         public static string LastLogLine { get { return _lastLogLine; } }
+
+        private static long _currentId;
+        private static ConcurrentQueue<Entry> logQueue = new ConcurrentQueue<Entry>();
+
 
         public class Entry
         {
@@ -65,11 +69,12 @@ namespace StableDiffusionGui.Main
                 if (includeLogName)
                     chunks.Add($"[{LogName}]");
 
+                chunks.Add(Message);
+
                 return string.Join(" ", chunks);
             }
         }
 
-        private static ConcurrentQueue<Entry> logQueue = new ConcurrentQueue<Entry>();
 
         public static void Log(Entry entry)
         {
@@ -112,7 +117,7 @@ namespace StableDiffusionGui.Main
 
         public static void Show(Entry entry)
         {
-            if (string.IsNullOrWhiteSpace(entry.Message))
+            if (entry == null || string.IsNullOrWhiteSpace(entry.Message) || string.IsNullOrWhiteSpace(entry.LogName))
                 return;
 
             entry.Id = _currentId;
@@ -165,8 +170,8 @@ namespace StableDiffusionGui.Main
 
             try
             {
-                bool firstLog = !SessionLogs.ContainsKey(filename) || SessionLogs[filename].Count <= 0;
-                StoreLog(filename, entry);
+                bool firstLog = !SessionLogs.ContainsKey(filename) || SessionLogs.GetPopulate(filename, new List<Entry>()).Count <= 0;
+                SessionLogs.GetPopulate(filename, new List<Entry>()).Add(entry);
                 File.AppendAllText(Path.Combine(Paths.GetLogPath(), filename), $"{(firstLog ? "" : Environment.NewLine)}{entry.ToString(true, true)}");
                 _currentId++;
                 _lastFileLine = entry.Message;
@@ -177,21 +182,13 @@ namespace StableDiffusionGui.Main
             }
         }
 
-        private static void StoreLog(string logName, Entry entry)
-        {
-            if (!SessionLogs.ContainsKey(logName) || SessionLogs[logName] == null)
-                SessionLogs[logName] = new List<Entry>();
-
-            SessionLogs[logName].Add(entry);
-        }
-
         public static List<Entry> GetSessionLogEntries(string filename)
         {
             if (!filename.Contains(".txt"))
                 filename = Path.ChangeExtension(filename, "txt");
 
             if (SessionLogs.ContainsKey(filename))
-                return SessionLogs[filename];
+                return SessionLogs.GetPopulate(filename, new List<Entry>());
             else
                 return new List<Entry>();
         }
@@ -202,7 +199,7 @@ namespace StableDiffusionGui.Main
                 filename = Path.ChangeExtension(filename, "txt");
 
             if (SessionLogs.ContainsKey(filename))
-                return EntriesToString(SessionLogs[filename]);
+                return EntriesToString(SessionLogs.GetPopulate(filename, new List<Entry>()));
             else
                 return "";
         }
@@ -219,7 +216,7 @@ namespace StableDiffusionGui.Main
 
         public static List<string> GetLastLines(string filename, int linesCount = 5, bool stripTimestamp = false)
         {
-            return SessionLogs[filename].AsEnumerable().Reverse().Take(linesCount).Reverse().Select(l => l.ToString(false, !stripTimestamp, false)).ToList();
+            return SessionLogs.GetPopulate(filename, new List<Entry>()).AsEnumerable().Reverse().Take(linesCount).Reverse().Select(l => l.ToString(false, !stripTimestamp, false)).ToList();
         }
 
         public static void LogIfLastLineDoesNotContainMsg(string s, bool hidden = false, bool replaceLastLine = false, string filename = "")
