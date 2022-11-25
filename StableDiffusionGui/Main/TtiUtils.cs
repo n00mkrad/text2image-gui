@@ -238,7 +238,7 @@ namespace StableDiffusionGui.Main
             return string.Join(" && ", cmds);
         }
 
-        public static bool ModelFilesizeValid(string path, Enums.StableDiffusion.ModelType type = Enums.StableDiffusion.ModelType.Normal)
+        public static bool ModelFilesizeValid(string path, ModelType type = ModelType.Normal)
         {
             if (!File.Exists(path))
                 return false;
@@ -246,7 +246,7 @@ namespace StableDiffusionGui.Main
             return ModelFilesizeValid(new ZlpFileInfo(path).Length);
         }
 
-        public static bool ModelFilesizeValid(Model model, Enums.StableDiffusion.ModelType type = Enums.StableDiffusion.ModelType.Normal)
+        public static bool ModelFilesizeValid(Model model, ModelType type = ModelType.Normal)
         {
             if (!File.Exists(model.FullName))
                 return false;
@@ -254,12 +254,14 @@ namespace StableDiffusionGui.Main
             return ModelFilesizeValid(model.Size);
         }
 
-        public static bool ModelFilesizeValid(long size, Enums.StableDiffusion.ModelType type = Enums.StableDiffusion.ModelType.Normal)
+        public static bool ModelFilesizeValid(long size, ModelType type = ModelType.Normal)
         {
             try
             {
-                if (type == Enums.StableDiffusion.ModelType.Normal)
-                    return size > 2010000000;
+                if (type == ModelType.Normal)
+                    return size > 2000 * 1024 * 1024;
+                else if (type == ModelType.Normal)
+                    return size > 200 * 1024 * 1024 && size < 2000 * 1024 * 1024;
             }
             catch
             {

@@ -96,12 +96,19 @@ namespace StableDiffusionGui.Io
                     var fileList = new List<ZlpFileInfo>();
 
                     foreach (string folderPath in mdlFolders)
-                        fileList.AddRange(IoUtils.GetFileInfosSorted(folderPath, false, $"*{Constants.FileExts.SdModel}").ToList());
+                        fileList.AddRange(IoUtils.GetFileInfosSorted(folderPath, false, $"*.*").ToList());
 
-                    if (type == ModelType.Normal && !Config.GetBool("disableModelFilesizeValidation"))
-                        fileList = fileList.Where(mdl => TtiUtils.ModelFilesizeValid(mdl.Length, type)).ToList();
+                    if (!Config.GetBool("disableModelFilesizeValidation"))
+                    {
+                        fileList = fileList.Where(f => TtiUtils.ModelFilesizeValid(f.Length, type)).ToList();
 
-                    list = fileList.Select(f => new Model(f, new[] { Implementation.InvokeAi, Implementation.OptimizedSd } )).ToList();
+                        if (type == ModelType.Normal)
+                            fileList = fileList.Where(f => Constants.FileExts.ValidSdModels.Contains(f.Extension)).ToList();
+                        else if (type == ModelType.Vae)
+                            fileList = fileList.Where(f => Constants.FileExts.ValidSdVaeModels.Contains(f.Extension)).ToList();
+                    }
+
+                    list = fileList.Select(f => new Model(f, new[] { Implementation.InvokeAi, Implementation.OptimizedSd })).ToList();
                 }
                 else if (implementation == Implementation.DiffusersOnnx)
                 {
@@ -110,7 +117,7 @@ namespace StableDiffusionGui.Io
                     foreach (string folderPath in mdlFolders)
                         dirList.AddRange(Directory.GetDirectories(folderPath, "*", SearchOption.TopDirectoryOnly).Select(x => new ZlpDirectoryInfo(x)).ToList());
 
-                    foreach(ZlpDirectoryInfo dir in new List<ZlpDirectoryInfo>(dirList)) // Filter for valid model folders
+                    foreach (ZlpDirectoryInfo dir in new List<ZlpDirectoryInfo>(dirList)) // Filter for valid model folders
                     {
                         List<string> subDirs = dir.GetDirectories().Select(d => d.Name).ToList();
 

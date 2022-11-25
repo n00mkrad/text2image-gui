@@ -49,7 +49,7 @@ namespace StableDiffusionGui.Main
                 if (!File.Exists(configPath))
                     throw new Exception("Could not create training config.");
 
-                string outPath = Path.Combine(Paths.GetModelsPath(), $"dreambooth-{className}-{CurrentTargetSteps}step-{timestamp}{Constants.FileExts.SdModel}");
+                string outPath = Path.Combine(Paths.GetModelsPath(), $"dreambooth-{className}-{CurrentTargetSteps}step-{timestamp}{Constants.FileExts.ValidSdModels.First()}");
 
                 Process db = OsUtils.NewProcess(!showCmd);
                 db.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand()} && call activate.bat {Constants.Dirs.Conda}/envs/{Constants.Dirs.SdEnv} && python {Constants.Dirs.SdRepo}/db/main.py -t " +

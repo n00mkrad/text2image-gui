@@ -29,7 +29,7 @@ namespace StableDiffusionGui.Implementations
         {
             string text = $"{keyName}:\n" +
                 $"    config: configs/stable-diffusion/v1-inference.yaml\n" +
-                $"    weights: {(mdl == null ? $"unknown{Constants.FileExts.SdModel}" : mdl.FullName.Wrap(true))}\n" +
+                $"    weights: {(mdl == null ? $"unknown{Constants.FileExts.ValidSdModels.First()}" : mdl.FullName.Wrap(true))}\n" +
                 $"    {(vae != null && File.Exists(vae.FullName) ? $"vae: {vae.FullName.Wrap(true)}" : "")}\n" +
                 $"    description: Current NMKD SD GUI model\n" +
                 $"    width: 512\n" +

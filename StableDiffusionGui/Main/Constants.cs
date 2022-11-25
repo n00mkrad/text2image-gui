@@ -48,7 +48,8 @@
         {
             public static readonly string[] ValidImages = new string[] { ".png", ".jpeg", ".jpg", ".jfif", ".bmp", ".webp" };
             public static readonly string[] ValidEmbeddings = new string[] { ".pt", ".bin" };
-            public const string SdModel = ".ckpt";
+            public static readonly string[] ValidSdModels = new string[] { ".ckpt" };
+            public static readonly string[] ValidSdVaeModels = new string[] { ".ckpt", ".pt" };
         }
 
         public class Limits
