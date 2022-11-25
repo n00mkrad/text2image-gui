@@ -24,7 +24,10 @@ namespace StableDiffusionGui.Main
             if (string.IsNullOrWhiteSpace(line))
                 return;
 
-            Logger.Log(line, true, false, Constants.Lognames.Sd);
+            var noLogWildcards = new string[] { "step */*" };
+
+            if (noLogWildcards.Where(w => !line.MatchesWildcard(w)).Any())
+                Logger.Log(line, true, false, Constants.Lognames.Sd);
 
             bool ellipsis = Logger.LastUiLine.Contains("...");
             string errMsg = "";
@@ -203,8 +206,8 @@ namespace StableDiffusionGui.Main
             if (_hasErrored)
             {
                 TextToImage.Cancel();
-                
-                if(!string.IsNullOrWhiteSpace(errMsg))
+
+                if (!string.IsNullOrWhiteSpace(errMsg))
                     Task.Run(() => UiUtils.ShowMessageBox(errMsg, UiUtils.MessageType.Error));
             }
         }

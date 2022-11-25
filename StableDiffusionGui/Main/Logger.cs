@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Interop;
 using DT = System.DateTime;
 
 namespace StableDiffusionGui.Main
@@ -25,30 +26,50 @@ namespace StableDiffusionGui.Main
         public static string LastLogLine { get { return _lastLog; } }
         private static Dictionary<string, DT> _lastEntryTimestampPerLog = new Dictionary<string, DT>();
 
-        public struct Entry
+        public class Entry
         {
-            public string logMessage;
-            public bool hidden;
-            public bool replaceLastLine;
-            public string filename;
+            public string Message { get; set; } = "";
+            public bool Hidden { get; set; } = false;
+            public bool ReplaceLastLine { get; set; } = false;
+            public string LogName { get; set; } = Constants.Lognames.General;
 
-            public Entry(string logMessageArg, bool hiddenArg = false, bool replaceLastLineArg = false, string filenameArg = "")
+            public Entry()
             {
-                logMessage = logMessageArg;
-                hidden = hiddenArg;
-                replaceLastLine = replaceLastLineArg;
-                filename = filenameArg;
+
+            }
+
+            public Entry(string message, bool hidden = false, bool replaceLastLine = false, string logName = "")
+            {
+                Message = message;
+                Hidden = hidden;
+                ReplaceLastLine = replaceLastLine;
+                LogName = logName;
             }
         }
 
         private static ConcurrentQueue<Entry> logQueue = new ConcurrentQueue<Entry>();
 
-        public static void Log(string msg, bool hidden = false, bool replaceLastLine = false, string filename = Constants.Lognames.General)
+        public static void Log(Entry entry)
         {
-            if (string.IsNullOrWhiteSpace(msg))
+            if (string.IsNullOrWhiteSpace(entry.Message))
                 return;
 
-            logQueue.Enqueue(new Entry(msg, hidden, replaceLastLine, filename));
+            logQueue.Enqueue(entry);
+        }
+
+        public static void LogReplace(string msg, string filename = Constants.Lognames.General)
+        {
+            Log(new Entry(msg, false, true, filename));
+        }
+
+        public static void Log(string msg, bool hidden = false, bool replaceLastLine = false, string filename = Constants.Lognames.General)
+        {
+            Log(new Entry(msg, hidden, replaceLastLine, filename));
+        }
+
+        public static void LogHidden(string msg, string filename = Constants.Lognames.General)
+        {
+            Log(new Entry(msg, true, false, filename));
         }
 
         public static async Task QueueLoop ()
@@ -68,26 +89,26 @@ namespace StableDiffusionGui.Main
 
         public static void Show(Entry entry)
         {
-            if (string.IsNullOrWhiteSpace(entry.logMessage))
+            if (string.IsNullOrWhiteSpace(entry.Message))
                 return;
 
-            string msg = entry.logMessage;
+            string msg = entry.Message;
 
             if (msg == LastUiLine)
-                entry.hidden = true; // Never show the same line twice in UI, but log it to file
+                entry.Hidden = true; // Never show the same line twice in UI, but log it to file
 
             _lastLog = msg;
 
-            if (!entry.hidden)
+            if (!entry.Hidden)
                 _lastUi = msg;
 
-            _lastEntryTimestampPerLog[entry.filename] = DT.Now;
+            _lastEntryTimestampPerLog[entry.LogName] = DT.Now;
 
             Console.WriteLine(msg);
 
             try
             {
-                if (!entry.hidden && entry.replaceLastLine)
+                if (!entry.Hidden && entry.ReplaceLastLine)
                 {
                     Textbox.Suspend();
                     string[] lines = Textbox.Text.SplitIntoLines();
@@ -97,22 +118,22 @@ namespace StableDiffusionGui.Main
             catch { }
             msg = msg.Replace("\n", Environment.NewLine);
 
-            if (!entry.hidden && Textbox != null && !Textbox.IsDisposed)
+            if (!entry.Hidden && Textbox != null && !Textbox.IsDisposed)
                 Textbox.AppendText((Textbox.Text.Length > 1 ? Environment.NewLine : "") + msg);
 
-            if (entry.replaceLastLine)
+            if (entry.ReplaceLastLine)
             {
                 Textbox.Resume();
                 msg = "[REPL] " + msg;
             }
 
-            if (!entry.hidden)
+            if (!entry.Hidden)
                 msg = "[UI] " + msg;
 
             if (TextboxDebug != null && !TextboxDebug.IsDisposed)
-                TextboxDebug.AppendText($"[{entry.filename}] {msg}{Environment.NewLine}");
+                TextboxDebug.AppendText($"[{entry.LogName}] {msg}{Environment.NewLine}");
 
-            LogToFile(msg, false, entry.filename);
+            LogToFile(msg, false, entry.LogName);
         }
 
         public static void LogToFile(string logStr, bool noLineBreak, string filename)
