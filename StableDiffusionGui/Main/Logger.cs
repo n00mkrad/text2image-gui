@@ -7,8 +7,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Interop;
-using DT = System.DateTime;
 
 namespace StableDiffusionGui.Main
 {
@@ -16,16 +14,16 @@ namespace StableDiffusionGui.Main
     {
         public static TextBox Textbox;
         public static TextBox TextboxDebug;
-        private static string _file;
-        public static long Id;
-        public static Dictionary<string, string> SessionLogs = new Dictionary<string, string>();
+
+        private static long _currentId;
+
+        public static Dictionary<string, List<Entry>> SessionLogs = new Dictionary<string, List<Entry>>();
         private static string _lastUiLine = "";
         public static string LastUiLine { get { return _lastUiLine; } }
         private static string _lastFileLine = "";
         public static string LastFileLine { get { return _lastFileLine; } }
         private static string _lastLogLine = "";
         public static string LastLogLine { get { return _lastLogLine; } }
-        private static Dictionary<string, DT> _lastEntryTimestampPerLog = new Dictionary<string, DT>();
 
         public class Entry
         {
@@ -33,6 +31,13 @@ namespace StableDiffusionGui.Main
             public bool Hidden { get; set; } = false;
             public bool ReplaceLastLine { get; set; } = false;
             public string LogName { get; set; } = Constants.Lognames.General;
+            public long Id { get; set; } = -1;
+            public bool RepeatedMessage = false;
+            public bool RepeatedUiMessage = false;
+            public DateTime TimeEnqueue { get; set; }
+            public DateTime TimeDequeue { get; set; }
+            public string TimestampEnqueue { get { return GetTimestamp(TimeEnqueue); } }
+            public string TimestampDequeue { get { return GetTimestamp(TimeDequeue); } }
 
             public Entry()
             {
@@ -46,6 +51,22 @@ namespace StableDiffusionGui.Main
                 ReplaceLastLine = replaceLastLine;
                 LogName = logName;
             }
+
+            public string ToString(bool includeIndex, bool includeTimestamp, bool includeLogName = false)
+            {
+                var chunks = new List<string>();
+
+                if (includeIndex)
+                    chunks.Add($"[{_currentId.ToString().PadLeft(8, '0')}]");
+
+                if (includeTimestamp)
+                    chunks.Add($"[{DateTime.Now.ToString("MM-dd-yyyy HH:mm:ss")}]:");
+
+                if (includeLogName)
+                    chunks.Add($"[{LogName}]");
+
+                return string.Join(" ", chunks);
+            }
         }
 
         private static ConcurrentQueue<Entry> logQueue = new ConcurrentQueue<Entry>();
@@ -55,6 +76,7 @@ namespace StableDiffusionGui.Main
             if (string.IsNullOrWhiteSpace(entry.Message))
                 return;
 
+            entry.TimeEnqueue = DateTime.Now;
             logQueue.Enqueue(entry);
         }
 
@@ -73,11 +95,11 @@ namespace StableDiffusionGui.Main
             Log(new Entry(msg, true, false, filename));
         }
 
-        public static async Task QueueLoop ()
+        public static async Task QueueLoop()
         {
             while (true)
             {
-                if(logQueue.Count >= 1)
+                if (logQueue.Count >= 1)
                     ShowNext();
             }
         }
@@ -93,22 +115,20 @@ namespace StableDiffusionGui.Main
             if (string.IsNullOrWhiteSpace(entry.Message))
                 return;
 
-            string msg = entry.Message;
+            entry.Id = _currentId;
+            entry.TimeDequeue = DateTime.Now;
+            entry.RepeatedMessage = entry.Message == LastLogLine;
+            entry.RepeatedUiMessage = entry.Message == LastLogLine;
 
-            bool repeated = msg == LastLogLine;
-            bool repeatedUi = msg == LastLogLine;
-
-            if (repeatedUi)
+            if (entry.RepeatedUiMessage)
                 entry.Hidden = true; // Never show the same line twice in UI, but log it to file
 
-            _lastLogLine = msg;
+            _lastLogLine = entry.Message;
 
             if (!entry.Hidden)
-                _lastUiLine = msg;
+                _lastUiLine = entry.Message;
 
-            _lastEntryTimestampPerLog[entry.LogName] = DT.Now;
-
-            Console.WriteLine(msg);
+            Console.WriteLine(entry.ToString(true, true, true));
 
             try
             {
@@ -116,58 +136,64 @@ namespace StableDiffusionGui.Main
                 {
                     Textbox.Suspend();
                     string[] lines = Textbox.Text.SplitIntoLines();
-                    Textbox.Text = string.Join(Environment.NewLine, lines.Take(lines.Count() - 1).ToArray());
+                    Textbox.Text = string.Join(Environment.NewLine, lines.Take(lines.Length - 1));
                 }
             }
-            catch { }
-
-            msg = msg.Replace("\n", Environment.NewLine);
-
-            if (!entry.Hidden && Textbox != null && !Textbox.IsDisposed)
-                Textbox.AppendText((Textbox.Text.Length > 1 ? Environment.NewLine : "") + msg);
-
-            if (repeated)
-                msg = "\"";
-
-            if (entry.ReplaceLastLine)
+            catch (Exception ex)
             {
-                Textbox.Resume();
-                msg = $"[REPL] {msg}";
+                Console.WriteLine($"Logging Error: {ex.Message}\n{ex.StackTrace}");
             }
 
-            if (!entry.Hidden)
-                msg = $"[UI] {msg}";
+            if (!entry.Hidden && Textbox != null && !Textbox.IsDisposed)
+                Textbox.AppendText((string.IsNullOrWhiteSpace(Textbox.Text) ? "" : Environment.NewLine) + entry.Message.Replace("\n", Environment.NewLine));
 
-            if (TextboxDebug != null && !TextboxDebug.IsDisposed)
-                TextboxDebug.AppendText($"[{entry.LogName}] {msg}{Environment.NewLine}");
+            if (entry.ReplaceLastLine)
+                Textbox.Resume();
 
-            LogToFile(msg, false, entry.LogName);
+            LogToFile(entry);
         }
 
-        public static void LogToFile(string logStr, bool noLineBreak, string filename)
+        public static void LogToFile(Entry entry)
         {
+            string filename = entry.LogName;
+
             if (string.IsNullOrWhiteSpace(filename))
                 filename = Constants.Lognames.General;
 
             if (Path.GetExtension(filename) != ".txt")
                 filename = Path.ChangeExtension(filename, "txt");
 
-            _file = Path.Combine(Paths.GetLogPath(), filename);
-            //logStr = logStr.Replace(Environment.NewLine, " ").TrimWhitespaces();
-            string time = DT.Now.ToString("MM-dd-yyyy HH:mm:ss");
-
             try
             {
-                string appendStr = noLineBreak ? $" {logStr}" : $"{Environment.NewLine}[{Id.ToString().PadLeft(8, '0')}] [{time}]: {logStr}";
-                SessionLogs[filename] = (SessionLogs.ContainsKey(filename) ? SessionLogs[filename] : "") + appendStr;
-                File.AppendAllText(_file, appendStr);
-                Id++;
-                _lastFileLine = logStr;
+                bool firstLog = !SessionLogs.ContainsKey(filename) || SessionLogs[filename].Count <= 0;
+                StoreLog(filename, entry);
+                File.AppendAllText(Path.Combine(Paths.GetLogPath(), filename), $"{(firstLog ? "" : Environment.NewLine)}{entry.ToString(true, true)}");
+                _currentId++;
+                _lastFileLine = entry.Message;
             }
-            catch
+            catch (Exception ex)
             {
-                // this if fine, i forgot why
+                Console.WriteLine($"Logging Error: {ex.Message}\n{ex.StackTrace}");
             }
+        }
+
+        private static void StoreLog(string logName, Entry entry)
+        {
+            if (!SessionLogs.ContainsKey(logName) || SessionLogs[logName] == null)
+                SessionLogs[logName] = new List<Entry>();
+
+            SessionLogs[logName].Add(entry);
+        }
+
+        public static List<Entry> GetSessionLogEntries(string filename)
+        {
+            if (!filename.Contains(".txt"))
+                filename = Path.ChangeExtension(filename, "txt");
+
+            if (SessionLogs.ContainsKey(filename))
+                return SessionLogs[filename];
+            else
+                return new List<Entry>();
         }
 
         public static string GetSessionLog(string filename)
@@ -176,19 +202,24 @@ namespace StableDiffusionGui.Main
                 filename = Path.ChangeExtension(filename, "txt");
 
             if (SessionLogs.ContainsKey(filename))
-                return SessionLogs[filename];
+                return EntriesToString(SessionLogs[filename]);
             else
                 return "";
         }
 
+        private static string EntriesToString(IEnumerable<Entry> entries, bool includeIndex = false, bool includeTimestamp = false, bool includeLogName = false)
+        {
+            string s = "";
+
+            foreach (Entry e in entries)
+                s += $"{(s == "" ? "" : Environment.NewLine)}{e.ToString(includeIndex, includeTimestamp, includeLogName)}";
+
+            return s;
+        }
+
         public static List<string> GetLastLines(string filename, int linesCount = 5, bool stripTimestamp = false)
         {
-            var lines = GetSessionLog(filename).SplitIntoLines();
-
-            if (stripTimestamp)
-                return lines.Reverse().Take(linesCount).Reverse().Select(line => line.Contains("]: ") ? line.Substring(line.IndexOf("]: ") + 1).Substring(2) : line).ToList();
-            else
-                return lines.Reverse().Take(linesCount).Reverse().ToList();
+            return SessionLogs[filename].AsEnumerable().Reverse().Take(linesCount).Reverse().Select(l => l.ToString(false, !stripTimestamp, false)).ToList();
         }
 
         public static void LogIfLastLineDoesNotContainMsg(string s, bool hidden = false, bool replaceLastLine = false, string filename = "")
@@ -197,29 +228,12 @@ namespace StableDiffusionGui.Main
                 Log(s, hidden, replaceLastLine, filename);
         }
 
-        public static void WriteToFile(string content, bool append, string filename)
+        private static string GetTimestamp(DateTime t)
         {
-            if (string.IsNullOrWhiteSpace(filename))
-                filename = Constants.Lognames.General;
+            if (t == DateTime.MinValue)
+                t = DateTime.Now;
 
-            if (Path.GetExtension(filename) != ".txt")
-                filename = Path.ChangeExtension(filename, "txt");
-
-            _file = Path.Combine(Paths.GetLogPath(), filename);
-
-            string time = DT.Now.Month + "-" + DT.Now.Day + "-" + DT.Now.Year + " " + DT.Now.Hour + ":" + DT.Now.Minute + ":" + DT.Now.Second;
-
-            try
-            {
-                if (append)
-                    File.AppendAllText(_file, Environment.NewLine + time + ":" + Environment.NewLine + content);
-                else
-                    File.WriteAllText(_file, Environment.NewLine + time + ":" + Environment.NewLine + content);
-            }
-            catch
-            {
-
-            }
+            return t.ToString("MM-dd-yyyy HH:mm:ss");
         }
 
         public static void ClearLogBox()
@@ -235,14 +249,6 @@ namespace StableDiffusionGui.Main
         public static void RemoveLastLine()
         {
             Textbox.Text = Textbox.Text.Remove(Textbox.Text.LastIndexOf(Environment.NewLine));
-        }
-
-        public static TimeSpan GetTimeSinceLastEntry (string logName)
-        {
-            if (_lastEntryTimestampPerLog.ContainsKey(logName))
-                return DT.Now - _lastEntryTimestampPerLog[logName];
-            else
-                return DT.MaxValue - DT.MinValue;
         }
     }
 }
