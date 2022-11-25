@@ -8,7 +8,6 @@ using StableDiffusionGui.MiscUtils;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Windows.Documents;
 using Paths = StableDiffusionGui.Io.Paths;
 
 namespace StableDiffusionGui.Ui

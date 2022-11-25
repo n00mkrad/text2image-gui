@@ -86,7 +86,7 @@ namespace StableDiffusionGui.Main
 
                 if (!_hasErrored && line.Trim().EndsWith(" is not a known model name. Please check your models.yaml file"))
                 {
-                    errMsg = $"Failed to switch models:\n\n{line}";
+                    errMsg = $"Failed to switch models.\n\nPossibly you tried to load an incompatible model.";
                     _hasErrored = true;
                 }
             }

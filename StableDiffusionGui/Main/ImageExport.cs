@@ -4,7 +4,6 @@ using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -121,6 +120,9 @@ namespace StableDiffusionGui.Main
 
         private static void OverlayMaskIfExists(string imgPath, bool copyMetadata = true)
         {
+            if (TextToImage.CurrentTaskSettings.Implementation == Enums.StableDiffusion.Implementation.InvokeAi)
+                return; // InvokeAI has proper built-in inpainting - Skip for this implementation
+
             string maskPath = InpaintingUtils.MaskedImagePath;
 
             if (!File.Exists(maskPath))
@@ -129,12 +131,12 @@ namespace StableDiffusionGui.Main
             ImageMetadata meta = null;
 
             if (copyMetadata)
-                meta = IoUtils.GetImageMetadata(imgPath);
+                meta = IoUtils.GetImageMetadata(imgPath); // Save metadata as it gets lost otherwise
 
-            ImgUtils.Overlay(imgPath, maskPath);
+            ImgUtils.Overlay(imgPath, maskPath); // Actually do the overlaying
 
             if (meta != null)
-                IoUtils.SetImageMetadata(imgPath, meta.ParsedText);
+                IoUtils.SetImageMetadata(imgPath, meta.ParsedText); // Put metadata back in
         }
 
     }

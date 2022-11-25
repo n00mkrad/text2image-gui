@@ -76,6 +76,7 @@ namespace StableDiffusionGui.Implementations
                     {
                         args.Remove("initImg");
                         args.Remove("initStrength");
+                        args.Remove("inpaintMask");
                         args["prompt"] = processedPrompts[i].Wrap();
                         args["res"] = $"-W {res.Width} -H {res.Height}";
                         args["sampler"] = $"-A {sampler}";
@@ -102,8 +103,12 @@ namespace StableDiffusionGui.Implementations
                                     {
                                         foreach (float strength in initStrengths)
                                         {
-                                            args["initImg"] = $"--init_img {initImg.Wrap()}";
-                                            args["initStrength"] = $"--strength {strength.ToStringDot("0.###")}";
+                                            args["initImg"] = $"-I {initImg.Wrap()}";
+                                            args["initStrength"] = $"-f {strength.ToStringDot("0.###")}";
+
+                                            if (inpaint == InpaintMode.ImageMask)
+                                                args["inpaintMask"] = $"-M {InpaintingUtils.MaskedImagePath.Wrap()}";
+
                                             argLists.Add(new Dictionary<string, string>(args));
                                         }
                                     }
