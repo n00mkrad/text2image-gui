@@ -80,7 +80,7 @@ namespace StableDiffusionGui.Ui.MainForm
             foreach (var log in Logger.SessionLogs)
             {
                 ToolStripItem newItem = F.menuStripLogs.Items.Add($"Copy {log.Key}");
-                newItem.Click += (s, ea) => { OsUtils.SetClipboard(Logger.SessionLogs[log.Key]); };
+                newItem.Click += (s, ea) => { OsUtils.SetClipboard(Logger.EntriesToString(Logger.SessionLogs[log.Key], true, true)); };
             }
 
             F.menuStripLogs.Show(Cursor.Position);

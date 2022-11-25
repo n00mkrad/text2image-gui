@@ -61,7 +61,7 @@ namespace StableDiffusionGui.Main
                 var chunks = new List<string>();
 
                 if (includeIndex)
-                    chunks.Add($"[{_currentId.ToString().PadLeft(8, '0')}]");
+                    chunks.Add($"[{Id.ToString().PadLeft(8, '0')}]");
 
                 if (includeTimestamp)
                     chunks.Add($"[{DateTime.Now.ToString("MM-dd-yyyy HH:mm:ss")}]:");
@@ -124,6 +124,7 @@ namespace StableDiffusionGui.Main
             entry.TimeDequeue = DateTime.Now;
             entry.RepeatedMessage = entry.Message == LastLogLine;
             entry.RepeatedUiMessage = entry.Message == LastLogLine;
+            _currentId++;
 
             if (entry.RepeatedUiMessage)
                 entry.Hidden = true; // Never show the same line twice in UI, but log it to file
@@ -163,7 +164,7 @@ namespace StableDiffusionGui.Main
             string filename = entry.LogName;
 
             if (string.IsNullOrWhiteSpace(filename))
-                filename = Constants.Lognames.General;
+                filename = Lognames.General;
 
             if (Path.GetExtension(filename) != ".txt")
                 filename = Path.ChangeExtension(filename, "txt");
@@ -173,7 +174,6 @@ namespace StableDiffusionGui.Main
                 bool firstLog = !SessionLogs.ContainsKey(filename) || SessionLogs.GetPopulate(filename, new List<Entry>()).Count <= 0;
                 SessionLogs.GetPopulate(filename, new List<Entry>()).Add(entry);
                 File.AppendAllText(Path.Combine(Paths.GetLogPath(), filename), $"{(firstLog ? "" : Environment.NewLine)}{entry.ToString(true, true)}");
-                _currentId++;
                 _lastFileLine = entry.Message;
             }
             catch (Exception ex)
@@ -204,7 +204,7 @@ namespace StableDiffusionGui.Main
                 return "";
         }
 
-        private static string EntriesToString(IEnumerable<Entry> entries, bool includeIndex = false, bool includeTimestamp = false, bool includeLogName = false)
+        public static string EntriesToString(IEnumerable<Entry> entries, bool includeIndex = false, bool includeTimestamp = false, bool includeLogName = false)
         {
             string s = "";
 
