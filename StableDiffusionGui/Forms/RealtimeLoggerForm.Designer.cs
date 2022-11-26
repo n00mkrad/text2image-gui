@@ -62,6 +62,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Log Viewer";
             this.Load += new System.EventHandler(this.RealtimeLoggerForm_Load);
+            this.Shown += new System.EventHandler(this.RealtimeLoggerForm_Shown);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.RealtimeLoggerForm_KeyDown);
             this.ResumeLayout(false);
             this.PerformLayout();

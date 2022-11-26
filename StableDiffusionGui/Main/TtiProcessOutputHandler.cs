@@ -24,10 +24,10 @@ namespace StableDiffusionGui.Main
             if (string.IsNullOrWhiteSpace(line))
                 return;
 
-            var noLogWildcards = new string[] { "step */*" };
-
-            if (noLogWildcards.Where(w => !line.MatchesWildcard(w)).Any())
-                Logger.Log(line, true, false, Constants.Lognames.Sd);
+            //var noLogWildcards = new string[] { "step */*" };
+            //
+            //if (noLogWildcards.Where(w => !line.MatchesWildcard(w)).Any())
+            Logger.Log(line, true, false, Constants.Lognames.Sd);
 
             bool ellipsis = Logger.LastUiLine.Contains("...");
             string errMsg = "";

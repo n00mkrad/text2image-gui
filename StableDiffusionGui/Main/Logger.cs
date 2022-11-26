@@ -2,14 +2,12 @@
 using StableDiffusionGui.Extensions;
 using StableDiffusionGui.Io;
 using System;
-using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static StableDiffusionGui.Main.Constants;
 
 namespace StableDiffusionGui.Main
 {
@@ -65,7 +63,7 @@ namespace StableDiffusionGui.Main
                     chunks.Add($"[{Id.ToString().PadLeft(8, '0')}]");
 
                 if (includeTimestamp)
-                    chunks.Add($"[{DateTime.Now.ToString("MM-dd-yyyy HH:mm:ss")}]:");
+                    chunks.Add($"[{TimestampDequeue}]");
 
                 if (includeLogName)
                     chunks.Add($"[{Path.ChangeExtension(LogName, null)}]");
@@ -169,7 +167,7 @@ namespace StableDiffusionGui.Main
             string filename = entry.LogName;
 
             if (string.IsNullOrWhiteSpace(filename))
-                filename = Lognames.General;
+                filename = Constants.Lognames.General;
 
             filename = AddTxt(filename);
 
@@ -195,9 +193,8 @@ namespace StableDiffusionGui.Main
         public static string EntriesToString(IEnumerable<Entry> entries, bool includeId = false, bool includeTimestamp = false, bool includeLogName = false)
         {
             string s = "";
-            var snapshot = new List<Entry>(entries);
 
-            foreach (Entry e in snapshot)
+            foreach (Entry e in entries)
                 s += $"{(s == "" ? "" : Environment.NewLine)}{e.ToString(includeId, includeTimestamp, includeLogName)}";
 
             return s;
@@ -213,6 +210,24 @@ namespace StableDiffusionGui.Main
         {
             filename = AddTxt(filename);
             return SessionLogs.GetNoNull(filename, new ConcurrentQueue<Entry>()).AsEnumerable().Reverse().Take(entriesCount).Reverse().ToList();
+        }
+
+        public static List<Entry> GetLastEntries(int entriesCount = 5)
+        {
+            var entries = new List<Entry>();
+
+            if(entriesCount > 0)
+            {
+                foreach (var log in SessionLogs)
+                    entries.AddRange(log.Value.Reverse().Take(entriesCount).Reverse());
+            }
+            else
+            {
+                foreach (var log in SessionLogs)
+                    entries.AddRange(log.Value);
+            }
+
+            return entries;
         }
 
         public static void LogIfLastLineDoesNotContainMsg(string s, bool hidden = false, bool replaceLastLine = false, string filename = "")
