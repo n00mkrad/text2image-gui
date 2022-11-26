@@ -107,6 +107,8 @@ namespace StableDiffusionGui.Main
             {
                 if (logQueue.Count >= 1)
                     ShowNext();
+                else
+                    await Task.Delay(1);
             }
         }
 
