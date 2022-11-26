@@ -2,6 +2,7 @@
 using StableDiffusionGui.Extensions;
 using StableDiffusionGui.Io;
 using System;
+using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
@@ -17,7 +18,7 @@ namespace StableDiffusionGui.Main
         public static TextBox Textbox;
         public static TextBox TextboxDebug;
 
-        public static EasyDict<string, List<Entry>> SessionLogs = new EasyDict<string, List<Entry>>();
+        public static EasyDict<string, ConcurrentQueue<Entry>> SessionLogs = new EasyDict<string, ConcurrentQueue<Entry>>();
         private static string _lastUiLine = "";
         public static string LastUiLine { get { return _lastUiLine; } }
         private static string _lastFileLine = "";
@@ -172,8 +173,8 @@ namespace StableDiffusionGui.Main
 
             try
             {
-                bool firstLog = !SessionLogs.ContainsKey(filename) || SessionLogs.GetPopulate(filename, new List<Entry>()).Count <= 0;
-                SessionLogs.GetPopulate(filename, new List<Entry>()).Add(entry);
+                bool firstLog = !SessionLogs.ContainsKey(filename) || SessionLogs[filename].Count <= 0;
+                StoreLog(filename, entry);
                 File.AppendAllText(Path.Combine(Paths.GetLogPath(), filename), $"{(firstLog ? "" : Environment.NewLine)}{entry.ToString(true, true)}");
                 _lastFileLine = entry.Message;
             }
@@ -183,24 +184,10 @@ namespace StableDiffusionGui.Main
             }
         }
 
-        public static List<Entry> GetSessionLogEntries(string filename)
-        {
-            filename = AddTxt(filename);
-
-            if (SessionLogs.ContainsKey(filename))
-                return SessionLogs.GetPopulate(filename, new List<Entry>());
-            else
-                return new List<Entry>();
-        }
-
         public static string GetSessionLog(string filename)
         {
             filename = AddTxt(filename);
-
-            if (SessionLogs.Get(filename, null) != null)
-                return EntriesToString(SessionLogs.Get(filename, new List<Entry>()));
-            else
-                return "";
+            return EntriesToString(SessionLogs.GetNoNull(filename, new ConcurrentQueue<Entry>()));
         }
 
         public static string EntriesToString(IEnumerable<Entry> entries, bool includeId = false, bool includeTimestamp = false, bool includeLogName = false)
@@ -217,15 +204,13 @@ namespace StableDiffusionGui.Main
         public static List<string> GetLastLines(string filename, int linesCount = 5, bool includeId = false, bool includeTimestamp = false)
         {
             filename = AddTxt(filename);
-            var snapshot = SessionLogs.Clone();
-            return snapshot.GetNoNull(filename, new List<Entry>()).AsEnumerable().Reverse().Take(linesCount).Reverse().Select(l => l.ToString(includeId, includeTimestamp, false)).ToList();
+            return GetLastEntries(filename, linesCount).Select(l => l.ToString(includeId, includeTimestamp, false)).ToList();
         }
 
         public static List<Entry> GetLastEntries(string filename, int entriesCount = 5)
         {
             filename = AddTxt(filename);
-            var snapshot = SessionLogs.Clone();
-            return snapshot.GetNoNull(filename, new List<Entry>()).AsEnumerable().Reverse().Take(entriesCount).Reverse().ToList();
+            return SessionLogs.GetNoNull(filename, new ConcurrentQueue<Entry>()).AsEnumerable().Reverse().Take(entriesCount).Reverse().ToList();
         }
 
         public static void LogIfLastLineDoesNotContainMsg(string s, bool hidden = false, bool replaceLastLine = false, string filename = "")
@@ -260,6 +245,14 @@ namespace StableDiffusionGui.Main
         public static string AddTxt(string name)
         {
             return name.EndsWith(".txt") ? name : $"{name}.txt"; // Add .txt if it's not already there
+        }
+
+        public static void StoreLog(string filename, Entry entry)
+        {
+            if (!SessionLogs.ContainsKey(filename) || SessionLogs[filename] == null)
+                SessionLogs[filename] = new ConcurrentQueue<Entry>();
+
+            SessionLogs[filename].Enqueue(entry);
         }
     }
 }

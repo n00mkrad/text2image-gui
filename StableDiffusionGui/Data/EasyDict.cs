@@ -7,7 +7,7 @@ namespace StableDiffusionGui.Data
     public class EasyDict<TKey, TValue> : Dictionary<TKey, TValue>
     {
         /// <returns> Value for requested key. Returns <paramref name="fallback"/> if the dictionary did not contain <paramref name="key"/>. </returns>
-        public TValue Get(TKey key, TValue fallback)
+        public TValue Get(TKey key, TValue fallback = default)
         {
             if (base.ContainsKey(key))
                 return base[key];
@@ -16,7 +16,7 @@ namespace StableDiffusionGui.Data
         }
 
         /// <returns> Value for requested key. Returns <paramref name="fallback"/> if the dictionary did not contain <paramref name="key"/> or if the value was null. </returns>
-        public TValue GetNoNull(TKey key, TValue fallback)
+        public TValue GetNoNull(TKey key, TValue fallback = default)
         {
             if (!base.ContainsKey(key) || base[key] == null)
                 return fallback;
