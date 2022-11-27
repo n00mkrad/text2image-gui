@@ -16,7 +16,9 @@ namespace StableDiffusionGui.Main
         public static TextBox Textbox;
         public static TextBox TextboxDebug;
 
-        public static EasyDict<string, ConcurrentQueue<Entry>> SessionLogs = new EasyDict<string, ConcurrentQueue<Entry>>();
+        public static EasyDict<string, ConcurrentQueue<Entry>> CachedEntries = new EasyDict<string, ConcurrentQueue<Entry>>();
+        public static EasyDict<string, ConcurrentQueue<string>> CachedLines = new EasyDict<string, ConcurrentQueue<string>>();
+
         private static string _lastUiLine = "";
         public static string LastUiLine { get { return _lastUiLine; } }
         private static string _lastFileLine = "";
@@ -25,7 +27,7 @@ namespace StableDiffusionGui.Main
         public static string LastLogLine { get { return _lastLogLine; } }
 
         private static long _currentId;
-        private static ConcurrentQueue<Entry> logQueue = new ConcurrentQueue<Entry>();
+        private static ConcurrentQueue<Entry> _logQueue = new ConcurrentQueue<Entry>();
 
 
         public class Entry
@@ -52,8 +54,8 @@ namespace StableDiffusionGui.Main
                 Message = message;
                 Hidden = hidden;
                 ReplaceLastLine = replaceLastLine;
-                
-                if(!string.IsNullOrWhiteSpace(logName))
+
+                if (!string.IsNullOrWhiteSpace(logName))
                     LogName = logName;
             }
 
@@ -83,7 +85,7 @@ namespace StableDiffusionGui.Main
                 return;
 
             entry.TimeEnqueue = DateTime.Now;
-            logQueue.Enqueue(entry);
+            _logQueue.Enqueue(entry);
         }
 
         public static void LogReplace(string msg, string filename = Constants.Lognames.General)
@@ -105,7 +107,7 @@ namespace StableDiffusionGui.Main
         {
             while (true)
             {
-                if (logQueue.Count >= 1)
+                if (_logQueue.Count >= 1)
                     ShowNext();
                 else
                     await Task.Delay(1);
@@ -114,7 +116,7 @@ namespace StableDiffusionGui.Main
 
         public static void ShowNext()
         {
-            if (logQueue.TryDequeue(out Entry entry))
+            if (_logQueue.TryDequeue(out Entry entry))
                 Show(entry);
         }
 
@@ -175,7 +177,7 @@ namespace StableDiffusionGui.Main
 
             try
             {
-                bool firstLog = !SessionLogs.ContainsKey(filename) || SessionLogs[filename].Count <= 0;
+                bool firstLog = !CachedEntries.ContainsKey(filename) || CachedEntries[filename].Count <= 0;
                 StoreLog(filename, entry);
                 File.AppendAllText(Path.Combine(Paths.GetLogPath(), filename), $"{(firstLog ? "" : Environment.NewLine)}{entry.ToString(true, true)}");
                 _lastFileLine = entry.Message;
@@ -189,7 +191,7 @@ namespace StableDiffusionGui.Main
         public static string GetSessionLog(string filename)
         {
             filename = AddTxt(filename);
-            return EntriesToString(SessionLogs.GetNoNull(filename, new ConcurrentQueue<Entry>()));
+            return string.Join(Environment.NewLine, CachedLines.GetNoNull(filename, new ConcurrentQueue<string>()));
         }
 
         public static string EntriesToString(IEnumerable<Entry> entries, bool includeId = false, bool includeTimestamp = false, bool includeLogName = false)
@@ -202,30 +204,30 @@ namespace StableDiffusionGui.Main
             return s;
         }
 
-        public static List<string> GetLastLines(string filename, int linesCount = 5, bool includeId = false, bool includeTimestamp = false)
+        public static List<string> GetLastLines(string filename, int linesCount = 5)
         {
             filename = AddTxt(filename);
-            return GetLastEntries(filename, linesCount).Select(l => l.ToString(includeId, includeTimestamp, false)).ToList();
+            return CachedLines.GetNoNull(filename, new ConcurrentQueue<string>()).AsEnumerable().Reverse().Take(linesCount).Reverse().ToList();
         }
 
         public static List<Entry> GetLastEntries(string filename, int entriesCount = 5)
         {
             filename = AddTxt(filename);
-            return SessionLogs.GetNoNull(filename, new ConcurrentQueue<Entry>()).AsEnumerable().Reverse().Take(entriesCount).Reverse().ToList();
+            return CachedEntries.GetNoNull(filename, new ConcurrentQueue<Entry>()).AsEnumerable().Reverse().Take(entriesCount).Reverse().ToList();
         }
 
         public static List<Entry> GetLastEntries(int entriesCount = 5)
         {
             var entries = new List<Entry>();
 
-            if(entriesCount > 0)
+            if (entriesCount > 0)
             {
-                foreach (var log in SessionLogs)
+                foreach (var log in CachedEntries)
                     entries.AddRange(log.Value.Reverse().Take(entriesCount).Reverse());
             }
             else
             {
-                foreach (var log in SessionLogs)
+                foreach (var log in CachedEntries)
                     entries.AddRange(log.Value);
             }
 
@@ -268,10 +270,32 @@ namespace StableDiffusionGui.Main
 
         public static void StoreLog(string filename, Entry entry)
         {
-            if (!SessionLogs.ContainsKey(filename) || SessionLogs[filename] == null)
-                SessionLogs[filename] = new ConcurrentQueue<Entry>();
+            if (!CachedEntries.ContainsKey(filename) || CachedEntries[filename] == null)
+                CachedEntries[filename] = new ConcurrentQueue<Entry>();
 
-            SessionLogs[filename].Enqueue(entry);
+            CachedEntries[filename].Enqueue(entry);
+
+            if (!CachedLines.ContainsKey(filename) || CachedLines[filename] == null)
+                CachedLines[filename] = new ConcurrentQueue<string>();
+
+            CachedLines[filename].Enqueue(entry.Message);
+        }
+
+        public static void Clear(string filename = "")
+        {
+            if (string.IsNullOrWhiteSpace(filename))
+            {
+                CachedEntries.Clear();
+                CachedLines.Clear();
+            }
+            else
+            {
+                if (CachedEntries.ContainsKey(filename))
+                    CachedEntries[filename] = new ConcurrentQueue<Entry>();
+
+                if (CachedLines.ContainsKey(filename))
+                    CachedLines[filename] = new ConcurrentQueue<string>();
+            }
         }
     }
 }

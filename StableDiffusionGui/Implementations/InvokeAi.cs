@@ -130,11 +130,12 @@ namespace StableDiffusionGui.Implementations
 
                 string modelsChecksumStartup = InvokeAiUtils.GetModelsYamlHash();
                 string argsStartup = Args.InvokeAi.GetArgsStartup(embedding);
-
                 string newStartupSettings = $"{argsStartup} {modelsChecksumStartup} {Config.GetInt("comboxCudaDevice")}"; // Check if startup settings match - If not, we need to restart the process
 
                 string initsStr = initImages != null ? $" and {initImages.Count} image{(initImages.Count != 1 ? "s" : "")} using {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
                 Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} * {iterations} image{(iterations != 1 ? "s" : "")} * {steps.Length} step count{(steps.Length != 1 ? "s" : "")} * {scales.Length} scale{(scales.Length != 1 ? "s" : "")}{initsStr} = {cmds.Count} images total.");
+
+                Logger.Clear(Constants.Lognames.Sd);
 
                 if (!TtiProcess.IsAiProcessRunning || (TtiProcess.IsAiProcessRunning && TtiProcess.LastStartupSettings != newStartupSettings))
                 {
@@ -189,11 +190,9 @@ namespace StableDiffusionGui.Implementations
                 else
                 {
                     TtiProcessOutputHandler.Reset();
-                    await InvokeAi.SwitchModel(InvokeAiUtils.GetMdlNameForYaml(modelFile, vaeFile));
+                    await SwitchModel(InvokeAiUtils.GetMdlNameForYaml(modelFile, vaeFile));
                     TextToImage.CurrentTask.Processes.Add(TtiProcess.CurrentProcess);
                 }
-
-                Logger.Log($"Writing to stdin...", true);
 
                 await TtiProcess.WriteStdIn("!reset");
 

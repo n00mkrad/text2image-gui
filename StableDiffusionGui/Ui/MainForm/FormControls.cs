@@ -77,10 +77,10 @@ namespace StableDiffusionGui.Ui.MainForm
             var openLogs = F.menuStripLogs.Items.Add($"Open Logs Folder");
             openLogs.Click += (s, ea) => { Process.Start("explorer", Paths.GetLogPath().Wrap()); };
 
-            foreach (var log in Logger.SessionLogs)
+            foreach (var log in Logger.CachedEntries)
             {
                 ToolStripItem newItem = F.menuStripLogs.Items.Add($"Copy {log.Key}");
-                newItem.Click += (s, ea) => { OsUtils.SetClipboard(Logger.EntriesToString(Logger.SessionLogs[log.Key], true, true)); };
+                newItem.Click += (s, ea) => { OsUtils.SetClipboard(Logger.EntriesToString(Logger.CachedEntries[log.Key], true, true)); };
             }
 
             F.menuStripLogs.Show(Cursor.Position);
