@@ -134,7 +134,7 @@ namespace StableDiffusionGui.Implementations
             if (!prompt.Contains("(") && !prompt.Contains("{")) // Skip if no parentheses/curly brackets were used
                 return prompt;
 
-            if (prompt.Contains(")+") || prompt.Contains(")-") || Regex.Matches(prompt, @"\)\d.\d+").Count >= 1) // Assume new syntax is already used
+            if (PromptUsesNewAttentionSyntax(prompt))
                 return prompt;
 
             prompt = prompt.Replace("\\(", "escapedParenthesisOpen").Replace("\\)", "escapedParenthesisClose");
@@ -162,6 +162,22 @@ namespace StableDiffusionGui.Implementations
             prompt = prompt.Replace("escapedParenthesisOpen", "\\(").Replace("escapedParenthesisClose", "\\)");
 
             return prompt;
+        }
+
+        private static bool PromptUsesNewAttentionSyntax (string p)
+        {
+            bool newSyntax = false;
+
+            if (p.Contains(")+") || p.Contains(")-")) // Detect +/- weighted parentheses
+                newSyntax = true;
+
+            if (Regex.Matches(p, @"\)\d").Count >= 1 || Regex.Matches(p, @"\)\d.\d+").Count >= 1) // Detect int or float weighted parentheses
+                newSyntax = true;
+
+            if(p.Contains(".blend(") || p.Contains(".swap(")) // Check for blend and swap commands
+                newSyntax = true;
+
+            return newSyntax;
         }
     }
 }
