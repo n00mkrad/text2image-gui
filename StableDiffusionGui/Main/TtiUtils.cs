@@ -27,7 +27,7 @@ namespace StableDiffusionGui.Main
     {
         public static async Task<OrderedDictionary> CreateResizedInitImagesIfNeeded(List<string> initImgPaths, Size targetSize, bool print = false)
         {
-            Logger.Log($"Importing initialization images...");
+            Logger.Log($"Importing initialization images...", false, Logger.LastUiLine.EndsWith("..."));
 
             var sourceAndImportedPaths = new ConcurrentDictionary<string, string>(initImgPaths.ToDictionary(x => x, x => ""));
             int imgsSucessful = 0;
@@ -70,7 +70,7 @@ namespace StableDiffusionGui.Main
             while (!parallelTask.IsCompleted)
                 await Task.Delay(1);
 
-            Logger.Log($"Imported {imgsSucessful} images{(imgsResized > 0 ? $" - {imgsResized} were resized to {targetSize.Width}x{targetSize.Height}" : "")}.", false, Logger.LastUiLine.EndsWith("..."));
+            Logger.Log($"Imported {imgsSucessful} image(s){(imgsResized > 0 ? $" - {imgsResized} were resized to {targetSize.Width}x{targetSize.Height}" : "")}.", false, Logger.LastUiLine.EndsWith("..."));
 
             var sorted = new OrderedDictionary();
 

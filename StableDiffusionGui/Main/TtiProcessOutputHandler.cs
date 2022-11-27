@@ -13,6 +13,7 @@ namespace StableDiffusionGui.Main
     internal class TtiProcessOutputHandler
     {
         private static bool _hasErrored = false;
+        private static bool _invokeAiLastModelCached = false;
 
         public static void Reset()
         {
@@ -36,10 +37,19 @@ namespace StableDiffusionGui.Main
             {
                 bool replace = ellipsis || Logger.LastUiLine.MatchesWildcard("*Generated*image*in*");
 
+                if (!TextToImage.Canceled && line.StartsWith(">> Retrieving model "))
+                {
+                    _invokeAiLastModelCached = true;
+                }
+
+                if (!TextToImage.Canceled && line.StartsWith(">> Loading ") && line.Contains(" from "))
+                {
+                    _invokeAiLastModelCached = false;
+                }
+
                 if (!TextToImage.Canceled && line.StartsWith(">> Setting Sampler to "))
                 {
-                    bool cached = Logger.GetLastLines(Constants.Lognames.Sd, 3).Where(x => x.Contains("Retrieving model ")).Any();
-                    Logger.Log($"Model {(cached ? " retrieved from RAM cache" : "loaded")}.", false, ellipsis);
+                    Logger.Log($"Model {(_invokeAiLastModelCached ? " retrieved from RAM cache" : "loaded")}.", false, ellipsis);
                 }
 
                 if (!TextToImage.Canceled && line.MatchesWildcard("step */*"))

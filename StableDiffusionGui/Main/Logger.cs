@@ -52,7 +52,9 @@ namespace StableDiffusionGui.Main
                 Message = message;
                 Hidden = hidden;
                 ReplaceLastLine = replaceLastLine;
-                LogName = logName;
+                
+                if(!string.IsNullOrWhiteSpace(logName))
+                    LogName = logName;
             }
 
             public string ToString(bool includeId, bool includeTimestamp, bool includeLogName = false)
@@ -125,7 +127,7 @@ namespace StableDiffusionGui.Main
             _currentId++;
             entry.TimeDequeue = DateTime.Now;
             entry.RepeatedMessage = entry.Message == LastLogLine;
-            entry.RepeatedUiMessage = entry.Message == LastLogLine;
+            entry.RepeatedUiMessage = entry.Message == LastUiLine;
 
             entry.LogName = AddTxt(entry.LogName);
 
