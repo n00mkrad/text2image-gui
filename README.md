@@ -88,7 +88,10 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (form
 
 ### Settings Button (Top Bar)
 
-* **Low Memory Mode:** Use "optimizedSD" implementation that is very slow, but requires less VRAM. Not recommended unless you need it.
+* **Image Generation Implementation:** Chose the AI implementation that's used for image generation.
+  * Stable Diffusion - [InvokeAI](https://github.com/invoke-ai/InvokeAI/): Supports the most features, but struggles with 4 GB or less VRAM, requires an Nvidia GPU
+  * Stable Diffusion - [OptimizedSD](https://github.com/basujindal/stable-diffusion): Lacks many features, but runs on 4 GB or even less VRAM, requires an Nvidia GPU
+
 * **Use Full Precision:** Use FP32 instead of FP16 math, which requires more VRAM but can fix certain compatibility issues.
 * **Unload Model After Each Generation:** Completely unload Stable Diffusion after images are generated.
 * **Stable Diffusion Model File:** Select the model file to use for image generation.
