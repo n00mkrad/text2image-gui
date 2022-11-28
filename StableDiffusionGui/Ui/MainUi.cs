@@ -19,7 +19,6 @@ using System.Linq;
 using System.Resources;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
 namespace StableDiffusionGui.Ui
 {
@@ -36,14 +35,7 @@ namespace StableDiffusionGui.Ui
                 if (value != null && value.Count() > 0)
                 {
                     Logger.Log(value.Count() == 1 ? $"Now using initialization image {Path.GetFileName(value[0]).Wrap()}." : $"Now using {value.Count()} initialization images.");
-
-                    if (EnabledFeatures.AutoSetSizeForInitImg)
-                    {
-                        Size currentRes = new Size(Program.MainForm.comboxResW.Text.GetInt(), Program.MainForm.comboxResH.Text.GetInt());
-                        Size newRes = TtiUtils.GetBestSizeForInitImage(currentRes, IoUtils.GetImage(value[0]).Size);
-                        Program.MainForm.comboxResW.Text = newRes.Width.ToString();
-                        Program.MainForm.comboxResH.Text = newRes.Height.ToString();
-                    }
+                    SetResolutionForInitImage(value[0]);
                 }
 
                 if (InpaintingUtils.CurrentMask != null)
@@ -368,6 +360,20 @@ namespace StableDiffusionGui.Ui
             menu.SearchPattern = "[\\w\\.-]";
             menu.TargetControlWrapper = null;
             return menu;
+        }
+
+        private static void SetResolutionForInitImage(string initImgPath)
+        {
+            if (!EnabledFeatures.AutoSetSizeForInitImg)
+                return;
+
+            Size currentRes = new Size(Program.MainForm.comboxResW.Text.GetInt(), Program.MainForm.comboxResH.Text.GetInt());
+            List<int> availableResolutions = Program.MainForm.comboxResW.Items.Cast<string>().Select(x => x.GetInt()).ToList();
+            int min = availableResolutions.Min();
+            int max = availableResolutions.Max();
+            Size newRes = TtiUtils.GetBestSizeForInitImage(currentRes, IoUtils.GetImage(initImgPath).Size, 64, min, max);
+            Program.MainForm.comboxResW.Text = newRes.Width.ToString();
+            Program.MainForm.comboxResH.Text = newRes.Height.ToString();
         }
     }
 }

@@ -337,7 +337,7 @@ namespace StableDiffusionGui.Main
             return safeModels;
         }
 
-        public static Size GetBestSizeForInitImage(Size currentRes, Size initImgRes, int mod = 64, int minimum = 384, int maximum = 4096)
+        public static Size GetBestSizeForInitImage(Size currentRes, Size initImgRes, int mod = 64, int minimum = 384, int maximum = 2048)
         {
             Size newRes = currentRes;
 
