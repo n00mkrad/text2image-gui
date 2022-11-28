@@ -199,7 +199,7 @@ namespace StableDiffusionGui.Ui
                 if (clipboardImg == null)
                     return;
 
-                string savePath = Path.Combine(Paths.GetSessionDataPath(), "clipboard.png");
+                string savePath = Paths.GetClipboardPath(".png");
                 clipboardImg.Save(savePath);
                 HandleDroppedFiles(new string[] { savePath });
             }

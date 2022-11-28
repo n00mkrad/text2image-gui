@@ -294,5 +294,10 @@ namespace StableDiffusionGui.MiscUtils
         {
             return $"{prompt.Trim()}{(string.IsNullOrWhiteSpace(negPrompt) ? "" : $" [{negPrompt.Trim()}]")}";
         }
+
+        public static string GetUnixTimestamp ()
+        {
+            return ((long)(DateTime.Now - new DateTime(1970, 1, 1)).TotalMilliseconds).ToString();
+        }
     }
 }

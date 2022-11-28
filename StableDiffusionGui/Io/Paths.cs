@@ -15,6 +15,7 @@ namespace StableDiffusionGui.Io
     internal class Paths
     {
         public static string SessionTimestamp;
+        public static long SessionClipboardIndex = 0;
 
         public static void Init()
         {
@@ -145,6 +146,18 @@ namespace StableDiffusionGui.Io
         public static Model GetModel(List<Model> cachedModels, string filename, bool anyExtension = false, ModelType type = ModelType.Normal, Implementation imp = Implementation.InvokeAi)
         {
             return cachedModels.Where(x => x.Name == filename).FirstOrDefault();
+        }
+
+        public static string GetClipboardFilename (string extension)
+        {
+            string filename = Path.ChangeExtension($"clipboard{SessionClipboardIndex}", extension);
+            SessionClipboardIndex++;
+            return filename;
+        }
+
+        public static string GetClipboardPath(string extension)
+        {
+            return Path.Combine(GetSessionDataPath(), GetClipboardFilename(extension));
         }
     }
 }
