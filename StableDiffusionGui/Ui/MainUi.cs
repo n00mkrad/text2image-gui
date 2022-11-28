@@ -34,7 +34,17 @@ namespace StableDiffusionGui.Ui
                 _currentInitImgPaths = value;
 
                 if (value != null && value.Count() > 0)
+                {
                     Logger.Log(value.Count() == 1 ? $"Now using initialization image {Path.GetFileName(value[0]).Wrap()}." : $"Now using {value.Count()} initialization images.");
+
+                    if (EnabledFeatures.AutoSetSizeForInitImg)
+                    {
+                        Size currentRes = new Size(Program.MainForm.comboxResW.Text.GetInt(), Program.MainForm.comboxResH.Text.GetInt());
+                        Size newRes = TtiUtils.GetBestSizeForInitImage(currentRes, IoUtils.GetImage(value[0]).Size);
+                        Program.MainForm.comboxResW.Text = newRes.Width.ToString();
+                        Program.MainForm.comboxResH.Text = newRes.Height.ToString();
+                    }
+                }
 
                 if (InpaintingUtils.CurrentMask != null)
                 {

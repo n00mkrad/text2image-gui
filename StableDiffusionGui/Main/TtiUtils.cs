@@ -336,5 +336,32 @@ namespace StableDiffusionGui.Main
             Config.Set("safeModels", safeModels.ToJson());
             return safeModels;
         }
+
+        public static Size GetBestSizeForInitImage(Size currentRes, Size initImgRes, int mod = 64, int minimum = 384, int maximum = 4096)
+        {
+            Size newRes = currentRes;
+
+            if (initImgRes.Width % mod == 0)
+            {
+                newRes.Width = initImgRes.Width;
+            }
+            else
+            {
+                int closest = (initImgRes.Width + mod) - ((initImgRes.Width + mod) % mod);
+                newRes.Width = closest.Clamp(minimum, maximum);
+            }
+
+            if (initImgRes.Height % mod == 0)
+            {
+                newRes.Height = initImgRes.Height;
+            }
+            else
+            {
+                int closest = (initImgRes.Height + mod) - ((initImgRes.Height + mod) % mod);
+                newRes.Height = closest.Clamp(minimum, maximum);
+            }
+
+            return newRes;
+        }
     }
 }
