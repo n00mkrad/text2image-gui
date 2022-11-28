@@ -67,7 +67,7 @@ namespace StableDiffusionGui.Implementations
                         TextToImage.Cancel("Selected model appears to contain malware.");
                 }
             }
-            
+
             string text = "";
 
             cachedModelsVae.Insert(0, null); // Insert null entry, for looping
@@ -129,7 +129,7 @@ namespace StableDiffusionGui.Implementations
             return IoUtils.GetHash(contentStr, hashType, false);
         }
 
-        public static string ConvertOldAttentionSyntax(string prompt)
+        public static string ConvertAttentionSyntax(string prompt)
         {
             if (!prompt.Contains("(") && !prompt.Contains("{")) // Skip if no parentheses/curly brackets were used
                 return prompt;
@@ -139,17 +139,21 @@ namespace StableDiffusionGui.Implementations
 
             prompt = prompt.Replace("\\(", "escapedParenthesisOpen").Replace("\\)", "escapedParenthesisClose");
 
-            var parentheses = Regex.Matches(prompt, @"\(((?>[^()]+|\((?<n>)|\)(?<-n>))+(?(n)(?!)))\)");
+            var parentheses = Regex.Matches(prompt, @"\(((?>[^()]+|\((?<n>)|\)(?<-n>))+(?(n)(?!)))\)"); // Find parenthesis pairs
 
             for (int i = 0; i < parentheses.Count; i++)
             {
                 string match = parentheses[i].Value;
+
+                if (match.MatchesRegex(@":\d.\d+\)"))
+                    continue;
+
                 int count = match.Where(c => c == ')').Count();
                 string converted = $"({match.Remove("(").Remove(")")}){new string('+', count)}";
                 prompt = prompt.Replace(match, converted);
             }
 
-            var curlyBrackets = Regex.Matches(prompt, @"\{((?>[^{}]+|\{(?<n>)|\}(?<-n>))+(?(n)(?!)))\}");
+            var curlyBrackets = Regex.Matches(prompt, @"\{((?>[^{}]+|\{(?<n>)|\}(?<-n>))+(?(n)(?!)))\}"); // Find curly bracket pairs
 
             for (int i = 0; i < curlyBrackets.Count; i++)
             {
@@ -159,12 +163,21 @@ namespace StableDiffusionGui.Implementations
                 prompt = prompt.Replace(match, converted);
             }
 
+            var weightsInsideParentheses = Regex.Matches(prompt, @":\d.\d+\)"); // Detect A1111 float weighted parentheses
+
+            for (int i = 0; i < weightsInsideParentheses.Count; i++)
+            {
+                string match = weightsInsideParentheses[i].Value;
+                float weight = match.TrimStart(':').TrimEnd(')').GetFloat();
+                prompt = prompt.Replace(match, $"){weight.ToStringDot("0.#")}");
+            }
+
             prompt = prompt.Replace("escapedParenthesisOpen", "\\(").Replace("escapedParenthesisClose", "\\)");
 
             return prompt;
         }
 
-        private static bool PromptUsesNewAttentionSyntax (string p)
+        private static bool PromptUsesNewAttentionSyntax(string p)
         {
             bool newSyntax = false;
 
@@ -174,7 +187,7 @@ namespace StableDiffusionGui.Implementations
             if (Regex.Matches(p, @"\)\d").Count >= 1 || Regex.Matches(p, @"\)\d.\d+").Count >= 1) // Detect int or float weighted parentheses
                 newSyntax = true;
 
-            if(p.Contains(".blend(") || p.Contains(".swap(")) // Check for blend and swap commands
+            if (p.Contains(".blend(") || p.Contains(".swap(")) // Check for blend and swap commands
                 newSyntax = true;
 
             return newSyntax;
