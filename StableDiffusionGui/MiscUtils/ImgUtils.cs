@@ -87,6 +87,16 @@ namespace StableDiffusionGui.MiscUtils
             return img;
         }
 
+        public static MagickImage ReplaceColorWithTransparency (MagickImage image, MagickColor color = null)
+        {
+            if (color == null)
+                color = MagickColors.Black;
+
+            image.InverseTransparent(color);
+            image.Alpha(AlphaOption.On);
+            return image;
+        }
+
         public enum ScaleMode { Percentage, Height, Width, LongerSide, ShorterSide }
 
         public static async Task<MagickImage> Scale(string path, ScaleMode mode, float targetScale, bool write)

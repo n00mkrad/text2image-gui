@@ -32,6 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DrawForm));
             this.menuStripOptions = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.clearToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.invertMaskToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelBlur = new System.Windows.Forms.Panel();
             this.sliderBlur = new HTAlt.WinForms.HTSlider();
             this.label1 = new System.Windows.Forms.Label();
@@ -41,7 +42,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.btnOk = new HTAlt.WinForms.HTButton();
             this.pictBox = new System.Windows.Forms.PictureBox();
-            this.invertMaskToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pasteMaskToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStripOptions.SuspendLayout();
             this.panelBlur.SuspendLayout();
             this.panelBrushSize.SuspendLayout();
@@ -53,16 +54,25 @@
             // 
             this.menuStripOptions.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.clearToolStripMenuItem,
-            this.invertMaskToolStripMenuItem});
+            this.invertMaskToolStripMenuItem,
+            this.pasteMaskToolStripMenuItem});
             this.menuStripOptions.Name = "menuStripOptions";
-            this.menuStripOptions.Size = new System.Drawing.Size(181, 70);
+            this.menuStripOptions.Size = new System.Drawing.Size(181, 92);
             // 
             // clearToolStripMenuItem
             // 
             this.clearToolStripMenuItem.Name = "clearToolStripMenuItem";
-            this.clearToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.clearToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
             this.clearToolStripMenuItem.Text = "Clear";
             this.clearToolStripMenuItem.Click += new System.EventHandler(this.clearToolStripMenuItem_Click);
+            // 
+            // invertMaskToolStripMenuItem
+            // 
+            this.invertMaskToolStripMenuItem.Name = "invertMaskToolStripMenuItem";
+            this.invertMaskToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
+            this.invertMaskToolStripMenuItem.Text = "Invert Mask";
+            this.invertMaskToolStripMenuItem.Visible = false;
+            this.invertMaskToolStripMenuItem.Click += new System.EventHandler(this.invertMaskToolStripMenuItem_Click);
             // 
             // panelBlur
             // 
@@ -203,13 +213,12 @@
             this.pictBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictBox_MouseMove);
             this.pictBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictBox_MouseUp);
             // 
-            // invertMaskToolStripMenuItem
+            // pasteMaskToolStripMenuItem
             // 
-            this.invertMaskToolStripMenuItem.Name = "invertMaskToolStripMenuItem";
-            this.invertMaskToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.invertMaskToolStripMenuItem.Text = "Invert Mask";
-            this.invertMaskToolStripMenuItem.Visible = false;
-            this.invertMaskToolStripMenuItem.Click += new System.EventHandler(this.invertMaskToolStripMenuItem_Click);
+            this.pasteMaskToolStripMenuItem.Name = "pasteMaskToolStripMenuItem";
+            this.pasteMaskToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.pasteMaskToolStripMenuItem.Text = "Paste Mask";
+            this.pasteMaskToolStripMenuItem.Click += new System.EventHandler(this.pasteMaskToolStripMenuItem_Click);
             // 
             // DrawForm
             // 
@@ -224,6 +233,7 @@
             this.ForeColor = System.Drawing.Color.White;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "DrawForm";
@@ -255,5 +265,6 @@
         private System.Windows.Forms.Panel panel1;
         private HTAlt.WinForms.HTButton btnOk;
         private System.Windows.Forms.ToolStripMenuItem invertMaskToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem pasteMaskToolStripMenuItem;
     }
 }

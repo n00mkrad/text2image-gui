@@ -1,9 +1,11 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using ImageMagick;
+using Newtonsoft.Json.Linq;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Ui;
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.Windows;
 using System.Windows.Forms;
 using Point = System.Drawing.Point;
@@ -118,6 +120,34 @@ namespace StableDiffusionGui.Forms
         {
             if (_raw != null)
                 pictBox.Image = new GaussianBlur(_raw).Process(InpaintingUtils.CurrentBlurValue);
+        }
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == (Keys.Control | Keys.V)) // Hotkey: Paste mask
+                PasteImage();
+
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        private void pasteMaskToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PasteImage();
+        }
+
+        private void PasteImage ()
+        {
+            Image clipboardImg = System.Windows.Forms.Clipboard.GetImage();
+
+            if (clipboardImg != null)
+            {
+                var magickImg = ImgUtils.MagickImgFromImage(clipboardImg);
+                Image pastedMask = ImgUtils.ReplaceColorWithTransparency(magickImg).ToBitmap();
+                _raw = (Bitmap)pastedMask;
+                sliderBlur.Value = 0;
+                Blur();
+                pictBox.Invalidate();
+            }
         }
     }
 }
