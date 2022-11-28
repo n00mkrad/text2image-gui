@@ -61,11 +61,13 @@ namespace StableDiffusionGui.Main
             {
                 List<string> args = new List<string>();
 
+                args.Add("-n 1");
+
                 if (Config.GetBool("checkboxSaveUnprocessedImages"))
                     args.Add("-save_orig");
 
-                args.Add("-n 1");
-                args.Add("-t");
+                if (Config.GetBool("enableTokenizationLogging"))
+                    args.Add("-t");
 
                 return string.Join(" ", args);
             }
