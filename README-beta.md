@@ -3,6 +3,12 @@ Somewhat modular text2image GUI, initially just for Stable Diffusion.
 
 Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (formerly lstein): [Code Repo](https://github.com/n00mkrad/stable-diffusion-cust/commits/main)
 
+**Table of Contents:**
+
+[System Requirements](https://github.com/n00mkrad/text2image-gui#system-requirements)  
+[Features and How to Use Them](#features-and-how-to-use-them)  
+[Hotkeys (Main Window)](https://github.com/n00mkrad/text2image-gui#hotkeys-main-window)
+
 
 
 ## System Requirements
@@ -35,7 +41,11 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (form
 - **Negative Prompt:** Put words or phrases into this box to tell the AI to exclude those things when generating images.
   - Alternatively, you can also put the negative prompt into the regular prompt box by wrapping it in [brackets].
 
-- **Emphasis:** Use (parentheses) to make a word/phrase more impactful, or {curly brackets} to do the opposite. You can also use ((multiple)) to increase the effect.
+- **Emphasis:** Use `+` after a word/phrase to make it more impactful, or `-` to do the opposite. You can also use to increase the effect. Wrap your phrase in parentheses if you want to apply it to more than one word.
+  - Each plus/minus applies a multiplier of 1.1. So two `+++` would be 1.1^3 = 1.331, and so on.
+  - You can also type the strength manually after parentheses, e.g. `a (huge)1.33 dog` instead of `a huge+++ dog`
+  - Examples: `a green++ tree`, `a (big green)+ tree with orange- leaves (in the woods)++`
+
 - **Wildcards:** Fill in words or phrases from a list into the prompt.
   - Inline: `photo of a ~car,tree,dog~`.
   - From File: `photo of a ~objects` for loading texts from `objects.txt` in your `Wildcards` folder in the SD GUI root folder.
@@ -84,7 +94,10 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (form
 
 ### Settings Button (Top Bar)
 
-* **Low Memory Mode:** Use "optimizedSD" implementation that is very slow, but requires less VRAM. Not recommended unless you need it.
+* **Image Generation Implementation:** Chose the AI implementation that's used for image generation.
+  * Stable Diffusion - [InvokeAI](https://github.com/invoke-ai/InvokeAI/): Supports the most features, but struggles with 4 GB or less VRAM, requires an Nvidia GPU
+  * Stable Diffusion - [OptimizedSD](https://github.com/basujindal/stable-diffusion): Lacks many features, but runs on 4 GB or even less VRAM, requires an Nvidia GPU
+
 * **Use Full Precision:** Use FP32 instead of FP16 math, which requires more VRAM but can fix certain compatibility issues.
 * **Unload Model After Each Generation:** Completely unload Stable Diffusion after images are generated.
 * **Stable Diffusion Model File:** Select the model file to use for image generation.
@@ -139,6 +152,12 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (form
 
 * **Upscaling:** Set RealESRGAN upscaling factor.
 * **Face Restoration:** Enable GFPGAN or CodeFormer for face restoration.
+
+
+
+### DreamBooth Button (Top Bar)
+
+* Opens DreamBooth training window ([Guide here](https://github.com/n00mkrad/text2image-gui/blob/main/DreamBooth.md))
 
 
 
