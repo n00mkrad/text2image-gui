@@ -58,6 +58,7 @@ namespace StableDiffusionGui.Forms
                 if (IsModelValid())
                     ConfigParser.SaveGuiElement(comboxModel);
 
+                Ui.MainForm.FormControls.UpdateInitImgAndEmbeddingUi();
                 Close();
             }
 

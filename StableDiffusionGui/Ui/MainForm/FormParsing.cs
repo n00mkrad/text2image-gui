@@ -107,7 +107,7 @@ namespace StableDiffusionGui.Ui.MainForm
                     { "seed", (F.upDownSeed.Value < 0 ? new Random().Next(0, int.MaxValue) : ((long)F.upDownSeed.Value)).ToJson() },
                     { "sampler", ((Sampler)F.comboxSampler.SelectedIndex).ToString().Lower().ToJson() },
                     { "initImgs", MainUi.CurrentInitImgPaths.ToJson() },
-                    { "initStrengths", MainUi.GetExtraValues(F.textboxExtraInitStrengths.Text, F.sliderInitStrength.ActualValueFloat).ToJson() },
+                    { "initStrengths", F.panelInitImgStrength.Visible ? MainUi.GetExtraValues(F.textboxExtraInitStrengths.Text, F.sliderInitStrength.ActualValueFloat).ToJson() : new List<float>() { 0.5f }.ToJson() },
                     { "embedding", MainUi.CurrentEmbeddingPath.ToJson() },
                     { "seamless", ((SeamlessMode)F.comboxSeamless.SelectedIndex).ToJson() },
                     { "inpainting", ((InpaintMode)F.comboxInpaintMode.SelectedIndex).ToJson() },

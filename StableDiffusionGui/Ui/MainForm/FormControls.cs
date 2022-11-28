@@ -96,9 +96,10 @@ namespace StableDiffusionGui.Ui.MainForm
                 Logger.Log($"Concept was cleared because the file no longer exists.");
             }
 
+            bool inpaintingModel = Path.ChangeExtension(Config.Get("comboxSdModel"), null).EndsWith("-inpainting");
             bool img2img = MainUi.CurrentInitImgPaths != null;
             F.panelInpainting.Visible = img2img;
-            F.panelInitImgStrength.Visible = img2img;
+            F.panelInitImgStrength.Visible = img2img && !inpaintingModel;
             F.btnInitImgBrowse.Text = img2img ? $"Clear Image{(MainUi.CurrentInitImgPaths.Count == 1 ? "" : "s")}" : "Load Image(s)";
 
             bool embeddingExists = File.Exists(MainUi.CurrentEmbeddingPath);

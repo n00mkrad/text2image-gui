@@ -167,7 +167,7 @@ namespace StableDiffusionGui.Forms
                 Image pastedMask = ImgUtils.ReplaceOtherColorsWithTransparency(magickImg).ToBitmap();
                 _raw = (Bitmap)pastedMask;
                 sliderBlur.Value = 0;
-                Blur();
+                sliderBlur_Scroll(null, null);
                 pictBox.Invalidate();
             }
         }

@@ -15,7 +15,7 @@ namespace StableDiffusionGui.Installation
         public static bool MaskInversion { get { return false || Program.Debug; } }
         public static bool AutoSetSizeForInitImg { get { return false || Program.Debug; } }
 
-        public static List<Implementation> DisabledImplementations { get { return new List<Implementation>() { Implementation.DiffusersOnnx }; } }
-        public static List<InpaintMode> DisabledInpaintModes { get { return new List<InpaintMode>() { InpaintMode.TextMask }; } }
+        public static List<Implementation> DisabledImplementations { get { return Program.Debug ? new List<Implementation>() : new List<Implementation>() { Implementation.DiffusersOnnx }; } }
+        public static List<InpaintMode> DisabledInpaintModes { get { return Program.Debug ? new List<InpaintMode>() : new List<InpaintMode>() { InpaintMode.TextMask }; } }
     }
 }
