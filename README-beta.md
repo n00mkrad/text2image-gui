@@ -3,11 +3,11 @@ Somewhat modular text2image GUI, initially just for Stable Diffusion.
 
 Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (formerly lstein): [Code Repo](https://github.com/n00mkrad/stable-diffusion-cust/commits/main)
 
-**Table of Contents:**
 
-[System Requirements](https://github.com/n00mkrad/text2image-gui#system-requirements)  
-[Features and How to Use Them](#features-and-how-to-use-them)  
-[Hotkeys (Main Window)](https://github.com/n00mkrad/text2image-gui#hotkeys-main-window)
+**Table of Contents:**  
+[**System Requirements**](#system-requirements)  
+[**Features and How to Use Them**](#features-and-how-to-use-them)  
+[**Hotkeys (Main Window)**](#hotkeys-main-window)
 
 
 
@@ -17,13 +17,13 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (form
 
 - **GPU:** Nvidia GPU with 4 GB VRAM, Maxwell Architecture (2014) or newer
 - **RAM:** 8 GB RAM (Note: Pagefile must be enabled as swapping will occur with only 8 GB!)
-- **Disk:** 12 GB (another free 2 GB for temporary files recommended)
+- **Disk:** 10 GB (another free 3 GB for temporary files recommended)
 
 #### Recommended:
 
 - **GPU:** Nvidia GPU with 8 GB VRAM, Pascal Architecture (2016) or newer
 - **RAM:** 16 GB RAM
-- **Disk:** 12 GB on SSD (another free 2 GB for temporary files recommended)
+- **Disk:** 12 GB on SSD (another free 3 GB for temporary files recommended)
 
 #### Professional/DreamBooth-capable:
 
