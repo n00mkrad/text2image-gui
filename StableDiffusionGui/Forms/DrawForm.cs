@@ -157,6 +157,12 @@ namespace StableDiffusionGui.Forms
 
             if (clipboardImg != null)
             {
+                if(clipboardImg.Size != pictBox.Image.Size)
+                {
+                    UiUtils.ShowMessageBox($"The pasted mask ({clipboardImg.Width}x{clipboardImg.Height}) needs to have the same dimensions as the initialization image ({pictBox.Image.Width}x{pictBox.Image.Height}).");
+                    return;
+                }
+
                 var magickImg = ImgUtils.MagickImgFromImage(clipboardImg);
                 Image pastedMask = ImgUtils.ReplaceOtherColorsWithTransparency(magickImg).ToBitmap();
                 _raw = (Bitmap)pastedMask;
