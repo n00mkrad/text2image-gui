@@ -1,11 +1,11 @@
 ﻿using ImageMagick;
 using Newtonsoft.Json.Linq;
+using StableDiffusionGui.Installation;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Ui;
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
 using System.Windows;
 using System.Windows.Forms;
 using Point = System.Drawing.Point;
@@ -17,7 +17,9 @@ namespace StableDiffusionGui.Forms
         public Image BackgroundImg;
         public Image Mask;
 
-        Bitmap _raw;
+        private Bitmap _raw;
+        private Point _lastPoint = Point.Empty;
+        private bool _mouseDown;
 
         public DrawForm(Image background, Image mask = null)
         {
@@ -39,6 +41,14 @@ namespace StableDiffusionGui.Forms
             Width = BackgroundImg.Width + (16 * scaleFactor).RoundToInt();
             Height = BackgroundImg.Height + (144 * scaleFactor).RoundToInt();
             CenterToScreen();
+        }
+
+        private void DrawForm_Shown(object sender, EventArgs e)
+        {
+            Refresh();
+
+            pasteMaskToolStripMenuItem.Visible = EnabledFeatures.MaskPasting;
+            invertMaskToolStripMenuItem.Visible = EnabledFeatures.MaskInversion;
 
             if (InpaintingUtils.CurrentBlurValue >= 0)
                 sliderBlur.Value = InpaintingUtils.CurrentBlurValue;
@@ -48,9 +58,6 @@ namespace StableDiffusionGui.Forms
             pictBox.BackgroundImage = BackgroundImg;
             Blur();
         }
-
-        Point _lastPoint = Point.Empty;
-        bool _mouseDown;
 
         private void pictBox_Click(object sender, EventArgs e)
         {
@@ -113,7 +120,13 @@ namespace StableDiffusionGui.Forms
 
         private void invertMaskToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            
+            var magickImg = ImgUtils.MagickImgFromImage(_raw);
+            magickImg = ImgUtils.RemoveTransparency(magickImg, ImgUtils.NoAlphaMode.Fill, MagickColors.White);
+            magickImg = ImgUtils.Invert(magickImg);
+            magickImg = ImgUtils.ReplaceColorWithTransparency(magickImg, MagickColors.White);
+            _raw = magickImg.ToBitmap();
+            Blur();
+            pictBox.Invalidate();
         }
 
         private void Blur()
@@ -137,12 +150,15 @@ namespace StableDiffusionGui.Forms
 
         private void PasteImage ()
         {
+            if (!EnabledFeatures.MaskPasting)
+                return;
+
             Image clipboardImg = System.Windows.Forms.Clipboard.GetImage();
 
             if (clipboardImg != null)
             {
                 var magickImg = ImgUtils.MagickImgFromImage(clipboardImg);
-                Image pastedMask = ImgUtils.ReplaceColorWithTransparency(magickImg).ToBitmap();
+                Image pastedMask = ImgUtils.ReplaceOtherColorsWithTransparency(magickImg).ToBitmap();
                 _raw = (Bitmap)pastedMask;
                 sliderBlur.Value = 0;
                 Blur();

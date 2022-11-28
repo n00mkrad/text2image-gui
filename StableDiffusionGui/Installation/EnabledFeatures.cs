@@ -11,6 +11,8 @@ namespace StableDiffusionGui.Installation
         public static bool InvokeAiModelCaching { get { return false || Program.Debug; } }
         public static bool WildcardAutocomplete { get { return false; } }
         public static bool RunwayMlInpainting { get { return false || Program.Debug; } }
+        public static bool MaskPasting { get { return false || Program.Debug; } }
+        public static bool MaskInversion { get { return false || Program.Debug; } }
 
         public static List<Implementation> DisabledImplementations { get { return new List<Implementation>() { Implementation.DiffusersOnnx }; } }
         public static List<InpaintMode> DisabledInpaintModes { get { return new List<InpaintMode>() { InpaintMode.TextMask }; } }

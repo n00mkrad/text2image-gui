@@ -15,7 +15,7 @@ namespace StableDiffusionGui.MiscUtils
             return MagickImgFromImage(img as Bitmap);
         }
 
-        public static MagickImage MagickImgFromImage (Bitmap bmp)
+        public static MagickImage MagickImgFromImage(Bitmap bmp)
         {
             var m = new MagickFactory();
             MagickImage image = new MagickImage(m.Image.Create(bmp));
@@ -48,23 +48,23 @@ namespace StableDiffusionGui.MiscUtils
             }
         }
 
-        public static Image Negate (Image image)
+        public static Image Negate(Image image)
         {
             MagickImage magickImage = MagickImgFromImage(image);
             magickImage.Negate();
             return ImageFromMagickImg(magickImage);
         }
 
-        public static MagickImage AlphaMask (MagickImage image, MagickImage mask, bool invert)
+        public static MagickImage AlphaMask(MagickImage image, MagickImage mask, bool invert)
         {
-            if(invert)
+            if (invert)
                 mask.Negate();
 
             image.Composite(mask, CompositeOperator.CopyAlpha);
             return image;
         }
 
-        public static void Overlay (string path, string overlayImg, bool matchSize = true)
+        public static void Overlay(string path, string overlayImg, bool matchSize = true)
         {
             Image imgBase = IoUtils.GetImage(path);
             Image imgOverlay = IoUtils.GetImage(overlayImg);
@@ -87,13 +87,52 @@ namespace StableDiffusionGui.MiscUtils
             return img;
         }
 
-        public static MagickImage ReplaceColorWithTransparency (MagickImage image, MagickColor color = null)
+        public static MagickImage ReplaceColorWithTransparency(MagickImage image, MagickColor color = null)
         {
             if (color == null)
                 color = MagickColors.Black;
 
-            image.InverseTransparent(color);
+            image.Transparent(color);
             image.Alpha(AlphaOption.On);
+            image.ColorAlpha(new MagickColor("#00000000"));
+            return image;
+        }
+
+        public static MagickImage ReplaceOtherColorsWithTransparency(MagickImage image, MagickColor colorToKeep = null)
+        {
+            if (colorToKeep == null)
+                colorToKeep = MagickColors.Black;
+
+            image.InverseTransparent(colorToKeep);
+            image.Alpha(AlphaOption.On);
+            return image;
+        }
+
+        public static MagickImage Invert(MagickImage image)
+        {
+            image.Negate();
+            return image;
+        }
+
+        public enum NoAlphaMode { Off, Fill }
+
+        public static MagickImage RemoveTransparency(MagickImage image, NoAlphaMode mode, MagickColor fillColor = null)
+        {
+            if (mode == NoAlphaMode.Fill)
+            {
+                if (fillColor == null)
+                    fillColor = MagickColors.Black;
+
+                MagickImage bg = new MagickImage(fillColor, image.Width, image.Height);
+                bg.BackgroundColor = fillColor;
+                bg.Composite(image, CompositeOperator.Over);
+                image = bg;
+            }
+            if (mode == NoAlphaMode.Off)
+            {
+                image.Alpha(AlphaOption.Off);
+            }
+
             return image;
         }
 

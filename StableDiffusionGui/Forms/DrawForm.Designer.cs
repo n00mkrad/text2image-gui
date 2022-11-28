@@ -33,6 +33,7 @@
             this.menuStripOptions = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.clearToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.invertMaskToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pasteMaskToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelBlur = new System.Windows.Forms.Panel();
             this.sliderBlur = new HTAlt.WinForms.HTSlider();
             this.label1 = new System.Windows.Forms.Label();
@@ -42,7 +43,6 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.btnOk = new HTAlt.WinForms.HTButton();
             this.pictBox = new System.Windows.Forms.PictureBox();
-            this.pasteMaskToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStripOptions.SuspendLayout();
             this.panelBlur.SuspendLayout();
             this.panelBrushSize.SuspendLayout();
@@ -57,7 +57,7 @@
             this.invertMaskToolStripMenuItem,
             this.pasteMaskToolStripMenuItem});
             this.menuStripOptions.Name = "menuStripOptions";
-            this.menuStripOptions.Size = new System.Drawing.Size(181, 92);
+            this.menuStripOptions.Size = new System.Drawing.Size(136, 70);
             // 
             // clearToolStripMenuItem
             // 
@@ -71,8 +71,14 @@
             this.invertMaskToolStripMenuItem.Name = "invertMaskToolStripMenuItem";
             this.invertMaskToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
             this.invertMaskToolStripMenuItem.Text = "Invert Mask";
-            this.invertMaskToolStripMenuItem.Visible = false;
             this.invertMaskToolStripMenuItem.Click += new System.EventHandler(this.invertMaskToolStripMenuItem_Click);
+            // 
+            // pasteMaskToolStripMenuItem
+            // 
+            this.pasteMaskToolStripMenuItem.Name = "pasteMaskToolStripMenuItem";
+            this.pasteMaskToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
+            this.pasteMaskToolStripMenuItem.Text = "Paste Mask";
+            this.pasteMaskToolStripMenuItem.Click += new System.EventHandler(this.pasteMaskToolStripMenuItem_Click);
             // 
             // panelBlur
             // 
@@ -213,13 +219,6 @@
             this.pictBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictBox_MouseMove);
             this.pictBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictBox_MouseUp);
             // 
-            // pasteMaskToolStripMenuItem
-            // 
-            this.pasteMaskToolStripMenuItem.Name = "pasteMaskToolStripMenuItem";
-            this.pasteMaskToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.pasteMaskToolStripMenuItem.Text = "Paste Mask";
-            this.pasteMaskToolStripMenuItem.Click += new System.EventHandler(this.pasteMaskToolStripMenuItem_Click);
-            // 
             // DrawForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -240,6 +239,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Draw Mask";
             this.Load += new System.EventHandler(this.DrawForm_Load);
+            this.Shown += new System.EventHandler(this.DrawForm_Shown);
             this.menuStripOptions.ResumeLayout(false);
             this.panelBlur.ResumeLayout(false);
             this.panelBlur.PerformLayout();
