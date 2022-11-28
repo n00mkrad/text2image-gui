@@ -149,6 +149,12 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (form
 
 
 
+### DreamBooth Button (Top Bar)
+
+* Opens DreamBooth training window ([Guide here](https://github.com/n00mkrad/text2image-gui/blob/main/DreamBooth.md))
+
+
+
 ### Bottom Bar Buttons
 
 * **Generate:** Start AI image generation (or cancel if it's already running).
