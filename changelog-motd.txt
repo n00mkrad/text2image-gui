@@ -1,3 +1,14 @@
+SD GUI 1.7.2 Changelog:
+- Improved prompt syntax converter (converts A1111 or pre-1.7 weighting to new syntax)
+- VAE Model selection now also lists .pt files (same format as ckpt, just different extension)
+- Fixed init images being in random order after importing
+- Fixed idle CPU usage
+- Fixed an issue with having the same model filename in multiple model folders
+- Fixed issue where k_diffusion module was not imported properly
+- If a config YAML exists next to a model file it will be used instead of the default (e.g. model.ckpt.yaml)
+
+
+
 SD GUI 1.7.1 Changelog:
 - Added DPM++2 and DPM++2A samplers
 - Added advanced syntax for step count (run same image with different step counts)
