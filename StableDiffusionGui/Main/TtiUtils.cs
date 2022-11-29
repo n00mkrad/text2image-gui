@@ -56,8 +56,7 @@ namespace StableDiffusionGui.Main
                         if (EnabledFeatures.AutoSetSizeForInitImg)
                         {
                             Size unstretchedSize = ImgUtils.GetValidSize(new Size(img.Width, img.Height), MainUi.GetValidImageWidths(), MainUi.GetValidImageHeights(), false);
-                            img.Scale(new MagickGeometry(unstretchedSize.Width, unstretchedSize.Height) { IgnoreAspectRatio = true });
-                            img = ImgUtils.Pad(img, targetSize, false, MagickColors.Black);
+                            img = ImgUtils.ScaleAndPad(img, unstretchedSize, targetSize);
                             Logger.Log($"Padded {unstretchedSize.Width}x{unstretchedSize.Height} to {targetSize.Width}x{targetSize.Height}", true);
                         }
                         else

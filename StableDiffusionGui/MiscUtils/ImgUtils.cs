@@ -209,12 +209,8 @@ namespace StableDiffusionGui.MiscUtils
             }
         }
 
-        public enum Side { Width, Height }
-
         public static Size GetValidSize (Size imageSize, List<int> validWidths, List<int> validHeights, bool validResolutionsOnly = true)
         {
-            Logger.Log($"Image Size: {imageSize.Width}x{imageSize.Height}");
-
             if (validWidths.Contains(imageSize.Width) && validHeights.Contains(imageSize.Height))
                 return imageSize;
 
@@ -222,17 +218,9 @@ namespace StableDiffusionGui.MiscUtils
             Size biggestFrame = new Size(validWidths.Max(), validHeights.Max());
             
             if (ImgMaths.IsSmallerThanFrame(imageSize.Width, imageSize.Height, smallestFrame.Width, smallestFrame.Height))
-            {
-                Logger.Log($"is smaller than smallest frame ({smallestFrame.Width}x{smallestFrame.Height})");
                 imageSize = ImgMaths.FitIntoFrame(imageSize, smallestFrame);
-            }
             else if(ImgMaths.IsBiggerThanFrame(imageSize.Width, imageSize.Height, biggestFrame.Width, biggestFrame.Height))
-            {
-                Logger.Log($"is bigger than biggest frame ({biggestFrame.Width}x{biggestFrame.Height})");
                 imageSize = ImgMaths.FitIntoFrame(imageSize, biggestFrame);
-            }
-
-            Logger.Log($"Non-mod64 frame: {imageSize.Width}x{imageSize.Height}");
 
             if (validResolutionsOnly)
             {
@@ -241,11 +229,19 @@ namespace StableDiffusionGui.MiscUtils
 
                 if (!validHeights.Contains(imageSize.Height))
                     imageSize.Height = validHeights.OrderBy(x => x).Where(x => x >= imageSize.Height).First();
-
-                Logger.Log($"nod64 frame: {imageSize.Width}x{imageSize.Height}");
             }
 
-            return new Size();
+            return imageSize;
+        }
+
+        public static MagickImage ScaleAndPad (MagickImage img, Size scaleDimensions, Size canvasSize, MagickColor color = null)
+        {
+            if (color == null)
+                color = MagickColors.Black;
+
+            img.Scale(new MagickGeometry(scaleDimensions.Width, scaleDimensions.Height) { IgnoreAspectRatio = true });
+            img = Pad(img, canvasSize, false, color);
+            return img;
         }
     }
 }
