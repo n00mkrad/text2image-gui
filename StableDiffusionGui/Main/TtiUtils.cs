@@ -2,6 +2,7 @@
 using StableDiffusionGui.Data;
 using StableDiffusionGui.Extensions;
 using StableDiffusionGui.Forms;
+using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
@@ -51,7 +52,19 @@ namespace StableDiffusionGui.Main
                     try
                     {
                         Logger.Log($"Init img '{Path.GetFileName(pair.Key)}' has incorrect dimensions ({img.Width}x{img.Height}), resizing to {targetSize.Width}x{targetSize.Height}.", true);
-                        img.Scale(new MagickGeometry(targetSize.Width, targetSize.Height) { IgnoreAspectRatio = true });
+
+                        if (EnabledFeatures.AutoSetSizeForInitImg)
+                        {
+                            Size unstretchedSize = ImgUtils.GetValidSize(new Size(img.Width, img.Height), MainUi.GetValidImageWidths(), MainUi.GetValidImageHeights(), false);
+                            img.Scale(new MagickGeometry(unstretchedSize.Width, unstretchedSize.Height) { IgnoreAspectRatio = true });
+                            img = ImgUtils.Pad(img, targetSize, false, MagickColors.Black);
+                            Logger.Log($"Padded {unstretchedSize.Width}x{unstretchedSize.Height} to {targetSize.Width}x{targetSize.Height}", true);
+                        }
+                        else
+                        {
+                            img.Scale(new MagickGeometry(targetSize.Width, targetSize.Height) { IgnoreAspectRatio = true });
+                        }
+
                         string initImgsDir = Directory.CreateDirectory(Path.Combine(Paths.GetSessionDataPath(), "inits")).FullName;
                         string resizedImgPath = Path.Combine(initImgsDir, $"{index}.png");
                         img.Write(resizedImgPath);
@@ -101,19 +114,6 @@ namespace StableDiffusionGui.Main
             }
 
             return removed;
-        }
-
-        /// <returns> Path to resized image </returns>
-        public static string ResizeInitImg(string path, Size targetSize, bool print = false)
-        {
-            string outPath = Path.Combine(Paths.GetSessionDataPath(), "init.bmp");
-            Image resized = ImgUtils.ResizeImage(IoUtils.GetImage(path), targetSize.Width, targetSize.Height);
-            resized.Save(outPath, System.Drawing.Imaging.ImageFormat.Bmp);
-
-            if (print)
-                Logger.Log($"Resized init image to {targetSize.Width}x{targetSize.Height}.");
-
-            return outPath;
         }
 
         public static void ShowPromptWarnings(List<string> prompts)
@@ -335,33 +335,6 @@ namespace StableDiffusionGui.Main
 
             Config.Set("safeModels", safeModels.ToJson());
             return safeModels;
-        }
-
-        public static Size GetBestSizeForInitImage(Size currentRes, Size initImgRes, int mod = 64, int minimum = 384, int maximum = 2048)
-        {
-            Size newRes = currentRes;
-
-            if (initImgRes.Width % mod == 0)
-            {
-                newRes.Width = initImgRes.Width;
-            }
-            else
-            {
-                int closest = (initImgRes.Width + mod) - ((initImgRes.Width + mod) % mod);
-                newRes.Width = closest.Clamp(minimum, maximum);
-            }
-
-            if (initImgRes.Height % mod == 0)
-            {
-                newRes.Height = initImgRes.Height;
-            }
-            else
-            {
-                int closest = (initImgRes.Height + mod) - ((initImgRes.Height + mod) % mod);
-                newRes.Height = closest.Clamp(minimum, maximum);
-            }
-
-            return newRes;
         }
     }
 }

@@ -248,7 +248,7 @@ namespace StableDiffusionGui.Main
 
             Task imageProcessingTask = Task.Run(async () => Parallel.ForEach(files, opts, async file => {
                 var scaledImg = await ImgUtils.Scale(file.FullName, ImgUtils.ScaleMode.LongerSide, 512, false);
-                await ImgUtils.Pad(scaledImg, new Size(512, 512), true);
+                ImgUtils.Pad(scaledImg, new Size(512, 512), true);
                 int currentCount = Interlocked.Increment(ref count);
                 Logger.Log($"Processed {currentCount}/{files.Count} images...", false, Logger.LastUiLine.EndsWith("..."));
             }));

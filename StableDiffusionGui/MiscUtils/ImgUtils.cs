@@ -1,9 +1,12 @@
 ﻿using ImageMagick;
 using StableDiffusionGui.Io;
+using StableDiffusionGui.Main;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace StableDiffusionGui.MiscUtils
@@ -181,17 +184,18 @@ namespace StableDiffusionGui.MiscUtils
             }
         }
 
-        public static async Task<MagickImage> Pad(string path, Size newSize, bool write, MagickColor fillColor = null)
+        public static MagickImage Pad(string path, Size newSize, bool write, MagickColor fillColor = null)
         {
             MagickImage img = new MagickImage(path);
-            return await Pad(img, newSize, write, fillColor);
+            return Pad(img, newSize, write, fillColor);
         }
 
-        public static async Task<MagickImage> Pad(MagickImage img, Size newSize, bool write, MagickColor fillColor = null)
+        /// <summary> Pads an image using Magick.NET </summary>
+        /// <returns> The padded image if <paramref name="write"/>, otherwise null as the image was written to disk and disposed </returns>
+        public static MagickImage Pad(MagickImage img, Size newSize, bool write, MagickColor fillColor = null)
         {
             img.BackgroundColor = fillColor ?? MagickColors.Black;
             img.Extent(newSize.Width, newSize.Height, Gravity.Center);
-            img.Write(img.FileName);
 
             if (write)
             {
@@ -203,6 +207,45 @@ namespace StableDiffusionGui.MiscUtils
             {
                 return img;
             }
+        }
+
+        public enum Side { Width, Height }
+
+        public static Size GetValidSize (Size imageSize, List<int> validWidths, List<int> validHeights, bool validResolutionsOnly = true)
+        {
+            Logger.Log($"Image Size: {imageSize.Width}x{imageSize.Height}");
+
+            if (validWidths.Contains(imageSize.Width) && validHeights.Contains(imageSize.Height))
+                return imageSize;
+
+            Size smallestFrame = new Size(validWidths.Min(), validHeights.Min());
+            Size biggestFrame = new Size(validWidths.Max(), validHeights.Max());
+            
+            if (ImgMaths.IsSmallerThanFrame(imageSize.Width, imageSize.Height, smallestFrame.Width, smallestFrame.Height))
+            {
+                Logger.Log($"is smaller than smallest frame ({smallestFrame.Width}x{smallestFrame.Height})");
+                imageSize = ImgMaths.FitIntoFrame(imageSize, smallestFrame);
+            }
+            else if(ImgMaths.IsBiggerThanFrame(imageSize.Width, imageSize.Height, biggestFrame.Width, biggestFrame.Height))
+            {
+                Logger.Log($"is bigger than biggest frame ({biggestFrame.Width}x{biggestFrame.Height})");
+                imageSize = ImgMaths.FitIntoFrame(imageSize, biggestFrame);
+            }
+
+            Logger.Log($"Non-mod64 frame: {imageSize.Width}x{imageSize.Height}");
+
+            if (validResolutionsOnly)
+            {
+                if (!validWidths.Contains(imageSize.Width))
+                    imageSize.Width = validWidths.OrderBy(x => x).Where(x => x >= imageSize.Width).First();
+
+                if (!validHeights.Contains(imageSize.Height))
+                    imageSize.Height = validHeights.OrderBy(x => x).Where(x => x >= imageSize.Height).First();
+
+                Logger.Log($"nod64 frame: {imageSize.Width}x{imageSize.Height}");
+            }
+
+            return new Size();
         }
     }
 }

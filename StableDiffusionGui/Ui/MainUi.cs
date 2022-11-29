@@ -367,13 +367,24 @@ namespace StableDiffusionGui.Ui
             if (!EnabledFeatures.AutoSetSizeForInitImg)
                 return;
 
-            Size currentRes = new Size(Program.MainForm.comboxResW.Text.GetInt(), Program.MainForm.comboxResH.Text.GetInt());
-            List<int> availableResolutions = Program.MainForm.comboxResW.Items.Cast<string>().Select(x => x.GetInt()).ToList();
-            int min = availableResolutions.Min();
-            int max = availableResolutions.Max();
-            Size newRes = TtiUtils.GetBestSizeForInitImage(currentRes, IoUtils.GetImage(initImgPath).Size, 64, min, max);
+            Size newRes = GetResolutionForInitImage(IoUtils.GetImage(initImgPath).Size);
             Program.MainForm.comboxResW.Text = newRes.Width.ToString();
             Program.MainForm.comboxResH.Text = newRes.Height.ToString();
+        }
+
+        public static Size GetResolutionForInitImage (Size imageSize)
+        {
+            return ImgUtils.GetValidSize(imageSize, GetValidImageWidths(), GetValidImageHeights());
+        }
+
+        public static List<int> GetValidImageWidths ()
+        {
+            return Program.MainForm.comboxResW.Items.Cast<string>().Select(x => x.GetInt()).ToList();
+        }
+
+        public static List<int> GetValidImageHeights()
+        {
+            return Program.MainForm.comboxResH.Items.Cast<string>().Select(x => x.GetInt()).ToList();
         }
     }
 }
