@@ -44,7 +44,7 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (form
 - **Emphasis:** Use `+` after a word/phrase to make it more impactful, or `-` to do the opposite. You can also use to increase the effect. Wrap your phrase in parentheses if you want to apply it to more than one word.
   - Each plus/minus applies a multiplier of 1.1. So two `+++` would be 1.1^3 = 1.331, and so on.
   - You can also type the strength manually after parentheses, e.g. `a (huge)1.33 dog` instead of `a huge+++ dog`
-  - Examples: `a green++ tree`, `a (big green)+ tree with orange- leaves (in the woods)++`
+  - Syntax Examples: `a green++ tree`, `a (big green)+ tree with orange- leaves (in the woods)++`
 
 - **Wildcards:** Fill in words or phrases from a list into the prompt.
   - Inline: `photo of a ~car,tree,dog~`.
