@@ -42,11 +42,15 @@
             this.label3 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.btnOk = new HTAlt.WinForms.HTButton();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanelImg = new System.Windows.Forms.TableLayoutPanel();
             this.pictBox = new System.Windows.Forms.PictureBox();
             this.menuStripOptions.SuspendLayout();
             this.panelBlur.SuspendLayout();
             this.panelBrushSize.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
+            this.tableLayoutPanelImg.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -86,10 +90,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panelBlur.Controls.Add(this.sliderBlur);
             this.panelBlur.Controls.Add(this.label1);
-            this.panelBlur.Location = new System.Drawing.Point(0, 418);
+            this.panelBlur.Location = new System.Drawing.Point(0, 453);
             this.panelBlur.Margin = new System.Windows.Forms.Padding(0);
             this.panelBlur.Name = "panelBlur";
-            this.panelBlur.Size = new System.Drawing.Size(515, 35);
+            this.panelBlur.Size = new System.Drawing.Size(725, 35);
             this.panelBlur.TabIndex = 4;
             // 
             // sliderBlur
@@ -105,7 +109,7 @@
             this.sliderBlur.Maximum = 15;
             this.sliderBlur.Name = "sliderBlur";
             this.sliderBlur.OverlayColor = System.Drawing.Color.White;
-            this.sliderBlur.Size = new System.Drawing.Size(404, 21);
+            this.sliderBlur.Size = new System.Drawing.Size(614, 21);
             this.sliderBlur.SmallChange = ((uint)(1u));
             this.sliderBlur.TabIndex = 4;
             this.sliderBlur.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
@@ -131,10 +135,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panelBrushSize.Controls.Add(this.sliderBrushSize);
             this.panelBrushSize.Controls.Add(this.label3);
-            this.panelBrushSize.Location = new System.Drawing.Point(0, 383);
+            this.panelBrushSize.Location = new System.Drawing.Point(0, 418);
             this.panelBrushSize.Margin = new System.Windows.Forms.Padding(0);
             this.panelBrushSize.Name = "panelBrushSize";
-            this.panelBrushSize.Size = new System.Drawing.Size(515, 35);
+            this.panelBrushSize.Size = new System.Drawing.Size(725, 35);
             this.panelBrushSize.TabIndex = 3;
             // 
             // sliderBrushSize
@@ -151,7 +155,7 @@
             this.sliderBrushSize.Minimum = 5;
             this.sliderBrushSize.Name = "sliderBrushSize";
             this.sliderBrushSize.OverlayColor = System.Drawing.Color.White;
-            this.sliderBrushSize.Size = new System.Drawing.Size(404, 21);
+            this.sliderBrushSize.Size = new System.Drawing.Size(614, 21);
             this.sliderBrushSize.SmallChange = ((uint)(1u));
             this.sliderBrushSize.TabIndex = 4;
             this.sliderBrushSize.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
@@ -175,10 +179,10 @@
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.Controls.Add(this.btnOk);
-            this.panel1.Location = new System.Drawing.Point(0, 453);
+            this.panel1.Location = new System.Drawing.Point(0, 488);
             this.panel1.Margin = new System.Windows.Forms.Padding(0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(515, 35);
+            this.panel1.Size = new System.Drawing.Size(725, 35);
             this.panel1.TabIndex = 5;
             // 
             // btnOk
@@ -193,7 +197,7 @@
             this.btnOk.ForeColor = System.Drawing.Color.White;
             this.btnOk.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
             this.btnOk.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
-            this.btnOk.Location = new System.Drawing.Point(427, 5);
+            this.btnOk.Location = new System.Drawing.Point(637, 5);
             this.btnOk.Name = "btnOk";
             this.btnOk.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
             this.btnOk.Size = new System.Drawing.Size(79, 23);
@@ -202,16 +206,55 @@
             this.btnOk.Text = "OK";
             this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
             // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.ColumnCount = 1;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Controls.Add(this.panelBlur, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.panelBrushSize, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanelImg, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.panel1, 0, 3);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 4;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(725, 523);
+            this.tableLayoutPanel1.TabIndex = 6;
+            // 
+            // tableLayoutPanelImg
+            // 
+            this.tableLayoutPanelImg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            this.tableLayoutPanelImg.ColumnCount = 3;
+            this.tableLayoutPanelImg.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 0F));
+            this.tableLayoutPanelImg.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanelImg.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 0F));
+            this.tableLayoutPanelImg.Controls.Add(this.pictBox, 1, 1);
+            this.tableLayoutPanelImg.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanelImg.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanelImg.Margin = new System.Windows.Forms.Padding(0);
+            this.tableLayoutPanelImg.Name = "tableLayoutPanelImg";
+            this.tableLayoutPanelImg.RowCount = 3;
+            this.tableLayoutPanelImg.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 0F));
+            this.tableLayoutPanelImg.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanelImg.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 0F));
+            this.tableLayoutPanelImg.Size = new System.Drawing.Size(725, 418);
+            this.tableLayoutPanelImg.TabIndex = 6;
+            // 
             // pictBox
             // 
-            this.pictBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.pictBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            this.pictBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.pictBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictBox.Location = new System.Drawing.Point(0, 0);
             this.pictBox.Margin = new System.Windows.Forms.Padding(0);
             this.pictBox.Name = "pictBox";
-            this.pictBox.Size = new System.Drawing.Size(513, 383);
+            this.pictBox.Size = new System.Drawing.Size(725, 418);
+            this.pictBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictBox.TabIndex = 0;
             this.pictBox.TabStop = false;
             this.pictBox.Click += new System.EventHandler(this.pictBox_Click);
@@ -224,36 +267,32 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.ClientSize = new System.Drawing.Size(513, 488);
-            this.Controls.Add(this.panel1);
-            this.Controls.Add(this.panelBlur);
-            this.Controls.Add(this.panelBrushSize);
-            this.Controls.Add(this.pictBox);
+            this.ClientSize = new System.Drawing.Size(725, 523);
+            this.Controls.Add(this.tableLayoutPanel1);
             this.ForeColor = System.Drawing.Color.White;
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
-            this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "DrawForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Draw Mask";
             this.Load += new System.EventHandler(this.DrawForm_Load);
             this.Shown += new System.EventHandler(this.DrawForm_Shown);
+            this.SizeChanged += new System.EventHandler(this.DrawForm_SizeChanged);
             this.menuStripOptions.ResumeLayout(false);
             this.panelBlur.ResumeLayout(false);
             this.panelBlur.PerformLayout();
             this.panelBrushSize.ResumeLayout(false);
             this.panelBrushSize.PerformLayout();
             this.panel1.ResumeLayout(false);
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanelImg.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictBox)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
-        private System.Windows.Forms.PictureBox pictBox;
         private System.Windows.Forms.ContextMenuStrip menuStripOptions;
         private System.Windows.Forms.ToolStripMenuItem clearToolStripMenuItem;
         private System.Windows.Forms.Panel panelBrushSize;
@@ -266,5 +305,8 @@
         private HTAlt.WinForms.HTButton btnOk;
         private System.Windows.Forms.ToolStripMenuItem invertMaskToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem pasteMaskToolStripMenuItem;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.PictureBox pictBox;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanelImg;
     }
 }

@@ -14,7 +14,8 @@ namespace StableDiffusionGui.Ui
 {
     internal class InpaintingUtils
     {
-        public static string MaskedImagePath { get { return Path.Combine(Paths.GetSessionDataPath(), "masked.png"); } }
+        public static string MaskImagePath { get { return Path.Combine(Paths.GetSessionDataPath(), "inpaint-mask.png"); } }
+        public static string MaskedImagePath { get { return Path.Combine(Paths.GetSessionDataPath(), "inpaint-masked.png"); } }
 
         private static Image _currentMask;
         public static Image CurrentMask
@@ -76,6 +77,7 @@ namespace StableDiffusionGui.Ui
             if (CurrentMask.Size != img.Size)
                 CurrentMask = ImgUtils.ResizeImage(CurrentMask, img.Size);
 
+            CurrentMask.Save(MaskImagePath, System.Drawing.Imaging.ImageFormat.Png);
             MagickImage maskedOverlay = ImgUtils.AlphaMask(ImgUtils.GetMagickImage(img), ImgUtils.GetMagickImage(CurrentMask), true);
             maskedOverlay.Write(MaskedImagePath);
         }

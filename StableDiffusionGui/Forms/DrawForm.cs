@@ -1,4 +1,5 @@
-﻿using ImageMagick;
+﻿using Dasync.Collections;
+using ImageMagick;
 using StableDiffusionGui.Installation;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
@@ -8,13 +9,13 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
-using System.Windows;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Point = System.Drawing.Point;
 
 namespace StableDiffusionGui.Forms
 {
-    public partial class DrawForm : Form
+    public partial class DrawForm : CustomForm
     {
         public Image BackgroundImg;
         public Image Mask;
@@ -29,6 +30,7 @@ namespace StableDiffusionGui.Forms
 
         public DrawForm(Image background, Image mask = null)
         {
+            Opacity = 0;
             BackgroundImg = background;
 
             if (mask != null)
@@ -42,17 +44,17 @@ namespace StableDiffusionGui.Forms
 
         private void DrawForm_Load(object sender, EventArgs e)
         {
-            int scale = (int)(100 * Screen.PrimaryScreen.Bounds.Width / SystemParameters.PrimaryScreenWidth);
-            float scaleFactor = scale / 100f;
-
-            Width = BackgroundImg.Width + (16 * scaleFactor).RoundToInt();
-            Height = BackgroundImg.Height + (144 * scaleFactor).RoundToInt();
-            CenterToScreen();
+            AllowEscClose = true;
         }
 
-        private void DrawForm_Shown(object sender, EventArgs e)
+        private async void DrawForm_Shown(object sender, EventArgs e)
         {
-            Refresh();
+            Size = new Size((Program.MainForm.Size.Width * 0.6f).RoundToInt(), (Program.MainForm.Size.Height * 0.8f).RoundToInt());
+            MinimumSize = new Size((Program.MainForm.Size.Width * 0.3f).RoundToInt(), (Program.MainForm.Size.Height * 0.4f).RoundToInt());
+            CenterToScreen();
+
+            tableLayoutPanelImg.ColumnStyles.Cast<ColumnStyle>().ToList().ForEach(s => s.SizeType = SizeType.Absolute);
+            tableLayoutPanelImg.RowStyles.Cast<RowStyle>().ToList().ForEach(s => s.SizeType = SizeType.Absolute);
 
             pasteMaskToolStripMenuItem.Visible = EnabledFeatures.MaskPasting;
             invertMaskToolStripMenuItem.Visible = EnabledFeatures.MaskInversion;
@@ -63,7 +65,10 @@ namespace StableDiffusionGui.Forms
                 InpaintingUtils.CurrentBlurValue = sliderBlur.Value;
 
             pictBox.BackgroundImage = BackgroundImg;
+            SetPictureBoxPadding();
             Blur();
+            await Task.Delay(1);
+            Opacity = 1;
         }
 
         private void pictBox_Click(object sender, EventArgs e)
@@ -90,7 +95,9 @@ namespace StableDiffusionGui.Forms
 
             using (Graphics g = Graphics.FromImage(_raw))
             {
-                g.DrawEllipse(new Pen(Color.Black, brushSize), new RectangleF(_lastPoint, new SizeF(brushSize, brushSize)));
+                float scaleFactor = (float)pictBox.Width / pictBox.Image.Width;
+                Point scaledPoint = new Point((_lastPoint.X / scaleFactor).RoundToInt(), (_lastPoint.Y / scaleFactor).RoundToInt());
+                g.DrawEllipse(new Pen(Color.Black, brushSize), new RectangleF(scaledPoint, new SizeF(brushSize, brushSize)));
                 g.SmoothingMode = SmoothingMode.HighQuality;
             }
 
@@ -151,6 +158,9 @@ namespace StableDiffusionGui.Forms
             if (keyData == (Keys.Control | Keys.Z)) // Hotkey: Undo
                 HistoryUndo();
 
+            if (keyData == Keys.Return) // Hotkey: OK
+                btnOk_Click(null, null);
+
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
@@ -164,7 +174,7 @@ namespace StableDiffusionGui.Forms
             if (!EnabledFeatures.MaskPasting)
                 return;
 
-            Image clipboardImg = System.Windows.Forms.Clipboard.GetImage();
+            Image clipboardImg = Clipboard.GetImage();
 
             if (clipboardImg != null)
             {
@@ -202,6 +212,30 @@ namespace StableDiffusionGui.Forms
 
             sliderBlur_Scroll(null, null);
             pictBox.Invalidate();
+        }
+
+        private void DrawForm_SizeChanged(object sender, EventArgs e)
+        {
+            SetPictureBoxPadding();
+        }
+
+        private void SetPictureBoxPadding ()
+        {
+            Size frameSize = tableLayoutPanelImg.Size;
+            Size imageSize = BackgroundImg.Size;
+
+            Size targetImgBoxSize = ImgMaths.FitIntoFrame(imageSize, frameSize);
+
+            int padTopBot = ((tableLayoutPanelImg.Size.Height - targetImgBoxSize.Height) / 2f).RoundToInt();
+            int padSides = ((tableLayoutPanelImg.Size.Width - targetImgBoxSize.Width) / 2f).RoundToInt();
+
+            tableLayoutPanelImg.ColumnStyles[0].Width = padSides;
+            tableLayoutPanelImg.ColumnStyles[1].Width = targetImgBoxSize.Width;
+            tableLayoutPanelImg.ColumnStyles[2].Width = padSides;
+
+            tableLayoutPanelImg.RowStyles[0].Height = padTopBot;
+            tableLayoutPanelImg.RowStyles[1].Height = targetImgBoxSize.Height;
+            tableLayoutPanelImg.RowStyles[2].Height = padTopBot;
         }
     }
 }

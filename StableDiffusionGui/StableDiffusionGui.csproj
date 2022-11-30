@@ -414,6 +414,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon1.ico" />
+    <None Include="Resources\checkerboard-alpha1.png" />
     <None Include="Resources\iconUtils.png" />
     <None Include="Resources\iconDreambooth.png" />
     <None Include="Resources\iconReset.png" />

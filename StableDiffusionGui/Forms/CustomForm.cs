@@ -50,15 +50,15 @@ namespace StableDiffusionGui.Forms
             _tabOrderedControls.First().Focus();
         }
 
-        protected override void OnKeyDown(KeyEventArgs e)
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            base.OnKeyDown(e);
-
-            if (e.KeyCode == Keys.Escape && AllowEscClose)
+            if (keyData == Keys.Escape && AllowEscClose)
                 Close();
 
-            if (e.KeyCode == Keys.Tab && !(FocusedControl is TextBox && AllowTextboxTab))
+            if (keyData == Keys.Tab && !(FocusedControl is TextBox && AllowTextboxTab))
                 TabOrderNext();
+
+            return base.ProcessCmdKey(ref msg, keyData);
         }
     }
 }
