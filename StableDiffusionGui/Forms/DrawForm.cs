@@ -1,11 +1,13 @@
 ﻿using ImageMagick;
-using Newtonsoft.Json.Linq;
 using StableDiffusionGui.Installation;
+using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Ui;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
 using Point = System.Drawing.Point;
@@ -18,6 +20,10 @@ namespace StableDiffusionGui.Forms
         public Image Mask;
 
         private Bitmap _raw;
+
+        private List<Bitmap> _history = new List<Bitmap>();
+        private int _historyLimit = 200;
+
         private Point _lastPoint = Point.Empty;
         private bool _mouseDown;
 
@@ -25,11 +31,12 @@ namespace StableDiffusionGui.Forms
         {
             BackgroundImg = background;
 
-            if(mask != null)
+            if (mask != null)
                 _raw = mask as Bitmap;
             else
                 _raw = new Bitmap(BackgroundImg.Width, BackgroundImg.Height);
 
+            HistorySave();
             InitializeComponent();
         }
 
@@ -73,7 +80,7 @@ namespace StableDiffusionGui.Forms
 
         private void pictBox_MouseMove(object sender, MouseEventArgs e)
         {
-            if (!_mouseDown || _lastPoint == null || ((MouseEventArgs)e).Button != MouseButtons.Left)
+            if (!_mouseDown || _lastPoint == null || e.Button != MouseButtons.Left)
                 return;
 
             if (pictBox.Image == null)
@@ -88,7 +95,6 @@ namespace StableDiffusionGui.Forms
             }
 
             Blur();
-
             pictBox.Invalidate();
             _lastPoint = e.Location;
         }
@@ -97,6 +103,7 @@ namespace StableDiffusionGui.Forms
         {
             _mouseDown = false;
             _lastPoint = Point.Empty;
+            HistorySave();
         }
 
         private void clearToolStripMenuItem_Click(object sender, EventArgs e)
@@ -135,10 +142,14 @@ namespace StableDiffusionGui.Forms
                 pictBox.Image = new GaussianBlur(_raw).Process(InpaintingUtils.CurrentBlurValue);
         }
 
+        // I could not get KeyPreview to work in this Form for whatever reason, so I use this alternative method of processing keys
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             if (keyData == (Keys.Control | Keys.V)) // Hotkey: Paste mask
                 PasteImage();
+
+            if (keyData == (Keys.Control | Keys.Z)) // Hotkey: Undo
+                HistoryUndo();
 
             return base.ProcessCmdKey(ref msg, keyData);
         }
@@ -148,7 +159,7 @@ namespace StableDiffusionGui.Forms
             PasteImage();
         }
 
-        private void PasteImage ()
+        private void PasteImage()
         {
             if (!EnabledFeatures.MaskPasting)
                 return;
@@ -157,7 +168,7 @@ namespace StableDiffusionGui.Forms
 
             if (clipboardImg != null)
             {
-                if(clipboardImg.Size != pictBox.Image.Size)
+                if (clipboardImg.Size != pictBox.Image.Size)
                 {
                     UiUtils.ShowMessageBox($"The pasted mask ({clipboardImg.Width}x{clipboardImg.Height}) needs to have the same dimensions as the initialization image ({pictBox.Image.Width}x{pictBox.Image.Height}).");
                     return;
@@ -169,7 +180,28 @@ namespace StableDiffusionGui.Forms
                 sliderBlur.Value = 0;
                 sliderBlur_Scroll(null, null);
                 pictBox.Invalidate();
+                HistorySave();
             }
+        }
+
+        private void HistorySave()
+        {
+            if (_history.Count >= _historyLimit)
+                _history = _history.Skip(1).ToList(); // Remove first (oldest) entry if we maxed out the capacity
+
+            _history.Add(new Bitmap(_raw));
+        }
+
+        private void HistoryUndo()
+        {
+            if (_history.Count <= 1)
+                return;
+
+            _history.Remove(_history.Last());
+            _raw = new Bitmap(_history.Last());
+
+            sliderBlur_Scroll(null, null);
+            pictBox.Invalidate();
         }
     }
 }
