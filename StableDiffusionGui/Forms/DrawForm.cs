@@ -120,7 +120,7 @@ namespace StableDiffusionGui.Forms
 
         private void invertMaskToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var magickImg = ImgUtils.MagickImgFromImage(_raw);
+            var magickImg = ImgUtils.GetMagickImage(_raw);
             magickImg = ImgUtils.RemoveTransparency(magickImg, ImgUtils.NoAlphaMode.Fill, MagickColors.White);
             magickImg = ImgUtils.Invert(magickImg);
             magickImg = ImgUtils.ReplaceColorWithTransparency(magickImg, MagickColors.White);
@@ -163,7 +163,7 @@ namespace StableDiffusionGui.Forms
                     return;
                 }
 
-                var magickImg = ImgUtils.MagickImgFromImage(clipboardImg);
+                var magickImg = ImgUtils.GetMagickImage(clipboardImg);
                 Image pastedMask = ImgUtils.ReplaceOtherColorsWithTransparency(magickImg).ToBitmap();
                 _raw = (Bitmap)pastedMask;
                 sliderBlur.Value = 0;

@@ -58,7 +58,7 @@ namespace StableDiffusionGui.Ui
         {
 
             Image img = IoUtils.GetImage(initImgPath); // ImgUtils.ResizeImage(IoUtils.GetImage(initImgPath), targetSize.Width, targetSize.Height);
-            img = ImgUtils.ScaleAndPad(ImgUtils.MagickImgFromImage(img), img.Size, targetSize).ToBitmap();
+            img = ImgUtils.ScaleAndPad(ImgUtils.GetMagickImage(img), img.Size, targetSize).ToBitmap();
 
             if (CurrentMask == null)
             {
@@ -76,7 +76,7 @@ namespace StableDiffusionGui.Ui
             if (CurrentMask.Size != img.Size)
                 CurrentMask = ImgUtils.ResizeImage(CurrentMask, img.Size);
 
-            MagickImage maskedOverlay = ImgUtils.AlphaMask(ImgUtils.MagickImgFromImage(img), ImgUtils.MagickImgFromImage(CurrentMask), true);
+            MagickImage maskedOverlay = ImgUtils.AlphaMask(ImgUtils.GetMagickImage(img), ImgUtils.GetMagickImage(CurrentMask), true);
             maskedOverlay.Write(MaskedImagePath);
         }
 

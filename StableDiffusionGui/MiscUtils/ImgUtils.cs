@@ -5,33 +5,22 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-
 namespace StableDiffusionGui.MiscUtils
 {
     internal class ImgUtils
     {
-        public static MagickImage MagickImgFromImage(Image img)
+        public static MagickImage GetMagickImage(Image img)
         {
-            return MagickImgFromImage(img as Bitmap);
+            return GetMagickImage(img as Bitmap);
         }
 
-        public static MagickImage MagickImgFromImage(Bitmap bmp)
+        public static MagickImage GetMagickImage(Bitmap bmp)
         {
             var m = new MagickFactory();
             MagickImage image = new MagickImage(m.Image.Create(bmp));
             return image;
-        }
-
-        public static Image ImageFromMagickImg(MagickImage img)
-        {
-            using (var stream = new MemoryStream())
-            {
-                img.Write(stream);
-                return new Bitmap(stream);
-            }
         }
 
         public static Image ResizeImage(Image image, Size size)
@@ -53,9 +42,9 @@ namespace StableDiffusionGui.MiscUtils
 
         public static Image Negate(Image image)
         {
-            MagickImage magickImage = MagickImgFromImage(image);
+            MagickImage magickImage = GetMagickImage(image);
             magickImage.Negate();
-            return ImageFromMagickImg(magickImage);
+            return magickImage.ToBitmap();
         }
 
         public static MagickImage AlphaMask(MagickImage image, MagickImage mask, bool invert)
@@ -123,9 +112,7 @@ namespace StableDiffusionGui.MiscUtils
         {
             if (mode == NoAlphaMode.Fill)
             {
-                if (fillColor == null)
-                    fillColor = MagickColors.Black;
-
+                fillColor = fillColor ?? MagickColors.Black;
                 MagickImage bg = new MagickImage(fillColor, image.Width, image.Height);
                 bg.BackgroundColor = fillColor;
                 bg.Composite(image, CompositeOperator.Over);
@@ -144,10 +131,12 @@ namespace StableDiffusionGui.MiscUtils
         public static async Task<MagickImage> Scale(string path, ScaleMode mode, float targetScale, bool write)
         {
             MagickImage img = new MagickImage(path);
-            return await Scale(img, mode, targetScale, write);
+            return Scale(img, mode, targetScale, write);
         }
 
-        public static async Task<MagickImage> Scale(MagickImage img, ScaleMode mode, float targetScale, bool write)
+        /// <summary> Scale and image using <paramref name="mode"/>. Optionally write to disk with <paramref name="write"/> </summary>
+        /// <returns> The scaled image if <paramref name="write"/> was true, otherwise null </returns>
+        public static MagickImage Scale(MagickImage img, ScaleMode mode, float targetScale, bool write)
         {
             img.FilterType = FilterType.Mitchell;
 
@@ -209,6 +198,10 @@ namespace StableDiffusionGui.MiscUtils
             }
         }
 
+        /// <summary>
+        /// Returns a valid resolution for an input resolution. If <paramref name="validResolutionsOnly"/>, it will only use numbers from
+        /// <paramref name="validWidths"/> and <paramref name="validHeights"/>, otherwise it only resizes if the size is smaller/bigger than the min/max canvas size.
+        /// </summary>
         public static Size GetValidSize (Size imageSize, List<int> validWidths, List<int> validHeights, bool validResolutionsOnly = true)
         {
             if (validWidths.Contains(imageSize.Width) && validHeights.Contains(imageSize.Height))
@@ -234,11 +227,13 @@ namespace StableDiffusionGui.MiscUtils
             return imageSize;
         }
 
+        /// <summary>
+        /// Scale and Pad a MagickImage - Scale to dimensions <paramref name="scaleDimensions"/>, then pad it out to <paramref name="canvasSize"/>
+        /// </summary>
+        /// <returns> Scaled and padded image </returns>
         public static MagickImage ScaleAndPad (MagickImage img, Size scaleDimensions, Size canvasSize, MagickColor color = null)
         {
-            if (color == null)
-                color = MagickColors.Black;
-
+            color = color ?? MagickColors.Black;
             img.Scale(new MagickGeometry(scaleDimensions.Width, scaleDimensions.Height) { IgnoreAspectRatio = true });
             img = Pad(img, canvasSize, false, color);
             return img;
