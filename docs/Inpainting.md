@@ -59,14 +59,14 @@ Allows you to describe the objects you want to replace, using CLIP (clipseg). No
 
 #### Masked Overlay Inpainting
 
-![](assets\inpdemo-wing-basic.png)
+![](https://raw.githubusercontent.com/n00mkrad/text2image-gui/main/docs/assets/inpdemo-wing-basic.png)
 
 *Original - Mask - Result using `photo of a landscape, cloudy sky` using Stable Diffusion 1.5*  
 Note that the wing does not really disappear, it just gets replaced by a weird cloud formation.
 
 #### RunwayML Inpainting
 
-![](assets\inpdemo-wing-rwml.png)
+![](https://raw.githubusercontent.com/n00mkrad/text2image-gui/main/docs/assets/inpdemo-wing-rwml.png)
 
 *Original - Mask - Result using `photo of a landscape, cloudy sky` using Stable Diffusion 1.5 Inpainting (RunwayML)*  
 Note that with the RunwayML inpainting model, the wing gets fully removed and replaced with landscape, making it almost impossible to tell that the area was filled with AI-generated content.
