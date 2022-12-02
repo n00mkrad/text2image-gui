@@ -49,8 +49,8 @@ namespace StableDiffusionGui.Forms
 
         private async void DrawForm_Shown(object sender, EventArgs e)
         {
-            Size = new Size((Program.MainForm.Size.Width * 0.6f).RoundToInt(), (Program.MainForm.Size.Height * 0.8f).RoundToInt());
-            MinimumSize = new Size((Program.MainForm.Size.Width * 0.3f).RoundToInt(), (Program.MainForm.Size.Height * 0.4f).RoundToInt());
+            Size = new Size((Program.MainForm.Size.Width * 0.8f).RoundToInt(), (Program.MainForm.Size.Height * 0.9f).RoundToInt());
+            MinimumSize = new Size((Program.MainForm.Size.Width * 0.4f).RoundToInt(), (Program.MainForm.Size.Height * 0.6f).RoundToInt());
             CenterToScreen();
 
             tableLayoutPanelImg.ColumnStyles.Cast<ColumnStyle>().ToList().ForEach(s => s.SizeType = SizeType.Absolute);
