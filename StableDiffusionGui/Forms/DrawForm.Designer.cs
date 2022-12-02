@@ -34,6 +34,8 @@
             this.clearToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.invertMaskToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pasteMaskToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelBlur = new System.Windows.Forms.Panel();
             this.sliderBlur = new HTAlt.WinForms.HTSlider();
             this.label1 = new System.Windows.Forms.Label();
@@ -41,6 +43,9 @@
             this.sliderBrushSize = new HTAlt.WinForms.HTSlider();
             this.label3 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btnMaskLoad = new HTAlt.WinForms.HTButton();
+            this.btnMaskSave = new HTAlt.WinForms.HTButton();
+            this.btnClear = new HTAlt.WinForms.HTButton();
             this.btnOk = new HTAlt.WinForms.HTButton();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanelImg = new System.Windows.Forms.TableLayoutPanel();
@@ -59,30 +64,46 @@
             this.menuStripOptions.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.clearToolStripMenuItem,
             this.invertMaskToolStripMenuItem,
-            this.pasteMaskToolStripMenuItem});
+            this.pasteMaskToolStripMenuItem,
+            this.saveToolStripMenuItem,
+            this.loadToolStripMenuItem});
             this.menuStripOptions.Name = "menuStripOptions";
-            this.menuStripOptions.Size = new System.Drawing.Size(136, 70);
+            this.menuStripOptions.Size = new System.Drawing.Size(105, 114);
             // 
             // clearToolStripMenuItem
             // 
             this.clearToolStripMenuItem.Name = "clearToolStripMenuItem";
-            this.clearToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
+            this.clearToolStripMenuItem.Size = new System.Drawing.Size(104, 22);
             this.clearToolStripMenuItem.Text = "Clear";
             this.clearToolStripMenuItem.Click += new System.EventHandler(this.clearToolStripMenuItem_Click);
             // 
             // invertMaskToolStripMenuItem
             // 
             this.invertMaskToolStripMenuItem.Name = "invertMaskToolStripMenuItem";
-            this.invertMaskToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
-            this.invertMaskToolStripMenuItem.Text = "Invert Mask";
+            this.invertMaskToolStripMenuItem.Size = new System.Drawing.Size(104, 22);
+            this.invertMaskToolStripMenuItem.Text = "Invert";
             this.invertMaskToolStripMenuItem.Click += new System.EventHandler(this.invertMaskToolStripMenuItem_Click);
             // 
             // pasteMaskToolStripMenuItem
             // 
             this.pasteMaskToolStripMenuItem.Name = "pasteMaskToolStripMenuItem";
-            this.pasteMaskToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
-            this.pasteMaskToolStripMenuItem.Text = "Paste Mask";
+            this.pasteMaskToolStripMenuItem.Size = new System.Drawing.Size(104, 22);
+            this.pasteMaskToolStripMenuItem.Text = "Paste";
             this.pasteMaskToolStripMenuItem.Click += new System.EventHandler(this.pasteMaskToolStripMenuItem_Click);
+            // 
+            // saveToolStripMenuItem
+            // 
+            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(104, 22);
+            this.saveToolStripMenuItem.Text = "Save";
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
+            // 
+            // loadToolStripMenuItem
+            // 
+            this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(104, 22);
+            this.loadToolStripMenuItem.Text = "Load";
+            this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
             // 
             // panelBlur
             // 
@@ -178,12 +199,81 @@
             // 
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.Controls.Add(this.btnMaskLoad);
+            this.panel1.Controls.Add(this.btnMaskSave);
+            this.panel1.Controls.Add(this.btnClear);
             this.panel1.Controls.Add(this.btnOk);
             this.panel1.Location = new System.Drawing.Point(0, 488);
             this.panel1.Margin = new System.Windows.Forms.Padding(0);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(725, 35);
             this.panel1.TabIndex = 5;
+            // 
+            // btnMaskLoad
+            // 
+            this.btnMaskLoad.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnMaskLoad.AutoColor = true;
+            this.btnMaskLoad.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnMaskLoad.ButtonImage = null;
+            this.btnMaskLoad.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
+            this.btnMaskLoad.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
+            this.btnMaskLoad.DrawImage = false;
+            this.btnMaskLoad.ForeColor = System.Drawing.Color.White;
+            this.btnMaskLoad.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
+            this.btnMaskLoad.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
+            this.btnMaskLoad.Location = new System.Drawing.Point(176, 6);
+            this.btnMaskLoad.Margin = new System.Windows.Forms.Padding(3, 6, 3, 6);
+            this.btnMaskLoad.Name = "btnMaskLoad";
+            this.btnMaskLoad.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+            this.btnMaskLoad.Size = new System.Drawing.Size(79, 23);
+            this.btnMaskLoad.TabIndex = 112;
+            this.btnMaskLoad.TabStop = false;
+            this.btnMaskLoad.Text = "Load Mask";
+            this.btnMaskLoad.Click += new System.EventHandler(this.btnMaskLoad_Click);
+            // 
+            // btnMaskSave
+            // 
+            this.btnMaskSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnMaskSave.AutoColor = true;
+            this.btnMaskSave.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnMaskSave.ButtonImage = null;
+            this.btnMaskSave.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
+            this.btnMaskSave.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
+            this.btnMaskSave.DrawImage = false;
+            this.btnMaskSave.ForeColor = System.Drawing.Color.White;
+            this.btnMaskSave.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
+            this.btnMaskSave.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
+            this.btnMaskSave.Location = new System.Drawing.Point(91, 6);
+            this.btnMaskSave.Margin = new System.Windows.Forms.Padding(3, 6, 3, 6);
+            this.btnMaskSave.Name = "btnMaskSave";
+            this.btnMaskSave.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+            this.btnMaskSave.Size = new System.Drawing.Size(79, 23);
+            this.btnMaskSave.TabIndex = 111;
+            this.btnMaskSave.TabStop = false;
+            this.btnMaskSave.Text = "Save Mask";
+            this.btnMaskSave.Click += new System.EventHandler(this.btnMaskSave_Click);
+            // 
+            // btnClear
+            // 
+            this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnClear.AutoColor = true;
+            this.btnClear.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnClear.ButtonImage = null;
+            this.btnClear.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
+            this.btnClear.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
+            this.btnClear.DrawImage = false;
+            this.btnClear.ForeColor = System.Drawing.Color.White;
+            this.btnClear.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
+            this.btnClear.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
+            this.btnClear.Location = new System.Drawing.Point(6, 6);
+            this.btnClear.Margin = new System.Windows.Forms.Padding(6, 6, 3, 6);
+            this.btnClear.Name = "btnClear";
+            this.btnClear.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+            this.btnClear.Size = new System.Drawing.Size(79, 23);
+            this.btnClear.TabIndex = 110;
+            this.btnClear.TabStop = false;
+            this.btnClear.Text = "Clear Mask";
+            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
             // 
             // btnOk
             // 
@@ -197,7 +287,8 @@
             this.btnOk.ForeColor = System.Drawing.Color.White;
             this.btnOk.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
             this.btnOk.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
-            this.btnOk.Location = new System.Drawing.Point(637, 5);
+            this.btnOk.Location = new System.Drawing.Point(640, 6);
+            this.btnOk.Margin = new System.Windows.Forms.Padding(6);
             this.btnOk.Name = "btnOk";
             this.btnOk.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
             this.btnOk.Size = new System.Drawing.Size(79, 23);
@@ -308,5 +399,10 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.PictureBox pictBox;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelImg;
+        private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem loadToolStripMenuItem;
+        private HTAlt.WinForms.HTButton btnMaskLoad;
+        private HTAlt.WinForms.HTButton btnMaskSave;
+        private HTAlt.WinForms.HTButton btnClear;
     }
 }

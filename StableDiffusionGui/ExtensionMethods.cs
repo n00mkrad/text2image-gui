@@ -46,7 +46,7 @@ namespace StableDiffusionGui
 
             try
             {
-                if(allowScientificNotation && CouldBeScientificNotation(str))
+                if (allowScientificNotation && CouldBeScientificNotation(str))
                     return int.Parse(str.TrimNumbers(true, true), NumberStyles.Float, CultureInfo.InvariantCulture);
 
                 if (str.Length >= 2 && str[0] == '-' && str[1] != '-')
@@ -60,7 +60,7 @@ namespace StableDiffusionGui
             }
         }
 
-        private static bool CouldBeScientificNotation (string s)
+        private static bool CouldBeScientificNotation(string s)
         {
             if (!(s.ToLowerInvariant().Contains("e+") || s.ToLowerInvariant().Contains("e-")))
                 return false;
@@ -147,7 +147,7 @@ namespace StableDiffusionGui
         {
             try
             {
-                return new ZlpFileInfo (path).Directory.FullName;
+                return new ZlpFileInfo(path).Directory.FullName;
             }
             catch (Exception ex)
             {
@@ -379,11 +379,11 @@ namespace StableDiffusionGui
             if (key == null)
                 key = "";
 
-            for(int i = 0; i < dict.Count; i++)
+            for (int i = 0; i < dict.Count; i++)
             {
                 if (ignoreCase)
                 {
-                    if(key.Lower() == dict.ElementAt(i).Key.Lower())
+                    if (key.Lower() == dict.ElementAt(i).Key.Lower())
                         return dict.ElementAt(i).Value;
                 }
                 else
@@ -420,12 +420,12 @@ namespace StableDiffusionGui
                 stringMap = new Dictionary<string, string>();
 
             str = stringMap.Get(str, true, true);
-            
-            for(int i = 0; i < comboBox.Items.Count; i++)
+
+            for (int i = 0; i < comboBox.Items.Count; i++)
             {
                 if (ignoreCase)
                 {
-                    if(comboBox.Items[i].ToString().Lower() == str.Lower())
+                    if (comboBox.Items[i].ToString().Lower() == str.Lower())
                     {
                         comboBox.SelectedIndex = i;
                         return;
@@ -442,20 +442,20 @@ namespace StableDiffusionGui
             }
         }
 
-        public static Dictionary<V, K> SwapKeysValues<V, K> (this Dictionary<K, V> dict)
+        public static Dictionary<V, K> SwapKeysValues<V, K>(this Dictionary<K, V> dict)
         {
             Dictionary<V, K> result = new Dictionary<V, K>();
 
-            foreach(var pair in dict)
+            foreach (var pair in dict)
             {
-                if(!result.ContainsKey(pair.Value))
+                if (!result.ContainsKey(pair.Value))
                     result.Add(pair.Value, pair.Key);
             }
 
             return result;
         }
 
-        public static string Lower (this string s)
+        public static string Lower(this string s)
         {
             if (s == null)
                 return s;
@@ -463,18 +463,18 @@ namespace StableDiffusionGui
             return s.ToLowerInvariant();
         }
 
-        public static T FromJson<T> (this Dictionary<string, string> jsonDict, string key)
+        public static T FromJson<T>(this Dictionary<string, string> jsonDict, string key)
         {
             return jsonDict.Get(key).FromJson<T>();
         }
 
-        public static T FromJson<T> (this string s)
+        public static T FromJson<T>(this string s)
         {
             try
             {
                 return JsonConvert.DeserializeObject<T>(s);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logger.Log($"Failed to deserialize ({ex.Message}):\n{s.Trunc(1000)}", true);
                 return default(T);
@@ -491,7 +491,7 @@ namespace StableDiffusionGui
             return JsonConvert.SerializeObject(o, indent ? Formatting.Indented : Formatting.None, settings);
         }
 
-        public static void AddRange<T> (this List<T> listIn, IEnumerable<T> itemsToAdd, out List<T> listOut)
+        public static void AddRange<T>(this List<T> listIn, IEnumerable<T> itemsToAdd, out List<T> listOut)
         {
             if (itemsToAdd != null)
                 listIn.AddRange(itemsToAdd);
@@ -499,7 +499,7 @@ namespace StableDiffusionGui
             listOut = listIn;
         }
 
-        public static string NullToEmpty (this string s)
+        public static string NullToEmpty(this string s)
         {
             if (s == null)
                 return "";
@@ -512,12 +512,12 @@ namespace StableDiffusionGui
             return Path.GetFileNameWithoutExtension(file.Name);
         }
 
-        public static string NameNoExt (this ZlpFileInfo file)
+        public static string NameNoExt(this ZlpFileInfo file)
         {
             return Path.GetFileNameWithoutExtension(file.Name);
         }
 
-        public static IEnumerable<TSource> DistinctBy<TSource, TKey> (this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
+        public static IEnumerable<TSource> DistinctBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
         {
             HashSet<TKey> seenKeys = new HashSet<TKey>();
 
@@ -528,6 +528,14 @@ namespace StableDiffusionGui
                     yield return element;
                 }
             }
+        }
+
+        public static string AsString(this Size s, string delimiter = "x", bool swapWidthHeight = false)
+        {
+            if (swapWidthHeight)
+                return $"{s.Height}{delimiter}{s.Width}";
+            else
+                return $"{s.Width}{delimiter}{s.Height}";
         }
     }
 }

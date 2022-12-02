@@ -14,10 +14,13 @@
 
         public class Dirs
         {
+            // Top Level
+            public const string Wildcards = "Wildcards";
+            public const string Masks = "Masks";
+            // Data and below
             public const string Bins = "bin";
             public const string SdRepo = "repo";
             public const string Dreambooth = "db";
-            public const string Wildcards = "Wildcards";
             public const string SdEnv = "ldo";
             public const string Conda = "mb";
             public const string SdVenv = "venv";

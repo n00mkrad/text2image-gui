@@ -1,5 +1,6 @@
 ﻿using Dasync.Collections;
 using ImageMagick;
+using Microsoft.WindowsAPICodePack.Dialogs;
 using StableDiffusionGui.Installation;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
@@ -8,10 +9,13 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Point = System.Drawing.Point;
+using Paths = StableDiffusionGui.Io.Paths;
+using StableDiffusionGui.Io;
 
 namespace StableDiffusionGui.Forms
 {
@@ -113,13 +117,6 @@ namespace StableDiffusionGui.Forms
             HistorySave();
         }
 
-        private void clearToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            _raw = new Bitmap(BackgroundImg.Width, BackgroundImg.Height);
-            pictBox.Image = null;
-            Invalidate();
-        }
-
         private void sliderBlur_Scroll(object sender, ScrollEventArgs e)
         {
             InpaintingUtils.CurrentBlurValue = sliderBlur.Value;
@@ -132,28 +129,10 @@ namespace StableDiffusionGui.Forms
             Close();
         }
 
-        private void invertMaskToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var magickImg = ImgUtils.GetMagickImage(_raw);
-            magickImg = ImgUtils.RemoveTransparency(magickImg, ImgUtils.NoAlphaMode.Fill, MagickColors.White);
-            magickImg = ImgUtils.Invert(magickImg);
-            magickImg = ImgUtils.ReplaceColorWithTransparency(magickImg, MagickColors.White);
-            _raw = magickImg.ToBitmap();
-            Blur();
-            pictBox.Invalidate();
-        }
-
-        private void Blur()
-        {
-            if (_raw != null)
-                pictBox.Image = new GaussianBlur(_raw).Process(InpaintingUtils.CurrentBlurValue);
-        }
-
-        // I could not get KeyPreview to work in this Form for whatever reason, so I use this alternative method of processing keys
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             if (keyData == (Keys.Control | Keys.V)) // Hotkey: Paste mask
-                PasteImage();
+                PasteMask();
 
             if (keyData == (Keys.Control | Keys.Z)) // Hotkey: Undo
                 HistoryUndo();
@@ -164,12 +143,67 @@ namespace StableDiffusionGui.Forms
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
-        private void pasteMaskToolStripMenuItem_Click(object sender, EventArgs e)
+        private void DrawForm_SizeChanged(object sender, EventArgs e)
         {
-            PasteImage();
+            SetPictureBoxPadding();
         }
 
-        private void PasteImage()
+        #region Context Menu
+
+        private void clearToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ClearMask();
+        }
+
+        private void invertMaskToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            InvertMask();
+        }
+
+        private void pasteMaskToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PasteMask();
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveMask();
+        }
+
+        private void loadToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            LoadMask();
+        }
+
+        #endregion
+
+        #region Buttons Bottom Left
+
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            ClearMask();
+        }
+
+        private void btnMaskSave_Click(object sender, EventArgs e)
+        {
+            SaveMask();
+        }
+
+        private void btnMaskLoad_Click(object sender, EventArgs e)
+        {
+            LoadMask();
+        }
+
+        #endregion
+
+
+        private void Blur()
+        {
+            if (_raw != null)
+                pictBox.Image = new GaussianBlur(_raw).Process(InpaintingUtils.CurrentBlurValue);
+        }
+
+        private void PasteMask()
         {
             if (!EnabledFeatures.MaskPasting)
                 return;
@@ -214,12 +248,7 @@ namespace StableDiffusionGui.Forms
             pictBox.Invalidate();
         }
 
-        private void DrawForm_SizeChanged(object sender, EventArgs e)
-        {
-            SetPictureBoxPadding();
-        }
-
-        private void SetPictureBoxPadding ()
+        private void SetPictureBoxPadding()
         {
             Size frameSize = tableLayoutPanelImg.Size;
             Size imageSize = BackgroundImg.Size;
@@ -236,6 +265,96 @@ namespace StableDiffusionGui.Forms
             tableLayoutPanelImg.RowStyles[0].Height = padTopBot;
             tableLayoutPanelImg.RowStyles[1].Height = targetImgBoxSize.Height;
             tableLayoutPanelImg.RowStyles[2].Height = padTopBot;
+        }
+
+        public void ClearMask()
+        {
+            _raw = new Bitmap(BackgroundImg.Width, BackgroundImg.Height);
+            pictBox.Image = null;
+            Invalidate();
+        }
+
+        public void InvertMask()
+        {
+            var magickImg = ImgUtils.GetMagickImage(_raw);
+            magickImg = ImgUtils.RemoveTransparency(magickImg, ImgUtils.NoAlphaMode.Fill, MagickColors.White);
+            magickImg = ImgUtils.Invert(magickImg);
+            magickImg = ImgUtils.ReplaceColorWithTransparency(magickImg, MagickColors.White);
+            _raw = magickImg.ToBitmap();
+            Blur();
+            pictBox.Invalidate();
+        }
+
+        public void SaveMask()
+        {
+            string initDir = Directory.CreateDirectory(Path.Combine(Paths.GetExeDir(), Constants.Dirs.Masks)).FullName;
+            string fname = Path.GetFileNameWithoutExtension(MainUi.CurrentInitImgPaths.FirstOrDefault()).Trunc(20);
+            string initFilename = $"mask_{fname}_{_raw.Size.AsString()}_{DateTime.Now.ToString("MM-dd-yyyy_HH-mm-ss")}";
+
+            CommonSaveFileDialog dialog = new CommonSaveFileDialog
+            {
+                AddToMostRecentlyUsedList = false,
+                AlwaysAppendDefaultExtension = true,
+                DefaultExtension = ".png",
+                DefaultDirectory = initDir,
+                InitialDirectory = initDir,
+                DefaultFileName = initFilename,
+            };
+
+            dialog.Filters.Add(new CommonFileDialogFilter("PNG Image Files", "*.png"));
+            dialog.ShowDialog();
+
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(dialog.FileName))
+                    _raw.Save(dialog.FileName);
+            }
+            catch (Exception ex)
+            {
+                Logger.Log($"Failed to save mask: {ex.Message}");
+                Logger.Log(ex.StackTrace, true);
+            }
+        }
+
+        public void LoadMask()
+        {
+            string initDir = Directory.CreateDirectory(Path.Combine(Paths.GetExeDir(), Constants.Dirs.Masks)).FullName;
+
+            CommonOpenFileDialog dialog = new CommonOpenFileDialog
+            {
+                AddToMostRecentlyUsedList = false,
+                DefaultExtension = ".png",
+                DefaultDirectory = initDir,
+                InitialDirectory = initDir,
+            };
+
+            dialog.Filters.Add(new CommonFileDialogFilter("PNG Image Files", "*.png"));
+            dialog.ShowDialog();
+
+            try
+            {
+                if (!File.Exists(dialog.FileName))
+                {
+                    Logger.Log($"Can't load mask: Invalid file.");
+                    return;
+                }
+
+                Image mask = IoUtils.GetImage(dialog.FileName);
+
+                if(mask.Size != pictBox.Image.Size)
+                {
+                    Logger.Log($"Can't load mask: Mask ({mask.Size.AsString()}) does not match image dimensions ({pictBox.Image.Size.AsString()}).");
+                    return;
+                }
+
+                _raw = (Bitmap)mask;
+                sliderBlur_Scroll(null, null);
+            }
+            catch (Exception ex)
+            {
+                Logger.Log($"Failed to load mask: {ex.Message}");
+                Logger.Log(ex.StackTrace, true);
+            }
         }
     }
 }
