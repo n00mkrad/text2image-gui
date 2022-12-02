@@ -316,7 +316,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Ui\MainForm\ImageViewer.cs" />
-    <Compile Include="Ui\MainUiHotkeys.cs" />
+    <Compile Include="Ui\Hotkeys.cs" />
     <Compile Include="Ui\Strings.cs" />
     <Compile Include="Ui\UiUtils.cs" />
     <EmbeddedResource Include="Forms\CustomForm.resx">

@@ -115,7 +115,7 @@ namespace StableDiffusionGui.Forms
                 menuStripOptions.Show(Cursor.Position);
         }
 
-        private void CycleTiling()
+        public void CycleTiling()
         {
             _currentTiling = _currentTiling == 3 ? 1 : _currentTiling += 1;
             SetImage(CurrentImage, _currentTiling);
@@ -129,32 +129,7 @@ namespace StableDiffusionGui.Forms
 
         private void ImagePopupForm_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Escape || e.KeyCode == Keys.Q)
-            {
-                Close();
-                return;
-            }
-
-            if (e.KeyCode == Keys.T)
-            {
-                CycleTiling();
-                return;
-            }
-
-            if (SlideshowMode)
-            {
-                if (e.KeyCode == Keys.Left)
-                {
-                    Ui.MainForm.ImageViewer.Move(true);
-                    return;
-                }
-
-                if (e.KeyCode == Keys.Right)
-                {
-                    Ui.MainForm.ImageViewer.Move();
-                    return;
-                }
-            }
+            Hotkeys.HandleImageViewer(e.KeyData, this, SlideshowMode);
         }
 
         private void closeESCToolStripMenuItem_Click(object sender, EventArgs e)

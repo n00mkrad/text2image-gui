@@ -446,7 +446,7 @@ namespace StableDiffusionGui
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            MainUiHotkeys.Handle(keyData);
+            Hotkeys.HandleMainForm(keyData);
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
