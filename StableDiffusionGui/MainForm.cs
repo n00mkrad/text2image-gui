@@ -1,17 +1,14 @@
 ﻿using Dasync.Collections;
-using StableDiffusionGui.Data;
 using StableDiffusionGui.Extensions;
 using StableDiffusionGui.Forms;
 using StableDiffusionGui.Implementations;
 using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
-using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
 using StableDiffusionGui.Ui.MainForm;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
@@ -20,8 +17,6 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using ZetaLongPaths;
-using static StableDiffusionGui.Main.Enums;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
 namespace StableDiffusionGui
@@ -449,9 +444,10 @@ namespace StableDiffusionGui
 
         #endregion
 
-        private void MainForm_KeyDown(object sender, KeyEventArgs e)
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            MainUiHotkeys.Handle(e.KeyData);
+            MainUiHotkeys.Handle(keyData);
+            return base.ProcessCmdKey(ref msg, keyData);
         }
 
         private void panelSettings_SizeChanged(object sender, EventArgs e)

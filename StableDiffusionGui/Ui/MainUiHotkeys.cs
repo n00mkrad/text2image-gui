@@ -3,6 +3,7 @@ using StableDiffusionGui.Forms;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
+using StableDiffusionGui.Ui.MainForm;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
@@ -13,6 +14,7 @@ namespace StableDiffusionGui.Ui
     internal class MainUiHotkeys
     {
         private static bool _anyTextboxFocused { get { return Program.MainForm.GetControls().Where(control => control.Focused && control is TextBox).Any(); } }
+        private static bool _allowArrowKeys { get { return Program.MainForm.FocusedControl is Panel || Program.MainForm.FocusedControl is PictureBox; } }
 
         public static void Handle (Keys keys)
         {
@@ -72,6 +74,12 @@ namespace StableDiffusionGui.Ui
 
             if (keys == Keys.Escape) // Hotkey: Remove focus from focused control
                 Program.MainForm.panelSettings.Focus();
+
+            if (keys == (Keys.Control | Keys.Right)) // Hotkey: Next image
+                ImageViewer.Move(false);
+
+            if (keys == (Keys.Control | Keys.Left)) // Hotkey: Previous image
+                ImageViewer.Move(true);
         }
     }
 }
