@@ -33,6 +33,7 @@ namespace StableDiffusionGui.Main
             var sourceAndImportedPaths = new ConcurrentDictionary<string, string>(initImgPaths.ToDictionary(x => x, x => ""));
             int imgsSucessful = 0;
             int imgsResized = 0;
+            string initImgsDir = Directory.CreateDirectory(Path.Combine(Paths.GetSessionDataPath(), "inits")).FullName;
 
             var opts = new ParallelOptions() { MaxDegreeOfParallelism = Environment.ProcessorCount };
             Task parallelTask = Task.Run(async () => Parallel.For(0, sourceAndImportedPaths.Count, opts, async i =>
@@ -64,7 +65,6 @@ namespace StableDiffusionGui.Main
                             img.Scale(new MagickGeometry(targetSize.Width, targetSize.Height) { IgnoreAspectRatio = true });
                         }
 
-                        string initImgsDir = Directory.CreateDirectory(Path.Combine(Paths.GetSessionDataPath(), "inits")).FullName;
                         string resizedImgPath = Path.Combine(initImgsDir, $"{index}.png");
                         img.Write(resizedImgPath);
                         img.Dispose();

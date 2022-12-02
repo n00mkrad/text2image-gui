@@ -1,12 +1,8 @@
 ﻿using StableDiffusionGui.Forms;
 using Newtonsoft.Json;
-using StableDiffusionGui;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
-using System.Threading.Tasks;
-using System.Xml;
 using StableDiffusionGui.Main;
 using System.Linq;
 using StableDiffusionGui.Os;
@@ -59,7 +55,7 @@ namespace StableDiffusionGui.Io
         public static void Set(string str, string value)
         {
             Reload();
-            _cachedConfig[str] = value;
+            _cachedConfig[str] = value == null ? "" : value;
             WriteConfig();
         }
 
@@ -121,21 +117,18 @@ namespace StableDiffusionGui.Io
 
         public static string Get(string key, Type type = Type.String)
         {
-            string keyStr = key.ToString();
-
             try
             {
-                if (_cachedConfig.ContainsKey(keyStr))
-                    return _cachedConfig[keyStr];
+                if (_cachedConfig.ContainsKey(key))
+                    return _cachedConfig[key];
 
                 return WriteDefaultValIfExists(key.ToString(), type);
             }
             catch (Exception e)
             {
-                Logger.Log($"Failed to get {keyStr.Wrap()} from config! {e.Message}", true);
+                Logger.Log($"Failed to get {key.Wrap()} from config! {e.Message}", true);
+                return null;
             }
-
-            return null;
         }
 
         #region Get Bool
@@ -257,8 +250,8 @@ namespace StableDiffusionGui.Io
             if (key == Key.textboxOutPath) return WriteDefault(key, Path.Combine(Paths.GetExeDir(), "Images"));
             if (keyStr == "textboxFavsPath") return WriteDefault(key, Path.Combine(Paths.GetExeDir(), "Images", "Favs"));
             if (key == Key.upDownIterations) return WriteDefault(key, "5");
-            if (key == Key.comboxSdModel) return WriteDefault(key, Paths.GetModels(Enums.StableDiffusion.ModelType.Normal).Select(x => x.Name).FirstOrDefault());
-            if (key == Key.comboxSdModelVae) return WriteDefault(key, Paths.GetModels(Enums.StableDiffusion.ModelType.Vae).Select(x => x.Name).FirstOrDefault());
+            try { if (key == Key.comboxSdModel) return WriteDefault(key, Paths.GetModels(Enums.StableDiffusion.ModelType.Normal).Select(x => x.Name).First()); } catch { }
+            try { if (key == Key.comboxSdModelVae) return WriteDefault(key, Paths.GetModels(Enums.StableDiffusion.ModelType.Vae).Select(x => x.Name).First()); } catch { }
             if (key == Key.checkboxEnableHistory) return WriteDefault(key, true.ToString());
             if (key == Key.sliderCodeformerFidelity) return WriteDefault(key, 0.6f.ToString());
             if (keyStr == "checkboxFullPrecision") return WriteDefault(key, (GpuUtils.CachedGpus.Count > 0 && GpuUtils.CachedGpus[0].FullName.Contains(" GTX 16")).ToString());
