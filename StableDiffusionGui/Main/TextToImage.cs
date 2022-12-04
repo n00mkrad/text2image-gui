@@ -102,14 +102,9 @@ namespace StableDiffusionGui.Main
             TimeSpan timeTaken = DateTime.Now - CurrentTask.StartTime;
 
             if (CurrentTask.ImgCount > 0)
-            {
                 Logger.Log($"Done! Generated {CurrentTask.ImgCount} images in {FormatUtils.Time(timeTaken, false)}.");
-            }
             else
-            {
-                bool logCopySuccess = OsUtils.SetClipboard(Logger.GetSessionLog(Constants.Lognames.Sd));
-                Logger.Log($"No images generated. {(logCopySuccess ? "Log was copied to clipboard." : "")}");
-            }
+                Logger.Log($"No images generated.");
 
             Program.SetState(Program.BusyState.Standby);
 
