@@ -161,7 +161,7 @@ namespace StableDiffusionGui.Ui
             }
         }
 
-        private static void AddInitImages(List<string> paths)
+        public static void AddInitImages(List<string> paths, bool silent = false, DialogResult silentReplaceInsteadOfAppendResult = DialogResult.Yes)
         {
             if (paths.Count < 1)
                 return;
@@ -173,7 +173,7 @@ namespace StableDiffusionGui.Ui
 
                 string msg = $"Do you want to replace the currently loaded {(oldIs1 ? $"image '{Path.GetFileName(CurrentInitImgPaths[0])}'" : $"{CurrentInitImgPaths.Count} images")}?\n\n" +
                     $"Press \"No\" to append {(newIs1 ? "it" : "them")} to the list instead.";
-                DialogResult dialogResult = UiUtils.ShowMessageBox(msg, $"Replace current image{(oldIs1 ? "" : "s")}?", MessageBoxButtons.YesNo);
+                DialogResult dialogResult = silent ? silentReplaceInsteadOfAppendResult : UiUtils.ShowMessageBox(msg, $"Replace current image{(oldIs1 ? "" : "s")}?", MessageBoxButtons.YesNo);
 
                 if (dialogResult == DialogResult.Yes)
                     CurrentInitImgPaths = paths;

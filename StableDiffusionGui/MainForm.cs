@@ -104,8 +104,9 @@ namespace StableDiffusionGui
             if (!Program.Debug)
                 new WelcomeForm().ShowDialogForm(0f);
 
-            panelDebugSendStdin.Visible = Program.Debug;
+            panelDebugLoopback.Visible = Program.Debug;
             panelDebugPerlinThresh.Visible = Program.Debug;
+            panelDebugSendStdin.Visible = Program.Debug;
         }
 
         private void installerBtn_Click(object sender, EventArgs e)
@@ -139,6 +140,12 @@ namespace StableDiffusionGui
         public async void runBtn_Click(object sender, EventArgs e)
         {
             await FormUtils.TryRun();
+
+            if (checkboxLoopback.Checked)
+            {
+                FormUtils.TryUseCurrentImgAsInitImg(true);
+                runBtn_Click(null, null);
+            }
         }
 
         public void SetProgress(int percent, bool taskbarProgress = true)

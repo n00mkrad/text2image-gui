@@ -4,7 +4,6 @@ using StableDiffusionGui.Forms;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -209,15 +208,15 @@ namespace StableDiffusionGui.Ui.MainForm
             }
         }
 
-        public static void TryUseCurrentImgAsInitImg()
+        public static void TryUseCurrentImgAsInitImg(bool ignoreBusy = false)
         {
-            if (Program.Busy)
+            if (Program.Busy && !ignoreBusy)
             {
                 UiUtils.ShowMessageBox("Please wait until the generation has finished.");
                 return;
             }
 
-            MainUi.HandleDroppedFiles(new string[] { ImageViewer.CurrentImagePath });
+            MainUi.AddInitImages(new [] { ImageViewer.CurrentImagePath }.ToList(), true);
         }
 
     }

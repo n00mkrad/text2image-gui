@@ -155,6 +155,9 @@ namespace StableDiffusionGui
             this.promptAutocomplete = new AutocompleteMenuNS.AutocompleteMenu();
             this.pictBoxImgViewer = new System.Windows.Forms.PictureBox();
             this.separator = new System.Windows.Forms.Button();
+            this.panelDebugLoopback = new System.Windows.Forms.Panel();
+            this.label16 = new System.Windows.Forms.Label();
+            this.checkboxLoopback = new System.Windows.Forms.CheckBox();
             this.menuStripOutputImg.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.upDownSeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
@@ -182,6 +185,7 @@ namespace StableDiffusionGui
             this.panelPromptNeg.SuspendLayout();
             this.panelPrompt.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictBoxImgViewer)).BeginInit();
+            this.panelDebugLoopback.SuspendLayout();
             this.SuspendLayout();
             // 
             // runBtn
@@ -559,7 +563,7 @@ namespace StableDiffusionGui
             this.textboxSliderScale.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScale.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScale.Location = new System.Drawing.Point(302, 9);
+            this.textboxSliderScale.Location = new System.Drawing.Point(302, 7);
             this.textboxSliderScale.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScale.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScale.Name = "textboxSliderScale";
@@ -700,7 +704,7 @@ namespace StableDiffusionGui
             this.textboxSliderInitStrength.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderInitStrength.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderInitStrength.Location = new System.Drawing.Point(302, 7);
+            this.textboxSliderInitStrength.Location = new System.Drawing.Point(302, 9);
             this.textboxSliderInitStrength.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderInitStrength.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderInitStrength.Name = "textboxSliderInitStrength";
@@ -1317,6 +1321,7 @@ namespace StableDiffusionGui
             this.panelSettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.panelSettings.AutoScroll = true;
+            this.panelSettings.Controls.Add(this.panelDebugLoopback);
             this.panelSettings.Controls.Add(this.panelDebugPerlinThresh);
             this.panelSettings.Controls.Add(this.panelDebugSendStdin);
             this.panelSettings.Controls.Add(this.panelSeamless);
@@ -1678,7 +1683,7 @@ namespace StableDiffusionGui
             this.textboxSliderSteps.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderSteps.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderSteps.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderSteps.Location = new System.Drawing.Point(302, 9);
+            this.textboxSliderSteps.Location = new System.Drawing.Point(302, 7);
             this.textboxSliderSteps.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderSteps.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderSteps.Name = "textboxSliderSteps";
@@ -1944,6 +1949,40 @@ namespace StableDiffusionGui
             this.separator.TabStop = false;
             this.separator.UseVisualStyleBackColor = false;
             // 
+            // panelDebugLoopback
+            // 
+            this.panelDebugLoopback.Controls.Add(this.checkboxLoopback);
+            this.panelDebugLoopback.Controls.Add(this.label16);
+            this.panelDebugLoopback.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelDebugLoopback.Location = new System.Drawing.Point(0, 555);
+            this.panelDebugLoopback.Name = "panelDebugLoopback";
+            this.panelDebugLoopback.Size = new System.Drawing.Size(645, 35);
+            this.panelDebugLoopback.TabIndex = 19;
+            this.panelDebugLoopback.Visible = false;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label16.ForeColor = System.Drawing.Color.White;
+            this.label16.Location = new System.Drawing.Point(2, 11);
+            this.label16.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(164, 13);
+            this.label16.TabIndex = 105;
+            this.label16.Text = "Enable Loopback Img2Img Mode";
+            // 
+            // checkboxLoopback
+            // 
+            this.checkboxLoopback.AutoSize = true;
+            this.checkboxLoopback.ForeColor = System.Drawing.Color.White;
+            this.checkboxLoopback.Location = new System.Drawing.Point(233, 7);
+            this.checkboxLoopback.Name = "checkboxLoopback";
+            this.checkboxLoopback.Padding = new System.Windows.Forms.Padding(3);
+            this.checkboxLoopback.Size = new System.Drawing.Size(21, 20);
+            this.checkboxLoopback.TabIndex = 110;
+            this.checkboxLoopback.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AllowDrop = true;
@@ -2033,6 +2072,8 @@ namespace StableDiffusionGui
             this.panelPrompt.ResumeLayout(false);
             this.panelPrompt.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictBoxImgViewer)).EndInit();
+            this.panelDebugLoopback.ResumeLayout(false);
+            this.panelDebugLoopback.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2162,6 +2203,9 @@ namespace StableDiffusionGui
         public System.Windows.Forms.TextBox textboxExtraScales;
         public System.Windows.Forms.TextBox textboxExtraInitStrengths;
         public System.Windows.Forms.TextBox textboxExtraSteps;
+        public System.Windows.Forms.Panel panelDebugLoopback;
+        public System.Windows.Forms.CheckBox checkboxLoopback;
+        private System.Windows.Forms.Label label16;
     }
 }
 

@@ -316,12 +316,12 @@ namespace StableDiffusionGui.Main
             return $"{pathNoExt}{separator}{counter}{ext}";
         }
 
-        public static async Task<Dictionary<string, bool>> VerifyModelsWithPseudoHash(IEnumerable<Model> models)
+        public static async Task<EasyDict<string, bool>> VerifyModelsWithPseudoHash(IEnumerable<Model> models)
         {
-            var safeModels = Config.Get("safeModels").FromJson<Dictionary<string, bool>>();
+            var safeModels = Config.Get("safeModels").FromJson<EasyDict<string, bool>>();
 
             if (safeModels == null)
-                safeModels = new Dictionary<string, bool>();
+                safeModels = new EasyDict<string, bool>();
 
             foreach (Model m in models)
             {

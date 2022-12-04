@@ -53,18 +53,18 @@ namespace StableDiffusionGui.Implementations
                 Logger.Log($"Preparing model files...");
 
                 var pickleScanResults = await TtiUtils.VerifyModelsWithPseudoHash(cachedModels.Concat(cachedModelsVae));
-                var cachedModelsUnsafe = cachedModels.Concat(cachedModelsVae).Where(m => !pickleScanResults[IoUtils.GetPseudoHash(m.FullName)]).ToList();
+                var cachedModelsUnsafe = cachedModels.Concat(cachedModelsVae).Where(model => !pickleScanResults.GetNoNull(IoUtils.GetPseudoHash(model.FullName), false)).ToList();
 
                 cachedModels = cachedModels.Except(cachedModelsUnsafe).ToList();
                 cachedModelsVae = cachedModelsVae.Except(cachedModelsUnsafe).ToList();
 
                 if (cachedModelsUnsafe.Any())
                 {
-                    Logger.Log($"Warning: The following model files were disabled because they might be malicious:\n" +
+                    Logger.Log($"Warning: The following model files were disabled because they are either corrupted, incompatible, or malicious:\n" +
                         $"{string.Join("\n", cachedModelsUnsafe.Select(model => model.Name))}");
 
                     if (cachedModelsUnsafe.Select(m => m.FullName).Contains(selectedMdl.FullName))
-                        TextToImage.Cancel("Selected model appears to contain malware.");
+                        TextToImage.Cancel("Selected model can not be loaded because it is either corruped or contains malware.");
                 }
             }
 
