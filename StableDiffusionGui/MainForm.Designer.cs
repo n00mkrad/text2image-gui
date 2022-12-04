@@ -385,7 +385,7 @@ namespace StableDiffusionGui
             this.labelImgPrompt.Name = "labelImgPrompt";
             this.labelImgPrompt.Size = new System.Drawing.Size(512, 16);
             this.labelImgPrompt.TabIndex = 115;
-            this.labelImgPrompt.Text = "No prompt to show.";
+            this.labelImgPrompt.Text = "No prompt to display.";
             this.toolTip.SetToolTip(this.labelImgPrompt, "Shows the prompt of the displayed image. Click to copy.");
             this.labelImgPrompt.Click += new System.EventHandler(this.labelImgPrompt_Click);
             // 
@@ -399,7 +399,7 @@ namespace StableDiffusionGui
             this.labelImgPromptNeg.Name = "labelImgPromptNeg";
             this.labelImgPromptNeg.Size = new System.Drawing.Size(512, 16);
             this.labelImgPromptNeg.TabIndex = 116;
-            this.labelImgPromptNeg.Text = "No negative prompt to show.";
+            this.labelImgPromptNeg.Text = "No negative prompt to display.";
             this.toolTip.SetToolTip(this.labelImgPromptNeg, "Shows the prompt of the displayed image. Click to copy.");
             this.labelImgPromptNeg.Click += new System.EventHandler(this.labelImgPromptNeg_Click);
             // 
