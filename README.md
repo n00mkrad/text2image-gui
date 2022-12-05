@@ -51,7 +51,7 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (form
 ### Additional Inputs
 
 * **Load Image(s):** Load an initialization image that will be used together with your text prompt ("img2img")
-  * Loading multiple images means that each image will be processed separately.
+  * Loading multiple images means that each image will be processed separately, in sequence.
 
 * **Load Concept:** Load a Textual Inversion concept to apply a style or use a specific character
 

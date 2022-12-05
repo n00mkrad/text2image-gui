@@ -61,7 +61,7 @@ Allows you to describe the objects you want to replace, using CLIP (clipseg). No
 
 ![](https://raw.githubusercontent.com/n00mkrad/text2image-gui/main/docs/assets/inpdemo-wing-basic.png)
 
-*Original - Mask - Result using `photo of a landscape, cloudy sky` using Stable Diffusion 1.5*  
+*Original vs Mask - Result using `photo of a landscape, cloudy sky` using Stable Diffusion 1.5*  
 Note that the wing does not really disappear, it just gets replaced by a weird cloud formation.
 
 #### RunwayML Inpainting
