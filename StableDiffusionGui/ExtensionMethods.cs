@@ -472,11 +472,15 @@ namespace StableDiffusionGui
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(s))
+                    return default(T);
+
                 return JsonConvert.DeserializeObject<T>(s);
             }
             catch (Exception ex)
             {
-                Logger.Log($"Failed to deserialize ({ex.Message}):\n{s.Trunc(1000)}", true);
+                Logger.Log($"Failed to deserialize ({ex.Message}): \n'{s.Trunc(1000)}'", true);
+                if(Program.Debug) Logger.Log(ex.StackTrace, true);
                 return default(T);
             }
         }

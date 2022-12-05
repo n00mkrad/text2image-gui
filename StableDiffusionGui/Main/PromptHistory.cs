@@ -11,13 +11,23 @@ namespace StableDiffusionGui.Main
     {
         public static List<TtiSettings> History = new List<TtiSettings>();
 
+        private static readonly int _maxEntries = 500;
+
         public static void Add(TtiSettings batch)
         {
             if (!Config.Get<bool>(Config.Keys.EnablePromptHistory))
                 return;
 
             foreach (string prompt in batch.Prompts.Distinct())
-                History.Add(new TtiSettings() { Prompts = new string[] { prompt }, NegativePrompt = batch.NegativePrompt, Implementation = batch.Implementation, Iterations = batch.Iterations, Params = batch.Params });
+            {
+                var newEntry = new TtiSettings() { Prompts = new string[] { prompt }, NegativePrompt = batch.NegativePrompt, Implementation = batch.Implementation, Iterations = batch.Iterations, Params = batch.Params };
+
+                if (History.Count < 1 || (History.Count >= 1 && History.First().ToJson() != newEntry.ToJson()))
+                    History.Insert(0, newEntry);
+            }
+
+            if (History.Count > _maxEntries)
+                History = History.Take(_maxEntries).ToList();
 
             Save();
         }
@@ -36,7 +46,7 @@ namespace StableDiffusionGui.Main
 
         public static void Save()
         {
-            string text = JsonConvert.SerializeObject(History, Formatting.Indented);
+            string text = History.ToJson(true);
             File.WriteAllText(GetJsonPath(), text);
         }
 

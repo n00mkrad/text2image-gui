@@ -90,7 +90,9 @@ namespace StableDiffusionGui.Io
                 List<string> mdlFolders = new List<string>() { GetModelsPath(type) };
 
                 List<string> customModelDirsList = Config.Get<string>($"{Config.Keys.CustomModelDirsPfx}{type}").FromJson<List<string>>();
-                mdlFolders.AddRange(customModelDirsList, out mdlFolders);
+
+                if (customModelDirsList != null)
+                    mdlFolders.AddRange(customModelDirsList, out mdlFolders);
 
                 if (implementation == Implementation.InvokeAi || implementation == Implementation.OptimizedSd)
                 {
@@ -148,7 +150,7 @@ namespace StableDiffusionGui.Io
             return cachedModels.Where(x => x.Name == filename).FirstOrDefault();
         }
 
-        public static string GetClipboardFilename (string extension)
+        public static string GetClipboardFilename(string extension)
         {
             string filename = Path.ChangeExtension($"clipboard{SessionClipboardIndex}", extension);
             SessionClipboardIndex++;

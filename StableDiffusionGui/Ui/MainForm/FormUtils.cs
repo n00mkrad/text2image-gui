@@ -190,7 +190,7 @@ namespace StableDiffusionGui.Ui.MainForm
                             return;
                         }
 
-                        await TextToImage.RunTti(MainUi.Queue.AsEnumerable().Reverse().ToList()); // Reverse list to use top entries first
+                        await TextToImage.RunTti(MainUi.Queue);
                     }
                     else
                     {

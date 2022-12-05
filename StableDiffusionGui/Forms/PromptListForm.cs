@@ -59,7 +59,7 @@ namespace StableDiffusionGui.Forms
         private void LoadPromptHistory(string filter = "")
         {
             promptListView.Items.Clear();
-            var items = Filter(PromptHistory.History, filter).Select(settings => new ListViewItem() { Text = settings.ToString(), Tag = settings }).Reverse();
+            var items = Filter(PromptHistory.History, filter).Select(settings => new ListViewItem() { Text = settings.ToString(), Tag = settings });
             promptListView.Items.AddRange(items.ToArray());
             LoadTooltips();
         }
@@ -67,7 +67,7 @@ namespace StableDiffusionGui.Forms
         private void LoadQueue(string filter = "")
         {
             promptListView.Items.Clear();
-            var items = Filter(MainUi.Queue, filter).Select(x => new ListViewItem() { Text = x.ToString(), Tag = x }).Reverse();
+            var items = Filter(MainUi.Queue, filter).Select(x => new ListViewItem() { Text = x.ToString(), Tag = x });
             promptListView.Items.AddRange(items.ToArray());
             LoadTooltips();
         }
