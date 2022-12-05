@@ -126,9 +126,9 @@ namespace StableDiffusionGui.Main
                     $"This is not supported with your current implementation ({Strings.Implementation.Get(imp.ToString(), true)}).");
             }
 
-            if (MainUi.CurrentEmbeddingPath != null && MainUi.CurrentEmbeddingPath.ToLowerInvariant().EndsWith(".pt") && prompts.Any(x => !x.Contains("*")))
+            if (MainUi.CurrentEmbeddingPath != null && MainUi.CurrentEmbeddingPath.ToLowerInvariant().EndsWith(".pt") && prompts.Any(x => !x.Contains("*") && !x.MatchesWildcard("*<*>*")))
             {
-                UiUtils.ShowMessageBox($"{(prompts.Count > 1 ? "One of your prompts" : "Your prompt")} does not contain a concept placeholder (*).\n\n" +
+                UiUtils.ShowMessageBox($"{(prompts.Count > 1 ? "One of your prompts" : "Your prompt")} does not contain a concept placeholder (* or <ConceptName>).\n\n" +
                     $"It will not use your loaded concept.");
             }
         }
