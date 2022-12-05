@@ -1,8 +1,10 @@
-﻿using Microsoft.WindowsAPICodePack.Dialogs;
+﻿using ImageMagick;
+using Microsoft.WindowsAPICodePack.Dialogs;
 using StableDiffusionGui.Extensions;
 using StableDiffusionGui.Forms;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
+using StableDiffusionGui.MiscUtils;
 using System;
 using System.Drawing;
 using System.IO;
@@ -10,6 +12,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
+using Paths = StableDiffusionGui.Io.Paths;
 
 namespace StableDiffusionGui.Ui.MainForm
 {
@@ -139,7 +142,7 @@ namespace StableDiffusionGui.Ui.MainForm
             F.progressBarImg.Visible = imageGen;
         }
 
-        public static async Task TryRun ()
+        public static async Task TryRun()
         {
             if (Program.Busy)
             {
@@ -216,8 +219,22 @@ namespace StableDiffusionGui.Ui.MainForm
                 return;
             }
 
-            MainUi.AddInitImages(new [] { ImageViewer.CurrentImagePath }.ToList(), true);
+            MainUi.AddInitImages(new[] { ImageViewer.CurrentImagePath }.ToList(), true);
         }
 
+        public static void EditMask()
+        {
+            if (MainUi.CurrentInitImgPaths == null || MainUi.CurrentInitImgPaths.Count < 1)
+                return;
+
+            Image image = IoUtils.GetImage(MainUi.CurrentInitImgPaths[0], false);
+
+            if (image == null)
+                return;
+
+            Size targetSize = new Size(F.comboxResW.GetInt(), F.comboxResH.GetInt());
+            image = ImgUtils.ScaleAndPad(ImgUtils.GetMagickImage(image), image.Size, targetSize).ToBitmap();
+            Inpainting.EditCurrentMask(image);
+        }
     }
 }

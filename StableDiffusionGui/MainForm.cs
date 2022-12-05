@@ -332,6 +332,7 @@ namespace StableDiffusionGui
         public void UpdateInpaintUi()
         {
             btnResetMask.Visible = Inpainting.CurrentMask != null;
+            btnEditMask.Visible = Inpainting.CurrentMask != null;
         }
 
         private void btnResetMask_Click(object sender, EventArgs e)
@@ -494,6 +495,11 @@ namespace StableDiffusionGui
         {
             Application.OpenForms.Cast<Form>().Where(f => f is ImageHoverForm).ToList().ForEach(f => f.Close());
             Program.MainForm.toolTip.Active = true;
+        }
+
+        private void btnEditMask_Click(object sender, EventArgs e)
+        {
+            FormUtils.EditMask();
         }
     }
 }

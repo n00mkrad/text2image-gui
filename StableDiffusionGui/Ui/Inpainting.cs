@@ -57,15 +57,12 @@ namespace StableDiffusionGui.Ui
 
         public static void PrepareInpainting(string initImgPath, Size targetSize)
         {
-
-            Image img = IoUtils.GetImage(initImgPath); // ImgUtils.ResizeImage(IoUtils.GetImage(initImgPath), targetSize.Width, targetSize.Height);
+            Image img = IoUtils.GetImage(initImgPath);
             img = ImgUtils.ScaleAndPad(ImgUtils.GetMagickImage(img), img.Size, targetSize).ToBitmap();
 
             if (CurrentMask == null)
             {
-                var maskForm = new Forms.DrawForm(img);
-                maskForm.ShowDialogForm();
-                CurrentMask = maskForm.Mask;
+                EditCurrentMask(img);
             }
 
             if (CurrentMask == null)
@@ -80,6 +77,13 @@ namespace StableDiffusionGui.Ui
             CurrentMask.Save(MaskImagePath, System.Drawing.Imaging.ImageFormat.Png);
             MagickImage maskedOverlay = ImgUtils.AlphaMask(ImgUtils.GetMagickImage(img), ImgUtils.GetMagickImage(CurrentMask), true);
             maskedOverlay.Write(MaskedImagePath);
+        }
+
+        public static void EditCurrentMask (Image image)
+        {
+            var maskForm = new Forms.DrawForm(image, CurrentMask);
+            maskForm.ShowDialogForm();
+            CurrentMask = maskForm.Mask;
         }
 
         public static void DeleteMaskedImage()

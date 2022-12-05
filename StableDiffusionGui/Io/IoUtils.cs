@@ -22,7 +22,7 @@ namespace StableDiffusionGui.Io
 {
     internal class IoUtils
     {
-        public static Image GetImage(string path)
+        public static Image GetImage(string path, bool returnDummyIfNull = true)
         {
             try
             {
@@ -32,7 +32,7 @@ namespace StableDiffusionGui.Io
             catch (Exception ex)
             {
                 Logger.Log($"Failed to load image from {path}: {ex.Message}", true);
-                return Resources.imgNotFound;
+                return returnDummyIfNull ? Resources.imgNotFound : null;
             }
         }
 

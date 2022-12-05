@@ -89,6 +89,7 @@ namespace StableDiffusionGui
             this.paypalBtn = new System.Windows.Forms.Button();
             this.textboxClipsegMask = new System.Windows.Forms.TextBox();
             this.textboxExtraSteps = new System.Windows.Forms.TextBox();
+            this.labelCurrentImage = new System.Windows.Forms.Label();
             this.menuStripLogs = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.progressBarImg = new HTAlt.WinForms.HTProgressBar();
             this.menuStripRunQueue = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -152,12 +153,12 @@ namespace StableDiffusionGui
             this.panelAiInputs = new System.Windows.Forms.Panel();
             this.labelCurrentConcept = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.labelCurrentImage = new System.Windows.Forms.Label();
             this.panelPromptNeg = new System.Windows.Forms.Panel();
             this.panelPrompt = new System.Windows.Forms.Panel();
             this.promptAutocomplete = new AutocompleteMenuNS.AutocompleteMenu();
             this.pictBoxImgViewer = new System.Windows.Forms.PictureBox();
             this.separator = new System.Windows.Forms.Button();
+            this.btnEditMask = new HTAlt.WinForms.HTButton();
             this.menuStripOutputImg.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.upDownSeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
@@ -563,7 +564,7 @@ namespace StableDiffusionGui
             this.textboxSliderScale.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScale.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScale.Location = new System.Drawing.Point(302, 9);
+            this.textboxSliderScale.Location = new System.Drawing.Point(302, 7);
             this.textboxSliderScale.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScale.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScale.Name = "textboxSliderScale";
@@ -631,7 +632,7 @@ namespace StableDiffusionGui
             this.btnResetMask.Size = new System.Drawing.Size(79, 23);
             this.btnResetMask.TabIndex = 108;
             this.btnResetMask.TabStop = false;
-            this.btnResetMask.Text = "Reset Mask";
+            this.btnResetMask.Text = "Clear Mask";
             this.toolTip.SetToolTip(this.btnResetMask, "Reset Inpainting Mask");
             this.btnResetMask.Visible = false;
             this.btnResetMask.Click += new System.EventHandler(this.btnResetMask_Click);
@@ -704,7 +705,7 @@ namespace StableDiffusionGui
             this.textboxSliderInitStrength.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderInitStrength.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderInitStrength.Location = new System.Drawing.Point(302, 7);
+            this.textboxSliderInitStrength.Location = new System.Drawing.Point(302, 9);
             this.textboxSliderInitStrength.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderInitStrength.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderInitStrength.Name = "textboxSliderInitStrength";
@@ -1129,10 +1130,10 @@ namespace StableDiffusionGui
             this.promptAutocomplete.SetAutocompleteMenu(this.textboxClipsegMask, null);
             this.textboxClipsegMask.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textboxClipsegMask.ForeColor = System.Drawing.Color.White;
-            this.textboxClipsegMask.Location = new System.Drawing.Point(440, 7);
+            this.textboxClipsegMask.Location = new System.Drawing.Point(439, 7);
             this.textboxClipsegMask.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxClipsegMask.Name = "textboxClipsegMask";
-            this.textboxClipsegMask.Size = new System.Drawing.Size(202, 21);
+            this.textboxClipsegMask.Size = new System.Drawing.Size(203, 21);
             this.textboxClipsegMask.TabIndex = 110;
             this.toolTip.SetToolTip(this.textboxClipsegMask, "Describe what objects you want to replace");
             // 
@@ -1150,6 +1151,20 @@ namespace StableDiffusionGui
             this.textboxExtraSteps.Size = new System.Drawing.Size(69, 21);
             this.textboxExtraSteps.TabIndex = 93;
             this.toolTip.SetToolTip(this.textboxExtraSteps, resources.GetString("textboxExtraSteps.ToolTip"));
+            // 
+            // labelCurrentImage
+            // 
+            this.labelCurrentImage.AutoSize = true;
+            this.labelCurrentImage.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelCurrentImage.ForeColor = System.Drawing.Color.Silver;
+            this.labelCurrentImage.Location = new System.Drawing.Point(344, 10);
+            this.labelCurrentImage.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.labelCurrentImage.Name = "labelCurrentImage";
+            this.labelCurrentImage.Size = new System.Drawing.Size(0, 13);
+            this.labelCurrentImage.TabIndex = 91;
+            this.toolTip.SetToolTip(this.labelCurrentImage, "Shift + Hover to preview.");
+            this.labelCurrentImage.MouseEnter += new System.EventHandler(this.labelCurrentImage_MouseEnter);
+            this.labelCurrentImage.MouseLeave += new System.EventHandler(this.labelCurrentImage_MouseLeave);
             // 
             // menuStripLogs
             // 
@@ -1717,7 +1732,7 @@ namespace StableDiffusionGui
             this.textboxSliderSteps.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderSteps.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderSteps.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderSteps.Location = new System.Drawing.Point(302, 9);
+            this.textboxSliderSteps.Location = new System.Drawing.Point(302, 7);
             this.textboxSliderSteps.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderSteps.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderSteps.Name = "textboxSliderSteps";
@@ -1793,6 +1808,7 @@ namespace StableDiffusionGui
             // 
             this.panelInpainting.Controls.Add(this.textboxClipsegMask);
             this.panelInpainting.Controls.Add(this.comboxInpaintMode);
+            this.panelInpainting.Controls.Add(this.btnEditMask);
             this.panelInpainting.Controls.Add(this.btnResetMask);
             this.panelInpainting.Controls.Add(this.label10);
             this.panelInpainting.Dock = System.Windows.Forms.DockStyle.Top;
@@ -1905,20 +1921,6 @@ namespace StableDiffusionGui
             this.label2.TabIndex = 83;
             this.label2.Text = "Additional Input Data";
             // 
-            // labelCurrentImage
-            // 
-            this.labelCurrentImage.AutoSize = true;
-            this.labelCurrentImage.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelCurrentImage.ForeColor = System.Drawing.Color.Silver;
-            this.labelCurrentImage.Location = new System.Drawing.Point(344, 10);
-            this.labelCurrentImage.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
-            this.labelCurrentImage.Name = "labelCurrentImage";
-            this.labelCurrentImage.Size = new System.Drawing.Size(0, 13);
-            this.labelCurrentImage.TabIndex = 91;
-            this.toolTip.SetToolTip(this.labelCurrentImage, "Shift + Hover to preview.");
-            this.labelCurrentImage.MouseEnter += new System.EventHandler(this.labelCurrentImage_MouseEnter);
-            this.labelCurrentImage.MouseLeave += new System.EventHandler(this.labelCurrentImage_MouseLeave);
-            // 
             // panelPromptNeg
             // 
             this.panelPromptNeg.Controls.Add(this.btnExpandPromptNegField);
@@ -1985,6 +1987,28 @@ namespace StableDiffusionGui
             this.separator.TabIndex = 75;
             this.separator.TabStop = false;
             this.separator.UseVisualStyleBackColor = false;
+            // 
+            // btnEditMask
+            // 
+            this.btnEditMask.AutoColor = true;
+            this.btnEditMask.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnEditMask.ButtonImage = null;
+            this.btnEditMask.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
+            this.btnEditMask.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
+            this.btnEditMask.DrawImage = false;
+            this.btnEditMask.ForeColor = System.Drawing.Color.White;
+            this.btnEditMask.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
+            this.btnEditMask.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
+            this.btnEditMask.Location = new System.Drawing.Point(524, 6);
+            this.btnEditMask.Name = "btnEditMask";
+            this.btnEditMask.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+            this.btnEditMask.Size = new System.Drawing.Size(79, 23);
+            this.btnEditMask.TabIndex = 111;
+            this.btnEditMask.TabStop = false;
+            this.btnEditMask.Text = "Edit Mask";
+            this.toolTip.SetToolTip(this.btnEditMask, "Edit Inpainting Mask");
+            this.btnEditMask.Visible = false;
+            this.btnEditMask.Click += new System.EventHandler(this.btnEditMask_Click);
             // 
             // MainForm
             // 
@@ -2209,6 +2233,7 @@ namespace StableDiffusionGui
         public System.Windows.Forms.Panel panelDebugLoopback;
         public System.Windows.Forms.CheckBox checkboxLoopback;
         private System.Windows.Forms.Label label16;
+        private HTAlt.WinForms.HTButton btnEditMask;
     }
 }
 
