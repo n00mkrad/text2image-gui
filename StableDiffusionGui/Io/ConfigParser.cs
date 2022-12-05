@@ -15,8 +15,8 @@ namespace StableDiffusionGui.Io
             switch (stringMode)
             {
                 case StringMode.Any: Config.Set(key, textbox.Text); break;
-                case StringMode.Int: Config.Set(key, textbox.Text.GetInt().ToString()); break;
-                case StringMode.Float: Config.Set(key, textbox.Text.GetFloat().ToString()); break;
+                case StringMode.Int: Config.Set(key, textbox.Text.GetInt()); break;
+                case StringMode.Float: Config.Set(key, textbox.Text.GetFloat()); break;
             }
         }
 
@@ -25,42 +25,35 @@ namespace StableDiffusionGui.Io
             switch (stringMode)
             {
                 case StringMode.Any: Config.Set(key, comboBox.Text); break;
-                case StringMode.Int: Config.Set(key, comboBox.Text.GetInt().ToString()); break;
-                case StringMode.Float: Config.Set(key, comboBox.Text.GetFloat().ToStringDot()); break;
+                case StringMode.Int: Config.Set(key, comboBox.Text.GetInt()); break;
+                case StringMode.Float: Config.Set(key, comboBox.Text.GetFloat()); break;
             }
         }
 
         public static void SaveGuiElement(CheckBox checkbox, string key)
         {
-            Config.Set(key, checkbox.Checked.ToString());
+            Config.Set(key, checkbox.Checked);
         }
 
         public static void SaveGuiElement(NumericUpDown upDown, string key, StringMode stringMode = StringMode.Any)
         {
             switch (stringMode)
             {
-                case StringMode.Any: Config.Set(key, ((float)upDown.Value).ToStringDot()); break;
-                case StringMode.Int: Config.Set(key, ((int)upDown.Value).ToString()); break;
-                case StringMode.Float: Config.Set(key, ((float)upDown.Value).ToStringDot()); break;
+                case StringMode.Any: Config.Set(key, ((float)upDown.Value)); break;
+                case StringMode.Int: Config.Set(key, ((int)upDown.Value)); break;
+                case StringMode.Float: Config.Set(key, ((float)upDown.Value)); break;
             }
         }
 
-        public static void SaveGuiElement(HTAlt.WinForms.HTSlider slider, string key, SaveValueAs convertMode = SaveValueAs.Unchanged, float convertValue = 1f)
+        public static void SaveGuiElement(HTAlt.WinForms.HTSlider slider, string key)
         {
             float value = slider is CustomSlider ? ((CustomSlider)slider).ActualValueFloat : slider.Value;
-
-            if (convertMode == SaveValueAs.Multiplied)
-                value = value * convertValue;
-
-            if (convertMode == SaveValueAs.Divided)
-                value = value / convertValue;
-
-            Config.Set(key, value.ToStringDot());
+            Config.Set(key, value);
         }
 
         public static void SaveComboxIndex(ComboBox comboBox, string key)
         {
-            Config.Set(key, comboBox.SelectedIndex.ToString());
+            Config.Set(key, comboBox.SelectedIndex);
         }
 
         public static void LoadGuiElement(ComboBox comboBox, string key, string suffix = "")

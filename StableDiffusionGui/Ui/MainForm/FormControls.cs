@@ -20,6 +20,8 @@ namespace StableDiffusionGui.Ui.MainForm
     {
 
         private static StableDiffusionGui.MainForm F { get { return Program.MainForm; } }
+        private static Implementation CurrImpl { get { return (Implementation)Config.Get<int>(Config.Keys.ImplementationIdx); } }
+        private static bool IsUsingInpaintingModel { get { return Path.ChangeExtension(Config.Get<string>(Config.Keys.Model), null).EndsWith("-inpainting"); } }
 
         public static void InitializeControls()
         {
@@ -56,11 +58,10 @@ namespace StableDiffusionGui.Ui.MainForm
 
         public static void RefreshUiAfterSettingsChanged()
         {
-            var imp = (Implementation)Config.Get<int>(Config.Keys.ImplementationIdx);
-            F.panelPromptNeg.Visible = imp != Implementation.OptimizedSd;
-            F.btnEmbeddingBrowse.Enabled = imp == Implementation.InvokeAi;
-            F.panelSampler.Visible = imp == Implementation.InvokeAi;
-            F.panelSeamless.Visible = imp == Implementation.InvokeAi;
+            F.panelPromptNeg.Visible = CurrImpl != Implementation.OptimizedSd && !IsUsingInpaintingModel;
+            F.btnEmbeddingBrowse.Enabled = CurrImpl == Implementation.InvokeAi;
+            F.panelSampler.Visible = CurrImpl == Implementation.InvokeAi;
+            F.panelSeamless.Visible = CurrImpl == Implementation.InvokeAi;
 
             bool adv = Config.Get<bool>(Config.Keys.AdvancedUi);
             F.upDownIterations.Maximum = !adv ? 10000 : 100000;
@@ -96,11 +97,11 @@ namespace StableDiffusionGui.Ui.MainForm
                 Logger.Log($"Concept was cleared because the file no longer exists.");
             }
 
-            bool inpaintingModel = Path.ChangeExtension(Config.Get<string>(Config.Keys.Model), null).EndsWith("-inpainting");
             bool img2img = MainUi.CurrentInitImgPaths != null;
+            bool invoke = CurrImpl == Implementation.InvokeAi;
 
-            F.panelInpainting.Visible = img2img;
-            F.panelInitImgStrength.Visible = img2img && !(inpaintingModel && F.panelInpainting.Visible && F.comboxInpaintMode.SelectedIndex > 0);
+            F.panelInpainting.Visible = img2img && invoke;
+            F.panelInitImgStrength.Visible = img2img && !IsUsingInpaintingModel;
             F.textboxClipsegMask.Visible = (InpaintMode)F.comboxInpaintMode.SelectedIndex == InpaintMode.TextMask;
 
             F.btnInitImgBrowse.Text = img2img ? $"Clear Image{(MainUi.CurrentInitImgPaths.Count == 1 ? "" : "s")}" : "Load Image(s)";
@@ -160,7 +161,7 @@ namespace StableDiffusionGui.Ui.MainForm
         public static void SetHiresFixVisible()
         {
             bool txt2img = MainUi.CurrentInitImgPaths == null;
-            bool compatible = (Implementation)Config.Get<int>(Config.Keys.ImplementationIdx) == Implementation.InvokeAi;
+            bool compatible = CurrImpl == Implementation.InvokeAi;
             F.checkboxHiresFix.Visible = F.comboxResW.GetInt() > 512 && F.comboxResH.GetInt() > 512 && txt2img && compatible;
         }
     }

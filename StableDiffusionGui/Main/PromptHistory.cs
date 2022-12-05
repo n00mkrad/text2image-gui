@@ -57,6 +57,9 @@ namespace StableDiffusionGui.Main
 
             string text = File.ReadAllText(GetJsonPath());
             History = JsonConvert.DeserializeObject<List<TtiSettings>>(text);
+            Logger.Log(History.First().Params.Get("initStrengths"));
+            List<float> s = History.First().Params.Get("initStrengths").FromJson<List<float>>();
+            Logger.Log(s.First().ToString());
         }
 
         private static string GetJsonPath()

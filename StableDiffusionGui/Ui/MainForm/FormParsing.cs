@@ -53,13 +53,13 @@ namespace StableDiffusionGui.Ui.MainForm
             try
             {
                 SetSliderValues(s.Params.FromJson<List<float>>("steps"), true, F.sliderSteps, F.textboxExtraSteps);
-                SetSliderValues(s.Params.FromJson<List<float>>("scales"), true, F.sliderScale, F.textboxExtraScales);
+                SetSliderValues(s.Params.FromJson<List<float>>("scales"), false, F.sliderScale, F.textboxExtraScales);
                 F.comboxResW.Text = s.Params.Get("res").FromJson<Size>().Width.ToString();
                 F.comboxResH.Text = s.Params.Get("res").FromJson<Size>().Height.ToString();
                 F.upDownSeed.Value = s.Params.Get("seed").FromJson<long>();
                 F.comboxSampler.SetIfTextMatches(s.Params.Get("sampler").FromJson<string>(), true, Strings.Samplers);
                 MainUi.CurrentInitImgPaths = s.Params.Get("initImgs").FromJson<List<string>>();
-                SetSliderValues(s.Params.FromJson<List<float>>("initStrengths"), true, F.sliderInitStrength, F.textboxExtraInitStrengths);
+                SetSliderValues(s.Params.FromJson<List<float>>("initStrengths"), false, F.sliderInitStrength, F.textboxExtraInitStrengths);
                 MainUi.CurrentEmbeddingPath = s.Params.Get("embedding").FromJson<string>();
                 F.comboxSeamless.SetIfTextMatches(s.Params.Get("seamless").FromJson<string>(), true, Strings.SeamlessMode);
                 F.comboxInpaintMode.SelectedIndex = (int)s.Params.Get("inpainting").FromJson<InpaintMode>();
