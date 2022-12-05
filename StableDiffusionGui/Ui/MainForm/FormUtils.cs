@@ -167,7 +167,7 @@ namespace StableDiffusionGui.Ui.MainForm
             {
                 if (Program.Busy)
                 {
-                    TextToImage.Cancel();
+                    TextToImage.Cancel($"Program is already busy ({Program.State})");
                     return;
                 }
                 else

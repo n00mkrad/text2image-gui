@@ -125,17 +125,17 @@ namespace StableDiffusionGui.Main
             Cancel("Canceled manually.", false);
         }
 
-        public static async void Cancel(string reason = "", bool showMsgBox = true)
+        public static async void Cancel(string reason, bool showMsgBox = true)
         {
             if (Canceled)
                 return;
 
             Canceled = true;
 
-            bool manual = reason.Lower().Contains("manually");
+            bool manual = reason.Lower().Contains("manually.");
             bool forceKill = manual && InputUtils.IsHoldingShift; // Shift force-kills the process
 
-            Logger.Log($"Canceling. Manual: {manual} - Implementation: {(CurrentTaskSettings != null ? CurrentTaskSettings.Implementation.ToString() : "None")} - Force Kill: {forceKill}", true);
+            Logger.Log($"Canceling. Reason: {(string.IsNullOrWhiteSpace(reason) ? "None" : reason)} - Implementation: {(CurrentTaskSettings != null ? CurrentTaskSettings.Implementation.ToString() : "None")} - Force Kill: {forceKill}", true);
 
             if (CurrentTaskSettings != null && CurrentTaskSettings.Implementation == Enums.StableDiffusion.Implementation.DiffusersOnnx)
                 forceKill = true;
