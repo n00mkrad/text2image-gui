@@ -131,6 +131,7 @@ namespace StableDiffusionGui.Ui
             if (keys == (Keys.Control | Keys.Left)) // Hotkey: Previous image
             {
                 ImageViewer.Move(true);
+                return;
             }
         }
 
