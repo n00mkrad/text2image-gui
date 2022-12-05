@@ -153,7 +153,7 @@ namespace StableDiffusionGui.Ui.MainForm
 
         public static void CopyCurrentToFavs()
         {
-            string dir = Directory.CreateDirectory(Config.Get("textboxFavsPath")).FullName;
+            string dir = Directory.CreateDirectory(Config.Get<string>(Config.Keys.FavsPath)).FullName;
 
             if (File.Exists(CurrentImagePath))
             {

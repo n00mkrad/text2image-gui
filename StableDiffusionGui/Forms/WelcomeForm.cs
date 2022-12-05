@@ -26,14 +26,14 @@ namespace StableDiffusionGui.Forms
             Task.Run(() => GetWebInfo.LoadNews(newsLabel));
             Task.Run(() => GetWebInfo.LoadPatronListCsv(patronsLabel));
 
-            if(Config.Get("motdShownVersion") != Program.Version)
+            if(Config.Get<string>(Config.Keys.MotdShownVersion) != Program.Version)
             {
-                Config.Set("motdShownVersion", Program.Version);
+                Config.Set(Config.Keys.MotdShownVersion, Program.Version);
             }
             else
             {
                 checkboxDoNotShow.Visible = true;
-                Config.Set("hideMotd", false.ToString());
+                Config.Set(Config.Keys.HideMotd, false.ToString());
             }
         }
 
@@ -60,7 +60,7 @@ namespace StableDiffusionGui.Forms
 
         private void WelcomeForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Config.Set("hideMotd", checkboxDoNotShow.Checked.ToString());
+            Config.Set(Config.Keys.HideMotd, checkboxDoNotShow.Checked.ToString());
         }
     }
 }

@@ -5,7 +5,6 @@ using StableDiffusionGui.Implementations;
 using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
-using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
 using StableDiffusionGui.Ui.MainForm;
@@ -102,7 +101,7 @@ namespace StableDiffusionGui
             await Task.Delay(1); // Don't ask. Just keep it here
             Opacity = 1.0;
 
-            if (!Program.Debug && !(Config.GetBool("hideMotd") && Config.Get("motdShownVersion") == Program.Version))
+            if (!Program.Debug && !(Config.Get<bool>(Config.Keys.HideMotd) && Config.Get<string>(Config.Keys.MotdShownVersion) == Program.Version))
                 new WelcomeForm().ShowDialogForm(0f);
 
             panelDebugLoopback.Visible = Program.Debug;
@@ -171,7 +170,7 @@ namespace StableDiffusionGui
 
         private void btnOpenOutFolder_Click(object sender, EventArgs e)
         {
-            Process.Start("explorer", Config.Get(Config.Key.textboxOutPath));
+            Process.Start("explorer", Config.Get<string>(Config.Keys.OutPath));
         }
 
         #region Link Buttons
@@ -385,7 +384,7 @@ namespace StableDiffusionGui
             if (Program.Busy || !MainUi.IsInstalledWithWarning())
                 return;
 
-            InvokeAi.RunCli(Config.Get(Config.Key.textboxOutPath), Config.Get(Config.Key.comboxSdModelVae));
+            InvokeAi.RunCli(Config.Get<string>(Config.Keys.OutPath), Config.Get<string>(Config.Keys.ModelVae));
         }
 
         private void openModelMergeToolToolStripMenuItem_Click(object sender, EventArgs e)

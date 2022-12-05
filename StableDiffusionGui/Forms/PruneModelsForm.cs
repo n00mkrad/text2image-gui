@@ -32,8 +32,8 @@ namespace StableDiffusionGui.Forms
             LoadModels();
             comboxPrunePrecision.FillFromEnum<Enums.Models.Format>(_uiStrings);
 
-            ConfigParser.LoadComboxIndex(comboxPrunePrecision);
-            ConfigParser.LoadGuiElement(checkboxPruneDeleteInput);
+            ConfigParser.LoadComboxIndex(comboxPrunePrecision, Config.Keys.PrunePrecisionIdx);
+            ConfigParser.LoadGuiElement(checkboxPruneDeleteInput, Config.Keys.PruneDeleteInput);
         }
 
         private void btnReloadModels_Click(object sender, EventArgs e)
@@ -162,8 +162,8 @@ namespace StableDiffusionGui.Forms
 
         private void SaveConfig ()
         {
-            ConfigParser.SaveComboxIndex(comboxPrunePrecision);
-            ConfigParser.SaveGuiElement(checkboxPruneDeleteInput);
+            ConfigParser.SaveComboxIndex(comboxPrunePrecision, Config.Keys.PrunePrecisionIdx);
+            ConfigParser.SaveGuiElement(checkboxPruneDeleteInput, Config.Keys.PruneDeleteInput);
         }
     }
 }

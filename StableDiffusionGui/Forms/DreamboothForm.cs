@@ -64,7 +64,7 @@ namespace StableDiffusionGui.Forms
                     valid = false;
                 }
 
-                int cudaDeviceOpt = Config.GetInt("comboxCudaDevice");
+                int cudaDeviceOpt = Config.Get<int>(Config.Keys.CudaDeviceIdx);
 
                 if (valid && cudaDeviceOpt == (int)Enums.Cuda.Device.Cpu)
                 {

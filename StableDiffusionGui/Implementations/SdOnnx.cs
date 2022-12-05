@@ -94,7 +94,7 @@ namespace StableDiffusionGui.Implementations
                             seed++;
                     }
 
-                    if (Config.GetBool(Config.Key.checkboxMultiPromptsSameSeed))
+                    if (Config.Get<bool>(Config.Keys.MultiPromptsSameSeed))
                         seed = startSeed;
                 }
 

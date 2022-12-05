@@ -27,42 +27,42 @@ namespace StableDiffusionGui.Ui.MainForm
             F.comboxSeamless.FillFromEnum<SeamlessMode>(Strings.SeamlessMode, 0);
             F.comboxInpaintMode.FillFromEnum<InpaintMode>(Strings.InpaintMode, 0);
 
-            var resItems = MainUi.Resolutions.Where(x => x <= (Config.GetBool("checkboxAdvancedMode") ? 2048 : 1024)).Select(x => x.ToString());
+            var resItems = MainUi.Resolutions.Where(x => x <= (Config.Get<bool>(Config.Keys.AdvancedUi) ? 2048 : 1024)).Select(x => x.ToString());
             F.comboxResW.SetItems(resItems, UiExtensions.SelectMode.Last);
             F.comboxResH.SetItems(resItems, UiExtensions.SelectMode.Last);
         }
 
         public static void Load()
         {
-            ConfigParser.LoadGuiElement(F.upDownIterations);
-            ConfigParser.LoadGuiElement(F.sliderSteps);
-            ConfigParser.LoadGuiElement(F.sliderScale);
-            ConfigParser.LoadGuiElement(F.comboxResH);
-            ConfigParser.LoadGuiElement(F.comboxResW);
-            ConfigParser.LoadComboxIndex(F.comboxSampler);
-            ConfigParser.LoadGuiElement(F.sliderInitStrength);
+            ConfigParser.LoadGuiElement(F.upDownIterations, Config.Keys.Iterations);
+            ConfigParser.LoadGuiElement(F.sliderSteps, Config.Keys.Steps);
+            ConfigParser.LoadGuiElement(F.sliderScale, Config.Keys.Scale);
+            ConfigParser.LoadGuiElement(F.comboxResW, Config.Keys.ResW);
+            ConfigParser.LoadGuiElement(F.comboxResH, Config.Keys.ResH);
+            ConfigParser.LoadComboxIndex(F.comboxSampler, Config.Keys.Sampler);
+            ConfigParser.LoadGuiElement(F.sliderInitStrength, Config.Keys.InitStrength);
         }
 
         public static void Save()
         {
-            ConfigParser.SaveGuiElement(F.upDownIterations);
-            ConfigParser.SaveGuiElement(F.sliderSteps);
-            ConfigParser.SaveGuiElement(F.sliderScale);
-            ConfigParser.SaveGuiElement(F.comboxResH);
-            ConfigParser.SaveGuiElement(F.comboxResW);
-            ConfigParser.SaveComboxIndex(F.comboxSampler);
-            ConfigParser.SaveGuiElement(F.sliderInitStrength);
+            ConfigParser.SaveGuiElement(F.upDownIterations, Config.Keys.Iterations);
+            ConfigParser.SaveGuiElement(F.sliderSteps, Config.Keys.Steps);
+            ConfigParser.SaveGuiElement(F.sliderScale, Config.Keys.Scale);
+            ConfigParser.SaveGuiElement(F.comboxResW, Config.Keys.ResW);
+            ConfigParser.SaveGuiElement(F.comboxResH, Config.Keys.ResH);
+            ConfigParser.SaveComboxIndex(F.comboxSampler, Config.Keys.Sampler);
+            ConfigParser.SaveGuiElement(F.sliderInitStrength, Config.Keys.InitStrength);
         }
 
         public static void RefreshUiAfterSettingsChanged()
         {
-            var imp = (Implementation)Config.GetInt("comboxImplementation");
+            var imp = (Implementation)Config.Get<int>(Config.Keys.ImplementationIdx);
             F.panelPromptNeg.Visible = imp != Implementation.OptimizedSd;
             F.btnEmbeddingBrowse.Enabled = imp == Implementation.InvokeAi;
             F.panelSampler.Visible = imp == Implementation.InvokeAi;
             F.panelSeamless.Visible = imp == Implementation.InvokeAi;
 
-            bool adv = Config.GetBool("checkboxAdvancedMode");
+            bool adv = Config.Get<bool>(Config.Keys.AdvancedUi);
             F.upDownIterations.Maximum = !adv ? 10000 : 100000;
             F.sliderSteps.ActualMaximum = !adv ? 120 : 500;
             F.sliderSteps.ValueStep = !adv ? 5 : 1;
@@ -96,7 +96,7 @@ namespace StableDiffusionGui.Ui.MainForm
                 Logger.Log($"Concept was cleared because the file no longer exists.");
             }
 
-            bool inpaintingModel = Path.ChangeExtension(Config.Get("comboxSdModel"), null).EndsWith("-inpainting");
+            bool inpaintingModel = Path.ChangeExtension(Config.Get<string>(Config.Keys.Model), null).EndsWith("-inpainting");
             bool img2img = MainUi.CurrentInitImgPaths != null;
             F.panelInpainting.Visible = img2img;
             F.panelInitImgStrength.Visible = img2img && !inpaintingModel;
@@ -157,7 +157,7 @@ namespace StableDiffusionGui.Ui.MainForm
         public static void SetHiresFixVisible()
         {
             bool txt2img = MainUi.CurrentInitImgPaths == null;
-            bool compatible = (Implementation)Config.GetInt("comboxImplementation") == Implementation.InvokeAi;
+            bool compatible = (Implementation)Config.Get<int>(Config.Keys.ImplementationIdx) == Implementation.InvokeAi;
             F.checkboxHiresFix.Visible = F.comboxResW.GetInt() > 512 && F.comboxResH.GetInt() > 512 && txt2img && compatible;
         }
     }

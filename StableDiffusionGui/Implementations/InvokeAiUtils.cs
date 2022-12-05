@@ -48,7 +48,7 @@ namespace StableDiffusionGui.Implementations
             if (cachedModelsVae == null || cachedModelsVae.Count < 1)
                 cachedModelsVae = Paths.GetModels(Enums.StableDiffusion.ModelType.Vae);
 
-            if (!Config.GetBool("disablePickleScanner"))
+            if (!Config.Get<bool>(Config.Keys.DisablePickleScanner))
             {
                 Logger.Log($"Preparing model files...");
 

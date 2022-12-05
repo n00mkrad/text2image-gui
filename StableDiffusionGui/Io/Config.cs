@@ -6,6 +6,8 @@ using System.IO;
 using StableDiffusionGui.Main;
 using System.Linq;
 using StableDiffusionGui.Os;
+using System.Threading.Tasks;
+using StableDiffusionGui.Data;
 
 namespace StableDiffusionGui.Io
 {
@@ -13,7 +15,7 @@ namespace StableDiffusionGui.Io
     {
         public static bool Ready = false;
         public static string ConfigPath = "";
-        private static Dictionary<string, string> _cachedConfig = new Dictionary<string, string>();
+        private static EasyDict<string, string> _cachedConfig = new EasyDict<string, string>();
 
         public static void Init()
         {
@@ -23,67 +25,52 @@ namespace StableDiffusionGui.Io
             Ready = true;
         }
 
-        // public static async Task Reset(int retries = 3, SettingsForm settingsForm = null)
-        // {
-        //     try
-        //     {
-        //         if (settingsForm != null)
-        //             settingsForm.Enabled = false;
-        // 
-        //         File.Delete(configPath);
-        //         await Task.Delay(100);
-        //         cachedValues.Clear();
-        //         await Task.Delay(100);
-        // 
-        //         if (settingsForm != null)
-        //             settingsForm.Enabled = true;
-        //     }
-        //     catch (Exception e)
-        //     {
-        //         retries -= 1;
-        //         Logger.Log($"Failed to reset config: {e.Message}. Retrying ({retries} attempts left).", true);
-        //         await Task.Delay(500);
-        //         await Reset(retries, settingsForm);
-        //     }
-        // }
-
-        public static void Set(Key key, string value)
+        public static async Task Reset(int retries = 3, SettingsForm settingsForm = null)
         {
-            Set(key.ToString(), value);
+            try
+            {
+                if (settingsForm != null)
+                    settingsForm.Enabled = false;
+
+                File.Delete(ConfigPath);
+                await Task.Delay(100);
+                _cachedConfig.Clear();
+                await Task.Delay(100);
+
+                if (settingsForm != null)
+                    settingsForm.Enabled = true;
+            }
+            catch (Exception e)
+            {
+                retries -= 1;
+                Logger.Log($"Failed to reset config: {e.Message}. Retrying ({retries} attempts left).", true);
+                await Task.Delay(500);
+                await Reset(retries, settingsForm);
+            }
         }
 
-        public static void Set(string str, string value)
+        public static void Set<T>(string key, T value)
         {
             Reload();
-            _cachedConfig[str] = value == null ? "" : value;
-            WriteConfig();
-        }
-
-        public static void Set(Dictionary<string, string> keyValuePairs)
-        {
-            Reload();
-
-            foreach (KeyValuePair<string, string> entry in keyValuePairs)
-                _cachedConfig[entry.Key] = entry.Value;
-
+            _cachedConfig[key] = value == null ? "" : value.ToJson();
             WriteConfig();
         }
 
         private static void WriteConfig()
         {
             SortedDictionary<string, string> cachedValuesSorted = new SortedDictionary<string, string>(_cachedConfig);
-            File.WriteAllText(ConfigPath, JsonConvert.SerializeObject(cachedValuesSorted, Newtonsoft.Json.Formatting.Indented));
+            File.WriteAllText(ConfigPath, cachedValuesSorted.ToJson(true));
         }
 
         private static void Reload()
         {
             try
             {
-                Dictionary<string, string> newDict = new Dictionary<string, string>();
-                Dictionary<string, string> deserializedConfig = JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(ConfigPath));
+                EasyDict<string, string> newDict = new EasyDict<string, string>();
+                EasyDict<string, string> deserializedConfig = JsonConvert.DeserializeObject<EasyDict<string, string>>(File.ReadAllText(ConfigPath));
 
                 if (deserializedConfig == null)
-                    deserializedConfig = new Dictionary<string, string>();
+                    deserializedConfig = new EasyDict<string, string>();
 
                 foreach (KeyValuePair<string, string> entry in deserializedConfig)
                     newDict.Add(entry.Key, entry.Value);
@@ -96,204 +83,115 @@ namespace StableDiffusionGui.Io
             }
         }
 
-        // Get using fixed key
-        public static string Get(Key key, string defaultVal)
-        {
-            WriteIfDoesntExist(key.ToString(), defaultVal);
-            return Get(key);
-        }
-
-        // Get using string
-        public static string Get(string key, string defaultVal)
-        {
-            WriteIfDoesntExist(key, defaultVal);
-            return Get(key);
-        }
-
-        public static string Get(Key key, Type type = Type.String)
-        {
-            return Get(key.ToString(), type);
-        }
-
-        public static string Get(string key, Type type = Type.String)
+        public static T Get<T>(string key, T defaultValue = default)
         {
             try
             {
-                if (_cachedConfig.ContainsKey(key))
-                    return _cachedConfig[key];
+                if (!_cachedConfig.ContainsKey(key))
+                {
+                    if (defaultValue != null && !defaultValue.Equals(default(T)))
+                        Set(key, defaultValue);
+                    else
+                        ApplyDefaults(key);
+                }
 
-                return WriteDefaultValIfExists(key.ToString(), type);
+                return _cachedConfig.GetNoNull(key, default(T).ToJson()).FromJson<T>();
             }
             catch (Exception e)
             {
                 Logger.Log($"Failed to get {key.Wrap()} from config! {e.Message}", true);
-                return null;
+                return default(T);
             }
         }
 
-        #region Get Bool
-
-        public static bool GetBool(Key key)
+        /// <returns> True if a default value was applied, False if not </returns>
+        private static bool ApplyDefaults(string key)
         {
-            return Get(key, Type.Bool).GetBool();
-        }
-
-        public static bool GetBool(Key key, bool defaultVal = false)
-        {
-            WriteIfDoesntExist(key.ToString(), (defaultVal ? "True" : "False"));
-            return Get(key, Type.Bool).GetBool();
-        }
-
-        public static bool GetBool(string key)
-        {
-            return Get(key, Type.Bool).GetBool();
-        }
-
-        public static bool GetBool(string key, bool defaultVal)
-        {
-            WriteIfDoesntExist(key.ToString(), (defaultVal ? "True" : "False"));
-            return bool.Parse(Get(key, Type.Bool));
-        }
-
-        #endregion
-
-        #region Get Int
-
-        public static int GetInt(Key key)
-        {
-            return Get(key, Type.Int).GetInt();
-        }
-
-        public static int GetInt(Key key, int defaultVal)
-        {
-            WriteIfDoesntExist(key.ToString(), defaultVal.ToString());
-            return GetInt(key);
-        }
-
-        public static int GetInt(string key)
-        {
-            return Get(key, Type.Int).GetInt();
-        }
-
-        public static int GetInt(string key, int defaultVal)
-        {
-            WriteIfDoesntExist(key.ToString(), defaultVal.ToString());
-            return GetInt(key);
-        }
-
-        #endregion
-
-        #region Get Float
-
-        public static float GetFloat(Key key)
-        {
-            return Get(key, Type.Float).GetFloat();
-        }
-
-        public static float GetFloat(Key key, float defaultVal)
-        {
-            WriteIfDoesntExist(key.ToString(), defaultVal.ToStringDot());
-            return Get(key, Type.Float).GetFloat();
-        }
-
-        public static float GetFloat(string key)
-        {
-            return Get(key, Type.Float).GetFloat();
-        }
-
-        public static float GetFloat(string key, float defaultVal)
-        {
-            WriteIfDoesntExist(key.ToString(), defaultVal.ToStringDot());
-            return Get(key, Type.Float).GetFloat();
-        }
-
-        public static string GetFloatString(Key key)
-        {
-            return Get(key, Type.Float).Replace(",", ".");
-        }
-
-        public static string GetFloatString(string key)
-        {
-            return Get(key, Type.Float).Replace(",", ".");
-        }
-
-        #endregion
-
-        static void WriteIfDoesntExist(string key, string val)
-        {
-            if (_cachedConfig.ContainsKey(key.ToString()))
-                return;
-
-            Set(key, val);
-        }
-
-        public enum Type { String, Int, Float, Bool }
-        private static string WriteDefaultValIfExists(string keyStr, Type type)
-        {
-            Key key;
-
-            try
+            switch (key)
             {
-                key = (Key)Enum.Parse(typeof(Key), keyStr);
+                case Keys.CodeformerFidelity: Set(key, 0.6f); return true;
+                case Keys.EnablePromptHistory: Set(key, true); return true;
+                case Keys.FaceRestoreStrength: Set(key, 0.8f); return true;
+                case Keys.FavsPath: Set(key, Path.Combine(Paths.GetExeDir(), "Images", "Favs")); return true;
+                case Keys.FilenameIgnoreWildcards: Set(key, true); return true;
+                case Keys.FolderPerPrompt: Set(key, true); return true;
+                case Keys.FullPrecision: Set(key, GpuUtils.CachedGpus.Count > 0 && GpuUtils.CachedGpus[0].FullName.Contains(" GTX 16")); return true;
+                case Keys.InitStrength: Set(key, 0.5f); return true;
+                case Keys.Iterations: Set(key, 5); return true;
+                case Keys.MedVramDisablePostProcessing: Set(key, true); return true;
+                case Keys.MedVramFreeGpuMem: Set(key, true); return true;
+                case Keys.Model: try { Set(key, Paths.GetModels(Enums.StableDiffusion.ModelType.Normal).Select(x => x.Name).First()); } catch { Set(key, ""); } return true;
+                case Keys.ModelInFilename: Set(key, true); return true;
+                case Keys.ModelVae: try { Set(key, Paths.GetModels(Enums.StableDiffusion.ModelType.Vae).Select(x => x.Name).First()); } catch { Set(key, ""); } return true;
+                case Keys.MultiPromptsSameSeed: Set(key, true); return true;
+                case Keys.OutPath: Set(key, Path.Combine(Paths.GetExeDir(), "Images")); return true;
+                case Keys.PromptInFilename: Set(key, true); return true;
+                case Keys.PruneDeleteInput: Set(key, true); return true;
+                case Keys.PrunePrecisionIdx: Set(key, true); return true;
+                case Keys.ResH: Set(key, 512); return true;
+                case Keys.ResW: Set(key, 512); return true;
+                case Keys.SamplerInFilename: Set(key, true); return true;
+                case Keys.Scale: Set(key, 8.0f); return true;
+                case Keys.ScaleInFilename: Set(key, true); return true;
+                case Keys.SeedInFilename: Set(key, true); return true;
+                case Keys.Steps: Set(key, 25); return true;
+                case Keys.UpscaleStrength: Set(key, 1.0f); return true;
             }
-            catch
-            {
-                key = Key.none;
-            }
 
-            if (key == Key.checkboxMultiPromptsSameSeed) return WriteDefault(key, "True");
-            if (key == Key.sliderInitStrength) return WriteDefault(key, "0.5");
-            if (keyStr == "comboxResW") return WriteDefault(key, "512");
-            if (keyStr == "comboxResH") return WriteDefault(key, "512");
-            if (key == Key.sliderSteps) return WriteDefault(key, "25");
-            if (key == Key.sliderScale) return WriteDefault(key, "8");
-            if (key == Key.textboxOutPath) return WriteDefault(key, Path.Combine(Paths.GetExeDir(), "Images"));
-            if (keyStr == "textboxFavsPath") return WriteDefault(key, Path.Combine(Paths.GetExeDir(), "Images", "Favs"));
-            if (key == Key.upDownIterations) return WriteDefault(key, "5");
-            try { if (key == Key.comboxSdModel) return WriteDefault(key, Paths.GetModels(Enums.StableDiffusion.ModelType.Normal).Select(x => x.Name).First()); } catch { }
-            try { if (key == Key.comboxSdModelVae) return WriteDefault(key, Paths.GetModels(Enums.StableDiffusion.ModelType.Vae).Select(x => x.Name).First()); } catch { }
-            if (key == Key.checkboxEnableHistory) return WriteDefault(key, true.ToString());
-            if (key == Key.sliderCodeformerFidelity) return WriteDefault(key, 0.6f.ToString());
-            if (keyStr == "checkboxFullPrecision") return WriteDefault(key, (GpuUtils.CachedGpus.Count > 0 && GpuUtils.CachedGpus[0].FullName.Contains(" GTX 16")).ToString());
-            if (keyStr.MatchesWildcard("checkbox*InFilename")) return WriteDefault(key, true.ToString());
-            if (keyStr == "checkboxOutputIgnoreWildcards") return WriteDefault(key, true.ToString());
-            if (keyStr == "sliderFaceRestoreStrength") return WriteDefault(key, 0.8f.ToString());
-            if (keyStr == "sliderUpscaleStrength") return WriteDefault(key, 1.0f.ToString());
-
-            if (key == Key.none)
-                return WriteDefault(keyStr, "");
-            else
-                return WriteDefault(key, "");
+            return false;
         }
 
-        private static string WriteDefault(Key key, string def)
+        public class Keys
         {
-            Set(key, def);
-            return def;
-        }
-
-        private static string WriteDefault(string key, string def)
-        {
-            Set(key, def);
-            return def;
-        }
-
-        public enum Key
-        {
-            none,
-            cmdDebugMode,
-            checkboxMultiPromptsSameSeed,
-            comboxSampler,
-            sliderInitStrength,
-            sliderSteps,
-            sliderScale,
-            textboxOutPath,
-            upDownIterations,
-            comboxSdModel,
-            comboxSdModelVae,
-            lowMemTurbo,
-            checkboxEnableHistory,
-            sliderCodeformerFidelity,
+            public const string CmdDebugMode = "cmdDebugMode";
+            public const string MultiPromptsSameSeed = "multiPromptsSameSeed";
+            public const string Sampler = "sampler";
+            public const string InitStrength = "initStrength";
+            public const string Steps = "steps";
+            public const string Scale = "scale";
+            public const string OutPath = "outPath";
+            public const string FavsPath = "favsPath";
+            public const string Iterations = "iterations";
+            public const string Model = "sdModel";
+            public const string ModelVae = "sdModelVae";
+            public const string LowMemTurbo = "lowMemTurbo";
+            public const string EnablePromptHistory = "enablePromptHistory";
+            public const string CodeformerFidelity = "codeformerFidelity";
+            public const string ResW = "resW";
+            public const string ResH = "resH";
+            public const string FullPrecision = "fullPrecision";
+            public const string FolderPerPrompt = "folderPerPrompt";
+            public const string FolderPerSession = "folderPerSession";
+            public const string PromptInFilename = "promptInFilename";
+            public const string SeedInFilename = "seedInFilename";
+            public const string ScaleInFilename = "scaleInFilename";
+            public const string SamplerInFilename = "samplerInFilename";
+            public const string ModelInFilename = "modelInFilename";
+            public const string FilenameIgnoreWildcards = "filenameIgnoreWildcards";
+            public const string FaceRestoreStrength = "faceRestoreStrength";
+            public const string FaceRestoreEnable = "faceRestoreEnable";
+            public const string FaceRestoreIdx = "faceRestoreIdx";
+            public const string UpscaleEnable = "upscaleEnable";
+            public const string UpscaleIdx = "upscaleIdx";
+            public const string UpscaleStrength = "upscaleStrength";
+            public const string ImplementationIdx = "implementation";
+            public const string CudaDeviceIdx = "cudaDevice";
+            public const string AdvancedUi = "advancedUi";
+            public const string NotifyModeIdx = "motifyModeIdx";
+            public const string SaveUnprocessedImages = "saveUnprocessedImages";
+            public const string UnloadModel = "unloadModel";
+            public const string PrunePrecisionIdx = "prunePrecisionIdx";
+            public const string PruneDeleteInput = "pruneDeleteInput";
+            public const string CustomModelDirsPfx = "customModelDirs";
+            public const string MotdShownVersion = "motdShownVersion";
+            public const string HideMotd = "hideMotd";
+            public const string SafeModels = "safeModels";
+            public const string DisablePickleScanner = "disablePickleScanner";
+            public const string DisableModelFileValidation = "disableModelFileValidation";
+            public const string MedVramFreeGpuMem = "medVramFreeGpuMem";
+            public const string MedVramDisablePostProcessing = "medVramDisablePostProcessing";
+            public const string DisableModelCaching = "disableModelCaching";
+            public const string EnableTokenizationLogging = "enableTokenizationLogging";
         }
     }
 }

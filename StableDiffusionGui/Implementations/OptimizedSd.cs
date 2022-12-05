@@ -89,7 +89,7 @@ namespace StableDiffusionGui.Implementations
                         seed++;
                 }
 
-                if (Config.GetBool(Config.Key.checkboxMultiPromptsSameSeed))
+                if (Config.Get<bool>(Config.Keys.MultiPromptsSameSeed))
                     seed = startSeed;
             }
 
@@ -102,7 +102,7 @@ namespace StableDiffusionGui.Implementations
             Logger.Log($"Running Stable Diffusion - {iterations} Iterations, {steps.Length} Steps, Scales {(scales.Length < 4 ? string.Join(", ", scales.Select(x => x.ToStringDot())) : $"{scales.First()}->{scales.Last()}")}, {res.Width}x{res.Height}, Starting Seed: {startSeed}");
 
             string argsStartup = Args.OptimizedSd.GetDefaultArgsStartup();
-            string newStartupSettings = $"opt {modelNoExt} {argsStartup} {Config.GetInt("comboxCudaDevice")}"; // Check if startup settings match - If not, we need to restart the process
+            string newStartupSettings = $"opt {modelNoExt} {argsStartup} {Config.Get<int>(Config.Keys.CudaDeviceIdx)}"; // Check if startup settings match - If not, we need to restart the process
 
             string initsStr = initImages != null ? $" and {initImages.Count} image{(initImages.Count != 1 ? "s" : "")} using {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
             Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} * {iterations} image{(iterations != 1 ? "s" : "")} * {steps.Length} step count{(steps.Length != 1 ? "s" : "")} * {scales.Length} scale{(scales.Length != 1 ? "s" : "")}{initsStr} = {promptFileLines.Count} images total.");

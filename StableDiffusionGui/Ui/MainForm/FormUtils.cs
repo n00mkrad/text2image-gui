@@ -25,7 +25,7 @@ namespace StableDiffusionGui.Ui.MainForm
             if (Program.Busy)
                 return;
 
-            var imp = (Implementation)Config.GetInt("comboxImplementation");
+            var imp = (Implementation)Config.Get<int>(Config.Keys.ImplementationIdx);
 
             if (imp == Implementation.OptimizedSd)
             {
@@ -101,7 +101,7 @@ namespace StableDiffusionGui.Ui.MainForm
 
         public static void TryOpenPostProcessingSettings()
         {
-            var imp = (Implementation)Config.GetInt("comboxImplementation");
+            var imp = (Implementation)Config.Get<int>(Config.Keys.ImplementationIdx);
 
             if (imp == Implementation.OptimizedSd)
             {

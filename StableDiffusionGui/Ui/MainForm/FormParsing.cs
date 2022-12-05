@@ -95,7 +95,7 @@ namespace StableDiffusionGui.Ui.MainForm
         {
             TtiSettings settings = new TtiSettings
             {
-                Implementation = (Implementation)Config.GetInt("comboxImplementation"),
+                Implementation = (Implementation)Config.Get<int>(Config.Keys.ImplementationIdx),
                 Prompts = F.textboxPrompt.TextNoPlaceholder.SplitIntoLines().Where(x => !string.IsNullOrWhiteSpace(x)).ToArray(),
                 NegativePrompt = F.textboxPromptNeg.TextNoPlaceholder.Trim().Replace(Environment.NewLine, " "),
                 Iterations = (int)F.upDownIterations.Value,
@@ -112,10 +112,10 @@ namespace StableDiffusionGui.Ui.MainForm
                     { "seamless", ((SeamlessMode)F.comboxSeamless.SelectedIndex).ToJson() },
                     { "inpainting", ((InpaintMode)F.comboxInpaintMode.SelectedIndex).ToJson() },
                     { "clipSegMask", F.textboxClipsegMask.Text.Trim().ToJson() },
-                    { "model", Config.Get(Config.Key.comboxSdModel).ToJson() },
+                    { "model", Config.Get<string>(Config.Keys.Model).ToJson() },
                     { "hiresFix", (F.checkboxHiresFix.Visible && F.checkboxHiresFix.Checked).ToJson() },
                     { "lockSeed", F.checkboxLockSeed.Checked.ToJson() },
-                    { "vae", Config.Get(Config.Key.comboxSdModelVae).ToJson() },
+                    { "vae", Config.Get<string>(Config.Keys.ModelVae).ToJson() },
                     { "perlin", F.textboxPerlin.GetFloat().ToJson() },
                     { "threshold", F.textboxThresh.GetInt().ToJson() },
                 },

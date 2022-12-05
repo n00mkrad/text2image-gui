@@ -43,7 +43,7 @@ namespace StableDiffusionGui.Forms
 
             titleLabel.Text = Text;
 
-            ConfigParser.LoadGuiElement(checkboxEnableHistory);
+            ConfigParser.LoadGuiElement(checkboxEnableHistory, Config.Keys.EnablePromptHistory);
         }
 
         private void PromptListForm_Shown(object sender, EventArgs e)
@@ -173,7 +173,7 @@ namespace StableDiffusionGui.Forms
 
         private void PromptListForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            ConfigParser.SaveGuiElement(checkboxEnableHistory);
+            ConfigParser.SaveGuiElement(checkboxEnableHistory, Config.Keys.EnablePromptHistory);
         }
 
         string _previousFilterText = "";

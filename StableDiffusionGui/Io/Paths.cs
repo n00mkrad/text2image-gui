@@ -89,7 +89,7 @@ namespace StableDiffusionGui.Io
             {
                 List<string> mdlFolders = new List<string>() { GetModelsPath(type) };
 
-                List<string> customModelDirsList = Config.Get($"CustomModelDirs{type}").FromJson<List<string>>();
+                List<string> customModelDirsList = Config.Get<string>($"{Config.Keys.CustomModelDirsPfx}{type}").FromJson<List<string>>();
                 mdlFolders.AddRange(customModelDirsList, out mdlFolders);
 
                 if (implementation == Implementation.InvokeAi || implementation == Implementation.OptimizedSd)
@@ -99,7 +99,7 @@ namespace StableDiffusionGui.Io
                     foreach (string folderPath in mdlFolders)
                         fileList.AddRange(IoUtils.GetFileInfosSorted(folderPath, false, $"*.*").ToList());
 
-                    if (!Config.GetBool("disableModelFilesizeValidation"))
+                    if (!Config.Get<bool>(Config.Keys.DisableModelFileValidation))
                     {
                         fileList = fileList.Where(f => TtiUtils.ModelFilesizeValid(f.Length, type)).ToList();
 

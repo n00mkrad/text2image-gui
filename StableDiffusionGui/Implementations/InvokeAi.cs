@@ -120,7 +120,7 @@ namespace StableDiffusionGui.Implementations
                             seed++;
                     }
 
-                    if (Config.GetBool(Config.Key.checkboxMultiPromptsSameSeed))
+                    if (Config.Get<bool>(Config.Keys.MultiPromptsSameSeed))
                         seed = startSeed;
                 }
 
@@ -130,7 +130,7 @@ namespace StableDiffusionGui.Implementations
 
                 string modelsChecksumStartup = InvokeAiUtils.GetModelsYamlHash();
                 string argsStartup = Args.InvokeAi.GetArgsStartup(embedding);
-                string newStartupSettings = $"{argsStartup} {modelsChecksumStartup} {Config.GetInt("comboxCudaDevice")}"; // Check if startup settings match - If not, we need to restart the process
+                string newStartupSettings = $"{argsStartup} {modelsChecksumStartup} {Config.Get<int>(Config.Keys.CudaDeviceIdx)}"; // Check if startup settings match - If not, we need to restart the process
 
                 string initsStr = initImages != null ? $" and {initImages.Count} image{(initImages.Count != 1 ? "s" : "")} using {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
                 Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} * {iterations} image{(iterations != 1 ? "s" : "")} * {steps.Length} step count{(steps.Length != 1 ? "s" : "")} * {scales.Length} scale{(scales.Length != 1 ? "s" : "")}{initsStr} = {cmds.Count} images total.");

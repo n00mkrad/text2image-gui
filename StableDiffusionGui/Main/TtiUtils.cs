@@ -118,7 +118,7 @@ namespace StableDiffusionGui.Main
             if (words > thresh)
                 UiUtils.ShowMessageBox($"{(prompts.Count > 1 ? "One of your prompts" : "Your prompt")} is very long (>{thresh} words).\n\nThe AI might ignore parts of your prompt. Shorten the prompt to avoid this.");
 
-            var imp = (Implementation)Config.GetInt("comboxImplementation");
+            var imp = (Implementation)Config.Get<int>(Config.Keys.ImplementationIdx);
 
             if (imp == Implementation.OptimizedSd && prompts.Where(x => x.MatchesRegex(@"(?:(?!\[)(?:.|\n))*\[(?:(?!\])(?:.|\n))*\]")).Any())
             {
@@ -147,8 +147,8 @@ namespace StableDiffusionGui.Main
         /// <returns> Model ZlpFileInfo , if it exists - null if not </returns>
         public static Model CheckIfCurrentSdModelExists(List<Model> cachedModels = null)
         {
-            string name = Config.Get(Config.Key.comboxSdModel);
-            var imp = (Implementation)Config.GetInt("comboxImplementation");
+            string name = Config.Get<string>(Config.Keys.Model);
+            var imp = (Implementation)Config.Get<int>(Config.Keys.ImplementationIdx);
 
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -201,7 +201,7 @@ namespace StableDiffusionGui.Main
                 envVars["PATH"] = p;
             }
 
-            int cudaDeviceOpt = Config.GetInt("comboxCudaDevice");
+            int cudaDeviceOpt = Config.Get<int>(Config.Keys.CudaDeviceIdx);
 
             if (!allCudaDevices && cudaDeviceOpt > 0)
             {
@@ -308,7 +308,7 @@ namespace StableDiffusionGui.Main
 
         public static async Task<EasyDict<string, bool>> VerifyModelsWithPseudoHash(IEnumerable<Model> models)
         {
-            var safeModels = Config.Get("safeModels").FromJson<EasyDict<string, bool>>();
+            var safeModels = Config.Get<string>(Config.Keys.SafeModels).FromJson<EasyDict<string, bool>>();
 
             if (safeModels == null)
                 safeModels = new EasyDict<string, bool>();
@@ -322,7 +322,7 @@ namespace StableDiffusionGui.Main
                     safeModels[pseudoHash] = safe;
             }
 
-            Config.Set("safeModels", safeModels.ToJson());
+            Config.Set(Config.Keys.SafeModels, safeModels.ToJson());
             return safeModels;
         }
     }

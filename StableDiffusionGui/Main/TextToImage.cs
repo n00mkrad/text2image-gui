@@ -39,9 +39,9 @@ namespace StableDiffusionGui.Main
             CurrentTask = new TtiTaskInfo
             {
                 StartTime = DateTime.Now,
-                OutDir = Config.Get(Config.Key.textboxOutPath),
-                SubfoldersPerPrompt = Config.GetBool("checkboxFolderPerPrompt"),
-                IgnoreWildcardsForFilenames = Config.GetBool("checkboxOutputIgnoreWildcards"),
+                OutDir = Config.Get<string>(Config.Keys.OutPath),
+                SubfoldersPerPrompt = Config.Get<bool>(Config.Keys.FolderPerPrompt),
+                IgnoreWildcardsForFilenames = Config.Get<bool>(Config.Keys.FilenameIgnoreWildcards),
                 TargetImgCount = batches.Sum(x => x.GetTargetImgCount()),
             };
 
@@ -108,7 +108,7 @@ namespace StableDiffusionGui.Main
 
             Program.SetState(Program.BusyState.Standby);
 
-            NotifyMode notifyMode = (NotifyMode)Config.GetInt("comboxNotify");
+            NotifyMode notifyMode = (NotifyMode)Config.Get<int>(Config.Keys.NotifyModeIdx);
 
             if (notifyMode == NotifyMode.Both || notifyMode == NotifyMode.Ping)
                 OsUtils.PlayPingSound(true);
@@ -116,7 +116,7 @@ namespace StableDiffusionGui.Main
             if (notifyMode == NotifyMode.Both || notifyMode == NotifyMode.Notification)
                 OsUtils.ShowNotification("Stable Diffusion GUI", $"Image generation has finished.\nGenerated {CurrentTask.ImgCount} images in {FormatUtils.Time(timeTaken, false)}.", true);
 
-            if (Config.GetBool("checkboxUnloadModel"))
+            if (Config.Get<bool>(Config.Keys.UnloadModel))
                 TtiProcess.Kill();
         }
 

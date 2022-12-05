@@ -87,7 +87,7 @@ namespace StableDiffusionGui.Forms
 
             if (loadCombox)
             {
-                ConfigParser.LoadGuiElement(combox);
+                ConfigParser.LoadGuiElement(combox, type == ModelType.Normal ? Config.Keys.Model : Config.Keys.ModelVae);
 
                 if (combox.Items.Count > 0 && combox.SelectedIndex == -1)
                     combox.SelectedIndex = 0;
@@ -109,56 +109,56 @@ namespace StableDiffusionGui.Forms
             foreach (var g in gpus)
                 comboxCudaDevice.Items.Add($"GPU {g.CudaDeviceId} ({g.FullName} - {g.VramGb} GB)");
 
-            ConfigParser.LoadComboxIndex(comboxCudaDevice);
+            ConfigParser.LoadComboxIndex(comboxCudaDevice, Config.Keys.CudaDeviceIdx);
             _ready = true;
         }
 
         void LoadSettings()
         {
-            ConfigParser.LoadComboxIndex(comboxImplementation);
-            ConfigParser.LoadGuiElement(checkboxFullPrecision);
-            ConfigParser.LoadGuiElement(checkboxFolderPerPrompt);
-            ConfigParser.LoadGuiElement(checkboxOutputIgnoreWildcards);
-            ConfigParser.LoadGuiElement(checkboxFolderPerSession);
-            ConfigParser.LoadGuiElement(checkboxAdvancedMode);
-            ConfigParser.LoadGuiElement(checkboxMultiPromptsSameSeed);
-            ConfigParser.LoadGuiElement(checkboxPromptInFilename);
-            ConfigParser.LoadGuiElement(checkboxSeedInFilename);
-            ConfigParser.LoadGuiElement(checkboxScaleInFilename);
-            ConfigParser.LoadGuiElement(checkboxSamplerInFilename);
-            ConfigParser.LoadGuiElement(checkboxModelInFilename);
-            ConfigParser.LoadGuiElement(textboxOutPath);
-            ConfigParser.LoadGuiElement(textboxFavsPath);
-            ConfigParser.LoadGuiElement(comboxSdModel);
-            ConfigParser.LoadGuiElement(comboxSdModelVae);
+            ConfigParser.LoadComboxIndex(comboxImplementation, Config.Keys.ImplementationIdx);
+            ConfigParser.LoadGuiElement(checkboxFullPrecision, Config.Keys.FullPrecision);
+            ConfigParser.LoadGuiElement(checkboxFolderPerPrompt, Config.Keys.FolderPerPrompt);
+            ConfigParser.LoadGuiElement(checkboxOutputIgnoreWildcards, Config.Keys.FilenameIgnoreWildcards);
+            ConfigParser.LoadGuiElement(checkboxFolderPerSession, Config.Keys.FolderPerSession);
+            ConfigParser.LoadGuiElement(checkboxAdvancedMode, Config.Keys.AdvancedUi);
+            ConfigParser.LoadGuiElement(checkboxMultiPromptsSameSeed, Config.Keys.MultiPromptsSameSeed);
+            ConfigParser.LoadGuiElement(checkboxPromptInFilename, Config.Keys.PromptInFilename);
+            ConfigParser.LoadGuiElement(checkboxSeedInFilename, Config.Keys.SeedInFilename);
+            ConfigParser.LoadGuiElement(checkboxScaleInFilename, Config.Keys.ScaleInFilename);
+            ConfigParser.LoadGuiElement(checkboxSamplerInFilename, Config.Keys.SamplerInFilename);
+            ConfigParser.LoadGuiElement(checkboxModelInFilename, Config.Keys.ModelInFilename);
+            ConfigParser.LoadGuiElement(textboxOutPath, Config.Keys.OutPath);
+            ConfigParser.LoadGuiElement(textboxFavsPath, Config.Keys.FavsPath);
+            ConfigParser.LoadGuiElement(comboxSdModel, Config.Keys.Model);
+            ConfigParser.LoadGuiElement(comboxSdModelVae, Config.Keys.ModelVae);
             // ConfigParser.LoadComboxIndex(comboxCudaDevice);
-            ConfigParser.LoadComboxIndex(comboxNotify);
-            ConfigParser.LoadGuiElement(checkboxSaveUnprocessedImages);
-            ConfigParser.LoadGuiElement(checkboxUnloadModel);
+            ConfigParser.LoadComboxIndex(comboxNotify, Config.Keys.NotifyModeIdx);
+            ConfigParser.LoadGuiElement(checkboxSaveUnprocessedImages, Config.Keys.SaveUnprocessedImages);
+            ConfigParser.LoadGuiElement(checkboxUnloadModel, Config.Keys.UnloadModel);
         }
 
         void SaveSettings()
         {
-            ConfigParser.SaveComboxIndex(comboxImplementation);
-            ConfigParser.SaveGuiElement(checkboxFullPrecision);
-            ConfigParser.SaveGuiElement(checkboxFolderPerPrompt);
-            ConfigParser.SaveGuiElement(checkboxOutputIgnoreWildcards);
-            ConfigParser.SaveGuiElement(checkboxFolderPerSession);
-            ConfigParser.SaveGuiElement(checkboxAdvancedMode);
-            ConfigParser.SaveGuiElement(checkboxMultiPromptsSameSeed);
-            ConfigParser.SaveGuiElement(checkboxPromptInFilename);
-            ConfigParser.SaveGuiElement(checkboxSeedInFilename);
-            ConfigParser.SaveGuiElement(checkboxScaleInFilename);
-            ConfigParser.SaveGuiElement(checkboxSamplerInFilename);
-            ConfigParser.SaveGuiElement(checkboxModelInFilename);
-            ConfigParser.SaveGuiElement(textboxOutPath);
-            ConfigParser.SaveGuiElement(textboxFavsPath);
-            ConfigParser.SaveGuiElement(comboxSdModel);
-            ConfigParser.SaveGuiElement(comboxSdModelVae);
-            ConfigParser.SaveComboxIndex(comboxCudaDevice);
-            ConfigParser.SaveComboxIndex(comboxNotify);
-            ConfigParser.SaveGuiElement(checkboxSaveUnprocessedImages);
-            ConfigParser.SaveGuiElement(checkboxUnloadModel);
+            ConfigParser.SaveComboxIndex(comboxImplementation, Config.Keys.ImplementationIdx);
+            ConfigParser.SaveGuiElement(checkboxFullPrecision, Config.Keys.FullPrecision);
+            ConfigParser.SaveGuiElement(checkboxFolderPerPrompt, Config.Keys.FolderPerPrompt);
+            ConfigParser.SaveGuiElement(checkboxOutputIgnoreWildcards, Config.Keys.FilenameIgnoreWildcards);
+            ConfigParser.SaveGuiElement(checkboxFolderPerSession, Config.Keys.FolderPerSession);
+            ConfigParser.SaveGuiElement(checkboxAdvancedMode, Config.Keys.AdvancedUi);
+            ConfigParser.SaveGuiElement(checkboxMultiPromptsSameSeed, Config.Keys.MultiPromptsSameSeed);
+            ConfigParser.SaveGuiElement(checkboxPromptInFilename, Config.Keys.PromptInFilename);
+            ConfigParser.SaveGuiElement(checkboxSeedInFilename, Config.Keys.SeedInFilename);
+            ConfigParser.SaveGuiElement(checkboxScaleInFilename, Config.Keys.ScaleInFilename);
+            ConfigParser.SaveGuiElement(checkboxSamplerInFilename, Config.Keys.SamplerInFilename);
+            ConfigParser.SaveGuiElement(checkboxModelInFilename, Config.Keys.ModelInFilename);
+            ConfigParser.SaveGuiElement(textboxOutPath, Config.Keys.OutPath);
+            ConfigParser.SaveGuiElement(textboxFavsPath, Config.Keys.FavsPath);
+            ConfigParser.SaveGuiElement(comboxSdModel, Config.Keys.Model);
+            ConfigParser.SaveGuiElement(comboxSdModelVae, Config.Keys.ModelVae);
+            ConfigParser.SaveComboxIndex(comboxCudaDevice, Config.Keys.CudaDeviceIdx);
+            ConfigParser.SaveComboxIndex(comboxNotify, Config.Keys.NotifyModeIdx);
+            ConfigParser.SaveGuiElement(checkboxSaveUnprocessedImages, Config.Keys.SaveUnprocessedImages);
+            ConfigParser.SaveGuiElement(checkboxUnloadModel, Config.Keys.UnloadModel);
         }
 
         private void btnOutPathBrowse_Click(object sender, EventArgs e)

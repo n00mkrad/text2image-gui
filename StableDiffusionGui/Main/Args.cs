@@ -21,17 +21,17 @@ namespace StableDiffusionGui.Main
                 if (!string.IsNullOrWhiteSpace(model))
                     args.Add($"--model {model}");
 
-                if (Config.GetBool("checkboxFullPrecision"))
+                if (Config.Get<bool>(Config.Keys.FullPrecision))
                     args.Add("--precision float32");
 
                 args.Add(GetEmbeddingArg(embedding));
 
                 if (lowVram)
                 {
-                    if (Config.GetBool("medVramFreeGpuMem", true))
+                    if (Config.Get<bool>(Config.Keys.MedVramFreeGpuMem, true))
                         args.Add("--free_gpu_mem");
 
-                    if (Config.GetBool("medVramDisablePostProcessing", false))
+                    if (Config.Get<bool>(Config.Keys.MedVramDisablePostProcessing, false))
                     {
                         args.Add("--no_upscale");
                         args.Add("--no_restore");
@@ -46,7 +46,7 @@ namespace StableDiffusionGui.Main
 
                 int maxCachedModels = 0;
 
-                if (HwInfo.GetFreeRamGb > 6f && !Config.GetBool("disableModelCaching")) // Disable caching if <6GB free, no matter the total RAM
+                if (HwInfo.GetFreeRamGb > 6f && !Config.Get<bool>(Config.Keys.DisableModelCaching)) // Disable caching if <6GB free, no matter the total RAM
                 {
                     maxCachedModels = (int)Math.Floor((HwInfo.GetTotalRamGb - 11f) / 4f); // >16GB => 1 - >20GB => 2 - >24GB => 3 - >24GB => 4 - ...
                     Logger.Log($"InvokeAI model caching: Cache up to {maxCachedModels} models in RAM", true);
@@ -63,10 +63,10 @@ namespace StableDiffusionGui.Main
 
                 args.Add("-n 1");
 
-                if (Config.GetBool("checkboxSaveUnprocessedImages"))
+                if (Config.Get<bool>(Config.Keys.SaveUnprocessedImages))
                     args.Add("-save_orig");
 
-                if (Config.GetBool("enableTokenizationLogging"))
+                if (Config.Get<bool>(Config.Keys.EnableTokenizationLogging))
                     args.Add("-t");
 
                 return string.Join(" ", args);
@@ -91,18 +91,18 @@ namespace StableDiffusionGui.Main
 
             public static string GetFaceRestoreArgs(bool force = false)
             {
-                if (!force && !Config.GetBool("checkboxFaceRestorationEnable"))
+                if (!force && !Config.Get<bool>(Config.Keys.FaceRestoreEnable))
                     return "";
 
                 if (!InstallationStatus.HasSdUpscalers())
                     return "";
 
-                var faceRestoreOpt = (Forms.PostProcSettingsForm.FaceRestoreOption)Config.GetInt("comboxFaceRestoration");
+                var faceRestoreOpt = (Forms.PostProcSettingsForm.FaceRestoreOption)Config.Get<int>(Config.Keys.FaceRestoreIdx);
                 string tool = "";
-                string strength = Config.GetFloat("sliderFaceRestoreStrength").ToStringDot("0.000");
+                string strength = Config.Get<float>(Config.Keys.FaceRestoreStrength).ToStringDot("0.###");
 
                 if (faceRestoreOpt == Forms.PostProcSettingsForm.FaceRestoreOption.CodeFormer)
-                    tool = $"codeformer -cf {Config.GetFloat(Config.Key.sliderCodeformerFidelity).ToStringDot()}";
+                    tool = $"codeformer -cf {Config.Get<float>(Config.Keys.CodeformerFidelity).ToStringDot()}";
 
                 if (faceRestoreOpt == Forms.PostProcSettingsForm.FaceRestoreOption.Gfpgan)
                     tool = "gfpgan";
@@ -112,17 +112,17 @@ namespace StableDiffusionGui.Main
 
             public static string GetUpscaleArgs(bool force = false)
             {
-                if (!force && !Config.GetBool("checkboxUpscaleEnable"))
+                if (!force && !Config.Get<bool>(Config.Keys.UpscaleEnable))
                     return "";
 
-                var upscaleSetting = (Forms.PostProcSettingsForm.UpscaleOption)Config.GetInt("comboxUpscale");
+                var upscaleSetting = (Forms.PostProcSettingsForm.UpscaleOption)Config.Get<int>(Config.Keys.UpscaleIdx);
                 int factor = 2;
 
                 if (upscaleSetting == Forms.PostProcSettingsForm.UpscaleOption.X2) factor = 2;
                 if (upscaleSetting == Forms.PostProcSettingsForm.UpscaleOption.X3) factor = 3;
                 if (upscaleSetting == Forms.PostProcSettingsForm.UpscaleOption.X4) factor = 4;
 
-                return $"-U {factor} {Config.GetFloat("sliderUpscaleStrength").ToStringDot("0.###")}";
+                return $"-U {factor} {Config.Get<float>(Config.Keys.UpscaleStrength).ToStringDot("0.###")}";
             }
         }
 
@@ -132,7 +132,7 @@ namespace StableDiffusionGui.Main
             {
                 List<string> args = new List<string>();
 
-                args.Add($"--precision {(Config.GetBool("checkboxFullPrecision") ? "full" : "autocast")}"); // Precision
+                args.Add($"--precision {(Config.Get<bool>(Config.Keys.FullPrecision) ? "full" : "autocast")}"); // Precision
 
                 return string.Join(" ", args);
             }

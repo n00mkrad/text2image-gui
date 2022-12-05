@@ -27,12 +27,12 @@ namespace StableDiffusionGui.Main
 
             await Task.Delay(_loopWaitBeforeStartMs);
 
-            bool inclPrompt = !currTask.SubfoldersPerPrompt && Config.GetBool("checkboxPromptInFilename");
-            bool inclSeed = Config.GetBool("checkboxSeedInFilename");
-            bool inclScale = Config.GetBool("checkboxScaleInFilename");
-            bool inclSampler = Config.GetBool("checkboxSamplerInFilename");
-            bool inclModel = Config.GetBool("checkboxModelInFilename");
-            bool sessionDir = Config.GetBool("checkboxFolderPerSession");
+            bool inclPrompt = !currTask.SubfoldersPerPrompt && Config.Get<bool>(Config.Keys.PromptInFilename);
+            bool inclSeed = Config.Get<bool>(Config.Keys.SeedInFilename);
+            bool inclScale = Config.Get<bool>(Config.Keys.ScaleInFilename);
+            bool inclSampler = Config.Get<bool>(Config.Keys.SamplerInFilename);
+            bool inclModel = Config.Get<bool>(Config.Keys.ModelInFilename);
+            bool sessionDir = Config.Get<bool>(Config.Keys.FolderPerSession);
 
             while (!TextToImage.Canceled)
             {

@@ -127,7 +127,7 @@ namespace StableDiffusionGui.Os
 
         public static string GetCmdArg()
         {
-            bool stayOpen = Config.GetInt(Config.Key.cmdDebugMode) == 2;
+            bool stayOpen = Config.Get<int>(Config.Keys.CmdDebugMode) == 2;
 
             if (stayOpen)
                 return "/K";
@@ -137,7 +137,7 @@ namespace StableDiffusionGui.Os
 
         public static bool ShowHiddenCmd()
         {
-            return Config.GetInt(Config.Key.cmdDebugMode) > 0;
+            return Config.Get<int>(Config.Keys.CmdDebugMode) > 0;
         }
 
         public static int GetFreeRamMb()

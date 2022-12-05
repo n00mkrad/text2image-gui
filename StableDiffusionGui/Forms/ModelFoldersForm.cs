@@ -48,13 +48,15 @@ namespace StableDiffusionGui.Forms
         private void LoadDirs()
         {
             Folders = new List<string>() { Paths.GetModelsPath(_modelType) };
-            string serializedPaths = Config.Get($"CustomModelDirs{_modelType}");
-            Folders.AddRange(serializedPaths.FromJson<List<string>>(), out Folders);
+            string serializedPaths = Config.Get<string>($"{Config.Keys.CustomModelDirsPfx}{_modelType}");
+
+            if (serializedPaths != null)
+                Folders.AddRange(serializedPaths.FromJson<List<string>>(), out Folders);
         }
 
         private void SaveDirs()
         {
-            Config.Set($"CustomModelDirs{_modelType}", Folders.Where(x => x != Paths.GetModelsPath(_modelType)).ToJson());
+            Config.Set($"{Config.Keys.CustomModelDirsPfx}{_modelType}", Folders.Where(x => x != Paths.GetModelsPath(_modelType)).ToJson());
         }
 
         private void FillList()
@@ -104,7 +106,7 @@ namespace StableDiffusionGui.Forms
 
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
             {
-                if(Directory.Exists(dialog.FileName) && !Folders.Contains(dialog.FileName))
+                if (Directory.Exists(dialog.FileName) && !Folders.Contains(dialog.FileName))
                 {
                     Folders.Add(dialog.FileName);
                     FillList();
