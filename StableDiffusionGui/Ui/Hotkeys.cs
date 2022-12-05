@@ -14,7 +14,6 @@ namespace StableDiffusionGui.Ui
     internal class Hotkeys
     {
         private static bool _anyTextboxFocused { get { return Program.MainForm.GetControls().Where(control => control.Focused && control is TextBox).Any(); } }
-        private static bool _allowArrowKeys { get { return Program.MainForm.FocusedControl is Panel || Program.MainForm.FocusedControl is PictureBox; } }
 
         public static void HandleMainForm (Keys keys)
         {
@@ -122,13 +121,13 @@ namespace StableDiffusionGui.Ui
                 return;
             }
 
-            if (keys == (Keys.Control | Keys.Right)) // Hotkey: Next image
+            if (keys == (Keys.Control | Keys.Right) && !_anyTextboxFocused) // Hotkey: Next image
             {
                 ImageViewer.Move(false);
                 return;
             }
 
-            if (keys == (Keys.Control | Keys.Left)) // Hotkey: Previous image
+            if (keys == (Keys.Control | Keys.Left) && !_anyTextboxFocused) // Hotkey: Previous image
             {
                 ImageViewer.Move(true);
                 return;
