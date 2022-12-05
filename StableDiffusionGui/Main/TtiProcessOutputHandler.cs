@@ -81,7 +81,6 @@ namespace StableDiffusionGui.Main
                 {
                     try
                     {
-                        var log = Logger.GetLastLines(Constants.Lognames.Sd, 2);
                         string pathSource = line.Split(": !fix ")[1].Split(".png ")[0] + ".png";
                         string pathOut = line.Substring(line.IndexOf("] ") + 2).Split(": !fix ")[0];
                         TtiUtils.ExportPostprocessedImage(pathSource, pathOut);

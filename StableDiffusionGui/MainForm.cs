@@ -479,7 +479,7 @@ namespace StableDiffusionGui
 
         private void comboxInpaintMode_SelectedIndexChanged(object sender, EventArgs e)
         {
-            textboxClipsegMask.Visible = (InpaintMode)comboxInpaintMode.SelectedIndex == InpaintMode.TextMask;
+            FormControls.UpdateInitImgAndEmbeddingUi();
         }
 
         private void labelCurrentImage_MouseEnter(object sender, EventArgs e)

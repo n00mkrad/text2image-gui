@@ -98,8 +98,11 @@ namespace StableDiffusionGui.Ui.MainForm
 
             bool inpaintingModel = Path.ChangeExtension(Config.Get<string>(Config.Keys.Model), null).EndsWith("-inpainting");
             bool img2img = MainUi.CurrentInitImgPaths != null;
+
             F.panelInpainting.Visible = img2img;
-            F.panelInitImgStrength.Visible = img2img && !inpaintingModel;
+            F.panelInitImgStrength.Visible = img2img && !(inpaintingModel && F.panelInpainting.Visible && F.comboxInpaintMode.SelectedIndex > 0);
+            F.textboxClipsegMask.Visible = (InpaintMode)F.comboxInpaintMode.SelectedIndex == InpaintMode.TextMask;
+
             F.btnInitImgBrowse.Text = img2img ? $"Clear Image{(MainUi.CurrentInitImgPaths.Count == 1 ? "" : "s")}" : "Load Image(s)";
 
             bool embeddingExists = File.Exists(MainUi.CurrentEmbeddingPath);
