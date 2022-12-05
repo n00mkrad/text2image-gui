@@ -179,6 +179,12 @@
     <Compile Include="Forms\DreamboothForm.designer.cs">
       <DependentUpon>DreamboothForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\ImageHoverForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ImageHoverForm.Designer.cs">
+      <DependentUpon>ImageHoverForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\ImagePopupForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -324,6 +330,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\DreamboothForm.resx">
       <DependentUpon>DreamboothForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ImageHoverForm.resx">
+      <DependentUpon>ImageHoverForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ImagePopupForm.resx">
       <DependentUpon>ImagePopupForm.cs</DependentUpon>

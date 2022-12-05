@@ -5,6 +5,7 @@ using StableDiffusionGui.Implementations;
 using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
+using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
 using StableDiffusionGui.Ui.MainForm;
@@ -479,6 +480,20 @@ namespace StableDiffusionGui
         private void comboxInpaintMode_SelectedIndexChanged(object sender, EventArgs e)
         {
             textboxClipsegMask.Visible = (InpaintMode)comboxInpaintMode.SelectedIndex == InpaintMode.TextMask;
+        }
+
+        private void labelCurrentImage_MouseEnter(object sender, EventArgs e)
+        {
+            Application.OpenForms.Cast<Form>().Where(f => f is ImageHoverForm).ToList().ForEach(f => f.Close());
+
+            MainUi.CurrentInitImgPaths?.Take(1).ToList().ForEach(img => new ImageHoverForm(IoUtils.GetImage(img)).Show());
+            // new ImageHoverForm(IoUtils.GetImage(MainUi.CurrentInitImgPaths.FirstOrDefault())).Show();
+        }
+
+        private void labelCurrentImage_MouseLeave(object sender, EventArgs e)
+        {
+            Application.OpenForms.Cast<Form>().Where(f => f is ImageHoverForm).ToList().ForEach(f => f.Close());
+            Program.MainForm.toolTip.Active = true;
         }
     }
 }
