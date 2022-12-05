@@ -16,6 +16,7 @@ using System.Windows.Forms;
 using Point = System.Drawing.Point;
 using Paths = StableDiffusionGui.Io.Paths;
 using StableDiffusionGui.Io;
+using StableDiffusionGui.Ui.DrawForm;
 
 namespace StableDiffusionGui.Forms
 {
@@ -24,25 +25,28 @@ namespace StableDiffusionGui.Forms
         public Image BackgroundImg;
         public Image Mask;
 
-        private Bitmap _raw;
+        public Bitmap RawMask;
 
-        private List<Bitmap> _history = new List<Bitmap>();
-        private int _historyLimit = 200;
+        public List<Bitmap> History = new List<Bitmap>();
+        public int HistoryLimit = 200;
 
-        private Point _lastPoint = Point.Empty;
-        private bool _mouseDown;
+        public Point LastPoint = Point.Empty;
+        public bool MouseIsDown;
 
         public DrawForm(Image background, Image mask = null)
         {
+            FormControls.F = this;
+            FormUtils.F = this;
+
             Opacity = 0;
             BackgroundImg = background;
 
             if (mask != null)
-                _raw = mask as Bitmap;
+                RawMask = mask as Bitmap;
             else
-                _raw = new Bitmap(BackgroundImg.Width, BackgroundImg.Height);
+                RawMask = new Bitmap(BackgroundImg.Width, BackgroundImg.Height);
 
-            HistorySave();
+            FormUtils.HistorySave();
             InitializeComponent();
         }
 
@@ -60,17 +64,14 @@ namespace StableDiffusionGui.Forms
             tableLayoutPanelImg.ColumnStyles.Cast<ColumnStyle>().ToList().ForEach(s => s.SizeType = SizeType.Absolute);
             tableLayoutPanelImg.RowStyles.Cast<RowStyle>().ToList().ForEach(s => s.SizeType = SizeType.Absolute);
 
-            pasteMaskToolStripMenuItem.Visible = EnabledFeatures.MaskPasting;
-            invertMaskToolStripMenuItem.Visible = EnabledFeatures.MaskInversion;
-
             if (Inpainting.CurrentBlurValue >= 0)
                 sliderBlur.Value = Inpainting.CurrentBlurValue;
             else
                 Inpainting.CurrentBlurValue = sliderBlur.Value;
 
             pictBox.BackgroundImage = BackgroundImg;
-            SetPictureBoxPadding();
-            Blur();
+            FormControls.SetPictureBoxPadding();
+            FormUtils.Blur();
             await Task.Delay(1);
             Opacity = 1;
         }
@@ -78,49 +79,31 @@ namespace StableDiffusionGui.Forms
         private void pictBox_Click(object sender, EventArgs e)
         {
             if (((MouseEventArgs)e).Button == MouseButtons.Right)
-                menuStripOptions.Show(Cursor.Position);
+                FormControls.ShowContextMenu();
         }
 
         private void pictBox_MouseDown(object sender, MouseEventArgs e)
         {
-            _lastPoint = e.Location;
-            _mouseDown = true;
+            LastPoint = e.Location;
+            MouseIsDown = true;
         }
 
         private void pictBox_MouseMove(object sender, MouseEventArgs e)
         {
-            if (!_mouseDown || _lastPoint == null || e.Button != MouseButtons.Left)
-                return;
-
-            if (pictBox.Image == null)
-                pictBox.Image = new Bitmap(BackgroundImg.Width, BackgroundImg.Height);
-
-            int brushSize = sliderBrushSize.Value;
-
-            using (Graphics g = Graphics.FromImage(_raw))
-            {
-                float scaleFactor = (float)pictBox.Width / pictBox.Image.Width;
-                Point scaledPoint = new Point((_lastPoint.X / scaleFactor).RoundToInt(), (_lastPoint.Y / scaleFactor).RoundToInt());
-                g.DrawEllipse(new Pen(Color.Black, brushSize), new RectangleF(scaledPoint, new SizeF(brushSize, brushSize)));
-                g.SmoothingMode = SmoothingMode.HighQuality;
-            }
-
-            Blur();
-            pictBox.Invalidate();
-            _lastPoint = e.Location;
+            FormUtils.Draw(e);
         }
 
         private void pictBox_MouseUp(object sender, MouseEventArgs e)
         {
-            _mouseDown = false;
-            _lastPoint = Point.Empty;
-            HistorySave();
+            MouseIsDown = false;
+            LastPoint = Point.Empty;
+            FormUtils.HistorySave();
         }
 
-        private void sliderBlur_Scroll(object sender, ScrollEventArgs e)
+        public void sliderBlur_Scroll(object sender, ScrollEventArgs e)
         {
             Inpainting.CurrentBlurValue = sliderBlur.Value;
-            Blur();
+            FormUtils.Blur();
         }
 
         private void btnOk_Click(object sender, EventArgs e)
@@ -132,19 +115,19 @@ namespace StableDiffusionGui.Forms
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             if (keyData == (Keys.Control | Keys.I)) // Hotkey: Invert
-                InvertMask();
+                FormUtils.InvertMask();
 
             if (keyData == (Keys.Control | Keys.V)) // Hotkey: Paste mask
-                PasteMask();
+                FormUtils.PasteMask();
 
             if (keyData == (Keys.Control | Keys.S)) // Hotkey: Save
-                SaveMask();
+                FormUtils.SaveMask();
 
             if (keyData == (Keys.Control | Keys.O)) // Hotkey: Load
-                LoadMask();
+                FormUtils.LoadMask();
 
             if (keyData == (Keys.Control | Keys.Z)) // Hotkey: Undo
-                HistoryUndo();
+                FormUtils.HistoryUndo();
 
             if (keyData == Keys.Return) // Hotkey: OK
                 btnOk_Click(null, null);
@@ -154,34 +137,34 @@ namespace StableDiffusionGui.Forms
 
         private void DrawForm_SizeChanged(object sender, EventArgs e)
         {
-            SetPictureBoxPadding();
+            FormControls.SetPictureBoxPadding();
         }
 
         #region Context Menu
 
         private void clearToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ClearMask();
+            FormUtils.ClearMask();
         }
 
         private void invertMaskToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            InvertMask();
+            FormUtils.InvertMask();
         }
 
         private void pasteMaskToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            PasteMask();
+            FormUtils.PasteMask();
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SaveMask();
+            FormUtils.SaveMask();
         }
 
         private void loadToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            LoadMask();
+            FormUtils.LoadMask();
         }
 
         #endregion
@@ -190,180 +173,19 @@ namespace StableDiffusionGui.Forms
 
         private void btnClear_Click(object sender, EventArgs e)
         {
-            ClearMask();
+            FormUtils.ClearMask();
         }
 
         private void btnMaskSave_Click(object sender, EventArgs e)
         {
-            SaveMask();
+            FormUtils.SaveMask();
         }
 
         private void btnMaskLoad_Click(object sender, EventArgs e)
         {
-            LoadMask();
+            FormUtils.LoadMask();
         }
 
         #endregion
-
-
-        private void Blur()
-        {
-            if (_raw != null)
-                pictBox.Image = new GaussianBlur(_raw).Process(Inpainting.CurrentBlurValue);
-        }
-
-        private void PasteMask()
-        {
-            if (!EnabledFeatures.MaskPasting)
-                return;
-
-            Image clipboardImg = Clipboard.GetImage();
-
-            if (clipboardImg != null)
-            {
-                if (clipboardImg.Size != pictBox.Image.Size)
-                {
-                    UiUtils.ShowMessageBox($"The pasted mask ({clipboardImg.Width}x{clipboardImg.Height}) needs to have the same dimensions as the initialization image ({pictBox.Image.Width}x{pictBox.Image.Height}).");
-                    return;
-                }
-
-                var magickImg = ImgUtils.GetMagickImage(clipboardImg);
-                Image pastedMask = ImgUtils.ReplaceOtherColorsWithTransparency(magickImg).ToBitmap();
-                _raw = (Bitmap)pastedMask;
-                sliderBlur.Value = 0;
-                sliderBlur_Scroll(null, null);
-                pictBox.Invalidate();
-                HistorySave();
-            }
-        }
-
-        private void HistorySave()
-        {
-            if (_history.Count >= _historyLimit)
-                _history = _history.Skip(1).ToList(); // Remove first (oldest) entry if we maxed out the capacity
-
-            _history.Add(new Bitmap(_raw));
-        }
-
-        private void HistoryUndo()
-        {
-            if (_history.Count <= 1)
-                return;
-
-            _history.Remove(_history.Last());
-            _raw = new Bitmap(_history.Last());
-
-            sliderBlur_Scroll(null, null);
-            pictBox.Invalidate();
-        }
-
-        private void SetPictureBoxPadding()
-        {
-            Size frameSize = tableLayoutPanelImg.Size;
-            Size imageSize = BackgroundImg.Size;
-
-            Size targetImgBoxSize = ImgMaths.FitIntoFrame(imageSize, frameSize);
-
-            int padTopBot = ((tableLayoutPanelImg.Size.Height - targetImgBoxSize.Height) / 2f).RoundToInt();
-            int padSides = ((tableLayoutPanelImg.Size.Width - targetImgBoxSize.Width) / 2f).RoundToInt();
-
-            tableLayoutPanelImg.ColumnStyles[0].Width = padSides;
-            tableLayoutPanelImg.ColumnStyles[1].Width = targetImgBoxSize.Width;
-            tableLayoutPanelImg.ColumnStyles[2].Width = padSides;
-
-            tableLayoutPanelImg.RowStyles[0].Height = padTopBot;
-            tableLayoutPanelImg.RowStyles[1].Height = targetImgBoxSize.Height;
-            tableLayoutPanelImg.RowStyles[2].Height = padTopBot;
-        }
-
-        public void ClearMask()
-        {
-            _raw = new Bitmap(BackgroundImg.Width, BackgroundImg.Height);
-            pictBox.Image = null;
-            Invalidate();
-        }
-
-        public void InvertMask()
-        {
-            var magickImg = ImgUtils.GetMagickImage(_raw);
-            magickImg = ImgUtils.RemoveTransparency(magickImg, ImgUtils.NoAlphaMode.Fill, MagickColors.White);
-            magickImg = ImgUtils.Invert(magickImg);
-            magickImg = ImgUtils.ReplaceColorWithTransparency(magickImg, MagickColors.White);
-            _raw = magickImg.ToBitmap();
-            Blur();
-            pictBox.Invalidate();
-        }
-
-        public void SaveMask()
-        {
-            string initDir = Directory.CreateDirectory(Path.Combine(Paths.GetExeDir(), Constants.Dirs.Masks)).FullName;
-            string fname = Path.GetFileNameWithoutExtension(MainUi.CurrentInitImgPaths.FirstOrDefault()).Trunc(20);
-            string initFilename = $"mask_{fname}_{_raw.Size.AsString()}_{DateTime.Now.ToString("MM-dd-yyyy_HH-mm-ss")}";
-
-            CommonSaveFileDialog dialog = new CommonSaveFileDialog
-            {
-                AddToMostRecentlyUsedList = false,
-                AlwaysAppendDefaultExtension = true,
-                DefaultExtension = ".png",
-                DefaultDirectory = initDir,
-                InitialDirectory = initDir,
-                DefaultFileName = initFilename,
-            };
-
-            dialog.Filters.Add(new CommonFileDialogFilter("PNG Image Files", "*.png"));
-            dialog.ShowDialog();
-
-            try
-            {
-                if (!string.IsNullOrWhiteSpace(dialog.FileName))
-                    _raw.Save(dialog.FileName);
-            }
-            catch (Exception ex)
-            {
-                Logger.Log($"Failed to save mask: {ex.Message}");
-                Logger.Log(ex.StackTrace, true);
-            }
-        }
-
-        public void LoadMask()
-        {
-            string initDir = Directory.CreateDirectory(Path.Combine(Paths.GetExeDir(), Constants.Dirs.Masks)).FullName;
-
-            CommonOpenFileDialog dialog = new CommonOpenFileDialog
-            {
-                AddToMostRecentlyUsedList = false,
-                DefaultExtension = ".png",
-                DefaultDirectory = initDir,
-                InitialDirectory = initDir,
-            };
-
-            dialog.Filters.Add(new CommonFileDialogFilter("PNG Image Files", "*.png"));
-            dialog.ShowDialog();
-
-            try
-            {
-                if (!File.Exists(dialog.FileName))
-                {
-                    Logger.Log($"Can't load mask: Invalid file.");
-                    return;
-                }
-
-                Image mask = IoUtils.GetImage(dialog.FileName);
-
-                if(mask.Size != pictBox.Image.Size)
-                {
-                    Logger.Log($"Can't load mask: Mask ({mask.Size.AsString()}) does not match image dimensions ({pictBox.Image.Size.AsString()}).");
-                    return;
-                }
-
-                _raw = (Bitmap)mask;
-                sliderBlur_Scroll(null, null);
-            }
-            catch (Exception ex)
-            {
-                Logger.Log($"Failed to load mask: {ex.Message}");
-                Logger.Log(ex.StackTrace, true);
-            }
-        }
     }
 }

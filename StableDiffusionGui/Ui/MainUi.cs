@@ -362,9 +362,6 @@ namespace StableDiffusionGui.Ui
 
         private static void SetResolutionForInitImage(string initImgPath)
         {
-            if (!EnabledFeatures.AutoSetSizeForInitImg)
-                return;
-
             Size newRes = GetResolutionForInitImage(IoUtils.GetImage(initImgPath).Size);
             Program.MainForm.comboxResW.Text = newRes.Width.ToString();
             Program.MainForm.comboxResH.Text = newRes.Height.ToString();

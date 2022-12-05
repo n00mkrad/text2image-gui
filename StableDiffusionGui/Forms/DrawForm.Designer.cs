@@ -392,26 +392,26 @@
         }
 
         #endregion
-        private System.Windows.Forms.ContextMenuStrip menuStripOptions;
-        private System.Windows.Forms.ToolStripMenuItem clearToolStripMenuItem;
-        private System.Windows.Forms.Panel panelBrushSize;
-        private System.Windows.Forms.Label label3;
-        private HTAlt.WinForms.HTSlider sliderBrushSize;
-        private System.Windows.Forms.Panel panelBlur;
-        private HTAlt.WinForms.HTSlider sliderBlur;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Panel panel1;
-        private HTAlt.WinForms.HTButton btnOk;
-        private System.Windows.Forms.ToolStripMenuItem invertMaskToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem pasteMaskToolStripMenuItem;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.PictureBox pictBox;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanelImg;
-        private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem loadToolStripMenuItem;
-        private HTAlt.WinForms.HTButton btnMaskLoad;
-        private HTAlt.WinForms.HTButton btnMaskSave;
-        private HTAlt.WinForms.HTButton btnClear;
-        private System.Windows.Forms.ToolStripMenuItem undoToolStripMenuItem;
+        public System.Windows.Forms.ContextMenuStrip menuStripOptions;
+        public System.Windows.Forms.ToolStripMenuItem clearToolStripMenuItem;
+        public System.Windows.Forms.Panel panelBrushSize;
+        public System.Windows.Forms.Label label3;
+        public HTAlt.WinForms.HTSlider sliderBrushSize;
+        public System.Windows.Forms.Panel panelBlur;
+        public HTAlt.WinForms.HTSlider sliderBlur;
+        public System.Windows.Forms.Label label1;
+        public System.Windows.Forms.Panel panel1;
+        public HTAlt.WinForms.HTButton btnOk;
+        public System.Windows.Forms.ToolStripMenuItem invertMaskToolStripMenuItem;
+        public System.Windows.Forms.ToolStripMenuItem pasteMaskToolStripMenuItem;
+        public System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        public System.Windows.Forms.PictureBox pictBox;
+        public System.Windows.Forms.TableLayoutPanel tableLayoutPanelImg;
+        public System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
+        public System.Windows.Forms.ToolStripMenuItem loadToolStripMenuItem;
+        public HTAlt.WinForms.HTButton btnMaskLoad;
+        public HTAlt.WinForms.HTButton btnMaskSave;
+        public HTAlt.WinForms.HTButton btnClear;
+        public System.Windows.Forms.ToolStripMenuItem undoToolStripMenuItem;
     }
 }

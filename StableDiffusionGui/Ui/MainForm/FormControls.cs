@@ -25,7 +25,7 @@ namespace StableDiffusionGui.Ui.MainForm
         {
             F.comboxSampler.FillFromEnum<Sampler>(Strings.Samplers, 0);
             F.comboxSeamless.FillFromEnum<SeamlessMode>(Strings.SeamlessMode, 0);
-            F.comboxInpaintMode.FillFromEnum<InpaintMode>(Strings.InpaintMode, 0, EnabledFeatures.DisabledInpaintModes);
+            F.comboxInpaintMode.FillFromEnum<InpaintMode>(Strings.InpaintMode, 0);
 
             var resItems = MainUi.Resolutions.Where(x => x <= (Config.GetBool("checkboxAdvancedMode") ? 2048 : 1024)).Select(x => x.ToString());
             F.comboxResW.SetItems(resItems, UiExtensions.SelectMode.Last);

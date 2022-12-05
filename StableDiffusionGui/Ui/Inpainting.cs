@@ -63,7 +63,7 @@ namespace StableDiffusionGui.Ui
 
             if (CurrentMask == null)
             {
-                var maskForm = new DrawForm(img);
+                var maskForm = new Forms.DrawForm(img);
                 maskForm.ShowDialogForm();
                 CurrentMask = maskForm.Mask;
             }

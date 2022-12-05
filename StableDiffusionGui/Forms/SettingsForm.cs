@@ -37,7 +37,7 @@ namespace StableDiffusionGui.Forms
         private void SettingsForm_Shown(object sender, EventArgs e)
         {
             Refresh();
-            comboxImplementation.FillFromEnum<Implementation>(Strings.Implementation, -1, EnabledFeatures.DisabledImplementations);
+            comboxImplementation.FillFromEnum<Implementation>(Strings.Implementation, -1);
 
             LoadSettings();
 
