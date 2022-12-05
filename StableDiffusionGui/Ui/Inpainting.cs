@@ -12,7 +12,7 @@ using Paths = StableDiffusionGui.Io.Paths;
 
 namespace StableDiffusionGui.Ui
 {
-    internal class InpaintingUtils
+    internal class Inpainting
     {
         public static string MaskImagePath { get { return Path.Combine(Paths.GetSessionDataPath(), "inpaint-mask.png"); } }
         public static string MaskedImagePath { get { return Path.Combine(Paths.GetSessionDataPath(), "inpaint-masked.png"); } }

@@ -331,12 +331,12 @@ namespace StableDiffusionGui
 
         public void UpdateInpaintUi()
         {
-            btnResetMask.Visible = InpaintingUtils.CurrentMask != null;
+            btnResetMask.Visible = Inpainting.CurrentMask != null;
         }
 
         private void btnResetMask_Click(object sender, EventArgs e)
         {
-            InpaintingUtils.CurrentMask = null;
+            Inpainting.CurrentMask = null;
         }
 
         private void textboxCliTest_DoubleClick(object sender, EventArgs e)

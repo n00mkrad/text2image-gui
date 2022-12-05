@@ -36,9 +36,9 @@ namespace StableDiffusionGui.Ui
                     SetResolutionForInitImage(value[0]);
                 }
 
-                if (InpaintingUtils.CurrentMask != null)
+                if (Inpainting.CurrentMask != null)
                 {
-                    InpaintingUtils.CurrentMask = null;
+                    Inpainting.CurrentMask = null;
                     Logger.Log("Inpainting mask has been cleared.");
                 }
             }

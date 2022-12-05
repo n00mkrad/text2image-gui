@@ -107,7 +107,7 @@ namespace StableDiffusionGui.Implementations
                                             args["initStrength"] = $"-f {strength.ToStringDot("0.###")}";
 
                                             if (inpaint == InpaintMode.ImageMask)
-                                                args["inpaintMask"] = $"-M {InpaintingUtils.MaskedImagePath.Wrap()}";
+                                                args["inpaintMask"] = $"-M {Inpainting.MaskedImagePath.Wrap()}";
 
                                             argLists.Add(new Dictionary<string, string>(args));
                                         }

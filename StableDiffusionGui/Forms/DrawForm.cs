@@ -63,10 +63,10 @@ namespace StableDiffusionGui.Forms
             pasteMaskToolStripMenuItem.Visible = EnabledFeatures.MaskPasting;
             invertMaskToolStripMenuItem.Visible = EnabledFeatures.MaskInversion;
 
-            if (InpaintingUtils.CurrentBlurValue >= 0)
-                sliderBlur.Value = InpaintingUtils.CurrentBlurValue;
+            if (Inpainting.CurrentBlurValue >= 0)
+                sliderBlur.Value = Inpainting.CurrentBlurValue;
             else
-                InpaintingUtils.CurrentBlurValue = sliderBlur.Value;
+                Inpainting.CurrentBlurValue = sliderBlur.Value;
 
             pictBox.BackgroundImage = BackgroundImg;
             SetPictureBoxPadding();
@@ -119,7 +119,7 @@ namespace StableDiffusionGui.Forms
 
         private void sliderBlur_Scroll(object sender, ScrollEventArgs e)
         {
-            InpaintingUtils.CurrentBlurValue = sliderBlur.Value;
+            Inpainting.CurrentBlurValue = sliderBlur.Value;
             Blur();
         }
 
@@ -131,8 +131,17 @@ namespace StableDiffusionGui.Forms
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
+            if (keyData == (Keys.Control | Keys.I)) // Hotkey: Invert
+                InvertMask();
+
             if (keyData == (Keys.Control | Keys.V)) // Hotkey: Paste mask
                 PasteMask();
+
+            if (keyData == (Keys.Control | Keys.S)) // Hotkey: Save
+                SaveMask();
+
+            if (keyData == (Keys.Control | Keys.O)) // Hotkey: Load
+                LoadMask();
 
             if (keyData == (Keys.Control | Keys.Z)) // Hotkey: Undo
                 HistoryUndo();
@@ -200,7 +209,7 @@ namespace StableDiffusionGui.Forms
         private void Blur()
         {
             if (_raw != null)
-                pictBox.Image = new GaussianBlur(_raw).Process(InpaintingUtils.CurrentBlurValue);
+                pictBox.Image = new GaussianBlur(_raw).Process(Inpainting.CurrentBlurValue);
         }
 
         private void PasteMask()

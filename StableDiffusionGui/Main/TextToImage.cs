@@ -21,7 +21,7 @@ namespace StableDiffusionGui.Main
 
         public static async Task RunTti(TtiSettings settings)
         {
-            InpaintingUtils.PrepareInpaintingIfEnabled(settings);
+            Inpainting.PrepareInpaintingIfEnabled(settings);
 
             if (Canceled)
                 return;

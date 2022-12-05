@@ -122,7 +122,7 @@ namespace StableDiffusionGui.Main
             if (TextToImage.CurrentTaskSettings.Implementation == Enums.StableDiffusion.Implementation.InvokeAi)
                 return; // InvokeAI has proper built-in inpainting - Skip for this implementation
 
-            string maskPath = InpaintingUtils.MaskedImagePath;
+            string maskPath = Inpainting.MaskedImagePath;
 
             if (!File.Exists(maskPath))
                 return;

@@ -177,7 +177,7 @@ namespace StableDiffusionGui.Ui.MainForm
                     Logger.ClearLogBox();
                     F.CleanPrompt();
                     FormControls.UpdateInitImgAndEmbeddingUi();
-                    InpaintingUtils.DeleteMaskedImage();
+                    Inpainting.DeleteMaskedImage();
 
                     if (fromQueue)
                     {
