@@ -17,7 +17,9 @@ Generates an entire image based on your prompt and the original image, they over
 Generates an entire image based on your prompt and the original image, they overlays the original image minus the masked areas.
 
 * **Pros:** Excellent quality, fully context-aware even without a prompt, reproduces environment well (lighting, style, quality, etc.)
-* **Cons:** Requires specific models (`sd-v1-5-inpainting`), certain prompt features do not work or don't work as well
+* **Cons:** Requires specific models (`sd-v1-5-inpainting`), negative prompts do not work currently, prompt has less impact
+
+**Important:** Inpainting-capable models must be marked as such by using the filename suffix `-inpainting`. If the filename does not end with that, it will not be recognized as an inpainting model.
 
 
 
@@ -26,7 +28,7 @@ Generates an entire image based on your prompt and the original image, they over
 #### Image Mask
 
 Will open a basic painting tool once you press *Generate* that allows you to paint the regions which should be replaced by AI-generated content.  
-The mask editor also supports loading a mask bitmap from the clipboard (Left-click > Paste or CTRL+V), where black is the masked area and white is the area that should remain untouched.
+The mask editor also supports loading a mask bitmap from a file or from the clipboard, where black is the masked area and white is the area that should remain untouched.
 
 #### Text Mask
 
