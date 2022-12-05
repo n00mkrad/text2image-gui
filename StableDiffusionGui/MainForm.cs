@@ -102,7 +102,7 @@ namespace StableDiffusionGui
             await Task.Delay(1); // Don't ask. Just keep it here
             Opacity = 1.0;
 
-            if (!Program.Debug)
+            if (!Program.Debug && !(Config.GetBool("hideMotd") && Config.Get("motdShownVersion") == Program.Version))
                 new WelcomeForm().ShowDialogForm(0f);
 
             panelDebugLoopback.Visible = Program.Debug;

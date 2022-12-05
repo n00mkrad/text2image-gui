@@ -16,7 +16,7 @@ namespace StableDiffusionGui
 {
     public static class Program
     {
-        public const string Version = "1.7.2";
+        public const string Version = "1.8.0";
         public static bool Debug { get { return Debugger.IsAttached || UserArgs.Get("debug").Lower() == true.ToString().Lower(); } }
 
         public static List<string> Args = new List<string>(); // All args

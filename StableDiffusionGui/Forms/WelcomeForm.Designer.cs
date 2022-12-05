@@ -43,6 +43,7 @@
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.btnGithub = new System.Windows.Forms.Button();
             this.btnItch = new System.Windows.Forms.Button();
+            this.checkboxDoNotShow = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             this.panelNews.SuspendLayout();
             this.panelPatrons.SuspendLayout();
@@ -66,6 +67,7 @@
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.Controls.Add(this.checkboxDoNotShow);
             this.panel1.Controls.Add(this.btnOk);
             this.panel1.Location = new System.Drawing.Point(12, 62);
             this.panel1.Margin = new System.Windows.Forms.Padding(0);
@@ -231,6 +233,19 @@
             this.btnItch.UseVisualStyleBackColor = false;
             this.btnItch.Click += new System.EventHandler(this.btnItch_Click);
             // 
+            // checkboxDoNotShow
+            // 
+            this.checkboxDoNotShow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.checkboxDoNotShow.AutoSize = true;
+            this.checkboxDoNotShow.ForeColor = System.Drawing.Color.Silver;
+            this.checkboxDoNotShow.Location = new System.Drawing.Point(0, 473);
+            this.checkboxDoNotShow.Name = "checkboxDoNotShow";
+            this.checkboxDoNotShow.Size = new System.Drawing.Size(196, 17);
+            this.checkboxDoNotShow.TabIndex = 111;
+            this.checkboxDoNotShow.Text = "Do Not Display This Message Again";
+            this.checkboxDoNotShow.UseVisualStyleBackColor = true;
+            this.checkboxDoNotShow.Visible = false;
+            // 
             // WelcomeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -250,10 +265,12 @@
             this.Name = "WelcomeForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Welcome";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.WelcomeForm_FormClosing);
             this.Load += new System.EventHandler(this.WelcomeForm_Load);
             this.Shown += new System.EventHandler(this.WelcomeForm_Shown);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.WelcomeForm_KeyDown);
             this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.panelNews.ResumeLayout(false);
             this.panelNews.PerformLayout();
             this.panelPatrons.ResumeLayout(false);
@@ -279,5 +296,6 @@
         private System.Windows.Forms.Button btnItch;
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.Button btnGithub;
+        private System.Windows.Forms.CheckBox checkboxDoNotShow;
     }
 }
