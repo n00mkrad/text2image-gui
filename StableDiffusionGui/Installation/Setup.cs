@@ -83,18 +83,16 @@ namespace StableDiffusionGui.Installation
                 return;
             }
 
+            bool amd = HwInfo.KnownGpus.Any(gpu => gpu.Vendor == HwInfo.GpuInfo.GpuVendor.Amd) && !HwInfo.KnownGpus.Any(gpu => gpu.Vendor == HwInfo.GpuInfo.GpuVendor.Nvidia);
             string repoPath = GetDataSubPath(Constants.Dirs.SdRepo);
             string batPath = Path.Combine(repoPath, "install.bat");
 
-            File.WriteAllText(batPath,
-                $"@echo off\n" +
+            File.WriteAllText(batPath, $"@echo off\n" +
                 $"cd /D {Paths.GetDataPath().Wrap()}\n" +
                 $"SET PATH={OsUtils.GetPathVar(new string[] { $@".\{Constants.Dirs.SdVenv}\Scripts", $@".\{Constants.Dirs.Python}\Scripts", $@".\{Constants.Dirs.Python}", $@".\{Constants.Dirs.Git}\cmd" })}\n" +
                 $"python -m virtualenv {Constants.Dirs.SdVenv}\n" +
-                $"{Constants.Dirs.SdRepo}\\install-venv-deps.bat\n" +
-                //$"{Constants.Dirs.SdRepo}\\install-venv-deps-onnx.bat\n" +
-                $""
-            );
+                $"{Constants.Dirs.SdRepo}\\install-venv-deps.bat {(amd ? $"&& {Constants.Dirs.SdRepo}\\install-venv-deps-onnx.bat" : "")}\n" +
+                $"");
 
             Logger.Log("Running python environment installation script...");
 
@@ -183,6 +181,11 @@ namespace StableDiffusionGui.Installation
 
             if (!conda)
             {
+                if (log.StartsWith("Downloading "))
+                {
+                    Logger.Log($"Downloading packages...", false, Logger.LastUiLine.EndsWith("..."));
+                }
+
                 if (log.StartsWith("Collecting "))
                 {
                     Logger.Log($"Installing {log.Split("Collecting ")[1].Split("=")[0].Split("<")[0].Split(">")[0].Split("!")[0].Trim()}...", false, Logger.LastUiLine.EndsWith("..."));
@@ -372,6 +375,7 @@ namespace StableDiffusionGui.Installation
         {
             IoUtils.SetAttributes(GetDataSubPath(Constants.Dirs.SdRepo), ZetaLongPaths.Native.FileAttributes.Normal);
             await IoUtils.TryDeleteIfExistsAsync(GetDataSubPath(Constants.Dirs.SdRepo));
+            await IoUtils.TryDeleteIfExistsAsync(GetDataSubPath(Constants.Dirs.SdVenv));
         }
 
         public static async Task RemoveEnv()

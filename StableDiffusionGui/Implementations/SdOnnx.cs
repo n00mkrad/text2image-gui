@@ -159,7 +159,7 @@ namespace StableDiffusionGui.Implementations
         {
             string marker = "# PATCHED BY NMKD SD GUI";
 
-            string diffusersPath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.Conda, "envs", Constants.Dirs.SdEnv, "Lib", "site-packages", "diffusers");
+            string diffusersPath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdVenv, "Lib", "site-packages", "diffusers");
             string t2iPipelinePath = Path.Combine(diffusersPath, "pipelines", "stable_diffusion", "pipeline_onnx_stable_diffusion.py");
             string i2iPipelinePath = Path.Combine(diffusersPath, "pipelines", "stable_diffusion", "pipeline_onnx_stable_diffusion_img2img.py");
 
