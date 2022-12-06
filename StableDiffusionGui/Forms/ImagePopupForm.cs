@@ -1,4 +1,5 @@
-﻿using StableDiffusionGui.Main;
+﻿using StableDiffusionGui.Io;
+using StableDiffusionGui.Main;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
 using System;
@@ -48,6 +49,9 @@ namespace StableDiffusionGui.Forms
         private void ImagePopupForm_Shown(object sender, EventArgs e)
         {
             FixLabelPosition();
+            SlideshowMode = Config.Get<bool>(Config.Keys.PopupSlideshowEnabledByDefault);
+            enableToolStripMenuItem.Checked = SlideshowMode;
+            enabledByDefaultToolStripMenuItem.Checked = SlideshowMode;
         }
 
         private void SetMaxZoom()
@@ -207,11 +211,6 @@ namespace StableDiffusionGui.Forms
             SetImage(CurrentImage, _currentTiling);
         }
 
-        private void slideshowModeToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SlideshowMode = slideshowModeToolStripMenuItem.Checked;
-        }
-
         private void pictBoxImgViewer_MouseWheel(object sender, MouseEventArgs e)
         {
             if (e.Delta > 0)
@@ -276,5 +275,15 @@ namespace StableDiffusionGui.Forms
         }
 
         #endregion
+
+        private void enableToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SlideshowMode = enableToolStripMenuItem.Checked;
+        }
+
+        private void enabledByDefaultToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Config.Set(Config.Keys.PopupSlideshowEnabledByDefault, enabledByDefaultToolStripMenuItem.Checked);
+        }
     }
 }

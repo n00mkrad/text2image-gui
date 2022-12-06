@@ -192,6 +192,7 @@ namespace StableDiffusionGui.Io
             public const string MedVramDisablePostProcessing = "medVramDisablePostProcessing";
             public const string DisableModelCaching = "disableModelCaching";
             public const string EnableTokenizationLogging = "enableTokenizationLogging";
+            public const string PopupSlideshowEnabledByDefault = "popupSlideshowEnabledByDefault";
         }
     }
 }

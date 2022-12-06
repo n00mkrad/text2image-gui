@@ -46,6 +46,8 @@
             this.alwaysOnTopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.infoLabel = new System.Windows.Forms.Label();
+            this.enableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.enabledByDefaultToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.picBox)).BeginInit();
             this.menuStripOptions.SuspendLayout();
             this.SuspendLayout();
@@ -77,19 +79,19 @@
             this.alwaysOnTopToolStripMenuItem,
             this.helpToolStripMenuItem});
             this.menuStripOptions.Name = "menuStripOptions";
-            this.menuStripOptions.Size = new System.Drawing.Size(318, 158);
+            this.menuStripOptions.Size = new System.Drawing.Size(280, 180);
             // 
             // closeESCToolStripMenuItem
             // 
             this.closeESCToolStripMenuItem.Name = "closeESCToolStripMenuItem";
-            this.closeESCToolStripMenuItem.Size = new System.Drawing.Size(317, 22);
+            this.closeESCToolStripMenuItem.Size = new System.Drawing.Size(279, 22);
             this.closeESCToolStripMenuItem.Text = "Close (ESC)";
             this.closeESCToolStripMenuItem.Click += new System.EventHandler(this.closeESCToolStripMenuItem_Click);
             // 
             // copyImageToolStripMenuItem
             // 
             this.copyImageToolStripMenuItem.Name = "copyImageToolStripMenuItem";
-            this.copyImageToolStripMenuItem.Size = new System.Drawing.Size(317, 22);
+            this.copyImageToolStripMenuItem.Size = new System.Drawing.Size(279, 22);
             this.copyImageToolStripMenuItem.Text = "Copy Image to Clipboard";
             this.copyImageToolStripMenuItem.Click += new System.EventHandler(this.copyImageToolStripMenuItem_Click);
             // 
@@ -100,7 +102,7 @@
             this.toolStripMenuItem2,
             this.fullscreenToolStripMenuItem});
             this.setSizeToolStripMenuItem.Name = "setSizeToolStripMenuItem";
-            this.setSizeToolStripMenuItem.Size = new System.Drawing.Size(317, 22);
+            this.setSizeToolStripMenuItem.Size = new System.Drawing.Size(279, 22);
             this.setSizeToolStripMenuItem.Text = "Set Size...";
             this.setSizeToolStripMenuItem.Visible = false;
             // 
@@ -132,7 +134,7 @@
             this.x2ToolStripMenuItem,
             this.x3ToolStripMenuItem});
             this.setTilingToolStripMenuItem.Name = "setTilingToolStripMenuItem";
-            this.setTilingToolStripMenuItem.Size = new System.Drawing.Size(317, 22);
+            this.setTilingToolStripMenuItem.Size = new System.Drawing.Size(279, 22);
             this.setTilingToolStripMenuItem.Text = "Set Tiling...";
             // 
             // x1ToolStripMenuItem
@@ -158,24 +160,25 @@
             // 
             // slideshowModeToolStripMenuItem
             // 
-            this.slideshowModeToolStripMenuItem.CheckOnClick = true;
+            this.slideshowModeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.enableToolStripMenuItem,
+            this.enabledByDefaultToolStripMenuItem});
             this.slideshowModeToolStripMenuItem.Name = "slideshowModeToolStripMenuItem";
-            this.slideshowModeToolStripMenuItem.Size = new System.Drawing.Size(317, 22);
-            this.slideshowModeToolStripMenuItem.Text = "Enable Slideshow Mode (Mirror Image Viewer)";
-            this.slideshowModeToolStripMenuItem.Click += new System.EventHandler(this.slideshowModeToolStripMenuItem_Click);
+            this.slideshowModeToolStripMenuItem.Size = new System.Drawing.Size(279, 22);
+            this.slideshowModeToolStripMenuItem.Text = "Slideshow Mode (Mirror Image Viewer)";
             // 
             // alwaysOnTopToolStripMenuItem
             // 
             this.alwaysOnTopToolStripMenuItem.CheckOnClick = true;
             this.alwaysOnTopToolStripMenuItem.Name = "alwaysOnTopToolStripMenuItem";
-            this.alwaysOnTopToolStripMenuItem.Size = new System.Drawing.Size(317, 22);
+            this.alwaysOnTopToolStripMenuItem.Size = new System.Drawing.Size(279, 22);
             this.alwaysOnTopToolStripMenuItem.Text = "Always on Top";
             this.alwaysOnTopToolStripMenuItem.Click += new System.EventHandler(this.alwaysOnTopToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(317, 22);
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(279, 22);
             this.helpToolStripMenuItem.Text = "Help";
             this.helpToolStripMenuItem.Click += new System.EventHandler(this.helpToolStripMenuItem_Click);
             // 
@@ -190,6 +193,22 @@
             this.infoLabel.Size = new System.Drawing.Size(0, 16);
             this.infoLabel.TabIndex = 1;
             this.infoLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // enableToolStripMenuItem
+            // 
+            this.enableToolStripMenuItem.CheckOnClick = true;
+            this.enableToolStripMenuItem.Name = "enableToolStripMenuItem";
+            this.enableToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.enableToolStripMenuItem.Text = "Enable";
+            this.enableToolStripMenuItem.Click += new System.EventHandler(this.enableToolStripMenuItem_Click);
+            // 
+            // enabledByDefaultToolStripMenuItem
+            // 
+            this.enabledByDefaultToolStripMenuItem.CheckOnClick = true;
+            this.enabledByDefaultToolStripMenuItem.Name = "enabledByDefaultToolStripMenuItem";
+            this.enabledByDefaultToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.enabledByDefaultToolStripMenuItem.Text = "Enabled by Default";
+            this.enabledByDefaultToolStripMenuItem.Click += new System.EventHandler(this.enabledByDefaultToolStripMenuItem_Click);
             // 
             // ImagePopupForm
             // 
@@ -236,5 +255,7 @@
         private System.Windows.Forms.ToolStripMenuItem alwaysOnTopToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.Label infoLabel;
+        private System.Windows.Forms.ToolStripMenuItem enableToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem enabledByDefaultToolStripMenuItem;
     }
 }
