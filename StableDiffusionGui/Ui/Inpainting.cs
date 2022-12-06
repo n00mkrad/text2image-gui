@@ -58,7 +58,7 @@ namespace StableDiffusionGui.Ui
         public static void PrepareInpainting(string initImgPath, Size targetSize)
         {
             Image img = IoUtils.GetImage(initImgPath);
-            img = ImgUtils.ScaleAndPad(ImgUtils.GetMagickImage(img), img.Size, targetSize).ToBitmap();
+            img = ImgUtils.ScaleAndPad(ImgUtils.GetMagickImage(img), MainUi.GetResolutionForInitImage(img.Size), targetSize).ToBitmap();
 
             if (CurrentMask == null)
             {
