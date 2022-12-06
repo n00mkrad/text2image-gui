@@ -64,7 +64,7 @@ namespace StableDiffusionGui.Implementations
                         $"{string.Join("\n", cachedModelsUnsafe.Select(model => model.Name))}");
 
                     if (cachedModelsUnsafe.Select(m => m.FullName).Contains(selectedMdl.FullName))
-                        TextToImage.Cancel("Selected model can not be loaded because it is either corruped or contains malware.");
+                        TextToImage.Cancel("Selected model can not be loaded because it is either corruped or contains malware.", true);
                 }
             }
 

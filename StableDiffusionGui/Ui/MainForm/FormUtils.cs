@@ -167,7 +167,7 @@ namespace StableDiffusionGui.Ui.MainForm
             {
                 if (Program.Busy)
                 {
-                    TextToImage.Cancel($"Program is already busy ({Program.State})");
+                    TextToImage.Cancel($"Program is already busy ({Program.State})", false);
                     return;
                 }
                 else
@@ -186,7 +186,7 @@ namespace StableDiffusionGui.Ui.MainForm
                     {
                         if (MainUi.Queue.Where(x => x != null).Count() < 0)
                         {
-                            TextToImage.Cancel("Queue is empty.");
+                            TextToImage.Cancel("Queue is empty.", true);
                             return;
                         }
 
@@ -196,7 +196,7 @@ namespace StableDiffusionGui.Ui.MainForm
                     {
                         if (string.IsNullOrWhiteSpace(F.textboxPrompt.Text))
                         {
-                            TextToImage.Cancel("No prompt was entered.");
+                            TextToImage.Cancel("No prompt was entered.", true);
                             return;
                         }
 

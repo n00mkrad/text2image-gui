@@ -125,7 +125,7 @@ namespace StableDiffusionGui.Main
             Cancel("Canceled manually.", false);
         }
 
-        public static async void Cancel(string reason, bool showMsgBox = true)
+        public static async void Cancel(string reason, bool showMsgBox)
         {
             if (Canceled)
                 return;
@@ -163,7 +163,7 @@ namespace StableDiffusionGui.Main
                 TtiProcess.Kill();
             }
 
-            Logger.LogIfLastLineDoesNotContainMsg("Canceled.");
+            Logger.LogIfLastLineDoesNotContainMsg(showMsgBox ? "Canceled." : $"Canceled: {reason.Replace("\n", "").Trunc(200)}.");
 
             if (!string.IsNullOrWhiteSpace(reason) && showMsgBox)
                 Task.Run(() => UiUtils.ShowMessageBox($"Canceled:\n\n{reason}"));

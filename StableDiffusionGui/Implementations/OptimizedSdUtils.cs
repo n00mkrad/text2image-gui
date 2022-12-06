@@ -15,7 +15,7 @@ namespace StableDiffusionGui.Implementations
             var pickleScanResults = await TtiUtils.VerifyModelsWithPseudoHash(new[] { model }.ToList());
 
             if(pickleScanResults != null && pickleScanResults.Count > 0 && pickleScanResults.FirstOrDefault().Value == false)
-                TextToImage.Cancel("Selected model appears to contain malware.");
+                TextToImage.Cancel("Selected model appears to contain malware.", true);
         }
     }
 }

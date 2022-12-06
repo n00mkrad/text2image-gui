@@ -92,7 +92,7 @@ namespace StableDiffusionGui.Main
             else
             {
                 string log = "...\n" + string.Join("\n", Logger.GetLastLines(Constants.Lognames.Sd, 8));
-                TextToImage.Cancel($"Process has exited unexpectedly.\n\nOutput:\n{log}");
+                TextToImage.Cancel($"Process has exited unexpectedly.\n\nOutput:\n{log}", true);
             }
         }
     }

@@ -67,7 +67,7 @@ namespace StableDiffusionGui.Ui
 
             if (CurrentMask == null)
             {
-                TextToImage.Cancel("Inpainting is enabled, but no mask was used!");
+                TextToImage.Cancel("Inpainting is enabled, but no mask was used!", true);
                 return;
             }
 

@@ -152,7 +152,7 @@ namespace StableDiffusionGui.Main
 
             if (string.IsNullOrWhiteSpace(name))
             {
-                TextToImage.Cancel($"No Stable Diffusion model file has been set.\nPlease set one in the settings.");
+                TextToImage.Cancel($"No Stable Diffusion model file has been set.\nPlease set one in the settings.", true);
                 new SettingsForm().ShowDialogForm(0.5f);
                 return null;
             }
@@ -162,7 +162,7 @@ namespace StableDiffusionGui.Main
 
                 if (model == null)
                 {
-                    TextToImage.Cancel($"Stable Diffusion model file {name.Wrap()} not found.\nPossibly it was moved, renamed, or deleted.");
+                    TextToImage.Cancel($"Stable Diffusion model file {name.Wrap()} not found.\nPossibly it was moved, renamed, or deleted.", true);
                     return null;
                 }
                 else
