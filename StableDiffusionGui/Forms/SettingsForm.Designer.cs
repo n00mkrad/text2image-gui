@@ -1430,7 +1430,7 @@
             this.comboxImplementation.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.comboxImplementation.ForeColor = System.Drawing.Color.White;
             this.comboxImplementation.FormattingEnabled = true;
-            this.comboxImplementation.Location = new System.Drawing.Point(2, 4);
+            this.comboxImplementation.Location = new System.Drawing.Point(0, 4);
             this.comboxImplementation.Name = "comboxImplementation";
             this.comboxImplementation.Size = new System.Drawing.Size(401, 21);
             this.comboxImplementation.TabIndex = 107;

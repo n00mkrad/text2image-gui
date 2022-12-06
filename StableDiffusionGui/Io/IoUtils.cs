@@ -25,14 +25,7 @@ namespace StableDiffusionGui.Io
         {
             try
             {
-                try
-                {
-                    return Image.FromFile(path);
-                }
-                catch
-                {
-                    return new MagickImage(path).ToBitmap();
-                }
+                return new MagickImage(path).ToBitmap();
             }
             catch (Exception ex)
             {

@@ -53,7 +53,7 @@ namespace StableDiffusionGui.Main
                     try
                     {
                         Logger.Log($"Init img '{Path.GetFileName(pair.Key)}' has incorrect dimensions ({img.Width}x{img.Height}), resizing to {targetSize.Width}x{targetSize.Height}.", true);
-                        Size unstretchedSize = ImgUtils.GetValidSize(new Size(img.Width, img.Height), MainUi.GetValidImageWidths(), MainUi.GetValidImageHeights(), false);
+                        Size unstretchedSize = ImgMaths.FitIntoFrame(new Size(img.Width, img.Height), targetSize); // ImgUtils.GetValidSize(new Size(img.Width, img.Height), MainUi.GetValidImageWidths(), MainUi.GetValidImageHeights(), false);
                         img = ImgUtils.ScaleAndPad(img, unstretchedSize, targetSize);
                         string resizedImgPath = Path.Combine(initImgsDir, $"{index}.png");
                         img.Write(resizedImgPath);
