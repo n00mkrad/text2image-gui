@@ -81,7 +81,6 @@ namespace StableDiffusionGui
             MainUi.LoadAutocompleteData(promptAutocomplete, new[] { textboxPrompt, textboxPromptNeg });
             Task.Run(() => MainUi.SetGpusInWindowTitle());
             upDownSeed.Text = "";
-            MainUi.DoStartupChecks();
             FormControls.UpdateInitImgAndEmbeddingUi();
 
             TabOrderInit(new List<Control>() {
@@ -99,7 +98,9 @@ namespace StableDiffusionGui
             }, false);
 
             await Task.Delay(1); // Don't ask. Just keep it here
+
             Opacity = 1.0;
+            MainUi.DoStartupChecks();
 
             if (!Program.Debug && !(Config.Get<bool>(Config.Keys.HideMotd) && Config.Get<string>(Config.Keys.MotdShownVersion) == Program.Version))
                 new WelcomeForm().ShowDialogForm(0f);
