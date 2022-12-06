@@ -391,6 +391,9 @@ namespace StableDiffusionGui.Installation
         {
             try
             {
+                if (IoUtils.GetAmountOfFiles(Path.Combine(GetDataSubPath(Constants.Dirs.SdVenv)), false) < 1)
+                    return;
+
                 #region virtualenv (pyvenv.cfg)
 
                 Logger.Log($"Fixing pyenv paths...", true);
