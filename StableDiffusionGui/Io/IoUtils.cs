@@ -1,4 +1,5 @@
 ﻿using Force.Crc32;
+using ImageMagick;
 using StableDiffusionGui.Data;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
@@ -11,11 +12,9 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Management.Automation;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using ZetaLongPaths;
 
 namespace StableDiffusionGui.Io
@@ -26,8 +25,14 @@ namespace StableDiffusionGui.Io
         {
             try
             {
-                using (FileStream stream = new FileStream(path, FileMode.Open, FileAccess.Read))
-                    return Image.FromStream(stream);
+                try
+                {
+                    return Image.FromFile(path);
+                }
+                catch
+                {
+                    return new MagickImage(path).ToBitmap();
+                }
             }
             catch (Exception ex)
             {
