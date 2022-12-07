@@ -177,7 +177,7 @@ namespace StableDiffusionGui.Implementations
 
                     py.Start();
                     OsUtils.AttachOrphanHitman(py);
-                    TtiProcess.CurrentStdInWriter = py.StandardInput;
+                    TtiProcess.CurrentStdInWriter = new NmkdStreamWriter(py);
 
                     if (!OsUtils.ShowHiddenCmd())
                     {
@@ -280,14 +280,17 @@ namespace StableDiffusionGui.Implementations
                 if (actions.Contains(FixAction.FaceRestoration))
                     args.Add(Args.InvokeAi.GetFaceRestoreArgs(true));
 
-                await TtiProcess.WriteStdIn(string.Join(" ", args), true);
+                bool success = await TtiProcess.WriteStdIn(string.Join(" ", args), true);
 
-                return true;
+                if (!success)
+                    throw new Exception("Can't write to process. Possibly it is not running?");
+                else
+                    return true;
             }
             catch (Exception ex)
             {
                 Logger.Log($"Error: {ex.Message}");
-                Logger.Log(ex.StackTrace);
+                Logger.Log(ex.StackTrace, true);
                 Program.SetState(Program.BusyState.Standby);
                 return false;
             }

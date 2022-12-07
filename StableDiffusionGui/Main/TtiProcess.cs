@@ -1,24 +1,15 @@
-﻿using StableDiffusionGui.Data;
-using StableDiffusionGui.Io;
-using StableDiffusionGui.MiscUtils;
+﻿using StableDiffusionGui.Io;
 using StableDiffusionGui.Os;
-using StableDiffusionGui.Ui;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
-using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
-using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
 namespace StableDiffusionGui.Main
 {
     internal class TtiProcess
     {
         public static Process CurrentProcess;
-        public static StreamWriter CurrentStdInWriter;
+        public static NmkdStreamWriter CurrentStdInWriter;
         public static bool ProcessExistWasIntentional = false;
         public static bool IsAiProcessRunning { get { return CurrentProcess != null && !CurrentProcess.HasExited; } }
 
@@ -29,19 +20,24 @@ namespace StableDiffusionGui.Main
 
         public static string LastStartupSettings;
 
+        /// <summary> Writes text to a CLI using stdin </summary>
+        /// <returns> True if successful, False if not </returns>
         public static async Task<bool> WriteStdIn(string text, bool ignoreCanceled = false, bool newLine = true)
         {
             try
             {
-                if ((!ignoreCanceled && TextToImage.Canceled) || CurrentStdInWriter == null)
+                if (!ignoreCanceled && TextToImage.Canceled)
+                    return false;
+
+                if (CurrentStdInWriter == null || !CurrentStdInWriter.IsRunning)
                     return false;
 
                 Logger.Log($"=> {text}", true);
 
                 if (newLine)
-                    await CurrentStdInWriter.WriteLineAsync(text);
+                    await CurrentStdInWriter.Writer.WriteLineAsync(text);
                 else
-                    await CurrentStdInWriter.WriteAsync(text);
+                    await CurrentStdInWriter.Writer.WriteAsync(text);
 
                 return true;
             }
