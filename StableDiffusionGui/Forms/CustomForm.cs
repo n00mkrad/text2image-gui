@@ -14,13 +14,13 @@ namespace StableDiffusionGui.Forms
 
         private List<Control> _tabOrderedControls;
 
-        public void TabOrderInit(List<Control> tabOrderedControls, bool focusFirst = true)
+        public void TabOrderInit(List<Control> tabOrderedControls, int defaultFocusIndex = 0)
         {
             _tabOrderedControls = tabOrderedControls;
             this.GetControls().ForEach(control => control.TabStop = false);
 
-            if (focusFirst && tabOrderedControls != null && tabOrderedControls.Count > 0)
-                tabOrderedControls[0].Focus();
+            if (defaultFocusIndex >= 0 && tabOrderedControls != null && tabOrderedControls.Count > 0)
+                tabOrderedControls[defaultFocusIndex].Focus();
         }
 
         public void TabOrderNext()

@@ -54,5 +54,14 @@ namespace StableDiffusionGui.Ui
             { Enums.StableDiffusion.Implementation.OptimizedSd.ToString(), "Stable Diffusion (OptimizedSD - CUDA - Low Memory Mode)" },
             { Enums.StableDiffusion.Implementation.DiffusersOnnx.ToString(), "Stable Diffusion (ONNX - DirectML - For AMD GPUs)" },
         };
+
+        public static Dictionary<string, string> ImageImportMode = new Dictionary<string, string>
+        {
+            // Seamless Modes
+            { Enums.Misc.ImageImportAction.LoadImage.ToString(), "Load as Initialization Image" },
+            { Enums.Misc.ImageImportAction.LoadSettings.ToString(), "Use Settings From Metadata" },
+            { Enums.Misc.ImageImportAction.LoadImageAndSettings.ToString(), "Load Image and Use Settings From Metadata" },
+            { Enums.Misc.ImageImportAction.CopyPrompt.ToString(), "Copy Prompt" },
+        };
     }
 }

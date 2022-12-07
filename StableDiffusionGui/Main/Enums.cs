@@ -27,5 +27,10 @@ namespace StableDiffusionGui.Main
         {
             public enum Device { Automatic, Cpu }
         }
+
+        public class Misc
+        {
+            public enum ImageImportAction { LoadImage, LoadSettings, LoadImageAndSettings, CopyPrompt /* , LoadIntoImgViewer */ }
+        }
     }
 }

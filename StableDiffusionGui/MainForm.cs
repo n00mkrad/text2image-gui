@@ -95,7 +95,7 @@ namespace StableDiffusionGui
                 comboxSampler,
                 comboxSeamless,
                 runBtn
-            }, false);
+            }, -1);
 
             await Task.Delay(1); // Don't ask. Just keep it here
 

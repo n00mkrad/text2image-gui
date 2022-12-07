@@ -32,7 +32,9 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.pictBox = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.textboxInfo = new System.Windows.Forms.TextBox();
+            this.btnOk = new HTAlt.WinForms.HTButton();
+            this.comboxImportAction = new System.Windows.Forms.ComboBox();
+            this.textboxInfo = new StableDiffusionGui.Controls.CustomTextbox();
             this.btnInitImage = new HTAlt.WinForms.HTButton();
             this.btnLoadSettings = new HTAlt.WinForms.HTButton();
             this.btnCopyPrompt = new HTAlt.WinForms.HTButton();
@@ -70,6 +72,8 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.btnOk);
+            this.panel1.Controls.Add(this.comboxImportAction);
             this.panel1.Controls.Add(this.textboxInfo);
             this.panel1.Controls.Add(this.btnInitImage);
             this.panel1.Controls.Add(this.btnLoadSettings);
@@ -81,17 +85,55 @@
             this.panel1.Size = new System.Drawing.Size(372, 512);
             this.panel1.TabIndex = 2;
             // 
+            // btnOk
+            // 
+            this.btnOk.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnOk.AutoColor = true;
+            this.btnOk.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnOk.ButtonImage = null;
+            this.btnOk.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
+            this.btnOk.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
+            this.btnOk.DrawImage = false;
+            this.btnOk.ForeColor = System.Drawing.Color.White;
+            this.btnOk.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
+            this.btnOk.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
+            this.btnOk.Location = new System.Drawing.Point(3, 486);
+            this.btnOk.Name = "btnOk";
+            this.btnOk.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+            this.btnOk.Size = new System.Drawing.Size(366, 23);
+            this.btnOk.TabIndex = 111;
+            this.btnOk.TabStop = false;
+            this.btnOk.Text = "OK";
+            this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
+            // 
+            // comboxImportAction
+            // 
+            this.comboxImportAction.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboxImportAction.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.comboxImportAction.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboxImportAction.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboxImportAction.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.comboxImportAction.ForeColor = System.Drawing.Color.White;
+            this.comboxImportAction.FormattingEnabled = true;
+            this.comboxImportAction.Location = new System.Drawing.Point(3, 456);
+            this.comboxImportAction.Name = "comboxImportAction";
+            this.comboxImportAction.Size = new System.Drawing.Size(366, 24);
+            this.comboxImportAction.TabIndex = 110;
+            // 
             // textboxInfo
             // 
             this.textboxInfo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textboxInfo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.textboxInfo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.textboxInfo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textboxInfo.ForeColor = System.Drawing.Color.Silver;
             this.textboxInfo.Location = new System.Drawing.Point(3, 3);
             this.textboxInfo.Multiline = true;
             this.textboxInfo.Name = "textboxInfo";
-            this.textboxInfo.Size = new System.Drawing.Size(366, 419);
+            this.textboxInfo.ReadOnly = true;
+            this.textboxInfo.Size = new System.Drawing.Size(366, 447);
             this.textboxInfo.TabIndex = 79;
             this.textboxInfo.TabStop = false;
             // 
@@ -108,13 +150,14 @@
             this.btnInitImage.ForeColor = System.Drawing.Color.White;
             this.btnInitImage.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
             this.btnInitImage.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
-            this.btnInitImage.Location = new System.Drawing.Point(3, 428);
+            this.btnInitImage.Location = new System.Drawing.Point(363, 353);
             this.btnInitImage.Name = "btnInitImage";
             this.btnInitImage.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
             this.btnInitImage.Size = new System.Drawing.Size(366, 23);
             this.btnInitImage.TabIndex = 4;
             this.btnInitImage.TabStop = false;
             this.btnInitImage.Text = "Use as Initialization Image";
+            this.btnInitImage.Visible = false;
             this.btnInitImage.Click += new System.EventHandler(this.btnInitImage_Click);
             // 
             // btnLoadSettings
@@ -131,13 +174,14 @@
             this.btnLoadSettings.ForeColor = System.Drawing.Color.White;
             this.btnLoadSettings.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.btnLoadSettings.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
-            this.btnLoadSettings.Location = new System.Drawing.Point(3, 457);
+            this.btnLoadSettings.Location = new System.Drawing.Point(363, 382);
             this.btnLoadSettings.Name = "btnLoadSettings";
             this.btnLoadSettings.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
             this.btnLoadSettings.Size = new System.Drawing.Size(366, 23);
             this.btnLoadSettings.TabIndex = 3;
             this.btnLoadSettings.TabStop = false;
             this.btnLoadSettings.Text = "Load Settings From Metadata";
+            this.btnLoadSettings.Visible = false;
             this.btnLoadSettings.Click += new System.EventHandler(this.btnLoadSettings_Click);
             // 
             // btnCopyPrompt
@@ -154,13 +198,14 @@
             this.btnCopyPrompt.ForeColor = System.Drawing.Color.White;
             this.btnCopyPrompt.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.btnCopyPrompt.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
-            this.btnCopyPrompt.Location = new System.Drawing.Point(3, 486);
+            this.btnCopyPrompt.Location = new System.Drawing.Point(363, 411);
             this.btnCopyPrompt.Name = "btnCopyPrompt";
             this.btnCopyPrompt.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
             this.btnCopyPrompt.Size = new System.Drawing.Size(366, 23);
             this.btnCopyPrompt.TabIndex = 2;
             this.btnCopyPrompt.TabStop = false;
             this.btnCopyPrompt.Text = "Copy Prompt to Clipboard";
+            this.btnCopyPrompt.Visible = false;
             this.btnCopyPrompt.Click += new System.EventHandler(this.btnCopyPrompt_Click);
             // 
             // ImageLoadForm
@@ -198,6 +243,8 @@
         private HTAlt.WinForms.HTButton btnInitImage;
         private HTAlt.WinForms.HTButton btnLoadSettings;
         private HTAlt.WinForms.HTButton btnCopyPrompt;
-        private System.Windows.Forms.TextBox textboxInfo;
+        private StableDiffusionGui.Controls.CustomTextbox textboxInfo;
+        public System.Windows.Forms.ComboBox comboxImportAction;
+        private HTAlt.WinForms.HTButton btnOk;
     }
 }

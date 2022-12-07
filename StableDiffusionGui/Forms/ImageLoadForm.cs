@@ -1,22 +1,27 @@
 ﻿using StableDiffusionGui.Data;
 using StableDiffusionGui.Io;
+using StableDiffusionGui.Main;
+using StableDiffusionGui.MiscUtils;
+using StableDiffusionGui.Ui;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using static StableDiffusionGui.Main.Enums.Misc;
 
 namespace StableDiffusionGui.Forms
 {
-    public partial class ImageLoadForm : Form
+    public partial class ImageLoadForm : CustomForm
     {
-        public enum ImageAction { None, InitImage, LoadSettings, CopyPrompt }
-        public ImageAction Action = ImageAction.None;
-
+        public ImageImportAction Action = (ImageImportAction)(-1);
         public ImageMetadata CurrentMetadata;
 
         private string _path;
 
         public ImageLoadForm(string path)
         {
+            AllowTextboxTab = false;
             _path = path;
             InitializeComponent();
         }
@@ -28,31 +33,29 @@ namespace StableDiffusionGui.Forms
             Text = isClipboardImage ? "Clipboard Image" :  filename.Trunc(120);
         }
 
-        private void btnCopyPrompt_Click(object sender, EventArgs e)
+        private async void ImageLoadForm_Shown(object sender, EventArgs e)
         {
-            Action = ImageAction.CopyPrompt;
-            Close();
-        }
+            TabOrderInit(new List<Control>() { textboxInfo, comboxImportAction }, 1);
 
-        private void btnLoadSettings_Click(object sender, EventArgs e)
-        {
-            Action = ImageAction.LoadSettings;
-            Close();
-        }
-
-        private void btnInitImage_Click(object sender, EventArgs e)
-        {
-            Action = ImageAction.InitImage;
-            Close();
-        }
-
-        private void ImageLoadForm_Shown(object sender, EventArgs e)
-        {
+            await Task.Delay(1);
             Refresh();
+
             pictBox.Image = IoUtils.GetImage(_path);
             CurrentMetadata = IoUtils.GetImageMetadata(_path);
 
+            var disabledActions = new List<ImageImportAction>();
+
+            if(CurrentMetadata == null || string.IsNullOrWhiteSpace(CurrentMetadata.ParsedText))
+            {
+                disabledActions.Add(ImageImportAction.LoadSettings);
+                disabledActions.Add(ImageImportAction.LoadImageAndSettings);
+                disabledActions.Add(ImageImportAction.CopyPrompt);
+            }
+
+            comboxImportAction.FillFromEnum<ImageImportAction>(Strings.ImageImportMode, 0, disabledActions);
+
             string n = Environment.NewLine;
+            textboxInfo.Text += $"Resolution: {pictBox.Image.Size.AsString()}{n}{n}";
 
             if (!string.IsNullOrWhiteSpace(CurrentMetadata.ParsedText))
             {
@@ -84,13 +87,40 @@ namespace StableDiffusionGui.Forms
             {
                 textboxInfo.Text += $"No Metadata Found in Image.";
             }
-                
+
+        }
+
+        private void btnCopyPrompt_Click(object sender, EventArgs e)
+        {
+            Action = ImageImportAction.CopyPrompt;
+            Close();
+        }
+
+        private void btnLoadSettings_Click(object sender, EventArgs e)
+        {
+            Action = ImageImportAction.LoadSettings;
+            Close();
+        }
+
+        private void btnInitImage_Click(object sender, EventArgs e)
+        {
+            Action = ImageImportAction.LoadImage;
+            Close();
         }
 
         private void ImageLoadForm_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Escape)
                 Close();
+
+            if (e.KeyCode == Keys.Return)
+                btnOk_Click(null, null);
+        }
+
+        private void btnOk_Click(object sender, EventArgs e)
+        {
+            Action = ParseUtils.GetEnum<ImageImportAction>(comboxImportAction.Text, true, Strings.ImageImportMode);
+            Close();
         }
     }
 }

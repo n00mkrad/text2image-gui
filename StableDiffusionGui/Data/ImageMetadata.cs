@@ -154,7 +154,7 @@ namespace StableDiffusionGui.Data
                 Prompt = lines[0].Trim();
                 NegativePrompt = lines[1].Split("Negative prompt: ")[1];
                 Steps = lines[2].Split("Steps: ")[1].Split(',')[0].GetInt();
-                GeneratedResolution = Parser.GetSize(lines[2].Split("Size: ")[1].Split(',')[0]);
+                GeneratedResolution = ParseUtils.GetSize(lines[2].Split("Size: ")[1].Split(',')[0]);
                 Scale = lines[2].Split("CFG scale: ")[1].Split(',')[0].GetFloat();
                 Sampler = lines[2].Split("Sampler: ")[1].Split(',')[0].Replace(" ", "_");
                 Seed = lines[2].Split("Seed: ")[1].Split(',')[0].GetLong();

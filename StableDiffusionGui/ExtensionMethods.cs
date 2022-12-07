@@ -408,7 +408,8 @@ namespace StableDiffusionGui
                 exclusionList = new List<TEnum>();
 
             comboBox.Items.Clear();
-            comboBox.Items.AddRange(Enum.GetValues(typeof(TEnum)).Cast<TEnum>().Except(exclusionList).Select(x => stringMap.Get(x.ToString(), true)).ToArray());
+            var entriesToAdd = Enum.GetValues(typeof(TEnum)).Cast<TEnum>().Except(exclusionList);
+            comboBox.Items.AddRange(entriesToAdd.Select(x => stringMap.Get(x.ToString(), true)).ToArray());
 
             if (defaultIndex >= 0)
                 comboBox.SelectedIndex = defaultIndex;

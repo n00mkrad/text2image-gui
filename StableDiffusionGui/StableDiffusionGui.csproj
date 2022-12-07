@@ -302,7 +302,7 @@
     <Compile Include="MiscUtils\ImgUtils.cs" />
     <Compile Include="MiscUtils\InputUtils.cs" />
     <Compile Include="MiscUtils\NmkdStopwatch.cs" />
-    <Compile Include="MiscUtils\Parser.cs" />
+    <Compile Include="MiscUtils\ParseUtils.cs" />
     <Compile Include="MiscUtils\PromptWildcardUtils.cs" />
     <Compile Include="Os\GpuUtils.cs" />
     <Compile Include="Os\HwInfo.cs" />

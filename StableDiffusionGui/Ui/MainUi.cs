@@ -17,6 +17,7 @@ using System.Linq;
 using System.Resources;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static StableDiffusionGui.Main.Enums.Misc;
 
 namespace StableDiffusionGui.Ui
 {
@@ -128,11 +129,13 @@ namespace StableDiffusionGui.Ui
                     ImageLoadForm imgForm = new ImageLoadForm(paths[0]);
                     imgForm.ShowDialogForm();
 
-                    if (imgForm.Action == ImageLoadForm.ImageAction.InitImage)
+                    if (imgForm.Action == ImageImportAction.LoadSettings || imgForm.Action == ImageImportAction.LoadImageAndSettings)
+                        FormParsing.LoadMetadataIntoUi(imgForm.CurrentMetadata);
+
+                    if (imgForm.Action == ImageImportAction.LoadImage || imgForm.Action == ImageImportAction.LoadImageAndSettings)
                         AddInitImages(paths.ToList());
-                    else if (imgForm.Action == ImageLoadForm.ImageAction.LoadSettings)
-                        Ui.MainForm.FormParsing.LoadMetadataIntoUi(imgForm.CurrentMetadata);
-                    else if (imgForm.Action == ImageLoadForm.ImageAction.CopyPrompt)
+
+                    if (imgForm.Action == ImageImportAction.CopyPrompt)
                         OsUtils.SetClipboard(imgForm.CurrentMetadata.Prompt);
                 }
 
@@ -367,12 +370,12 @@ namespace StableDiffusionGui.Ui
             Program.MainForm.comboxResH.Text = newRes.Height.ToString();
         }
 
-        public static Size GetResolutionForInitImage (Size imageSize)
+        public static Size GetResolutionForInitImage(Size imageSize)
         {
             return ImgUtils.GetValidSize(imageSize, GetValidImageWidths(), GetValidImageHeights());
         }
 
-        public static List<int> GetValidImageWidths ()
+        public static List<int> GetValidImageWidths()
         {
             return Program.MainForm.comboxResW.Items.Cast<string>().Select(x => x.GetInt()).ToList();
         }
