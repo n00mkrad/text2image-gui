@@ -19,7 +19,8 @@ Generates an entire image based on your prompt and the original image, they over
 * **Pros:** Excellent quality, fully context-aware even without a prompt, reproduces environment well (lighting, style, quality, etc.)
 * **Cons:** Requires specific models (`sd-v1-5-inpainting`), negative prompts do not work currently, prompt has less impact
 
-**Important:** Inpainting-capable models must be marked as such by using the filename suffix `-inpainting`. If the filename does not end with that, it will not be recognized as an inpainting model.
+**Important:** Inpainting-capable models must be marked as such by using the filename suffix `-inpainting`. If the filename does not end with that, it will not be recognized as an inpainting model.  
+Also, do not enable any mask blurring/smoothing when using this method - it requires a clean cutoff. When making a mask in an image editor, set your brush to full strength and disable anti-aliasing (avoid semi-transparent pixels).
 
 
 
