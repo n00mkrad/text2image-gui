@@ -103,7 +103,7 @@ namespace StableDiffusionGui
             MainUi.DoStartupChecks();
 
             if (!Program.Debug && !(Config.Get<bool>(Config.Keys.HideMotd) && Config.Get<string>(Config.Keys.MotdShownVersion) == Program.Version))
-                new WelcomeForm().ShowDialogForm(0f);
+                new WelcomeForm().ShowDialogForm();
 
             panelDebugLoopback.Visible = Program.Debug;
             panelDebugPerlinThresh.Visible = Program.Debug;
@@ -277,7 +277,7 @@ namespace StableDiffusionGui
 
         private void btnSettings_Click(object sender, EventArgs e)
         {
-            new SettingsForm().ShowDialogForm(0.5f);
+            new SettingsForm().ShowDialogForm();
         }
 
         private void btnPostProc_Click(object sender, EventArgs e)

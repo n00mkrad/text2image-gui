@@ -71,36 +71,9 @@ namespace StableDiffusionGui.Extensions
             }
         }
 
-        public static DialogResult ShowDialogForm(this Form form, IWin32Window owner, float darken = 0.0f)
+        public static DialogResult ShowDialogForm(this Form form, IWin32Window owner = null)
         {
-            return ShowDialogForm(form, darken, owner);
-        }
-
-        public static DialogResult ShowDialogForm(this Form form, float darken = 0.0f, IWin32Window owner = null)
-        {
-            if (darken < 0.01f || Program.MainForm.Controls.ContainsKey("overlayPanel"))
-                return form.ShowDialog(owner);
-
-            Bitmap screen = new Bitmap(Program.MainForm.Width, Program.MainForm.Height);
-
-            Point clientAreaStartingPoint = Program.MainForm.PointToClient(Program.MainForm.Location);
-            Program.MainForm.DrawToBitmap(screen, new Rectangle(0, 0, Program.MainForm.Width, Program.MainForm.Height));
-            screen = screen.Clone(new Rectangle(-clientAreaStartingPoint.X, -clientAreaStartingPoint.Y, Program.MainForm.ClientRectangle.Width, Program.MainForm.ClientRectangle.Height), screen.PixelFormat);
-
-            using (Graphics gfx = Graphics.FromImage(screen))
-                using (Brush brush = new SolidBrush(Color.FromArgb((255 * darken).RoundToInt(), Color.Black)))
-                    gfx.FillRectangle(brush, Program.MainForm.ClientRectangle);
-
-            using (Panel overlay = new Panel() { Name = "overlayPanel", Size = Program.MainForm.ClientRectangle.Size, BackgroundImage = screen, BackgroundImageLayout = ImageLayout.Stretch } )
-            {
-                overlay.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom;
-                Program.MainForm.Controls.Add(overlay);
-                overlay.BringToFront();
-
-                Program.MainForm.Refresh();
-
-                return form.ShowDialog(owner);
-            }
+            return form.ShowDialog(owner);
         }
 
         public static List<Control> GetControls(this Control control)
