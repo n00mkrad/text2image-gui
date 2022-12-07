@@ -167,6 +167,9 @@ namespace StableDiffusionGui.Main
 
             if (!string.IsNullOrWhiteSpace(reason) && showMsgBox)
                 Task.Run(() => UiUtils.ShowMessageBox($"Canceled:\n\n{reason}"));
+
+            if (Program.State == Program.BusyState.PostProcessing)
+                Program.SetState(Program.BusyState.Standby);
         }
 
         public static async Task WaitForInvokeAiCancel()

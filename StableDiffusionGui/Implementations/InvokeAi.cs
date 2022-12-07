@@ -281,6 +281,7 @@ namespace StableDiffusionGui.Implementations
                     args.Add(Args.InvokeAi.GetFaceRestoreArgs(true));
 
                 await TtiProcess.WriteStdIn(string.Join(" ", args), true);
+
                 return true;
             }
             catch (Exception ex)

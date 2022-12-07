@@ -72,7 +72,7 @@ namespace StableDiffusionGui
 
         public static void SetState(BusyState state)
         {
-            Logger.Log($"SetWorking({state})", true);
+            Logger.Log($"SetState({state})", true);
             State = state;
             Ui.MainForm.FormUtils.UpdateBusyState();
         }
