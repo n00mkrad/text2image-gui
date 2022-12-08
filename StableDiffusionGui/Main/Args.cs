@@ -28,9 +28,6 @@ namespace StableDiffusionGui.Main
 
                 if (lowVram)
                 {
-                    if (Config.Get<bool>(Config.Keys.MedVramFreeGpuMem, true))
-                        args.Add("--free_gpu_mem");
-
                     if (Config.Get<bool>(Config.Keys.MedVramDisablePostProcessing, false))
                     {
                         args.Add("--no_upscale");
