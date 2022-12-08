@@ -170,6 +170,12 @@
     <Compile Include="Data\TtiTaskInfo.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Extensions\UiExtensions.cs" />
+    <Compile Include="Forms\ConvertModelForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ConvertModelForm.Designer.cs">
+      <DependentUpon>ConvertModelForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\CustomForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -297,6 +303,7 @@
     <Compile Include="Main\ImageExport.cs" />
     <Compile Include="Main\PromptHistory.cs" />
     <Compile Include="Main\TtiProcessOutputHandler.cs" />
+    <Compile Include="Main\Utils\ConvertModels.cs" />
     <Compile Include="MiscUtils\GaussianBlur.cs" />
     <Compile Include="MiscUtils\ImgMaths.cs" />
     <Compile Include="MiscUtils\ImgUtils.cs" />
@@ -328,6 +335,9 @@
     <Compile Include="Ui\Hotkeys.cs" />
     <Compile Include="Ui\Strings.cs" />
     <Compile Include="Ui\UiUtils.cs" />
+    <EmbeddedResource Include="Forms\ConvertModelForm.resx">
+      <DependentUpon>ConvertModelForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\CustomForm.resx">
       <DependentUpon>CustomForm.cs</DependentUpon>
     </EmbeddedResource>

@@ -30,13 +30,12 @@ namespace StableDiffusionGui.Forms
         public List<Bitmap> History = new List<Bitmap>();
         public int HistoryLimit = 200;
 
-        public Point LastPoint = Point.Empty;
-        public bool MouseIsDown;
-
         public DrawForm(Image background, Image mask = null)
         {
             FormControls.F = this;
             FormUtils.F = this;
+
+            FormUtils.Reset();
 
             Opacity = 0;
             BackgroundImg = background;
@@ -71,7 +70,7 @@ namespace StableDiffusionGui.Forms
 
             pictBox.BackgroundImage = BackgroundImg;
             FormControls.SetPictureBoxPadding();
-            FormUtils.Blur();
+            FormUtils.Apply();
             await Task.Delay(1);
             Opacity = 1;
         }
@@ -84,8 +83,7 @@ namespace StableDiffusionGui.Forms
 
         private void pictBox_MouseDown(object sender, MouseEventArgs e)
         {
-            LastPoint = e.Location;
-            MouseIsDown = true;
+            FormUtils.DrawStart(e.Location);
         }
 
         private void pictBox_MouseMove(object sender, MouseEventArgs e)
@@ -95,15 +93,13 @@ namespace StableDiffusionGui.Forms
 
         private void pictBox_MouseUp(object sender, MouseEventArgs e)
         {
-            MouseIsDown = false;
-            LastPoint = Point.Empty;
-            FormUtils.HistorySave();
+            FormUtils.DrawEnd();
         }
 
         public void sliderBlur_Scroll(object sender, ScrollEventArgs e)
         {
             Inpainting.CurrentBlurValue = sliderBlur.Value;
-            FormUtils.Blur();
+            FormUtils.Apply();
         }
 
         private void btnOk_Click(object sender, EventArgs e)

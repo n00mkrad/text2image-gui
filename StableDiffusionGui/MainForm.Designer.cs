@@ -70,23 +70,6 @@ namespace StableDiffusionGui
             this.textboxPromptNeg = new StableDiffusionGui.Controls.CustomTextbox();
             this.textboxPrompt = new StableDiffusionGui.Controls.CustomTextbox();
             this.comboxSeamless = new System.Windows.Forms.ComboBox();
-            this.btnDreambooth = new System.Windows.Forms.Button();
-            this.btnDeleteBatch = new System.Windows.Forms.Button();
-            this.btnPromptHistory = new System.Windows.Forms.Button();
-            this.btnQueue = new System.Windows.Forms.Button();
-            this.btnPostProc = new System.Windows.Forms.Button();
-            this.btnSettings = new System.Windows.Forms.Button();
-            this.btnDebug = new System.Windows.Forms.Button();
-            this.btnExpandPromptNegField = new System.Windows.Forms.Button();
-            this.btnExpandPromptField = new System.Windows.Forms.Button();
-            this.cliButton = new System.Windows.Forms.Button();
-            this.btnOpenOutFolder = new System.Windows.Forms.Button();
-            this.btnPrevImg = new System.Windows.Forms.Button();
-            this.btnNextImg = new System.Windows.Forms.Button();
-            this.installerBtn = new System.Windows.Forms.Button();
-            this.discordBtn = new System.Windows.Forms.Button();
-            this.patreonBtn = new System.Windows.Forms.Button();
-            this.paypalBtn = new System.Windows.Forms.Button();
             this.textboxClipsegMask = new System.Windows.Forms.TextBox();
             this.textboxExtraSteps = new System.Windows.Forms.TextBox();
             this.labelCurrentImage = new System.Windows.Forms.Label();
@@ -157,8 +140,25 @@ namespace StableDiffusionGui
             this.panelPromptNeg = new System.Windows.Forms.Panel();
             this.panelPrompt = new System.Windows.Forms.Panel();
             this.promptAutocomplete = new AutocompleteMenuNS.AutocompleteMenu();
+            this.btnDreambooth = new System.Windows.Forms.Button();
+            this.btnDeleteBatch = new System.Windows.Forms.Button();
             this.pictBoxImgViewer = new System.Windows.Forms.PictureBox();
+            this.btnPromptHistory = new System.Windows.Forms.Button();
+            this.btnQueue = new System.Windows.Forms.Button();
+            this.btnPostProc = new System.Windows.Forms.Button();
+            this.btnSettings = new System.Windows.Forms.Button();
+            this.btnDebug = new System.Windows.Forms.Button();
+            this.btnExpandPromptNegField = new System.Windows.Forms.Button();
+            this.btnExpandPromptField = new System.Windows.Forms.Button();
+            this.cliButton = new System.Windows.Forms.Button();
+            this.btnOpenOutFolder = new System.Windows.Forms.Button();
+            this.btnPrevImg = new System.Windows.Forms.Button();
+            this.btnNextImg = new System.Windows.Forms.Button();
+            this.installerBtn = new System.Windows.Forms.Button();
             this.separator = new System.Windows.Forms.Button();
+            this.discordBtn = new System.Windows.Forms.Button();
+            this.patreonBtn = new System.Windows.Forms.Button();
+            this.paypalBtn = new System.Windows.Forms.Button();
             this.menuStripOutputImg.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.upDownSeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
@@ -583,7 +583,7 @@ namespace StableDiffusionGui
             this.textboxExtraScales.Location = new System.Drawing.Point(340, 7);
             this.textboxExtraScales.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxExtraScales.Name = "textboxExtraScales";
-            this.textboxExtraScales.Size = new System.Drawing.Size(69, 21);
+            this.textboxExtraScales.Size = new System.Drawing.Size(69, 20);
             this.textboxExtraScales.TabIndex = 3;
             this.toolTip.SetToolTip(this.textboxExtraScales, "Here you can custom additional scales to run per image.\r\n\r\nBasic Syntax:\r\n10,12,1" +
         "4\r\nwill run scales 10, 12 and 14.\r\n\r\nIncremental Syntax:\r\n10 > 14 : 0.5\r\nwill ru" +
@@ -648,7 +648,7 @@ namespace StableDiffusionGui
             this.textboxExtraInitStrengths.Location = new System.Drawing.Point(340, 7);
             this.textboxExtraInitStrengths.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxExtraInitStrengths.Name = "textboxExtraInitStrengths";
-            this.textboxExtraInitStrengths.Size = new System.Drawing.Size(69, 21);
+            this.textboxExtraInitStrengths.Size = new System.Drawing.Size(69, 20);
             this.textboxExtraInitStrengths.TabIndex = 91;
             this.toolTip.SetToolTip(this.textboxExtraInitStrengths, resources.GetString("textboxExtraInitStrengths.ToolTip"));
             // 
@@ -705,11 +705,11 @@ namespace StableDiffusionGui
             this.textboxSliderInitStrength.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderInitStrength.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderInitStrength.Location = new System.Drawing.Point(302, 7);
+            this.textboxSliderInitStrength.Location = new System.Drawing.Point(302, 9);
             this.textboxSliderInitStrength.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderInitStrength.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderInitStrength.Name = "textboxSliderInitStrength";
-            this.textboxSliderInitStrength.Size = new System.Drawing.Size(35, 21);
+            this.textboxSliderInitStrength.Size = new System.Drawing.Size(35, 17);
             this.textboxSliderInitStrength.TabIndex = 94;
             this.textboxSliderInitStrength.Text = "0,3";
             // 
@@ -811,317 +811,6 @@ namespace StableDiffusionGui
             this.toolTip.SetToolTip(this.comboxSeamless, "Changes how the image is sampled.\r\nEuler Ancestral works very well at low step co" +
         "unts.");
             // 
-            // btnDreambooth
-            // 
-            this.btnDreambooth.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDreambooth.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnDreambooth.BackgroundImage = global::StableDiffusionGui.Properties.Resources.iconDreambooth;
-            this.btnDreambooth.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnDreambooth.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnDreambooth.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDreambooth.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnDreambooth.Location = new System.Drawing.Point(968, 12);
-            this.btnDreambooth.Name = "btnDreambooth";
-            this.btnDreambooth.Size = new System.Drawing.Size(40, 40);
-            this.btnDreambooth.TabIndex = 117;
-            this.btnDreambooth.TabStop = false;
-            this.toolTip.SetToolTip(this.btnDreambooth, "Train DreamBooth Model");
-            this.btnDreambooth.UseVisualStyleBackColor = false;
-            this.btnDreambooth.Click += new System.EventHandler(this.btnDreambooth_Click);
-            // 
-            // btnDeleteBatch
-            // 
-            this.btnDeleteBatch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDeleteBatch.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnDeleteBatch.BackgroundImage = global::StableDiffusionGui.Properties.Resources.deleteBtn;
-            this.btnDeleteBatch.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnDeleteBatch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnDeleteBatch.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDeleteBatch.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnDeleteBatch.Location = new System.Drawing.Point(1014, 632);
-            this.btnDeleteBatch.Name = "btnDeleteBatch";
-            this.btnDeleteBatch.Size = new System.Drawing.Size(40, 40);
-            this.btnDeleteBatch.TabIndex = 114;
-            this.btnDeleteBatch.TabStop = false;
-            this.toolTip.SetToolTip(this.btnDeleteBatch, "Delete one or all images...");
-            this.btnDeleteBatch.UseVisualStyleBackColor = false;
-            this.btnDeleteBatch.Click += new System.EventHandler(this.btnDeleteBatch_Click);
-            // 
-            // btnPromptHistory
-            // 
-            this.btnPromptHistory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnPromptHistory.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnPromptHistory.BackgroundImage = global::StableDiffusionGui.Properties.Resources.historyIcon;
-            this.btnPromptHistory.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnPromptHistory.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnPromptHistory.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnPromptHistory.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnPromptHistory.Location = new System.Drawing.Point(852, 632);
-            this.btnPromptHistory.Name = "btnPromptHistory";
-            this.btnPromptHistory.Size = new System.Drawing.Size(40, 40);
-            this.btnPromptHistory.TabIndex = 112;
-            this.btnPromptHistory.TabStop = false;
-            this.toolTip.SetToolTip(this.btnPromptHistory, "View Prompt History");
-            this.btnPromptHistory.UseVisualStyleBackColor = false;
-            this.btnPromptHistory.Click += new System.EventHandler(this.btnPromptHistory_Click);
-            // 
-            // btnQueue
-            // 
-            this.btnQueue.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnQueue.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnQueue.BackgroundImage = global::StableDiffusionGui.Properties.Resources.queueIcon;
-            this.btnQueue.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnQueue.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnQueue.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnQueue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnQueue.Location = new System.Drawing.Point(806, 632);
-            this.btnQueue.Name = "btnQueue";
-            this.btnQueue.Size = new System.Drawing.Size(40, 40);
-            this.btnQueue.TabIndex = 111;
-            this.btnQueue.TabStop = false;
-            this.toolTip.SetToolTip(this.btnQueue, "View Prompt Queue");
-            this.btnQueue.UseVisualStyleBackColor = false;
-            this.btnQueue.Click += new System.EventHandler(this.btnQueue_Click);
-            this.btnQueue.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnQueue_MouseDown);
-            // 
-            // btnPostProc
-            // 
-            this.btnPostProc.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnPostProc.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnPostProc.BackgroundImage = global::StableDiffusionGui.Properties.Resources.baseline_auto_fix_high_white_48dp;
-            this.btnPostProc.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnPostProc.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnPostProc.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnPostProc.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnPostProc.Location = new System.Drawing.Point(922, 12);
-            this.btnPostProc.Name = "btnPostProc";
-            this.btnPostProc.Size = new System.Drawing.Size(40, 40);
-            this.btnPostProc.TabIndex = 109;
-            this.btnPostProc.TabStop = false;
-            this.toolTip.SetToolTip(this.btnPostProc, "Post Processing Settings");
-            this.btnPostProc.UseVisualStyleBackColor = false;
-            this.btnPostProc.Click += new System.EventHandler(this.btnPostProc_Click);
-            // 
-            // btnSettings
-            // 
-            this.btnSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSettings.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnSettings.BackgroundImage = global::StableDiffusionGui.Properties.Resources.baseline_settings_white_48dp;
-            this.btnSettings.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSettings.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnSettings.Location = new System.Drawing.Point(1152, 12);
-            this.btnSettings.Name = "btnSettings";
-            this.btnSettings.Size = new System.Drawing.Size(40, 40);
-            this.btnSettings.TabIndex = 108;
-            this.btnSettings.TabStop = false;
-            this.toolTip.SetToolTip(this.btnSettings, "Open Settings");
-            this.btnSettings.UseVisualStyleBackColor = false;
-            this.btnSettings.Click += new System.EventHandler(this.btnSettings_Click);
-            // 
-            // btnDebug
-            // 
-            this.btnDebug.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDebug.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnDebug.BackgroundImage = global::StableDiffusionGui.Properties.Resources.baseline_list_alt_white_48dp;
-            this.btnDebug.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnDebug.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnDebug.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDebug.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnDebug.Location = new System.Drawing.Point(1106, 12);
-            this.btnDebug.Name = "btnDebug";
-            this.btnDebug.Size = new System.Drawing.Size(40, 40);
-            this.btnDebug.TabIndex = 107;
-            this.btnDebug.TabStop = false;
-            this.toolTip.SetToolTip(this.btnDebug, "Logs...");
-            this.btnDebug.UseVisualStyleBackColor = false;
-            this.btnDebug.Click += new System.EventHandler(this.btnDebug_Click);
-            // 
-            // btnExpandPromptNegField
-            // 
-            this.btnExpandPromptNegField.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnExpandPromptNegField.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnExpandPromptNegField.BackgroundImage = global::StableDiffusionGui.Properties.Resources.downArrowIcon;
-            this.btnExpandPromptNegField.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnExpandPromptNegField.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnExpandPromptNegField.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnExpandPromptNegField.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnExpandPromptNegField.Location = new System.Drawing.Point(622, 0);
-            this.btnExpandPromptNegField.Margin = new System.Windows.Forms.Padding(0);
-            this.btnExpandPromptNegField.Name = "btnExpandPromptNegField";
-            this.btnExpandPromptNegField.Size = new System.Drawing.Size(20, 37);
-            this.btnExpandPromptNegField.TabIndex = 87;
-            this.btnExpandPromptNegField.TabStop = false;
-            this.toolTip.SetToolTip(this.btnExpandPromptNegField, "Expand/Collapse Prompt Field");
-            this.btnExpandPromptNegField.UseVisualStyleBackColor = false;
-            this.btnExpandPromptNegField.Click += new System.EventHandler(this.btnExpandPromptNegField_Click);
-            // 
-            // btnExpandPromptField
-            // 
-            this.btnExpandPromptField.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnExpandPromptField.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnExpandPromptField.BackgroundImage = global::StableDiffusionGui.Properties.Resources.downArrowIcon;
-            this.btnExpandPromptField.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnExpandPromptField.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnExpandPromptField.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnExpandPromptField.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnExpandPromptField.Location = new System.Drawing.Point(622, 0);
-            this.btnExpandPromptField.Margin = new System.Windows.Forms.Padding(0);
-            this.btnExpandPromptField.Name = "btnExpandPromptField";
-            this.btnExpandPromptField.Size = new System.Drawing.Size(20, 62);
-            this.btnExpandPromptField.TabIndex = 86;
-            this.btnExpandPromptField.TabStop = false;
-            this.toolTip.SetToolTip(this.btnExpandPromptField, "Expand/Collapse Prompt Field");
-            this.btnExpandPromptField.UseVisualStyleBackColor = false;
-            this.btnExpandPromptField.Click += new System.EventHandler(this.btnExpandPromptField_Click);
-            // 
-            // cliButton
-            // 
-            this.cliButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.cliButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.cliButton.BackgroundImage = global::StableDiffusionGui.Properties.Resources.iconUtils;
-            this.cliButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.cliButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cliButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cliButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.cliButton.Location = new System.Drawing.Point(1014, 12);
-            this.cliButton.Name = "cliButton";
-            this.cliButton.Size = new System.Drawing.Size(40, 40);
-            this.cliButton.TabIndex = 103;
-            this.cliButton.TabStop = false;
-            this.toolTip.SetToolTip(this.cliButton, "Developer Tools...");
-            this.cliButton.UseVisualStyleBackColor = false;
-            this.cliButton.Click += new System.EventHandler(this.cliButton_Click);
-            // 
-            // btnOpenOutFolder
-            // 
-            this.btnOpenOutFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOpenOutFolder.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnOpenOutFolder.BackgroundImage = global::StableDiffusionGui.Properties.Resources.baseline_folder_open_white_48dp;
-            this.btnOpenOutFolder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnOpenOutFolder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnOpenOutFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnOpenOutFolder.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnOpenOutFolder.Location = new System.Drawing.Point(1060, 632);
-            this.btnOpenOutFolder.Name = "btnOpenOutFolder";
-            this.btnOpenOutFolder.Size = new System.Drawing.Size(40, 40);
-            this.btnOpenOutFolder.TabIndex = 94;
-            this.btnOpenOutFolder.TabStop = false;
-            this.toolTip.SetToolTip(this.btnOpenOutFolder, "Open Output Folder");
-            this.btnOpenOutFolder.UseVisualStyleBackColor = false;
-            this.btnOpenOutFolder.Click += new System.EventHandler(this.btnOpenOutFolder_Click);
-            // 
-            // btnPrevImg
-            // 
-            this.btnPrevImg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnPrevImg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnPrevImg.BackgroundImage = global::StableDiffusionGui.Properties.Resources.backArrowIcon;
-            this.btnPrevImg.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnPrevImg.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnPrevImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnPrevImg.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnPrevImg.Location = new System.Drawing.Point(1106, 632);
-            this.btnPrevImg.Name = "btnPrevImg";
-            this.btnPrevImg.Size = new System.Drawing.Size(40, 40);
-            this.btnPrevImg.TabIndex = 82;
-            this.btnPrevImg.TabStop = false;
-            this.toolTip.SetToolTip(this.btnPrevImg, "Previous Image");
-            this.btnPrevImg.UseVisualStyleBackColor = false;
-            this.btnPrevImg.Click += new System.EventHandler(this.btnPrevImg_Click);
-            // 
-            // btnNextImg
-            // 
-            this.btnNextImg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnNextImg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnNextImg.BackgroundImage = global::StableDiffusionGui.Properties.Resources.forwardArrowIcon;
-            this.btnNextImg.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnNextImg.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnNextImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnNextImg.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnNextImg.Location = new System.Drawing.Point(1152, 632);
-            this.btnNextImg.Name = "btnNextImg";
-            this.btnNextImg.Size = new System.Drawing.Size(40, 40);
-            this.btnNextImg.TabIndex = 80;
-            this.btnNextImg.TabStop = false;
-            this.toolTip.SetToolTip(this.btnNextImg, "Next Image");
-            this.btnNextImg.UseVisualStyleBackColor = false;
-            this.btnNextImg.Click += new System.EventHandler(this.btnNextImg_Click);
-            // 
-            // installerBtn
-            // 
-            this.installerBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.installerBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.installerBtn.BackgroundImage = global::StableDiffusionGui.Properties.Resources.installIcon;
-            this.installerBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.installerBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.installerBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.installerBtn.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.installerBtn.Location = new System.Drawing.Point(1060, 12);
-            this.installerBtn.Name = "installerBtn";
-            this.installerBtn.Size = new System.Drawing.Size(40, 40);
-            this.installerBtn.TabIndex = 76;
-            this.installerBtn.TabStop = false;
-            this.toolTip.SetToolTip(this.installerBtn, "Open Installer");
-            this.installerBtn.UseVisualStyleBackColor = false;
-            this.installerBtn.Click += new System.EventHandler(this.installerBtn_Click);
-            // 
-            // discordBtn
-            // 
-            this.discordBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.discordBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.discordBtn.BackgroundImage = global::StableDiffusionGui.Properties.Resources.discordNew;
-            this.discordBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.discordBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.discordBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.discordBtn.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.discordBtn.Location = new System.Drawing.Point(830, 12);
-            this.discordBtn.Name = "discordBtn";
-            this.discordBtn.Size = new System.Drawing.Size(40, 40);
-            this.discordBtn.TabIndex = 74;
-            this.discordBtn.TabStop = false;
-            this.toolTip.SetToolTip(this.discordBtn, "Chat on Discord");
-            this.discordBtn.UseVisualStyleBackColor = false;
-            this.discordBtn.Click += new System.EventHandler(this.discordBtn_Click);
-            // 
-            // patreonBtn
-            // 
-            this.patreonBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.patreonBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.patreonBtn.BackgroundImage = global::StableDiffusionGui.Properties.Resources.patreon256pxColored;
-            this.patreonBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.patreonBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.patreonBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.patreonBtn.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.patreonBtn.Location = new System.Drawing.Point(784, 12);
-            this.patreonBtn.Name = "patreonBtn";
-            this.patreonBtn.Size = new System.Drawing.Size(40, 40);
-            this.patreonBtn.TabIndex = 73;
-            this.patreonBtn.TabStop = false;
-            this.toolTip.SetToolTip(this.patreonBtn, "Support Me on Patreon");
-            this.patreonBtn.UseVisualStyleBackColor = false;
-            this.patreonBtn.Click += new System.EventHandler(this.patreonBtn_Click);
-            // 
-            // paypalBtn
-            // 
-            this.paypalBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.paypalBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.paypalBtn.BackgroundImage = global::StableDiffusionGui.Properties.Resources.paypal256px;
-            this.paypalBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.paypalBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.paypalBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.paypalBtn.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.paypalBtn.Location = new System.Drawing.Point(738, 12);
-            this.paypalBtn.Name = "paypalBtn";
-            this.paypalBtn.Size = new System.Drawing.Size(40, 40);
-            this.paypalBtn.TabIndex = 72;
-            this.paypalBtn.TabStop = false;
-            this.toolTip.SetToolTip(this.paypalBtn, "Donate One-Time via PayPal");
-            this.paypalBtn.UseVisualStyleBackColor = false;
-            this.paypalBtn.Click += new System.EventHandler(this.paypalBtn_Click);
-            // 
             // textboxClipsegMask
             // 
             this.textboxClipsegMask.AllowDrop = true;
@@ -1133,7 +822,7 @@ namespace StableDiffusionGui
             this.textboxClipsegMask.Location = new System.Drawing.Point(439, 7);
             this.textboxClipsegMask.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxClipsegMask.Name = "textboxClipsegMask";
-            this.textboxClipsegMask.Size = new System.Drawing.Size(203, 21);
+            this.textboxClipsegMask.Size = new System.Drawing.Size(203, 20);
             this.textboxClipsegMask.TabIndex = 110;
             this.toolTip.SetToolTip(this.textboxClipsegMask, "Describe what objects you want to replace");
             // 
@@ -1148,7 +837,7 @@ namespace StableDiffusionGui
             this.textboxExtraSteps.Location = new System.Drawing.Point(340, 7);
             this.textboxExtraSteps.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxExtraSteps.Name = "textboxExtraSteps";
-            this.textboxExtraSteps.Size = new System.Drawing.Size(69, 21);
+            this.textboxExtraSteps.Size = new System.Drawing.Size(69, 20);
             this.textboxExtraSteps.TabIndex = 93;
             this.toolTip.SetToolTip(this.textboxExtraSteps, resources.GetString("textboxExtraSteps.ToolTip"));
             // 
@@ -1441,7 +1130,7 @@ namespace StableDiffusionGui
             this.textboxThresh.Location = new System.Drawing.Point(470, 7);
             this.textboxThresh.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxThresh.Name = "textboxThresh";
-            this.textboxThresh.Size = new System.Drawing.Size(100, 21);
+            this.textboxThresh.Size = new System.Drawing.Size(100, 20);
             this.textboxThresh.TabIndex = 108;
             this.textboxThresh.Text = "0";
             // 
@@ -1492,7 +1181,7 @@ namespace StableDiffusionGui
             this.textboxPerlin.Location = new System.Drawing.Point(299, 7);
             this.textboxPerlin.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxPerlin.Name = "textboxPerlin";
-            this.textboxPerlin.Size = new System.Drawing.Size(100, 21);
+            this.textboxPerlin.Size = new System.Drawing.Size(100, 20);
             this.textboxPerlin.TabIndex = 4;
             this.textboxPerlin.Text = "0.0";
             // 
@@ -1530,7 +1219,7 @@ namespace StableDiffusionGui
             this.textboxCliTest.Location = new System.Drawing.Point(233, 7);
             this.textboxCliTest.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxCliTest.Name = "textboxCliTest";
-            this.textboxCliTest.Size = new System.Drawing.Size(409, 21);
+            this.textboxCliTest.Size = new System.Drawing.Size(409, 20);
             this.textboxCliTest.TabIndex = 4;
             this.textboxCliTest.DoubleClick += new System.EventHandler(this.textboxCliTest_DoubleClick);
             // 
@@ -1979,6 +1668,42 @@ namespace StableDiffusionGui
             this.promptAutocomplete.SearchPattern = "[\\w\\.-]";
             this.promptAutocomplete.TargetControlWrapper = null;
             // 
+            // btnDreambooth
+            // 
+            this.btnDreambooth.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnDreambooth.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnDreambooth.BackgroundImage = global::StableDiffusionGui.Properties.Resources.iconDreambooth;
+            this.btnDreambooth.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnDreambooth.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnDreambooth.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDreambooth.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnDreambooth.Location = new System.Drawing.Point(968, 12);
+            this.btnDreambooth.Name = "btnDreambooth";
+            this.btnDreambooth.Size = new System.Drawing.Size(40, 40);
+            this.btnDreambooth.TabIndex = 117;
+            this.btnDreambooth.TabStop = false;
+            this.toolTip.SetToolTip(this.btnDreambooth, "Train DreamBooth Model");
+            this.btnDreambooth.UseVisualStyleBackColor = false;
+            this.btnDreambooth.Click += new System.EventHandler(this.btnDreambooth_Click);
+            // 
+            // btnDeleteBatch
+            // 
+            this.btnDeleteBatch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnDeleteBatch.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnDeleteBatch.BackgroundImage = global::StableDiffusionGui.Properties.Resources.deleteBtn;
+            this.btnDeleteBatch.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnDeleteBatch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnDeleteBatch.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDeleteBatch.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnDeleteBatch.Location = new System.Drawing.Point(1014, 632);
+            this.btnDeleteBatch.Name = "btnDeleteBatch";
+            this.btnDeleteBatch.Size = new System.Drawing.Size(40, 40);
+            this.btnDeleteBatch.TabIndex = 114;
+            this.btnDeleteBatch.TabStop = false;
+            this.toolTip.SetToolTip(this.btnDeleteBatch, "Delete one or all images...");
+            this.btnDeleteBatch.UseVisualStyleBackColor = false;
+            this.btnDeleteBatch.Click += new System.EventHandler(this.btnDeleteBatch_Click);
+            // 
             // pictBoxImgViewer
             // 
             this.pictBoxImgViewer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -1992,6 +1717,227 @@ namespace StableDiffusionGui
             this.pictBoxImgViewer.TabIndex = 113;
             this.pictBoxImgViewer.TabStop = false;
             this.pictBoxImgViewer.Click += new System.EventHandler(this.pictBoxImgViewer_Click);
+            // 
+            // btnPromptHistory
+            // 
+            this.btnPromptHistory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnPromptHistory.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnPromptHistory.BackgroundImage = global::StableDiffusionGui.Properties.Resources.historyIcon;
+            this.btnPromptHistory.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnPromptHistory.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnPromptHistory.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnPromptHistory.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnPromptHistory.Location = new System.Drawing.Point(852, 632);
+            this.btnPromptHistory.Name = "btnPromptHistory";
+            this.btnPromptHistory.Size = new System.Drawing.Size(40, 40);
+            this.btnPromptHistory.TabIndex = 112;
+            this.btnPromptHistory.TabStop = false;
+            this.toolTip.SetToolTip(this.btnPromptHistory, "View Prompt History");
+            this.btnPromptHistory.UseVisualStyleBackColor = false;
+            this.btnPromptHistory.Click += new System.EventHandler(this.btnPromptHistory_Click);
+            // 
+            // btnQueue
+            // 
+            this.btnQueue.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnQueue.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnQueue.BackgroundImage = global::StableDiffusionGui.Properties.Resources.queueIcon;
+            this.btnQueue.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnQueue.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnQueue.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnQueue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnQueue.Location = new System.Drawing.Point(806, 632);
+            this.btnQueue.Name = "btnQueue";
+            this.btnQueue.Size = new System.Drawing.Size(40, 40);
+            this.btnQueue.TabIndex = 111;
+            this.btnQueue.TabStop = false;
+            this.toolTip.SetToolTip(this.btnQueue, "View Prompt Queue");
+            this.btnQueue.UseVisualStyleBackColor = false;
+            this.btnQueue.Click += new System.EventHandler(this.btnQueue_Click);
+            this.btnQueue.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnQueue_MouseDown);
+            // 
+            // btnPostProc
+            // 
+            this.btnPostProc.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnPostProc.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnPostProc.BackgroundImage = global::StableDiffusionGui.Properties.Resources.baseline_auto_fix_high_white_48dp;
+            this.btnPostProc.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnPostProc.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnPostProc.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnPostProc.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnPostProc.Location = new System.Drawing.Point(922, 12);
+            this.btnPostProc.Name = "btnPostProc";
+            this.btnPostProc.Size = new System.Drawing.Size(40, 40);
+            this.btnPostProc.TabIndex = 109;
+            this.btnPostProc.TabStop = false;
+            this.toolTip.SetToolTip(this.btnPostProc, "Post Processing Settings");
+            this.btnPostProc.UseVisualStyleBackColor = false;
+            this.btnPostProc.Click += new System.EventHandler(this.btnPostProc_Click);
+            // 
+            // btnSettings
+            // 
+            this.btnSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSettings.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnSettings.BackgroundImage = global::StableDiffusionGui.Properties.Resources.baseline_settings_white_48dp;
+            this.btnSettings.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSettings.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnSettings.Location = new System.Drawing.Point(1152, 12);
+            this.btnSettings.Name = "btnSettings";
+            this.btnSettings.Size = new System.Drawing.Size(40, 40);
+            this.btnSettings.TabIndex = 108;
+            this.btnSettings.TabStop = false;
+            this.toolTip.SetToolTip(this.btnSettings, "Open Settings");
+            this.btnSettings.UseVisualStyleBackColor = false;
+            this.btnSettings.Click += new System.EventHandler(this.btnSettings_Click);
+            // 
+            // btnDebug
+            // 
+            this.btnDebug.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnDebug.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnDebug.BackgroundImage = global::StableDiffusionGui.Properties.Resources.baseline_list_alt_white_48dp;
+            this.btnDebug.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnDebug.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnDebug.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDebug.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnDebug.Location = new System.Drawing.Point(1106, 12);
+            this.btnDebug.Name = "btnDebug";
+            this.btnDebug.Size = new System.Drawing.Size(40, 40);
+            this.btnDebug.TabIndex = 107;
+            this.btnDebug.TabStop = false;
+            this.toolTip.SetToolTip(this.btnDebug, "Logs...");
+            this.btnDebug.UseVisualStyleBackColor = false;
+            this.btnDebug.Click += new System.EventHandler(this.btnDebug_Click);
+            // 
+            // btnExpandPromptNegField
+            // 
+            this.btnExpandPromptNegField.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnExpandPromptNegField.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnExpandPromptNegField.BackgroundImage = global::StableDiffusionGui.Properties.Resources.downArrowIcon;
+            this.btnExpandPromptNegField.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnExpandPromptNegField.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnExpandPromptNegField.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnExpandPromptNegField.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnExpandPromptNegField.Location = new System.Drawing.Point(622, 0);
+            this.btnExpandPromptNegField.Margin = new System.Windows.Forms.Padding(0);
+            this.btnExpandPromptNegField.Name = "btnExpandPromptNegField";
+            this.btnExpandPromptNegField.Size = new System.Drawing.Size(20, 37);
+            this.btnExpandPromptNegField.TabIndex = 87;
+            this.btnExpandPromptNegField.TabStop = false;
+            this.toolTip.SetToolTip(this.btnExpandPromptNegField, "Expand/Collapse Prompt Field");
+            this.btnExpandPromptNegField.UseVisualStyleBackColor = false;
+            this.btnExpandPromptNegField.Click += new System.EventHandler(this.btnExpandPromptNegField_Click);
+            // 
+            // btnExpandPromptField
+            // 
+            this.btnExpandPromptField.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnExpandPromptField.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnExpandPromptField.BackgroundImage = global::StableDiffusionGui.Properties.Resources.downArrowIcon;
+            this.btnExpandPromptField.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnExpandPromptField.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnExpandPromptField.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnExpandPromptField.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnExpandPromptField.Location = new System.Drawing.Point(622, 0);
+            this.btnExpandPromptField.Margin = new System.Windows.Forms.Padding(0);
+            this.btnExpandPromptField.Name = "btnExpandPromptField";
+            this.btnExpandPromptField.Size = new System.Drawing.Size(20, 62);
+            this.btnExpandPromptField.TabIndex = 86;
+            this.btnExpandPromptField.TabStop = false;
+            this.toolTip.SetToolTip(this.btnExpandPromptField, "Expand/Collapse Prompt Field");
+            this.btnExpandPromptField.UseVisualStyleBackColor = false;
+            this.btnExpandPromptField.Click += new System.EventHandler(this.btnExpandPromptField_Click);
+            // 
+            // cliButton
+            // 
+            this.cliButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.cliButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.cliButton.BackgroundImage = global::StableDiffusionGui.Properties.Resources.iconUtils;
+            this.cliButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.cliButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cliButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cliButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.cliButton.Location = new System.Drawing.Point(1014, 12);
+            this.cliButton.Name = "cliButton";
+            this.cliButton.Size = new System.Drawing.Size(40, 40);
+            this.cliButton.TabIndex = 103;
+            this.cliButton.TabStop = false;
+            this.toolTip.SetToolTip(this.cliButton, "Developer Tools...");
+            this.cliButton.UseVisualStyleBackColor = false;
+            this.cliButton.Click += new System.EventHandler(this.cliButton_Click);
+            // 
+            // btnOpenOutFolder
+            // 
+            this.btnOpenOutFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnOpenOutFolder.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnOpenOutFolder.BackgroundImage = global::StableDiffusionGui.Properties.Resources.baseline_folder_open_white_48dp;
+            this.btnOpenOutFolder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnOpenOutFolder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnOpenOutFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnOpenOutFolder.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnOpenOutFolder.Location = new System.Drawing.Point(1060, 632);
+            this.btnOpenOutFolder.Name = "btnOpenOutFolder";
+            this.btnOpenOutFolder.Size = new System.Drawing.Size(40, 40);
+            this.btnOpenOutFolder.TabIndex = 94;
+            this.btnOpenOutFolder.TabStop = false;
+            this.toolTip.SetToolTip(this.btnOpenOutFolder, "Open Output Folder");
+            this.btnOpenOutFolder.UseVisualStyleBackColor = false;
+            this.btnOpenOutFolder.Click += new System.EventHandler(this.btnOpenOutFolder_Click);
+            // 
+            // btnPrevImg
+            // 
+            this.btnPrevImg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnPrevImg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnPrevImg.BackgroundImage = global::StableDiffusionGui.Properties.Resources.backArrowIcon;
+            this.btnPrevImg.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnPrevImg.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnPrevImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnPrevImg.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnPrevImg.Location = new System.Drawing.Point(1106, 632);
+            this.btnPrevImg.Name = "btnPrevImg";
+            this.btnPrevImg.Size = new System.Drawing.Size(40, 40);
+            this.btnPrevImg.TabIndex = 82;
+            this.btnPrevImg.TabStop = false;
+            this.toolTip.SetToolTip(this.btnPrevImg, "Previous Image");
+            this.btnPrevImg.UseVisualStyleBackColor = false;
+            this.btnPrevImg.Click += new System.EventHandler(this.btnPrevImg_Click);
+            // 
+            // btnNextImg
+            // 
+            this.btnNextImg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnNextImg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnNextImg.BackgroundImage = global::StableDiffusionGui.Properties.Resources.forwardArrowIcon;
+            this.btnNextImg.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnNextImg.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnNextImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnNextImg.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnNextImg.Location = new System.Drawing.Point(1152, 632);
+            this.btnNextImg.Name = "btnNextImg";
+            this.btnNextImg.Size = new System.Drawing.Size(40, 40);
+            this.btnNextImg.TabIndex = 80;
+            this.btnNextImg.TabStop = false;
+            this.toolTip.SetToolTip(this.btnNextImg, "Next Image");
+            this.btnNextImg.UseVisualStyleBackColor = false;
+            this.btnNextImg.Click += new System.EventHandler(this.btnNextImg_Click);
+            // 
+            // installerBtn
+            // 
+            this.installerBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.installerBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.installerBtn.BackgroundImage = global::StableDiffusionGui.Properties.Resources.installIcon;
+            this.installerBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.installerBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.installerBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.installerBtn.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.installerBtn.Location = new System.Drawing.Point(1060, 12);
+            this.installerBtn.Name = "installerBtn";
+            this.installerBtn.Size = new System.Drawing.Size(40, 40);
+            this.installerBtn.TabIndex = 76;
+            this.installerBtn.TabStop = false;
+            this.toolTip.SetToolTip(this.installerBtn, "Open Installer");
+            this.installerBtn.UseVisualStyleBackColor = false;
+            this.installerBtn.Click += new System.EventHandler(this.installerBtn_Click);
             // 
             // separator
             // 
@@ -2009,6 +1955,60 @@ namespace StableDiffusionGui
             this.separator.TabIndex = 75;
             this.separator.TabStop = false;
             this.separator.UseVisualStyleBackColor = false;
+            // 
+            // discordBtn
+            // 
+            this.discordBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.discordBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.discordBtn.BackgroundImage = global::StableDiffusionGui.Properties.Resources.discordNew;
+            this.discordBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.discordBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.discordBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.discordBtn.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.discordBtn.Location = new System.Drawing.Point(830, 12);
+            this.discordBtn.Name = "discordBtn";
+            this.discordBtn.Size = new System.Drawing.Size(40, 40);
+            this.discordBtn.TabIndex = 74;
+            this.discordBtn.TabStop = false;
+            this.toolTip.SetToolTip(this.discordBtn, "Chat on Discord");
+            this.discordBtn.UseVisualStyleBackColor = false;
+            this.discordBtn.Click += new System.EventHandler(this.discordBtn_Click);
+            // 
+            // patreonBtn
+            // 
+            this.patreonBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.patreonBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.patreonBtn.BackgroundImage = global::StableDiffusionGui.Properties.Resources.patreon256pxColored;
+            this.patreonBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.patreonBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.patreonBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.patreonBtn.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.patreonBtn.Location = new System.Drawing.Point(784, 12);
+            this.patreonBtn.Name = "patreonBtn";
+            this.patreonBtn.Size = new System.Drawing.Size(40, 40);
+            this.patreonBtn.TabIndex = 73;
+            this.patreonBtn.TabStop = false;
+            this.toolTip.SetToolTip(this.patreonBtn, "Support Me on Patreon");
+            this.patreonBtn.UseVisualStyleBackColor = false;
+            this.patreonBtn.Click += new System.EventHandler(this.patreonBtn_Click);
+            // 
+            // paypalBtn
+            // 
+            this.paypalBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.paypalBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.paypalBtn.BackgroundImage = global::StableDiffusionGui.Properties.Resources.paypal256px;
+            this.paypalBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.paypalBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.paypalBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.paypalBtn.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.paypalBtn.Location = new System.Drawing.Point(738, 12);
+            this.paypalBtn.Name = "paypalBtn";
+            this.paypalBtn.Size = new System.Drawing.Size(40, 40);
+            this.paypalBtn.TabIndex = 72;
+            this.paypalBtn.TabStop = false;
+            this.toolTip.SetToolTip(this.paypalBtn, "Donate One-Time via PayPal");
+            this.paypalBtn.UseVisualStyleBackColor = false;
+            this.paypalBtn.Click += new System.EventHandler(this.paypalBtn_Click);
             // 
             // MainForm
             // 

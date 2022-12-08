@@ -160,34 +160,51 @@ namespace StableDiffusionGui.Implementations
             string marker = "# PATCHED BY NMKD SD GUI";
 
             string diffusersPath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdVenv, "Lib", "site-packages", "diffusers");
-            string t2iPipelinePath = Path.Combine(diffusersPath, "pipelines", "stable_diffusion", "pipeline_onnx_stable_diffusion.py");
-            string i2iPipelinePath = Path.Combine(diffusersPath, "pipelines", "stable_diffusion", "pipeline_onnx_stable_diffusion_img2img.py");
 
-            string t2iText = File.ReadAllText(t2iPipelinePath);
+            string pipelinePath = Path.Combine(diffusersPath, "pipelines", "stable_diffusion", "pipeline_onnx_stable_diffusion.py");
+            string text = File.ReadAllText(pipelinePath);
 
-            if (t2iText.SplitIntoLines()[0].Trim() != marker)
+            if (text.SplitIntoLines()[0].Trim() != marker)
             {
-                t2iText = t2iText.Replace("    safety_checker: OnnxRuntimeModel", "    # safety_checker: OnnxRuntimeModel");
-                t2iText = t2iText.Replace("    safety_checker=safety_checker", "    # safety_checker=safety_checker");
-                t2iText = t2iText.Replace("    safety_checker_input = self.feature_extractor(", "    pass # safety_checker_input = self.feature_extractor(");
-                t2iText = t2iText.Replace("    image, has_nsfw_concept = self.safety_checker(", "    pass # image, has_nsfw_concept = self.safety_checker(");
-                t2iText = t2iText.Replace("has_nsfw_concept", "False");
-                File.WriteAllText(t2iPipelinePath, $"{marker}{Environment.NewLine}{t2iText}");
-                Logger.Log($"Patched {Path.GetFileName(t2iPipelinePath)}", true);
+                text = text.Replace("    safety_checker: OnnxRuntimeModel", "    # safety_checker: OnnxRuntimeModel");
+                text = text.Replace("    safety_checker=safety_checker", "    # safety_checker=safety_checker");
+                text = text.Replace("    feature_extractor: CLIPFeatureExtractor", "    # feature_extractor: CLIPFeatureExtractor");
+                text = text.Replace("    feature_extractor=feature_extractor", "    # feature_extractor=feature_extractor");
+                text = text.Replace("    safety_checker_input = self.feature_extractor(", "    pass # safety_checker_input = self.feature_extractor(");
+                text = text.Replace("    image, has_nsfw_concept = self.safety_checker(", "    pass # image, has_nsfw_concept = self.safety_checker(");
+                text = text.Replace("has_nsfw_concept", "False");
+                File.WriteAllText(pipelinePath, $"{marker}{Environment.NewLine}{text}");
+                Logger.Log($"Patched {Path.GetFileName(pipelinePath)}", true);
             }
 
-            string i2iText = File.ReadAllText(i2iPipelinePath);
+            pipelinePath = Path.Combine(diffusersPath, "pipelines", "stable_diffusion", "pipeline_onnx_stable_diffusion_img2img.py");
+            text = File.ReadAllText(pipelinePath);
 
-            if (i2iText.SplitIntoLines()[0].Trim() != marker)
+            if (text.SplitIntoLines()[0].Trim() != marker)
             {
-                i2iText = i2iText.Replace("    safety_checker: OnnxRuntimeModel", "    # safety_checker: OnnxRuntimeModel");
-                i2iText = i2iText.Replace("    safety_checker=safety_checker", "    # safety_checker=safety_checker");
-                i2iText = i2iText.Replace("    safety_checker_input = self.feature_extractor(", "    pass # safety_checker_input = self.feature_extractor(");
-                i2iText = i2iText.Replace("    image, has_nsfw_concept = self.safety_checker(", "    pass # image, has_nsfw_concept = self.safety_checker(");
-                i2iText = i2iText.Replace("    if self.safety_checker is not None", "    if False");
-                i2iText = i2iText.Replace("    if safety_checker is None", "    if False");
-                File.WriteAllText(i2iPipelinePath, $"{marker}{Environment.NewLine}{i2iText}");
-                Logger.Log($"Patched {Path.GetFileName(i2iPipelinePath)}", true);
+                text = text.Replace("    safety_checker: OnnxRuntimeModel", "    # safety_checker: OnnxRuntimeModel");
+                text = text.Replace("    safety_checker=safety_checker", "    # safety_checker=safety_checker");
+                text = text.Replace("    safety_checker_input = self.feature_extractor(", "    pass # safety_checker_input = self.feature_extractor(");
+                text = text.Replace("    image, has_nsfw_concept = self.safety_checker(", "    pass # image, has_nsfw_concept = self.safety_checker(");
+                text = text.Replace("    if self.safety_checker is not None", "    if False");
+                text = text.Replace("    if safety_checker is None", "    if False");
+                File.WriteAllText(pipelinePath, $"{marker}{Environment.NewLine}{text}");
+                Logger.Log($"Patched {Path.GetFileName(pipelinePath)}", true);
+            }
+
+            pipelinePath = Path.Combine(diffusersPath, "pipelines", "stable_diffusion", "pipeline_stable_diffusion.py");
+            text = File.ReadAllText(pipelinePath);
+
+            if (text.SplitIntoLines()[0].Trim() != marker)
+            {
+                text = text.Replace("    safety_checker: StableDiffusionSafetyChecker", "    # safety_checker: StableDiffusionSafetyChecker");
+                text = text.Replace("    feature_extractor: CLIPFeatureExtractor,", "    # feature_extractor: CLIPFeatureExtractor,");
+                text = text.Replace("    feature_extractor=feature_extractor", "    # feature_extractor=feature_extractor");
+                text = text.Replace("    safety_checker=safety_checker", "    # safety_checker=safety_checker");
+                text = text.Replace("    if self.safety_checker is not None", "    if False");
+                text = text.Replace("    if safety_checker is None", "    if False");
+                File.WriteAllText(pipelinePath, $"{marker}{Environment.NewLine}{text}");
+                Logger.Log($"Patched {Path.GetFileName(pipelinePath)}", true);
             }
         }
     }

@@ -81,6 +81,66 @@ namespace StableDiffusionGui.Io
             return path;
         }
 
+        public static List<Model> GetModelsAll()
+        {
+            List<Model> list = new List<Model>();
+
+            try
+            {
+                List<string> mdlFolders = new List<string>() { GetModelsPath() };
+
+                foreach (ModelType type in Enum.GetValues(typeof(ModelType)).Cast<ModelType>())
+                {
+                    List<string> customModelDirsList = Config.Get<string>($"{Config.Keys.CustomModelDirsPfx}{type}").FromJson<List<string>>();
+
+                    if (customModelDirsList != null)
+                        mdlFolders.AddRange(customModelDirsList, out mdlFolders);
+                }
+
+                var fileList = new List<ZlpFileInfo>();
+
+                foreach (string folderPath in mdlFolders)
+                    fileList.AddRange(IoUtils.GetFileInfosSorted(folderPath, false, $"*.*").ToList());
+
+                foreach (ModelType type in Enum.GetValues(typeof(ModelType)).Cast<ModelType>())
+                {
+                    if (!Config.Get<bool>(Config.Keys.DisableModelFileValidation))
+                    {
+                        fileList = fileList.Where(f => TtiUtils.ModelFilesizeValid(f.Length, type)).ToList();
+
+                        if (type == ModelType.Normal)
+                            fileList = fileList.Where(f => Constants.FileExts.ValidSdModels.Contains(f.Extension)).ToList();
+                        else if (type == ModelType.Vae)
+                            fileList = fileList.Where(f => Constants.FileExts.ValidSdVaeModels.Contains(f.Extension)).ToList();
+                    }
+                }
+
+                list.AddRange(fileList.Select(f => new Model(f, new[] { Implementation.InvokeAi, Implementation.OptimizedSd }))); // Add file-based models to final list
+
+                var dirList = new List<ZlpDirectoryInfo>();
+
+                foreach (string folderPath in mdlFolders)
+                    dirList.AddRange(Directory.GetDirectories(folderPath, "*", SearchOption.TopDirectoryOnly).Select(x => new ZlpDirectoryInfo(x)).ToList());
+
+                foreach (ZlpDirectoryInfo dir in new List<ZlpDirectoryInfo>(dirList)) // Filter for valid model folders
+                {
+                    List<string> subDirs = dir.GetDirectories().Select(d => d.Name).ToList();
+
+                    if (!(new[] { "unet", "text_encoder", "vae_decoder", "vae_encoder", "tokenizer" }.All(d => subDirs.Contains(d))))
+                        dirList.Remove(dir);
+                }
+
+                list.AddRange(dirList.Select(f => new Model(f, new[] { Implementation.DiffusersOnnx }))); // Add folder-based models to final list
+            }
+            catch (Exception ex)
+            {
+                Logger.Log($"Error getting models: {ex.Message}");
+                Logger.Log(ex.StackTrace, true);
+            }
+
+            return list.DistinctBy(x => x.Name).OrderBy(x => x.Name).ToList();
+        }
+
         public static List<Model> GetModels(ModelType type = ModelType.Normal, Implementation implementation = Implementation.InvokeAi)
         {
             List<Model> list = new List<Model>();
@@ -139,6 +199,7 @@ namespace StableDiffusionGui.Io
 
             return list.DistinctBy(x => x.Name).OrderBy(x => x.Name).ToList();
         }
+
 
         public static Model GetModel(string filename, bool anyExtension = false, ModelType type = ModelType.Normal, Implementation imp = Implementation.InvokeAi)
         {

@@ -63,5 +63,24 @@ namespace StableDiffusionGui.Ui
             { Enums.Misc.ImageImportAction.LoadImageAndSettings.ToString(), "Load Image and Use Settings From Metadata" },
             { Enums.Misc.ImageImportAction.CopyPrompt.ToString(), "Copy Prompt" },
         };
+
+        public static Dictionary<string, string> SdPytorchOptions = new Dictionary<string, string>()
+        {
+            { Enums.Models.Precision.Fp16.ToString(), "Half Precision (FP16 - 2 GB)" },
+            { Enums.Models.Precision.Fp32.ToString(), "Full Precision (FP32 - 4 GB)" },
+        };
+
+        public static Dictionary<string, string> ModelTypes = new Dictionary<string, string>()
+        {
+            { Enums.Models.Precision.Fp16.ToString(), "Half Precision (FP16 - 2 GB)" },
+            { Enums.Models.Precision.Fp32.ToString(), "Full Precision (FP32 - 4 GB)" },
+        };
+
+        public static Dictionary<string, string> ModelFormats = new Dictionary<string, string>()
+        {
+            { Enums.Models.Format.Pytorch.ToString(), "Pytorch (ckpt/pt Files)" },
+            { Enums.Models.Format.Diffusers.ToString(), "Diffusers (Folder)" },
+            { Enums.Models.Format.DiffusersOnnx.ToString(), "Diffusers ONNX (Folder)" },
+        };
     }
 }

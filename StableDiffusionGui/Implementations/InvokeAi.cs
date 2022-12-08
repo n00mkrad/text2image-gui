@@ -240,17 +240,16 @@ namespace StableDiffusionGui.Implementations
         {
             if (conda)
             {
-                Process.Start("cmd", $"/K title Env: {Constants.Dirs.SdEnv} && cd /D {Paths.GetDataPath().Wrap()} && " +
-                    $"{TtiUtils.GetEnvVarsSdCommand(true, Paths.GetDataPath())} && call activate.bat {Constants.Dirs.Conda}/envs/{Constants.Dirs.SdEnv}");
+                Process.Start("cmd", $"/K title Env: {Constants.Dirs.SdEnv} && cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand(true, Paths.GetDataPath())} && " +
+                    $"call activate.bat {Constants.Dirs.Conda}/envs/{Constants.Dirs.SdEnv}");
             }
             else
             {
-                Process.Start("cmd", $"/K title Env: {Constants.Dirs.SdVenv} && cd /D {Paths.GetDataPath().Wrap()} && " +
-                    $"{TtiUtils.GetEnvVarsSdCommand(true, Paths.GetDataPath())}");
+                Process.Start("cmd", $"/K title Env: {Constants.Dirs.SdVenv} && cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand(true, Paths.GetDataPath())}");
             }
         }
 
-        /// <summary> Run InvokeAI post-processing (!fix), with log timeout </summary>
+        /// <summary> Run InvokeAI post-processing (!fix) </summary>
         /// <returns> Successful or not </returns>
         public static async Task<bool> RunFix(string imgPath, List<FixAction> actions)
         {
@@ -283,7 +282,7 @@ namespace StableDiffusionGui.Implementations
                 bool success = await TtiProcess.WriteStdIn(string.Join(" ", args), true);
 
                 if (!success)
-                    throw new Exception("Can't write to process. Possibly it is not running?");
+                    throw new Exception("Can't interact with process. Possibly it is not running?");
                 else
                     return true;
             }

@@ -18,8 +18,8 @@ namespace StableDiffusionGui.Forms
     {
         private Dictionary<string, string> _uiStrings = new Dictionary<string, string>()
         {
-            { Enums.Models.Format.Fp16.ToString(), "Half Precision (FP16 - 2 GB)" },
-            { Enums.Models.Format.Fp32.ToString(), "Full Precision (FP32 - 4 GB)" },
+            { Enums.Models.Precision.Fp16.ToString(), "Half Precision (FP16 - 2 GB)" },
+            { Enums.Models.Precision.Fp32.ToString(), "Full Precision (FP32 - 4 GB)" },
         };
 
         public PruneModelsForm()
@@ -30,7 +30,7 @@ namespace StableDiffusionGui.Forms
         private void PruneModelsForm_Load(object sender, EventArgs e)
         {
             LoadModels();
-            comboxPrunePrecision.FillFromEnum<Enums.Models.Format>(_uiStrings);
+            comboxPrunePrecision.FillFromEnum<Enums.Models.Precision>(_uiStrings);
 
             ConfigParser.LoadComboxIndex(comboxPrunePrecision, Config.Keys.PrunePrecisionIdx);
             ConfigParser.LoadGuiElement(checkboxPruneDeleteInput, Config.Keys.PruneDeleteInput);
@@ -60,7 +60,7 @@ namespace StableDiffusionGui.Forms
         {
             try
             {
-                bool fp16 = (Enums.Models.Format)comboxPrunePrecision.SelectedIndex == Enums.Models.Format.Fp16;
+                bool fp16 = (Enums.Models.Precision)comboxPrunePrecision.SelectedIndex == Enums.Models.Precision.Fp16;
                 Model model = Paths.GetModel(comboxModel.Text);
 
                 Logger.ClearLogBox();
@@ -136,10 +136,8 @@ namespace StableDiffusionGui.Forms
                 if (checkboxPruneDeleteInput.Checked)
                 {
                     var inputFile = Paths.GetModel(comboxModel.Text);
-                    bool s = IoUtils.TryDeleteIfExists(inputFile.FullName);
-
-                    if (s)
-                        Logger.Log($"{(s ? "Deleted" : "Failed to delete")} input file '{inputFile.Name}'.");
+                    bool deleteSuccess = IoUtils.TryDeleteIfExists(inputFile.FullName);
+                    Logger.Log($"{(deleteSuccess ? "Deleted" : "Failed to delete")} input file '{inputFile.Name}'.");
 
                     LoadModels();
                 }

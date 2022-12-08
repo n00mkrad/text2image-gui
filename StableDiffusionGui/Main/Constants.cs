@@ -9,6 +9,7 @@
             public const string Sd = "sd";
             public const string Prune = "prune";
             public const string Merge = "merge";
+            public const string Convert = "convert";
             public const string Dreambooth = "dreambooth";
         }
 

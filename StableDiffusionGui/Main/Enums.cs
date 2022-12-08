@@ -6,7 +6,8 @@ namespace StableDiffusionGui.Main
     {
         public class Models
         {
-            public enum Format { Fp16, Fp32 }
+            public enum Precision { Fp16, Fp32 }
+            public enum Format { Pytorch, Diffusers, DiffusersOnnx }
         }
 
         public class StableDiffusion

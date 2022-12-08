@@ -1,6 +1,5 @@
 ﻿using ImageMagick;
 using Microsoft.WindowsAPICodePack.Dialogs;
-using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
@@ -18,9 +17,39 @@ namespace StableDiffusionGui.Ui.DrawForm
     {
         public static Forms.DrawForm F;
 
+        public static float ScaleFactor = 1f;
+        public static int LastPointX = 0;
+        public static int LastPointY = 0;
+        public static bool MouseIsDown = false;
+
+        public static void Reset ()
+        {
+            ScaleFactor = 1f;
+            LastPointX = 0;
+            LastPointY = 0;
+            MouseIsDown = false;
+        }
+
+        public static void DrawStart (Point mouseLocation)
+        {
+            ScaleFactor = F.pictBox.Image == null ? 1f : (float)F.pictBox.Width / F.pictBox.Image.Width;
+            LastPointX = mouseLocation.X;
+            LastPointY = mouseLocation.Y;
+            MouseIsDown = true;
+        }
+
+        public static void DrawEnd()
+        {
+            MouseIsDown = false;
+            LastPointX = 0;
+            LastPointY = 0;
+            Apply();
+            HistorySave();
+        }
+
         public static void Draw (MouseEventArgs e)
         {
-            if (!F.MouseIsDown || F.LastPoint == null || e.Button != MouseButtons.Left)
+            if (!MouseIsDown || e.Button != MouseButtons.Left)
                 return;
 
             if (F.pictBox.Image == null)
@@ -30,21 +59,26 @@ namespace StableDiffusionGui.Ui.DrawForm
 
             using (Graphics g = Graphics.FromImage(F.RawMask))
             {
-                float scaleFactor = (float)F.pictBox.Width / F.pictBox.Image.Width;
-                Point scaledPoint = new Point((F.LastPoint.X / scaleFactor).RoundToInt(), (F.LastPoint.Y / scaleFactor).RoundToInt());
+                Point scaledPoint = new Point((LastPointX / ScaleFactor).RoundToInt(), (LastPointY / ScaleFactor).RoundToInt());
                 g.DrawEllipse(new Pen(Color.Black, brushSize), new RectangleF(scaledPoint, new SizeF(brushSize, brushSize)));
                 g.SmoothingMode = SmoothingMode.HighQuality;
             }
 
-            Blur();
+            Apply(false); // Disable blur while drawing for performance reasons
             F.pictBox.Invalidate();
-            F.LastPoint = e.Location;
+            LastPointX = e.Location.X;
+            LastPointY = e.Location.Y;
         }
 
-        public static void Blur()
+        public static void Apply(bool blur = true)
         {
             if (F.RawMask != null)
-                F.pictBox.Image = new GaussianBlur(F.RawMask).Process(Inpainting.CurrentBlurValue);
+            {
+                if (blur && Inpainting.CurrentBlurValue > 0)
+                    F.pictBox.Image = new GaussianBlur(F.RawMask).Process(Inpainting.CurrentBlurValue);
+                else
+                    F.pictBox.Image = F.RawMask;
+            }
         }
 
         public static void PasteMask()
@@ -107,7 +141,7 @@ namespace StableDiffusionGui.Ui.DrawForm
             magickImg = ImgUtils.Invert(magickImg);
             magickImg = ImgUtils.ReplaceColorWithTransparency(magickImg, MagickColors.White);
             F.RawMask = magickImg.ToBitmap();
-            Blur();
+            Apply();
             F.pictBox.Invalidate();
         }
 

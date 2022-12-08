@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.Drawing;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace StableDiffusionGui.MiscUtils
@@ -21,11 +19,14 @@ namespace StableDiffusionGui.MiscUtils
 
         private readonly ParallelOptions _pOptions = new ParallelOptions { MaxDegreeOfParallelism = 16 };
 
+        private Image _sourceImage;
+
         public GaussianBlur(Bitmap image)
         {
             if (image == null || image.Width < 1 || image.Height < 1)
                 return;
 
+            _sourceImage = image;
             var rct = new Rectangle(0, 0, image.Width, image.Height);
             var source = new int[rct.Width * rct.Height];
             var bits = image.LockBits(rct, ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
@@ -51,6 +52,9 @@ namespace StableDiffusionGui.MiscUtils
 
         public Bitmap Process(int radial)
         {
+            if (radial == 0)
+                return (Bitmap)_sourceImage;
+
             var newAlpha = new int[_width * _height];
             var newRed = new int[_width * _height];
             var newGreen = new int[_width * _height];

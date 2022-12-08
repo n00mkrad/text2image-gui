@@ -1,3 +1,26 @@
+SD GUI 1.8.0 Changelog:
+- New: Stable Diffusion DirectML implementation, enables image generation on AMD GPUs
+- New: Inpainting models are now supported, providing much better quality than the old method
+- New: Models are cached in RAM when switching. Switching back loads a model in ~2 seconds
+- New: Text-based masking - Describe what you want to mask instead of drawing the mask
+- New: Initialization image can be previewed by Shift+Hovering over the filename in the GUI
+- New: Generation resolution is automatically set to init image size if it doesn't match
+- New: Pop-Up Image Viewer now has an option to enable Slideshow Mode by default
+- Improved: Image Viewer now has hotkeys Ctrl+Left/Ctrl+Right for previous/next image
+- Improved: Image Viewer hotkeys (copy, open, etc.) now also work in pop-up viewer
+- Improved: Mask Editor can be resized, is no longer locked to the init image size
+- Improved: Mask Editor now has paste, invert, save, load, and undo functionality
+- Improved: Inpainting mask can now be edited without having to clear it first
+- Improved: Prompt History will not save a new entry if it's identical to the previous one
+- Improved: Prompt History now has a limit of 500 entries to avoid long loading times
+- Improved: Prompt Queue now behaves like a queue, not like a stack (FIFO)
+- Improved: Welcome Screen (MOTD) can now be disabled after it's been shown once per version
+- Fixed: Post-processing after generation would cause a soft-lock
+- Fixed: Loading settings from prompt history sets incorrect values
+- Fixed: Broken or malicious model files would cause an unhandled exception
+- Fixed: Using a concept with <Name> syntax would show warning about missing placeholder
+
+
 SD GUI 1.7.2 Changelog:
 - Improved prompt syntax converter (converts A1111 or pre-1.7 weighting to new syntax)
 - VAE Model selection now also lists .pt files (same format as ckpt, just different extension)
