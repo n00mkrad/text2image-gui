@@ -81,7 +81,7 @@ namespace StableDiffusionGui.Io
             return path;
         }
 
-        public static List<Model> GetModelsAll()
+        public static List<Model> GetModelsAll(bool removeUnknownModels = true)
         {
             List<Model> list = new List<Model>();
 
@@ -122,14 +122,6 @@ namespace StableDiffusionGui.Io
                 foreach (string folderPath in mdlFolders)
                     dirList.AddRange(Directory.GetDirectories(folderPath, "*", SearchOption.TopDirectoryOnly).Select(x => new ZlpDirectoryInfo(x)).ToList());
 
-                foreach (ZlpDirectoryInfo dir in new List<ZlpDirectoryInfo>(dirList)) // Filter for valid model folders
-                {
-                    List<string> subDirs = dir.GetDirectories().Select(d => d.Name).ToList();
-
-                    if (!(new[] { "unet", "text_encoder", "vae_decoder", "vae_encoder", "tokenizer" }.All(d => subDirs.Contains(d))))
-                        dirList.Remove(dir);
-                }
-
                 list.AddRange(dirList.Select(f => new Model(f, new[] { Implementation.DiffusersOnnx }))); // Add folder-based models to final list
             }
             catch (Exception ex)
@@ -137,6 +129,9 @@ namespace StableDiffusionGui.Io
                 Logger.Log($"Error getting models: {ex.Message}");
                 Logger.Log(ex.StackTrace, true);
             }
+
+            if (removeUnknownModels)
+                list = list.Where(m => m.Format != (Enums.Models.Format)(-1)).ToList();
 
             return list.DistinctBy(x => x.Name).OrderBy(x => x.Name).ToList();
         }

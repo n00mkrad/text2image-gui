@@ -23,7 +23,7 @@ namespace StableDiffusionGui.Implementations
             {
                 string[] initImgs = parameters.FromJson<string[]>("initImgs");
                 string embedding = parameters.FromJson<string>("embedding");
-                float[] initStrengths = parameters.FromJson<float[]>("initStrengths");
+                float[] initStrengths = parameters.FromJson<float[]>("initStrengths").Select(n => 1f - n).ToArray();
                 int[] steps = parameters.FromJson<int[]>("steps");
                 float[] scales = parameters.FromJson<float[]>("scales");
                 long seed = parameters.FromJson<long>("seed");
@@ -135,7 +135,7 @@ namespace StableDiffusionGui.Implementations
 
                 TtiProcessOutputHandler.Reset();
 
-                Logger.Log($"Loading Stable Diffusion (ONNX) with model {Path.ChangeExtension(model, null).Trunc(80).Wrap()}...");
+                Logger.Log($"Loading Stable Diffusion (ONNX) with model {model.Trunc(80).Wrap()}...");
 
                 TtiProcess.ProcessExistWasIntentional = false;
                 py.Start();
@@ -157,6 +157,8 @@ namespace StableDiffusionGui.Implementations
 
         private static void PatchDiffusersIfNeeded()
         {
+            return;
+
             string marker = "# PATCHED BY NMKD SD GUI";
 
             string diffusersPath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdVenv, "Lib", "site-packages", "diffusers");
@@ -170,9 +172,9 @@ namespace StableDiffusionGui.Implementations
                 text = text.Replace("    safety_checker=safety_checker", "    # safety_checker=safety_checker");
                 text = text.Replace("    feature_extractor: CLIPFeatureExtractor", "    # feature_extractor: CLIPFeatureExtractor");
                 text = text.Replace("    feature_extractor=feature_extractor", "    # feature_extractor=feature_extractor");
-                text = text.Replace("    safety_checker_input = self.feature_extractor(", "    pass # safety_checker_input = self.feature_extractor(");
-                text = text.Replace("    image, has_nsfw_concept = self.safety_checker(", "    pass # image, has_nsfw_concept = self.safety_checker(");
-                text = text.Replace("has_nsfw_concept", "False");
+                text = text.Replace("    if self.safety_checker is not None:", "    if False:");
+                text = text.Replace("    if safety_checker is None and requires_safety_checker:", "    if False:");
+                text = text.Replace("    if safety_checker is not None and feature_extractor is None:", "    if False:");
                 File.WriteAllText(pipelinePath, $"{marker}{Environment.NewLine}{text}");
                 Logger.Log($"Patched {Path.GetFileName(pipelinePath)}", true);
             }
@@ -184,10 +186,10 @@ namespace StableDiffusionGui.Implementations
             {
                 text = text.Replace("    safety_checker: OnnxRuntimeModel", "    # safety_checker: OnnxRuntimeModel");
                 text = text.Replace("    safety_checker=safety_checker", "    # safety_checker=safety_checker");
-                text = text.Replace("    safety_checker_input = self.feature_extractor(", "    pass # safety_checker_input = self.feature_extractor(");
-                text = text.Replace("    image, has_nsfw_concept = self.safety_checker(", "    pass # image, has_nsfw_concept = self.safety_checker(");
                 text = text.Replace("    if self.safety_checker is not None", "    if False");
                 text = text.Replace("    if safety_checker is None", "    if False");
+                text = text.Replace("    feature_extractor: CLIPFeatureExtractor", "    # feature_extractor: CLIPFeatureExtractor");
+                text = text.Replace("    feature_extractor=feature_extractor,", "    # feature_extractor=feature_extractor,");
                 File.WriteAllText(pipelinePath, $"{marker}{Environment.NewLine}{text}");
                 Logger.Log($"Patched {Path.GetFileName(pipelinePath)}", true);
             }

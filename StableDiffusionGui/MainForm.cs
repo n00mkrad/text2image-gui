@@ -501,5 +501,10 @@ namespace StableDiffusionGui
         {
             FormUtils.EditMask();
         }
+
+        private void convertModelsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new ConvertModelForm().ShowDialog();
+        }
     }
 }

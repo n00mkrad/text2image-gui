@@ -22,40 +22,52 @@ namespace StableDiffusionGui.Main.Utils
             try
             {
                 Logger.ClearLogBox();
-                Logger.Log($"Converting model '{model.Name}'...");
+                Logger.Log($"Converting model '{model.Name}' - This could take a few minutes...");
 
                 string filename = model.IsDirectory ? model.Name : Path.GetFileNameWithoutExtension(model.Name);
                 string outPath = "";
 
                 List<string> outLines = new List<string>();
 
-                if(formatIn == Format.Pytorch && formatOut == Format.Diffusers)
+                if (formatIn == Format.Pytorch && formatOut == Format.Diffusers)
                 {
-                    outPath = GetOutputPath(model, "");
+                    outPath = GetOutputPath(model, "_diff");
                     await RunPython($"python repo/scripts/diff/convert_original_stable_diffusion_to_diffusers.py --checkpoint_path {model.FullName.Wrap(true)} --dump_path {outPath.Wrap(true)} " +
                         $"--original_config_file {Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdRepo, "configs", "stable-diffusion", "v1-inference.yaml").Wrap(true)}");
                 }
                 else if (formatIn == Format.Pytorch && formatOut == Format.DiffusersOnnx)
                 {
                     string tempPath = Path.Combine(Paths.GetSessionDataPath(), $"conv-temp-{FormatUtils.GetUnixTimestamp()}");
-                    outPath = GetOutputPath(model, "");
+                    outPath = GetOutputPath(model, "_onnx");
                     await RunPython($"python repo/scripts/diff/convert_original_stable_diffusion_to_diffusers.py --checkpoint_path {model.FullName.Wrap(true)} --dump_path {tempPath.Wrap(true)} " +
                         $"--original_config_file {Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdRepo, "configs", "stable-diffusion", "v1-inference.yaml").Wrap(true)}");
                     await RunPython($"python repo/scripts/diff/convert_stable_diffusion_checkpoint_to_onnx.py --model_path {tempPath.Wrap(true)} --output_path {outPath.Wrap(true)} ");
+                    IoUtils.TryDeleteIfExists(tempPath);
+                }
+                else if (formatIn == Format.Diffusers && formatOut == Format.Pytorch)
+                {
+                    outPath = GetOutputPath(model, "_ckpt.ckpt");
+                    await RunPython($"python repo/scripts/diff/convert_diffusers_to_original_stable_diffusion.py --model_path {model.FullName.Wrap(true)} --checkpoint_path {outPath.Wrap(true)}");
+                }
+                else if (formatIn == Format.Diffusers && formatOut == Format.DiffusersOnnx)
+                {
+                    outPath = GetOutputPath(model, "_onnx");
+                    await RunPython($"python repo/scripts/diff/convert_stable_diffusion_checkpoint_to_onnx.py --model_path {model.FullName.Wrap(true)} --output_path {outPath.Wrap(true)} ");
                 }
 
                 Logger.ClearLogBox();
 
-                if (File.Exists(outPath))
+                if (File.Exists(outPath) || Directory.Exists(outPath))
                 {
                     Logger.Log($"Done. Saved converted model to:\n{outPath.Replace(Paths.GetDataPath(), "Data")}");
 
                     if (Config.Get<bool>(Config.Keys.ConvertModelsDeleteInput))
                     {
                         bool deleteSuccess = IoUtils.TryDeleteIfExists(model.FullName);
-
                         Logger.Log($"{(deleteSuccess ? "Deleted" : "Failed to delete")} input file '{model.Name}'.");
                     }
+
+                    return Paths.GetModelsAll().Where(m => m.FullName == outPath).FirstOrDefault();
                 }
                 else
                 {

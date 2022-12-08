@@ -29,8 +29,7 @@ namespace StableDiffusionGui.Forms
         private void ConvertModelForm_Load(object sender, EventArgs e)
         {
             // LoadModels();
-            comboxInFormat.FillFromEnum<Enums.Models.Format>(Strings.ModelFormats);
-            comboxOutFormat.FillFromEnum<Enums.Models.Format>(Strings.ModelFormats);
+            comboxInFormat.FillFromEnum<Enums.Models.Format>(Strings.ModelFormats, 0, new[] { Enums.Models.Format.DiffusersOnnx }.ToList());
 
             // ConfigParser.LoadComboxIndex(comboxOutFormat, Config.Keys.PrunePrecisionIdx);
             ConfigParser.LoadGuiElement(checkboxDeleteInput, Config.Keys.ConvertModelsDeleteInput);
@@ -50,7 +49,7 @@ namespace StableDiffusionGui.Forms
         private void LoadModels()
         {
             comboxModel.Items.Clear();
-            Paths.GetModels().ForEach(x => comboxModel.Items.Add(x.Name));
+            Paths.GetModelsAll().Where(m => m.Format == _currentInFormat).ToList().ForEach(x => comboxModel.Items.Add(x.Name));
 
             if (comboxModel.SelectedIndex < 0 && comboxModel.Items.Count > 0)
                 comboxModel.SelectedIndex = 0;
@@ -76,7 +75,7 @@ namespace StableDiffusionGui.Forms
             Enabled = false;
             btnRun.Text = "Converting...";
 
-            var model = Paths.GetModel(comboxModel.Text, false);
+            var model = Paths.GetModelsAll().Where(m => m.Name == comboxModel.Text).FirstOrDefault();
             Model outModel = await ConvertModels.Convert(_currentInFormat, _currentOutFormat, model, true);
 
             Program.SetState(Program.BusyState.Standby);
@@ -99,7 +98,13 @@ namespace StableDiffusionGui.Forms
         private void comboxInFormat_SelectedIndexChanged(object sender, EventArgs e)
         {
             _currentInFormat = ParseUtils.GetEnum<Enums.Models.Format>(comboxInFormat.Text, true, Strings.ModelFormats);
+            comboxOutFormat.FillFromEnum<Enums.Models.Format>(Strings.ModelFormats, 0, new[] { _currentInFormat }.ToList());
             LoadModels();
+        }
+
+        private void comboxOutFormat_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            _currentOutFormat = ParseUtils.GetEnum<Enums.Models.Format>(comboxOutFormat.Text, true, Strings.ModelFormats);
         }
     }
 }

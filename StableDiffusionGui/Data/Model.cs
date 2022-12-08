@@ -6,13 +6,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using ZetaLongPaths;
-using static StableDiffusionGui.Main.Constants;
 
 namespace StableDiffusionGui.Data
 {
     public class Model
     {
-        public Enums.Models.Format Format { get; set; }
+        public Enums.Models.Format Format { get; set; } = (Enums.Models.Format)(-1);
         public string Name { get { return _file == null ? _dir.Name : _file.Name; } }
         public string FullName { get { return _file == null ? _dir.FullName : _file.FullName; } }
         public ZlpDirectoryInfo Directory { get { return _file == null ? _dir.Parent : _file.Directory; } }
@@ -69,7 +68,7 @@ namespace StableDiffusionGui.Data
 
                     bool diffusersStructureValid = new[] { "text_encoder", "tokenizer", "unet" }.All(d => subDirs.Contains(d));
                     var unetDir = new ZlpDirectoryInfo(Path.Combine(_dir.FullName, "unet"));
-                    bool unetValid = unetDir.Exists && IoUtils.GetDirSize(unetDir.FullName, false) < 64 * 1024 * 1024; // Assume that a <64 MB unet file is not valid
+                    bool unetValid = unetDir.Exists && IoUtils.GetDirSize(unetDir.FullName, false) >= 64 * 1024 * 1024; // Assume that a <64 MB unet file is not valid
                     string indexJsonPath = Path.Combine(_dir.FullName, "model_index.json");
 
                     if (diffusersStructureValid && unetValid && File.Exists(indexJsonPath))
@@ -87,6 +86,11 @@ namespace StableDiffusionGui.Data
             }
 
             return (Enums.Models.Format)(-1);
+        }
+
+        public override string ToString()
+        {
+            return $"{Name} {(Format != (Enums.Models.Format)(-1) ? $"(Format: {Format})" : "")}";
         }
     }
 }

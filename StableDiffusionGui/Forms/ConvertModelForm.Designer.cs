@@ -218,6 +218,7 @@
             this.comboxOutFormat.Name = "comboxOutFormat";
             this.comboxOutFormat.Size = new System.Drawing.Size(280, 21);
             this.comboxOutFormat.TabIndex = 107;
+            this.comboxOutFormat.SelectedIndexChanged += new System.EventHandler(this.comboxOutFormat_SelectedIndexChanged);
             // 
             // panel3
             // 
@@ -283,9 +284,9 @@
             this.comboxModel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.comboxModel.ForeColor = System.Drawing.Color.White;
             this.comboxModel.FormattingEnabled = true;
-            this.comboxModel.Location = new System.Drawing.Point(0, -78);
+            this.comboxModel.Location = new System.Drawing.Point(0, 7);
             this.comboxModel.Name = "comboxModel";
-            this.comboxModel.Size = new System.Drawing.Size(220, 21);
+            this.comboxModel.Size = new System.Drawing.Size(280, 21);
             this.comboxModel.TabIndex = 106;
             // 
             // panel26
