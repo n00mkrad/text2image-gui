@@ -102,27 +102,30 @@ namespace StableDiffusionGui.Io
                 foreach (string folderPath in mdlFolders)
                     fileList.AddRange(IoUtils.GetFileInfosSorted(folderPath, false, $"*.*").ToList());
 
-                foreach (ModelType type in Enum.GetValues(typeof(ModelType)).Cast<ModelType>())
-                {
-                    if (!Config.Get<bool>(Config.Keys.DisableModelFileValidation))
-                    {
-                        fileList = fileList.Where(f => TtiUtils.ModelFilesizeValid(f.Length, type)).ToList();
+                // foreach (ModelType type in Enum.GetValues(typeof(ModelType)).Cast<ModelType>())
+                // {
+                //     if (!Config.Get<bool>(Config.Keys.DisableModelFileValidation))
+                //     {
+                //         fileList = fileList.Where(f => f.).Where(f => TtiUtils.ModelFilesizeValid(f.Length, type)).ToList();
+                // 
+                //         // if (type == ModelType.Normal)
+                //         //     fileList = fileList.Where(f => Constants.FileExts.ValidSdModels.Contains(f.Extension)).ToList();
+                //         // else if (type == ModelType.Vae)
+                //         //     fileList = fileList.Where(f => Constants.FileExts.ValidSdVaeModels.Contains(f.Extension)).ToList();
+                //     }   
+                // }
 
-                        if (type == ModelType.Normal)
-                            fileList = fileList.Where(f => Constants.FileExts.ValidSdModels.Contains(f.Extension)).ToList();
-                        else if (type == ModelType.Vae)
-                            fileList = fileList.Where(f => Constants.FileExts.ValidSdVaeModels.Contains(f.Extension)).ToList();
-                    }
-                }
+                // if (!Config.Get<bool>(Config.Keys.DisableModelFileValidation))
+                //     fileList = fileList.Where(f => TtiUtils.ModelFilesizeValid(f.Length, ModelType.Normal)).ToList();
 
-                list.AddRange(fileList.Select(f => new Model(f, new[] { Implementation.InvokeAi, Implementation.OptimizedSd }))); // Add file-based models to final list
+                list.AddRange(fileList.Select(f => new Model(f))); // Add file-based models to final list
 
                 var dirList = new List<ZlpDirectoryInfo>();
 
                 foreach (string folderPath in mdlFolders)
                     dirList.AddRange(Directory.GetDirectories(folderPath, "*", SearchOption.TopDirectoryOnly).Select(x => new ZlpDirectoryInfo(x)).ToList());
 
-                list.AddRange(dirList.Select(f => new Model(f, new[] { Implementation.DiffusersOnnx }))); // Add folder-based models to final list
+                list.AddRange(dirList.Select(f => new Model(f))); // Add folder-based models to final list
             }
             catch (Exception ex)
             {

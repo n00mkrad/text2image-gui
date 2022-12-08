@@ -25,28 +25,28 @@ namespace StableDiffusionGui.Data
 
         public Model() { }
 
-        public Model(string dataPath, IEnumerable<Enums.StableDiffusion.Implementation> compatibleImplementations)
+        public Model(string dataPath, IEnumerable<Enums.StableDiffusion.Implementation> compatibleImplementations = null)
         {
             if (IoUtils.IsPathDirectory(dataPath))
                 _dir = new ZlpDirectoryInfo(dataPath);
             else
                 _file = new ZlpFileInfo(dataPath);
 
-            CompatibleImplementations = compatibleImplementations.ToArray();
+            CompatibleImplementations = compatibleImplementations == null ? new List<Enums.StableDiffusion.Implementation>().ToArray() : compatibleImplementations.ToArray();
             Format = DetectModelFormat();
         }
 
-        public Model(ZlpFileInfo file, IEnumerable<Enums.StableDiffusion.Implementation> compatibleImplementations)
+        public Model(ZlpFileInfo file, IEnumerable<Enums.StableDiffusion.Implementation> compatibleImplementations = null)
         {
             _file = file;
-            CompatibleImplementations = compatibleImplementations.ToArray();
+            CompatibleImplementations = compatibleImplementations == null ? new List<Enums.StableDiffusion.Implementation>().ToArray() : compatibleImplementations.ToArray();
             Format = DetectModelFormat();
         }
 
-        public Model(ZlpDirectoryInfo dir, IEnumerable<Enums.StableDiffusion.Implementation> compatibleImplementations)
+        public Model(ZlpDirectoryInfo dir, IEnumerable<Enums.StableDiffusion.Implementation> compatibleImplementations = null)
         {
             _dir = dir;
-            CompatibleImplementations = compatibleImplementations.ToArray();
+            CompatibleImplementations = compatibleImplementations == null ? new List<Enums.StableDiffusion.Implementation>().ToArray() : compatibleImplementations.ToArray();
             Format = DetectModelFormat();
         }
 
@@ -61,6 +61,9 @@ namespace StableDiffusionGui.Data
 
                     if (_file.FullName.Lower().EndsWith(".ckpt") || _file.FullName.Lower().EndsWith(".pt"))
                         return Enums.Models.Format.Pytorch;
+
+                    if (_file.FullName.Lower().EndsWith(".safetensors"))
+                        return Enums.Models.Format.Safetensors;
                 }
                 else if (_dir != null)
                 {

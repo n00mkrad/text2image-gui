@@ -54,6 +54,16 @@ namespace StableDiffusionGui.Main.Utils
                     outPath = GetOutputPath(model, "_onnx");
                     await RunPython($"python repo/scripts/diff/convert_stable_diffusion_checkpoint_to_onnx.py --model_path {model.FullName.Wrap(true)} --output_path {outPath.Wrap(true)} ");
                 }
+                else if (formatIn == Format.Pytorch && formatOut == Format.Safetensors)
+                {
+                    outPath = GetOutputPath(model, "_sft.safetensors");
+                    await RunPython($"python repo/scripts/ckpt_to_st.py -i {model.FullName.Wrap(true)} -o {outPath.Wrap(true)}");
+                }
+                else if (formatIn == Format.Safetensors && formatOut == Format.Pytorch)
+                {
+                    outPath = GetOutputPath(model, "_ckpt.ckpt");
+                    await RunPython($"python repo/scripts/st_to_ckpt.py -i {model.FullName.Wrap(true)} -o {outPath.Wrap(true)}");
+                }
 
                 Logger.ClearLogBox();
 

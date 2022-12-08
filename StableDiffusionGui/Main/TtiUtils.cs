@@ -249,8 +249,8 @@ namespace StableDiffusionGui.Main
             {
                 if (type == ModelType.Normal)
                     return size > 2000 * 1024 * 1024;
-                else if (type == ModelType.Normal)
-                    return size > 200 * 1024 * 1024 && size < 2000 * 1024 * 1024;
+                else if (type == ModelType.Vae)
+                    return size > 100 * 1024 * 1024 && size < 1500 * 1024 * 1024;
             }
             catch
             {

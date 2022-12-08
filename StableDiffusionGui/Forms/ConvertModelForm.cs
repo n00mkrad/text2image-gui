@@ -98,7 +98,12 @@ namespace StableDiffusionGui.Forms
         private void comboxInFormat_SelectedIndexChanged(object sender, EventArgs e)
         {
             _currentInFormat = ParseUtils.GetEnum<Enums.Models.Format>(comboxInFormat.Text, true, Strings.ModelFormats);
-            comboxOutFormat.FillFromEnum<Enums.Models.Format>(Strings.ModelFormats, 0, new[] { _currentInFormat }.ToList());
+            List<Enums.Models.Format> excludedFormats = new[] { _currentInFormat }.ToList();
+            
+            if(_currentInFormat == Enums.Models.Format.Safetensors)
+                excludedFormats.AddRange(Enum.GetValues(typeof(Enums.Models.Format)).Cast<Enums.Models.Format>().ToList().Except(new[] { Enums.Models.Format.Pytorch }.ToList()));
+
+            comboxOutFormat.FillFromEnum<Enums.Models.Format>(Strings.ModelFormats, 0, excludedFormats);
             LoadModels();
         }
 
