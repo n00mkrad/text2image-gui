@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace StableDiffusionGui.Forms
 {
-    public partial class InstallerForm : Form
+    public partial class InstallerForm : CustomForm
     {
         public InstallerForm()
         {
