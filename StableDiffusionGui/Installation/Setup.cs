@@ -274,6 +274,7 @@ namespace StableDiffusionGui.Installation
                 unneededFileTypes.ForEach(ext => IoUtils.GetFilesSorted(repoPath, true, $"*.{ext}").ToList().ForEach(x => IoUtils.TryDeleteIfExists(x)));
                 unneededFileTypes.ForEach(ext => IoUtils.GetFilesSorted(venvSrcPath, true, $"*.{ext}").ToList().ForEach(x => IoUtils.TryDeleteIfExists(x)));
 
+                IoUtils.TryDeleteIfExists(Path.Combine(sitePkgsPath, "pandas", "tests"));
                 IoUtils.TryDeleteIfExists(GetDataSubPath("0.7.5"));
             }
             catch { }
