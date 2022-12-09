@@ -100,6 +100,10 @@ namespace StableDiffusionGui.Ui
                 UiUtils.ShowMessageBox("No complete installation of the Stable Diffusion files was found.\n\nThe GUI will now open the installer.\nPlease press \"Install\" in the next window to install all required files.");
                 new InstallerForm().ShowDialogForm();
             }
+
+            if(Paths.GetModelsAll().Count <= 0)
+                UiUtils.ShowMessageBox($"No model files have been found. You will not be able to generate images until you either place a model in Data/models, or set an external folder in the settings.",
+                    UiUtils.MessageType.Warning, Nmkoder.Forms.MessageForm.FontSize.Normal);
         }
 
         public static bool IsInstalledWithWarning(bool showInstaller = true)

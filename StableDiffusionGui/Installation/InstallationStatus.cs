@@ -8,7 +8,7 @@ namespace StableDiffusionGui.Installation
 {
     internal class InstallationStatus
     {
-        public static bool IsInstalledBasic { get { return HasBins() && HasSdRepo() && HasSdEnv() && HasSdModel(); } }
+        public static bool IsInstalledBasic { get { return HasBins() && HasSdRepo() && HasSdEnv(); } }
         public static bool IsInstalledAll { get { return IsInstalledBasic && HasSdUpscalers(); } }
 
         public static bool HasBins()
