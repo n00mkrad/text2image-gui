@@ -39,9 +39,6 @@ namespace StableDiffusionGui.Forms
             {
                 string text = checkedListBoxStatus.Items[i].ToString().Lower();
 
-                if (text.Contains("conda"))
-                    checkedListBoxStatus.SetItemChecked(i, InstallationStatus.HasConda());
-
                 if (text.Contains("binaries"))
                     checkedListBoxStatus.SetItemChecked(i, InstallationStatus.HasBins());
 

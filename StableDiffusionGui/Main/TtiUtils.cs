@@ -172,34 +172,18 @@ namespace StableDiffusionGui.Main
             }
         }
 
-        public static Dictionary<string, string> GetEnvVarsSd(bool allCudaDevices = false, string baseDir = ".", bool useConda = false)
+        public static Dictionary<string, string> GetEnvVarsSd(bool allCudaDevices = false, string baseDir = ".")
         {
             var envVars = new Dictionary<string, string>();
 
-            if (useConda)
-            {
-                string p = OsUtils.GetPathVar(new string[] {
-                    Path.Combine(baseDir, Constants.Dirs.Conda),
-                    Path.Combine(baseDir, Constants.Dirs.Conda, "Scripts"),
-                    Path.Combine(baseDir, Constants.Dirs.Conda, "condabin"),
-                    Path.Combine(baseDir, Constants.Dirs.Conda, "Scripts"),
-                    Path.Combine(baseDir, Constants.Dirs.Conda, "Library", "bin"),
-                    Path.Combine(baseDir, Constants.Dirs.Conda, "Scripts"),
-                });
-
-                envVars["PATH"] = p;
-            }
-            else
-            {
-                string p = OsUtils.GetPathVar(new string[] {
-                    Path.Combine(baseDir, Constants.Dirs.SdVenv, "Scripts"), 
-                    Path.Combine(baseDir, Constants.Dirs.Python, "Scripts"), 
-                    Path.Combine(baseDir, Constants.Dirs.Python), 
+            string p = OsUtils.GetPathVar(new string[] {
+                    Path.Combine(baseDir, Constants.Dirs.SdVenv, "Scripts"),
+                    Path.Combine(baseDir, Constants.Dirs.Python, "Scripts"),
+                    Path.Combine(baseDir, Constants.Dirs.Python),
                     Path.Combine(baseDir, Constants.Dirs.Git, "cmd")
                 });
 
-                envVars["PATH"] = p;
-            }
+            envVars["PATH"] = p;
 
             int cudaDeviceOpt = Config.Get<int>(Config.Keys.CudaDeviceIdx);
 
@@ -220,9 +204,9 @@ namespace StableDiffusionGui.Main
             return envVars;
         }
 
-        public static string GetEnvVarsSdCommand(bool allCudaDevices = false, string baseDir = ".", bool useConda = false)
+        public static string GetEnvVarsSdCommand(bool allCudaDevices = false, string baseDir = ".")
         {
-            Dictionary<string, string> envVars = GetEnvVarsSd(allCudaDevices, baseDir, useConda);
+            Dictionary<string, string> envVars = GetEnvVarsSd(allCudaDevices, baseDir);
             List<string> cmds = envVars.Select(x => $"SET \"{x.Key}={x.Value}\"").ToList();
             return string.Join(" && ", cmds);
         }

@@ -120,55 +120,6 @@ namespace StableDiffusionGui.Installation
             Logger.Log("Done.");
         }
 
-        public static async Task SetupPythonEnv()
-        {
-            string repoPath = GetDataSubPath(Constants.Dirs.SdRepo);
-            string batPath = Path.Combine(repoPath, "install.bat");
-
-            List<string> l = new List<string>();
-
-            l.Add($"@echo off");
-            l.Add($"");
-            l.Add($"cd /D {repoPath.Wrap()}");
-            l.Add($"");
-            l.Add($"SET CONDA_ROOT_PATH=..\\{Constants.Dirs.Conda}");
-            // l.Add($"SET PYTHONHOME=..\\{Constants.Dirs.Conda}");
-            l.Add($"SET CONDA_SCRIPTS_PATH=..\\{Constants.Dirs.Conda}\\Scripts");
-            l.Add($"");
-            l.Add($"SET PATH={OsUtils.GetPathVar(new string[] { $"..\\{Constants.Dirs.Conda}", $"..\\{Constants.Dirs.Conda}\\Scripts", $"..\\{Constants.Dirs.Conda}\\condabin", $"..\\{Constants.Dirs.Conda}\\Library\\bin" })}");
-            l.Add($"");
-            l.Add($"_conda env create -f environment.yml -p \"%CONDA_ROOT_PATH%\\envs\\{Constants.Dirs.SdEnv}\"");
-            l.Add($"_conda env update --file environment.yml --prune -p \"%CONDA_ROOT_PATH%\\envs\\{Constants.Dirs.SdEnv}\"");
-            l.Add($"");
-            l.Add($"rmdir /q /s \"%CONDA_ROOT_PATH%\\pkgs\"");
-            l.Add($"call \"%CONDA_SCRIPTS_PATH%\\activate.bat\" \"%CONDA_ROOT_PATH%\\envs\\{Constants.Dirs.SdEnv}\"");
-
-            File.WriteAllLines(batPath, l);
-
-            Logger.Log("Running python environment installation script...");
-
-            Process p = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd(), batPath);
-
-            if (!OsUtils.ShowHiddenCmd())
-            {
-                p.OutputDataReceived += (sender, line) => { HandleInstallScriptOutput(line.Data, true, false); };
-                p.ErrorDataReceived += (sender, line) => { HandleInstallScriptOutput(line.Data, true, true); };
-            }
-
-            p.Start();
-
-            if (!OsUtils.ShowHiddenCmd())
-            {
-                p.BeginOutputReadLine();
-                p.BeginErrorReadLine();
-            }
-
-            while (!p.HasExited) await Task.Delay(1);
-
-            RemoveGitFiles();
-            Logger.Log("Done.");
-        }
-
         private static void HandleInstallScriptOutput(string log, bool conda, bool stderr)
         {
             if (string.IsNullOrWhiteSpace(log))
@@ -375,12 +326,11 @@ namespace StableDiffusionGui.Installation
         {
             IoUtils.SetAttributes(GetDataSubPath(Constants.Dirs.SdRepo), ZetaLongPaths.Native.FileAttributes.Normal);
             await IoUtils.TryDeleteIfExistsAsync(GetDataSubPath(Constants.Dirs.SdRepo));
-            await IoUtils.TryDeleteIfExistsAsync(GetDataSubPath(Constants.Dirs.SdVenv));
         }
 
         public static async Task RemoveEnv()
         {
-            await IoUtils.TryDeleteIfExistsAsync(Path.Combine(Paths.GetDataPath(), Constants.Dirs.Conda, "envs", Constants.Dirs.SdEnv));
+            await IoUtils.TryDeleteIfExistsAsync(GetDataSubPath(Constants.Dirs.SdVenv));
         }
 
         #endregion

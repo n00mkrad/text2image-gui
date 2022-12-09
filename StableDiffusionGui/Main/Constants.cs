@@ -22,8 +22,6 @@
             public const string Bins = "bin";
             public const string SdRepo = "repo";
             public const string Dreambooth = "db";
-            public const string SdEnv = "ldo";
-            public const string Conda = "mb";
             public const string SdVenv = "venv";
             public const string Python = "py";
             public const string Git = "git";

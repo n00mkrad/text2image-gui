@@ -53,6 +53,8 @@ namespace StableDiffusionGui.Forms
 
             if (comboxModel.SelectedIndex < 0 && comboxModel.Items.Count > 0)
                 comboxModel.SelectedIndex = 0;
+
+            comboxModel.Enabled = comboxModel.Items.Count >= 1;
         }
 
         private async void btnRun_Click(object sender, EventArgs e)

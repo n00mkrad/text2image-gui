@@ -236,17 +236,9 @@ namespace StableDiffusionGui.Implementations
             OsUtils.AttachOrphanHitman(cli);
         }
 
-        public static void StartCmdInSdEnv(bool conda)
+        public static void StartCmdInSdEnv()
         {
-            if (conda)
-            {
-                Process.Start("cmd", $"/K title Env: {Constants.Dirs.SdEnv} && cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand(true, Paths.GetDataPath())} && " +
-                    $"call activate.bat {Constants.Dirs.Conda}/envs/{Constants.Dirs.SdEnv}");
-            }
-            else
-            {
-                Process.Start("cmd", $"/K title Env: {Constants.Dirs.SdVenv} && cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand(true, Paths.GetDataPath())}");
-            }
+            Process.Start("cmd", $"/K title Env: {Constants.Dirs.SdVenv} && cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand(true, Paths.GetDataPath())}");
         }
 
         /// <summary> Run InvokeAI post-processing (!fix) </summary>

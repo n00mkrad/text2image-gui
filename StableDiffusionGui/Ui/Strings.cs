@@ -78,9 +78,10 @@ namespace StableDiffusionGui.Ui
 
         public static Dictionary<string, string> ModelFormats = new Dictionary<string, string>()
         {
-            { Enums.Models.Format.Pytorch.ToString(), "Pytorch (ckpt/pt Files)" },
+            { Enums.Models.Format.Pytorch.ToString(), "Pytorch (ckpt/pt File)" },
             { Enums.Models.Format.Diffusers.ToString(), "Diffusers (Folder)" },
             { Enums.Models.Format.DiffusersOnnx.ToString(), "Diffusers ONNX (Folder)" },
+            { Enums.Models.Format.Safetensors.ToString(), "Safetensors (safetensors File)" },
         };
     }
 }

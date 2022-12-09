@@ -426,7 +426,7 @@ namespace StableDiffusionGui
 
         private void openCmdInPythonEnvironmentToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            InvokeAi.StartCmdInSdEnv(false);
+            InvokeAi.StartCmdInSdEnv();
         }
 
         #region Post-Processing
