@@ -14,7 +14,9 @@ namespace StableDiffusionGui.Installation
 {
     internal class Setup
     {
-        public static readonly string GitFile = "n00mkrad/stable-diffusion-cust.git";
+        private static readonly string _gitFile = "n00mkrad/stable-diffusion-cust.git";
+        private static readonly string _gitBranch = "main";
+        private static readonly string _gitCommit = "2021554274b490e030a608fd84c482be717050f4";
 
         private static bool ReplaceUiLogLine { get { return Logger.LastUiLine.EndsWith("..."); } }
 
@@ -51,7 +53,7 @@ namespace StableDiffusionGui.Installation
                     await InstallUpscalers();
                 }
 
-                RemoveGitFiles();
+                RepoCleanup();
 
                 await Task.Delay(500);
 
@@ -116,7 +118,7 @@ namespace StableDiffusionGui.Installation
 
             Logger.Log("Cleaning up...");
             IoUtils.TryDeleteIfExists(Path.Combine(Environment.ExpandEnvironmentVariables("%LOCALAPPDATA%"), "pip", "cache"));
-            RemoveGitFiles();
+            RepoCleanup();
             Logger.Log("Done.");
         }
 
@@ -192,10 +194,10 @@ namespace StableDiffusionGui.Installation
         {
             TtiProcess.ProcessExistWasIntentional = true;
             ProcessManager.FindAndKillOrphans($"*invoke.py*{Paths.SessionTimestamp}*");
-            await CloneSdRepo($"https://github.com/{GitFile}", GetDataSubPath(Constants.Dirs.SdRepo));
+            await CloneSdRepo($"https://github.com/{_gitFile}", GetDataSubPath(Constants.Dirs.SdRepo), _gitBranch, _gitCommit);
         }
 
-        public static async Task CloneSdRepo(string url, string dir, string branch = "main", string commit = "a139e811840d6e4abf1a670d20b9727981b226a8")
+        public static async Task CloneSdRepo(string url, string dir, string branch = "main", string commit = "")
         {
             try
             {
@@ -234,12 +236,13 @@ namespace StableDiffusionGui.Installation
             while (!p.HasExited) await Task.Delay(1);
         }
 
-        public static void RemoveGitFiles()
+        public static void RepoCleanup()
         {
             try
             {
                 string repoPath = GetDataSubPath(Constants.Dirs.SdRepo);
                 string venvSrcPath = Path.Combine(GetDataSubPath(Constants.Dirs.SdVenv), "src");
+                string sitePkgsPath = Path.Combine(GetDataSubPath(Constants.Dirs.SdVenv), "Lib", "site-packages");
 
                 var dirs = new List<ZlpDirectoryInfo>();
 
@@ -256,6 +259,12 @@ namespace StableDiffusionGui.Installation
                 {
                     if (dir.Name == ".git")
                         IoUtils.TryDeleteIfExists(dir.FullName);
+                }
+
+                foreach(var dir in Directory.GetDirectories(sitePkgsPath, "*", SearchOption.TopDirectoryOnly).Select(x => new ZlpDirectoryInfo(x)))
+                {
+                    if (dir.Name.StartsWith("~"))
+                        dir.Delete(true);
                 }
 
                 var unneededDirs = new List<string> { "docs", "assets" };

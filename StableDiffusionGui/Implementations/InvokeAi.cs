@@ -1,4 +1,5 @@
 ﻿using StableDiffusionGui.Data;
+using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
@@ -248,6 +249,12 @@ namespace StableDiffusionGui.Implementations
             if (Program.Busy)
             {
                 UiUtils.ShowMessageBox("Can't run post-processing while the program is still busy.");
+                return false;
+            }
+
+            if (!InstallationStatus.HasSdUpscalers())
+            {
+                UiUtils.ShowMessageBox("Upscalers are not installed. You can install them in the installer window.");
                 return false;
             }
 
