@@ -183,5 +183,10 @@ namespace StableDiffusionGui.Forms
         }
 
         #endregion
+
+        private void undoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormUtils.HistoryUndo();
+        }
     }
 }

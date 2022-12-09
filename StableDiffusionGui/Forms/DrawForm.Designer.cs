@@ -36,6 +36,7 @@
             this.pasteMaskToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.undoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelBlur = new System.Windows.Forms.Panel();
             this.sliderBlur = new HTAlt.WinForms.HTSlider();
             this.label1 = new System.Windows.Forms.Label();
@@ -50,7 +51,6 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanelImg = new System.Windows.Forms.TableLayoutPanel();
             this.pictBox = new System.Windows.Forms.PictureBox();
-            this.undoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStripOptions.SuspendLayout();
             this.panelBlur.SuspendLayout();
             this.panelBrushSize.SuspendLayout();
@@ -70,42 +70,49 @@
             this.loadToolStripMenuItem,
             this.undoToolStripMenuItem});
             this.menuStripOptions.Name = "menuStripOptions";
-            this.menuStripOptions.Size = new System.Drawing.Size(149, 136);
+            this.menuStripOptions.Size = new System.Drawing.Size(181, 158);
             // 
             // clearToolStripMenuItem
             // 
             this.clearToolStripMenuItem.Name = "clearToolStripMenuItem";
-            this.clearToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.clearToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.clearToolStripMenuItem.Text = "Clear";
             this.clearToolStripMenuItem.Click += new System.EventHandler(this.clearToolStripMenuItem_Click);
             // 
             // invertMaskToolStripMenuItem
             // 
             this.invertMaskToolStripMenuItem.Name = "invertMaskToolStripMenuItem";
-            this.invertMaskToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.invertMaskToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.invertMaskToolStripMenuItem.Text = "Invert (Ctrl+I)";
             this.invertMaskToolStripMenuItem.Click += new System.EventHandler(this.invertMaskToolStripMenuItem_Click);
             // 
             // pasteMaskToolStripMenuItem
             // 
             this.pasteMaskToolStripMenuItem.Name = "pasteMaskToolStripMenuItem";
-            this.pasteMaskToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.pasteMaskToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.pasteMaskToolStripMenuItem.Text = "Paste (Ctrl+V)";
             this.pasteMaskToolStripMenuItem.Click += new System.EventHandler(this.pasteMaskToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.saveToolStripMenuItem.Text = "Save (Ctrl+S)";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // loadToolStripMenuItem
             // 
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.loadToolStripMenuItem.Text = "Load (Ctrl+O)";
             this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
+            // 
+            // undoToolStripMenuItem
+            // 
+            this.undoToolStripMenuItem.Name = "undoToolStripMenuItem";
+            this.undoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.undoToolStripMenuItem.Text = "Undo (Ctrl+Z)";
+            this.undoToolStripMenuItem.Click += new System.EventHandler(this.undoToolStripMenuItem_Click);
             // 
             // panelBlur
             // 
@@ -354,12 +361,6 @@
             this.pictBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictBox_MouseDown);
             this.pictBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictBox_MouseMove);
             this.pictBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictBox_MouseUp);
-            // 
-            // undoToolStripMenuItem
-            // 
-            this.undoToolStripMenuItem.Name = "undoToolStripMenuItem";
-            this.undoToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
-            this.undoToolStripMenuItem.Text = "Undo (Ctrl+Z)";
             // 
             // DrawForm
             // 
