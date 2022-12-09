@@ -405,6 +405,7 @@ namespace StableDiffusionGui
 
         private void viewLogInRealtimeToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            Application.OpenForms.Cast<Form>().Where(f => f is RealtimeLoggerForm).ToList().ForEach(f => f.Close());
             new RealtimeLoggerForm().Show();
         }
 
