@@ -1,10 +1,5 @@
-﻿using Microsoft.VisualBasic;
-using StableDiffusionGui.Main;
-using System;
+﻿using StableDiffusionGui.Main;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static StableDiffusionGui.Forms.PostProcSettingsForm;
 
 namespace StableDiffusionGui.Ui
@@ -64,13 +59,7 @@ namespace StableDiffusionGui.Ui
             { Enums.Misc.ImageImportAction.CopyPrompt.ToString(), "Copy Prompt" },
         };
 
-        public static Dictionary<string, string> SdPytorchOptions = new Dictionary<string, string>()
-        {
-            { Enums.Models.Precision.Fp16.ToString(), "Half Precision (FP16 - 2 GB)" },
-            { Enums.Models.Precision.Fp32.ToString(), "Full Precision (FP32 - 4 GB)" },
-        };
-
-        public static Dictionary<string, string> ModelTypes = new Dictionary<string, string>()
+        public static Dictionary<string, string> SdPrecision = new Dictionary<string, string>()
         {
             { Enums.Models.Precision.Fp16.ToString(), "Half Precision (FP16 - 2 GB)" },
             { Enums.Models.Precision.Fp32.ToString(), "Full Precision (FP32 - 4 GB)" },

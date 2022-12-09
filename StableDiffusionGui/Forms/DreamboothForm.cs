@@ -104,11 +104,6 @@ namespace StableDiffusionGui.Forms
             }
         }
 
-        private void btnReloadModels_Click(object sender, EventArgs e)
-        {
-            LoadModels();
-        }
-
         private void btnOpenModelFolder_Click(object sender, EventArgs e)
         {
             new ModelFoldersForm(Enums.StableDiffusion.ModelType.Normal).ShowDialogForm();
