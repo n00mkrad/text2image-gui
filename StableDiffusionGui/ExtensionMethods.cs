@@ -464,9 +464,15 @@ namespace StableDiffusionGui
             return s.ToLowerInvariant();
         }
 
-        public static T FromJson<T>(this Dictionary<string, string> jsonDict, string key)
+        public static T FromJson<T>(this Dictionary<string, string> jsonDict, string key, T fallbackValue = default(T))
         {
-            return jsonDict.Get(key).FromJson<T>();
+            if (jsonDict.ContainsKey(key))
+            {
+                var value = jsonDict.Get(key).FromJson<T>();
+                return value != null ? value : fallbackValue;
+            }
+
+            return fallbackValue;
         }
 
         public static T FromJson<T>(this string s)

@@ -62,6 +62,14 @@ namespace StableDiffusionGui.Main
                     continue;
                 }
 
+                var invalidInitImgs = s.Params.FromJson<string[]>("initImgs", new string[0]).Where(i => !File.Exists(i)).ToList();
+
+                if (invalidInitImgs.Any())
+                {
+                    Logger.Log($"Missing initialization images:\n{string.Join("\n", invalidInitImgs.Select(i => Path.GetFileName(i)))}");
+                    continue;
+                }
+
                 TtiUtils.ShowPromptWarnings(s.Prompts.ToList());
 
                 PromptHistory.Add(s);
@@ -163,7 +171,7 @@ namespace StableDiffusionGui.Main
                 TtiProcess.Kill();
             }
 
-            Logger.LogIfLastLineDoesNotContainMsg(showMsgBox ? "Canceled." : $"Canceled: {reason.Replace("\n", "").Trunc(200)}.");
+            Logger.LogIfLastLineDoesNotContainMsg(showMsgBox || manual ? "Canceled." : $"Canceled: {reason.Replace("\n", " ").Trunc(200)}.");
 
             if (!string.IsNullOrWhiteSpace(reason) && showMsgBox)
                 Task.Run(() => UiUtils.ShowMessageBox($"Canceled:\n\n{reason}"));
@@ -186,7 +194,7 @@ namespace StableDiffusionGui.Main
                 var entries = Logger.GetLastEntries(Constants.Lognames.Sd, 5);
                 Dictionary<string, TimeSpan> linesWithAge = new Dictionary<string, TimeSpan>();
 
-                foreach(Logger.Entry entry in entries)
+                foreach (Logger.Entry entry in entries)
                     linesWithAge[entry.Message] = DateTime.Now - entry.TimeDequeue;
 
                 linesWithAge = linesWithAge.Where(x => x.Value.TotalMilliseconds >= 0).ToDictionary(p => p.Key, p => p.Value);
