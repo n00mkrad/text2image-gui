@@ -79,12 +79,16 @@ namespace StableDiffusionGui.Forms
 
                 if (valid && gpu.VramGb < 23f)
                 {
-                    UiUtils.ShowMessageBox($"Your GPU has {gpu.VramGb} GB VRAM, but 24 GB are currently required for DreamBooth training.", UiUtils.MessageType.Error);
-                    valid = false;
+                    DialogResult result = UiUtils.ShowMessageBox($"Your GPU appears to have {gpu.VramGb} GB VRAM, but 24 GB are currently required for DreamBooth " +
+                        $"training.\n\nContinue anyway?", "VRAM Warning", MessageBoxButtons.YesNo);
+                    
+                    if(result == DialogResult.No)
+                        valid = false;
                 }
                 else if (valid && gpu.VramGb < 25f)
                 {
-                    UiUtils.ShowMessageBox($"Your GPU has {gpu.VramGb} GB VRAM.\nThis is enough to train DreamBooth, but you should make sure that no other VRAM-consuming applications are running (Games, Browsers, Game Launchers, AI/ML).", UiUtils.MessageType.Message);
+                    UiUtils.ShowMessageBox($"Your GPU appears to have {gpu.VramGb} GB VRAM.\nThis is enough to train DreamBooth, but you should make sure that no " +
+                        $"other VRAM-consuming applications are running (Games, Browsers, Game Launchers, AI/ML).", UiUtils.MessageType.Message);
                 }
 
                 if (valid)
