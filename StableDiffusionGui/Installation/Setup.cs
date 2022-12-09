@@ -85,7 +85,7 @@ namespace StableDiffusionGui.Installation
                 return;
             }
 
-            bool amd = HwInfo.KnownGpus.Any(gpu => gpu.Vendor == HwInfo.GpuInfo.GpuVendor.Amd) && !HwInfo.KnownGpus.Any(gpu => gpu.Vendor == HwInfo.GpuInfo.GpuVendor.Nvidia);
+            bool installOnnx = HwInfo.KnownGpus.Any(gpu => gpu.Vendor != HwInfo.GpuInfo.GpuVendor.Unknown);
             string repoPath = GetDataSubPath(Constants.Dirs.SdRepo);
             string batPath = Path.Combine(repoPath, "install.bat");
 
@@ -93,7 +93,7 @@ namespace StableDiffusionGui.Installation
                 $"cd /D {Paths.GetDataPath().Wrap()}\n" +
                 $"SET PATH={OsUtils.GetPathVar(new string[] { $@".\{Constants.Dirs.SdVenv}\Scripts", $@".\{Constants.Dirs.Python}\Scripts", $@".\{Constants.Dirs.Python}", $@".\{Constants.Dirs.Git}\cmd" })}\n" +
                 $"python -m virtualenv {Constants.Dirs.SdVenv}\n" +
-                $"{Constants.Dirs.SdRepo}\\install-venv-deps.bat {(amd ? $"&& {Constants.Dirs.SdRepo}\\install-venv-deps-onnx.bat" : "")}\n" +
+                $"{Constants.Dirs.SdRepo}\\install-venv-deps.bat {(installOnnx ? $"&& {Constants.Dirs.SdRepo}\\install-venv-deps-onnx.bat" : "")}\n" +
                 $"");
 
             Logger.Log("Running python environment installation script...");
@@ -273,6 +273,8 @@ namespace StableDiffusionGui.Installation
                 var unneededFileTypes = new List<string> { "jpg", "jpeg", "png", "gif", "ipynb", "ttf" };
                 unneededFileTypes.ForEach(ext => IoUtils.GetFilesSorted(repoPath, true, $"*.{ext}").ToList().ForEach(x => IoUtils.TryDeleteIfExists(x)));
                 unneededFileTypes.ForEach(ext => IoUtils.GetFilesSorted(venvSrcPath, true, $"*.{ext}").ToList().ForEach(x => IoUtils.TryDeleteIfExists(x)));
+
+                IoUtils.TryDeleteIfExists(GetDataSubPath("0.7.5"));
             }
             catch { }
         }
