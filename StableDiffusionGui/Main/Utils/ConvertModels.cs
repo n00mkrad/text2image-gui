@@ -51,7 +51,7 @@ namespace StableDiffusionGui.Main.Utils
                 // Pytorch -> Safetensors
                 else if (formatIn == Format.Pytorch && formatOut == Format.Safetensors)
                 {
-                    await ConvPytorchSafetensors(outPath, outPath);
+                    await ConvPytorchSafetensors(model.FullName, outPath);
                 }
                 // Diffusers -> Pytorch
                 else if (formatIn == Format.Diffusers && formatOut == Format.Pytorch)
