@@ -152,8 +152,7 @@ namespace StableDiffusionGui.Main
 
             if (string.IsNullOrWhiteSpace(name))
             {
-                TextToImage.Cancel($"No Stable Diffusion model file has been set.\nPlease set one in the settings.", true);
-                new SettingsForm().ShowDialogForm();
+                TextToImage.Cancel($"No Stable Diffusion model file has been set.\nPlease set one in the settings, or quick-switch with Ctrl+M.", true);
                 return null;
             }
             else
