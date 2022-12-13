@@ -145,6 +145,12 @@
             this.checkboxAutoSetResForInitImg = new System.Windows.Forms.CheckBox();
             this.panel38 = new System.Windows.Forms.Panel();
             this.label18 = new System.Windows.Forms.Label();
+            this.panelInitImageRetainAspectRatio = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel15 = new System.Windows.Forms.TableLayoutPanel();
+            this.panel39 = new System.Windows.Forms.Panel();
+            this.checkboxInitImageRetainAspectRatio = new System.Windows.Forms.CheckBox();
+            this.panel40 = new System.Windows.Forms.Panel();
+            this.label19 = new System.Windows.Forms.Label();
             this.parentPanel.SuspendLayout();
             this.panelNotify.SuspendLayout();
             this.notificationPanel.SuspendLayout();
@@ -213,6 +219,10 @@
             this.tableLayoutPanel14.SuspendLayout();
             this.panel37.SuspendLayout();
             this.panel38.SuspendLayout();
+            this.panelInitImageRetainAspectRatio.SuspendLayout();
+            this.tableLayoutPanel15.SuspendLayout();
+            this.panel39.SuspendLayout();
+            this.panel40.SuspendLayout();
             this.SuspendLayout();
             // 
             // titleLabel
@@ -235,6 +245,7 @@
             this.parentPanel.AutoScroll = true;
             this.parentPanel.Controls.Add(this.panelNotify);
             this.parentPanel.Controls.Add(this.panelAdvancedMode);
+            this.parentPanel.Controls.Add(this.panelInitImageRetainAspectRatio);
             this.parentPanel.Controls.Add(this.panelAutoSetResForInitImg);
             this.parentPanel.Controls.Add(this.panel1);
             this.parentPanel.Controls.Add(this.panelSaveUnprocessedImages);
@@ -253,14 +264,14 @@
             this.parentPanel.Controls.Add(this.panel11);
             this.parentPanel.Location = new System.Drawing.Point(12, 62);
             this.parentPanel.Name = "parentPanel";
-            this.parentPanel.Size = new System.Drawing.Size(820, 667);
+            this.parentPanel.Size = new System.Drawing.Size(820, 697);
             this.parentPanel.TabIndex = 14;
             // 
             // panelNotify
             // 
             this.panelNotify.Controls.Add(this.notificationPanel);
             this.panelNotify.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelNotify.Location = new System.Drawing.Point(0, 610);
+            this.panelNotify.Location = new System.Drawing.Point(0, 645);
             this.panelNotify.Name = "panelNotify";
             this.panelNotify.Size = new System.Drawing.Size(820, 35);
             this.panelNotify.TabIndex = 22;
@@ -333,7 +344,7 @@
             // 
             this.panelAdvancedMode.Controls.Add(this.tableLayoutPanel4);
             this.panelAdvancedMode.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelAdvancedMode.Location = new System.Drawing.Point(0, 575);
+            this.panelAdvancedMode.Location = new System.Drawing.Point(0, 610);
             this.panelAdvancedMode.Name = "panelAdvancedMode";
             this.panelAdvancedMode.Size = new System.Drawing.Size(820, 35);
             this.panelAdvancedMode.TabIndex = 15;
@@ -626,7 +637,7 @@
             this.textboxFavsPath.Location = new System.Drawing.Point(0, 3);
             this.textboxFavsPath.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxFavsPath.Name = "textboxFavsPath";
-            this.textboxFavsPath.Size = new System.Drawing.Size(320, 20);
+            this.textboxFavsPath.Size = new System.Drawing.Size(320, 21);
             this.textboxFavsPath.TabIndex = 2;
             this.textboxFavsPath.WordWrap = false;
             // 
@@ -926,7 +937,7 @@
             this.textboxOutPath.Location = new System.Drawing.Point(0, 3);
             this.textboxOutPath.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxOutPath.Name = "textboxOutPath";
-            this.textboxOutPath.Size = new System.Drawing.Size(320, 20);
+            this.textboxOutPath.Size = new System.Drawing.Size(320, 21);
             this.textboxOutPath.TabIndex = 2;
             this.textboxOutPath.WordWrap = false;
             // 
@@ -1580,13 +1591,79 @@
             this.label18.TabIndex = 85;
             this.label18.Text = "Auto-Select Fitting Resolution After Loading an Image";
             // 
+            // panelInitImageRetainAspectRatio
+            // 
+            this.panelInitImageRetainAspectRatio.Controls.Add(this.tableLayoutPanel15);
+            this.panelInitImageRetainAspectRatio.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelInitImageRetainAspectRatio.Location = new System.Drawing.Point(0, 575);
+            this.panelInitImageRetainAspectRatio.Name = "panelInitImageRetainAspectRatio";
+            this.panelInitImageRetainAspectRatio.Size = new System.Drawing.Size(820, 35);
+            this.panelInitImageRetainAspectRatio.TabIndex = 29;
+            // 
+            // tableLayoutPanel15
+            // 
+            this.tableLayoutPanel15.ColumnCount = 2;
+            this.tableLayoutPanel15.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel15.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel15.Controls.Add(this.panel39, 0, 0);
+            this.tableLayoutPanel15.Controls.Add(this.panel40, 0, 0);
+            this.tableLayoutPanel15.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel15.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel15.Name = "tableLayoutPanel15";
+            this.tableLayoutPanel15.RowCount = 1;
+            this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel15.Size = new System.Drawing.Size(820, 35);
+            this.tableLayoutPanel15.TabIndex = 2;
+            // 
+            // panel39
+            // 
+            this.panel39.Controls.Add(this.checkboxInitImageRetainAspectRatio);
+            this.panel39.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel39.Location = new System.Drawing.Point(410, 0);
+            this.panel39.Margin = new System.Windows.Forms.Padding(0);
+            this.panel39.Name = "panel39";
+            this.panel39.Size = new System.Drawing.Size(410, 35);
+            this.panel39.TabIndex = 88;
+            // 
+            // checkboxInitImageRetainAspectRatio
+            // 
+            this.checkboxInitImageRetainAspectRatio.AutoSize = true;
+            this.checkboxInitImageRetainAspectRatio.ForeColor = System.Drawing.Color.White;
+            this.checkboxInitImageRetainAspectRatio.Location = new System.Drawing.Point(8, 10);
+            this.checkboxInitImageRetainAspectRatio.Name = "checkboxInitImageRetainAspectRatio";
+            this.checkboxInitImageRetainAspectRatio.Size = new System.Drawing.Size(15, 14);
+            this.checkboxInitImageRetainAspectRatio.TabIndex = 111;
+            this.checkboxInitImageRetainAspectRatio.UseVisualStyleBackColor = true;
+            // 
+            // panel40
+            // 
+            this.panel40.Controls.Add(this.label19);
+            this.panel40.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel40.Location = new System.Drawing.Point(0, 0);
+            this.panel40.Margin = new System.Windows.Forms.Padding(0);
+            this.panel40.Name = "panel40";
+            this.panel40.Size = new System.Drawing.Size(410, 35);
+            this.panel40.TabIndex = 87;
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label19.ForeColor = System.Drawing.Color.White;
+            this.label19.Location = new System.Drawing.Point(5, 11);
+            this.label19.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(304, 13);
+            this.label19.TabIndex = 85;
+            this.label19.Text = "Retain Aspect Ratio of Initialization Image (If It Needs Resizing)";
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.ClientSize = new System.Drawing.Size(844, 741);
+            this.ClientSize = new System.Drawing.Size(844, 771);
             this.Controls.Add(this.parentPanel);
             this.Controls.Add(this.titleLabel);
             this.ForeColor = System.Drawing.Color.White;
@@ -1699,6 +1776,12 @@
             this.panel37.PerformLayout();
             this.panel38.ResumeLayout(false);
             this.panel38.PerformLayout();
+            this.panelInitImageRetainAspectRatio.ResumeLayout(false);
+            this.tableLayoutPanel15.ResumeLayout(false);
+            this.panel39.ResumeLayout(false);
+            this.panel39.PerformLayout();
+            this.panel40.ResumeLayout(false);
+            this.panel40.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1821,5 +1904,11 @@
         private System.Windows.Forms.CheckBox checkboxAutoSetResForInitImg;
         private System.Windows.Forms.Panel panel38;
         private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.Panel panelInitImageRetainAspectRatio;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel15;
+        private System.Windows.Forms.Panel panel39;
+        private System.Windows.Forms.CheckBox checkboxInitImageRetainAspectRatio;
+        private System.Windows.Forms.Panel panel40;
+        private System.Windows.Forms.Label label19;
     }
 }

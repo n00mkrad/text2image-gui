@@ -55,6 +55,8 @@ namespace StableDiffusionGui.Forms
                 textboxFavsPath, btnFavsPathBrowse,
                 checkboxMultiPromptsSameSeed,
                 checkboxSaveUnprocessedImages,
+                checkboxAutoSetResForInitImg,
+                checkboxInitImageRetainAspectRatio,
                 checkboxAdvancedMode,
                 comboxNotify
             }, -1);
@@ -160,6 +162,7 @@ namespace StableDiffusionGui.Forms
             ConfigParser.LoadGuiElement(checkboxSaveUnprocessedImages, Config.Keys.SaveUnprocessedImages);
             ConfigParser.LoadGuiElement(checkboxUnloadModel, Config.Keys.UnloadModel);
             ConfigParser.LoadGuiElement(checkboxAutoSetResForInitImg, Config.Keys.AutoSetResForInitImg);
+            ConfigParser.LoadGuiElement(checkboxInitImageRetainAspectRatio, Config.Keys.InitImageRetainAspectRatio);
         }
 
         void SaveSettings()
@@ -185,6 +188,7 @@ namespace StableDiffusionGui.Forms
             ConfigParser.SaveGuiElement(checkboxSaveUnprocessedImages, Config.Keys.SaveUnprocessedImages);
             ConfigParser.SaveGuiElement(checkboxUnloadModel, Config.Keys.UnloadModel);
             ConfigParser.SaveGuiElement(checkboxAutoSetResForInitImg, Config.Keys.AutoSetResForInitImg);
+            ConfigParser.SaveGuiElement(checkboxInitImageRetainAspectRatio, Config.Keys.InitImageRetainAspectRatio);
         }
 
         private void btnOutPathBrowse_Click(object sender, EventArgs e)

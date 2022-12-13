@@ -137,6 +137,7 @@ namespace StableDiffusionGui.Io
                 case Keys.Steps: Set(key, 25); return true;
                 case Keys.UpscaleStrength: Set(key, 1.0f); return true;
                 case Keys.AutoSetResForInitImg: Set(key, true); return true;
+                case Keys.InitImageRetainAspectRatio: Set(key, true); return true;
             }
 
             return false;
@@ -196,6 +197,7 @@ namespace StableDiffusionGui.Io
             public const string PopupSlideshowEnabledByDefault = "popupSlideshowEnabledByDefault";
             public const string ConvertModelsDeleteInput = "convertModelsDeleteInput";
             public const string AutoSetResForInitImg = "autoSetResForInitImg";
+            public const string InitImageRetainAspectRatio = "initImageRetainAspectRatio";
         }
     }
 }
