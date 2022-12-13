@@ -200,7 +200,7 @@ namespace StableDiffusionGui.Forms
 
         private void OpenGuide()
         {
-            System.Diagnostics.Process.Start("https://github.com/n00mkrad/text2image-gui/blob/main/DreamBooth.md");
+            System.Diagnostics.Process.Start("https://github.com/n00mkrad/text2image-gui/blob/main/docs/DreamBooth.md");
         }
 
         private void comboxTrainPreset_SelectedIndexChanged(object sender, EventArgs e)
