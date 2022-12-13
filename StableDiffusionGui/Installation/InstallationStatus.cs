@@ -1,8 +1,12 @@
 ﻿using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
+using StableDiffusionGui.Os;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace StableDiffusionGui.Installation
 {
@@ -63,6 +67,18 @@ namespace StableDiffusionGui.Installation
             Logger.Log($"HasSdUpscalers - Has ESRGAN: {hasEsrgan} - Has GFPGAN: {hasGfp} - Has Codeformer: {hasCf}", true);
 
             return hasEsrgan && hasGfp && hasCf;
+        }
+
+        public static bool HasOnnx()
+        {
+            List<string> modules = OsUtils.GetPythonPkgList().Result;
+            return modules.Contains("onnx") && modules.Contains("onnxruntime") && modules.Contains("onnxruntime-directml") && modules.Contains("diffusers");
+        }
+
+        public static async Task<bool> HasOnnxAsync()
+        {
+            List<string> modules = await OsUtils.GetPythonPkgList();
+            return modules.Contains("onnx") && modules.Contains("onnxruntime") && modules.Contains("onnxruntime-directml") && modules.Contains("diffusers");
         }
     }
 }

@@ -3,6 +3,7 @@ using StableDiffusionGui.Extensions;
 using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
+using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
 using System;
@@ -16,9 +17,10 @@ namespace StableDiffusionGui.Forms
 {
     public partial class SettingsForm : CustomForm
     {
-        private Implementation CurrImplementation { get { return (Implementation)comboxImplementation.SelectedIndex; } }
+        private Implementation CurrImplementation { get { return ParseUtils.GetEnum<Implementation>(comboxImplementation.Text, true, Strings.Implementation); } }
 
-        private bool _ready = false;
+        private bool _initialImplementationLoad = true; // If true, suppress the compat warning, this is to avoid showing it when opening the form
+        private bool _ready = false; // Wait for loading settings etc. before allowing to close the form & save settings
 
         public SettingsForm()
         {
@@ -37,7 +39,6 @@ namespace StableDiffusionGui.Forms
         private void SettingsForm_Shown(object sender, EventArgs e)
         {
             Refresh();
-            comboxImplementation.FillFromEnum<Implementation>(Strings.Implementation, -1);
 
             LoadSettings();
 
@@ -56,9 +57,12 @@ namespace StableDiffusionGui.Forms
                 checkboxSaveUnprocessedImages,
                 checkboxAdvancedMode,
                 comboxNotify
-            });
+            }, -1);
 
             Task.Run(() => LoadGpus());
+            Task.Run(() => LoadImplementations());
+            UpdateComboxStates();
+            _ready = true;
             Opacity = 1;
         }
 
@@ -76,6 +80,9 @@ namespace StableDiffusionGui.Forms
 
         private void LoadModels(bool loadCombox, ModelType type)
         {
+            if (CurrImplementation < 0)
+                return;
+
             var combox = type == ModelType.Normal ? comboxSdModel : comboxSdModelVae;
 
             combox.Items.Clear();
@@ -92,6 +99,8 @@ namespace StableDiffusionGui.Forms
                 if (combox.Items.Count > 0 && combox.SelectedIndex == -1)
                     combox.SelectedIndex = 0;
             }
+
+            UpdateComboxStates();
         }
 
         private async Task LoadGpus()
@@ -110,12 +119,27 @@ namespace StableDiffusionGui.Forms
                 comboxCudaDevice.Items.Add($"GPU {g.CudaDeviceId} ({g.FullName} - {g.VramGb} GB)");
 
             ConfigParser.LoadComboxIndex(comboxCudaDevice, Config.Keys.CudaDeviceIdx);
-            _ready = true;
+        }
+
+        private async Task LoadImplementations()
+        {
+            comboxImplementation.Items.Clear();
+            comboxImplementation.Items.Add("Loading available implementations...");
+            comboxImplementation.SelectedIndex = 0;
+
+            var disabledImplementations = new List<Implementation>();
+
+            if (!(await InstallationStatus.HasOnnxAsync()))
+                disabledImplementations.Add(Implementation.DiffusersOnnx);
+
+            comboxImplementation.FillFromEnum<Implementation>(Strings.Implementation, -1, disabledImplementations);
+            ConfigParser.LoadComboxIndex(comboxImplementation, Config.Keys.ImplementationIdx);
+            _initialImplementationLoad = false;
         }
 
         void LoadSettings()
         {
-            ConfigParser.LoadComboxIndex(comboxImplementation, Config.Keys.ImplementationIdx);
+            //ConfigParser.LoadComboxIndex(comboxImplementation, Config.Keys.ImplementationIdx);
             ConfigParser.LoadGuiElement(checkboxFullPrecision, Config.Keys.FullPrecision);
             ConfigParser.LoadGuiElement(checkboxFolderPerPrompt, Config.Keys.FolderPerPrompt);
             ConfigParser.LoadGuiElement(checkboxOutputIgnoreWildcards, Config.Keys.FilenameIgnoreWildcards);
@@ -129,7 +153,7 @@ namespace StableDiffusionGui.Forms
             ConfigParser.LoadGuiElement(checkboxModelInFilename, Config.Keys.ModelInFilename);
             ConfigParser.LoadGuiElement(textboxOutPath, Config.Keys.OutPath);
             ConfigParser.LoadGuiElement(textboxFavsPath, Config.Keys.FavsPath);
-            ConfigParser.LoadGuiElement(comboxSdModel, Config.Keys.Model);
+            //ConfigParser.LoadGuiElement(comboxSdModel, Config.Keys.Model);
             ConfigParser.LoadGuiElement(comboxSdModelVae, Config.Keys.ModelVae);
             // ConfigParser.LoadComboxIndex(comboxCudaDevice);
             ConfigParser.LoadComboxIndex(comboxNotify, Config.Keys.NotifyModeIdx);
@@ -201,6 +225,9 @@ namespace StableDiffusionGui.Forms
 
         private void comboxImplementation_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (CurrImplementation < 0)
+                return;
+
             panelFullPrecision.Visible = CurrImplementation != Implementation.DiffusersOnnx;
             panelUnloadModel.Visible = CurrImplementation != Implementation.DiffusersOnnx;
             panelCudaDevice.Visible = CurrImplementation != Implementation.DiffusersOnnx;
@@ -210,8 +237,21 @@ namespace StableDiffusionGui.Forms
             LoadModels(true, ModelType.Vae);
 
             if (_ready && CurrImplementation != Implementation.InvokeAi)
-                UiUtils.ShowMessageBox($"Warning: This implementation disables several features.\n" +
-            $"Only use it if you need it due to compatibility or hardware limitations.");
+            {
+                if (_initialImplementationLoad)
+                {
+                    _initialImplementationLoad = false;
+                    return; // Supress once, as we only want to show this if the user selects it, not if it's loaded from config
+                }
+
+                UiUtils.ShowMessageBox($"Warning: This implementation disables several features.\nOnly use it if you need it due to compatibility or hardware limitations.");
+            }
+        }
+
+        private void UpdateComboxStates()
+        {
+            comboxSdModel.Enabled = comboxSdModel.Items.Count > 0;
+            comboxSdModelVae.Enabled = comboxSdModelVae.Items.Count > 0;
         }
     }
 }

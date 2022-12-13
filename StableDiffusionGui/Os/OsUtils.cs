@@ -346,5 +346,42 @@ namespace StableDiffusionGui.Os
 
             return scanResults.ToDictionary(x => x.Item1, x => x.Item2);
         }
+
+        /// <summary> Checks if a pip package is installed </summary>
+        /// <returns> True if pip package was found, False if not </returns>
+        public static async Task<bool> HasPythonPackage(string pkg)
+        {
+            Process p = NewProcess(true);
+            p.StartInfo.EnvironmentVariables["PATH"] = TtiUtils.GetEnvVarsSd(true, Paths.GetDataPath()).First().Value;
+            p.StartInfo.Arguments = $"/C python -m pip show {pkg}";
+            string output = await Task.Run(() => GetProcStdOut(p, true));
+            return output.Contains("Name: ");
+        }
+
+        /// <summary> Lists all installed pip packages </summary>
+        /// <returns> List of packages </returns>
+        public static async Task<List<string>> GetPythonPkgList(bool stripVersion = true)
+        {
+            var list = new List<string>();
+            Process p = NewProcess(true);
+            p.StartInfo.EnvironmentVariables["PATH"] = TtiUtils.GetEnvVarsSd(true, Paths.GetDataPath()).First().Value;
+            p.StartInfo.Arguments = $"/C python -m pip freeze";
+            string output = await Task.Run(() => GetProcStdOut(p, true));
+            list = output.SplitIntoLines().Where(l => !string.IsNullOrWhiteSpace(l)).ToList();
+
+            for(int i = 0; i < list.Count; i++)
+            {
+                if (list[i].Contains("#egg="))
+                    list[i] = list[i].Split("#egg=")[1].Split("&subdirectory=")[0];
+
+                if (list[i].Contains(" @ "))
+                    list[i] = list[i].Split(" @ ")[0];
+            }
+
+            if (stripVersion)
+                list = list.Select(s => s.Split("==")[0]).ToList();
+
+            return list;
+        }
     }
 }

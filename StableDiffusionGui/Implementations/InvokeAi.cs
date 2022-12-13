@@ -212,6 +212,7 @@ namespace StableDiffusionGui.Implementations
             if (Program.Busy)
                 return;
 
+            TextToImage.Canceled = false;
             var cachedModels = Paths.GetModels(ModelType.Normal);
             var cachedModelsVae = Paths.GetModels(ModelType.Vae);
             Model modelFile = TtiUtils.CheckIfCurrentSdModelExists();
@@ -220,7 +221,7 @@ namespace StableDiffusionGui.Implementations
             if (modelFile == null)
                 return;
 
-            await InvokeAiUtils.WriteModelsYamlAll(modelFile, vaeFile, cachedModels, cachedModelsVae);
+            await InvokeAiUtils.WriteModelsYamlAll(modelFile, vaeFile, cachedModels, cachedModelsVae, true);
             if (TextToImage.Canceled) return;
 
             string batPath = Path.Combine(Paths.GetSessionDataPath(), "invoke.bat");

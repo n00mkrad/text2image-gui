@@ -46,7 +46,7 @@ namespace StableDiffusionGui.MiscUtils
                 }
             }
 
-            return values.FirstOrDefault();
+            return (TEnum)(object)(-1);
         }
     }
 }

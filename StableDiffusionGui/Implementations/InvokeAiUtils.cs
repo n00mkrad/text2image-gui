@@ -40,58 +40,69 @@ namespace StableDiffusionGui.Implementations
         }
 
         /// <summary> Writes all models into models.yml for InvokeAI to use </summary>
-        public static async Task WriteModelsYamlAll(Model selectedMdl, Model selectedVae, List<Model> cachedModels = null, List<Model> cachedModelsVae = null)
+        public static async Task WriteModelsYamlAll(Model selectedMdl, Model selectedVae, List<Model> cachedModels = null, List<Model> cachedModelsVae = null, bool quiet = false)
         {
-            if (cachedModels == null || cachedModels.Count < 1)
-                cachedModels = Paths.GetModels(Enums.StableDiffusion.ModelType.Normal);
-
-            if (cachedModelsVae == null || cachedModelsVae.Count < 1)
-                cachedModelsVae = Paths.GetModels(Enums.StableDiffusion.ModelType.Vae);
-
-            if (!Config.Get<bool>(Config.Keys.DisablePickleScanner))
+            try
             {
-                Logger.Log($"Preparing model files...");
+                if (cachedModels == null || cachedModels.Count < 1)
+                    cachedModels = Paths.GetModels(Enums.StableDiffusion.ModelType.Normal);
 
-                var pickleScanResults = await TtiUtils.VerifyModelsWithPseudoHash(cachedModels.Concat(cachedModelsVae));
-                var cachedModelsUnsafe = cachedModels.Concat(cachedModelsVae).Where(model => !pickleScanResults.GetNoNull(IoUtils.GetPseudoHash(model.FullName), false)).ToList();
+                if (cachedModelsVae == null || cachedModelsVae.Count < 1)
+                    cachedModelsVae = Paths.GetModels(Enums.StableDiffusion.ModelType.Vae);
 
-                cachedModels = cachedModels.Except(cachedModelsUnsafe).ToList();
-                cachedModelsVae = cachedModelsVae.Except(cachedModelsUnsafe).ToList();
-
-                if (cachedModelsUnsafe.Any())
+                if (!Config.Get<bool>(Config.Keys.DisablePickleScanner))
                 {
-                    Logger.Log($"Warning: The following model files were disabled because they are either corrupted, incompatible, or malicious:\n" +
-                        $"{string.Join("\n", cachedModelsUnsafe.Select(model => model.Name))}");
+                    if (!quiet)
+                        Logger.Log($"Preparing model files...");
 
-                    if (cachedModelsUnsafe.Select(m => m.FullName).Contains(selectedMdl.FullName))
-                        TextToImage.Cancel("Selected model can not be loaded because it is either corruped or contains malware.", true);
+                    var pickleScanResults = await TtiUtils.VerifyModelsWithPseudoHash(cachedModels.Concat(cachedModelsVae));
+                    var cachedModelsUnsafe = cachedModels.Concat(cachedModelsVae).Where(model => !pickleScanResults.GetNoNull(IoUtils.GetPseudoHash(model.FullName), false)).ToList();
+
+                    cachedModels = cachedModels.Except(cachedModelsUnsafe).ToList();
+                    cachedModelsVae = cachedModelsVae.Except(cachedModelsUnsafe).ToList();
+
+                    if (cachedModelsUnsafe.Any())
+                    {
+                        if (!quiet)
+                            Logger.Log($"Warning: The following model files were disabled because they are either corrupted, incompatible, or malicious:\n" +
+                            $"{string.Join("\n", cachedModelsUnsafe.Select(model => model.Name))}");
+
+                        if (cachedModelsUnsafe.Select(m => m.FullName).Contains(selectedMdl.FullName))
+                            TextToImage.Cancel("Selected model can not be loaded because it is either corruped or contains malware.", true);
+                    }
                 }
+
+                string text = "";
+
+                cachedModelsVae.Insert(0, null); // Insert null entry, for looping
+
+                foreach (Model mdl in cachedModels)
+                {
+                    bool inpaint = mdl.Name.MatchesWildcard("*-inpainting.*");
+
+                    foreach (Model vae in cachedModelsVae)
+                    {
+                        string configFile = File.Exists(mdl.FullName + ".yaml") ? (mdl.FullName + ".yaml").Wrap(true) : $"configs/stable-diffusion/{(inpaint ? "v1-inpainting-inference" : "v1-inference")}.yaml";
+
+                        text += $"{GetMdlNameForYaml(mdl, vae)}:\n" +
+                        $"    config: {configFile}\n" +
+                        $"    weights: {mdl.FullName.Wrap(true)}\n" +
+                        $"{(vae != null && File.Exists(vae.FullName) ? $"    vae: {vae.FullName.Wrap(true)}\n" : "")}" +
+                        $"    description: {mdl.Name}\n" +
+                        $"    width: 512\n" +
+                        $"    height: 512\n" +
+                        $"    default: {IsModelDefault(mdl, vae, selectedMdl, selectedVae).ToString().Lower()}\n\n";
+                    }
+                }
+
+                File.WriteAllText(ModelsYamlPath, text);
             }
-
-            string text = "";
-
-            cachedModelsVae.Insert(0, null); // Insert null entry, for looping
-
-            foreach (Model mdl in cachedModels)
+            catch (Exception ex)
             {
-                bool inpaint = mdl.Name.MatchesWildcard("*-inpainting.*");
-
-                foreach (Model vae in cachedModelsVae)
-                {
-                    string configFile = File.Exists(mdl.FullName + ".yaml") ? (mdl.FullName + ".yaml").Wrap(true) : $"configs/stable-diffusion/{(inpaint ? "v1-inpainting-inference" : "v1-inference")}.yaml";
-
-                    text += $"{GetMdlNameForYaml(mdl, vae)}:\n" +
-                    $"    config: {configFile}\n" +
-                    $"    weights: {mdl.FullName.Wrap(true)}\n" +
-                    $"{(vae != null && File.Exists(vae.FullName) ? $"    vae: {vae.FullName.Wrap(true)}\n" : "")}" +
-                    $"    description: {mdl.Name}\n" +
-                    $"    width: 512\n" +
-                    $"    height: 512\n" +
-                    $"    default: {IsModelDefault(mdl, vae, selectedMdl, selectedVae).ToString().Lower()}\n\n";
-                }
+                Logger.Log($"Error writing model list: {ex.Message}.", true);
+                Logger.Log(ex.StackTrace, true);
+                TextToImage.Cancel($"Error writing model list: {ex.Message.Trunc(200)}.\nCheck logs for details.", true);
             }
-
-            File.WriteAllText(ModelsYamlPath, text);
         }
 
         private static bool IsModelDefault(Model mdl, Model vae, Model selectedMdl, Model selectedVae)
