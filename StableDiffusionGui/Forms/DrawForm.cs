@@ -1,21 +1,11 @@
 ﻿using Dasync.Collections;
-using ImageMagick;
-using Microsoft.WindowsAPICodePack.Dialogs;
-using StableDiffusionGui.Installation;
-using StableDiffusionGui.Main;
-using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Point = System.Drawing.Point;
-using Paths = StableDiffusionGui.Io.Paths;
-using StableDiffusionGui.Io;
 using StableDiffusionGui.Ui.DrawForm;
 
 namespace StableDiffusionGui.Forms
