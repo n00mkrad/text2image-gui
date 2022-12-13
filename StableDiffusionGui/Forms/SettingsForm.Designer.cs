@@ -139,6 +139,12 @@
             this.panel11 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.panelAutoSetResForInitImg = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel14 = new System.Windows.Forms.TableLayoutPanel();
+            this.panel37 = new System.Windows.Forms.Panel();
+            this.checkboxAutoSetResForInitImg = new System.Windows.Forms.CheckBox();
+            this.panel38 = new System.Windows.Forms.Panel();
+            this.label18 = new System.Windows.Forms.Label();
             this.parentPanel.SuspendLayout();
             this.panelNotify.SuspendLayout();
             this.notificationPanel.SuspendLayout();
@@ -203,6 +209,10 @@
             this.panel12.SuspendLayout();
             this.panel13.SuspendLayout();
             this.panel11.SuspendLayout();
+            this.panelAutoSetResForInitImg.SuspendLayout();
+            this.tableLayoutPanel14.SuspendLayout();
+            this.panel37.SuspendLayout();
+            this.panel38.SuspendLayout();
             this.SuspendLayout();
             // 
             // titleLabel
@@ -225,6 +235,7 @@
             this.parentPanel.AutoScroll = true;
             this.parentPanel.Controls.Add(this.panelNotify);
             this.parentPanel.Controls.Add(this.panelAdvancedMode);
+            this.parentPanel.Controls.Add(this.panelAutoSetResForInitImg);
             this.parentPanel.Controls.Add(this.panel1);
             this.parentPanel.Controls.Add(this.panelSaveUnprocessedImages);
             this.parentPanel.Controls.Add(this.panelMultiPromptsSameSeed);
@@ -242,14 +253,14 @@
             this.parentPanel.Controls.Add(this.panel11);
             this.parentPanel.Location = new System.Drawing.Point(12, 62);
             this.parentPanel.Name = "parentPanel";
-            this.parentPanel.Size = new System.Drawing.Size(820, 637);
+            this.parentPanel.Size = new System.Drawing.Size(820, 667);
             this.parentPanel.TabIndex = 14;
             // 
             // panelNotify
             // 
             this.panelNotify.Controls.Add(this.notificationPanel);
             this.panelNotify.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelNotify.Location = new System.Drawing.Point(0, 575);
+            this.panelNotify.Location = new System.Drawing.Point(0, 610);
             this.panelNotify.Name = "panelNotify";
             this.panelNotify.Size = new System.Drawing.Size(820, 35);
             this.panelNotify.TabIndex = 22;
@@ -300,9 +311,10 @@
             // 
             this.panel15.Controls.Add(this.label12);
             this.panel15.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel15.Location = new System.Drawing.Point(3, 3);
+            this.panel15.Location = new System.Drawing.Point(0, 0);
+            this.panel15.Margin = new System.Windows.Forms.Padding(0);
             this.panel15.Name = "panel15";
-            this.panel15.Size = new System.Drawing.Size(404, 29);
+            this.panel15.Size = new System.Drawing.Size(410, 35);
             this.panel15.TabIndex = 87;
             // 
             // label12
@@ -310,7 +322,7 @@
             this.label12.AutoSize = true;
             this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label12.ForeColor = System.Drawing.Color.White;
-            this.label12.Location = new System.Drawing.Point(5, 8);
+            this.label12.Location = new System.Drawing.Point(5, 11);
             this.label12.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(217, 13);
@@ -321,7 +333,7 @@
             // 
             this.panelAdvancedMode.Controls.Add(this.tableLayoutPanel4);
             this.panelAdvancedMode.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelAdvancedMode.Location = new System.Drawing.Point(0, 540);
+            this.panelAdvancedMode.Location = new System.Drawing.Point(0, 575);
             this.panelAdvancedMode.Name = "panelAdvancedMode";
             this.panelAdvancedMode.Size = new System.Drawing.Size(820, 35);
             this.panelAdvancedMode.TabIndex = 15;
@@ -345,16 +357,17 @@
             // 
             this.panel16.Controls.Add(this.checkboxAdvancedMode);
             this.panel16.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel16.Location = new System.Drawing.Point(413, 3);
+            this.panel16.Location = new System.Drawing.Point(410, 0);
+            this.panel16.Margin = new System.Windows.Forms.Padding(0);
             this.panel16.Name = "panel16";
-            this.panel16.Size = new System.Drawing.Size(404, 29);
+            this.panel16.Size = new System.Drawing.Size(410, 35);
             this.panel16.TabIndex = 88;
             // 
             // checkboxAdvancedMode
             // 
             this.checkboxAdvancedMode.AutoSize = true;
             this.checkboxAdvancedMode.ForeColor = System.Drawing.Color.White;
-            this.checkboxAdvancedMode.Location = new System.Drawing.Point(5, 7);
+            this.checkboxAdvancedMode.Location = new System.Drawing.Point(8, 10);
             this.checkboxAdvancedMode.Name = "checkboxAdvancedMode";
             this.checkboxAdvancedMode.Size = new System.Drawing.Size(15, 14);
             this.checkboxAdvancedMode.TabIndex = 111;
@@ -364,9 +377,10 @@
             // 
             this.panel17.Controls.Add(this.label6);
             this.panel17.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel17.Location = new System.Drawing.Point(3, 3);
+            this.panel17.Location = new System.Drawing.Point(0, 0);
+            this.panel17.Margin = new System.Windows.Forms.Padding(0);
             this.panel17.Name = "panel17";
-            this.panel17.Size = new System.Drawing.Size(404, 29);
+            this.panel17.Size = new System.Drawing.Size(410, 35);
             this.panel17.TabIndex = 87;
             // 
             // label6
@@ -374,7 +388,7 @@
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.ForeColor = System.Drawing.Color.White;
-            this.label6.Location = new System.Drawing.Point(5, 8);
+            this.label6.Location = new System.Drawing.Point(5, 11);
             this.label6.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(247, 13);
@@ -447,16 +461,17 @@
             // 
             this.panel31.Controls.Add(this.checkboxSaveUnprocessedImages);
             this.panel31.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel31.Location = new System.Drawing.Point(413, 3);
+            this.panel31.Location = new System.Drawing.Point(410, 0);
+            this.panel31.Margin = new System.Windows.Forms.Padding(0);
             this.panel31.Name = "panel31";
-            this.panel31.Size = new System.Drawing.Size(404, 29);
+            this.panel31.Size = new System.Drawing.Size(410, 35);
             this.panel31.TabIndex = 88;
             // 
             // checkboxSaveUnprocessedImages
             // 
             this.checkboxSaveUnprocessedImages.AutoSize = true;
             this.checkboxSaveUnprocessedImages.ForeColor = System.Drawing.Color.White;
-            this.checkboxSaveUnprocessedImages.Location = new System.Drawing.Point(5, 7);
+            this.checkboxSaveUnprocessedImages.Location = new System.Drawing.Point(8, 10);
             this.checkboxSaveUnprocessedImages.Name = "checkboxSaveUnprocessedImages";
             this.checkboxSaveUnprocessedImages.Size = new System.Drawing.Size(15, 14);
             this.checkboxSaveUnprocessedImages.TabIndex = 111;
@@ -466,9 +481,10 @@
             // 
             this.panel32.Controls.Add(this.label13);
             this.panel32.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel32.Location = new System.Drawing.Point(3, 3);
+            this.panel32.Location = new System.Drawing.Point(0, 0);
+            this.panel32.Margin = new System.Windows.Forms.Padding(0);
             this.panel32.Name = "panel32";
-            this.panel32.Size = new System.Drawing.Size(404, 29);
+            this.panel32.Size = new System.Drawing.Size(410, 35);
             this.panel32.TabIndex = 87;
             // 
             // label13
@@ -476,7 +492,7 @@
             this.label13.AutoSize = true;
             this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label13.ForeColor = System.Drawing.Color.White;
-            this.label13.Location = new System.Drawing.Point(5, 8);
+            this.label13.Location = new System.Drawing.Point(5, 11);
             this.label13.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(324, 13);
@@ -529,16 +545,17 @@
             // 
             this.panel6.Controls.Add(this.checkboxMultiPromptsSameSeed);
             this.panel6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel6.Location = new System.Drawing.Point(413, 3);
+            this.panel6.Location = new System.Drawing.Point(410, 0);
+            this.panel6.Margin = new System.Windows.Forms.Padding(0);
             this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(404, 29);
+            this.panel6.Size = new System.Drawing.Size(410, 35);
             this.panel6.TabIndex = 88;
             // 
             // checkboxMultiPromptsSameSeed
             // 
             this.checkboxMultiPromptsSameSeed.AutoSize = true;
             this.checkboxMultiPromptsSameSeed.ForeColor = System.Drawing.Color.White;
-            this.checkboxMultiPromptsSameSeed.Location = new System.Drawing.Point(5, 7);
+            this.checkboxMultiPromptsSameSeed.Location = new System.Drawing.Point(8, 10);
             this.checkboxMultiPromptsSameSeed.Name = "checkboxMultiPromptsSameSeed";
             this.checkboxMultiPromptsSameSeed.Size = new System.Drawing.Size(15, 14);
             this.checkboxMultiPromptsSameSeed.TabIndex = 111;
@@ -548,9 +565,10 @@
             // 
             this.panel22.Controls.Add(this.label8);
             this.panel22.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel22.Location = new System.Drawing.Point(3, 3);
+            this.panel22.Location = new System.Drawing.Point(0, 0);
+            this.panel22.Margin = new System.Windows.Forms.Padding(0);
             this.panel22.Name = "panel22";
-            this.panel22.Size = new System.Drawing.Size(404, 29);
+            this.panel22.Size = new System.Drawing.Size(410, 35);
             this.panel22.TabIndex = 87;
             // 
             // label8
@@ -558,7 +576,7 @@
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label8.ForeColor = System.Drawing.Color.White;
-            this.label8.Location = new System.Drawing.Point(5, 8);
+            this.label8.Location = new System.Drawing.Point(5, 11);
             this.label8.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(352, 13);
@@ -638,9 +656,10 @@
             // 
             this.panel35.Controls.Add(this.label16);
             this.panel35.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel35.Location = new System.Drawing.Point(3, 3);
+            this.panel35.Location = new System.Drawing.Point(0, 0);
+            this.panel35.Margin = new System.Windows.Forms.Padding(0);
             this.panel35.Name = "panel35";
-            this.panel35.Size = new System.Drawing.Size(404, 29);
+            this.panel35.Size = new System.Drawing.Size(410, 35);
             this.panel35.TabIndex = 87;
             // 
             // label16
@@ -648,7 +667,7 @@
             this.label16.AutoSize = true;
             this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label16.ForeColor = System.Drawing.Color.White;
-            this.label16.Location = new System.Drawing.Point(5, 8);
+            this.label16.Location = new System.Drawing.Point(5, 11);
             this.label16.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(82, 13);
@@ -751,9 +770,10 @@
             // 
             this.panel20.Controls.Add(this.label7);
             this.panel20.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel20.Location = new System.Drawing.Point(3, 3);
+            this.panel20.Location = new System.Drawing.Point(0, 0);
+            this.panel20.Margin = new System.Windows.Forms.Padding(0);
             this.panel20.Name = "panel20";
-            this.panel20.Size = new System.Drawing.Size(404, 29);
+            this.panel20.Size = new System.Drawing.Size(410, 35);
             this.panel20.TabIndex = 87;
             // 
             // label7
@@ -761,7 +781,7 @@
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.ForeColor = System.Drawing.Color.White;
-            this.label7.Location = new System.Drawing.Point(5, 8);
+            this.label7.Location = new System.Drawing.Point(5, 11);
             this.label7.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(158, 13);
@@ -845,9 +865,10 @@
             // 
             this.panel9.Controls.Add(this.label3);
             this.panel9.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel9.Location = new System.Drawing.Point(3, 3);
+            this.panel9.Location = new System.Drawing.Point(0, 0);
+            this.panel9.Margin = new System.Windows.Forms.Padding(0);
             this.panel9.Name = "panel9";
-            this.panel9.Size = new System.Drawing.Size(404, 29);
+            this.panel9.Size = new System.Drawing.Size(410, 35);
             this.panel9.TabIndex = 87;
             // 
             // label3
@@ -855,7 +876,7 @@
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.Color.White;
-            this.label3.Location = new System.Drawing.Point(5, 8);
+            this.label3.Location = new System.Drawing.Point(5, 11);
             this.label3.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(126, 13);
@@ -935,9 +956,10 @@
             // 
             this.panel24.Controls.Add(this.label9);
             this.panel24.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel24.Location = new System.Drawing.Point(3, 3);
+            this.panel24.Location = new System.Drawing.Point(0, 0);
+            this.panel24.Margin = new System.Windows.Forms.Padding(0);
             this.panel24.Name = "panel24";
-            this.panel24.Size = new System.Drawing.Size(404, 29);
+            this.panel24.Size = new System.Drawing.Size(410, 35);
             this.panel24.TabIndex = 87;
             // 
             // label9
@@ -945,7 +967,7 @@
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label9.ForeColor = System.Drawing.Color.White;
-            this.label9.Location = new System.Drawing.Point(5, 8);
+            this.label9.Location = new System.Drawing.Point(5, 11);
             this.label9.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(103, 13);
@@ -1022,9 +1044,10 @@
             // 
             this.panel28.Controls.Add(this.label11);
             this.panel28.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel28.Location = new System.Drawing.Point(3, 3);
+            this.panel28.Location = new System.Drawing.Point(0, 0);
+            this.panel28.Margin = new System.Windows.Forms.Padding(0);
             this.panel28.Name = "panel28";
-            this.panel28.Size = new System.Drawing.Size(404, 29);
+            this.panel28.Size = new System.Drawing.Size(410, 35);
             this.panel28.TabIndex = 87;
             // 
             // label11
@@ -1032,7 +1055,7 @@
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label11.ForeColor = System.Drawing.Color.White;
-            this.label11.Location = new System.Drawing.Point(5, 8);
+            this.label11.Location = new System.Drawing.Point(5, 11);
             this.label11.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(74, 13);
@@ -1134,9 +1157,10 @@
             // 
             this.panel34.Controls.Add(this.label15);
             this.panel34.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel34.Location = new System.Drawing.Point(3, 3);
+            this.panel34.Location = new System.Drawing.Point(0, 0);
+            this.panel34.Margin = new System.Windows.Forms.Padding(0);
             this.panel34.Name = "panel34";
-            this.panel34.Size = new System.Drawing.Size(404, 29);
+            this.panel34.Size = new System.Drawing.Size(410, 35);
             this.panel34.TabIndex = 87;
             // 
             // label15
@@ -1144,7 +1168,7 @@
             this.label15.AutoSize = true;
             this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label15.ForeColor = System.Drawing.Color.White;
-            this.label15.Location = new System.Drawing.Point(5, 8);
+            this.label15.Location = new System.Drawing.Point(5, 11);
             this.label15.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(227, 13);
@@ -1246,9 +1270,10 @@
             // 
             this.panel26.Controls.Add(this.label10);
             this.panel26.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel26.Location = new System.Drawing.Point(3, 3);
+            this.panel26.Location = new System.Drawing.Point(0, 0);
+            this.panel26.Margin = new System.Windows.Forms.Padding(0);
             this.panel26.Name = "panel26";
-            this.panel26.Size = new System.Drawing.Size(404, 29);
+            this.panel26.Size = new System.Drawing.Size(410, 35);
             this.panel26.TabIndex = 87;
             // 
             // label10
@@ -1256,7 +1281,7 @@
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label10.ForeColor = System.Drawing.Color.White;
-            this.label10.Location = new System.Drawing.Point(5, 8);
+            this.label10.Location = new System.Drawing.Point(5, 11);
             this.label10.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(113, 13);
@@ -1291,15 +1316,16 @@
             // 
             this.panel4.Controls.Add(this.checkboxUnloadModel);
             this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel4.Location = new System.Drawing.Point(413, 3);
+            this.panel4.Location = new System.Drawing.Point(410, 0);
+            this.panel4.Margin = new System.Windows.Forms.Padding(0);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(404, 29);
+            this.panel4.Size = new System.Drawing.Size(410, 35);
             this.panel4.TabIndex = 86;
             // 
             // checkboxUnloadModel
             // 
             this.checkboxUnloadModel.AutoSize = true;
-            this.checkboxUnloadModel.Location = new System.Drawing.Point(5, 7);
+            this.checkboxUnloadModel.Location = new System.Drawing.Point(8, 10);
             this.checkboxUnloadModel.Name = "checkboxUnloadModel";
             this.checkboxUnloadModel.Size = new System.Drawing.Size(15, 14);
             this.checkboxUnloadModel.TabIndex = 86;
@@ -1309,9 +1335,10 @@
             // 
             this.panel21.Controls.Add(this.label14);
             this.panel21.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel21.Location = new System.Drawing.Point(3, 3);
+            this.panel21.Location = new System.Drawing.Point(0, 0);
+            this.panel21.Margin = new System.Windows.Forms.Padding(0);
             this.panel21.Name = "panel21";
-            this.panel21.Size = new System.Drawing.Size(404, 29);
+            this.panel21.Size = new System.Drawing.Size(410, 35);
             this.panel21.TabIndex = 85;
             // 
             // label14
@@ -1319,7 +1346,7 @@
             this.label14.AutoSize = true;
             this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label14.ForeColor = System.Drawing.Color.White;
-            this.label14.Location = new System.Drawing.Point(5, 8);
+            this.label14.Location = new System.Drawing.Point(5, 11);
             this.label14.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(285, 13);
@@ -1354,15 +1381,16 @@
             // 
             this.panel8.Controls.Add(this.checkboxFullPrecision);
             this.panel8.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel8.Location = new System.Drawing.Point(413, 3);
+            this.panel8.Location = new System.Drawing.Point(410, 0);
+            this.panel8.Margin = new System.Windows.Forms.Padding(0);
             this.panel8.Name = "panel8";
-            this.panel8.Size = new System.Drawing.Size(404, 29);
+            this.panel8.Size = new System.Drawing.Size(410, 35);
             this.panel8.TabIndex = 86;
             // 
             // checkboxFullPrecision
             // 
             this.checkboxFullPrecision.AutoSize = true;
-            this.checkboxFullPrecision.Location = new System.Drawing.Point(5, 7);
+            this.checkboxFullPrecision.Location = new System.Drawing.Point(8, 10);
             this.checkboxFullPrecision.Name = "checkboxFullPrecision";
             this.checkboxFullPrecision.Size = new System.Drawing.Size(15, 14);
             this.checkboxFullPrecision.TabIndex = 86;
@@ -1372,9 +1400,10 @@
             // 
             this.panel7.Controls.Add(this.label2);
             this.panel7.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel7.Location = new System.Drawing.Point(3, 3);
+            this.panel7.Location = new System.Drawing.Point(0, 0);
+            this.panel7.Margin = new System.Windows.Forms.Padding(0);
             this.panel7.Name = "panel7";
-            this.panel7.Size = new System.Drawing.Size(404, 29);
+            this.panel7.Size = new System.Drawing.Size(410, 35);
             this.panel7.TabIndex = 85;
             // 
             // label2
@@ -1382,7 +1411,7 @@
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(5, 8);
+            this.label2.Location = new System.Drawing.Point(5, 11);
             this.label2.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(368, 13);
@@ -1440,9 +1469,10 @@
             // 
             this.panel13.Controls.Add(this.label4);
             this.panel13.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel13.Location = new System.Drawing.Point(3, 3);
+            this.panel13.Location = new System.Drawing.Point(0, 0);
+            this.panel13.Margin = new System.Windows.Forms.Padding(0);
             this.panel13.Name = "panel13";
-            this.panel13.Size = new System.Drawing.Size(404, 29);
+            this.panel13.Size = new System.Drawing.Size(410, 35);
             this.panel13.TabIndex = 85;
             // 
             // label4
@@ -1450,7 +1480,7 @@
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.ForeColor = System.Drawing.Color.White;
-            this.label4.Location = new System.Drawing.Point(5, 8);
+            this.label4.Location = new System.Drawing.Point(5, 11);
             this.label4.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(165, 13);
@@ -1484,13 +1514,79 @@
             this.toolTip.InitialDelay = 200;
             this.toolTip.ReshowDelay = 40;
             // 
+            // panelAutoSetResForInitImg
+            // 
+            this.panelAutoSetResForInitImg.Controls.Add(this.tableLayoutPanel14);
+            this.panelAutoSetResForInitImg.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelAutoSetResForInitImg.Location = new System.Drawing.Point(0, 540);
+            this.panelAutoSetResForInitImg.Name = "panelAutoSetResForInitImg";
+            this.panelAutoSetResForInitImg.Size = new System.Drawing.Size(820, 35);
+            this.panelAutoSetResForInitImg.TabIndex = 28;
+            // 
+            // tableLayoutPanel14
+            // 
+            this.tableLayoutPanel14.ColumnCount = 2;
+            this.tableLayoutPanel14.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel14.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel14.Controls.Add(this.panel37, 0, 0);
+            this.tableLayoutPanel14.Controls.Add(this.panel38, 0, 0);
+            this.tableLayoutPanel14.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel14.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel14.Name = "tableLayoutPanel14";
+            this.tableLayoutPanel14.RowCount = 1;
+            this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel14.Size = new System.Drawing.Size(820, 35);
+            this.tableLayoutPanel14.TabIndex = 2;
+            // 
+            // panel37
+            // 
+            this.panel37.Controls.Add(this.checkboxAutoSetResForInitImg);
+            this.panel37.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel37.Location = new System.Drawing.Point(410, 0);
+            this.panel37.Margin = new System.Windows.Forms.Padding(0);
+            this.panel37.Name = "panel37";
+            this.panel37.Size = new System.Drawing.Size(410, 35);
+            this.panel37.TabIndex = 88;
+            // 
+            // checkboxAutoSetResForInitImg
+            // 
+            this.checkboxAutoSetResForInitImg.AutoSize = true;
+            this.checkboxAutoSetResForInitImg.ForeColor = System.Drawing.Color.White;
+            this.checkboxAutoSetResForInitImg.Location = new System.Drawing.Point(8, 10);
+            this.checkboxAutoSetResForInitImg.Name = "checkboxAutoSetResForInitImg";
+            this.checkboxAutoSetResForInitImg.Size = new System.Drawing.Size(15, 14);
+            this.checkboxAutoSetResForInitImg.TabIndex = 111;
+            this.checkboxAutoSetResForInitImg.UseVisualStyleBackColor = true;
+            // 
+            // panel38
+            // 
+            this.panel38.Controls.Add(this.label18);
+            this.panel38.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel38.Location = new System.Drawing.Point(0, 0);
+            this.panel38.Margin = new System.Windows.Forms.Padding(0);
+            this.panel38.Name = "panel38";
+            this.panel38.Size = new System.Drawing.Size(410, 35);
+            this.panel38.TabIndex = 87;
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label18.ForeColor = System.Drawing.Color.White;
+            this.label18.Location = new System.Drawing.Point(5, 11);
+            this.label18.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(259, 13);
+            this.label18.TabIndex = 85;
+            this.label18.Text = "Auto-Select Fitting Resolution After Loading an Image";
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.ClientSize = new System.Drawing.Size(844, 711);
+            this.ClientSize = new System.Drawing.Size(844, 741);
             this.Controls.Add(this.parentPanel);
             this.Controls.Add(this.titleLabel);
             this.ForeColor = System.Drawing.Color.White;
@@ -1597,6 +1693,12 @@
             this.panel13.PerformLayout();
             this.panel11.ResumeLayout(false);
             this.panel11.PerformLayout();
+            this.panelAutoSetResForInitImg.ResumeLayout(false);
+            this.tableLayoutPanel14.ResumeLayout(false);
+            this.panel37.ResumeLayout(false);
+            this.panel37.PerformLayout();
+            this.panel38.ResumeLayout(false);
+            this.panel38.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1713,5 +1815,11 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.ComboBox comboxImplementation;
+        private System.Windows.Forms.Panel panelAutoSetResForInitImg;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel14;
+        private System.Windows.Forms.Panel panel37;
+        private System.Windows.Forms.CheckBox checkboxAutoSetResForInitImg;
+        private System.Windows.Forms.Panel panel38;
+        private System.Windows.Forms.Label label18;
     }
 }

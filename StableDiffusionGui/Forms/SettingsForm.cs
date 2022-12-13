@@ -159,6 +159,7 @@ namespace StableDiffusionGui.Forms
             ConfigParser.LoadComboxIndex(comboxNotify, Config.Keys.NotifyModeIdx);
             ConfigParser.LoadGuiElement(checkboxSaveUnprocessedImages, Config.Keys.SaveUnprocessedImages);
             ConfigParser.LoadGuiElement(checkboxUnloadModel, Config.Keys.UnloadModel);
+            ConfigParser.LoadGuiElement(checkboxAutoSetResForInitImg, Config.Keys.AutoSetResForInitImg);
         }
 
         void SaveSettings()
@@ -183,6 +184,7 @@ namespace StableDiffusionGui.Forms
             ConfigParser.SaveComboxIndex(comboxNotify, Config.Keys.NotifyModeIdx);
             ConfigParser.SaveGuiElement(checkboxSaveUnprocessedImages, Config.Keys.SaveUnprocessedImages);
             ConfigParser.SaveGuiElement(checkboxUnloadModel, Config.Keys.UnloadModel);
+            ConfigParser.SaveGuiElement(checkboxAutoSetResForInitImg, Config.Keys.AutoSetResForInitImg);
         }
 
         private void btnOutPathBrowse_Click(object sender, EventArgs e)

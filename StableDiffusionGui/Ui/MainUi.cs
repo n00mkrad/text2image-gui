@@ -34,7 +34,9 @@ namespace StableDiffusionGui.Ui
                 if (value != null && value.Count() > 0)
                 {
                     Logger.Log(value.Count() == 1 ? $"Now using initialization image {Path.GetFileName(value[0]).Wrap()}." : $"Now using {value.Count()} initialization images.");
-                    SetResolutionForInitImage(value[0]);
+
+                    if (Config.Get<bool>(Config.Keys.AutoSetResForInitImg))
+                        SetResolutionForInitImage(value[0]);
                 }
 
                 if (Inpainting.CurrentMask != null)
@@ -101,7 +103,7 @@ namespace StableDiffusionGui.Ui
                 new InstallerForm().ShowDialogForm();
             }
 
-            if(Paths.GetModelsAll().Count <= 0)
+            if (Paths.GetModelsAll().Count <= 0)
                 UiUtils.ShowMessageBox($"No model files have been found. You will not be able to generate images until you either place a model in Data/models, or set an external folder in the settings.",
                     UiUtils.MessageType.Warning, Nmkoder.Forms.MessageForm.FontSize.Normal);
         }
