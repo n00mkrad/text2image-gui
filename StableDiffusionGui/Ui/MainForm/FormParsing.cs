@@ -97,7 +97,7 @@ namespace StableDiffusionGui.Ui.MainForm
             {
                 Implementation = (Implementation)Config.Get<int>(Config.Keys.ImplementationIdx),
                 Prompts = F.textboxPrompt.TextNoPlaceholder.SplitIntoLines().Where(x => !string.IsNullOrWhiteSpace(x)).ToArray(),
-                NegativePrompt = F.textboxPromptNeg.TextNoPlaceholder.Trim().Replace(Environment.NewLine, " "),
+                NegativePrompt = F.textboxPromptNeg.Visible ? F.textboxPromptNeg.TextNoPlaceholder.Trim().Replace(Environment.NewLine, " ") : "",
                 Iterations = (int)F.upDownIterations.Value,
                 Params = new Dictionary<string, string>
                 {
