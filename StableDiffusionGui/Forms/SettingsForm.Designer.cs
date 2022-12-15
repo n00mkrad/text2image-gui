@@ -44,6 +44,18 @@
             this.checkboxAdvancedMode = new System.Windows.Forms.CheckBox();
             this.panel17 = new System.Windows.Forms.Panel();
             this.label6 = new System.Windows.Forms.Label();
+            this.panelInitImageRetainAspectRatio = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel15 = new System.Windows.Forms.TableLayoutPanel();
+            this.panel39 = new System.Windows.Forms.Panel();
+            this.checkboxInitImageRetainAspectRatio = new System.Windows.Forms.CheckBox();
+            this.panel40 = new System.Windows.Forms.Panel();
+            this.label19 = new System.Windows.Forms.Label();
+            this.panelAutoSetResForInitImg = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel14 = new System.Windows.Forms.TableLayoutPanel();
+            this.panel37 = new System.Windows.Forms.Panel();
+            this.checkboxAutoSetResForInitImg = new System.Windows.Forms.CheckBox();
+            this.panel38 = new System.Windows.Forms.Panel();
+            this.label18 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label17 = new System.Windows.Forms.Label();
             this.panelSaveUnprocessedImages = new System.Windows.Forms.Panel();
@@ -139,18 +151,6 @@
             this.panel11 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.panelAutoSetResForInitImg = new System.Windows.Forms.Panel();
-            this.tableLayoutPanel14 = new System.Windows.Forms.TableLayoutPanel();
-            this.panel37 = new System.Windows.Forms.Panel();
-            this.checkboxAutoSetResForInitImg = new System.Windows.Forms.CheckBox();
-            this.panel38 = new System.Windows.Forms.Panel();
-            this.label18 = new System.Windows.Forms.Label();
-            this.panelInitImageRetainAspectRatio = new System.Windows.Forms.Panel();
-            this.tableLayoutPanel15 = new System.Windows.Forms.TableLayoutPanel();
-            this.panel39 = new System.Windows.Forms.Panel();
-            this.checkboxInitImageRetainAspectRatio = new System.Windows.Forms.CheckBox();
-            this.panel40 = new System.Windows.Forms.Panel();
-            this.label19 = new System.Windows.Forms.Label();
             this.parentPanel.SuspendLayout();
             this.panelNotify.SuspendLayout();
             this.notificationPanel.SuspendLayout();
@@ -160,6 +160,14 @@
             this.tableLayoutPanel4.SuspendLayout();
             this.panel16.SuspendLayout();
             this.panel17.SuspendLayout();
+            this.panelInitImageRetainAspectRatio.SuspendLayout();
+            this.tableLayoutPanel15.SuspendLayout();
+            this.panel39.SuspendLayout();
+            this.panel40.SuspendLayout();
+            this.panelAutoSetResForInitImg.SuspendLayout();
+            this.tableLayoutPanel14.SuspendLayout();
+            this.panel37.SuspendLayout();
+            this.panel38.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panelSaveUnprocessedImages.SuspendLayout();
             this.panel29.SuspendLayout();
@@ -215,14 +223,6 @@
             this.panel12.SuspendLayout();
             this.panel13.SuspendLayout();
             this.panel11.SuspendLayout();
-            this.panelAutoSetResForInitImg.SuspendLayout();
-            this.tableLayoutPanel14.SuspendLayout();
-            this.panel37.SuspendLayout();
-            this.panel38.SuspendLayout();
-            this.panelInitImageRetainAspectRatio.SuspendLayout();
-            this.tableLayoutPanel15.SuspendLayout();
-            this.panel39.SuspendLayout();
-            this.panel40.SuspendLayout();
             this.SuspendLayout();
             // 
             // titleLabel
@@ -295,9 +295,10 @@
             // 
             this.panel14.Controls.Add(this.comboxNotify);
             this.panel14.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel14.Location = new System.Drawing.Point(413, 3);
+            this.panel14.Location = new System.Drawing.Point(410, 0);
+            this.panel14.Margin = new System.Windows.Forms.Padding(0);
             this.panel14.Name = "panel14";
-            this.panel14.Size = new System.Drawing.Size(404, 29);
+            this.panel14.Size = new System.Drawing.Size(410, 35);
             this.panel14.TabIndex = 88;
             // 
             // comboxNotify
@@ -313,9 +314,9 @@
             "Play Sound",
             "Show Notification",
             "Play Sound and Show Notification"});
-            this.comboxNotify.Location = new System.Drawing.Point(0, 4);
+            this.comboxNotify.Location = new System.Drawing.Point(0, 7);
             this.comboxNotify.Name = "comboxNotify";
-            this.comboxNotify.Size = new System.Drawing.Size(401, 21);
+            this.comboxNotify.Size = new System.Drawing.Size(410, 21);
             this.comboxNotify.TabIndex = 106;
             // 
             // panel15
@@ -333,7 +334,7 @@
             this.label12.AutoSize = true;
             this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label12.ForeColor = System.Drawing.Color.White;
-            this.label12.Location = new System.Drawing.Point(5, 11);
+            this.label12.Location = new System.Drawing.Point(2, 11);
             this.label12.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(217, 13);
@@ -399,12 +400,144 @@
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.ForeColor = System.Drawing.Color.White;
-            this.label6.Location = new System.Drawing.Point(5, 11);
+            this.label6.Location = new System.Drawing.Point(2, 11);
             this.label6.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(247, 13);
             this.label6.TabIndex = 85;
             this.label6.Text = "Advanced Mode (Unlock Higher Values for Sliders)";
+            // 
+            // panelInitImageRetainAspectRatio
+            // 
+            this.panelInitImageRetainAspectRatio.Controls.Add(this.tableLayoutPanel15);
+            this.panelInitImageRetainAspectRatio.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelInitImageRetainAspectRatio.Location = new System.Drawing.Point(0, 575);
+            this.panelInitImageRetainAspectRatio.Name = "panelInitImageRetainAspectRatio";
+            this.panelInitImageRetainAspectRatio.Size = new System.Drawing.Size(820, 35);
+            this.panelInitImageRetainAspectRatio.TabIndex = 29;
+            // 
+            // tableLayoutPanel15
+            // 
+            this.tableLayoutPanel15.ColumnCount = 2;
+            this.tableLayoutPanel15.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel15.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel15.Controls.Add(this.panel39, 0, 0);
+            this.tableLayoutPanel15.Controls.Add(this.panel40, 0, 0);
+            this.tableLayoutPanel15.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel15.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel15.Name = "tableLayoutPanel15";
+            this.tableLayoutPanel15.RowCount = 1;
+            this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel15.Size = new System.Drawing.Size(820, 35);
+            this.tableLayoutPanel15.TabIndex = 2;
+            // 
+            // panel39
+            // 
+            this.panel39.Controls.Add(this.checkboxInitImageRetainAspectRatio);
+            this.panel39.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel39.Location = new System.Drawing.Point(410, 0);
+            this.panel39.Margin = new System.Windows.Forms.Padding(0);
+            this.panel39.Name = "panel39";
+            this.panel39.Size = new System.Drawing.Size(410, 35);
+            this.panel39.TabIndex = 88;
+            // 
+            // checkboxInitImageRetainAspectRatio
+            // 
+            this.checkboxInitImageRetainAspectRatio.AutoSize = true;
+            this.checkboxInitImageRetainAspectRatio.ForeColor = System.Drawing.Color.White;
+            this.checkboxInitImageRetainAspectRatio.Location = new System.Drawing.Point(8, 10);
+            this.checkboxInitImageRetainAspectRatio.Name = "checkboxInitImageRetainAspectRatio";
+            this.checkboxInitImageRetainAspectRatio.Size = new System.Drawing.Size(15, 14);
+            this.checkboxInitImageRetainAspectRatio.TabIndex = 111;
+            this.checkboxInitImageRetainAspectRatio.UseVisualStyleBackColor = true;
+            // 
+            // panel40
+            // 
+            this.panel40.Controls.Add(this.label19);
+            this.panel40.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel40.Location = new System.Drawing.Point(0, 0);
+            this.panel40.Margin = new System.Windows.Forms.Padding(0);
+            this.panel40.Name = "panel40";
+            this.panel40.Size = new System.Drawing.Size(410, 35);
+            this.panel40.TabIndex = 87;
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label19.ForeColor = System.Drawing.Color.White;
+            this.label19.Location = new System.Drawing.Point(2, 11);
+            this.label19.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(304, 13);
+            this.label19.TabIndex = 85;
+            this.label19.Text = "Retain Aspect Ratio of Initialization Image (If It Needs Resizing)";
+            // 
+            // panelAutoSetResForInitImg
+            // 
+            this.panelAutoSetResForInitImg.Controls.Add(this.tableLayoutPanel14);
+            this.panelAutoSetResForInitImg.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelAutoSetResForInitImg.Location = new System.Drawing.Point(0, 540);
+            this.panelAutoSetResForInitImg.Name = "panelAutoSetResForInitImg";
+            this.panelAutoSetResForInitImg.Size = new System.Drawing.Size(820, 35);
+            this.panelAutoSetResForInitImg.TabIndex = 28;
+            // 
+            // tableLayoutPanel14
+            // 
+            this.tableLayoutPanel14.ColumnCount = 2;
+            this.tableLayoutPanel14.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel14.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel14.Controls.Add(this.panel37, 0, 0);
+            this.tableLayoutPanel14.Controls.Add(this.panel38, 0, 0);
+            this.tableLayoutPanel14.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel14.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel14.Name = "tableLayoutPanel14";
+            this.tableLayoutPanel14.RowCount = 1;
+            this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel14.Size = new System.Drawing.Size(820, 35);
+            this.tableLayoutPanel14.TabIndex = 2;
+            // 
+            // panel37
+            // 
+            this.panel37.Controls.Add(this.checkboxAutoSetResForInitImg);
+            this.panel37.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel37.Location = new System.Drawing.Point(410, 0);
+            this.panel37.Margin = new System.Windows.Forms.Padding(0);
+            this.panel37.Name = "panel37";
+            this.panel37.Size = new System.Drawing.Size(410, 35);
+            this.panel37.TabIndex = 88;
+            // 
+            // checkboxAutoSetResForInitImg
+            // 
+            this.checkboxAutoSetResForInitImg.AutoSize = true;
+            this.checkboxAutoSetResForInitImg.ForeColor = System.Drawing.Color.White;
+            this.checkboxAutoSetResForInitImg.Location = new System.Drawing.Point(8, 10);
+            this.checkboxAutoSetResForInitImg.Name = "checkboxAutoSetResForInitImg";
+            this.checkboxAutoSetResForInitImg.Size = new System.Drawing.Size(15, 14);
+            this.checkboxAutoSetResForInitImg.TabIndex = 111;
+            this.checkboxAutoSetResForInitImg.UseVisualStyleBackColor = true;
+            // 
+            // panel38
+            // 
+            this.panel38.Controls.Add(this.label18);
+            this.panel38.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel38.Location = new System.Drawing.Point(0, 0);
+            this.panel38.Margin = new System.Windows.Forms.Padding(0);
+            this.panel38.Name = "panel38";
+            this.panel38.Size = new System.Drawing.Size(410, 35);
+            this.panel38.TabIndex = 87;
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label18.ForeColor = System.Drawing.Color.White;
+            this.label18.Location = new System.Drawing.Point(2, 11);
+            this.label18.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(366, 13);
+            this.label18.TabIndex = 85;
+            this.label18.Text = "Automatically Set Generation Resolution After Loading an Initialization Image";
             // 
             // panel1
             // 
@@ -420,7 +553,7 @@
             this.label17.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label17.AutoSize = true;
             this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label17.Location = new System.Drawing.Point(5, 19);
+            this.label17.Location = new System.Drawing.Point(2, 19);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(145, 16);
             this.label17.TabIndex = 1;
@@ -503,7 +636,7 @@
             this.label13.AutoSize = true;
             this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label13.ForeColor = System.Drawing.Color.White;
-            this.label13.Location = new System.Drawing.Point(5, 11);
+            this.label13.Location = new System.Drawing.Point(2, 11);
             this.label13.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(324, 13);
@@ -587,7 +720,7 @@
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label8.ForeColor = System.Drawing.Color.White;
-            this.label8.Location = new System.Drawing.Point(5, 11);
+            this.label8.Location = new System.Drawing.Point(2, 11);
             this.label8.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(352, 13);
@@ -623,9 +756,10 @@
             this.panel2.Controls.Add(this.textboxFavsPath);
             this.panel2.Controls.Add(this.btnFavsPathBrowse);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel2.Location = new System.Drawing.Point(413, 3);
+            this.panel2.Location = new System.Drawing.Point(410, 0);
+            this.panel2.Margin = new System.Windows.Forms.Padding(0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(404, 29);
+            this.panel2.Size = new System.Drawing.Size(410, 35);
             this.panel2.TabIndex = 88;
             // 
             // textboxFavsPath
@@ -634,10 +768,10 @@
             this.textboxFavsPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.textboxFavsPath.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textboxFavsPath.ForeColor = System.Drawing.Color.White;
-            this.textboxFavsPath.Location = new System.Drawing.Point(0, 3);
+            this.textboxFavsPath.Location = new System.Drawing.Point(0, 6);
             this.textboxFavsPath.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxFavsPath.Name = "textboxFavsPath";
-            this.textboxFavsPath.Size = new System.Drawing.Size(320, 21);
+            this.textboxFavsPath.Size = new System.Drawing.Size(329, 20);
             this.textboxFavsPath.TabIndex = 2;
             this.textboxFavsPath.WordWrap = false;
             // 
@@ -653,7 +787,7 @@
             this.btnFavsPathBrowse.ForeColor = System.Drawing.Color.White;
             this.btnFavsPathBrowse.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
             this.btnFavsPathBrowse.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
-            this.btnFavsPathBrowse.Location = new System.Drawing.Point(326, 2);
+            this.btnFavsPathBrowse.Location = new System.Drawing.Point(335, 6);
             this.btnFavsPathBrowse.Name = "btnFavsPathBrowse";
             this.btnFavsPathBrowse.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
             this.btnFavsPathBrowse.Size = new System.Drawing.Size(75, 23);
@@ -678,7 +812,7 @@
             this.label16.AutoSize = true;
             this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label16.ForeColor = System.Drawing.Color.White;
-            this.label16.Location = new System.Drawing.Point(5, 11);
+            this.label16.Location = new System.Drawing.Point(2, 11);
             this.label16.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(82, 13);
@@ -717,16 +851,17 @@
             this.panel19.Controls.Add(this.checkboxSeedInFilename);
             this.panel19.Controls.Add(this.checkboxPromptInFilename);
             this.panel19.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel19.Location = new System.Drawing.Point(413, 3);
+            this.panel19.Location = new System.Drawing.Point(410, 0);
+            this.panel19.Margin = new System.Windows.Forms.Padding(0);
             this.panel19.Name = "panel19";
-            this.panel19.Size = new System.Drawing.Size(404, 29);
+            this.panel19.Size = new System.Drawing.Size(410, 35);
             this.panel19.TabIndex = 88;
             // 
             // checkboxModelInFilename
             // 
             this.checkboxModelInFilename.AutoSize = true;
             this.checkboxModelInFilename.ForeColor = System.Drawing.Color.White;
-            this.checkboxModelInFilename.Location = new System.Drawing.Point(256, 7);
+            this.checkboxModelInFilename.Location = new System.Drawing.Point(259, 10);
             this.checkboxModelInFilename.Name = "checkboxModelInFilename";
             this.checkboxModelInFilename.Size = new System.Drawing.Size(55, 17);
             this.checkboxModelInFilename.TabIndex = 115;
@@ -737,7 +872,7 @@
             // 
             this.checkboxSamplerInFilename.AutoSize = true;
             this.checkboxSamplerInFilename.ForeColor = System.Drawing.Color.White;
-            this.checkboxSamplerInFilename.Location = new System.Drawing.Point(186, 7);
+            this.checkboxSamplerInFilename.Location = new System.Drawing.Point(189, 10);
             this.checkboxSamplerInFilename.Name = "checkboxSamplerInFilename";
             this.checkboxSamplerInFilename.Size = new System.Drawing.Size(64, 17);
             this.checkboxSamplerInFilename.TabIndex = 114;
@@ -748,7 +883,7 @@
             // 
             this.checkboxScaleInFilename.AutoSize = true;
             this.checkboxScaleInFilename.ForeColor = System.Drawing.Color.White;
-            this.checkboxScaleInFilename.Location = new System.Drawing.Point(127, 7);
+            this.checkboxScaleInFilename.Location = new System.Drawing.Point(130, 10);
             this.checkboxScaleInFilename.Name = "checkboxScaleInFilename";
             this.checkboxScaleInFilename.Size = new System.Drawing.Size(53, 17);
             this.checkboxScaleInFilename.TabIndex = 113;
@@ -759,7 +894,7 @@
             // 
             this.checkboxSeedInFilename.AutoSize = true;
             this.checkboxSeedInFilename.ForeColor = System.Drawing.Color.White;
-            this.checkboxSeedInFilename.Location = new System.Drawing.Point(70, 7);
+            this.checkboxSeedInFilename.Location = new System.Drawing.Point(73, 10);
             this.checkboxSeedInFilename.Name = "checkboxSeedInFilename";
             this.checkboxSeedInFilename.Size = new System.Drawing.Size(51, 17);
             this.checkboxSeedInFilename.TabIndex = 112;
@@ -770,7 +905,7 @@
             // 
             this.checkboxPromptInFilename.AutoSize = true;
             this.checkboxPromptInFilename.ForeColor = System.Drawing.Color.White;
-            this.checkboxPromptInFilename.Location = new System.Drawing.Point(5, 7);
+            this.checkboxPromptInFilename.Location = new System.Drawing.Point(8, 10);
             this.checkboxPromptInFilename.Name = "checkboxPromptInFilename";
             this.checkboxPromptInFilename.Size = new System.Drawing.Size(59, 17);
             this.checkboxPromptInFilename.TabIndex = 111;
@@ -792,7 +927,7 @@
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.ForeColor = System.Drawing.Color.White;
-            this.label7.Location = new System.Drawing.Point(5, 11);
+            this.label7.Location = new System.Drawing.Point(2, 11);
             this.label7.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(158, 13);
@@ -829,16 +964,17 @@
             this.panel10.Controls.Add(this.checkboxFolderPerSession);
             this.panel10.Controls.Add(this.checkboxFolderPerPrompt);
             this.panel10.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel10.Location = new System.Drawing.Point(413, 3);
+            this.panel10.Location = new System.Drawing.Point(410, 0);
+            this.panel10.Margin = new System.Windows.Forms.Padding(0);
             this.panel10.Name = "panel10";
-            this.panel10.Size = new System.Drawing.Size(404, 29);
+            this.panel10.Size = new System.Drawing.Size(410, 35);
             this.panel10.TabIndex = 88;
             // 
             // checkboxOutputIgnoreWildcards
             // 
             this.checkboxOutputIgnoreWildcards.AutoSize = true;
             this.checkboxOutputIgnoreWildcards.ForeColor = System.Drawing.Color.White;
-            this.checkboxOutputIgnoreWildcards.Location = new System.Drawing.Point(137, 7);
+            this.checkboxOutputIgnoreWildcards.Location = new System.Drawing.Point(140, 10);
             this.checkboxOutputIgnoreWildcards.Name = "checkboxOutputIgnoreWildcards";
             this.checkboxOutputIgnoreWildcards.Size = new System.Drawing.Size(106, 17);
             this.checkboxOutputIgnoreWildcards.TabIndex = 113;
@@ -851,7 +987,7 @@
             // 
             this.checkboxFolderPerSession.AutoSize = true;
             this.checkboxFolderPerSession.ForeColor = System.Drawing.Color.White;
-            this.checkboxFolderPerSession.Location = new System.Drawing.Point(249, 7);
+            this.checkboxFolderPerSession.Location = new System.Drawing.Point(252, 10);
             this.checkboxFolderPerSession.Name = "checkboxFolderPerSession";
             this.checkboxFolderPerSession.Size = new System.Drawing.Size(130, 17);
             this.checkboxFolderPerSession.TabIndex = 112;
@@ -864,7 +1000,7 @@
             // 
             this.checkboxFolderPerPrompt.AutoSize = true;
             this.checkboxFolderPerPrompt.ForeColor = System.Drawing.Color.White;
-            this.checkboxFolderPerPrompt.Location = new System.Drawing.Point(5, 7);
+            this.checkboxFolderPerPrompt.Location = new System.Drawing.Point(8, 10);
             this.checkboxFolderPerPrompt.Name = "checkboxFolderPerPrompt";
             this.checkboxFolderPerPrompt.Size = new System.Drawing.Size(126, 17);
             this.checkboxFolderPerPrompt.TabIndex = 111;
@@ -887,7 +1023,7 @@
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.Color.White;
-            this.label3.Location = new System.Drawing.Point(5, 11);
+            this.label3.Location = new System.Drawing.Point(2, 11);
             this.label3.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(126, 13);
@@ -923,9 +1059,10 @@
             this.panel23.Controls.Add(this.textboxOutPath);
             this.panel23.Controls.Add(this.btnOutPathBrowse);
             this.panel23.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel23.Location = new System.Drawing.Point(413, 3);
+            this.panel23.Location = new System.Drawing.Point(410, 0);
+            this.panel23.Margin = new System.Windows.Forms.Padding(0);
             this.panel23.Name = "panel23";
-            this.panel23.Size = new System.Drawing.Size(404, 29);
+            this.panel23.Size = new System.Drawing.Size(410, 35);
             this.panel23.TabIndex = 88;
             // 
             // textboxOutPath
@@ -934,10 +1071,10 @@
             this.textboxOutPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.textboxOutPath.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textboxOutPath.ForeColor = System.Drawing.Color.White;
-            this.textboxOutPath.Location = new System.Drawing.Point(0, 3);
+            this.textboxOutPath.Location = new System.Drawing.Point(0, 7);
             this.textboxOutPath.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxOutPath.Name = "textboxOutPath";
-            this.textboxOutPath.Size = new System.Drawing.Size(320, 21);
+            this.textboxOutPath.Size = new System.Drawing.Size(329, 20);
             this.textboxOutPath.TabIndex = 2;
             this.textboxOutPath.WordWrap = false;
             // 
@@ -953,7 +1090,7 @@
             this.btnOutPathBrowse.ForeColor = System.Drawing.Color.White;
             this.btnOutPathBrowse.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
             this.btnOutPathBrowse.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
-            this.btnOutPathBrowse.Location = new System.Drawing.Point(326, 2);
+            this.btnOutPathBrowse.Location = new System.Drawing.Point(335, 6);
             this.btnOutPathBrowse.Name = "btnOutPathBrowse";
             this.btnOutPathBrowse.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
             this.btnOutPathBrowse.Size = new System.Drawing.Size(75, 23);
@@ -978,7 +1115,7 @@
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label9.ForeColor = System.Drawing.Color.White;
-            this.label9.Location = new System.Drawing.Point(5, 11);
+            this.label9.Location = new System.Drawing.Point(2, 11);
             this.label9.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(103, 13);
@@ -999,7 +1136,7 @@
             this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(5, 19);
+            this.label5.Location = new System.Drawing.Point(2, 19);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(111, 16);
             this.label5.TabIndex = 1;
@@ -1033,9 +1170,10 @@
             // 
             this.panel27.Controls.Add(this.comboxCudaDevice);
             this.panel27.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel27.Location = new System.Drawing.Point(413, 3);
+            this.panel27.Location = new System.Drawing.Point(410, 0);
+            this.panel27.Margin = new System.Windows.Forms.Padding(0);
             this.panel27.Name = "panel27";
-            this.panel27.Size = new System.Drawing.Size(404, 29);
+            this.panel27.Size = new System.Drawing.Size(410, 35);
             this.panel27.TabIndex = 88;
             // 
             // comboxCudaDevice
@@ -1046,9 +1184,9 @@
             this.comboxCudaDevice.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.comboxCudaDevice.ForeColor = System.Drawing.Color.White;
             this.comboxCudaDevice.FormattingEnabled = true;
-            this.comboxCudaDevice.Location = new System.Drawing.Point(0, 4);
+            this.comboxCudaDevice.Location = new System.Drawing.Point(0, 7);
             this.comboxCudaDevice.Name = "comboxCudaDevice";
-            this.comboxCudaDevice.Size = new System.Drawing.Size(401, 21);
+            this.comboxCudaDevice.Size = new System.Drawing.Size(407, 21);
             this.comboxCudaDevice.TabIndex = 106;
             // 
             // panel28
@@ -1066,7 +1204,7 @@
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label11.ForeColor = System.Drawing.Color.White;
-            this.label11.Location = new System.Drawing.Point(5, 11);
+            this.label11.Location = new System.Drawing.Point(2, 11);
             this.label11.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(74, 13);
@@ -1103,9 +1241,10 @@
             this.panel33.Controls.Add(this.comboxSdModelVae);
             this.panel33.Controls.Add(this.btnOpenModelsFolderVae);
             this.panel33.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel33.Location = new System.Drawing.Point(413, 3);
+            this.panel33.Location = new System.Drawing.Point(410, 0);
+            this.panel33.Margin = new System.Windows.Forms.Padding(0);
             this.panel33.Name = "panel33";
-            this.panel33.Size = new System.Drawing.Size(404, 29);
+            this.panel33.Size = new System.Drawing.Size(410, 35);
             this.panel33.TabIndex = 88;
             // 
             // btnRefreshModelsDropdownVae
@@ -1120,7 +1259,7 @@
             this.btnRefreshModelsDropdownVae.ForeColor = System.Drawing.Color.White;
             this.btnRefreshModelsDropdownVae.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
             this.btnRefreshModelsDropdownVae.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
-            this.btnRefreshModelsDropdownVae.Location = new System.Drawing.Point(245, 2);
+            this.btnRefreshModelsDropdownVae.Location = new System.Drawing.Point(254, 5);
             this.btnRefreshModelsDropdownVae.Name = "btnRefreshModelsDropdownVae";
             this.btnRefreshModelsDropdownVae.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
             this.btnRefreshModelsDropdownVae.Size = new System.Drawing.Size(75, 23);
@@ -1137,9 +1276,9 @@
             this.comboxSdModelVae.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.comboxSdModelVae.ForeColor = System.Drawing.Color.White;
             this.comboxSdModelVae.FormattingEnabled = true;
-            this.comboxSdModelVae.Location = new System.Drawing.Point(0, 4);
+            this.comboxSdModelVae.Location = new System.Drawing.Point(0, 7);
             this.comboxSdModelVae.Name = "comboxSdModelVae";
-            this.comboxSdModelVae.Size = new System.Drawing.Size(239, 21);
+            this.comboxSdModelVae.Size = new System.Drawing.Size(248, 21);
             this.comboxSdModelVae.TabIndex = 106;
             // 
             // btnOpenModelsFolderVae
@@ -1154,7 +1293,7 @@
             this.btnOpenModelsFolderVae.ForeColor = System.Drawing.Color.White;
             this.btnOpenModelsFolderVae.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
             this.btnOpenModelsFolderVae.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
-            this.btnOpenModelsFolderVae.Location = new System.Drawing.Point(326, 2);
+            this.btnOpenModelsFolderVae.Location = new System.Drawing.Point(335, 5);
             this.btnOpenModelsFolderVae.Name = "btnOpenModelsFolderVae";
             this.btnOpenModelsFolderVae.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
             this.btnOpenModelsFolderVae.Size = new System.Drawing.Size(75, 23);
@@ -1179,7 +1318,7 @@
             this.label15.AutoSize = true;
             this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label15.ForeColor = System.Drawing.Color.White;
-            this.label15.Location = new System.Drawing.Point(5, 11);
+            this.label15.Location = new System.Drawing.Point(2, 11);
             this.label15.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(227, 13);
@@ -1216,9 +1355,10 @@
             this.panel25.Controls.Add(this.comboxSdModel);
             this.panel25.Controls.Add(this.btnOpenModelsFolder);
             this.panel25.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel25.Location = new System.Drawing.Point(413, 3);
+            this.panel25.Location = new System.Drawing.Point(410, 0);
+            this.panel25.Margin = new System.Windows.Forms.Padding(0);
             this.panel25.Name = "panel25";
-            this.panel25.Size = new System.Drawing.Size(404, 29);
+            this.panel25.Size = new System.Drawing.Size(410, 35);
             this.panel25.TabIndex = 88;
             // 
             // btnRefreshModelsDropdown
@@ -1233,7 +1373,7 @@
             this.btnRefreshModelsDropdown.ForeColor = System.Drawing.Color.White;
             this.btnRefreshModelsDropdown.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
             this.btnRefreshModelsDropdown.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
-            this.btnRefreshModelsDropdown.Location = new System.Drawing.Point(245, 2);
+            this.btnRefreshModelsDropdown.Location = new System.Drawing.Point(254, 5);
             this.btnRefreshModelsDropdown.Name = "btnRefreshModelsDropdown";
             this.btnRefreshModelsDropdown.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
             this.btnRefreshModelsDropdown.Size = new System.Drawing.Size(75, 23);
@@ -1250,9 +1390,9 @@
             this.comboxSdModel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.comboxSdModel.ForeColor = System.Drawing.Color.White;
             this.comboxSdModel.FormattingEnabled = true;
-            this.comboxSdModel.Location = new System.Drawing.Point(0, 4);
+            this.comboxSdModel.Location = new System.Drawing.Point(0, 7);
             this.comboxSdModel.Name = "comboxSdModel";
-            this.comboxSdModel.Size = new System.Drawing.Size(239, 21);
+            this.comboxSdModel.Size = new System.Drawing.Size(248, 21);
             this.comboxSdModel.TabIndex = 106;
             // 
             // btnOpenModelsFolder
@@ -1267,7 +1407,7 @@
             this.btnOpenModelsFolder.ForeColor = System.Drawing.Color.White;
             this.btnOpenModelsFolder.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
             this.btnOpenModelsFolder.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
-            this.btnOpenModelsFolder.Location = new System.Drawing.Point(326, 2);
+            this.btnOpenModelsFolder.Location = new System.Drawing.Point(335, 5);
             this.btnOpenModelsFolder.Name = "btnOpenModelsFolder";
             this.btnOpenModelsFolder.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
             this.btnOpenModelsFolder.Size = new System.Drawing.Size(75, 23);
@@ -1292,7 +1432,7 @@
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label10.ForeColor = System.Drawing.Color.White;
-            this.label10.Location = new System.Drawing.Point(5, 11);
+            this.label10.Location = new System.Drawing.Point(2, 11);
             this.label10.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(113, 13);
@@ -1357,7 +1497,7 @@
             this.label14.AutoSize = true;
             this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label14.ForeColor = System.Drawing.Color.White;
-            this.label14.Location = new System.Drawing.Point(5, 11);
+            this.label14.Location = new System.Drawing.Point(2, 11);
             this.label14.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(285, 13);
@@ -1422,7 +1562,7 @@
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(5, 11);
+            this.label2.Location = new System.Drawing.Point(2, 11);
             this.label2.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(368, 13);
@@ -1457,9 +1597,10 @@
             // 
             this.panel12.Controls.Add(this.comboxImplementation);
             this.panel12.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel12.Location = new System.Drawing.Point(413, 3);
+            this.panel12.Location = new System.Drawing.Point(410, 0);
+            this.panel12.Margin = new System.Windows.Forms.Padding(0);
             this.panel12.Name = "panel12";
-            this.panel12.Size = new System.Drawing.Size(404, 29);
+            this.panel12.Size = new System.Drawing.Size(410, 35);
             this.panel12.TabIndex = 86;
             // 
             // comboxImplementation
@@ -1470,9 +1611,9 @@
             this.comboxImplementation.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.comboxImplementation.ForeColor = System.Drawing.Color.White;
             this.comboxImplementation.FormattingEnabled = true;
-            this.comboxImplementation.Location = new System.Drawing.Point(0, 4);
+            this.comboxImplementation.Location = new System.Drawing.Point(0, 7);
             this.comboxImplementation.Name = "comboxImplementation";
-            this.comboxImplementation.Size = new System.Drawing.Size(401, 21);
+            this.comboxImplementation.Size = new System.Drawing.Size(410, 21);
             this.comboxImplementation.TabIndex = 107;
             this.comboxImplementation.SelectedIndexChanged += new System.EventHandler(this.comboxImplementation_SelectedIndexChanged);
             // 
@@ -1491,7 +1632,7 @@
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.ForeColor = System.Drawing.Color.White;
-            this.label4.Location = new System.Drawing.Point(5, 11);
+            this.label4.Location = new System.Drawing.Point(2, 11);
             this.label4.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(165, 13);
@@ -1512,7 +1653,7 @@
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(5, 19);
+            this.label1.Location = new System.Drawing.Point(2, 19);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(176, 16);
             this.label1.TabIndex = 0;
@@ -1525,138 +1666,6 @@
             this.toolTip.InitialDelay = 200;
             this.toolTip.ReshowDelay = 40;
             // 
-            // panelAutoSetResForInitImg
-            // 
-            this.panelAutoSetResForInitImg.Controls.Add(this.tableLayoutPanel14);
-            this.panelAutoSetResForInitImg.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelAutoSetResForInitImg.Location = new System.Drawing.Point(0, 540);
-            this.panelAutoSetResForInitImg.Name = "panelAutoSetResForInitImg";
-            this.panelAutoSetResForInitImg.Size = new System.Drawing.Size(820, 35);
-            this.panelAutoSetResForInitImg.TabIndex = 28;
-            // 
-            // tableLayoutPanel14
-            // 
-            this.tableLayoutPanel14.ColumnCount = 2;
-            this.tableLayoutPanel14.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel14.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel14.Controls.Add(this.panel37, 0, 0);
-            this.tableLayoutPanel14.Controls.Add(this.panel38, 0, 0);
-            this.tableLayoutPanel14.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel14.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel14.Name = "tableLayoutPanel14";
-            this.tableLayoutPanel14.RowCount = 1;
-            this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel14.Size = new System.Drawing.Size(820, 35);
-            this.tableLayoutPanel14.TabIndex = 2;
-            // 
-            // panel37
-            // 
-            this.panel37.Controls.Add(this.checkboxAutoSetResForInitImg);
-            this.panel37.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel37.Location = new System.Drawing.Point(410, 0);
-            this.panel37.Margin = new System.Windows.Forms.Padding(0);
-            this.panel37.Name = "panel37";
-            this.panel37.Size = new System.Drawing.Size(410, 35);
-            this.panel37.TabIndex = 88;
-            // 
-            // checkboxAutoSetResForInitImg
-            // 
-            this.checkboxAutoSetResForInitImg.AutoSize = true;
-            this.checkboxAutoSetResForInitImg.ForeColor = System.Drawing.Color.White;
-            this.checkboxAutoSetResForInitImg.Location = new System.Drawing.Point(8, 10);
-            this.checkboxAutoSetResForInitImg.Name = "checkboxAutoSetResForInitImg";
-            this.checkboxAutoSetResForInitImg.Size = new System.Drawing.Size(15, 14);
-            this.checkboxAutoSetResForInitImg.TabIndex = 111;
-            this.checkboxAutoSetResForInitImg.UseVisualStyleBackColor = true;
-            // 
-            // panel38
-            // 
-            this.panel38.Controls.Add(this.label18);
-            this.panel38.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel38.Location = new System.Drawing.Point(0, 0);
-            this.panel38.Margin = new System.Windows.Forms.Padding(0);
-            this.panel38.Name = "panel38";
-            this.panel38.Size = new System.Drawing.Size(410, 35);
-            this.panel38.TabIndex = 87;
-            // 
-            // label18
-            // 
-            this.label18.AutoSize = true;
-            this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label18.ForeColor = System.Drawing.Color.White;
-            this.label18.Location = new System.Drawing.Point(5, 11);
-            this.label18.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(259, 13);
-            this.label18.TabIndex = 85;
-            this.label18.Text = "Auto-Select Fitting Resolution After Loading an Image";
-            // 
-            // panelInitImageRetainAspectRatio
-            // 
-            this.panelInitImageRetainAspectRatio.Controls.Add(this.tableLayoutPanel15);
-            this.panelInitImageRetainAspectRatio.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelInitImageRetainAspectRatio.Location = new System.Drawing.Point(0, 575);
-            this.panelInitImageRetainAspectRatio.Name = "panelInitImageRetainAspectRatio";
-            this.panelInitImageRetainAspectRatio.Size = new System.Drawing.Size(820, 35);
-            this.panelInitImageRetainAspectRatio.TabIndex = 29;
-            // 
-            // tableLayoutPanel15
-            // 
-            this.tableLayoutPanel15.ColumnCount = 2;
-            this.tableLayoutPanel15.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel15.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel15.Controls.Add(this.panel39, 0, 0);
-            this.tableLayoutPanel15.Controls.Add(this.panel40, 0, 0);
-            this.tableLayoutPanel15.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel15.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel15.Name = "tableLayoutPanel15";
-            this.tableLayoutPanel15.RowCount = 1;
-            this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel15.Size = new System.Drawing.Size(820, 35);
-            this.tableLayoutPanel15.TabIndex = 2;
-            // 
-            // panel39
-            // 
-            this.panel39.Controls.Add(this.checkboxInitImageRetainAspectRatio);
-            this.panel39.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel39.Location = new System.Drawing.Point(410, 0);
-            this.panel39.Margin = new System.Windows.Forms.Padding(0);
-            this.panel39.Name = "panel39";
-            this.panel39.Size = new System.Drawing.Size(410, 35);
-            this.panel39.TabIndex = 88;
-            // 
-            // checkboxInitImageRetainAspectRatio
-            // 
-            this.checkboxInitImageRetainAspectRatio.AutoSize = true;
-            this.checkboxInitImageRetainAspectRatio.ForeColor = System.Drawing.Color.White;
-            this.checkboxInitImageRetainAspectRatio.Location = new System.Drawing.Point(8, 10);
-            this.checkboxInitImageRetainAspectRatio.Name = "checkboxInitImageRetainAspectRatio";
-            this.checkboxInitImageRetainAspectRatio.Size = new System.Drawing.Size(15, 14);
-            this.checkboxInitImageRetainAspectRatio.TabIndex = 111;
-            this.checkboxInitImageRetainAspectRatio.UseVisualStyleBackColor = true;
-            // 
-            // panel40
-            // 
-            this.panel40.Controls.Add(this.label19);
-            this.panel40.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel40.Location = new System.Drawing.Point(0, 0);
-            this.panel40.Margin = new System.Windows.Forms.Padding(0);
-            this.panel40.Name = "panel40";
-            this.panel40.Size = new System.Drawing.Size(410, 35);
-            this.panel40.TabIndex = 87;
-            // 
-            // label19
-            // 
-            this.label19.AutoSize = true;
-            this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label19.ForeColor = System.Drawing.Color.White;
-            this.label19.Location = new System.Drawing.Point(5, 11);
-            this.label19.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(304, 13);
-            this.label19.TabIndex = 85;
-            this.label19.Text = "Retain Aspect Ratio of Initialization Image (If It Needs Resizing)";
-            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1667,7 +1676,7 @@
             this.Controls.Add(this.parentPanel);
             this.Controls.Add(this.titleLabel);
             this.ForeColor = System.Drawing.Color.White;
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
             this.MaximizeBox = false;
@@ -1692,6 +1701,18 @@
             this.panel16.PerformLayout();
             this.panel17.ResumeLayout(false);
             this.panel17.PerformLayout();
+            this.panelInitImageRetainAspectRatio.ResumeLayout(false);
+            this.tableLayoutPanel15.ResumeLayout(false);
+            this.panel39.ResumeLayout(false);
+            this.panel39.PerformLayout();
+            this.panel40.ResumeLayout(false);
+            this.panel40.PerformLayout();
+            this.panelAutoSetResForInitImg.ResumeLayout(false);
+            this.tableLayoutPanel14.ResumeLayout(false);
+            this.panel37.ResumeLayout(false);
+            this.panel37.PerformLayout();
+            this.panel38.ResumeLayout(false);
+            this.panel38.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panelSaveUnprocessedImages.ResumeLayout(false);
@@ -1770,18 +1791,6 @@
             this.panel13.PerformLayout();
             this.panel11.ResumeLayout(false);
             this.panel11.PerformLayout();
-            this.panelAutoSetResForInitImg.ResumeLayout(false);
-            this.tableLayoutPanel14.ResumeLayout(false);
-            this.panel37.ResumeLayout(false);
-            this.panel37.PerformLayout();
-            this.panel38.ResumeLayout(false);
-            this.panel38.PerformLayout();
-            this.panelInitImageRetainAspectRatio.ResumeLayout(false);
-            this.tableLayoutPanel15.ResumeLayout(false);
-            this.panel39.ResumeLayout(false);
-            this.panel39.PerformLayout();
-            this.panel40.ResumeLayout(false);
-            this.panel40.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 

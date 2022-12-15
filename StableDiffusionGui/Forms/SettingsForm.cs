@@ -64,18 +64,11 @@ namespace StableDiffusionGui.Forms
             Task.Run(() => LoadGpus());
             Task.Run(() => LoadImplementations());
             UpdateComboxStates();
-            _ready = true;
             Opacity = 1;
         }
 
         private void SettingsForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (!_ready)
-            {
-                e.Cancel = true;
-                return;
-            }
-
             SaveSettings();
             Ui.MainForm.FormControls.RefreshUiAfterSettingsChanged();
         }
@@ -108,7 +101,7 @@ namespace StableDiffusionGui.Forms
         private async Task LoadGpus()
         {
             comboxCudaDevice.Items.Clear();
-            comboxCudaDevice.Items.Add("Loading...");
+            comboxCudaDevice.Items.Add("Loading CUDA devices...");
             comboxCudaDevice.SelectedIndex = 0;
 
             var gpus = await GpuUtils.GetCudaGpusCached();
@@ -167,7 +160,7 @@ namespace StableDiffusionGui.Forms
 
         void SaveSettings()
         {
-            ConfigParser.SaveComboxIndex(comboxImplementation, Config.Keys.ImplementationIdx);
+            if(!comboxImplementation.Text.StartsWith("Loading")) ConfigParser.SaveComboxIndex(comboxImplementation, Config.Keys.ImplementationIdx);
             ConfigParser.SaveGuiElement(checkboxFullPrecision, Config.Keys.FullPrecision);
             ConfigParser.SaveGuiElement(checkboxFolderPerPrompt, Config.Keys.FolderPerPrompt);
             ConfigParser.SaveGuiElement(checkboxOutputIgnoreWildcards, Config.Keys.FilenameIgnoreWildcards);
@@ -181,9 +174,9 @@ namespace StableDiffusionGui.Forms
             ConfigParser.SaveGuiElement(checkboxModelInFilename, Config.Keys.ModelInFilename);
             ConfigParser.SaveGuiElement(textboxOutPath, Config.Keys.OutPath);
             ConfigParser.SaveGuiElement(textboxFavsPath, Config.Keys.FavsPath);
-            ConfigParser.SaveGuiElement(comboxSdModel, Config.Keys.Model);
-            ConfigParser.SaveGuiElement(comboxSdModelVae, Config.Keys.ModelVae);
-            ConfigParser.SaveComboxIndex(comboxCudaDevice, Config.Keys.CudaDeviceIdx);
+            if(!string.IsNullOrWhiteSpace(comboxSdModel.Text)) ConfigParser.SaveGuiElement(comboxSdModel, Config.Keys.Model);
+            if (!string.IsNullOrWhiteSpace(comboxSdModelVae.Text)) ConfigParser.SaveGuiElement(comboxSdModelVae, Config.Keys.ModelVae);
+            if (!comboxCudaDevice.Text.StartsWith("Loading")) ConfigParser.SaveComboxIndex(comboxCudaDevice, Config.Keys.CudaDeviceIdx);
             ConfigParser.SaveComboxIndex(comboxNotify, Config.Keys.NotifyModeIdx);
             ConfigParser.SaveGuiElement(checkboxSaveUnprocessedImages, Config.Keys.SaveUnprocessedImages);
             ConfigParser.SaveGuiElement(checkboxUnloadModel, Config.Keys.UnloadModel);
