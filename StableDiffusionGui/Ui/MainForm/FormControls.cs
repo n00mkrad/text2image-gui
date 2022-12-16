@@ -72,7 +72,7 @@ namespace StableDiffusionGui.Ui.MainForm
             F.comboxResH.SetItems(MainUi.Resolutions.Where(x => x <= (adv ? 2048 : 1024)).Select(x => x.ToString()), UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.Last);
         }
 
-        public static void OpenLogsMenu ()
+        public static void OpenLogsMenu()
         {
             F.menuStripLogs.Items.Clear();
             var openLogs = F.menuStripLogs.Items.Add($"Open Logs Folder");
@@ -115,7 +115,7 @@ namespace StableDiffusionGui.Ui.MainForm
             RefreshUiAfterSettingsChanged();
         }
 
-        public static void HandleImageViewerClick (bool rightClick)
+        public static void HandleImageViewerClick(bool rightClick)
         {
             F.pictBoxImgViewer.Focus();
 
@@ -155,7 +155,7 @@ namespace StableDiffusionGui.Ui.MainForm
                 {
                     Logger.Log($"Failed to set taskbar progress: {ex.Message}", true);
                 }
-            } 
+            }
         }
 
         public static void SetHiresFixVisible()

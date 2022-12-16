@@ -379,7 +379,7 @@
             // 
             this.checkboxAdvancedMode.AutoSize = true;
             this.checkboxAdvancedMode.ForeColor = System.Drawing.Color.White;
-            this.checkboxAdvancedMode.Location = new System.Drawing.Point(8, 10);
+            this.checkboxAdvancedMode.Location = new System.Drawing.Point(5, 10);
             this.checkboxAdvancedMode.Name = "checkboxAdvancedMode";
             this.checkboxAdvancedMode.Size = new System.Drawing.Size(15, 14);
             this.checkboxAdvancedMode.TabIndex = 111;
@@ -445,7 +445,7 @@
             // 
             this.checkboxInitImageRetainAspectRatio.AutoSize = true;
             this.checkboxInitImageRetainAspectRatio.ForeColor = System.Drawing.Color.White;
-            this.checkboxInitImageRetainAspectRatio.Location = new System.Drawing.Point(8, 10);
+            this.checkboxInitImageRetainAspectRatio.Location = new System.Drawing.Point(5, 10);
             this.checkboxInitImageRetainAspectRatio.Name = "checkboxInitImageRetainAspectRatio";
             this.checkboxInitImageRetainAspectRatio.Size = new System.Drawing.Size(15, 14);
             this.checkboxInitImageRetainAspectRatio.TabIndex = 111;
@@ -511,7 +511,7 @@
             // 
             this.checkboxAutoSetResForInitImg.AutoSize = true;
             this.checkboxAutoSetResForInitImg.ForeColor = System.Drawing.Color.White;
-            this.checkboxAutoSetResForInitImg.Location = new System.Drawing.Point(8, 10);
+            this.checkboxAutoSetResForInitImg.Location = new System.Drawing.Point(5, 10);
             this.checkboxAutoSetResForInitImg.Name = "checkboxAutoSetResForInitImg";
             this.checkboxAutoSetResForInitImg.Size = new System.Drawing.Size(15, 14);
             this.checkboxAutoSetResForInitImg.TabIndex = 111;
@@ -615,7 +615,7 @@
             // 
             this.checkboxSaveUnprocessedImages.AutoSize = true;
             this.checkboxSaveUnprocessedImages.ForeColor = System.Drawing.Color.White;
-            this.checkboxSaveUnprocessedImages.Location = new System.Drawing.Point(8, 10);
+            this.checkboxSaveUnprocessedImages.Location = new System.Drawing.Point(5, 10);
             this.checkboxSaveUnprocessedImages.Name = "checkboxSaveUnprocessedImages";
             this.checkboxSaveUnprocessedImages.Size = new System.Drawing.Size(15, 14);
             this.checkboxSaveUnprocessedImages.TabIndex = 111;
@@ -699,7 +699,7 @@
             // 
             this.checkboxMultiPromptsSameSeed.AutoSize = true;
             this.checkboxMultiPromptsSameSeed.ForeColor = System.Drawing.Color.White;
-            this.checkboxMultiPromptsSameSeed.Location = new System.Drawing.Point(8, 10);
+            this.checkboxMultiPromptsSameSeed.Location = new System.Drawing.Point(5, 10);
             this.checkboxMultiPromptsSameSeed.Name = "checkboxMultiPromptsSameSeed";
             this.checkboxMultiPromptsSameSeed.Size = new System.Drawing.Size(15, 14);
             this.checkboxMultiPromptsSameSeed.TabIndex = 111;
@@ -861,7 +861,7 @@
             // 
             this.checkboxModelInFilename.AutoSize = true;
             this.checkboxModelInFilename.ForeColor = System.Drawing.Color.White;
-            this.checkboxModelInFilename.Location = new System.Drawing.Point(259, 10);
+            this.checkboxModelInFilename.Location = new System.Drawing.Point(256, 10);
             this.checkboxModelInFilename.Name = "checkboxModelInFilename";
             this.checkboxModelInFilename.Size = new System.Drawing.Size(55, 17);
             this.checkboxModelInFilename.TabIndex = 115;
@@ -872,7 +872,7 @@
             // 
             this.checkboxSamplerInFilename.AutoSize = true;
             this.checkboxSamplerInFilename.ForeColor = System.Drawing.Color.White;
-            this.checkboxSamplerInFilename.Location = new System.Drawing.Point(189, 10);
+            this.checkboxSamplerInFilename.Location = new System.Drawing.Point(186, 10);
             this.checkboxSamplerInFilename.Name = "checkboxSamplerInFilename";
             this.checkboxSamplerInFilename.Size = new System.Drawing.Size(64, 17);
             this.checkboxSamplerInFilename.TabIndex = 114;
@@ -883,7 +883,7 @@
             // 
             this.checkboxScaleInFilename.AutoSize = true;
             this.checkboxScaleInFilename.ForeColor = System.Drawing.Color.White;
-            this.checkboxScaleInFilename.Location = new System.Drawing.Point(130, 10);
+            this.checkboxScaleInFilename.Location = new System.Drawing.Point(127, 10);
             this.checkboxScaleInFilename.Name = "checkboxScaleInFilename";
             this.checkboxScaleInFilename.Size = new System.Drawing.Size(53, 17);
             this.checkboxScaleInFilename.TabIndex = 113;
@@ -894,7 +894,7 @@
             // 
             this.checkboxSeedInFilename.AutoSize = true;
             this.checkboxSeedInFilename.ForeColor = System.Drawing.Color.White;
-            this.checkboxSeedInFilename.Location = new System.Drawing.Point(73, 10);
+            this.checkboxSeedInFilename.Location = new System.Drawing.Point(70, 10);
             this.checkboxSeedInFilename.Name = "checkboxSeedInFilename";
             this.checkboxSeedInFilename.Size = new System.Drawing.Size(51, 17);
             this.checkboxSeedInFilename.TabIndex = 112;
@@ -905,7 +905,7 @@
             // 
             this.checkboxPromptInFilename.AutoSize = true;
             this.checkboxPromptInFilename.ForeColor = System.Drawing.Color.White;
-            this.checkboxPromptInFilename.Location = new System.Drawing.Point(8, 10);
+            this.checkboxPromptInFilename.Location = new System.Drawing.Point(5, 10);
             this.checkboxPromptInFilename.Name = "checkboxPromptInFilename";
             this.checkboxPromptInFilename.Size = new System.Drawing.Size(59, 17);
             this.checkboxPromptInFilename.TabIndex = 111;
@@ -974,7 +974,7 @@
             // 
             this.checkboxOutputIgnoreWildcards.AutoSize = true;
             this.checkboxOutputIgnoreWildcards.ForeColor = System.Drawing.Color.White;
-            this.checkboxOutputIgnoreWildcards.Location = new System.Drawing.Point(140, 10);
+            this.checkboxOutputIgnoreWildcards.Location = new System.Drawing.Point(137, 10);
             this.checkboxOutputIgnoreWildcards.Name = "checkboxOutputIgnoreWildcards";
             this.checkboxOutputIgnoreWildcards.Size = new System.Drawing.Size(106, 17);
             this.checkboxOutputIgnoreWildcards.TabIndex = 113;
@@ -987,7 +987,7 @@
             // 
             this.checkboxFolderPerSession.AutoSize = true;
             this.checkboxFolderPerSession.ForeColor = System.Drawing.Color.White;
-            this.checkboxFolderPerSession.Location = new System.Drawing.Point(252, 10);
+            this.checkboxFolderPerSession.Location = new System.Drawing.Point(249, 10);
             this.checkboxFolderPerSession.Name = "checkboxFolderPerSession";
             this.checkboxFolderPerSession.Size = new System.Drawing.Size(130, 17);
             this.checkboxFolderPerSession.TabIndex = 112;
@@ -1000,7 +1000,7 @@
             // 
             this.checkboxFolderPerPrompt.AutoSize = true;
             this.checkboxFolderPerPrompt.ForeColor = System.Drawing.Color.White;
-            this.checkboxFolderPerPrompt.Location = new System.Drawing.Point(8, 10);
+            this.checkboxFolderPerPrompt.Location = new System.Drawing.Point(5, 10);
             this.checkboxFolderPerPrompt.Name = "checkboxFolderPerPrompt";
             this.checkboxFolderPerPrompt.Size = new System.Drawing.Size(126, 17);
             this.checkboxFolderPerPrompt.TabIndex = 111;
@@ -1476,7 +1476,7 @@
             // checkboxUnloadModel
             // 
             this.checkboxUnloadModel.AutoSize = true;
-            this.checkboxUnloadModel.Location = new System.Drawing.Point(8, 10);
+            this.checkboxUnloadModel.Location = new System.Drawing.Point(5, 10);
             this.checkboxUnloadModel.Name = "checkboxUnloadModel";
             this.checkboxUnloadModel.Size = new System.Drawing.Size(15, 14);
             this.checkboxUnloadModel.TabIndex = 86;
@@ -1541,7 +1541,7 @@
             // checkboxFullPrecision
             // 
             this.checkboxFullPrecision.AutoSize = true;
-            this.checkboxFullPrecision.Location = new System.Drawing.Point(8, 10);
+            this.checkboxFullPrecision.Location = new System.Drawing.Point(5, 10);
             this.checkboxFullPrecision.Name = "checkboxFullPrecision";
             this.checkboxFullPrecision.Size = new System.Drawing.Size(15, 14);
             this.checkboxFullPrecision.TabIndex = 86;

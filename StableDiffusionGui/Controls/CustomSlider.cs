@@ -39,7 +39,7 @@ namespace StableDiffusionGui.Controls
         public float ActualValueFloat { get { return (float)ActualValue; } }
 
         private decimal _valueStep = 0.2m;
-        public decimal ValueStep { get { return _valueStep; } set { _valueStep = value; UpdateProperties(); } }
+        public decimal ValueStep { get { return _valueStep; } set { var oldVal = ActualValue; _valueStep = value; UpdateProperties(); ActualValue = oldVal; } }
 
         private decimal _actualMinimum = 0.2m;
         public decimal ActualMinimum { get { return _actualMinimum; } set { _actualMinimum = value; UpdateProperties(); } }
