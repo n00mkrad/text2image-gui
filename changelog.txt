@@ -6,6 +6,8 @@ SD GUI 1.8.0 Changelog:
 - New: Initialization image can be previewed by Shift+Hovering over the filename in the GUI
 - New: Generation resolution is automatically set to init image size if it doesn't match
 - New: Pop-Up Image Viewer now has an option to enable Slideshow Mode by default
+- New: Model converter (Dev Tools) to convert between Pytorch, Diffusers, ONNX, Safetensors
+- New: Image Import window has a new option to use metadata plus the image itself as init image
 - Improved: Image Viewer now has hotkeys Ctrl+Left/Ctrl+Right for previous/next image
 - Improved: Image Viewer hotkeys (copy, open, etc.) now also work in pop-up viewer
 - Improved: Mask Editor can be resized, is no longer locked to the init image size
@@ -15,10 +17,16 @@ SD GUI 1.8.0 Changelog:
 - Improved: Prompt History now has a limit of 500 entries to avoid long loading times
 - Improved: Prompt Queue now behaves like a queue, not like a stack (FIFO)
 - Improved: Welcome Screen (MOTD) can now be disabled after it's been shown once per version
+- Improved: Image Import window now shows resolution, import actions are a dropdown to avoid button clutter
+- Improved: Mask Editor performance is better now, blur is only applied after releasing mouse
+- Improved: User can now ignore the Dreambooth VRAM warning, in case it was reported incorrectly etc.
 - Fixed: Post-processing after generation would cause a soft-lock
 - Fixed: Loading settings from prompt history sets incorrect values
 - Fixed: Broken or malicious model files would cause an unhandled exception
 - Fixed: Using a concept with <Name> syntax would show warning about missing placeholder
+- Fixed: InvokeAI CLI wouldn't open if GUI image generation was cancelled before
+- Fixed: Unhandled error when trying to use init images that no longer exist
+- Fixed: GUI would freeze if no model files exist in models folder(s)
 
 
 SD GUI 1.7.2 Changelog:
