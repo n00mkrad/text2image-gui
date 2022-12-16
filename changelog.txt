@@ -17,9 +17,9 @@ SD GUI 1.8.0 Changelog:
 - Improved: Prompt History now has a limit of 500 entries to avoid long loading times
 - Improved: Prompt Queue now behaves like a queue, not like a stack (FIFO)
 - Improved: Welcome Screen (MOTD) can now be disabled after it's been shown once per version
-- Improved: Image Import window now shows resolution, import actions are a dropdown to avoid button clutter
+- Improved: Image Import window now shows resolution, import actions are a dropdown to avoid clutter
 - Improved: Mask Editor performance is better now, blur is only applied after releasing mouse
-- Improved: User can now ignore the Dreambooth VRAM warning, in case it was reported incorrectly etc.
+- Improved: User can now ignore the Dreambooth VRAM warning
 - Fixed: Post-processing after generation would cause a soft-lock
 - Fixed: Loading settings from prompt history sets incorrect values
 - Fixed: Broken or malicious model files would cause an unhandled exception
