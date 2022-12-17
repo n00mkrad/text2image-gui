@@ -33,7 +33,7 @@ namespace StableDiffusionGui.Forms
             else
             {
                 checkboxDoNotShow.Visible = true;
-                Config.Set(Config.Keys.HideMotd, false.ToString());
+                Config.Set(Config.Keys.HideMotd, false);
             }
         }
 
@@ -60,7 +60,7 @@ namespace StableDiffusionGui.Forms
 
         private void WelcomeForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Config.Set(Config.Keys.HideMotd, checkboxDoNotShow.Checked.ToString());
+            Config.Set(Config.Keys.HideMotd, checkboxDoNotShow.Checked);
         }
     }
 }
