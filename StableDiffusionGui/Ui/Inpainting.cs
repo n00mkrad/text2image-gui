@@ -15,6 +15,7 @@ namespace StableDiffusionGui.Ui
     internal class Inpainting
     {
         public static string MaskImagePath { get { return Path.Combine(Paths.GetSessionDataPath(), "inpaint-mask.png"); } }
+        public static string MaskImagePathDiffusers { get { return Path.Combine(Paths.GetSessionDataPath(), "inpaint-mask-dif.png"); } }
         public static string MaskedImagePath { get { return Path.Combine(Paths.GetSessionDataPath(), "inpaint-masked.png"); } }
 
         private static Image _currentMask;
@@ -76,9 +77,14 @@ namespace StableDiffusionGui.Ui
             if (CurrentMask.Size != img.Size)
                 CurrentMask = ImgUtils.ResizeImage(CurrentMask, img.Size);
 
-            CurrentMask.Save(MaskImagePath, System.Drawing.Imaging.ImageFormat.Png);
+            CurrentMask.Save(MaskImagePath, System.Drawing.Imaging.ImageFormat.Png); // Save mask (black = inpaint, transparent = keep)
             MagickImage maskedOverlay = ImgUtils.AlphaMask(ImgUtils.GetMagickImage(img), ImgUtils.GetMagickImage(CurrentMask), true);
-            maskedOverlay.Write(MaskedImagePath);
+            maskedOverlay.Write(MaskedImagePath); // Save overlay mask (image with mask cutout)
+
+            MagickImage maskDiffusers = ImgUtils.RemoveTransparency(ImgUtils.GetMagickImage(CurrentMask), ImgUtils.NoAlphaMode.Fill, MagickColors.White);
+            maskDiffusers = ImgUtils.Invert(maskDiffusers);
+            maskDiffusers.Write(MaskImagePathDiffusers); // Safe diffusers mask (white = inpaint, black = keep)
+            maskDiffusers.Dispose();
         }
 
         public static void EditCurrentMask (Image image)

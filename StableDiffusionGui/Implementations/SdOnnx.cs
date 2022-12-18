@@ -3,6 +3,7 @@ using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
+using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -12,6 +13,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
 namespace StableDiffusionGui.Implementations
 {
@@ -32,6 +34,7 @@ namespace StableDiffusionGui.Implementations
                 var seamless = parameters.FromJson<Enums.StableDiffusion.SeamlessMode>("seamless");
                 string model = parameters.FromJson<string>("model");
                 bool lockSeed = parameters.FromJson<bool>("lockSeed");
+                InpaintMode inpaint = parameters.FromJson<InpaintMode>("inpainting");
 
                 var cachedModels = Paths.GetModels(Enums.StableDiffusion.ModelType.Normal, Enums.StableDiffusion.Implementation.DiffusersOnnx);
                 Model modelDir = TtiUtils.CheckIfCurrentSdModelExists();
@@ -57,6 +60,7 @@ namespace StableDiffusionGui.Implementations
                     {
                         args["initImg"] = "";
                         args["initStrength"] = "0";
+                        args["inpaintMask"] = "";
                         args["prompt"] = processedPrompts[i];
                         args["negprompt"] = negPrompt;
                         args["w"] = $"{res.Width}";
@@ -83,6 +87,10 @@ namespace StableDiffusionGui.Implementations
                                         {
                                             args["initImg"] = initImg;
                                             args["initStrength"] = strength.ToStringDot("0.###");
+
+                                            if (inpaint == InpaintMode.ImageMask)
+                                                args["inpaintMask"] = Inpainting.MaskImagePathDiffusers;
+
                                             argLists.Add(new Dictionary<string, string>(args));
                                         }
                                     }
@@ -106,18 +114,26 @@ namespace StableDiffusionGui.Implementations
                 //string argsStartup = Args.InvokeAi.GetArgsStartup(embedding);
 
                 string initsStr = initImages != null ? $" and {initImages.Count} image{(initImages.Count != 1 ? "s" : "")} using {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
-                Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} * {iterations} image{(iterations != 1 ? "s" : "")} * {steps.Length} step count{(steps.Length != 1 ? "s" : "")} * {scales.Length} scale{(scales.Length != 1 ? "s" : "")}{initsStr} = {argLists.Count} images total.");
+                Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} * {iterations} image{(iterations != 1 ? "s" : "")} * {steps.Length} step value{(steps.Length != 1 ? "s" : "")} * {scales.Length} scale{(scales.Length != 1 ? "s" : "")}{initsStr} = {argLists.Count} images total.");
 
                 PatchDiffusersIfNeeded();
 
                 Process py = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
                 TextToImage.CurrentTask.Processes.Add(py);
 
-                string i2iArg = initImgs != null && initImgs.Length > 0 ? "-i" : "";
+                string mode = "txt2img";
+
+                if(initImgs != null && initImgs.Length > 0)
+                {
+                    mode = "img2img";
+
+                    if (inpaint != InpaintMode.Disabled)
+                        mode = "inpaint";
+                }
 
                 py.StartInfo.RedirectStandardInput = true;
                 py.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand()} && " +
-                    $"python \"{Constants.Dirs.SdRepo}/sd_onnx/sd_onnx.py\" -m {modelDir.FullName.Wrap(true)} -j {jsonPath.Wrap(true)} -o {outPath.Wrap(true)} {i2iArg}";
+                    $"python \"{Constants.Dirs.SdRepo}/sd_onnx/sd_onnx.py\" -m {modelDir.FullName.Wrap(true)} -j {jsonPath.Wrap(true)} -o {outPath.Wrap(true)} -mode {mode}";
 
                 Logger.Log("cmd.exe " + py.StartInfo.Arguments, true);
 
