@@ -16,7 +16,7 @@ namespace StableDiffusionGui.Installation
     {
         private static readonly string _gitFile = "n00mkrad/stable-diffusion-cust.git";
         private static readonly string _gitBranch = "main";
-        private static readonly string _gitCommit = "9cbb400d4ec43b482ae640de170c8d90842fb99e";
+        private static readonly string _gitCommit = "65f977c488537a3ff9ae210edc7dc20f67167f9a";
 
         private static bool ReplaceUiLogLine { get { return Logger.LastUiLine.EndsWith("..."); } }
 
