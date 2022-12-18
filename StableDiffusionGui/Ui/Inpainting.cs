@@ -28,6 +28,7 @@ namespace StableDiffusionGui.Ui
             }
         }
 
+        public static Image CurrentRawMask;
         public static int CurrentBlurValue = -1;
 
         /// <returns> If inpainting was enabled </returns>
@@ -82,7 +83,7 @@ namespace StableDiffusionGui.Ui
 
         public static void EditCurrentMask (Image image)
         {
-            var maskForm = new Forms.DrawForm(image, CurrentMask);
+            var maskForm = new Forms.DrawForm(image, CurrentRawMask);
             maskForm.ShowDialogForm();
             CurrentMask = maskForm.Mask;
         }

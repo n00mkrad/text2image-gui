@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using StableDiffusionGui.Ui.DrawForm;
+using System.Runtime.InteropServices;
 
 namespace StableDiffusionGui.Forms
 {
@@ -177,6 +178,11 @@ namespace StableDiffusionGui.Forms
         private void undoToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FormUtils.HistoryUndo();
+        }
+
+        private void DrawForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Inpainting.CurrentRawMask = RawMask;
         }
     }
 }

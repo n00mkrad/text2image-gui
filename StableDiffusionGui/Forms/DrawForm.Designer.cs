@@ -379,6 +379,7 @@
             this.Load += new System.EventHandler(this.DrawForm_Load);
             this.Shown += new System.EventHandler(this.DrawForm_Shown);
             this.SizeChanged += new System.EventHandler(this.DrawForm_SizeChanged);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.DrawForm_FormClosing);
             this.menuStripOptions.ResumeLayout(false);
             this.panelBlur.ResumeLayout(false);
             this.panelBlur.PerformLayout();
