@@ -69,16 +69,33 @@ namespace StableDiffusionGui.Installation
             return hasEsrgan && hasGfp && hasCf;
         }
 
-        public static bool HasOnnx()
+        public static bool HasOnnx(bool fast = true)
         {
-            List<string> modules = OsUtils.GetPythonPkgList().Result;
-            return modules.Contains("onnx") && modules.Contains("onnxruntime") && modules.Contains("onnxruntime-directml") && modules.Contains("diffusers");
+            if (fast)
+            {
+                bool diffusers = Directory.Exists(Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdVenv, "Lib", "site-packages", "diffusers"));
+                bool onnx = Directory.Exists(Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdVenv, "Lib", "site-packages", "onnx"));
+                bool onnxruntime = Directory.Exists(Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdVenv, "Lib", "site-packages", "onnxruntime"));
+                return diffusers && onnx && onnxruntime;
+            }
+            else
+            {
+                List<string> modules = OsUtils.GetPythonPkgList().Result;
+                return modules.Contains("onnx") && modules.Contains("onnxruntime") && modules.Contains("onnxruntime-directml") && modules.Contains("diffusers");
+            }
         }
 
-        public static async Task<bool> HasOnnxAsync()
+        public static async Task<bool> HasOnnxAsync(bool fast = false)
         {
-            List<string> modules = await OsUtils.GetPythonPkgList();
-            return modules.Contains("onnx") && modules.Contains("onnxruntime") && modules.Contains("onnxruntime-directml") && modules.Contains("diffusers");
+            if (fast)
+            {
+                return HasOnnx(true);
+            }
+            else
+            {
+                List<string> modules = await OsUtils.GetPythonPkgList();
+                return modules.Contains("onnx") && modules.Contains("onnxruntime") && modules.Contains("onnxruntime-directml") && modules.Contains("diffusers");
+            }
         }
     }
 }

@@ -124,7 +124,7 @@ namespace StableDiffusionGui.Forms
 
             var disabledImplementations = new List<Implementation>();
 
-            if (!(await InstallationStatus.HasOnnxAsync()))
+            if (!(await InstallationStatus.HasOnnxAsync(true)))
                 disabledImplementations.Add(Implementation.DiffusersOnnx);
 
             comboxImplementation.FillFromEnum<Implementation>(Strings.Implementation, -1, disabledImplementations);
