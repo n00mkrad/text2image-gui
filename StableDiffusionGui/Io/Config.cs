@@ -198,6 +198,7 @@ namespace StableDiffusionGui.Io
             public const string ConvertModelsDeleteInput = "convertModelsDeleteInput";
             public const string AutoSetResForInitImg = "autoSetResForInitImg";
             public const string InitImageRetainAspectRatio = "initImageRetainAspectRatio";
+            public const string HiresFix = "hiresFix";
         }
     }
 }

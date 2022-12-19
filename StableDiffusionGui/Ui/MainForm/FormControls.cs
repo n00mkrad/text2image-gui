@@ -43,6 +43,7 @@ namespace StableDiffusionGui.Ui.MainForm
             ConfigParser.LoadGuiElement(F.comboxResH, Config.Keys.ResH);
             ConfigParser.LoadComboxIndex(F.comboxSampler, Config.Keys.Sampler);
             ConfigParser.LoadGuiElement(F.sliderInitStrength, Config.Keys.InitStrength);
+            ConfigParser.LoadGuiElement(F.checkboxHiresFix, Config.Keys.HiresFix);
         }
 
         public static void Save()
@@ -54,6 +55,7 @@ namespace StableDiffusionGui.Ui.MainForm
             ConfigParser.SaveGuiElement(F.comboxResH, Config.Keys.ResH);
             ConfigParser.SaveComboxIndex(F.comboxSampler, Config.Keys.Sampler);
             ConfigParser.SaveGuiElement(F.sliderInitStrength, Config.Keys.InitStrength);
+            ConfigParser.SaveGuiElement(F.checkboxHiresFix, Config.Keys.HiresFix);
         }
 
         public static void RefreshUiAfterSettingsChanged()
