@@ -118,7 +118,7 @@ namespace StableDiffusionGui.Io
                 case Keys.FullPrecision: Set(key, GpuUtils.CachedGpus.Count > 0 && GpuUtils.CachedGpus[0].FullName.Contains(" GTX 16")); return true;
                 case Keys.InitStrength: Set(key, 0.5f); return true;
                 case Keys.Iterations: Set(key, 5); return true;
-                case Keys.MedVramDisablePostProcessing: Set(key, true); return true;
+                case Keys.MedVramDisablePostProcessing: Set(key, false); return true;
                 case Keys.MedVramFreeGpuMem: Set(key, true); return true;
                 case Keys.Model: try { Set(key, Paths.GetModels(Enums.StableDiffusion.ModelType.Normal).Select(x => x.Name).First()); } catch { Set(key, ""); } return true;
                 case Keys.ModelInFilename: Set(key, true); return true;

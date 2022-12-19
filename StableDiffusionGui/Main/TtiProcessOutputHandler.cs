@@ -215,7 +215,7 @@ namespace StableDiffusionGui.Main
 
             if (_hasErrored)
             {
-                TextToImage.Cancel($"TTI Process has errored: {errMsg}", false);
+                TextToImage.Cancel($"Process has errored: {errMsg}", false);
 
                 if (!string.IsNullOrWhiteSpace(errMsg))
                     Task.Run(() => UiUtils.ShowMessageBox(errMsg, UiUtils.MessageType.Error));
