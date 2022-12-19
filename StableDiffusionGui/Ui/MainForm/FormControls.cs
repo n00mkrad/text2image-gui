@@ -162,7 +162,7 @@ namespace StableDiffusionGui.Ui.MainForm
         {
             bool txt2img = MainUi.CurrentInitImgPaths == null;
             bool compatible = CurrImpl == Implementation.InvokeAi;
-            F.checkboxHiresFix.Visible = F.comboxResW.GetInt() > 512 && F.comboxResH.GetInt() > 512 && txt2img && compatible;
+            F.checkboxHiresFix.Visible = F.comboxResW.GetInt() > 512 || F.comboxResH.GetInt() > 512 && txt2img && compatible;
         }
     }
 }
