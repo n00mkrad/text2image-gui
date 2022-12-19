@@ -19,22 +19,27 @@ namespace StableDiffusionGui.Forms
         public Bitmap RawMask;
 
         public List<Bitmap> History = new List<Bitmap>();
-        public int HistoryLimit = 200;
+        private readonly int _historyLimit = 200; // Reference value for 512x512
+        public int HistoryLimitNormalized; // Adjusted for resolution to avoid higher than expected RAM usage
+        public bool DisableBlurOption;
 
-        public DrawForm(Image background, Image mask = null)
+        public DrawForm(Image background, Image mask = null, bool disableBlurOption = false)
         {
             FormControls.F = this;
             FormUtils.F = this;
-
             FormUtils.Reset();
 
             Opacity = 0;
             BackgroundImg = background;
+            DisableBlurOption = disableBlurOption;
 
             if (mask != null)
                 RawMask = mask as Bitmap;
             else
                 RawMask = new Bitmap(BackgroundImg.Width, BackgroundImg.Height);
+
+            float pixelCountFactor = (512 * 512) / (float)(BackgroundImg.Width * BackgroundImg.Height);
+            HistoryLimitNormalized = (_historyLimit * pixelCountFactor).RoundToInt().Clamp(10, _historyLimit * 2);
 
             FormUtils.HistorySave();
             InitializeComponent();
@@ -54,10 +59,18 @@ namespace StableDiffusionGui.Forms
             tableLayoutPanelImg.ColumnStyles.Cast<ColumnStyle>().ToList().ForEach(s => s.SizeType = SizeType.Absolute);
             tableLayoutPanelImg.RowStyles.Cast<RowStyle>().ToList().ForEach(s => s.SizeType = SizeType.Absolute);
 
-            if (Inpainting.CurrentBlurValue >= 0)
-                sliderBlur.Value = Inpainting.CurrentBlurValue;
+            if (DisableBlurOption)
+            {
+                sliderBlur.Visible = false;
+                Inpainting.CurrentBlurValue = 0;
+            }
             else
-                Inpainting.CurrentBlurValue = sliderBlur.Value;
+            {
+                if (Inpainting.CurrentBlurValue >= 0)
+                    sliderBlur.Value = Inpainting.CurrentBlurValue;
+                else
+                    Inpainting.CurrentBlurValue = sliderBlur.Value;
+            }
 
             pictBox.BackgroundImage = BackgroundImg;
             FormControls.SetPictureBoxPadding();

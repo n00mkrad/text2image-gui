@@ -51,6 +51,7 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanelImg = new System.Windows.Forms.TableLayoutPanel();
             this.pictBox = new System.Windows.Forms.PictureBox();
+            this.labelBlurNotAvailable = new System.Windows.Forms.Label();
             this.menuStripOptions.SuspendLayout();
             this.panelBlur.SuspendLayout();
             this.panelBrushSize.SuspendLayout();
@@ -70,47 +71,47 @@
             this.loadToolStripMenuItem,
             this.undoToolStripMenuItem});
             this.menuStripOptions.Name = "menuStripOptions";
-            this.menuStripOptions.Size = new System.Drawing.Size(181, 158);
+            this.menuStripOptions.Size = new System.Drawing.Size(149, 136);
             // 
             // clearToolStripMenuItem
             // 
             this.clearToolStripMenuItem.Name = "clearToolStripMenuItem";
-            this.clearToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.clearToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.clearToolStripMenuItem.Text = "Clear";
             this.clearToolStripMenuItem.Click += new System.EventHandler(this.clearToolStripMenuItem_Click);
             // 
             // invertMaskToolStripMenuItem
             // 
             this.invertMaskToolStripMenuItem.Name = "invertMaskToolStripMenuItem";
-            this.invertMaskToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.invertMaskToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.invertMaskToolStripMenuItem.Text = "Invert (Ctrl+I)";
             this.invertMaskToolStripMenuItem.Click += new System.EventHandler(this.invertMaskToolStripMenuItem_Click);
             // 
             // pasteMaskToolStripMenuItem
             // 
             this.pasteMaskToolStripMenuItem.Name = "pasteMaskToolStripMenuItem";
-            this.pasteMaskToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.pasteMaskToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.pasteMaskToolStripMenuItem.Text = "Paste (Ctrl+V)";
             this.pasteMaskToolStripMenuItem.Click += new System.EventHandler(this.pasteMaskToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.saveToolStripMenuItem.Text = "Save (Ctrl+S)";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // loadToolStripMenuItem
             // 
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.loadToolStripMenuItem.Text = "Load (Ctrl+O)";
             this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
             // 
             // undoToolStripMenuItem
             // 
             this.undoToolStripMenuItem.Name = "undoToolStripMenuItem";
-            this.undoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.undoToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.undoToolStripMenuItem.Text = "Undo (Ctrl+Z)";
             this.undoToolStripMenuItem.Click += new System.EventHandler(this.undoToolStripMenuItem_Click);
             // 
@@ -119,6 +120,7 @@
             this.panelBlur.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panelBlur.Controls.Add(this.sliderBlur);
+            this.panelBlur.Controls.Add(this.labelBlurNotAvailable);
             this.panelBlur.Controls.Add(this.label1);
             this.panelBlur.Location = new System.Drawing.Point(0, 453);
             this.panelBlur.Margin = new System.Windows.Forms.Padding(0);
@@ -362,6 +364,18 @@
             this.pictBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictBox_MouseMove);
             this.pictBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictBox_MouseUp);
             // 
+            // labelBlurNotAvailable
+            // 
+            this.labelBlurNotAvailable.AutoSize = true;
+            this.labelBlurNotAvailable.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelBlurNotAvailable.ForeColor = System.Drawing.Color.Silver;
+            this.labelBlurNotAvailable.Location = new System.Drawing.Point(107, 10);
+            this.labelBlurNotAvailable.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.labelBlurNotAvailable.Name = "labelBlurNotAvailable";
+            this.labelBlurNotAvailable.Size = new System.Drawing.Size(114, 13);
+            this.labelBlurNotAvailable.TabIndex = 90;
+            this.labelBlurNotAvailable.Text = "Currently Not Available";
+            // 
             // DrawForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -376,10 +390,10 @@
             this.Name = "DrawForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Draw Mask";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.DrawForm_FormClosing);
             this.Load += new System.EventHandler(this.DrawForm_Load);
             this.Shown += new System.EventHandler(this.DrawForm_Shown);
             this.SizeChanged += new System.EventHandler(this.DrawForm_SizeChanged);
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.DrawForm_FormClosing);
             this.menuStripOptions.ResumeLayout(false);
             this.panelBlur.ResumeLayout(false);
             this.panelBlur.PerformLayout();
@@ -415,5 +429,6 @@
         public HTAlt.WinForms.HTButton btnMaskSave;
         public HTAlt.WinForms.HTButton btnClear;
         public System.Windows.Forms.ToolStripMenuItem undoToolStripMenuItem;
+        public System.Windows.Forms.Label labelBlurNotAvailable;
     }
 }

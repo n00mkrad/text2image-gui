@@ -74,7 +74,7 @@ namespace StableDiffusionGui.Ui.DrawForm
         {
             if (F.RawMask != null)
             {
-                if (blur && Inpainting.CurrentBlurValue > 0)
+                if (blur && !F.DisableBlurOption && Inpainting.CurrentBlurValue > 0)
                     F.pictBox.Image = new GaussianBlur(F.RawMask).Process(Inpainting.CurrentBlurValue);
                 else
                     F.pictBox.Image = F.RawMask;
@@ -107,7 +107,7 @@ namespace StableDiffusionGui.Ui.DrawForm
 
         public static void HistorySave()
         {
-            if (F.History.Count >= F.HistoryLimit)
+            if (F.History.Count >= F.HistoryLimitNormalized)
                 F.History = F.History.Skip(1).ToList(); // Remove first (oldest) entry if we maxed out the capacity
 
             F.History.Add(new Bitmap(F.RawMask));

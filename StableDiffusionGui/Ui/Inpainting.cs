@@ -65,7 +65,7 @@ namespace StableDiffusionGui.Ui
 
             if (CurrentMask == null)
             {
-                EditCurrentMask(img);
+                EditCurrentMask(img, MainForm.FormControls.IsUsingInpaintingModel);
             }
 
             if (CurrentMask == null)
@@ -87,9 +87,9 @@ namespace StableDiffusionGui.Ui
             maskDiffusers.Dispose();
         }
 
-        public static void EditCurrentMask (Image image)
+        public static void EditCurrentMask (Image image, bool inpaintingModel)
         {
-            var maskForm = new Forms.DrawForm(image, CurrentRawMask);
+            var maskForm = new Forms.DrawForm(image, CurrentRawMask, inpaintingModel);
             maskForm.ShowDialogForm();
             CurrentMask = maskForm.Mask;
         }

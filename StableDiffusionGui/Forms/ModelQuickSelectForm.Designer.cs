@@ -35,7 +35,7 @@
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // comboxSdModel
+            // comboxModel
             // 
             this.comboxModel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
@@ -47,7 +47,7 @@
             this.comboxModel.ForeColor = System.Drawing.Color.White;
             this.comboxModel.FormattingEnabled = true;
             this.comboxModel.Location = new System.Drawing.Point(11, 11);
-            this.comboxModel.Name = "comboxSdModel";
+            this.comboxModel.Name = "comboxModel";
             this.comboxModel.Size = new System.Drawing.Size(460, 23);
             this.comboxModel.TabIndex = 107;
             this.comboxModel.Visible = false;
@@ -87,7 +87,7 @@
             this.KeyPreview = true;
             this.Name = "ModelQuickSelectForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "ModelQuickSelectForm";
+            this.Text = "Select Model";
             this.Load += new System.EventHandler(this.ModelQuickSelectForm_Load);
             this.Shown += new System.EventHandler(this.ModelQuickSelectForm_Shown);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ModelQuickSelectForm_KeyDown);

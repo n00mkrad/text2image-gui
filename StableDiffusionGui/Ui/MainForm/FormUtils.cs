@@ -234,7 +234,7 @@ namespace StableDiffusionGui.Ui.MainForm
 
             Size targetSize = new Size(F.comboxResW.GetInt(), F.comboxResH.GetInt());
             image = ImgUtils.ScaleAndPad(ImgUtils.GetMagickImage(image), image.Size, targetSize).ToBitmap();
-            Inpainting.EditCurrentMask(image);
+            Inpainting.EditCurrentMask(image, MainForm.FormControls.IsUsingInpaintingModel);
         }
     }
 }
