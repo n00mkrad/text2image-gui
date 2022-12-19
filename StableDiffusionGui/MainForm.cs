@@ -337,7 +337,7 @@ namespace StableDiffusionGui
 
         private void btnResetMask_Click(object sender, EventArgs e)
         {
-            Inpainting.CurrentMask = null;
+            Inpainting.ClearMask();
         }
 
         private void textboxCliTest_DoubleClick(object sender, EventArgs e)

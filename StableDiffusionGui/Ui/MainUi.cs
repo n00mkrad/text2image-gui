@@ -41,7 +41,7 @@ namespace StableDiffusionGui.Ui
 
                 if (Inpainting.CurrentMask != null)
                 {
-                    Inpainting.CurrentMask = null;
+                    Inpainting.ClearMask();
                     Logger.Log("Inpainting mask has been cleared.");
                 }
             }

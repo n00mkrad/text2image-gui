@@ -98,5 +98,11 @@ namespace StableDiffusionGui.Ui
         {
             IoUtils.TryDeleteIfExists(MaskedImagePath);
         }
+
+        public static void ClearMask ()
+        {
+            CurrentRawMask = null;
+            CurrentMask = null;
+        }
     }
 }
