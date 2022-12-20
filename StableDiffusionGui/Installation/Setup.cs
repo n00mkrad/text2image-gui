@@ -199,11 +199,12 @@ namespace StableDiffusionGui.Installation
 
         #region Git
 
-        public static async Task CloneSdRepo()
+        public static async Task CloneSdRepo(string overrideCommit = "")
         {
+            string commit = string.IsNullOrWhiteSpace(overrideCommit) ? _gitCommit : overrideCommit;
             TtiProcess.ProcessExistWasIntentional = true;
             ProcessManager.FindAndKillOrphans($"*invoke.py*{Paths.SessionTimestamp}*");
-            await CloneSdRepo($"https://github.com/{_gitFile}", GetDataSubPath(Constants.Dirs.SdRepo), _gitBranch, _gitCommit);
+            await CloneSdRepo($"https://github.com/{_gitFile}", GetDataSubPath(Constants.Dirs.SdRepo), _gitBranch, commit);
         }
 
         public static async Task CloneSdRepo(string url, string dir, string branch = "main", string commit = "")

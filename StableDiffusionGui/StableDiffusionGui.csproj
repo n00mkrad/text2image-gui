@@ -245,6 +245,12 @@
     <Compile Include="Forms\PostProcSettingsForm.Designer.cs">
       <DependentUpon>PostProcSettingsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\PromptForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\PromptForm.designer.cs">
+      <DependentUpon>PromptForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\PromptListForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -375,6 +381,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\PostProcSettingsForm.resx">
       <DependentUpon>PostProcSettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\PromptForm.resx">
+      <DependentUpon>PromptForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\PromptListForm.resx">
       <DependentUpon>PromptListForm.cs</DependentUpon>

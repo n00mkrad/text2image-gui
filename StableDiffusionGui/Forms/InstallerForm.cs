@@ -1,5 +1,6 @@
 ﻿using StableDiffusionGui.Installation;
 using StableDiffusionGui.Main;
+using StableDiffusionGui.MiscUtils;
 using System;
 using System.Windows.Forms;
 
@@ -65,40 +66,49 @@ namespace StableDiffusionGui.Forms
 
         private async void btnUninstall_Click(object sender, EventArgs e)
         {
-            this.Enabled = false;
+            Enabled = false;
             Logger.Log("Uninstalling...");
             await Setup.RemoveRepo();
             await Setup.RemoveEnv();
             UpdateStatus();
             Logger.Log("Done.");
-            this.Enabled = true;
+            Enabled = true;
         }
 
         private async void btnClone_Click(object sender, EventArgs e)
         {
-            this.Enabled = false;
+            string commit = "";
+
+            if (InputUtils.IsHoldingShift)
+            {
+                var form = new PromptForm("Clone Specific Commit", "Enter a commit hash (SHA) to clone.", "");
+                form.ShowDialog();
+                commit = form.EnteredText.Trim();
+            }
+
+            Enabled = false;
             Program.SetState(Program.BusyState.Installation);
-            await Setup.CloneSdRepo();
+            await Setup.CloneSdRepo(commit);
             Setup.RepoCleanup();
             UpdateStatus();
             Program.SetState(Program.BusyState.Standby);
-            this.Enabled = true;
+            Enabled = true;
         }
 
         private async void btnRedownloadModel_Click(object sender, EventArgs e)
         {
-            this.Enabled = false;
+            Enabled = false;
             await Setup.DownloadSdModelFile(true);
             UpdateStatus();
-            this.Enabled = true;
+            Enabled = true;
         }
 
         private async void btnInstallUpscalers_Click(object sender, EventArgs e)
         {
-            this.Enabled = false;
+            Enabled = false;
             await Setup.InstallUpscalers();
             UpdateStatus();
-            this.Enabled = true;
+            Enabled = true;
         }
     }
 }
