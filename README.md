@@ -13,6 +13,8 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (form
 
 ## System Requirements
 
+**OS:** Windows 10/11 64-bit
+
 #### Minimum:
 
 - **GPU:** Nvidia GPU with 4 GB VRAM, Maxwell Architecture (2014) or newer
@@ -97,13 +99,14 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (form
 * **Image Generation Implementation:** Chose the AI implementation that's used for image generation.
   * Stable Diffusion - [InvokeAI](https://github.com/invoke-ai/InvokeAI/): Supports the most features, but struggles with 4 GB or less VRAM, requires an Nvidia GPU
   * Stable Diffusion - [OptimizedSD](https://github.com/basujindal/stable-diffusion): Lacks many features, but runs on 4 GB or even less VRAM, requires an Nvidia GPU
-
-* **Use Full Precision:** Use FP32 instead of FP16 math, which requires more VRAM but can fix certain compatibility issues.
-* **Unload Model After Each Generation:** Completely unload Stable Diffusion after images are generated.
+  * Stable Diffusion - [ONNX](https://github.com/huggingface/diffusers): Lacks some features and is relatively slow, but can utilize AMD GPUs (any DirectML capable card)
+  
+* **Use Full Precision:** Use FP32 instead of FP16 math, which requires more VRAM but can fix certain compatibility issues.*
+* **Unload Model After Each Generation:** Completely unload Stable Diffusion after images are generated.*
 * **Stable Diffusion Model File:** Select the model file to use for image generation.
   * Included models are located in `Data/models`. You can add more folder paths by clicking on "Folders...".
-* **Stable Diffusion VAE:** Select external VAE (Variational Autoencoder) model. VAEs can improve image quality.
-* **CUDA Device:** Allows your to specify the GPU to run the AI on, or set it to run on the CPU (very slow).
+* **Stable Diffusion VAE:** Select external VAE (Variational Autoencoder) model. VAEs can improve image quality.*
+* **CUDA Device:** Allows your to specify the GPU to run the AI on, or set it to run on the CPU (very slow).*
 * **Image Output Folder:** Set the folder where your generated images will be saved.
 * **Output Subfolder Options:**
   * Subfolder Per Prompt: Save images in a subfolder for each prompt. Negative prompt is excluded from the folder name.
@@ -114,8 +117,14 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (form
 * **Metadata to Include in Filename:** Specify which information should be included in the filename.
 * **When Running Multiple Prompts, Use Same Starting Seed for All of Them:** If enabled, the seed resets to the starting value for every new prompt. If disabled, the seed will be incremented by 1 after each iteration, being sequential until all prompts/iterations have been generated.
 * **When Post-Processing Is Enabled, Also Save Un-Processed Image:** When enabled, both the "raw" and the post-processed image will be saved.
+* **Automatically Set Generation Resolution After Loading an Initialization Image:** Automatically sets the image generation to match your image.
+* **Retain Aspect Ratio of Initialization Image (If It Needs Resizing):** Use padding (black borders) instead of stretching, in case the init image resolution does not match the image generation resolution.
 * **Advanced Mode:** Increases the limits of the sliders in the main window. Not very useful most of the time unless you really need those high values.
 * **Notify When Image Generation Has Finished:** Play a sound, show a notification, or do both if image generation finishes in background.
+
+
+
+**May not be available with certain implementations*
 
 
 
@@ -129,8 +138,7 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (form
 ### Installer Button (Top Bar)
 
 * **Installation Status:** Shows which modules are installed (checkboxes are not interactive and only indicate if a module is installed correctly!).
-* **Redownload SD Model:** Re-downloads Stable Diffusion 1.4 model (4 GB) from Google Storage servers.
-* **Re-Install SD Code:** Re-installs the Stable Diffusion code from its repository. Can fix some issues related to file paths.
+* **Re-Install Python Dependencies:** Re-installs the Stable Diffusion code from its repository and re-installs all required python packages.
 * **Re-Install Upscalers:** (Re-)Installs upscaling files (RealESRGAN, GFPGAN, CodeFormer, including model files).
 * **(Re-)Install:** Installs everything. Skips already installed components.
 * **Uninstall:** Removes everything except for Conda which is included and needed for a re-installation.
@@ -139,12 +147,12 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (form
 
 ### Developer Tools Button (Top Bar)
 
-* **Open Stable Diffusion CLI:** Use Stable Diffusion in command-line interface
-* **Open CMD in Conda Environment:** Opens a CMD window with the built-in conda python environment activated.
+* **Open Stable Diffusion CLI:** Use Stable Diffusion in command-line interface.
+* **Open CMD in Python Environment:** Opens a CMD window with the built-in python environment activated.
 * **Merge Models:** Allows you to merge/blend two models. The percentage numbers represent their respective weight.
 * **Prune Models:** Allows you to reduce the size of models by removing data that's not needed for image generation.
+* **Convert Models:** Allows you to convert model weights between Pytorch (ckpt/pt), Diffusers, Diffusers ONNX, and SafeTensors formats.
 * **View Log In Realtime:** Opens a separate window that shows all log output, including messages that are not shown in the normal log box.
-* **Train DreamBooth Model:** Allows you to train a model on a specific object or character using only a few images of it. (Guide)
 
 
 
