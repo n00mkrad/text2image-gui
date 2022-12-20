@@ -23,8 +23,11 @@ namespace StableDiffusionGui.Controls
             } }
         private bool HasValueBox { get { return ValueBox != null && ValueBox is TextBox; } }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public new int Value { get { return base.Value; } set { base.Value = value; } }
+
         public decimal ActualValue { 
-            get { 
+            get {
                 return Value / _conversionFactor; 
             } 
             set { 

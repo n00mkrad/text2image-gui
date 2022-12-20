@@ -17,6 +17,12 @@ namespace Nmkoder.Forms
 
         public FontSize MsgFontSize = FontSize.Normal;
 
+        private readonly int _fallbackWidth = 1200;
+        private readonly int _fallbackHeight = 700;
+
+        private int MainFormWidth { get { return Program.MainForm == null ? _fallbackWidth : Program.MainForm.Width; } }
+        private int MainFormHeight { get { return Program.MainForm == null ? _fallbackHeight : Program.MainForm.Height; } }
+
         public MessageForm(string text, string title, MessageBoxButtons buttons = MessageBoxButtons.OK)
         {
             _text = text;
@@ -60,9 +66,9 @@ namespace Nmkoder.Forms
                 // CancelButton = (IButtonControl)btn1;
             }
 
-            textLabel.MaximumSize = new Size(Program.MainForm.Size.Width - 30, Program.MainForm.Size.Height - 50);
+            textLabel.MaximumSize = new Size(MainFormWidth - 30, MainFormHeight - 50);
             Size labelSize = GetLabelSize(textLabel);
-            Size = new Size((labelSize.Width + 60).Clamp(360, Program.MainForm.Size.Width), (labelSize.Height + 120).Clamp(200, Program.MainForm.Size.Height));
+            Size = new Size((labelSize.Width + 60).Clamp(360, MainFormWidth), (labelSize.Height + 120).Clamp(200, MainFormHeight));
 
             CenterToScreen();
         }

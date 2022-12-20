@@ -58,5 +58,10 @@
         {
             public const int MaxWildcardCombinations = 100000;
         }
+
+        public class Urls
+        {
+            public const string ItchPage = "https://nmkd.itch.io/t2i-gui";
+        }
     }
 }

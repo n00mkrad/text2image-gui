@@ -1,9 +1,9 @@
-﻿using StableDiffusionGui.Main;
+﻿using StableDiffusionGui.Data;
+using StableDiffusionGui.Main;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -11,6 +11,22 @@ namespace StableDiffusionGui.Ui
 {
     internal class GetWebInfo
     {
+        public static async Task<string> LoadVersion()
+        {
+            try
+            {
+                string url = $"https://raw.githubusercontent.com/n00mkrad/text2image-gui/main/meta/version.json";
+                string text = await new WebClient().DownloadStringTaskAsync(new Uri(url));
+                var dict = text.FromJson<EasyDict<string, string>>();
+                return dict.Get("latestPublicRel", "0.0.0");
+            }
+            catch (Exception e)
+            {
+                Logger.Log($"Failed to load version info: {e.Message}", true);
+                return "0.0.0";
+            }
+        }
+
         public static async Task LoadNews(Label newsLabel)
         {
             string text = "";

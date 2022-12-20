@@ -80,6 +80,7 @@ namespace StableDiffusionGui
 
             MainUi.LoadAutocompleteData(promptAutocomplete, new[] { textboxPrompt, textboxPromptNeg });
             Task.Run(() => MainUi.SetGpusInWindowTitle());
+            Task.Run(() => MainUi.PrintVersion());
             upDownSeed.Text = "";
             FormControls.UpdateInitImgAndEmbeddingUi();
 

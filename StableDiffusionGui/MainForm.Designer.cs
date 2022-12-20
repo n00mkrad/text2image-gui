@@ -548,7 +548,6 @@ namespace StableDiffusionGui
             this.sliderScale.ThumbSize = new System.Drawing.Size(14, 14);
             this.toolTip.SetToolTip(this.sliderScale, "Higher tries to match your prompt better, but can get chaotic. 7-12 is a safe ran" +
         "ger for most things.");
-            this.sliderScale.Value = 0;
             this.sliderScale.ValueBox = this.textboxSliderScale;
             this.sliderScale.ValueStep = new decimal(new int[] {
             5,
@@ -666,7 +665,7 @@ namespace StableDiffusionGui
             0,
             65536});
             this.sliderInitStrength.ActualValue = new decimal(new int[] {
-            3,
+            8,
             0,
             0,
             65536});
@@ -689,7 +688,6 @@ namespace StableDiffusionGui
             this.sliderInitStrength.ThumbSize = new System.Drawing.Size(14, 14);
             this.toolTip.SetToolTip(this.sliderInitStrength, "Lower Value: Result Looks More Like Your Text Prompt\r\nHigher Value: Result Looks " +
         "More Like Your Image");
-            this.sliderInitStrength.Value = 6;
             this.sliderInitStrength.ValueBox = this.textboxSliderInitStrength;
             this.sliderInitStrength.ValueStep = new decimal(new int[] {
             5,
@@ -712,7 +710,7 @@ namespace StableDiffusionGui
             this.textboxSliderInitStrength.Name = "textboxSliderInitStrength";
             this.textboxSliderInitStrength.Size = new System.Drawing.Size(35, 21);
             this.textboxSliderInitStrength.TabIndex = 94;
-            this.textboxSliderInitStrength.Text = "0,3";
+            this.textboxSliderInitStrength.Text = "0,8";
             // 
             // btnInitImgBrowse
             // 
@@ -1769,7 +1767,7 @@ namespace StableDiffusionGui
             this.textboxSliderSteps.Name = "textboxSliderSteps";
             this.textboxSliderSteps.Size = new System.Drawing.Size(35, 21);
             this.textboxSliderSteps.TabIndex = 92;
-            this.textboxSliderSteps.Text = "10";
+            this.textboxSliderSteps.Text = "5";
             // 
             // sliderSteps
             // 
@@ -1779,12 +1777,12 @@ namespace StableDiffusionGui
             0,
             0});
             this.sliderSteps.ActualMinimum = new decimal(new int[] {
-            2,
+            5,
             0,
             0,
-            65536});
+            0});
             this.sliderSteps.ActualValue = new decimal(new int[] {
-            10,
+            5,
             0,
             0,
             0});
@@ -1797,6 +1795,7 @@ namespace StableDiffusionGui
             this.sliderSteps.Location = new System.Drawing.Point(0, 0);
             this.sliderSteps.Margin = new System.Windows.Forms.Padding(0);
             this.sliderSteps.Maximum = 20;
+            this.sliderSteps.Minimum = 1;
             this.sliderSteps.Name = "sliderSteps";
             this.sliderSteps.OverlayColor = System.Drawing.Color.White;
             this.sliderSteps.Size = new System.Drawing.Size(302, 35);
@@ -1805,7 +1804,6 @@ namespace StableDiffusionGui
             this.sliderSteps.Text = "sliderSteps";
             this.sliderSteps.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
             this.sliderSteps.ThumbSize = new System.Drawing.Size(14, 14);
-            this.sliderSteps.Value = 2;
             this.sliderSteps.ValueBox = this.textboxSliderSteps;
             this.sliderSteps.ValueStep = new decimal(new int[] {
             5,

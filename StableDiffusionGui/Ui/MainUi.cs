@@ -298,6 +298,15 @@ namespace StableDiffusionGui.Ui
             Logger.Log($"Detected {gpus.Count.ToString().Replace("0", "no")} CUDA-capable GPU{(gpus.Count != 1 ? "s" : "")}.");
         }
 
+        public static async Task PrintVersion ()
+        {
+            string ver = await GetWebInfo.LoadVersion();
+            Logger.Log($"Latest version: {ver}");
+
+            if (ver.Trim() != Program.Version)
+                Logger.Log($"It seems like you are not running the latest version. You can download the latest on itch: {Constants.Urls.ItchPage}");
+        }
+
         public static void SetSettingsVertScrollbar()
         {
             try
