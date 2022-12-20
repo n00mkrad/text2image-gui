@@ -4,6 +4,12 @@ Somewhat modular text2image GUI, initially just for Stable Diffusion.
 Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (formerly lstein): [Code Repo](https://github.com/n00mkrad/stable-diffusion-cust/commits/main)
 
 
+**Table of Contents:**  
+[**System Requirements**](#system-requirements)  
+[**Features and How to Use Them**](#features-and-how-to-use-them)  
+[**Hotkeys (Main Window)**](#hotkeys-main-window)
+
+
 
 ## System Requirements
 
@@ -11,13 +17,13 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (form
 
 - **GPU:** Nvidia GPU with 4 GB VRAM, Maxwell Architecture (2014) or newer
 - **RAM:** 8 GB RAM (Note: Pagefile must be enabled as swapping will occur with only 8 GB!)
-- **Disk:** 12 GB (another free 2 GB for temporary files recommended)
+- **Disk:** 10 GB (another free 3 GB for temporary files recommended)
 
 #### Recommended:
 
 - **GPU:** Nvidia GPU with 8 GB VRAM, Pascal Architecture (2016) or newer
 - **RAM:** 16 GB RAM
-- **Disk:** 12 GB on SSD (another free 2 GB for temporary files recommended)
+- **Disk:** 12 GB on SSD (another free 3 GB for temporary files recommended)
 
 #### Professional/DreamBooth-capable:
 
@@ -38,7 +44,7 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (form
 - **Emphasis:** Use `+` after a word/phrase to make it more impactful, or `-` to do the opposite. You can also use to increase the effect. Wrap your phrase in parentheses if you want to apply it to more than one word.
   - Each plus/minus applies a multiplier of 1.1. So two `+++` would be 1.1^3 = 1.331, and so on.
   - You can also type the strength manually after parentheses, e.g. `a (huge)1.33 dog` instead of `a huge+++ dog`
-  - Examples: `a green++ tree`, `a (big green)+ tree with orange- leaves (in the woods)++`
+  - Syntax Examples: `a green++ tree`, `a (big green)+ tree with orange- leaves (in the woods)++`
 
 - **Wildcards:** Fill in words or phrases from a list into the prompt.
   - Inline: `photo of a ~car,tree,dog~`.
@@ -51,7 +57,7 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (form
 ### Additional Inputs
 
 * **Load Image(s):** Load an initialization image that will be used together with your text prompt ("img2img")
-  * Loading multiple images means that each image will be processed separately, in sequence.
+  * Loading multiple images means that each image will be processed separately.
 
 * **Load Concept:** Load a Textual Inversion concept to apply a style or use a specific character
 
