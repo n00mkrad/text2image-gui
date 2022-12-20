@@ -39,6 +39,7 @@
             this.undoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelBlur = new System.Windows.Forms.Panel();
             this.sliderBlur = new HTAlt.WinForms.HTSlider();
+            this.labelBlurNotAvailable = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.panelBrushSize = new System.Windows.Forms.Panel();
             this.sliderBrushSize = new HTAlt.WinForms.HTSlider();
@@ -51,7 +52,6 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanelImg = new System.Windows.Forms.TableLayoutPanel();
             this.pictBox = new System.Windows.Forms.PictureBox();
-            this.labelBlurNotAvailable = new System.Windows.Forms.Label();
             this.menuStripOptions.SuspendLayout();
             this.panelBlur.SuspendLayout();
             this.panelBrushSize.SuspendLayout();
@@ -148,6 +148,18 @@
             this.sliderBlur.ThumbSize = new System.Drawing.Size(14, 14);
             this.sliderBlur.Value = 5;
             this.sliderBlur.Scroll += new System.Windows.Forms.ScrollEventHandler(this.sliderBlur_Scroll);
+            // 
+            // labelBlurNotAvailable
+            // 
+            this.labelBlurNotAvailable.AutoSize = true;
+            this.labelBlurNotAvailable.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelBlurNotAvailable.ForeColor = System.Drawing.Color.Silver;
+            this.labelBlurNotAvailable.Location = new System.Drawing.Point(107, 10);
+            this.labelBlurNotAvailable.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.labelBlurNotAvailable.Name = "labelBlurNotAvailable";
+            this.labelBlurNotAvailable.Size = new System.Drawing.Size(70, 13);
+            this.labelBlurNotAvailable.TabIndex = 90;
+            this.labelBlurNotAvailable.Text = "Not Available";
             // 
             // label1
             // 
@@ -363,18 +375,6 @@
             this.pictBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictBox_MouseDown);
             this.pictBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictBox_MouseMove);
             this.pictBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictBox_MouseUp);
-            // 
-            // labelBlurNotAvailable
-            // 
-            this.labelBlurNotAvailable.AutoSize = true;
-            this.labelBlurNotAvailable.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelBlurNotAvailable.ForeColor = System.Drawing.Color.Silver;
-            this.labelBlurNotAvailable.Location = new System.Drawing.Point(107, 10);
-            this.labelBlurNotAvailable.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
-            this.labelBlurNotAvailable.Name = "labelBlurNotAvailable";
-            this.labelBlurNotAvailable.Size = new System.Drawing.Size(114, 13);
-            this.labelBlurNotAvailable.TabIndex = 90;
-            this.labelBlurNotAvailable.Text = "Currently Not Available";
             // 
             // DrawForm
             // 

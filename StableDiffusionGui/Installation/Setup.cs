@@ -116,7 +116,7 @@ namespace StableDiffusionGui.Installation
 
             while (!p.HasExited) await Task.Delay(1);
 
-            Logger.Log("Cleaning up...");
+            Logger.Log("Cleaning up...", false, Logger.LastUiLine.EndsWith("..."));
             IoUtils.TryDeleteIfExists(Path.Combine(Environment.ExpandEnvironmentVariables("%LOCALAPPDATA%"), "pip", "cache"));
             RepoCleanup();
             Logger.Log("Done.");
@@ -136,17 +136,26 @@ namespace StableDiffusionGui.Installation
             {
                 if (log.StartsWith("Downloading "))
                 {
-                    Logger.Log($"Downloading packages...", false, Logger.LastUiLine.EndsWith("..."));
+                    string filename = log.Split('/').Last().Split('(').FirstOrDefault().Trim().Trunc(150);
+                    string filesize = log.Split(" (").Last().Split(')').FirstOrDefault().Trim();
+                    Logger.Log($"Downloading {filename} ({filesize})...", false, Logger.LastUiLine.EndsWith("..."));
                 }
 
                 if (log.StartsWith("Collecting "))
                 {
-                    Logger.Log($"Installing {log.Split("Collecting ")[1].Split("=")[0].Split("<")[0].Split(">")[0].Split("!")[0].Trim()}...", false, Logger.LastUiLine.EndsWith("..."));
+                    string name = log.Split("Collecting ")[1].Split("=")[0].Split("<")[0].Split(">")[0].Split("!")[0].Trim().Replace(" git+", " ").Trunc(150, false);
+                    Logger.Log($"Installing {name}...", false, Logger.LastUiLine.EndsWith("..."));
                 }
 
                 if (log.StartsWith("Installing collected packages: "))
                 {
-                    Logger.Log($"Installing packages...", false, Logger.LastUiLine.EndsWith("..."));
+                    int count = log.Split("Installing collected packages: ").Last().Split(", ").Count(); // Count comma-separated packages
+                    Logger.Log($"Installing {count} downloaded package{(count == 1 ? "" : "s")}...", false, Logger.LastUiLine.EndsWith("..."));
+                }
+
+                if (log.StartsWith("Building wheel"))
+                {
+                    Logger.Log($"Building packages...", false, Logger.LastUiLine.EndsWith("..."));
                 }
             }
             else
@@ -201,16 +210,16 @@ namespace StableDiffusionGui.Installation
         {
             try
             {
-                Logger.Log("Cloning repository...");
+                Logger.Log("Downloading repository...");
                 await Clone(url, dir, commit, branch);
-                Logger.Log($"Done cloning repository.");
+                Logger.Log($"Downloaded repository.", false, Logger.LastUiLine.EndsWith("..."));
 
                 await SetupVenv();
             }
             catch (Exception ex)
             {
-                Logger.Log($"Failed to clone repository: {ex.Message}");
-                Logger.Log($"{ex.StackTrace}", true);
+                Logger.Log($"Failed to download repository: {ex.Message}");
+                Logger.Log(ex.StackTrace, true);
             }
         }
 
@@ -226,7 +235,7 @@ namespace StableDiffusionGui.Installation
             string gitExe = Path.Combine(Paths.GetDataPath(), Constants.Dirs.Git, "cmd", "git.exe");
             Process p = OsUtils.NewProcess(true);
             p.StartInfo.EnvironmentVariables["PATH"] = TtiUtils.GetEnvVarsSd(true, Paths.GetDataPath()).First().Value;
-            p.StartInfo.Arguments = $"/C git clone --single-branch --branch {branch} {gitUrl} {dir.Wrap(true)} {(string.IsNullOrWhiteSpace(commit) ? "" : $"&& cd /D {dir.Wrap()} && git checkout {commit}")}";
+            p.StartInfo.Arguments = $"/C git clone --depth=1 --single-branch --branch {branch} {gitUrl} {dir.Wrap(true)} {(string.IsNullOrWhiteSpace(commit) ? "" : $"&& cd /D {dir.Wrap()} && git checkout {commit}")}";
             Logger.Log($"{p.StartInfo.FileName} {p.StartInfo.Arguments}", true);
             p.OutputDataReceived += (sender, line) => { HandleInstallScriptOutput($"[git] {line.Data}", false, false); };
             p.ErrorDataReceived += (sender, line) => { HandleInstallScriptOutput($"[git] {line.Data}", false, true); };

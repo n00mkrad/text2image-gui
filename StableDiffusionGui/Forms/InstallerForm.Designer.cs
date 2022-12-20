@@ -37,7 +37,6 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btnInstallUpscalers = new HTAlt.WinForms.HTButton();
             this.btnClone = new HTAlt.WinForms.HTButton();
-            this.btnRedownloadModel = new HTAlt.WinForms.HTButton();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -113,7 +112,6 @@
             // 
             this.groupBox1.Controls.Add(this.btnInstallUpscalers);
             this.groupBox1.Controls.Add(this.btnClone);
-            this.groupBox1.Controls.Add(this.btnRedownloadModel);
             this.groupBox1.ForeColor = System.Drawing.Color.White;
             this.groupBox1.Location = new System.Drawing.Point(12, 163);
             this.groupBox1.Name = "groupBox1";
@@ -133,10 +131,10 @@
             this.btnInstallUpscalers.ForeColor = System.Drawing.Color.White;
             this.btnInstallUpscalers.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
             this.btnInstallUpscalers.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
-            this.btnInstallUpscalers.Location = new System.Drawing.Point(296, 19);
+            this.btnInstallUpscalers.Location = new System.Drawing.Point(223, 19);
             this.btnInstallUpscalers.Name = "btnInstallUpscalers";
             this.btnInstallUpscalers.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
-            this.btnInstallUpscalers.Size = new System.Drawing.Size(138, 21);
+            this.btnInstallUpscalers.Size = new System.Drawing.Size(211, 21);
             this.btnInstallUpscalers.TabIndex = 4;
             this.btnInstallUpscalers.TabStop = false;
             this.btnInstallUpscalers.Text = "Re-Install Upscalers";
@@ -153,34 +151,14 @@
             this.btnClone.ForeColor = System.Drawing.Color.White;
             this.btnClone.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
             this.btnClone.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
-            this.btnClone.Location = new System.Drawing.Point(150, 19);
+            this.btnClone.Location = new System.Drawing.Point(6, 19);
             this.btnClone.Name = "btnClone";
             this.btnClone.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
-            this.btnClone.Size = new System.Drawing.Size(140, 21);
+            this.btnClone.Size = new System.Drawing.Size(211, 21);
             this.btnClone.TabIndex = 3;
             this.btnClone.TabStop = false;
-            this.btnClone.Text = "Re-Install SD Code";
+            this.btnClone.Text = "Re-Install Python Dependencies";
             this.btnClone.Click += new System.EventHandler(this.btnClone_Click);
-            // 
-            // btnRedownloadModel
-            // 
-            this.btnRedownloadModel.AutoColor = true;
-            this.btnRedownloadModel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnRedownloadModel.ButtonImage = null;
-            this.btnRedownloadModel.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
-            this.btnRedownloadModel.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
-            this.btnRedownloadModel.DrawImage = false;
-            this.btnRedownloadModel.ForeColor = System.Drawing.Color.White;
-            this.btnRedownloadModel.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
-            this.btnRedownloadModel.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
-            this.btnRedownloadModel.Location = new System.Drawing.Point(6, 19);
-            this.btnRedownloadModel.Name = "btnRedownloadModel";
-            this.btnRedownloadModel.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
-            this.btnRedownloadModel.Size = new System.Drawing.Size(138, 21);
-            this.btnRedownloadModel.TabIndex = 2;
-            this.btnRedownloadModel.TabStop = false;
-            this.btnRedownloadModel.Text = "Redownload SD Model";
-            this.btnRedownloadModel.Click += new System.EventHandler(this.btnRedownloadModel_Click);
             // 
             // InstallerForm
             // 
@@ -217,7 +195,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btnUninstall;
         private System.Windows.Forms.GroupBox groupBox1;
-        private HTAlt.WinForms.HTButton btnRedownloadModel;
         private HTAlt.WinForms.HTButton btnClone;
         private HTAlt.WinForms.HTButton btnInstallUpscalers;
     }
