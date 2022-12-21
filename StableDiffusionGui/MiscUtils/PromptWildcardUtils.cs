@@ -1,4 +1,5 @@
-﻿using StableDiffusionGui.Main;
+﻿using StableDiffusionGui.Io;
+using StableDiffusionGui.Main;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -165,12 +166,12 @@ namespace StableDiffusionGui.MiscUtils
         {
             if (File.Exists(wildcardStringOrFilePath))
             {
-                IEnumerable<string> validLines = File.ReadAllLines(wildcardStringOrFilePath).Where(line => !string.IsNullOrWhiteSpace(line));
+                IEnumerable<string> validLines = File.ReadAllLines(wildcardStringOrFilePath);
                 return GetWildcardList(validLines, listSize, sortMode);
             }
             else
             {
-                IEnumerable<string> validPhrases = wildcardStringOrFilePath.Split(',').Where(x => !string.IsNullOrWhiteSpace(x));
+                IEnumerable<string> validPhrases = wildcardStringOrFilePath.Split(',');
                 return GetWildcardList(validPhrases, listSize, sortMode);
             }
         }
@@ -180,17 +181,18 @@ namespace StableDiffusionGui.MiscUtils
             if (lines.Count() <= 0)
                 return new List<string>();
 
-            var linesSrc = lines.Where(line => !string.IsNullOrWhiteSpace(line)); // Read all lines from wildcard file
+            if(!Config.Get<bool>(Config.Keys.WildcardAllowEmptyEntries, true, true))
+                lines = lines.Where(line => !string.IsNullOrWhiteSpace(line)); // Filter out empty entries optionally
 
             if (sortMode == Order.Alphabetical)
-                linesSrc = linesSrc.OrderBy(a => a).ToList(); // Sort list optionally
+                lines = lines.OrderBy(a => a).ToList(); // Sort list optionally
             if (sortMode == Order.Shuffle)
-                linesSrc = linesSrc.OrderBy(a => _random.Next()).ToList(); // Shuffle list optionally
+                lines = lines.OrderBy(a => _random.Next()).ToList(); // Shuffle list optionally
 
-            List<string> list = new List<string>(linesSrc);
+            List<string> list = new List<string>(lines);
 
             while (listSize > 0 && list.Count < listSize) // Clone list until it's longer than the desired size (will not run at all if it's already long enough)
-                list.AddRange(linesSrc);
+                list.AddRange(lines);
 
             if (listSize > 0)
                 list = list.Take(listSize).ToList(); // Trim to the exact desired size

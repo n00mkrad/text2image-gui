@@ -258,6 +258,7 @@ namespace StableDiffusionGui.Io
             public const string InitImageRetainAspectRatio = "initImageRetainAspectRatio";
             public const string HiresFix = "hiresFix";
             public const string FilenameTimestampMode = "filenameTimestampMode";
+            public const string WildcardAllowEmptyEntries = "wildcardAllowEmptyEntries";
         }
     }
 }
