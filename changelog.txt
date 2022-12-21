@@ -1,3 +1,17 @@
+SD GUI 1.8.1 Changelog:
+- New: RunwayML inpainting now also works with ONNX implementation
+- New: Version now checks for the latest version on startup (no updater yet)
+- Improved: High-Res Fix can now be enabled if any axis is >512px instead of both
+- Improved: High-Res Fix option is saved/loaded when closing and re-opening GUI
+- Improved: Inpainting Mask Blur is now automatically disabled when using RunwayML inpainting
+- Improved: In Installer, a custom git commit can now be used (for developers)
+- Fixed: Upscalers were disabled by default on <=6GB GPUs
+- Fixed: CFG Scale <=1 didn't work or would fallback to default value
+- Fixed: Inpainting mask was saved with irreversible blur, making editing harder
+- Fixed: Init image import would ignore stretch/pad setting
+- Fixed: Saved inpainting mask wouldn't get cleared properly when resetting it
+
+
 SD GUI 1.8.0 Changelog:
 - New: Stable Diffusion DirectML implementation, enables image generation on AMD GPUs
 - New: Inpainting models are now supported, providing much better quality than the old method
