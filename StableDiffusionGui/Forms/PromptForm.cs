@@ -6,7 +6,7 @@ namespace StableDiffusionGui.Forms
 {
     public partial class PromptForm : Form
     {
-        public string EnteredText { get; set; }
+        public string EnteredText { get; set; } = "";
 
         public PromptForm(string title, string message, string defaultText)
         {
