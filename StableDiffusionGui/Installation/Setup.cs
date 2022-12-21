@@ -16,7 +16,9 @@ namespace StableDiffusionGui.Installation
     {
         private static readonly string _gitFile = "n00mkrad/stable-diffusion-cust.git";
         private static readonly string _gitBranch = "main";
-        private static readonly string _gitCommit = "a15a154908ec172969ab155b953f25c6050574ec";
+        private static readonly string _gitCommit = "bb729e35300a1cedea63db9e8e76ac06cef6d0a3";
+
+        private static readonly bool _allowModelDownload = false;
 
         private static bool ReplaceUiLogLine { get { return Logger.LastUiLine.EndsWith("..."); } }
 
@@ -36,7 +38,7 @@ namespace StableDiffusionGui.Installation
                     await CloneSdRepo();
                 }
 
-                if (force || !InstallationStatus.HasSdModel())
+                if (_allowModelDownload && (force || !InstallationStatus.HasSdModel()))
                 {
                     if (!force)
                         Logger.Log("Install: Downloading model file because there is none.", true, false, Constants.Lognames.Installer);

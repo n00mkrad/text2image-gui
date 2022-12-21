@@ -95,14 +95,6 @@ namespace StableDiffusionGui.Forms
             Enabled = true;
         }
 
-        private async void btnRedownloadModel_Click(object sender, EventArgs e)
-        {
-            Enabled = false;
-            await Setup.DownloadSdModelFile(true);
-            UpdateStatus();
-            Enabled = true;
-        }
-
         private async void btnInstallUpscalers_Click(object sender, EventArgs e)
         {
             Enabled = false;
