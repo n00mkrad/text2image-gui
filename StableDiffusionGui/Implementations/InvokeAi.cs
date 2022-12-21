@@ -88,7 +88,7 @@ namespace StableDiffusionGui.Implementations
 
                         foreach (float scale in scales)
                         {
-                            args["scale"] = $"-C {scale.ToStringDot()}";
+                            args["scale"] = $"-C {scale.Clamp(0.01f, 1000f).ToStringDot()}";
 
                             foreach (int stepCount in steps)
                             {
