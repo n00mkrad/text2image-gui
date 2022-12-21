@@ -136,7 +136,7 @@ namespace StableDiffusionGui.Installation
             {
                 if (log.StartsWith("Downloading "))
                 {
-                    string filename = log.Split('/').Last().Split('(').FirstOrDefault().Trim().Trunc(150);
+                    string filename = log.Split('/').Last().Split('(').FirstOrDefault().Remove("Downloading ").Trim().Trunc(150);
                     string filesize = log.Split(" (").Last().Split(')').FirstOrDefault().Trim();
                     Logger.Log($"Downloading {filename} ({filesize})...", false, Logger.LastUiLine.EndsWith("..."));
                 }
