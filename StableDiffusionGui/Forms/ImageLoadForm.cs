@@ -18,6 +18,7 @@ namespace StableDiffusionGui.Forms
         public ImageMetadata CurrentMetadata;
 
         private string _path;
+        private bool _ready;
 
         public ImageLoadForm(string path)
         {
@@ -35,59 +36,68 @@ namespace StableDiffusionGui.Forms
 
         private async void ImageLoadForm_Shown(object sender, EventArgs e)
         {
-            TabOrderInit(new List<Control>() { textboxInfo, comboxImportAction }, 1);
-
             await Task.Delay(1);
             Refresh();
 
-            pictBox.Image = IoUtils.GetImage(_path);
-            CurrentMetadata = IoUtils.GetImageMetadata(_path);
-
-            var disabledActions = new List<ImageImportAction>();
-
-            if(CurrentMetadata == null || string.IsNullOrWhiteSpace(CurrentMetadata.ParsedText))
+            try
             {
-                disabledActions.Add(ImageImportAction.LoadSettings);
-                disabledActions.Add(ImageImportAction.LoadImageAndSettings);
-                disabledActions.Add(ImageImportAction.CopyPrompt);
-            }
+                pictBox.Image = IoUtils.GetImage(_path);
+                CurrentMetadata = IoUtils.GetImageMetadata(_path);
 
-            comboxImportAction.FillFromEnum<ImageImportAction>(Strings.ImageImportMode, 0, disabledActions);
+                var disabledActions = new List<ImageImportAction>();
 
-            string n = Environment.NewLine;
-            textboxInfo.Text += $"Resolution: {pictBox.Image.Size.AsString()}{n}{n}";
-
-            if (!string.IsNullOrWhiteSpace(CurrentMetadata.ParsedText))
-            {
-                textboxInfo.Text += $"Found Metadata in Image:{n}{CurrentMetadata.ParsedText}{n}";
-
-                if (!string.IsNullOrWhiteSpace(CurrentMetadata.Prompt))
+                if (CurrentMetadata == null || string.IsNullOrWhiteSpace(CurrentMetadata.ParsedText))
                 {
-                    btnLoadSettings.Enabled = true;
-                    btnCopyPrompt.Enabled = true;
-                    btnLoadSettings.BackColor = btnInitImage.BackColor;
-                    btnCopyPrompt.BackColor = btnInitImage.BackColor;
+                    disabledActions.Add(ImageImportAction.LoadSettings);
+                    disabledActions.Add(ImageImportAction.LoadImageAndSettings);
+                    disabledActions.Add(ImageImportAction.CopyPrompt);
+                }
 
-                    textboxInfo.Text += $"{n}Prompt:{n}{CurrentMetadata.Prompt}{n}";
-                    textboxInfo.Text += $"{n}Negative Prompt:{n}{CurrentMetadata.NegativePrompt}{n}";
-                    textboxInfo.Text += $"{n}Steps:{n}{CurrentMetadata.Steps}{n}";
-                    textboxInfo.Text += $"{n}Scale:{n}{CurrentMetadata.Scale.ToStringDot("0.00")}{n}";
-                    textboxInfo.Text += $"{n}Seed:{n}{CurrentMetadata.Seed}{n}";
-                    textboxInfo.Text += $"{n}Generated Resolution:{n}{CurrentMetadata.GeneratedResolution.Width}x{CurrentMetadata.GeneratedResolution.Height}{n}";
-                    textboxInfo.Text += $"{n}Sampler:{n}{CurrentMetadata.Sampler}{n}";
+                comboxImportAction.FillFromEnum<ImageImportAction>(Strings.ImageImportMode, 0, disabledActions);
 
-                    if (!string.IsNullOrWhiteSpace(CurrentMetadata.InitImgName))
+                string n = Environment.NewLine;
+                textboxInfo.Text += $"Resolution: {pictBox.Image.Size.AsString()}{n}{n}";
+
+                if (!string.IsNullOrWhiteSpace(CurrentMetadata.ParsedText))
+                {
+                    textboxInfo.Text += $"Found Metadata in Image:{n}{CurrentMetadata.ParsedText}{n}";
+
+                    if (!string.IsNullOrWhiteSpace(CurrentMetadata.Prompt))
                     {
-                        textboxInfo.Text += $"{n}Init Image:{n}{CurrentMetadata.InitImgName}{n}";
-                        textboxInfo.Text += $"{n}Init Strength:{n}{CurrentMetadata.InitStrength}{n}";
+                        btnLoadSettings.Enabled = true;
+                        btnCopyPrompt.Enabled = true;
+                        btnLoadSettings.BackColor = btnInitImage.BackColor;
+                        btnCopyPrompt.BackColor = btnInitImage.BackColor;
+
+                        textboxInfo.Text += $"{n}Prompt:{n}{CurrentMetadata.Prompt}{n}";
+                        textboxInfo.Text += $"{n}Negative Prompt:{n}{CurrentMetadata.NegativePrompt}{n}";
+                        textboxInfo.Text += $"{n}Steps:{n}{CurrentMetadata.Steps}{n}";
+                        textboxInfo.Text += $"{n}Scale:{n}{CurrentMetadata.Scale.ToStringDot("0.00")}{n}";
+                        textboxInfo.Text += $"{n}Seed:{n}{CurrentMetadata.Seed}{n}";
+                        textboxInfo.Text += $"{n}Generated Resolution:{n}{CurrentMetadata.GeneratedResolution.Width}x{CurrentMetadata.GeneratedResolution.Height}{n}";
+                        textboxInfo.Text += $"{n}Sampler:{n}{CurrentMetadata.Sampler}{n}";
+
+                        if (!string.IsNullOrWhiteSpace(CurrentMetadata.InitImgName))
+                        {
+                            textboxInfo.Text += $"{n}Init Image:{n}{CurrentMetadata.InitImgName}{n}";
+                            textboxInfo.Text += $"{n}Init Strength:{n}{CurrentMetadata.InitStrength}{n}";
+                        }
                     }
                 }
+                else
+                {
+                    textboxInfo.Text += $"No Metadata Found in Image.";
+                }
+
+                panelOk.Visible = true;
+                TabOrderInit(new List<Control>() { textboxInfo, comboxImportAction }, 1);
             }
-            else
+            catch (Exception ex)
             {
-                textboxInfo.Text += $"No Metadata Found in Image.";
+                Logger.Log(ex.ToString(), true);
             }
 
+            _ready = true;
         }
 
         private void btnCopyPrompt_Click(object sender, EventArgs e)
@@ -110,10 +120,10 @@ namespace StableDiffusionGui.Forms
 
         private void ImageLoadForm_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Escape)
+            if (e.KeyCode == Keys.Escape && _ready)
                 Close();
 
-            if (e.KeyCode == Keys.Return)
+            if (e.KeyCode == Keys.Return && _ready)
                 btnOk_Click(null, null);
         }
 

@@ -32,6 +32,7 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.pictBox = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.panelOk = new System.Windows.Forms.Panel();
             this.btnOk = new HTAlt.WinForms.HTButton();
             this.comboxImportAction = new System.Windows.Forms.ComboBox();
             this.textboxInfo = new StableDiffusionGui.Controls.CustomTextbox();
@@ -41,6 +42,7 @@
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictBox)).BeginInit();
             this.panel1.SuspendLayout();
+            this.panelOk.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -72,8 +74,7 @@
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.btnOk);
-            this.panel1.Controls.Add(this.comboxImportAction);
+            this.panel1.Controls.Add(this.panelOk);
             this.panel1.Controls.Add(this.textboxInfo);
             this.panel1.Controls.Add(this.btnInitImage);
             this.panel1.Controls.Add(this.btnLoadSettings);
@@ -84,6 +85,18 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(372, 512);
             this.panel1.TabIndex = 2;
+            // 
+            // panelOk
+            // 
+            this.panelOk.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelOk.Controls.Add(this.btnOk);
+            this.panelOk.Controls.Add(this.comboxImportAction);
+            this.panelOk.Location = new System.Drawing.Point(3, 456);
+            this.panelOk.Name = "panelOk";
+            this.panelOk.Size = new System.Drawing.Size(366, 53);
+            this.panelOk.TabIndex = 112;
+            this.panelOk.Visible = false;
             // 
             // btnOk
             // 
@@ -98,7 +111,8 @@
             this.btnOk.ForeColor = System.Drawing.Color.White;
             this.btnOk.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
             this.btnOk.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
-            this.btnOk.Location = new System.Drawing.Point(3, 486);
+            this.btnOk.Location = new System.Drawing.Point(0, 30);
+            this.btnOk.Margin = new System.Windows.Forms.Padding(0);
             this.btnOk.Name = "btnOk";
             this.btnOk.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
             this.btnOk.Size = new System.Drawing.Size(366, 23);
@@ -117,14 +131,15 @@
             this.comboxImportAction.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.comboxImportAction.ForeColor = System.Drawing.Color.White;
             this.comboxImportAction.FormattingEnabled = true;
-            this.comboxImportAction.Location = new System.Drawing.Point(3, 456);
+            this.comboxImportAction.Location = new System.Drawing.Point(0, 0);
+            this.comboxImportAction.Margin = new System.Windows.Forms.Padding(0, 0, 0, 6);
             this.comboxImportAction.Name = "comboxImportAction";
             this.comboxImportAction.Size = new System.Drawing.Size(366, 24);
             this.comboxImportAction.TabIndex = 110;
             // 
             // textboxInfo
             // 
-            this.textboxInfo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.textboxInfo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textboxInfo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.textboxInfo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -132,6 +147,8 @@
             this.textboxInfo.Location = new System.Drawing.Point(3, 3);
             this.textboxInfo.Multiline = true;
             this.textboxInfo.Name = "textboxInfo";
+            this.textboxInfo.Placeholder = "";
+            this.textboxInfo.PlaceholderTextColor = System.Drawing.Color.Silver;
             this.textboxInfo.ReadOnly = true;
             this.textboxInfo.Size = new System.Drawing.Size(366, 447);
             this.textboxInfo.TabIndex = 79;
@@ -231,6 +248,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictBox)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.panelOk.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -246,5 +264,6 @@
         private StableDiffusionGui.Controls.CustomTextbox textboxInfo;
         public System.Windows.Forms.ComboBox comboxImportAction;
         private HTAlt.WinForms.HTButton btnOk;
+        private System.Windows.Forms.Panel panelOk;
     }
 }
