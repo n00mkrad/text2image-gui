@@ -1,12 +1,9 @@
-﻿using Newtonsoft.Json;
-using StableDiffusionGui.Data;
+﻿using StableDiffusionGui.Data;
 using StableDiffusionGui.Main;
-using StableDiffusionGui.MiscUtils;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 using ZetaLongPaths;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
 

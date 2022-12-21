@@ -35,8 +35,8 @@ namespace StableDiffusionGui
         [STAThread]
         static void Main(string[] args)
         {
+            Logger.Log("Starting up.", true);
             HandleArgs(args);
-
             Config.Init();
             Paths.Init();
 

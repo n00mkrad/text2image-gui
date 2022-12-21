@@ -8,6 +8,7 @@ using System.Linq;
 using StableDiffusionGui.Os;
 using System.Threading.Tasks;
 using StableDiffusionGui.Data;
+using System.Reflection;
 
 namespace StableDiffusionGui.Io
 {
@@ -23,6 +24,7 @@ namespace StableDiffusionGui.Io
             IoUtils.CreateFileIfNotExists(ConfigPath);
             Reload();
             Ready = true;
+            DumpKeys();
         }
 
         public static async Task Reset(int retries = 3, SettingsForm settingsForm = null)
@@ -83,17 +85,38 @@ namespace StableDiffusionGui.Io
             }
         }
 
-        public static T Get<T>(string key, T defaultValue = default)
+        /// <summary> Gets value from config by looking for <paramref name="key"/>. Use <paramref name="defaultValue"/> as fallback, optionally
+        /// with <paramref name="writeToFileIfNotExists"/> to write it to the config file. </summary>
+        /// <returns> Saved value if one was found, otherwise <paramref name="defaultValue"/> </returns>
+        public static T Get<T>(string key, T defaultValue = default, bool writeToFileIfNotExists = true)
         {
             try
             {
                 if (!_cachedConfig.ContainsKey(key))
                 {
-                    if (defaultValue != null && !defaultValue.Equals(default(T)))
-                        Set(key, defaultValue);
-                    else
-                        ApplyDefaults(key);
+                    if (!writeToFileIfNotExists)
+                        return defaultValue;
+
+                    Set(key, defaultValue);
                 }
+
+                return _cachedConfig.GetNoNull(key, default(T).ToJson()).FromJson<T>();
+            }
+            catch (Exception e)
+            {
+                Logger.Log($"Failed to get {key.Wrap()} from config! {e.Message}", true);
+                return default(T);
+            }
+        }
+
+        /// <summary> Gets value from config by looking for <paramref name="key"/>. If it does not exist, try applying defaults first. </summary>
+        /// <returns> Saved value if one was found </returns>
+        public static T Get<T>(string key)
+        {
+            try
+            {
+                if (!_cachedConfig.ContainsKey(key))
+                    ApplyDefaults(key);
 
                 return _cachedConfig.GetNoNull(key, default(T).ToJson()).FromJson<T>();
             }
@@ -141,6 +164,42 @@ namespace StableDiffusionGui.Io
             }
 
             return false;
+        }
+
+        /// <summary> Dumps all hardcoded config keys in Keys class to a text file using reflection, for user reference </summary>
+        public static void DumpKeys()
+        {
+            try
+            {
+                string filePath = Path.Combine(Paths.GetDataPath(), "configKeys.txt");
+
+                if (File.Exists(filePath) && File.ReadAllLines(filePath)[0].Trim() == Program.Version)
+                    return; // No need to dump again
+
+                var lines = new List<string>();
+                var type = typeof(Keys);
+                MemberInfo[] members = type.GetMembers();
+
+                foreach (MemberInfo member in members)
+                {
+                    if (member.MemberType == MemberTypes.Field || member.MemberType == MemberTypes.Property)
+                    {
+                        object value = type.InvokeMember(member.Name, BindingFlags.GetField | BindingFlags.GetProperty | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic, null, null, null);
+
+                        if (value != null)
+                            lines.Add(value.ToString());
+                    }
+                }
+
+                lines = lines.OrderBy(x => x).ToList(); // Sort alphabetically
+                lines.Insert(0, Program.Version); // First line is program version
+                File.WriteAllLines(filePath, lines);
+                Logger.Log($"Dumped {Program.Version} config keys to {filePath.Wrap()}.", true);
+            }
+            catch (Exception ex)
+            {
+                Logger.Log($"Failed to dump config keys: {ex.Message}\n{ex.StackTrace}", true);
+            }
         }
 
         public class Keys
@@ -199,6 +258,7 @@ namespace StableDiffusionGui.Io
             public const string AutoSetResForInitImg = "autoSetResForInitImg";
             public const string InitImageRetainAspectRatio = "initImageRetainAspectRatio";
             public const string HiresFix = "hiresFix";
+            public const string FilenameTimestampMode = "filenameTimestampMode";
         }
     }
 }

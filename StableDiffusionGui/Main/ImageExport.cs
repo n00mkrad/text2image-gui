@@ -12,6 +12,8 @@ namespace StableDiffusionGui.Main
 {
     internal class ImageExport
     {
+        public enum FilenameTimestamp { None, Date, DateTime, UnixEpoch }
+
         private static readonly int _maxPathLength = 255;
         private static readonly int _minimumImageAgeMs = 200;
         private static readonly int _loopWaitBeforeStartMs = 1000;
@@ -87,7 +89,7 @@ namespace StableDiffusionGui.Main
                             var img = images[i];
                             string number = $"{(sessionDir ? "" : "-")}{(currTask.ImgCount).ToString().PadLeft(currTask.TargetImgCount.ToString().Length, '0')}";
                             string parentDir = currTask.SubfoldersPerPrompt ? imageDirMap[img.FullName] : currTask.OutDir;
-                            string renamedPath = FormatUtils.GetExportFilename(img.FullName, parentDir, number, "png", _maxPathLength, !sessionDir, inclPrompt, inclSeed, inclScale, inclSampler, inclModel);
+                            string renamedPath = GetExportFilename(img.FullName, parentDir, number, "png", _maxPathLength, false, inclPrompt, inclSeed, inclScale, inclSampler, inclModel);
                             OverlayMaskIfExists(img.FullName);
                             Logger.Log($"ImageExport: Trying to move {img.Name} => {renamedPath}", true);
                             img.MoveTo(renamedPath);
@@ -117,6 +119,73 @@ namespace StableDiffusionGui.Main
             Logger.Log("ExportLoop END", true);
         }
 
+        public static string GetExportFilename(string filePath, string parentDir, string suffix, string ext, int pathLimit, bool inclTime, bool inclPrompt, bool inclSeed, bool inclScale, bool inclSampler, bool inclModel)
+        {
+            try
+            {
+                ext = ext.StartsWith(".") ? ext : $".{ext}"; // Ensure extension always starts with a dot
+                string timestamp = GetExportTimestamp(Config.Get<FilenameTimestamp>(Config.Keys.FilenameTimestampMode, FilenameTimestamp.None));
+                int pathBudget = pathLimit - parentDir.Length - timestamp.Length - suffix.Length - 4;
+                var meta = IoUtils.GetImageMetadata(filePath);
+                string infoStr = "";
+
+                string seed = $"-{meta.Seed}";
+
+                if (inclSeed && (pathBudget - seed.Length > 0))
+                {
+                    pathBudget -= seed.Length;
+                    infoStr += seed;
+                }
+
+                string scale = $"-scale{meta.Scale.ToStringDot("0.00")}";
+
+                if (inclScale && (pathBudget - scale.Length > 0))
+                {
+                    pathBudget -= scale.Length;
+                    infoStr += scale;
+                }
+
+                string sampler = $"-{meta.Sampler}";
+
+                if (inclSampler && (pathBudget - sampler.Length > 0))
+                {
+                    pathBudget -= sampler.Length;
+                    infoStr += sampler;
+                }
+
+                string model = $"-{Path.ChangeExtension(TextToImage.CurrentTaskSettings.Params.Get("model").FromJson<string>(), null).Trim().Trunc(20, false)}";
+
+                if (inclModel && model.Length > 1 && (pathBudget - model.Length > 0))
+                {
+                    pathBudget -= model.Length;
+                    infoStr += model;
+                }
+
+                string finalPath = inclPrompt
+                ? Path.Combine(parentDir, $"{timestamp}{suffix}-{FormatUtils.SanitizePromptFilename(meta.Prompt, pathBudget)}{infoStr}{ext}")
+                : Path.Combine(parentDir, $"{timestamp}{suffix}{infoStr}{ext}");
+
+                return IoUtils.GetAvailableFilePath(finalPath);
+            }
+            catch (Exception ex)
+            {
+                Logger.Log($"GetExportFilename Error: {ex.Message}\n{ex.StackTrace}");
+                return "";
+            }
+        }
+
+        private static string GetExportTimestamp (FilenameTimestamp timestampMode)
+        {
+            switch (timestampMode)
+            {
+                case FilenameTimestamp.None: return "";
+                case FilenameTimestamp.Date: return DateTime.Now.ToString("yyyy-MM-dd");
+                case FilenameTimestamp.DateTime: return DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
+                case FilenameTimestamp.UnixEpoch: return FormatUtils.GetUnixTimestamp();
+                default: return FormatUtils.GetUnixTimestamp();
+            }
+        }
+
         private static void OverlayMaskIfExists(string imgPath, bool copyMetadata = true)
         {
             if (TextToImage.CurrentTaskSettings.Implementation == Enums.StableDiffusion.Implementation.InvokeAi)
@@ -137,6 +206,5 @@ namespace StableDiffusionGui.Main
             if (meta != null)
                 IoUtils.SetImageMetadata(imgPath, meta.ParsedText); // Put metadata back in
         }
-
     }
 }

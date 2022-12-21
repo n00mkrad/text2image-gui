@@ -17,7 +17,6 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
 namespace StableDiffusionGui
 {

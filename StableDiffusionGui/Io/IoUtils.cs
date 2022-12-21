@@ -770,5 +770,51 @@ namespace StableDiffusionGui.Io
             if (cancel)
                 TextToImage.Cancel("File with invalid path detected.", false);
         }
+
+        public static string GetAvailableFilePath(string filePath, int maxRetries = 1000000)
+        {
+            if (File.Exists(filePath))
+            {
+                string dir = Path.GetDirectoryName(filePath);
+                string name = Path.GetFileNameWithoutExtension(filePath);
+                string ext = Path.GetExtension(filePath);
+                int counter = 2;
+
+                while (File.Exists(filePath))
+                {
+                    filePath = Path.Combine(dir, $"{name}({counter}){ext}");
+                    counter++;
+
+                    if (counter > (maxRetries + 2))
+                        break;
+                }
+            }
+
+            return filePath;
+        }
+
+        public static async Task<string> GetAvailableFilePathAsync(string filePath, int waitMs = 50, int maxRetries = 1000000)
+        {
+            if (File.Exists(filePath))
+            {
+                string dir = Path.GetDirectoryName(filePath);
+                string name = Path.GetFileNameWithoutExtension(filePath);
+                string ext = Path.GetExtension(filePath);
+                int counter = 2;
+
+                while (File.Exists(filePath))
+                {
+                    filePath = Path.Combine(dir, $"{name}({counter}){ext}");
+                    counter++;
+
+                    if (counter > (maxRetries + 2))
+                        break;
+
+                    await Task.Delay(waitMs);
+                }
+            }
+
+            return filePath;
+        }
     }
 }

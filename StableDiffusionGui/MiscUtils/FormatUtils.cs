@@ -165,69 +165,6 @@ namespace StableDiffusionGui.MiscUtils
                 return codec.ToTitleCase();
         }
 
-        public static string GetExportFilename(string filePath, string parentDir, string suffix, string ext, int pathLimit, bool inclTime, bool inclPrompt, bool inclSeed, bool inclScale, bool inclSampler, bool inclModel)
-        {
-            try
-            {
-                ext = ext.Remove(".");
-
-                var n = DateTime.Now;
-                string timestamp = inclTime ? $"{n.Year}-{n.Month.ToString().PadLeft(2, '0')}-{n.Day.ToString().PadLeft(2, '0')}-{n.Hour.ToString().PadLeft(2, '0')}-{n.Minute.ToString().PadLeft(2, '0')}-{n.Second.ToString().PadLeft(2, '0')}" : "";
-
-                int pathBudget = pathLimit - parentDir.Length - timestamp.Length - suffix.Length - 4;
-
-                var meta = IoUtils.GetImageMetadata(filePath);
-
-                string infoStr = "";
-
-                string seed = $"-{meta.Seed}";
-
-                if (inclSeed && (pathBudget - seed.Length > 0))
-                {
-                    pathBudget -= seed.Length;
-                    infoStr += seed;
-                }
-
-                string scale = $"-scale{meta.Scale.ToStringDot("0.00")}";
-
-                if (inclScale && (pathBudget - scale.Length > 0))
-                {
-                    pathBudget -= scale.Length;
-                    infoStr += scale;
-                }
-
-                string sampler = $"-{meta.Sampler}";
-
-                if (inclSampler && (pathBudget - sampler.Length > 0))
-                {
-                    pathBudget -= sampler.Length;
-                    infoStr += sampler;
-                }
-
-                string model = $"-{Path.ChangeExtension(TextToImage.CurrentTaskSettings.Params.Get("model").FromJson<string>(), null).Trim().Trunc(20, false)}";
-
-                if (inclModel && model.Length > 1 && (pathBudget - model.Length > 0))
-                {
-                    pathBudget -= model.Length;
-                    infoStr += model;
-                }
-
-                if (inclPrompt)
-                {
-                    return Path.Combine(parentDir, $"{timestamp}{suffix}-{SanitizePromptFilename(meta.Prompt, pathBudget)}{infoStr}") + $".{ext}";
-                }
-                else
-                {
-                    return Path.Combine(parentDir, $"{timestamp}{suffix}{infoStr}") + $".{ext}";
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Log($"GetExportFilename Error: {ex.Message}\n{ex.StackTrace}");
-                return "";
-            }
-        }
-
         public static string SanitizePromptFilename(string prompt, int pathBudget = 64)
         {
             if (string.IsNullOrWhiteSpace(prompt))

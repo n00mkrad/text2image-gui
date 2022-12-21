@@ -45,6 +45,9 @@ namespace StableDiffusionGui.Main
                 TargetImgCount = batches.Sum(x => x.GetTargetImgCount()),
             };
 
+            if (Config.Get<bool>(Config.Keys.FolderPerSession))
+                CurrentTask.OutDir = Path.Combine(CurrentTask.OutDir, Paths.SessionTimestamp);
+
             foreach (TtiSettings s in batches)
             {
                 if (s == null)
