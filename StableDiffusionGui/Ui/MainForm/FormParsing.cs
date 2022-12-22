@@ -39,9 +39,7 @@ namespace StableDiffusionGui.Ui.MainForm
         public static void LoadTtiSettingsIntoUi(string[] prompts, string negPrompt = "")
         {
             F.textboxPrompt.Text = string.Join(Environment.NewLine, prompts);
-
-            if (!string.IsNullOrWhiteSpace(negPrompt))
-                F.textboxPromptNeg.Text = negPrompt;
+            F.textboxPromptNeg.Text = negPrompt;
         }
 
         public static void LoadTtiSettingsIntoUi(TtiSettings s)
@@ -88,6 +86,8 @@ namespace StableDiffusionGui.Ui.MainForm
 
                 if (v.Count() > 1)
                     extraValuesTextbox.Text = string.Join(",", v);
+                else
+                    extraValuesTextbox.Text = "";
             }
         }
 
