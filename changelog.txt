@@ -6,6 +6,7 @@ SD GUI 1.8.1 Changelog:
 - Improved: Inpainting Mask Blur is now automatically disabled when using RunwayML inpainting
 - Improved: In Installer, a custom git commit can now be used (for developers)
 - Fixed: Upscalers were disabled by default on <=6GB GPUs
+- Fixed: Model loading would fail without an internet connection
 - Fixed: CFG Scale <=1 didn't work or would fallback to default value
 - Fixed: Inpainting mask was saved with irreversible blur, making editing harder
 - Fixed: Init image import would ignore stretch/pad setting
