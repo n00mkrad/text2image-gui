@@ -4,6 +4,11 @@ namespace StableDiffusionGui.Main
 {
     public class Enums
     {
+        public class Program
+        {
+            public enum UpdateChannel { Public, Beta }
+        }
+
         public class Models
         {
             public enum Precision { Fp16, Fp32 }

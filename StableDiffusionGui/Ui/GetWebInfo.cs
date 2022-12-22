@@ -18,7 +18,7 @@ namespace StableDiffusionGui.Ui
                 string url = $"https://raw.githubusercontent.com/n00mkrad/text2image-gui/main/meta/version.json";
                 string text = await new WebClient().DownloadStringTaskAsync(new Uri(url));
                 var dict = text.FromJson<EasyDict<string, string>>();
-                return dict.Get("latestPublicRel", "0.0.0");
+                return dict.Get($"latest{Program.ReleaseChannel}Rel", "0.0.0");
             }
             catch (Exception e)
             {
