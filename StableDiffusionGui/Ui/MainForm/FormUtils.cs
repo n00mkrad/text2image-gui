@@ -227,14 +227,16 @@ namespace StableDiffusionGui.Ui.MainForm
             if (MainUi.CurrentInitImgPaths == null || MainUi.CurrentInitImgPaths.Count < 1)
                 return;
 
-            Image image = IoUtils.GetImage(MainUi.CurrentInitImgPaths[0], false);
+            Image img = IoUtils.GetImage(MainUi.CurrentInitImgPaths[0], false);
 
-            if (image == null)
+            if (img == null)
                 return;
 
-            Size targetSize = new Size(F.comboxResW.GetInt(), F.comboxResH.GetInt());
-            image = ImgUtils.ScaleAndPad(ImgUtils.GetMagickImage(image), image.Size, targetSize).ToBitmap();
-            Inpainting.EditCurrentMask(image, MainForm.FormControls.IsUsingInpaintingModel);
+            Size targetSize = TextToImage.CurrentTaskSettings.Params["res"].FromJson<Size>();
+            Size scaleSize = Config.Get<bool>(Config.Keys.InitImageRetainAspectRatio) ? ImgMaths.FitIntoFrame(img.Size, targetSize) : targetSize;
+            img = ImgUtils.ScaleAndPad(ImgUtils.GetMagickImage(img), scaleSize, targetSize).ToBitmap();
+
+            Inpainting.EditCurrentMask(img, MainForm.FormControls.IsUsingInpaintingModel);
         }
     }
 }
