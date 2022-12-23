@@ -307,7 +307,7 @@ namespace StableDiffusionGui.Ui
             if (ver.Trim() != Program.Version)
                 Logger.Log($"It seems like you are not running the latest version.{(Program.ReleaseChannel == UpdateChannel.Public ? $" You can download the latest on itch: {Constants.Urls.ItchPage}" : "")}");
             else
-                Logger.Log($"You are running the latest version ({Program.ReleaseChannel}).");
+                Logger.Log($"You are running the latest version ({Program.ReleaseChannel} Channel).");
         }
 
         public static void SetSettingsVertScrollbar()
