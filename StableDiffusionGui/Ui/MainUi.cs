@@ -18,6 +18,7 @@ using System.Resources;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static StableDiffusionGui.Main.Enums.Misc;
+using static StableDiffusionGui.Main.Enums.Program;
 
 namespace StableDiffusionGui.Ui
 {
@@ -304,7 +305,7 @@ namespace StableDiffusionGui.Ui
             Logger.Log($"Latest version: {ver}");
 
             if (ver.Trim() != Program.Version)
-                Logger.Log($"It seems like you are not running the latest version. You can download the latest on itch: {Constants.Urls.ItchPage}");
+                Logger.Log($"It seems like you are not running the latest version.{(Program.ReleaseChannel == UpdateChannel.Public ? $" You can download the latest on itch: {Constants.Urls.ItchPage}" : "")}");
             else
                 Logger.Log($"You are running the latest version ({Program.ReleaseChannel}).");
         }
