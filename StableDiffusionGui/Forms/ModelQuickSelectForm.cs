@@ -27,7 +27,16 @@ namespace StableDiffusionGui.Forms
             Refresh();
             _implementation = (Enums.StableDiffusion.Implementation)Config.Get<int>(Config.Keys.ImplementationIdx);
             LoadModels(true);
-            comboxModel.DroppedDown = true;
+
+            if (comboxModel.Items.Count > 0)
+            {
+                comboxModel.DroppedDown = true;
+            }
+            else
+            {
+                comboxModel.Visible = false;
+                statusLabel.Text = "No compatible models found for the current implementation.";
+            }
         }
 
         private void LoadModels(bool loadCombox)
