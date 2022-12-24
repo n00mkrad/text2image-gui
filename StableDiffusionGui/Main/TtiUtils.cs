@@ -171,6 +171,19 @@ namespace StableDiffusionGui.Main
             }
         }
 
+        public static bool CurrentSdModelExists(List<Model> cachedModels = null)
+        {
+            string name = Config.Get<string>(Config.Keys.Model);
+            var imp = (Implementation)Config.Get<int>(Config.Keys.ImplementationIdx);
+
+            if (string.IsNullOrWhiteSpace(name))
+                return false;
+
+            var model = cachedModels == null ? Paths.GetModel(name, false, ModelType.Normal, imp) : Paths.GetModel(cachedModels, name, false, ModelType.Normal, imp);
+
+            return model != null;
+        }
+
         public static Dictionary<string, string> GetEnvVarsSd(bool allCudaDevices = false, string baseDir = ".")
         {
             var envVars = new Dictionary<string, string>();

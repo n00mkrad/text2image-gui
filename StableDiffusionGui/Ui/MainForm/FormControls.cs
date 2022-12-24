@@ -72,6 +72,9 @@ namespace StableDiffusionGui.Ui.MainForm
             F.sliderScale.ActualMaximum = !adv ? 25 : 50;
             F.comboxResW.SetItems(MainUi.Resolutions.Where(x => x <= (adv ? 2048 : 1024)).Select(x => x.ToString()), UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.Last);
             F.comboxResH.SetItems(MainUi.Resolutions.Where(x => x <= (adv ? 2048 : 1024)).Select(x => x.ToString()), UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.Last);
+
+            if (!TtiUtils.CurrentSdModelExists())
+                Config.Set(Config.Keys.Model, "");
         }
 
         public static void OpenLogsMenu()

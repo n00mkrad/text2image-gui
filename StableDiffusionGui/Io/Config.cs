@@ -235,6 +235,7 @@ namespace StableDiffusionGui.Io
             public const string UpscaleIdx = "upscaleIdx";
             public const string UpscaleStrength = "upscaleStrength";
             public const string ImplementationIdx = "implementation";
+            // public const string ImplementationName = "implementationName";
             public const string CudaDeviceIdx = "cudaDevice";
             public const string AdvancedUi = "advancedUi";
             public const string NotifyModeIdx = "motifyModeIdx";
