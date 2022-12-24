@@ -31,12 +31,12 @@ namespace StableDiffusionGui.Implementations
                 long seed = parameters.FromJson<long>("seed");
                 string sampler = parameters.FromJson<string>("sampler");
                 Size res = parameters.FromJson<Size>("res");
-                var seamless = parameters.FromJson<Enums.StableDiffusion.SeamlessMode>("seamless");
+                var seamless = parameters.FromJson<SeamlessMode>("seamless");
                 string model = parameters.FromJson<string>("model");
                 bool lockSeed = parameters.FromJson<bool>("lockSeed");
                 InpaintMode inpaint = parameters.FromJson<InpaintMode>("inpainting");
 
-                var cachedModels = Paths.GetModels(Enums.StableDiffusion.ModelType.Normal, Enums.StableDiffusion.Implementation.DiffusersOnnx);
+                var cachedModels = Paths.GetModels(ModelType.Normal, Implementation.DiffusersOnnx);
                 Model modelDir = TtiUtils.CheckIfCurrentSdModelExists();
 
                 if (modelDir == null)
@@ -122,12 +122,13 @@ namespace StableDiffusionGui.Implementations
                 TextToImage.CurrentTask.Processes.Add(py);
 
                 string mode = "txt2img";
+                bool inpaintingMdl = modelDir.Name.EndsWith(Constants.SuffixesPrefixes.InpaintingMdlSuf);
 
-                if(initImgs != null && initImgs.Length > 0)
+                if (initImgs != null && initImgs.Length > 0)
                 {
                     mode = "img2img";
 
-                    if (inpaint != InpaintMode.Disabled)
+                    if (inpaintingMdl && inpaint != InpaintMode.Disabled)
                         mode = "inpaint";
                 }
 

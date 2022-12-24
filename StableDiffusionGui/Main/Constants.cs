@@ -54,6 +54,11 @@
             public static readonly string[] ValidSdVaeModels = new string[] { ".ckpt", ".pt" };
         }
 
+        public class SuffixesPrefixes
+        {
+            public const string InpaintingMdlSuf = "-inpainting";
+        }
+
         public class Limits
         {
             public const int MaxWildcardCombinations = 100000;

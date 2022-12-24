@@ -21,7 +21,7 @@ namespace StableDiffusionGui.Ui.MainForm
 
         private static StableDiffusionGui.MainForm F { get { return Program.MainForm; } }
         private static Implementation CurrImpl { get { return (Implementation)Config.Get<int>(Config.Keys.ImplementationIdx); } }
-        public static bool IsUsingInpaintingModel { get { return Path.ChangeExtension(Config.Get<string>(Config.Keys.Model), null).EndsWith("-inpainting"); } }
+        public static bool IsUsingInpaintingModel { get { return Path.ChangeExtension(Config.Get<string>(Config.Keys.Model), null).EndsWith(Constants.SuffixesPrefixes.InpaintingMdlSuf); } }
 
         public static void InitializeControls()
         {
