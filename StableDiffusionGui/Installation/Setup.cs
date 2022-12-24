@@ -87,7 +87,7 @@ namespace StableDiffusionGui.Installation
                 return;
             }
 
-            bool installOnnx = HwInfo.KnownGpus.Any(gpu => gpu.Vendor != HwInfo.GpuInfo.GpuVendor.Unknown);
+            bool installOnnx = Config.Get<bool>(Config.Keys.AlwaysInstallOnnx, true) || HwInfo.KnownGpus.Any(gpu => gpu.Vendor != HwInfo.GpuInfo.GpuVendor.Unknown);
             string repoPath = GetDataSubPath(Constants.Dirs.SdRepo);
             string batPath = Path.Combine(repoPath, "install.bat");
 
