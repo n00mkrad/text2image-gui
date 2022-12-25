@@ -102,6 +102,23 @@ namespace StableDiffusionGui.Main
                     errMsg = $"Failed to switch models.\n\nPossibly you tried to load an incompatible model.";
                     _hasErrored = true;
                 }
+
+                if (!_hasErrored && line.Trim().StartsWith("** model ") && line.Contains("could not be loaded:"))
+                {
+                    errMsg = $"Failed to load model.";
+
+                    if(line.Contains("state_dict"))
+                        errMsg += $"\n\nThe model appears to be incompatible.";
+
+                    if (line.Contains("pytorch_model.bin"))
+                    {
+                        errMsg += "\n\nCache seems to be corrupted and has been cleared. Please try again.";
+                        IoUtils.TryDeleteIfExists(Path.Combine(Environment.ExpandEnvironmentVariables("%USERPROFILE%"), ".cache", "huggingface", "transformers"));
+                        IoUtils.TryDeleteIfExists(Path.Combine(Paths.GetDataPath(), Constants.Dirs.Cache.Root, Constants.Dirs.Cache.Transformers));
+                    }
+
+                    _hasErrored = true;
+                }
             }
 
             if (TextToImage.CurrentTaskSettings != null && TextToImage.CurrentTaskSettings.Implementation == Enums.StableDiffusion.Implementation.OptimizedSd)

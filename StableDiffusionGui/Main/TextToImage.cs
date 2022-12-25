@@ -174,7 +174,7 @@ namespace StableDiffusionGui.Main
                 TtiProcess.Kill();
             }
 
-            Logger.LogIfLastLineDoesNotContainMsg(showMsgBox || manual ? "Canceled." : $"Canceled: {reason.Replace("\n", " ").Trunc(200)}.");
+            Logger.LogIfLastLineDoesNotContainMsg(showMsgBox || manual ? "Canceled." : $"Canceled: {reason.Replace("\n", " ").Trunc(200)}");
 
             if (!string.IsNullOrWhiteSpace(reason) && showMsgBox)
                 Task.Run(() => UiUtils.ShowMessageBox($"Canceled:\n\n{reason}"));
