@@ -123,7 +123,7 @@ namespace StableDiffusionGui.Ui.MainForm
             UpdatePromptLabelColors();
         }
 
-        public static void UpdatePromptLabelColors ()
+        public static void UpdatePromptLabelColors()
         {
             Program.MainForm.labelImgPrompt.ForeColor = Program.MainForm.labelImgPrompt.Text == _strNoPrompt ? Color.Silver : Color.PaleGreen;
             Program.MainForm.labelImgPromptNeg.ForeColor = Program.MainForm.labelImgPromptNeg.Text == _strNoPromptNeg ? Color.Silver : Color.LightCoral;
@@ -131,7 +131,10 @@ namespace StableDiffusionGui.Ui.MainForm
 
         public static void Move(bool previous = false)
         {
-            TimeOfLastImageViewerInteraction = DateTime.Now;
+            if (_currentImages.Length == 0)
+                TimeOfLastImageViewerInteraction = new DateTime();
+            else
+                TimeOfLastImageViewerInteraction = DateTime.Now;
 
             if (!previous)
             {
@@ -164,7 +167,7 @@ namespace StableDiffusionGui.Ui.MainForm
                     File.Copy(CurrentImagePath, targetPath, true);
                     OsUtils.ShowNotification("Stable Diffusion GUI", $"Copied image to favorites.", false, 1.5f);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Logger.Log($"Failed to copy image to favorites: {ex.Message}");
                     Logger.Log($"Failed to copy '{CurrentImagePath}' => '{targetPath}'\n{ex.StackTrace}", true);
