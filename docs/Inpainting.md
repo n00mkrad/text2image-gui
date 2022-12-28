@@ -49,7 +49,10 @@ Allows you to describe the objects you want to replace, using CLIP (clipseg). No
 
 #### RunwayML Inpainting
 
-1. Download [sd-v1-5-inpainting](https://huggingface.co/runwayml/stable-diffusion-inpainting/blob/main/sd-v1-5-inpainting.ckpt) if you don't have it yet, put it in your `Data/models` folder, and select it in SD GUI (Ctrl+M)
+
+Make sure you have an inpainting model. With the default InvokeAI implementation, download [sd-v1-5-inpainting](https://huggingface.co/runwayml/stable-diffusion-inpainting/blob/main/sd-v1-5-inpainting.ckpt) to `Data/models`. If you use ONNX/DirectML, download the ONNX model instead ([stable-diffusion-inpainting](https://icedrive.net/s/hfhiGB4uC4XyCBTzN4x9F3fYQA7A)) and extract it to `Data/models` so that your folder structure is `Data/models/stable-diffusion-inpainting/model_index.json` etc.
+
+1. Select your inpainting model (in settings or with Ctrl+M)
 2. Load an image into SD GUI by dragging and dropping it, or by pressing "Load Image(s)"
 3. Select a masking mode next to *Inpainting* (Image Mask or Text)
 4. Press Generate, wait for the Mask Editor window to pop up, and create your mask (**Important: Do not use a blurred mask with this method!**)
