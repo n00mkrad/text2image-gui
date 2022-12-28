@@ -1,7 +1,7 @@
 # AMD GPU Guide
 SD GUI comes with an implementation that enables hardware-accelerated AI image generation on all GPUs that support DirectML.
 
-
+**Note:** The AMD implementation uses an entirely different codebase from the default Pytorch implementation and thus lacks certain features, such as tileable image generation or custom samplers.
 
 ## Prerequisites
 

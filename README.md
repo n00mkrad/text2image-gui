@@ -8,10 +8,9 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code: [Cod
 [**Features and How to Use Them**](#features-and-how-to-use-them)  
 [**Hotkeys (Main Window)**](#hotkeys-main-window)
 
-**Additional Guides:**
-
-[**AMD GPU Support**](https://github.com/n00mkrad/text2image-gui/blob/main/Amd.md)  
-[**Inpainting**](https://github.com/n00mkrad/text2image-gui/blob/main/Inpainting.md)  
+**Additional Guides:**  
+[**AMD GPU Support**](https://github.com/n00mkrad/text2image-gui/blob/main/docs/Amd.md)  
+[**Inpainting**](https://github.com/n00mkrad/text2image-gui/blob/main/docs/Inpainting.md)  
 
 
 
