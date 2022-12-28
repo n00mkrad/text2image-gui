@@ -12,6 +12,7 @@ SD GUI 1.8.1 Changelog:
 - Fixed: Inpainting mask was saved with irreversible blur, making editing harder
 - Fixed: Init image import would ignore stretch/pad setting
 - Fixed: Saved inpainting mask wouldn't get cleared properly when resetting it
+- Fixed: Various minor bugs
 
 
 SD GUI 1.8.0 Changelog:

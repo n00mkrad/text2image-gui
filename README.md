@@ -1,13 +1,17 @@
 # NMKD Stable Diffusion GUI
 Somewhat modular text2image GUI, initially just for Stable Diffusion.
 
-Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (formerly lstein): [Code Repo](https://github.com/n00mkrad/stable-diffusion-cust/commits/main)
+Relies on a slightly customized fork of the InvokeAI Stable Diffusion code: [Code Repo](https://github.com/n00mkrad/stable-diffusion-cust/commits/main)
 
-
-**Table of Contents:**  
+**Main Guide:**  
 [**System Requirements**](#system-requirements)  
 [**Features and How to Use Them**](#features-and-how-to-use-them)  
 [**Hotkeys (Main Window)**](#hotkeys-main-window)
+
+**Additional Guides:**
+
+[**AMD GPU Support**](https://github.com/n00mkrad/text2image-gui/blob/main/Amd.md)  
+[**Inpainting**](https://github.com/n00mkrad/text2image-gui/blob/main/Inpainting.md)  
 
 
 
@@ -18,14 +22,16 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code (form
 #### Minimum:
 
 - **GPU:** Nvidia GPU with 4 GB VRAM, Maxwell Architecture (2014) or newer
+  - Alternatively, with limited feature support: Any DirectML-capable GPU with 8 GB of VRAM
+
 - **RAM:** 8 GB RAM (Note: Pagefile must be enabled as swapping will occur with only 8 GB!)
-- **Disk:** 10 GB (another free 3 GB for temporary files recommended)
+- **Disk:** 10 GB (another free 5 GB for temporary files recommended)
 
 #### Recommended:
 
 - **GPU:** Nvidia GPU with 8 GB VRAM, Pascal Architecture (2016) or newer
 - **RAM:** 16 GB RAM
-- **Disk:** 12 GB on SSD (another free 3 GB for temporary files recommended)
+- **Disk:** 12 GB on SSD (another free 5 GB for temporary files recommended)
 
 #### Professional/DreamBooth-capable:
 
