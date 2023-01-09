@@ -75,7 +75,7 @@ namespace StableDiffusionGui.Forms
                         textboxInfo.Text += $"{n}Scale:{n}{CurrentMetadata.Scale.ToStringDot("0.00")}{n}";
                         textboxInfo.Text += $"{n}Seed:{n}{CurrentMetadata.Seed}{n}";
                         textboxInfo.Text += $"{n}Generated Resolution:{n}{CurrentMetadata.GeneratedResolution.Width}x{CurrentMetadata.GeneratedResolution.Height}{n}";
-                        textboxInfo.Text += $"{n}Sampler:{n}{CurrentMetadata.Sampler}{n}";
+                        textboxInfo.Text += $"{n}Sampler:{n}{Strings.Samplers.Get(CurrentMetadata.Sampler, true, true)}{n}";
 
                         if (!string.IsNullOrWhiteSpace(CurrentMetadata.InitImgName))
                         {
