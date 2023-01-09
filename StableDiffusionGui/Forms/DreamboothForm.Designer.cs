@@ -199,7 +199,7 @@
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(40, 17);
             this.textBox1.TabIndex = 93;
-            this.textBox1.Text = "100";
+            this.textBox1.Text = "0";
             // 
             // sliderSteps
             // 
@@ -214,7 +214,7 @@
             0,
             65536});
             this.sliderSteps.ActualValue = new decimal(new int[] {
-            100,
+            0,
             0,
             0,
             0});
@@ -236,7 +236,6 @@
             this.sliderSteps.ThumbSize = new System.Drawing.Size(14, 14);
             this.toolTip.SetToolTip(this.sliderSteps, "More steps can help the model learn better, but if it\'s too high it will overfit " +
         "and the model becomes less flexible.");
-            this.sliderSteps.Value = 10;
             this.sliderSteps.ValueBox = this.textBox1;
             this.sliderSteps.ValueStep = new decimal(new int[] {
             10,
@@ -328,7 +327,7 @@
             this.textboxSliderLrMultiplier.Name = "textboxSliderLrMultiplier";
             this.textboxSliderLrMultiplier.Size = new System.Drawing.Size(40, 17);
             this.textboxSliderLrMultiplier.TabIndex = 93;
-            this.textboxSliderLrMultiplier.Text = "1";
+            this.textboxSliderLrMultiplier.Text = "2";
             // 
             // sliderLrMultiplier
             // 
@@ -343,7 +342,7 @@
             0,
             65536});
             this.sliderLrMultiplier.ActualValue = new decimal(new int[] {
-            1,
+            2,
             0,
             0,
             0});
@@ -366,7 +365,6 @@
             this.sliderLrMultiplier.ThumbSize = new System.Drawing.Size(14, 14);
             this.toolTip.SetToolTip(this.sliderLrMultiplier, "A higher learning rate can help the model learn faster, but if it\'s too high it w" +
         "ill overfit and the model becomes less flexible.");
-            this.sliderLrMultiplier.Value = 10;
             this.sliderLrMultiplier.ValueBox = this.textboxSliderLrMultiplier;
             this.sliderLrMultiplier.ValueStep = new decimal(new int[] {
             1,

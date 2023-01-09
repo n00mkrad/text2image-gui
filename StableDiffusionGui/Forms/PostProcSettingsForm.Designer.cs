@@ -216,7 +216,7 @@
             this.textboxSliderCodeformerFidelity.Name = "textboxSliderCodeformerFidelity";
             this.textboxSliderCodeformerFidelity.Size = new System.Drawing.Size(45, 17);
             this.textboxSliderCodeformerFidelity.TabIndex = 0;
-            this.textboxSliderCodeformerFidelity.Text = "0,2";
+            this.textboxSliderCodeformerFidelity.Text = "0,4";
             // 
             // sliderCodeformerFidelity
             // 
@@ -231,7 +231,7 @@
             0,
             0});
             this.sliderCodeformerFidelity.ActualValue = new decimal(new int[] {
-            2,
+            4,
             0,
             0,
             65536});
@@ -253,7 +253,6 @@
             this.sliderCodeformerFidelity.ThumbSize = new System.Drawing.Size(14, 14);
             this.toolTip.SetToolTip(this.sliderCodeformerFidelity, "0 produces high quality but low accuracy. 1 produces high accuracy but low qualit" +
         "y.");
-            this.sliderCodeformerFidelity.Value = 2;
             this.sliderCodeformerFidelity.ValueBox = this.textboxSliderCodeformerFidelity;
             this.sliderCodeformerFidelity.ValueStep = new decimal(new int[] {
             1,
@@ -347,7 +346,7 @@
             this.textboxSliderFaceRestoreStrength.Name = "textboxSliderFaceRestoreStrength";
             this.textboxSliderFaceRestoreStrength.Size = new System.Drawing.Size(45, 17);
             this.textboxSliderFaceRestoreStrength.TabIndex = 0;
-            this.textboxSliderFaceRestoreStrength.Text = "0,05";
+            this.textboxSliderFaceRestoreStrength.Text = "0,2";
             // 
             // sliderFaceRestoreStrength
             // 
@@ -362,10 +361,10 @@
             0,
             0});
             this.sliderFaceRestoreStrength.ActualValue = new decimal(new int[] {
-            5,
+            2,
             0,
             0,
-            131072});
+            65536});
             this.sliderFaceRestoreStrength.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.sliderFaceRestoreStrength.BorderRoundRectSize = new System.Drawing.Size(12, 12);
             this.sliderFaceRestoreStrength.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -383,7 +382,6 @@
             this.sliderFaceRestoreStrength.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
             this.sliderFaceRestoreStrength.ThumbSize = new System.Drawing.Size(14, 14);
             this.toolTip.SetToolTip(this.sliderFaceRestoreStrength, "0 = Off, 1 = Full Restoration");
-            this.sliderFaceRestoreStrength.Value = 1;
             this.sliderFaceRestoreStrength.ValueBox = this.textboxSliderFaceRestoreStrength;
             this.sliderFaceRestoreStrength.ValueStep = new decimal(new int[] {
             5,
@@ -619,7 +617,7 @@
             this.textboxSliderUpscaleStrength.Name = "textboxSliderUpscaleStrength";
             this.textboxSliderUpscaleStrength.Size = new System.Drawing.Size(45, 17);
             this.textboxSliderUpscaleStrength.TabIndex = 0;
-            this.textboxSliderUpscaleStrength.Text = "0,05";
+            this.textboxSliderUpscaleStrength.Text = "0,2";
             // 
             // sliderUpscaleStrength
             // 
@@ -634,10 +632,10 @@
             0,
             0});
             this.sliderUpscaleStrength.ActualValue = new decimal(new int[] {
-            5,
+            2,
             0,
             0,
-            131072});
+            65536});
             this.sliderUpscaleStrength.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.sliderUpscaleStrength.BorderRoundRectSize = new System.Drawing.Size(12, 12);
             this.sliderUpscaleStrength.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -655,7 +653,6 @@
             this.sliderUpscaleStrength.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
             this.sliderUpscaleStrength.ThumbSize = new System.Drawing.Size(14, 14);
             this.toolTip.SetToolTip(this.sliderUpscaleStrength, "0 = No Effect, 1 = Full Effect");
-            this.sliderUpscaleStrength.Value = 1;
             this.sliderUpscaleStrength.ValueBox = this.textboxSliderUpscaleStrength;
             this.sliderUpscaleStrength.ValueStep = new decimal(new int[] {
             5,

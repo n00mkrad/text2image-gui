@@ -28,7 +28,7 @@ namespace StableDiffusionGui.Ui.MainForm
             F.comboxSampler.SetIfTextMatches(meta.Sampler, true, Strings.Samplers);
             // MainUi.CurrentInitImgPaths = new[] { meta.InitImgName }.Where(x => string.IsNullOrWhiteSpace(x)).ToList(); // Does this even work if we only store the temp path?
             MainUi.CurrentInitImgPaths = null;
-            F.comboxSeamless.SelectedIndex = meta.Seamless ? 1 : 0; // TODO: Extend Metadata class to include seamless mode
+            F.comboxSeamless.SelectedIndex = meta.SeamlessMode == SeamlessMode.Disabled ? 0 : 1;
 
             if (meta.InitStrength > 0f)
                 F.sliderInitStrength.ActualValue = (decimal)meta.InitStrength;

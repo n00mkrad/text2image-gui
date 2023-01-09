@@ -94,14 +94,14 @@ namespace StableDiffusionGui.Main
                 if (!InstallationStatus.HasSdUpscalers())
                     return "";
 
-                var faceRestoreOpt = (Forms.PostProcSettingsForm.FaceRestoreOption)Config.Get<int>(Config.Keys.FaceRestoreIdx);
+                var faceRestoreOpt = (Enums.Utils.FaceTool)Config.Get<int>(Config.Keys.FaceRestoreIdx);
                 string tool = "";
                 string strength = Config.Get<float>(Config.Keys.FaceRestoreStrength).ToStringDot("0.###");
 
-                if (faceRestoreOpt == Forms.PostProcSettingsForm.FaceRestoreOption.CodeFormer)
+                if (faceRestoreOpt == Enums.Utils.FaceTool.CodeFormer)
                     tool = $"codeformer -cf {Config.Get<float>(Config.Keys.CodeformerFidelity).ToStringDot()}";
 
-                if (faceRestoreOpt == Forms.PostProcSettingsForm.FaceRestoreOption.Gfpgan)
+                if (faceRestoreOpt == Enums.Utils.FaceTool.Gfpgan)
                     tool = "gfpgan";
 
                 return $"-G {strength} -ft {tool}";

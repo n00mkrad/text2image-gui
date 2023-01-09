@@ -87,7 +87,7 @@ namespace StableDiffusionGui.Main
                         try
                         {
                             var img = images[i];
-                            string number = $"{(sessionDir ? "" : "-")}{(currTask.ImgCount).ToString().PadLeft(currTask.TargetImgCount.ToString().Length, '0')}";
+                            string number = currTask.ImgCount.ToString().PadLeft(currTask.TargetImgCount.ToString().Length, '0');
                             string parentDir = currTask.SubfoldersPerPrompt ? imageDirMap[img.FullName] : currTask.OutDir;
                             string renamedPath = GetExportFilename(img.FullName, parentDir, number, "png", _maxPathLength, false, inclPrompt, inclSeed, inclScale, inclSampler, inclModel);
                             OverlayMaskIfExists(img.FullName);
@@ -125,46 +125,49 @@ namespace StableDiffusionGui.Main
             {
                 ext = ext.StartsWith(".") ? ext : $".{ext}"; // Ensure extension always starts with a dot
                 string timestamp = GetExportTimestamp(Config.Get<FilenameTimestamp>(Config.Keys.FilenameTimestampMode, FilenameTimestamp.None));
-                int pathBudget = pathLimit - parentDir.Length - timestamp.Length - suffix.Length - 4;
+                int pathBudget = pathLimit - parentDir.Length - (timestamp.Length + 1) - (suffix.Length + 1) - 4;
                 var meta = IoUtils.GetImageMetadata(filePath);
-                string infoStr = "";
 
-                string seed = $"-{meta.Seed}";
+                var filenameChunks = new List<string>();
+                filenameChunks.Add(timestamp);
+                filenameChunks.Add(suffix);
+
+                if (inclPrompt)
+                    filenameChunks.Add(FormatUtils.SanitizePromptFilename(meta.Prompt, pathBudget));
+
+                string seed = meta.Seed.ToString();
 
                 if (inclSeed && (pathBudget - seed.Length > 0))
                 {
-                    pathBudget -= seed.Length;
-                    infoStr += seed;
+                    pathBudget -= (seed.Length + 1);
+                    filenameChunks.Add(seed);
                 }
 
-                string scale = $"-scale{meta.Scale.ToStringDot("0.00")}";
+                string scale = $"scale{meta.Scale.ToStringDot("0.00")}";
 
                 if (inclScale && (pathBudget - scale.Length > 0))
                 {
-                    pathBudget -= scale.Length;
-                    infoStr += scale;
+                    pathBudget -= (scale.Length + 1);
+                    filenameChunks.Add(scale);
                 }
 
-                string sampler = $"-{meta.Sampler}";
+                string sampler = meta.Sampler;
 
                 if (inclSampler && (pathBudget - sampler.Length > 0))
                 {
-                    pathBudget -= sampler.Length;
-                    infoStr += sampler;
+                    pathBudget -= (sampler.Length + 1);
+                    filenameChunks.Add(sampler);
                 }
 
-                string model = $"-{Path.ChangeExtension(TextToImage.CurrentTaskSettings.Params.Get("model").FromJson<string>(), null).Trim().Trunc(20, false)}";
+                string model = $"{Path.ChangeExtension(TextToImage.CurrentTaskSettings.Params.Get("model").FromJson<string>(), null).Trim().Trunc(20, false)}";
 
                 if (inclModel && model.Length > 1 && (pathBudget - model.Length > 0))
                 {
-                    pathBudget -= model.Length;
-                    infoStr += model;
+                    pathBudget -= (model.Length + 1);
+                    filenameChunks.Add(model);
                 }
 
-                string finalPath = inclPrompt
-                ? Path.Combine(parentDir, $"{timestamp}{suffix}-{FormatUtils.SanitizePromptFilename(meta.Prompt, pathBudget)}{infoStr}{ext}")
-                : Path.Combine(parentDir, $"{timestamp}{suffix}{infoStr}{ext}");
-
+                string finalPath = Path.Combine(parentDir, $"{string.Join("-", filenameChunks.Where(s => !string.IsNullOrWhiteSpace(s)))}{ext}");
                 return IoUtils.GetAvailableFilePath(finalPath);
             }
             catch (Exception ex)
@@ -174,7 +177,7 @@ namespace StableDiffusionGui.Main
             }
         }
 
-        private static string GetExportTimestamp (FilenameTimestamp timestampMode)
+        private static string GetExportTimestamp(FilenameTimestamp timestampMode)
         {
             switch (timestampMode)
             {

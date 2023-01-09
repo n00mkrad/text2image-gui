@@ -5,7 +5,6 @@ using StableDiffusionGui.Main;
 using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -14,7 +13,6 @@ namespace StableDiffusionGui.Forms
     public partial class PostProcSettingsForm : CustomForm
     {
         public enum UpscaleOption { X2, X3, X4 }
-        public enum FaceRestoreOption { Gfpgan, CodeFormer }
 
         public PostProcSettingsForm()
         {
@@ -31,7 +29,7 @@ namespace StableDiffusionGui.Forms
         {
             Refresh();
             comboxUpscale.FillFromEnum<UpscaleOption>(Strings.PostProcSettingsUiStrings);
-            comboxFaceRestoration.FillFromEnum<FaceRestoreOption>(Strings.PostProcSettingsUiStrings);
+            comboxFaceRestoration.FillFromEnum<Enums.Utils.FaceTool>(Strings.PostProcSettingsUiStrings);
             LoadSettings();
             UpdateVisibility();
             TabOrderInit(new List<Control>() { checkboxUpscaleEnable, comboxUpscale, checkboxFaceRestorationEnable, comboxFaceRestoration, sliderFaceRestoreStrength, sliderCodeformerFidelity });
@@ -93,7 +91,7 @@ namespace StableDiffusionGui.Forms
 
         private void UpdateVisibility()
         {
-            panelCodeformerFidelity.Visible = (FaceRestoreOption)comboxFaceRestoration.SelectedIndex == FaceRestoreOption.CodeFormer;
+            panelCodeformerFidelity.Visible = (Enums.Utils.FaceTool)comboxFaceRestoration.SelectedIndex == Enums.Utils.FaceTool.CodeFormer;
         }
     }
 }

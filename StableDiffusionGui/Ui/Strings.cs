@@ -39,8 +39,8 @@ namespace StableDiffusionGui.Ui
             { UpscaleOption.X2.ToString(), "2x" },
             { UpscaleOption.X3.ToString(), "3x" },
             { UpscaleOption.X4.ToString(), "4x" },
-            { FaceRestoreOption.Gfpgan.ToString(), "GFPGAN"},
-            { FaceRestoreOption.CodeFormer.ToString(), "CodeFormer"}
+            { Enums.Utils.FaceTool.Gfpgan.ToString(), "GFPGAN"},
+            { Enums.Utils.FaceTool.CodeFormer.ToString(), "CodeFormer"}
         };
 
         public static Dictionary<string, string> Implementation = new Dictionary<string, string>

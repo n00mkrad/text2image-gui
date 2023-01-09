@@ -8,6 +8,9 @@ namespace StableDiffusionGui.MiscUtils
 {
     internal class ImgMaths
     {
+        /// <summary>
+        /// Calculates the new size of an image (<paramref name="inputSize"/>) in order to fill the canvas (<paramref name="frameSize"/>). Allows resizing.
+        /// <returns> Best size of <paramref name="inputSize"/> that fits into <paramref name="frameSize"/> </returns>
         public static Size FitIntoFrame (Size inputSize, Size frameSize)
         {
             float currentWidth = inputSize.Width;

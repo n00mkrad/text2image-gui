@@ -24,6 +24,11 @@ namespace StableDiffusionGui.Main
             public enum InpaintMode { Disabled, ImageMask, TextMask }
         }
 
+        public class Utils
+        {
+            public enum FaceTool { Gfpgan, CodeFormer }
+        }
+
         public class Dreambooth
         {
             public enum TrainPreset { VeryHighQuality, HighQuality, MedQuality, LowQuality }
