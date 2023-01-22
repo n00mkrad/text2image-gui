@@ -94,6 +94,9 @@ namespace StableDiffusionGui.Ui.MainFormUtils
             if (meta.Scale >= 0)
                 infos.Add($"Scale {meta.Scale.ToStringDot()}");
 
+            if (meta.ScaleImg >= 0)
+                infos.Add($"Img Scale {meta.ScaleImg.ToStringDot()}");
+
             Size res = Program.MainForm.pictBoxImgViewer.Image.Size;
 
             if (!meta.GeneratedResolution.IsEmpty)
