@@ -684,9 +684,7 @@ namespace StableDiffusionGui.Io
                     return false;
 
                 using (FileStream stream = file.Open(FileMode.Open, FileAccess.Read, FileShare.None))
-                {
                     stream.Close();
-                }
             }
             catch (IOException)
             {
