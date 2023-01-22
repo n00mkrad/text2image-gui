@@ -10,7 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace StableDiffusionGui.Ui.MainForm
+namespace StableDiffusionGui.Ui.MainFormUtils
 {
     internal class ImageViewer
     {

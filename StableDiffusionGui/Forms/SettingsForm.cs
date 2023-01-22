@@ -70,7 +70,7 @@ namespace StableDiffusionGui.Forms
         private void SettingsForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             SaveSettings();
-            Ui.MainForm.FormControls.RefreshUiAfterSettingsChanged();
+            Ui.MainFormUtils.FormControls.RefreshUiAfterSettingsChanged();
         }
 
         private void LoadModels(bool loadCombox, ModelType type)

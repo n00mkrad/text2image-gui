@@ -281,6 +281,7 @@
     <Compile Include="Forms\WelcomeForm.Designer.cs">
       <DependentUpon>WelcomeForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Implementations\InstructPixToPix.cs" />
     <Compile Include="Implementations\OptimizedSd.cs" />
     <Compile Include="Implementations\OptimizedSdUtils.cs" />
     <Compile Include="Implementations\SdOnnx.cs" />
@@ -297,6 +298,9 @@
     </Compile>
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainForm.States.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Main\Args.cs" />
     <Compile Include="Main\Constants.cs" />

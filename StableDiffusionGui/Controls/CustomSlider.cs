@@ -23,14 +23,14 @@ namespace StableDiffusionGui.Controls
             } }
         private bool HasValueBox { get { return ValueBox != null && ValueBox is TextBox; } }
 
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new int Value { get { return base.Value; } set { base.Value = value; } }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public decimal ActualValue { 
             get {
                 return Value / _conversionFactor; 
             } 
-            set { 
+            set {
                 Value = ((double)(value * _conversionFactor)).RoundToInt().Clamp(Minimum, Maximum);
                 UpdateValueBox(); 
             } }
@@ -42,7 +42,7 @@ namespace StableDiffusionGui.Controls
         public float ActualValueFloat { get { return (float)ActualValue; } }
 
         private decimal _valueStep = 0.2m;
-        public decimal ValueStep { get { return _valueStep; } set { var oldVal = ActualValue; _valueStep = value; UpdateProperties(); ActualValue = oldVal; } }
+        public decimal ValueStep { get { return _valueStep; } set { _valueStep = value; var oldVal = ActualValue; UpdateProperties(); ActualValue = oldVal; } }
 
         private decimal _actualMinimum = 0.2m;
         public decimal ActualMinimum { get { return _actualMinimum; } set { _actualMinimum = value; UpdateProperties(); } }

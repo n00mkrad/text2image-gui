@@ -91,6 +91,9 @@ namespace StableDiffusionGui
             this.discordBtn = new System.Windows.Forms.Button();
             this.patreonBtn = new System.Windows.Forms.Button();
             this.paypalBtn = new System.Windows.Forms.Button();
+            this.sliderScaleImg = new StableDiffusionGui.Controls.CustomSlider();
+            this.textboxSliderScaleImg = new System.Windows.Forms.TextBox();
+            this.textboxExtraScalesImg = new System.Windows.Forms.TextBox();
             this.menuStripLogs = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.progressBarImg = new HTAlt.WinForms.HTProgressBar();
             this.menuStripRunQueue = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -136,6 +139,9 @@ namespace StableDiffusionGui
             this.label9 = new System.Windows.Forms.Label();
             this.panelSeed = new System.Windows.Forms.Panel();
             this.label5 = new System.Windows.Forms.Label();
+            this.panelScaleImg = new System.Windows.Forms.Panel();
+            this.label17 = new System.Windows.Forms.Label();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.panelScale = new System.Windows.Forms.Panel();
             this.label4 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
@@ -176,6 +182,8 @@ namespace StableDiffusionGui
             this.panelSampler.SuspendLayout();
             this.panelRes.SuspendLayout();
             this.panelSeed.SuspendLayout();
+            this.panelScaleImg.SuspendLayout();
+            this.tableLayoutPanel2.SuspendLayout();
             this.panelScale.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.panelSteps.SuspendLayout();
@@ -525,11 +533,6 @@ namespace StableDiffusionGui
             0,
             0,
             0});
-            this.sliderScale.ActualValue = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
             this.sliderScale.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.sliderScale.BorderRoundRectSize = new System.Drawing.Size(12, 12);
             this.sliderScale.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -547,7 +550,8 @@ namespace StableDiffusionGui
             this.sliderScale.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
             this.sliderScale.ThumbSize = new System.Drawing.Size(14, 14);
             this.toolTip.SetToolTip(this.sliderScale, "Higher tries to match your prompt better, but can get chaotic. 7-12 is a safe ran" +
-        "ger for most things.");
+        "ge in most cases.");
+            this.sliderScale.Value = 0;
             this.sliderScale.ValueBox = this.textboxSliderScale;
             this.sliderScale.ValueStep = new decimal(new int[] {
             5,
@@ -585,9 +589,7 @@ namespace StableDiffusionGui
             this.textboxExtraScales.Name = "textboxExtraScales";
             this.textboxExtraScales.Size = new System.Drawing.Size(69, 21);
             this.textboxExtraScales.TabIndex = 3;
-            this.toolTip.SetToolTip(this.textboxExtraScales, "Here you can custom additional scales to run per image.\r\n\r\nBasic Syntax:\r\n10,12,1" +
-        "4\r\nwill run scales 10, 12 and 14.\r\n\r\nIncremental Syntax:\r\n10 > 14 : 0.5\r\nwill ru" +
-        "n scales 10 to 14 with steps of 0.5.");
+            this.toolTip.SetToolTip(this.textboxExtraScales, resources.GetString("textboxExtraScales.ToolTip"));
             // 
             // upDownIterations
             // 
@@ -664,11 +666,6 @@ namespace StableDiffusionGui
             0,
             0,
             65536});
-            this.sliderInitStrength.ActualValue = new decimal(new int[] {
-            8,
-            0,
-            0,
-            65536});
             this.sliderInitStrength.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.sliderInitStrength.BorderRoundRectSize = new System.Drawing.Size(12, 12);
             this.sliderInitStrength.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -688,6 +685,7 @@ namespace StableDiffusionGui
             this.sliderInitStrength.ThumbSize = new System.Drawing.Size(14, 14);
             this.toolTip.SetToolTip(this.sliderInitStrength, "Lower Value: Result Looks More Like Your Text Prompt\r\nHigher Value: Result Looks " +
         "More Like Your Image");
+            this.sliderInitStrength.Value = 2;
             this.sliderInitStrength.ValueBox = this.textboxSliderInitStrength;
             this.sliderInitStrength.ValueStep = new decimal(new int[] {
             5,
@@ -710,7 +708,7 @@ namespace StableDiffusionGui
             this.textboxSliderInitStrength.Name = "textboxSliderInitStrength";
             this.textboxSliderInitStrength.Size = new System.Drawing.Size(35, 21);
             this.textboxSliderInitStrength.TabIndex = 94;
-            this.textboxSliderInitStrength.Text = "0,8";
+            this.textboxSliderInitStrength.Text = "0,1";
             // 
             // btnInitImgBrowse
             // 
@@ -1187,6 +1185,77 @@ namespace StableDiffusionGui
             this.paypalBtn.UseVisualStyleBackColor = false;
             this.paypalBtn.Click += new System.EventHandler(this.paypalBtn_Click);
             // 
+            // sliderScaleImg
+            // 
+            this.sliderScaleImg.ActualMaximum = new decimal(new int[] {
+            25,
+            0,
+            0,
+            65536});
+            this.sliderScaleImg.ActualMinimum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.sliderScaleImg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            this.sliderScaleImg.BorderRoundRectSize = new System.Drawing.Size(12, 12);
+            this.sliderScaleImg.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sliderScaleImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
+            this.sliderScaleImg.ForeColor = System.Drawing.Color.Black;
+            this.sliderScaleImg.LargeChange = ((uint)(5u));
+            this.sliderScaleImg.Location = new System.Drawing.Point(0, 0);
+            this.sliderScaleImg.Margin = new System.Windows.Forms.Padding(0);
+            this.sliderScaleImg.Maximum = 25;
+            this.sliderScaleImg.Minimum = 5;
+            this.sliderScaleImg.Name = "sliderScaleImg";
+            this.sliderScaleImg.OverlayColor = System.Drawing.Color.White;
+            this.sliderScaleImg.Size = new System.Drawing.Size(302, 35);
+            this.sliderScaleImg.SmallChange = ((uint)(1u));
+            this.sliderScaleImg.TabIndex = 4;
+            this.sliderScaleImg.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
+            this.sliderScaleImg.ThumbSize = new System.Drawing.Size(14, 14);
+            this.toolTip.SetToolTip(this.sliderScaleImg, "Higher tries to match your image better, but can get chaotic. 1-2 is a safe range" +
+        " in most cases.");
+            this.sliderScaleImg.Value = 15;
+            this.sliderScaleImg.ValueBox = this.textboxSliderScaleImg;
+            this.sliderScaleImg.ValueStep = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            // 
+            // textboxSliderScaleImg
+            // 
+            this.textboxSliderScaleImg.AllowDrop = true;
+            this.textboxSliderScaleImg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.promptAutocomplete.SetAutocompleteMenu(this.textboxSliderScaleImg, null);
+            this.textboxSliderScaleImg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            this.textboxSliderScaleImg.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textboxSliderScaleImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textboxSliderScaleImg.ForeColor = System.Drawing.Color.Silver;
+            this.textboxSliderScaleImg.Location = new System.Drawing.Point(302, 9);
+            this.textboxSliderScaleImg.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
+            this.textboxSliderScaleImg.MinimumSize = new System.Drawing.Size(4, 21);
+            this.textboxSliderScaleImg.Name = "textboxSliderScaleImg";
+            this.textboxSliderScaleImg.Size = new System.Drawing.Size(35, 21);
+            this.textboxSliderScaleImg.TabIndex = 93;
+            this.textboxSliderScaleImg.Text = "1,5";
+            // 
+            // textboxExtraScalesImg
+            // 
+            this.textboxExtraScalesImg.AllowDrop = true;
+            this.textboxExtraScalesImg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.promptAutocomplete.SetAutocompleteMenu(this.textboxExtraScalesImg, null);
+            this.textboxExtraScalesImg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textboxExtraScalesImg.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textboxExtraScalesImg.ForeColor = System.Drawing.Color.White;
+            this.textboxExtraScalesImg.Location = new System.Drawing.Point(340, 7);
+            this.textboxExtraScalesImg.MinimumSize = new System.Drawing.Size(4, 21);
+            this.textboxExtraScalesImg.Name = "textboxExtraScalesImg";
+            this.textboxExtraScalesImg.Size = new System.Drawing.Size(69, 21);
+            this.textboxExtraScalesImg.TabIndex = 3;
+            this.toolTip.SetToolTip(this.textboxExtraScalesImg, resources.GetString("textboxExtraScalesImg.ToolTip"));
+            // 
             // menuStripLogs
             // 
             this.menuStripLogs.ImageScalingSize = new System.Drawing.Size(20, 20);
@@ -1372,6 +1441,7 @@ namespace StableDiffusionGui
             this.panelSettings.Controls.Add(this.panelSampler);
             this.panelSettings.Controls.Add(this.panelRes);
             this.panelSettings.Controls.Add(this.panelSeed);
+            this.panelSettings.Controls.Add(this.panelScaleImg);
             this.panelSettings.Controls.Add(this.panelScale);
             this.panelSettings.Controls.Add(this.panelSteps);
             this.panelSettings.Controls.Add(this.panelIterations);
@@ -1394,7 +1464,7 @@ namespace StableDiffusionGui
             this.panelDebugLoopback.Controls.Add(this.checkboxLoopback);
             this.panelDebugLoopback.Controls.Add(this.label16);
             this.panelDebugLoopback.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelDebugLoopback.Location = new System.Drawing.Point(0, 555);
+            this.panelDebugLoopback.Location = new System.Drawing.Point(0, 590);
             this.panelDebugLoopback.Name = "panelDebugLoopback";
             this.panelDebugLoopback.Size = new System.Drawing.Size(645, 35);
             this.panelDebugLoopback.TabIndex = 19;
@@ -1431,7 +1501,7 @@ namespace StableDiffusionGui
             this.panelDebugPerlinThresh.Controls.Add(this.label13);
             this.panelDebugPerlinThresh.Controls.Add(this.textboxPerlin);
             this.panelDebugPerlinThresh.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelDebugPerlinThresh.Location = new System.Drawing.Point(0, 520);
+            this.panelDebugPerlinThresh.Location = new System.Drawing.Point(0, 555);
             this.panelDebugPerlinThresh.Name = "panelDebugPerlinThresh";
             this.panelDebugPerlinThresh.Size = new System.Drawing.Size(645, 35);
             this.panelDebugPerlinThresh.TabIndex = 18;
@@ -1508,7 +1578,7 @@ namespace StableDiffusionGui
             this.panelDebugSendStdin.Controls.Add(this.label12);
             this.panelDebugSendStdin.Controls.Add(this.textboxCliTest);
             this.panelDebugSendStdin.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelDebugSendStdin.Location = new System.Drawing.Point(0, 485);
+            this.panelDebugSendStdin.Location = new System.Drawing.Point(0, 520);
             this.panelDebugSendStdin.Name = "panelDebugSendStdin";
             this.panelDebugSendStdin.Size = new System.Drawing.Size(645, 35);
             this.panelDebugSendStdin.TabIndex = 14;
@@ -1546,7 +1616,7 @@ namespace StableDiffusionGui
             this.panelSeamless.Controls.Add(this.comboxSeamless);
             this.panelSeamless.Controls.Add(this.label8);
             this.panelSeamless.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSeamless.Location = new System.Drawing.Point(0, 450);
+            this.panelSeamless.Location = new System.Drawing.Point(0, 485);
             this.panelSeamless.Name = "panelSeamless";
             this.panelSeamless.Size = new System.Drawing.Size(645, 35);
             this.panelSeamless.TabIndex = 9;
@@ -1568,7 +1638,7 @@ namespace StableDiffusionGui
             this.panelSampler.Controls.Add(this.label7);
             this.panelSampler.Controls.Add(this.comboxSampler);
             this.panelSampler.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSampler.Location = new System.Drawing.Point(0, 415);
+            this.panelSampler.Location = new System.Drawing.Point(0, 450);
             this.panelSampler.Name = "panelSampler";
             this.panelSampler.Size = new System.Drawing.Size(645, 35);
             this.panelSampler.TabIndex = 6;
@@ -1593,7 +1663,7 @@ namespace StableDiffusionGui
             this.panelRes.Controls.Add(this.label6);
             this.panelRes.Controls.Add(this.label9);
             this.panelRes.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelRes.Location = new System.Drawing.Point(0, 380);
+            this.panelRes.Location = new System.Drawing.Point(0, 415);
             this.panelRes.Name = "panelRes";
             this.panelRes.Size = new System.Drawing.Size(645, 35);
             this.panelRes.TabIndex = 5;
@@ -1654,7 +1724,7 @@ namespace StableDiffusionGui
             this.panelSeed.Controls.Add(this.label5);
             this.panelSeed.Controls.Add(this.upDownSeed);
             this.panelSeed.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSeed.Location = new System.Drawing.Point(0, 345);
+            this.panelSeed.Location = new System.Drawing.Point(0, 380);
             this.panelSeed.Name = "panelSeed";
             this.panelSeed.Size = new System.Drawing.Size(645, 35);
             this.panelSeed.TabIndex = 4;
@@ -1670,6 +1740,47 @@ namespace StableDiffusionGui
             this.label5.Size = new System.Drawing.Size(122, 13);
             this.label5.TabIndex = 92;
             this.label5.Text = "Seed (Empty = Random)";
+            // 
+            // panelScaleImg
+            // 
+            this.panelScaleImg.Controls.Add(this.label17);
+            this.panelScaleImg.Controls.Add(this.tableLayoutPanel2);
+            this.panelScaleImg.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelScaleImg.Location = new System.Drawing.Point(0, 345);
+            this.panelScaleImg.Name = "panelScaleImg";
+            this.panelScaleImg.Size = new System.Drawing.Size(645, 35);
+            this.panelScaleImg.TabIndex = 20;
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label17.ForeColor = System.Drawing.Color.White;
+            this.label17.Location = new System.Drawing.Point(2, 11);
+            this.label17.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(145, 13);
+            this.label17.TabIndex = 90;
+            this.label17.Text = "Image Guidance (CFG Scale)";
+            // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel2.ColumnCount = 3;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 75F));
+            this.tableLayoutPanel2.Controls.Add(this.textboxSliderScaleImg, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.sliderScaleImg, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.textboxExtraScalesImg, 2, 0);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(233, 0);
+            this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 1;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(412, 35);
+            this.tableLayoutPanel2.TabIndex = 91;
             // 
             // panelScale
             // 
@@ -1767,7 +1878,7 @@ namespace StableDiffusionGui
             this.textboxSliderSteps.Name = "textboxSliderSteps";
             this.textboxSliderSteps.Size = new System.Drawing.Size(35, 21);
             this.textboxSliderSteps.TabIndex = 92;
-            this.textboxSliderSteps.Text = "5";
+            this.textboxSliderSteps.Text = "100";
             // 
             // sliderSteps
             // 
@@ -1777,11 +1888,6 @@ namespace StableDiffusionGui
             0,
             0});
             this.sliderSteps.ActualMinimum = new decimal(new int[] {
-            5,
-            0,
-            0,
-            0});
-            this.sliderSteps.ActualValue = new decimal(new int[] {
             5,
             0,
             0,
@@ -1804,6 +1910,7 @@ namespace StableDiffusionGui
             this.sliderSteps.Text = "sliderSteps";
             this.sliderSteps.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
             this.sliderSteps.ThumbSize = new System.Drawing.Size(14, 14);
+            this.sliderSteps.Value = 20;
             this.sliderSteps.ValueBox = this.textboxSliderSteps;
             this.sliderSteps.ValueStep = new decimal(new int[] {
             5,
@@ -2085,6 +2192,10 @@ namespace StableDiffusionGui
             this.panelRes.PerformLayout();
             this.panelSeed.ResumeLayout(false);
             this.panelSeed.PerformLayout();
+            this.panelScaleImg.ResumeLayout(false);
+            this.panelScaleImg.PerformLayout();
+            this.tableLayoutPanel2.ResumeLayout(false);
+            this.tableLayoutPanel2.PerformLayout();
             this.panelScale.ResumeLayout(false);
             this.panelScale.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
@@ -2242,6 +2353,12 @@ namespace StableDiffusionGui
         private System.Windows.Forms.Label label16;
         private HTAlt.WinForms.HTButton btnEditMask;
         private System.Windows.Forms.ToolStripMenuItem convertModelsToolStripMenuItem;
+        public System.Windows.Forms.Panel panelScaleImg;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        private System.Windows.Forms.TextBox textboxSliderScaleImg;
+        public CustomSlider sliderScaleImg;
+        public System.Windows.Forms.TextBox textboxExtraScalesImg;
     }
 }
 

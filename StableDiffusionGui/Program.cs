@@ -76,7 +76,7 @@ namespace StableDiffusionGui
         {
             Logger.Log($"SetState({state})", true);
             State = state;
-            Ui.MainForm.FormUtils.UpdateBusyState();
+            Ui.MainFormUtils.FormUtils.UpdateBusyState();
         }
 
         public static void Cleanup()

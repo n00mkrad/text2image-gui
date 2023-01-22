@@ -87,14 +87,13 @@ namespace StableDiffusionGui.Main
 
                 List<Task> tasks = new List<Task>();
 
-                if (s.Implementation == Enums.StableDiffusion.Implementation.InvokeAi)
-                    tasks.Add(InvokeAi.Run(s.Prompts, s.NegativePrompt, s.Iterations, s.Params, tempOutDir));
-
-                if (s.Implementation == Enums.StableDiffusion.Implementation.OptimizedSd)
-                    tasks.Add(OptimizedSd.Run(s.Prompts, s.Iterations, s.Params, tempOutDir));
-
-                if (s.Implementation == Enums.StableDiffusion.Implementation.DiffusersOnnx)
-                    tasks.Add(SdOnnx.Run(s.Prompts, s.NegativePrompt, s.Iterations, s.Params, tempOutDir));
+                switch (s.Implementation)
+                {
+                    case Enums.StableDiffusion.Implementation.InvokeAi: tasks.Add(InvokeAi.Run(s.Prompts, s.NegativePrompt, s.Iterations, s.Params, tempOutDir)); break;
+                    case Enums.StableDiffusion.Implementation.OptimizedSd: tasks.Add(OptimizedSd.Run(s.Prompts, s.Iterations, s.Params, tempOutDir)); break;
+                    case Enums.StableDiffusion.Implementation.DiffusersOnnx: tasks.Add(SdOnnx.Run(s.Prompts, s.NegativePrompt, s.Iterations, s.Params, tempOutDir)); break;
+                    case Enums.StableDiffusion.Implementation.InstructPixToPix: tasks.Add(InstructPixToPix.Run(s.Prompts, s.NegativePrompt, s.Iterations, s.Params, tempOutDir)); break;
+                }
 
                 tasks.Add(ImageExport.ExportLoop(tempOutDir, CurrentTask.ImgCount, s.GetTargetImgCount(), true));
 

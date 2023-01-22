@@ -65,7 +65,7 @@ namespace StableDiffusionGui.Ui
 
             if (CurrentMask == null)
             {
-                EditCurrentMask(img, MainForm.FormControls.IsUsingInpaintingModel);
+                EditCurrentMask(img, MainFormUtils.FormControls.IsUsingInpaintingModel);
             }
 
             if (CurrentMask == null)

@@ -14,7 +14,7 @@ using System.Windows.Forms;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
 using Paths = StableDiffusionGui.Io.Paths;
 
-namespace StableDiffusionGui.Ui.MainForm
+namespace StableDiffusionGui.Ui.MainFormUtils
 {
     internal class FormUtils
     {
@@ -236,7 +236,7 @@ namespace StableDiffusionGui.Ui.MainForm
             Size scaleSize = Config.Get<bool>(Config.Keys.InitImageRetainAspectRatio) ? ImgMaths.FitIntoFrame(img.Size, targetSize) : targetSize;
             img = ImgUtils.ScaleAndPad(ImgUtils.GetMagickImage(img), scaleSize, targetSize).ToBitmap();
 
-            Inpainting.EditCurrentMask(img, MainForm.FormControls.IsUsingInpaintingModel);
+            Inpainting.EditCurrentMask(img, MainFormUtils.FormControls.IsUsingInpaintingModel);
         }
     }
 }

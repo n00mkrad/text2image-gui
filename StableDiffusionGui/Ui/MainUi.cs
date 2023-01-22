@@ -8,7 +8,7 @@ using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Properties;
-using StableDiffusionGui.Ui.MainForm;
+using StableDiffusionGui.Ui.MainFormUtils;
 using System;
 using System.Collections.Generic;
 using System.Drawing;

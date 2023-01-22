@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
-namespace StableDiffusionGui.Ui.MainForm
+namespace StableDiffusionGui.Ui.MainFormUtils
 {
     internal class FormParsing
     {
@@ -52,6 +52,7 @@ namespace StableDiffusionGui.Ui.MainForm
             {
                 SetSliderValues(s.Params.FromJson<List<float>>("steps"), true, F.sliderSteps, F.textboxExtraSteps);
                 SetSliderValues(s.Params.FromJson<List<float>>("scales"), false, F.sliderScale, F.textboxExtraScales);
+                SetSliderValues(s.Params.FromJson<List<float>>("scalesImg"), false, F.sliderScaleImg, F.textboxExtraScalesImg);
                 F.comboxResW.Text = s.Params.Get("res").FromJson<Size>().Width.ToString();
                 F.comboxResH.Text = s.Params.Get("res").FromJson<Size>().Height.ToString();
                 F.upDownSeed.Value = s.Params.Get("seed").FromJson<long>();
@@ -76,11 +77,11 @@ namespace StableDiffusionGui.Ui.MainForm
         /// <summary> Set values that have a single slider value and optionally an advanced syntax entry textbox </summary>
         private static void SetSliderValues(IEnumerable<float> values, bool toInt, CustomSlider slider, TextBox extraValuesTextbox = null)
         {
-            if (values.Count() == 1)
+            if (values != null && values.Count() == 1)
             {
                 slider.ActualValue = toInt ? (int)values.First() : (decimal)values.First();
             }
-            else if (extraValuesTextbox != null)
+            else
             {
                 var v = toInt ? values.Select(x => ((int)x).ToString()) : values.Select(x => x.ToString());
 
@@ -103,6 +104,7 @@ namespace StableDiffusionGui.Ui.MainForm
                 {
                     { "steps", MainUi.GetExtraValues(F.textboxExtraSteps.Text, F.sliderSteps.ActualValueFloat).Select(x => (int)x).ToArray().ToJson() },
                     { "scales", MainUi.GetExtraValues(F.textboxExtraScales.Text, F.sliderScale.ActualValueFloat).ToJson() },
+                    { "scalesImg", MainUi.GetExtraValues(F.textboxExtraScalesImg.Text, F.sliderScaleImg.ActualValueFloat).ToJson() },
                     { "res", new Size(F.comboxResW.Text.GetInt(), F.comboxResH.Text.GetInt()).ToJson() },
                     { "seed", (F.upDownSeed.Value < 0 ? new Random().Next(0, int.MaxValue) : ((long)F.upDownSeed.Value)).ToJson() },
                     { "sampler", ((Sampler)F.comboxSampler.SelectedIndex).ToString().Lower().ToJson() },

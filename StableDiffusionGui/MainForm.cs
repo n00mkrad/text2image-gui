@@ -7,7 +7,7 @@ using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
-using StableDiffusionGui.Ui.MainForm;
+using StableDiffusionGui.Ui.MainFormUtils;
 using System;
 using System.Collections.Generic;
 using System.Data;

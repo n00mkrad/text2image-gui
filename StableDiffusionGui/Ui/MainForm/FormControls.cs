@@ -14,13 +14,13 @@ using System.Linq;
 using System.Windows.Forms;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
-namespace StableDiffusionGui.Ui.MainForm
+namespace StableDiffusionGui.Ui.MainFormUtils
 {
     internal class FormControls
     {
 
-        private static StableDiffusionGui.MainForm F { get { return Program.MainForm; } }
-        private static Implementation CurrImpl { get { return (Implementation)Config.Get<int>(Config.Keys.ImplementationIdx); } }
+        public static StableDiffusionGui.MainForm F { get { return Program.MainForm; } }
+        public static Implementation CurrImpl { get { return (Implementation)Config.Get<int>(Config.Keys.ImplementationIdx); } }
         public static bool IsUsingInpaintingModel { get { return Path.ChangeExtension(Config.Get<string>(Config.Keys.Model), null).EndsWith(Constants.SuffixesPrefixes.InpaintingMdlSuf); } }
 
         public static void InitializeControls()
@@ -61,9 +61,11 @@ namespace StableDiffusionGui.Ui.MainForm
         public static void RefreshUiAfterSettingsChanged()
         {
             F.panelPromptNeg.Visible = CurrImpl != Implementation.OptimizedSd && !IsUsingInpaintingModel;
-            F.btnEmbeddingBrowse.Enabled = CurrImpl == Implementation.InvokeAi;
+            F.btnEmbeddingBrowse.Enabled = MainForm.ShouldControlBeVisible(F, F.btnEmbeddingBrowse);
             F.panelSampler.Visible = CurrImpl == Implementation.InvokeAi;
             F.panelSeamless.Visible = CurrImpl == Implementation.InvokeAi;
+            F.panelRes.Visible = MainForm.ShouldControlBeVisible(F, F.panelRes);
+            F.panelScaleImg.Visible = MainForm.ShouldControlBeVisible(F, F.panelScaleImg);
 
             bool adv = Config.Get<bool>(Config.Keys.AdvancedUi);
             F.upDownIterations.Maximum = !adv ? 10000 : 100000;
@@ -106,7 +108,7 @@ namespace StableDiffusionGui.Ui.MainForm
             bool inpaintingCompatibleImpl = CurrImpl == Implementation.InvokeAi || CurrImpl == Implementation.DiffusersOnnx;
 
             F.panelInpainting.Visible = img2img && inpaintingCompatibleImpl;
-            F.panelInitImgStrength.Visible = img2img && !IsUsingInpaintingModel;
+            F.panelInitImgStrength.Visible = MainForm.ShouldControlBeVisible(F, F.panelInitImgStrength);
             F.textboxClipsegMask.Visible = (InpaintMode)F.comboxInpaintMode.SelectedIndex == InpaintMode.TextMask;
 
             F.btnInitImgBrowse.Text = img2img ? $"Clear Image{(MainUi.CurrentInitImgPaths.Count == 1 ? "" : "s")}" : "Load Image(s)";
