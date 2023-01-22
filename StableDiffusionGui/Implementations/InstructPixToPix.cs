@@ -30,7 +30,7 @@ namespace StableDiffusionGui.Implementations
                 float[] scalesImg = parameters.FromJson<float[]>("scalesImg");
                 long seed = parameters.FromJson<long>("seed");
                 // string sampler = parameters.FromJson<string>("sampler");
-                Size res = parameters.FromJson<Size>("res");
+                // Size res = parameters.FromJson<Size>("res");
                 // string model = parameters.FromJson<string>("model");
 
                 // var cachedModels = Paths.GetModels(ModelType.Normal, Implementation.DiffusersOnnx);
@@ -39,7 +39,7 @@ namespace StableDiffusionGui.Implementations
                 // if (modelDir == null)
                 //     return;
 
-                OrderedDictionary initImages = initImgs != null && initImgs.Length > 0 ? await TtiUtils.CreateResizedInitImagesIfNeeded(initImgs.ToList(), res) : null;
+                OrderedDictionary initImages = initImgs != null && initImgs.Length > 0 ? await TtiUtils.CreateResizedInitImagesIfNeeded(initImgs.ToList(), new Size()) : null;
 
                 if(initImages == null || initImages.Count < 1)
                 {
@@ -65,8 +65,8 @@ namespace StableDiffusionGui.Implementations
                         args["initStrength"] = "0";
                         args["prompt"] = processedPrompts[i];
                         args["prompt_neg"] = negPrompt;
-                        args["w"] = $"{res.Width}";
-                        args["h"] = $"{res.Height}";
+                        // args["w"] = $"{res.Width}";
+                        // args["h"] = $"{res.Height}";
                         args["seed"] = $"{seed}";
 
                         foreach (float scale in scalesTxt)
@@ -105,7 +105,7 @@ namespace StableDiffusionGui.Implementations
                 string jsonPath = Path.Combine(Paths.GetSessionDataPath(), "prompts-ip2p.json");
                 File.WriteAllText(jsonPath, argLists.ToJson(true));
 
-                Logger.Log($"Running Stable Diffusion - {iterations} Iterations, {steps.Length} Steps, Scales {(scalesTxt.Length < 4 ? string.Join(", ", scalesTxt.Select(x => x.ToStringDot())) : $"{scalesTxt.First()}->{scalesTxt.Last()}")}, {res.Width}x{res.Height}, Starting Seed: {startSeed}");
+                Logger.Log($"Running Stable Diffusion - {iterations} Iterations, {steps.Length} Steps, Scales {(scalesTxt.Length < 4 ? string.Join(", ", scalesTxt.Select(x => x.ToStringDot())) : $"{scalesTxt.First()}->{scalesTxt.Last()}")}, Starting Seed: {startSeed}");
 
                 string initsStr = initImages != null ? $" and {initImages.Count} image{(initImages.Count != 1 ? "s" : "")} using {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
                 Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} * {iterations} image{(iterations != 1 ? "s" : "")} * {steps.Length} step value{(steps.Length != 1 ? "s" : "")} * {scalesTxt.Length} scale{(scalesTxt.Length != 1 ? "s" : "")}{initsStr} = {argLists.Count} images total.");

@@ -42,9 +42,8 @@ namespace StableDiffusionGui.Main
                 int index = initImgPaths.IndexOf(pair.Key);
                 MagickImage img = new MagickImage(pair.Key) { Format = MagickFormat.Png24, Quality = 30 };
 
-                if (img.Width == targetSize.Width && img.Height == targetSize.Height) // Size already matches
+                if (targetSize.IsEmpty || (img.Width == targetSize.Width && img.Height == targetSize.Height)) // Size already matches
                 {
-                    Logger.Log($"Init img '{Path.GetFileName(pair.Key)}' has correct dimensions ({img.Width}x{img.Height}).", true);
                     sourceAndImportedPaths[pair.Key] = pair.Key; // Don't do anything, just assign the same input path as import path
                     Interlocked.Increment(ref imgsSucessful);
                 }
@@ -52,7 +51,7 @@ namespace StableDiffusionGui.Main
                 {
                     try
                     {
-                        Logger.Log($"Init img '{Path.GetFileName(pair.Key)}' has incorrect dimensions ({img.Width}x{img.Height}), resizing to {targetSize.Width}x{targetSize.Height}.", true);
+                        Logger.Log($"Init img '{Path.GetFileName(pair.Key)}' has bad dimensions ({img.Width}x{img.Height}), resizing to {targetSize.Width}x{targetSize.Height}.", true);
                         Size scaleSize = Config.Get<bool>(Config.Keys.InitImageRetainAspectRatio) ? ImgMaths.FitIntoFrame(new Size(img.Width, img.Height), targetSize) : targetSize;
                         img = ImgUtils.ScaleAndPad(img, scaleSize, targetSize);
                         string resizedImgPath = Path.Combine(initImgsDir, $"{index}.png");
