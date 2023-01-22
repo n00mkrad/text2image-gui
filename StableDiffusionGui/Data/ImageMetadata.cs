@@ -12,6 +12,7 @@ namespace StableDiffusionGui.Data
         public enum MetadataType { InvokeAi, Auto1111, Unknown }
         public MetadataType Type { get; set; } = MetadataType.Unknown;
         public string Path { get; set; } = "";
+        public string AllText { get; set; } = "";
         public string ParsedText { get; set; } = "";
         public string Prompt { get; set; } = "";
         public string NegativePrompt { get; set; } = "";
@@ -45,6 +46,8 @@ namespace StableDiffusionGui.Data
 
                 if (pngTextDir == null)
                     return;
+
+                AllText = string.Join(Environment.NewLine, pngTextDir.Tags.Select(tag => tag.Description));
 
                 foreach (var tag in pngTextDir.Tags)
                 {

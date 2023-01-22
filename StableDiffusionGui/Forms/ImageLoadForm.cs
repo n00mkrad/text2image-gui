@@ -86,7 +86,10 @@ namespace StableDiffusionGui.Forms
                 }
                 else
                 {
-                    textboxInfo.Text += $"No Metadata Found in Image.";
+                    if (!string.IsNullOrWhiteSpace(CurrentMetadata.AllText))
+                        textboxInfo.Text += $"Unknown Metadata Found in Image:{Environment.NewLine}{CurrentMetadata.AllText}";
+                    else
+                        textboxInfo.Text += $"No Metadata Found in Image.";
                 }
 
                 panelOk.Visible = true;
