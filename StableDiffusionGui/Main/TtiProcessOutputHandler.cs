@@ -194,7 +194,7 @@ namespace StableDiffusionGui.Main
                     Logger.Log($"{line}", false, ellipsis);
                 }
 
-                if (!TextToImage.Canceled && line.MatchesWildcard("*%|*| *"))
+                if (!TextToImage.Canceled && line.MatchesWildcard("*%|*| *") && !line.Contains("Fetching "))
                 {
                     if (!Logger.LastUiLine.MatchesWildcard("*Generated*image*in*"))
                         Logger.LogIfLastLineDoesNotContainMsg($"Generating...");
