@@ -9,7 +9,7 @@ namespace StableDiffusionGui.Data
 {
     public class ImageMetadata
     {
-        public enum MetadataType { InvokeAi, Auto1111, Unknown }
+        public enum MetadataType { InvokeAi, Auto1111, NmkdInstructPixToPix, Unknown }
         public MetadataType Type { get; set; } = MetadataType.Unknown;
         public string Path { get; set; } = "";
         public string AllText { get; set; } = "";
@@ -21,6 +21,7 @@ namespace StableDiffusionGui.Data
         public int BatchSize { get; set; } = 1;
         public Size GeneratedResolution { get; set; } = new Size();
         public float Scale { get; set; } = -1;
+        public float ScaleImg { get; set; } = -1;
         public string Sampler { get; set; } = "";
         public long Seed { get; set; } = -1;
         public string InitImgName { get; set; } = "";
@@ -30,7 +31,8 @@ namespace StableDiffusionGui.Data
 
         private readonly Dictionary<MetadataType, string> _tags = new Dictionary<MetadataType, string>() {
             { MetadataType.InvokeAi, "Dream: " },
-            { MetadataType.Auto1111, "parameters:" }
+            { MetadataType.NmkdInstructPixToPix, "InstructPixToPix:" },
+            { MetadataType.Auto1111, "parameters:" },
         };
 
         public ImageMetadata() { }
@@ -60,6 +62,12 @@ namespace StableDiffusionGui.Data
                     if (tag.Description.Contains(_tags[MetadataType.Auto1111]))
                     {
                         LoadInfoAuto1111(tag.Description.Split(_tags[MetadataType.Auto1111]).Last());
+                        return;
+                    }
+
+                    if (tag.Description.Contains(_tags[MetadataType.NmkdInstructPixToPix]))
+                    {
+                        LoadInfoNmkdInstructPixToPix(tag.Description.Split(_tags[MetadataType.NmkdInstructPixToPix]).Last());
                         return;
                     }
                 }
@@ -183,6 +191,37 @@ namespace StableDiffusionGui.Data
             catch (Exception ex)
             {
                 Logger.Log($"Failed to load Automatic1111 image metadata from: {ex.Message}\n{ex.StackTrace}", true);
+            }
+        }
+
+        public void LoadInfoNmkdInstructPixToPix(string info)
+        {
+            ParsedText = info;
+
+            Dictionary<string, string> dict = info.FromJson<Dictionary<string, string>>();
+
+            foreach (var pair in dict)
+            {
+                if (pair.Key.Lower() == "prompt")
+                    Prompt = pair.Value;
+
+                if (pair.Key.Lower() == "image")
+                    InitImgName = pair.Value;
+
+                if (pair.Key.Lower() == "prompt_neg")
+                    NegativePrompt = pair.Value;
+
+                if (pair.Key.Lower() == "steps")
+                    Steps = pair.Value.GetInt();
+
+                if (pair.Key.Lower() == "seed")
+                    Seed = pair.Value.GetInt();
+
+                if (pair.Key.Lower() == "cfg_txt")
+                    Scale = pair.Value.GetFloat();
+
+                if (pair.Key.Lower() == "cfg_img")
+                    ScaleImg = pair.Value.GetFloat();
             }
         }
     }

@@ -41,6 +41,12 @@ namespace StableDiffusionGui.Implementations
 
                 OrderedDictionary initImages = initImgs != null && initImgs.Length > 0 ? await TtiUtils.CreateResizedInitImagesIfNeeded(initImgs.ToList(), res) : null;
 
+                if(initImages == null || initImages.Count < 1)
+                {
+                    UiUtils.ShowMessageBox("Please load an image first.", "No image loaded!");
+                    return;
+                }
+
                 long startSeed = seed;
 
                 List<Dictionary<string, string>> argLists = new List<Dictionary<string, string>>(); // List of all args for each command

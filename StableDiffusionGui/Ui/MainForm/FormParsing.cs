@@ -22,6 +22,7 @@ namespace StableDiffusionGui.Ui.MainFormUtils
             F.textboxPromptNeg.Text = meta.NegativePrompt;
             F.sliderSteps.ActualValue = meta.Steps;
             F.sliderScale.ActualValue = (decimal)meta.Scale;
+            F.sliderScaleImg.ActualValue = (decimal)meta.ScaleImg;
             F.comboxResW.Text = meta.GeneratedResolution.Width.ToString();
             F.comboxResH.Text = meta.GeneratedResolution.Height.ToString();
             F.upDownSeed.Value = meta.Seed;
