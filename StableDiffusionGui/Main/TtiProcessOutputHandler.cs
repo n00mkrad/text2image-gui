@@ -196,13 +196,18 @@ namespace StableDiffusionGui.Main
 
                 if (!TextToImage.Canceled && line.MatchesWildcard("*%|*| *") && !line.Contains("Fetching "))
                 {
-                    if (!Logger.LastUiLine.MatchesWildcard("*Generated*image*in*"))
+                    if (!Logger.LastUiLine.MatchesWildcard("*Generated*image*in*") && !line.Contains("B/s"))
                         Logger.LogIfLastLineDoesNotContainMsg($"Generating...");
 
                     int percent = line.Split("%|")[0].GetInt();
 
                     if (percent > 0 && percent <= 100)
-                        Program.MainForm.SetProgressImg(percent);
+                    {
+                        if(line.Contains("Downloading: "))
+                            Program.MainForm.SetProgress(percent);
+                        else
+                            Program.MainForm.SetProgressImg(percent);
+                    }
                 }
 
                 if (!TextToImage.Canceled && line.Contains("Image generated in "))
@@ -221,7 +226,7 @@ namespace StableDiffusionGui.Main
 
             if (line.MatchesWildcard("*%|*/*[*B/s]*") && !line.Lower().Contains("it/s") && !line.Lower().Contains("s/it"))
             {
-                Logger.Log($"Downloading required files... {line.Trunc(80)}", false, ellipsis);
+                Logger.Log($"Downloading required files - {line.Trunc(80)}...", false, ellipsis);
             }
 
             if (line.MatchesWildcard("Added terms: *, *"))

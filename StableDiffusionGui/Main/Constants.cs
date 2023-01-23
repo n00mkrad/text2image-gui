@@ -30,6 +30,8 @@
             {
                 public const string Root = "cache";
                 public const string Transformers = "trfm";
+                public const string Diffusers = "diff";
+                public const string Hf = "hf";
                 public const string TorchHub = "torch";
                 public const string Clip = "clip";
             }
