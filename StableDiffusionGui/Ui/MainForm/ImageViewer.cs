@@ -167,7 +167,7 @@ namespace StableDiffusionGui.Ui.MainFormUtils
 
             Image initImg = IoUtils.GetImage(metadata.InitImgName, false);
             Program.MainForm.checkboxShowInitImg.Visible = initImg != null;
-            Program.MainForm.pictBoxInitImg.Image = initImg != null ? initImg : Properties.Resources.checkerboard_darkened;
+            Program.MainForm.pictBoxInitImg.Image = initImg;
         }
 
         public static void CopyCurrentToFavs()

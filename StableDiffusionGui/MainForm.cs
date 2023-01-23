@@ -488,9 +488,7 @@ namespace StableDiffusionGui
         private void labelCurrentImage_MouseEnter(object sender, EventArgs e)
         {
             Application.OpenForms.Cast<Form>().Where(f => f is ImageHoverForm).ToList().ForEach(f => f.Close());
-
             MainUi.CurrentInitImgPaths?.Take(1).ToList().ForEach(img => new ImageHoverForm(IoUtils.GetImage(img)).Show());
-            // new ImageHoverForm(IoUtils.GetImage(MainUi.CurrentInitImgPaths.FirstOrDefault())).Show();
         }
 
         private void labelCurrentImage_MouseLeave(object sender, EventArgs e)
@@ -513,6 +511,19 @@ namespace StableDiffusionGui
         {
             tableLayoutPanelImgViewers.ColumnStyles[0].Width = checkboxShowInitImg.Checked ? 50 : 0;
             tableLayoutPanelImgViewers.ColumnStyles[1].Width = checkboxShowInitImg.Checked ? 50 : 100;
+            MainUi.FitWindowSizeToImageSize();
+            CenterToScreen();
+        }
+
+        private FormWindowState _prevWindowState;
+
+        private void MainForm_Resize(object sender, EventArgs e)
+        {
+            if (WindowState == _prevWindowState)
+                return;
+
+            _prevWindowState = WindowState;
+            MainUi.SetSettingsVertScrollbar();
         }
     }
 }
