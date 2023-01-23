@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
 namespace StableDiffusionGui.Main
 {
@@ -89,10 +90,10 @@ namespace StableDiffusionGui.Main
 
                 switch (s.Implementation)
                 {
-                    case Enums.StableDiffusion.Implementation.InvokeAi: tasks.Add(InvokeAi.Run(s.Prompts, s.NegativePrompt, s.Iterations, s.Params, tempOutDir)); break;
-                    case Enums.StableDiffusion.Implementation.OptimizedSd: tasks.Add(OptimizedSd.Run(s.Prompts, s.Iterations, s.Params, tempOutDir)); break;
-                    case Enums.StableDiffusion.Implementation.DiffusersOnnx: tasks.Add(SdOnnx.Run(s.Prompts, s.NegativePrompt, s.Iterations, s.Params, tempOutDir)); break;
-                    case Enums.StableDiffusion.Implementation.InstructPixToPix: tasks.Add(InstructPixToPix.Run(s.Prompts, s.NegativePrompt, s.Iterations, s.Params, tempOutDir)); break;
+                    case Implementation.InvokeAi: tasks.Add(InvokeAi.Run(s.Prompts, s.NegativePrompt, s.Iterations, s.Params, tempOutDir)); break;
+                    case Implementation.OptimizedSd: tasks.Add(OptimizedSd.Run(s.Prompts, s.Iterations, s.Params, tempOutDir)); break;
+                    case Implementation.DiffusersOnnx: tasks.Add(SdOnnx.Run(s.Prompts, s.NegativePrompt, s.Iterations, s.Params, tempOutDir)); break;
+                    case Implementation.InstructPixToPix: tasks.Add(InstructPixToPix.Run(s.Prompts, s.NegativePrompt, s.Iterations, s.Params, tempOutDir)); break;
                 }
 
                 tasks.Add(ImageExport.ExportLoop(tempOutDir, CurrentTask.ImgCount, s.GetTargetImgCount(), true));
@@ -147,18 +148,12 @@ namespace StableDiffusionGui.Main
 
             Logger.Log($"Canceling. Reason: {(string.IsNullOrWhiteSpace(reason) ? "None" : reason)} - Implementation: {(CurrentTaskSettings != null ? CurrentTaskSettings.Implementation.ToString() : "None")} - Force Kill: {forceKill}", true);
 
-            if (CurrentTaskSettings != null && CurrentTaskSettings.Implementation == Enums.StableDiffusion.Implementation.DiffusersOnnx)
+            if (CurrentTaskSettings != null && CurrentTaskSettings.Implementation != Implementation.InvokeAi)
                 forceKill = true;
 
             if (!forceKill && TtiProcess.IsAiProcessRunning)
             {
-                if (CurrentTaskSettings.Implementation == Enums.StableDiffusion.Implementation.OptimizedSd)
-                {
-                    IoUtils.TryDeleteIfExists(Path.Combine(Paths.GetSessionDataPath(), "prompts.txt"));
-                    // TtiUtils.SoftCancelDreamPy();
-                }
-
-                if (CurrentTaskSettings.Implementation == Enums.StableDiffusion.Implementation.InvokeAi)
+                if (CurrentTaskSettings.Implementation == Implementation.InvokeAi)
                 {
                     List<string> lastLogLines = Logger.GetLastLines(Constants.Lognames.Sd, 15);
 
