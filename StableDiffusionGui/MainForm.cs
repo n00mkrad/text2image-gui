@@ -507,5 +507,11 @@ namespace StableDiffusionGui
         {
             new ConvertModelForm().ShowDialog();
         }
+
+        private void checkboxShowInitImg_CheckedChanged(object sender, EventArgs e)
+        {
+            tableLayoutPanelImgViewers.ColumnStyles[0].Width = checkboxShowInitImg.Checked ? 50 : 0;
+            tableLayoutPanelImgViewers.ColumnStyles[1].Width = checkboxShowInitImg.Checked ? 50 : 100;
+        }
     }
 }

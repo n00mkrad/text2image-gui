@@ -79,9 +79,11 @@ namespace StableDiffusionGui.Ui.MainFormUtils
 
             Program.MainForm.pictBoxImgViewer.Text = "";
             Program.MainForm.pictBoxImgViewer.Image = IoUtils.GetImage(_currentImages[_currIndex]);
+
             ImagePopup.UpdateSlideshow(Program.MainForm.pictBoxImgViewer.Image);
 
             ImageMetadata meta = CurrentImageMetadata;
+            UpdateInitImgViewer(meta);
 
             List<string> infos = new List<string>();
 
@@ -123,6 +125,7 @@ namespace StableDiffusionGui.Ui.MainFormUtils
             Program.MainForm.labelImgInfo.Text = "No images to show.";
             Program.MainForm.labelImgPrompt.Text = _strNoPrompt;
             Program.MainForm.labelImgPromptNeg.Text = _strNoPromptNeg;
+            UpdateInitImgViewer();
             UpdatePromptLabelColors();
         }
 
@@ -155,6 +158,16 @@ namespace StableDiffusionGui.Ui.MainFormUtils
             }
 
             Show();
+        }
+
+        private static void UpdateInitImgViewer (ImageMetadata metadata = null)
+        {
+            if (metadata == null)
+                metadata = CurrentImageMetadata;
+
+            Image initImg = IoUtils.GetImage(metadata.InitImgName, false);
+            Program.MainForm.checkboxShowInitImg.Visible = initImg != null;
+            Program.MainForm.pictBoxInitImg.Image = initImg != null ? initImg : Properties.Resources.checkerboard_darkened;
         }
 
         public static void CopyCurrentToFavs()

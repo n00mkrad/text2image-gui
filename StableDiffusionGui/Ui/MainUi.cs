@@ -299,7 +299,7 @@ namespace StableDiffusionGui.Ui
             Logger.Log($"Detected {gpus.Count.ToString().Replace("0", "no")} CUDA-capable GPU{(gpus.Count != 1 ? "s" : "")}.");
         }
 
-        public static async Task PrintVersion ()
+        public static async Task PrintVersion()
         {
             string ver = await GetWebInfo.LoadVersion();
             Logger.Log($"Latest version: {ver}");
@@ -321,14 +321,20 @@ namespace StableDiffusionGui.Ui
 
         public static void FitWindowSizeToImageSize()
         {
-            if (Program.MainForm.pictBoxImgViewer.Image.Size == Program.MainForm.pictBoxImgViewer.Size)
+            int picInWidth = Program.MainForm.tableLayoutPanelImgViewers.ColumnStyles[0].Width > 1 ? Program.MainForm.pictBoxImgViewer.Image.Width : 0;
+            int picOutWidth = Program.MainForm.pictBoxImgViewer.Image.Width;
+            int picOutHeight = Program.MainForm.pictBoxImgViewer.Image.Height;
+
+            if (Program.MainForm.tableLayoutPanelImgViewers.Size.Width == picInWidth + picOutWidth)
                 return;
 
-            int formWidthWithoutImgViewer = Program.MainForm.Size.Width - Program.MainForm.pictBoxImgViewer.Width;
-            int formHeightWithoutImgViewer = Program.MainForm.Size.Height - Program.MainForm.pictBoxImgViewer.Height;
+            int formWidthWithoutImgViewer = Program.MainForm.Size.Width - Program.MainForm.tableLayoutPanelImgViewers.Width;
+            int formHeightWithoutImgViewer = Program.MainForm.Size.Height - Program.MainForm.tableLayoutPanelImgViewers.Height;
 
-            Size targetSize = new Size(Program.MainForm.pictBoxImgViewer.Image.Width + formWidthWithoutImgViewer, Program.MainForm.pictBoxImgViewer.Image.Height + formHeightWithoutImgViewer);
-            Program.MainForm.Size = new Size(targetSize.Width.Clamp(512, int.MaxValue), targetSize.Height.Clamp(512, int.MaxValue));
+            Size targetSize = new Size(picInWidth + picOutWidth + formWidthWithoutImgViewer, picOutHeight + formHeightWithoutImgViewer);
+
+            if (Program.MainForm.Size != targetSize)
+                Program.MainForm.Size = new Size(targetSize.Width.Clamp(512, int.MaxValue), targetSize.Height.Clamp(512, int.MaxValue));
         }
 
         public static void LoadAutocompleteData(AutocompleteMenuNS.AutocompleteMenu menu, TextBox textbox)

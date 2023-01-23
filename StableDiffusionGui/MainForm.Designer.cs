@@ -159,6 +159,7 @@ namespace StableDiffusionGui
             this.label11 = new System.Windows.Forms.Label();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.panelAiInputs = new System.Windows.Forms.Panel();
+            this.checkboxShowInitImg = new System.Windows.Forms.CheckBox();
             this.labelCurrentConcept = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.panelPromptNeg = new System.Windows.Forms.Panel();
@@ -166,6 +167,9 @@ namespace StableDiffusionGui
             this.promptAutocomplete = new AutocompleteMenuNS.AutocompleteMenu();
             this.pictBoxImgViewer = new System.Windows.Forms.PictureBox();
             this.separator = new System.Windows.Forms.Button();
+            this.pictBoxInitImg = new System.Windows.Forms.PictureBox();
+            this.tableLayoutPanelImgViewers = new System.Windows.Forms.TableLayoutPanel();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.menuStripOutputImg.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.upDownSeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
@@ -196,6 +200,9 @@ namespace StableDiffusionGui
             this.panelPromptNeg.SuspendLayout();
             this.panelPrompt.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictBoxImgViewer)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictBoxInitImg)).BeginInit();
+            this.tableLayoutPanelImgViewers.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // runBtn
@@ -568,7 +575,7 @@ namespace StableDiffusionGui
             this.textboxSliderScale.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScale.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScale.Location = new System.Drawing.Point(302, 9);
+            this.textboxSliderScale.Location = new System.Drawing.Point(302, 7);
             this.textboxSliderScale.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScale.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScale.Name = "textboxSliderScale";
@@ -702,7 +709,7 @@ namespace StableDiffusionGui
             this.textboxSliderInitStrength.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderInitStrength.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderInitStrength.Location = new System.Drawing.Point(302, 9);
+            this.textboxSliderInitStrength.Location = new System.Drawing.Point(302, 7);
             this.textboxSliderInitStrength.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderInitStrength.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderInitStrength.Name = "textboxSliderInitStrength";
@@ -1233,7 +1240,7 @@ namespace StableDiffusionGui
             this.textboxSliderScaleImg.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScaleImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScaleImg.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScaleImg.Location = new System.Drawing.Point(302, 9);
+            this.textboxSliderScaleImg.Location = new System.Drawing.Point(302, 7);
             this.textboxSliderScaleImg.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScaleImg.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScaleImg.Name = "textboxSliderScaleImg";
@@ -1270,6 +1277,7 @@ namespace StableDiffusionGui
             this.progressBarImg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.progressBarImg.BorderThickness = 0;
             this.progressBarImg.Location = new System.Drawing.Point(680, 603);
+            this.progressBarImg.Margin = new System.Windows.Forms.Padding(0);
             this.progressBarImg.Name = "progressBarImg";
             this.progressBarImg.Size = new System.Drawing.Size(512, 5);
             this.progressBarImg.TabIndex = 110;
@@ -1872,7 +1880,7 @@ namespace StableDiffusionGui
             this.textboxSliderSteps.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderSteps.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderSteps.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderSteps.Location = new System.Drawing.Point(302, 9);
+            this.textboxSliderSteps.Location = new System.Drawing.Point(302, 7);
             this.textboxSliderSteps.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderSteps.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderSteps.Name = "textboxSliderSteps";
@@ -2023,6 +2031,7 @@ namespace StableDiffusionGui
             // 
             // panelAiInputs
             // 
+            this.panelAiInputs.Controls.Add(this.checkboxShowInitImg);
             this.panelAiInputs.Controls.Add(this.labelCurrentConcept);
             this.panelAiInputs.Controls.Add(this.label2);
             this.panelAiInputs.Controls.Add(this.labelCurrentImage);
@@ -2033,6 +2042,18 @@ namespace StableDiffusionGui
             this.panelAiInputs.Name = "panelAiInputs";
             this.panelAiInputs.Size = new System.Drawing.Size(645, 65);
             this.panelAiInputs.TabIndex = 17;
+            // 
+            // checkboxShowInitImg
+            // 
+            this.checkboxShowInitImg.AutoSize = true;
+            this.checkboxShowInitImg.ForeColor = System.Drawing.Color.Silver;
+            this.checkboxShowInitImg.Location = new System.Drawing.Point(592, 7);
+            this.checkboxShowInitImg.Name = "checkboxShowInitImg";
+            this.checkboxShowInitImg.Size = new System.Drawing.Size(53, 17);
+            this.checkboxShowInitImg.TabIndex = 93;
+            this.checkboxShowInitImg.Text = "Show";
+            this.checkboxShowInitImg.UseVisualStyleBackColor = true;
+            this.checkboxShowInitImg.CheckedChanged += new System.EventHandler(this.checkboxShowInitImg_CheckedChanged);
             // 
             // labelCurrentConcept
             // 
@@ -2095,11 +2116,10 @@ namespace StableDiffusionGui
             // 
             // pictBoxImgViewer
             // 
-            this.pictBoxImgViewer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.pictBoxImgViewer.BackgroundImage = global::StableDiffusionGui.Properties.Resources.checkerboard_darkened;
-            this.pictBoxImgViewer.Location = new System.Drawing.Point(680, 96);
+            this.pictBoxImgViewer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictBoxImgViewer.Location = new System.Drawing.Point(0, 0);
+            this.pictBoxImgViewer.Margin = new System.Windows.Forms.Padding(0);
             this.pictBoxImgViewer.Name = "pictBoxImgViewer";
             this.pictBoxImgViewer.Size = new System.Drawing.Size(512, 512);
             this.pictBoxImgViewer.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -2124,6 +2144,48 @@ namespace StableDiffusionGui
             this.separator.TabStop = false;
             this.separator.UseVisualStyleBackColor = false;
             // 
+            // pictBoxInitImg
+            // 
+            this.pictBoxInitImg.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictBoxInitImg.BackgroundImage = global::StableDiffusionGui.Properties.Resources.checkerboard_darkened;
+            this.pictBoxInitImg.Location = new System.Drawing.Point(0, 0);
+            this.pictBoxInitImg.Margin = new System.Windows.Forms.Padding(0);
+            this.pictBoxInitImg.Name = "pictBoxInitImg";
+            this.pictBoxInitImg.Size = new System.Drawing.Size(1, 512);
+            this.pictBoxInitImg.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictBoxInitImg.TabIndex = 118;
+            this.pictBoxInitImg.TabStop = false;
+            // 
+            // tableLayoutPanelImgViewers
+            // 
+            this.tableLayoutPanelImgViewers.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanelImgViewers.ColumnCount = 2;
+            this.tableLayoutPanelImgViewers.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 0F));
+            this.tableLayoutPanelImgViewers.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanelImgViewers.Controls.Add(this.panel1, 1, 0);
+            this.tableLayoutPanelImgViewers.Controls.Add(this.pictBoxInitImg, 0, 0);
+            this.tableLayoutPanelImgViewers.Location = new System.Drawing.Point(680, 96);
+            this.tableLayoutPanelImgViewers.Name = "tableLayoutPanelImgViewers";
+            this.tableLayoutPanelImgViewers.RowCount = 1;
+            this.tableLayoutPanelImgViewers.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanelImgViewers.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanelImgViewers.Size = new System.Drawing.Size(512, 512);
+            this.tableLayoutPanelImgViewers.TabIndex = 119;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.pictBoxImgViewer);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Margin = new System.Windows.Forms.Padding(0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(512, 512);
+            this.panel1.TabIndex = 0;
+            // 
             // MainForm
             // 
             this.AllowDrop = true;
@@ -2131,12 +2193,12 @@ namespace StableDiffusionGui
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.ClientSize = new System.Drawing.Size(1204, 703);
+            this.Controls.Add(this.progressBarImg);
+            this.Controls.Add(this.tableLayoutPanelImgViewers);
             this.Controls.Add(this.btnDreambooth);
             this.Controls.Add(this.labelImgPromptNeg);
             this.Controls.Add(this.labelImgPrompt);
             this.Controls.Add(this.btnDeleteBatch);
-            this.Controls.Add(this.progressBarImg);
-            this.Controls.Add(this.pictBoxImgViewer);
             this.Controls.Add(this.btnPromptHistory);
             this.Controls.Add(this.btnQueue);
             this.Controls.Add(this.btnPostProc);
@@ -2219,6 +2281,9 @@ namespace StableDiffusionGui
             this.panelPrompt.ResumeLayout(false);
             this.panelPrompt.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictBoxImgViewer)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictBoxInitImg)).EndInit();
+            this.tableLayoutPanelImgViewers.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2359,6 +2424,10 @@ namespace StableDiffusionGui
         private System.Windows.Forms.TextBox textboxSliderScaleImg;
         public CustomSlider sliderScaleImg;
         public System.Windows.Forms.TextBox textboxExtraScalesImg;
+        public System.Windows.Forms.PictureBox pictBoxInitImg;
+        private System.Windows.Forms.Panel panel1;
+        public System.Windows.Forms.CheckBox checkboxShowInitImg;
+        public System.Windows.Forms.TableLayoutPanel tableLayoutPanelImgViewers;
     }
 }
 
