@@ -5,6 +5,7 @@ using StableDiffusionGui.Implementations;
 using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
+using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
 using StableDiffusionGui.Ui.MainFormUtils;
@@ -469,7 +470,7 @@ namespace StableDiffusionGui
                 panelSettings.Padding = newPadding;
         }
 
-        private void MainForm_SizeChanged(object sender, EventArgs e)
+        private void MainForm_ResizeEnd(object sender, EventArgs e)
         {
             MainUi.SetSettingsVertScrollbar();
         }
