@@ -2053,6 +2053,7 @@ namespace StableDiffusionGui
             this.checkboxShowInitImg.TabIndex = 93;
             this.checkboxShowInitImg.Text = "Show";
             this.checkboxShowInitImg.UseVisualStyleBackColor = true;
+            this.checkboxShowInitImg.Visible = false;
             this.checkboxShowInitImg.CheckedChanged += new System.EventHandler(this.checkboxShowInitImg_CheckedChanged);
             // 
             // labelCurrentConcept
