@@ -324,17 +324,20 @@ namespace StableDiffusionGui.Ui
             int picInWidth = Program.MainForm.tableLayoutPanelImgViewers.ColumnStyles[0].Width > 1 ? Program.MainForm.pictBoxImgViewer.Image.Width : 0;
             int picOutWidth = Program.MainForm.pictBoxImgViewer.Image.Width;
             int picOutHeight = Program.MainForm.pictBoxImgViewer.Image.Height;
-
-            if (Program.MainForm.tableLayoutPanelImgViewers.Size.Width == picInWidth + picOutWidth)
-                return;
-
             int formWidthWithoutImgViewer = Program.MainForm.Size.Width - Program.MainForm.tableLayoutPanelImgViewers.Width;
             int formHeightWithoutImgViewer = Program.MainForm.Size.Height - Program.MainForm.tableLayoutPanelImgViewers.Height;
 
-            Size targetSize = new Size(picInWidth + picOutWidth + formWidthWithoutImgViewer, picOutHeight + formHeightWithoutImgViewer);
+            Size targetSize = new Size(picInWidth + picOutWidth + formWidthWithoutImgViewer, picOutHeight.Clamp(512, 8192) + formHeightWithoutImgViewer);
+            Size currScreenSize = Screen.FromControl(Program.MainForm).Bounds.Size;
+            Size maxSize = new Size((currScreenSize.Width * 1.5f).RoundToInt(), currScreenSize.Height);
 
-            if (Program.MainForm.Size != targetSize)
-                Program.MainForm.Size = new Size(targetSize.Width.Clamp(512, int.MaxValue), targetSize.Height.Clamp(512, int.MaxValue));
+            if (Program.MainForm.Size == targetSize)
+                return;
+
+            if (Program.MainForm.WindowState == FormWindowState.Maximized)
+                Program.MainForm.WindowState = FormWindowState.Normal;
+
+            Program.MainForm.Size = new Size(targetSize.Width.Clamp(512, maxSize.Width), targetSize.Height.Clamp(512, maxSize.Height));
         }
 
         public static void LoadAutocompleteData(AutocompleteMenuNS.AutocompleteMenu menu, TextBox textbox)
