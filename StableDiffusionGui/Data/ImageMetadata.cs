@@ -39,6 +39,9 @@ namespace StableDiffusionGui.Data
 
         public ImageMetadata(string path)
         {
+            if (string.IsNullOrWhiteSpace(path))
+                return;
+
             Path = path;
 
             try
