@@ -45,7 +45,7 @@
             this.btnInstall.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnInstall.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
             this.btnInstall.ForeColor = System.Drawing.Color.White;
-            this.btnInstall.Location = new System.Drawing.Point(12, 217);
+            this.btnInstall.Location = new System.Drawing.Point(12, 202);
             this.btnInstall.Name = "btnInstall";
             this.btnInstall.Size = new System.Drawing.Size(217, 30);
             this.btnInstall.TabIndex = 0;
@@ -74,12 +74,11 @@
             "Base Binaries (Included)",
             "Python Environment (Included)",
             "Stable Diffusion Code",
-            "Stable Diffusion Model File",
             "Upscalers"});
             this.checkedListBoxStatus.Location = new System.Drawing.Point(12, 75);
             this.checkedListBoxStatus.Name = "checkedListBoxStatus";
             this.checkedListBoxStatus.SelectionMode = System.Windows.Forms.SelectionMode.None;
-            this.checkedListBoxStatus.Size = new System.Drawing.Size(440, 79);
+            this.checkedListBoxStatus.Size = new System.Drawing.Size(440, 64);
             this.checkedListBoxStatus.TabIndex = 13;
             this.checkedListBoxStatus.TabStop = false;
             // 
@@ -100,7 +99,7 @@
             this.btnUninstall.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnUninstall.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
             this.btnUninstall.ForeColor = System.Drawing.Color.White;
-            this.btnUninstall.Location = new System.Drawing.Point(235, 217);
+            this.btnUninstall.Location = new System.Drawing.Point(235, 202);
             this.btnUninstall.Name = "btnUninstall";
             this.btnUninstall.Size = new System.Drawing.Size(217, 30);
             this.btnUninstall.TabIndex = 1;
@@ -110,10 +109,11 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.groupBox1.Controls.Add(this.btnInstallUpscalers);
             this.groupBox1.Controls.Add(this.btnClone);
             this.groupBox1.ForeColor = System.Drawing.Color.White;
-            this.groupBox1.Location = new System.Drawing.Point(12, 163);
+            this.groupBox1.Location = new System.Drawing.Point(12, 148);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(440, 48);
             this.groupBox1.TabIndex = 85;
@@ -165,7 +165,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.ClientSize = new System.Drawing.Size(464, 259);
+            this.ClientSize = new System.Drawing.Size(464, 244);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btnUninstall);
             this.Controls.Add(this.label2);

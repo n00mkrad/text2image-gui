@@ -22,9 +22,9 @@ namespace StableDiffusionGui.Installation
 
         private static bool ReplaceUiLogLine { get { return Logger.LastUiLine.EndsWith("..."); } }
 
-        public static async Task Install(bool force = false)
+        public static async Task Install(bool force = false, bool installOnnxDml = false, bool installUpscalers = true)
         {
-            Logger.Log($"Installing (Force = {force})", true, false, Constants.Lognames.Installer);
+            Logger.Log($"Installing (Force = {force} - ONNX/DML: {installOnnxDml} - Upscalers: {installUpscalers})", true, false, Constants.Lognames.Installer);
 
             try
             {
@@ -35,7 +35,7 @@ namespace StableDiffusionGui.Installation
                     if (!force)
                         Logger.Log("Install: Cloning repo and setting up env because either SD Repo or SD Env is missing.", true, false, Constants.Lognames.Installer);
 
-                    await CloneSdRepo();
+                    await InstallRepo(installOnnxDml);
                 }
 
                 if (_allowModelDownload && (force || !InstallationStatus.HasSdModel()))
@@ -47,7 +47,7 @@ namespace StableDiffusionGui.Installation
 
                 }
 
-                if (force || !InstallationStatus.HasSdUpscalers())
+                if (force || (installUpscalers && !InstallationStatus.HasSdUpscalers()))
                 {
                     if (!force)
                         Logger.Log("Install: Downloading upscalers because they are not installed.", true, false, Constants.Lognames.Installer);
@@ -77,7 +77,7 @@ namespace StableDiffusionGui.Installation
             Program.SetState(Program.BusyState.Standby);
         }
 
-        public static async Task SetupVenv()
+        public static async Task SetupVenv(bool installOnnx)
         {
             bool clean = IoUtils.TryDeleteIfExists(GetDataSubPath(Constants.Dirs.SdVenv));
 
@@ -87,7 +87,6 @@ namespace StableDiffusionGui.Installation
                 return;
             }
 
-            bool installOnnx = Config.Get<bool>(Config.Keys.AlwaysInstallOnnx, true) || HwInfo.KnownGpus.Any(gpu => gpu.Vendor != HwInfo.GpuInfo.GpuVendor.Unknown);
             string repoPath = GetDataSubPath(Constants.Dirs.SdRepo);
             string batPath = Path.Combine(repoPath, "install.bat");
 
@@ -201,12 +200,13 @@ namespace StableDiffusionGui.Installation
 
         #region Git
 
-        public static async Task CloneSdRepo(string overrideCommit = "")
+        public static async Task InstallRepo(bool installOnnx, string overrideCommit = "", bool setupVenvAfterwards = true)
         {
             string commit = string.IsNullOrWhiteSpace(overrideCommit) ? _gitCommit : overrideCommit;
             TtiProcess.ProcessExistWasIntentional = true;
             ProcessManager.FindAndKillOrphans($"*invoke.py*{Paths.SessionTimestamp}*");
             await CloneSdRepo($"https://github.com/{_gitFile}", GetDataSubPath(Constants.Dirs.SdRepo), _gitBranch, commit);
+            await SetupVenv(installOnnx);
         }
 
         public static async Task CloneSdRepo(string url, string dir, string branch = "main", string commit = "")
@@ -216,8 +216,6 @@ namespace StableDiffusionGui.Installation
                 Logger.Log("Downloading repository...");
                 await Clone(url, dir, commit, branch);
                 Logger.Log($"Downloaded repository.", false, Logger.LastUiLine.EndsWith("..."));
-
-                await SetupVenv();
             }
             catch (Exception ex)
             {

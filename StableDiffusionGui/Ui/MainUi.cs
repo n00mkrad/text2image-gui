@@ -19,6 +19,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static StableDiffusionGui.Main.Enums.Misc;
 using static StableDiffusionGui.Main.Enums.Program;
+using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
 namespace StableDiffusionGui.Ui
 {
@@ -104,7 +105,7 @@ namespace StableDiffusionGui.Ui
                 new InstallerForm().ShowDialogForm();
             }
 
-            if (Paths.GetModelsAll().Count <= 0)
+            if (FormControls.CurrImpl == Implementation.InvokeAi && Paths.GetModelsAll().Count <= 0)
                 UiUtils.ShowMessageBox($"No model files have been found. You will not be able to generate images until you either place a model in Data/models, or set an external folder in the settings.",
                     UiUtils.MessageType.Warning, Nmkoder.Forms.MessageForm.FontSize.Normal);
         }

@@ -1,6 +1,7 @@
 ﻿using StableDiffusionGui.Installation;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
+using StableDiffusionGui.Ui;
 using System;
 using System.Windows.Forms;
 
@@ -21,7 +22,18 @@ namespace StableDiffusionGui.Forms
         private async void installBtn_Click(object sender, EventArgs e)
         {
             Enabled = false;
-            await Setup.Install(InstallationStatus.IsInstalledAll);
+
+            if (InstallationStatus.IsInstalledAll) // Re-install
+            {
+                await Setup.Install(true, InstallationStatus.HasOnnx(), InstallationStatus.HasSdUpscalers());
+            }
+            else
+            {
+                bool installOnnxDml = AskInstallOnnxDml();
+                bool installUpscalers = AskInstallUpscalers();
+                await Setup.Install(false, installOnnxDml, installUpscalers);
+            }
+            
             BringToFront();
             UpdateStatus();
             Enabled = true;
@@ -49,8 +61,8 @@ namespace StableDiffusionGui.Forms
                 if (text.Contains("code"))
                     checkedListBoxStatus.SetItemChecked(i, InstallationStatus.HasSdRepo());
 
-                if (text.Contains("model"))
-                    checkedListBoxStatus.SetItemChecked(i, InstallationStatus.HasSdModel());
+                //if (text.Contains("model"))
+                //    checkedListBoxStatus.SetItemChecked(i, InstallationStatus.HasSdModel());
 
                 if (text.Contains("upscalers"))
                     checkedListBoxStatus.SetItemChecked(i, InstallationStatus.HasSdUpscalers());
@@ -86,9 +98,10 @@ namespace StableDiffusionGui.Forms
                 commit = form.EnteredText.Trim();
             }
 
+            bool installOnnxDml = AskInstallOnnxDml();
             Enabled = false;
             Program.SetState(Program.BusyState.Installation);
-            await Setup.CloneSdRepo(commit);
+            await Setup.InstallRepo(installOnnxDml, commit, false);
             Setup.RepoCleanup();
             UpdateStatus();
             Program.SetState(Program.BusyState.Standby);
@@ -101,6 +114,18 @@ namespace StableDiffusionGui.Forms
             await Setup.InstallUpscalers();
             UpdateStatus();
             Enabled = true;
+        }
+
+        private bool AskInstallOnnxDml ()
+        {
+            DialogResult res = UiUtils.ShowMessageBox("Do you want to download the Stable Diffusion ONNX/DirectML files?\n\nThey are only needed if you have an AMD GPU.", "Setup", MessageBoxButtons.YesNo);
+            return res == DialogResult.Yes;
+        }
+
+        private bool AskInstallUpscalers()
+        {
+            DialogResult res = UiUtils.ShowMessageBox("Do you want to pre-download the upscaling and face restoration models? (800 MB)", "Setup", MessageBoxButtons.YesNo);
+            return res == DialogResult.Yes;
         }
     }
 }
