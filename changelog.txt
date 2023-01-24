@@ -1,3 +1,12 @@
+SD GUI 1.9.0 Changelog:
+- New: Added InstructPix2Pix (Use with Settings -> Implementation -> InstructPix2Pix)
+- New: Added the option to show the input image next to the output for comparisons
+- New: Added option to choose output filename timestamp (None, Date, Date+Time, Epoch)
+- Improved: minor UI fixes, e.g. no more scrollbar in main view if there is enough space
+- Fixed: Minor PNG metadata parsing issues
+- Fixed: Various of other minor fixes
+
+
 SD GUI 1.8.1 Changelog:
 - New: RunwayML inpainting now also works with ONNX implementation
 - New: Version now checks for the latest version on startup (no updater yet)
