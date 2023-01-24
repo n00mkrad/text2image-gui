@@ -72,7 +72,6 @@ namespace StableDiffusionGui
             this.comboxSeamless = new System.Windows.Forms.ComboBox();
             this.textboxClipsegMask = new System.Windows.Forms.TextBox();
             this.textboxExtraSteps = new System.Windows.Forms.TextBox();
-            this.labelCurrentImage = new System.Windows.Forms.Label();
             this.btnEditMask = new HTAlt.WinForms.HTButton();
             this.btnDreambooth = new System.Windows.Forms.Button();
             this.btnDeleteBatch = new System.Windows.Forms.Button();
@@ -94,6 +93,7 @@ namespace StableDiffusionGui
             this.sliderScaleImg = new StableDiffusionGui.Controls.CustomSlider();
             this.textboxSliderScaleImg = new System.Windows.Forms.TextBox();
             this.textboxExtraScalesImg = new System.Windows.Forms.TextBox();
+            this.labelCurrentImage = new System.Windows.Forms.Label();
             this.menuStripLogs = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.progressBarImg = new HTAlt.WinForms.HTProgressBar();
             this.menuStripRunQueue = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -436,7 +436,6 @@ namespace StableDiffusionGui
             // 
             // checkboxHiresFix
             // 
-            this.checkboxHiresFix.AutoSize = true;
             this.checkboxHiresFix.ForeColor = System.Drawing.Color.White;
             this.checkboxHiresFix.Location = new System.Drawing.Point(439, 6);
             this.checkboxHiresFix.Name = "checkboxHiresFix";
@@ -449,7 +448,6 @@ namespace StableDiffusionGui
             // 
             // checkboxLockSeed
             // 
-            this.checkboxLockSeed.AutoSize = true;
             this.checkboxLockSeed.ForeColor = System.Drawing.Color.White;
             this.checkboxLockSeed.Location = new System.Drawing.Point(511, 6);
             this.checkboxLockSeed.Name = "checkboxLockSeed";
@@ -575,7 +573,7 @@ namespace StableDiffusionGui
             this.textboxSliderScale.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScale.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScale.Location = new System.Drawing.Point(302, 9);
+            this.textboxSliderScale.Location = new System.Drawing.Point(302, 7);
             this.textboxSliderScale.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScale.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScale.Name = "textboxSliderScale";
@@ -709,7 +707,7 @@ namespace StableDiffusionGui
             this.textboxSliderInitStrength.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderInitStrength.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderInitStrength.Location = new System.Drawing.Point(302, 9);
+            this.textboxSliderInitStrength.Location = new System.Drawing.Point(302, 7);
             this.textboxSliderInitStrength.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderInitStrength.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderInitStrength.Name = "textboxSliderInitStrength";
@@ -844,20 +842,6 @@ namespace StableDiffusionGui
             this.textboxExtraSteps.Size = new System.Drawing.Size(69, 21);
             this.textboxExtraSteps.TabIndex = 93;
             this.toolTip.SetToolTip(this.textboxExtraSteps, resources.GetString("textboxExtraSteps.ToolTip"));
-            // 
-            // labelCurrentImage
-            // 
-            this.labelCurrentImage.AutoSize = true;
-            this.labelCurrentImage.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelCurrentImage.ForeColor = System.Drawing.Color.Silver;
-            this.labelCurrentImage.Location = new System.Drawing.Point(344, 10);
-            this.labelCurrentImage.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
-            this.labelCurrentImage.Name = "labelCurrentImage";
-            this.labelCurrentImage.Size = new System.Drawing.Size(0, 13);
-            this.labelCurrentImage.TabIndex = 91;
-            this.toolTip.SetToolTip(this.labelCurrentImage, "Shift + Hover to preview.");
-            this.labelCurrentImage.MouseEnter += new System.EventHandler(this.labelCurrentImage_MouseEnter);
-            this.labelCurrentImage.MouseLeave += new System.EventHandler(this.labelCurrentImage_MouseLeave);
             // 
             // btnEditMask
             // 
@@ -1240,7 +1224,7 @@ namespace StableDiffusionGui
             this.textboxSliderScaleImg.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScaleImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScaleImg.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScaleImg.Location = new System.Drawing.Point(302, 9);
+            this.textboxSliderScaleImg.Location = new System.Drawing.Point(302, 7);
             this.textboxSliderScaleImg.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScaleImg.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScaleImg.Name = "textboxSliderScaleImg";
@@ -1262,6 +1246,21 @@ namespace StableDiffusionGui
             this.textboxExtraScalesImg.Size = new System.Drawing.Size(69, 21);
             this.textboxExtraScalesImg.TabIndex = 3;
             this.toolTip.SetToolTip(this.textboxExtraScalesImg, resources.GetString("textboxExtraScalesImg.ToolTip"));
+            // 
+            // labelCurrentImage
+            // 
+            this.labelCurrentImage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelCurrentImage.AutoEllipsis = true;
+            this.labelCurrentImage.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelCurrentImage.ForeColor = System.Drawing.Color.Silver;
+            this.labelCurrentImage.Location = new System.Drawing.Point(344, 10);
+            this.labelCurrentImage.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.labelCurrentImage.Name = "labelCurrentImage";
+            this.labelCurrentImage.Size = new System.Drawing.Size(251, 13);
+            this.labelCurrentImage.TabIndex = 91;
+            this.labelCurrentImage.MouseEnter += new System.EventHandler(this.labelCurrentImage_MouseEnter);
+            this.labelCurrentImage.MouseLeave += new System.EventHandler(this.labelCurrentImage_MouseLeave);
             // 
             // menuStripLogs
             // 
@@ -1876,7 +1875,7 @@ namespace StableDiffusionGui
             this.textboxSliderSteps.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderSteps.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderSteps.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderSteps.Location = new System.Drawing.Point(302, 9);
+            this.textboxSliderSteps.Location = new System.Drawing.Point(302, 7);
             this.textboxSliderSteps.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderSteps.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderSteps.Name = "textboxSliderSteps";
@@ -2041,11 +2040,11 @@ namespace StableDiffusionGui
             // 
             // checkboxShowInitImg
             // 
-            this.checkboxShowInitImg.AutoSize = true;
+            this.checkboxShowInitImg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.checkboxShowInitImg.ForeColor = System.Drawing.Color.Silver;
-            this.checkboxShowInitImg.Location = new System.Drawing.Point(592, 7);
+            this.checkboxShowInitImg.Location = new System.Drawing.Point(592, 6);
             this.checkboxShowInitImg.Name = "checkboxShowInitImg";
-            this.checkboxShowInitImg.Size = new System.Drawing.Size(53, 17);
+            this.checkboxShowInitImg.Size = new System.Drawing.Size(53, 23);
             this.checkboxShowInitImg.TabIndex = 93;
             this.checkboxShowInitImg.Text = "Show";
             this.checkboxShowInitImg.UseVisualStyleBackColor = true;
@@ -2054,13 +2053,15 @@ namespace StableDiffusionGui
             // 
             // labelCurrentConcept
             // 
-            this.labelCurrentConcept.AutoSize = true;
+            this.labelCurrentConcept.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelCurrentConcept.AutoEllipsis = true;
             this.labelCurrentConcept.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelCurrentConcept.ForeColor = System.Drawing.Color.Silver;
             this.labelCurrentConcept.Location = new System.Drawing.Point(344, 39);
             this.labelCurrentConcept.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.labelCurrentConcept.Name = "labelCurrentConcept";
-            this.labelCurrentConcept.Size = new System.Drawing.Size(0, 13);
+            this.labelCurrentConcept.Size = new System.Drawing.Size(298, 13);
             this.labelCurrentConcept.TabIndex = 92;
             // 
             // label2
