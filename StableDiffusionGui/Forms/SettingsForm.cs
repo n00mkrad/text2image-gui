@@ -225,13 +225,18 @@ namespace StableDiffusionGui.Forms
 
         private void comboxImplementation_SelectedIndexChanged(object sender, EventArgs e)
         {
+            var test = CurrImplementation;
+            Console.WriteLine($"CurrImplementation: {CurrImplementation} (from '{comboxImplementation.Text}')");
+
             if (CurrImplementation < 0)
                 return;
 
-            panelFullPrecision.Visible = CurrImplementation != Implementation.DiffusersOnnx;
-            panelUnloadModel.Visible = CurrImplementation != Implementation.DiffusersOnnx;
-            panelCudaDevice.Visible = CurrImplementation != Implementation.DiffusersOnnx;
-            panelVae.Visible = CurrImplementation == Implementation.InvokeAi;
+            Config.Set(Config.Keys.ImplementationName, CurrImplementation.ToString());
+            panelFullPrecision.Visible = ShouldControlBeVisible(this, panelFullPrecision);
+            panelUnloadModel.Visible = ShouldControlBeVisible(this, panelUnloadModel);
+            panelCudaDevice.Visible = ShouldControlBeVisible(this, panelCudaDevice);
+            panelSdModel.Visible = ShouldControlBeVisible(this, panelSdModel);
+            panelVae.Visible = ShouldControlBeVisible(this, panelVae);
 
             LoadModels(true, ModelType.Normal);
             LoadModels(true, ModelType.Vae);

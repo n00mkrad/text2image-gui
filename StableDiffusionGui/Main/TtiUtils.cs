@@ -117,7 +117,7 @@ namespace StableDiffusionGui.Main
             if (words > thresh)
                 UiUtils.ShowMessageBox($"{(prompts.Count > 1 ? "One of your prompts" : "Your prompt")} is very long (>{thresh} words).\n\nThe AI might ignore parts of your prompt. Shorten the prompt to avoid this.");
 
-            var imp = ParseUtils.GetEnum<Implementation>(Config.Get<string>(Config.Keys.ImplementationName));
+            var imp = ConfigParser.CurrentImplementation;
 
             if (imp == Implementation.OptimizedSd && prompts.Where(x => x.MatchesRegex(@"(?:(?!\[)(?:.|\n))*\[(?:(?!\])(?:.|\n))*\]")).Any())
             {
@@ -147,7 +147,7 @@ namespace StableDiffusionGui.Main
         public static Model CheckIfCurrentSdModelExists(List<Model> cachedModels = null)
         {
             string name = Config.Get<string>(Config.Keys.Model);
-            var imp = ParseUtils.GetEnum<Implementation>(Config.Get<string>(Config.Keys.ImplementationName));
+            var imp = ConfigParser.CurrentImplementation;
 
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -173,7 +173,7 @@ namespace StableDiffusionGui.Main
         public static bool CurrentSdModelExists(List<Model> cachedModels = null)
         {
             string name = Config.Get<string>(Config.Keys.Model);
-            var imp = ParseUtils.GetEnum<Implementation>(Config.Get<string>(Config.Keys.ImplementationName));
+            var imp = ConfigParser.CurrentImplementation;
 
             if (string.IsNullOrWhiteSpace(name))
                 return false;

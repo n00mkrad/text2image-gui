@@ -21,7 +21,6 @@ namespace StableDiffusionGui.Ui.MainFormUtils
     {
 
         public static MainForm F { get { return Program.MainForm; } }
-        public static Implementation CurrImpl { get { return ParseUtils.GetEnum<Implementation>(Config.Get<string>(Config.Keys.ImplementationName)); } }
         public static bool IsUsingInpaintingModel { get { return Path.ChangeExtension(Config.Get<string>(Config.Keys.Model), null).EndsWith(Constants.SuffixesPrefixes.InpaintingMdlSuf); } }
 
         public static void InitializeControls()
@@ -61,11 +60,11 @@ namespace StableDiffusionGui.Ui.MainFormUtils
 
         public static void RefreshUiAfterSettingsChanged()
         {
-            F.panelPromptNeg.Visible = CurrImpl != Implementation.OptimizedSd && !IsUsingInpaintingModel;
+            F.panelPromptNeg.Visible = ConfigParser.CurrentImplementation != Implementation.OptimizedSd && !IsUsingInpaintingModel;
             F.btnEmbeddingBrowse.Visible = MainForm.ShouldControlBeVisible(F, F.btnEmbeddingBrowse);
             F.panelAiInputs.Height = MainForm.ShouldControlBeVisible(F, F.btnEmbeddingBrowse) ? 65 : 35;
-            F.panelSampler.Visible = CurrImpl == Implementation.InvokeAi;
-            F.panelSeamless.Visible = CurrImpl == Implementation.InvokeAi;
+            F.panelSampler.Visible = ConfigParser.CurrentImplementation == Implementation.InvokeAi;
+            F.panelSeamless.Visible = ConfigParser.CurrentImplementation == Implementation.InvokeAi;
             F.panelRes.Visible = MainForm.ShouldControlBeVisible(F, F.panelRes);
             F.panelScaleImg.Visible = MainForm.ShouldControlBeVisible(F, F.panelScaleImg);
 
@@ -169,7 +168,7 @@ namespace StableDiffusionGui.Ui.MainFormUtils
         public static void SetHiresFixVisible()
         {
             bool txt2img = MainUi.CurrentInitImgPaths == null;
-            bool compatible = CurrImpl == Implementation.InvokeAi;
+            bool compatible = ConfigParser.CurrentImplementation == Implementation.InvokeAi;
             F.checkboxHiresFix.Visible = (F.comboxResW.GetInt() > 512 || F.comboxResH.GetInt() > 512) && txt2img && compatible;
         }
     }

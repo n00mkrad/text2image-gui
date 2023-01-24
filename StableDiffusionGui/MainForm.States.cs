@@ -35,14 +35,14 @@ namespace StableDiffusionGui
             if (control == instance.panelInpainting)
                 return InpaintingAvailable();
 
-            return true;
+            return false;
         }
 
         private static bool ResolutionAdjustAvailable()
         {
             bool available = true;
 
-            if (FormControls.CurrImpl == Implementation.InstructPixToPix)
+            if (ConfigParser.CurrentImplementation == Implementation.InstructPixToPix)
                 available = false;
 
             return available;
@@ -52,7 +52,7 @@ namespace StableDiffusionGui
         {
             bool available = true;
 
-            if (FormControls.CurrImpl != Implementation.InvokeAi)
+            if (ConfigParser.CurrentImplementation != Implementation.InvokeAi)
                 available = false;
 
             return available;
@@ -62,7 +62,7 @@ namespace StableDiffusionGui
         {
             bool available = true;
 
-            if (FormControls.CurrImpl != Implementation.InstructPixToPix)
+            if (ConfigParser.CurrentImplementation != Implementation.InstructPixToPix)
                 available = false;
 
             return available;
@@ -72,7 +72,7 @@ namespace StableDiffusionGui
         {
             bool available = false;
 
-            if (FormControls.CurrImpl == Implementation.InstructPixToPix)
+            if (ConfigParser.CurrentImplementation == Implementation.InstructPixToPix)
                 return false;
 
             bool img2img = MainUi.CurrentInitImgPaths != null;
@@ -88,7 +88,7 @@ namespace StableDiffusionGui
             bool available = false;
 
             bool img2img = MainUi.CurrentInitImgPaths != null;
-            bool inpaintCompat = FormControls.CurrImpl == Implementation.InvokeAi || FormControls.CurrImpl == Implementation.DiffusersOnnx;
+            bool inpaintCompat = ConfigParser.CurrentImplementation == Implementation.InvokeAi || ConfigParser.CurrentImplementation == Implementation.DiffusersOnnx;
 
             if (img2img && inpaintCompat)
                 available = true;

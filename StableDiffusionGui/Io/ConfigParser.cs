@@ -1,6 +1,7 @@
 ﻿using StableDiffusionGui.Controls;
+using StableDiffusionGui.Main;
+using StableDiffusionGui.MiscUtils;
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace StableDiffusionGui.Io
@@ -9,6 +10,8 @@ namespace StableDiffusionGui.Io
     {
 
         public enum StringMode { Any, Int, Float }
+
+        public static Enums.StableDiffusion.Implementation CurrentImplementation { get { return ParseUtils.GetEnum<Enums.StableDiffusion.Implementation>(Config.Get<string>(Config.Keys.ImplementationName)); } }
 
         public static void SaveGuiElement(TextBox textbox, string key, StringMode stringMode = StringMode.Any)
         {

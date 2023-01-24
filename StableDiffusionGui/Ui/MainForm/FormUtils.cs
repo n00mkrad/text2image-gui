@@ -25,7 +25,7 @@ namespace StableDiffusionGui.Ui.MainFormUtils
             if (Program.Busy)
                 return;
 
-            var imp = ParseUtils.GetEnum<Implementation>(Config.Get<string>(Config.Keys.ImplementationName));
+            var imp = ConfigParser.CurrentImplementation;
 
             if (imp == Implementation.OptimizedSd)
             {
@@ -101,7 +101,7 @@ namespace StableDiffusionGui.Ui.MainFormUtils
 
         public static void TryOpenPostProcessingSettings()
         {
-            var imp = ParseUtils.GetEnum<Implementation>(Config.Get<string>(Config.Keys.ImplementationName));
+            var imp = ConfigParser.CurrentImplementation;
 
             if (imp == Implementation.OptimizedSd)
             {
