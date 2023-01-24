@@ -61,7 +61,8 @@ namespace StableDiffusionGui.Ui.MainFormUtils
         public static void RefreshUiAfterSettingsChanged()
         {
             F.panelPromptNeg.Visible = CurrImpl != Implementation.OptimizedSd && !IsUsingInpaintingModel;
-            F.btnEmbeddingBrowse.Enabled = MainForm.ShouldControlBeVisible(F, F.btnEmbeddingBrowse);
+            F.btnEmbeddingBrowse.Visible = MainForm.ShouldControlBeVisible(F, F.btnEmbeddingBrowse);
+            F.panelAiInputs.Height = MainForm.ShouldControlBeVisible(F, F.btnEmbeddingBrowse) ? 65 : 35;
             F.panelSampler.Visible = CurrImpl == Implementation.InvokeAi;
             F.panelSeamless.Visible = CurrImpl == Implementation.InvokeAi;
             F.panelRes.Visible = MainForm.ShouldControlBeVisible(F, F.panelRes);
@@ -74,6 +75,8 @@ namespace StableDiffusionGui.Ui.MainFormUtils
             F.sliderScale.ActualMaximum = !adv ? 25 : 50;
             F.comboxResW.SetItems(MainUi.Resolutions.Where(x => x <= (adv ? 2048 : 1024)).Select(x => x.ToString()), UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.Last);
             F.comboxResH.SetItems(MainUi.Resolutions.Where(x => x <= (adv ? 2048 : 1024)).Select(x => x.ToString()), UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.Last);
+
+            UpdateInitImgAndEmbeddingUi(false);
 
             if (!TtiUtils.CurrentSdModelExists())
                 Config.Set(Config.Keys.Model, "");
@@ -94,7 +97,7 @@ namespace StableDiffusionGui.Ui.MainFormUtils
             F.menuStripLogs.Show(Cursor.Position);
         }
 
-        public static void UpdateInitImgAndEmbeddingUi()
+        public static void UpdateInitImgAndEmbeddingUi(bool refreshRemainingUi = true)
         {
             TtiUtils.CleanInitImageList();
 
@@ -118,7 +121,8 @@ namespace StableDiffusionGui.Ui.MainFormUtils
             F.labelCurrentImage.Text = !img2img ? "No initialization image loaded." : (MainUi.CurrentInitImgPaths.Count == 1 ? $"Currently using {Path.GetFileName(MainUi.CurrentInitImgPaths[0]).Trunc(30)}" : $"Currently using {MainUi.CurrentInitImgPaths.Count} images.");
             F.labelCurrentConcept.Text = string.IsNullOrWhiteSpace(MainUi.CurrentEmbeddingPath) ? "No trained concept loaded." : $"Currently using {Path.GetFileName(MainUi.CurrentEmbeddingPath).Trunc(30)}";
 
-            RefreshUiAfterSettingsChanged();
+            if (refreshRemainingUi)
+                RefreshUiAfterSettingsChanged();
         }
 
         public static void HandleImageViewerClick(bool rightClick)
