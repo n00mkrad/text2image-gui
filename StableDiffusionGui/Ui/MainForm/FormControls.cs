@@ -105,9 +105,8 @@ namespace StableDiffusionGui.Ui.MainFormUtils
             }
 
             bool img2img = MainUi.CurrentInitImgPaths != null;
-            bool inpaintingCompatibleImpl = CurrImpl == Implementation.InvokeAi || CurrImpl == Implementation.DiffusersOnnx;
 
-            F.panelInpainting.Visible = img2img && inpaintingCompatibleImpl;
+            F.panelInpainting.Visible = MainForm.ShouldControlBeVisible(F, F.panelInpainting);
             F.panelInitImgStrength.Visible = MainForm.ShouldControlBeVisible(F, F.panelInitImgStrength);
             F.textboxClipsegMask.Visible = (InpaintMode)F.comboxInpaintMode.SelectedIndex == InpaintMode.TextMask;
 

@@ -31,6 +31,9 @@ namespace StableDiffusionGui
             if (control == instance.panelInitImgStrength)
                 return InitImgStrengthAvailable();
 
+            if (control == instance.panelInpainting)
+                return InpaintingAvailable();
+
             return true;
         }
 
@@ -74,6 +77,19 @@ namespace StableDiffusionGui
             bool img2img = MainUi.CurrentInitImgPaths != null;
 
             if (img2img && !FormControls.IsUsingInpaintingModel)
+                available = true;
+
+            return available;
+        }
+
+        private static bool InpaintingAvailable()
+        {
+            bool available = false;
+
+            bool img2img = MainUi.CurrentInitImgPaths != null;
+            bool inpaintCompat = FormControls.CurrImpl == Implementation.InvokeAi || FormControls.CurrImpl == Implementation.DiffusersOnnx;
+
+            if (img2img && inpaintCompat)
                 available = true;
 
             return available;

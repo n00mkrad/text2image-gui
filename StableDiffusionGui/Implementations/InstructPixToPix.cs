@@ -65,8 +65,6 @@ namespace StableDiffusionGui.Implementations
                         args["initStrength"] = "0";
                         args["prompt"] = processedPrompts[i];
                         args["prompt_neg"] = negPrompt;
-                        // args["w"] = $"{res.Width}";
-                        // args["h"] = $"{res.Height}";
                         args["seed"] = $"{seed}";
 
                         foreach (float scale in scalesTxt)
