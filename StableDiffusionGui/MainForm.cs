@@ -67,7 +67,6 @@ namespace StableDiffusionGui
 
         private async Task Initialize()
         {
-            MainUi.SetSettingsVertScrollbar();
             FormControls.InitializeControls();
             FormControls.RefreshUiAfterSettingsChanged();
             FormControls.Load();
@@ -470,11 +469,6 @@ namespace StableDiffusionGui
                 panelSettings.Padding = newPadding;
         }
 
-        private void MainForm_ResizeEnd(object sender, EventArgs e)
-        {
-            MainUi.SetSettingsVertScrollbar();
-        }
-
         private void btnDreambooth_Click(object sender, EventArgs e)
         {
             new DreamboothForm().ShowDialogForm();
@@ -513,17 +507,6 @@ namespace StableDiffusionGui
             tableLayoutPanelImgViewers.ColumnStyles[1].Width = checkboxShowInitImg.Checked ? 50 : 100;
             MainUi.FitWindowSizeToImageSize();
             CenterToScreen();
-        }
-
-        private FormWindowState _prevWindowState;
-
-        private void MainForm_Resize(object sender, EventArgs e)
-        {
-            if (WindowState == _prevWindowState)
-                return;
-
-            _prevWindowState = WindowState;
-            MainUi.SetSettingsVertScrollbar();
         }
     }
 }

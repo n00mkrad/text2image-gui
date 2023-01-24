@@ -1518,15 +1518,13 @@ namespace StableDiffusionGui
             // textboxThresh
             // 
             this.textboxThresh.AllowDrop = true;
-            this.textboxThresh.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.promptAutocomplete.SetAutocompleteMenu(this.textboxThresh, null);
             this.textboxThresh.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textboxThresh.ForeColor = System.Drawing.Color.White;
             this.textboxThresh.Location = new System.Drawing.Point(470, 7);
             this.textboxThresh.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxThresh.Name = "textboxThresh";
-            this.textboxThresh.Size = new System.Drawing.Size(100, 21);
+            this.textboxThresh.Size = new System.Drawing.Size(100, 20);
             this.textboxThresh.TabIndex = 108;
             this.textboxThresh.Text = "0";
             // 
@@ -1569,15 +1567,13 @@ namespace StableDiffusionGui
             // textboxPerlin
             // 
             this.textboxPerlin.AllowDrop = true;
-            this.textboxPerlin.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.promptAutocomplete.SetAutocompleteMenu(this.textboxPerlin, null);
             this.textboxPerlin.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textboxPerlin.ForeColor = System.Drawing.Color.White;
             this.textboxPerlin.Location = new System.Drawing.Point(299, 7);
             this.textboxPerlin.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxPerlin.Name = "textboxPerlin";
-            this.textboxPerlin.Size = new System.Drawing.Size(100, 21);
+            this.textboxPerlin.Size = new System.Drawing.Size(100, 20);
             this.textboxPerlin.TabIndex = 4;
             this.textboxPerlin.Text = "0.0";
             // 
@@ -2228,10 +2224,8 @@ namespace StableDiffusionGui
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.Shown += new System.EventHandler(this.MainForm_Shown);
-            this.ResizeEnd += new System.EventHandler(this.MainForm_ResizeEnd);
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.MainForm_DragDrop);
             this.DragEnter += new System.Windows.Forms.DragEventHandler(this.MainForm_DragEnter);
-            this.Resize += new System.EventHandler(this.MainForm_Resize);
             this.menuStripOutputImg.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.upDownSeed)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).EndInit();

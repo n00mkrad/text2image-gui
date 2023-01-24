@@ -310,15 +310,6 @@ namespace StableDiffusionGui.Ui
                 Logger.Log($"You are running the latest version ({Program.ReleaseChannel} Channel).");
         }
 
-        public static void SetSettingsVertScrollbar()
-        {
-            try
-            {
-                Program.MainForm.panelSettings.AutoScrollMinSize = new Size(Program.MainForm.panelSettings.AutoScrollMinSize.Width, Program.MainForm.panelSettings.Height + 1);
-            }
-            catch { }
-        }
-
         public static void FitWindowSizeToImageSize()
         {
             int picInWidth = Program.MainForm.tableLayoutPanelImgViewers.ColumnStyles[0].Width > 1 ? Program.MainForm.pictBoxImgViewer.Image.Width : 0;
