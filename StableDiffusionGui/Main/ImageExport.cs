@@ -7,13 +7,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using static StableDiffusionGui.Main.Enums.Export;
 
 namespace StableDiffusionGui.Main
 {
     internal class ImageExport
     {
-        public enum FilenameTimestamp { None, Date, DateTime, UnixEpoch }
-
         private static readonly int _maxPathLength = 255;
         private static readonly int _minimumImageAgeMs = 200;
         private static readonly int _loopWaitBeforeStartMs = 1000;
@@ -89,7 +88,7 @@ namespace StableDiffusionGui.Main
                             var img = images[i];
                             string number = currTask.ImgCount.ToString().PadLeft(currTask.TargetImgCount.ToString().Length, '0');
                             string parentDir = currTask.SubfoldersPerPrompt ? imageDirMap[img.FullName] : currTask.OutDir;
-                            string renamedPath = GetExportFilename(img.FullName, parentDir, number, "png", _maxPathLength, false, inclPrompt, inclSeed, inclScale, inclSampler, inclModel);
+                            string renamedPath = GetExportFilename(img.FullName, parentDir, number, "png", _maxPathLength, inclPrompt, inclSeed, inclScale, inclSampler, inclModel);
                             OverlayMaskIfExists(img.FullName);
                             Logger.Log($"ImageExport: Trying to move {img.Name} => {renamedPath}", true);
                             img.MoveTo(renamedPath);
@@ -119,7 +118,7 @@ namespace StableDiffusionGui.Main
             Logger.Log("ExportLoop END", true);
         }
 
-        public static string GetExportFilename(string filePath, string parentDir, string suffix, string ext, int pathLimit, bool inclTime, bool inclPrompt, bool inclSeed, bool inclScale, bool inclSampler, bool inclModel)
+        public static string GetExportFilename(string filePath, string parentDir, string suffix, string ext, int pathLimit, bool inclPrompt, bool inclSeed, bool inclScale, bool inclSampler, bool inclModel)
         {
             try
             {

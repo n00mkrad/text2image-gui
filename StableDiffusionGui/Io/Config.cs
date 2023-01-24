@@ -162,6 +162,7 @@ namespace StableDiffusionGui.Io
                 case Keys.AutoSetResForInitImg: Set(key, true); return true;
                 case Keys.InitImageRetainAspectRatio: Set(key, true); return true;
                 case Keys.ImplementationName: Set(key, Enums.StableDiffusion.Implementation.InvokeAi.ToString()); return true;
+                case Keys.FilenameTimestampMode: Set(key, Enums.Export.FilenameTimestamp.DateTime); return true;
             }
 
             return false;

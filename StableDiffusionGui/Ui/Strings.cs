@@ -73,5 +73,13 @@ namespace StableDiffusionGui.Ui
             { Enums.Models.Format.DiffusersOnnx.ToString(), "Diffusers ONNX (Folder)" },
             { Enums.Models.Format.Safetensors.ToString(), "Safetensors (safetensors File)" },
         };
+
+        public static Dictionary<string, string> TimestampModes = new Dictionary<string, string>()
+        {
+            { Enums.Export.FilenameTimestamp.None.ToString(), "No Timestamp" },
+            { Enums.Export.FilenameTimestamp.Date.ToString(), "Date" },
+            { Enums.Export.FilenameTimestamp.DateTime.ToString(), "Date and Time" },
+            { Enums.Export.FilenameTimestamp.UnixEpoch.ToString(), "Unix Epoch" },
+        };
     }
 }

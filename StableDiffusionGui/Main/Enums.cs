@@ -9,6 +9,11 @@ namespace StableDiffusionGui.Main
             public enum UpdateChannel { Public, Beta }
         }
 
+        public class Export
+        {
+            public enum FilenameTimestamp { None, Date, DateTime, UnixEpoch }
+        }
+
         public class Models
         {
             public enum Precision { Fp16, Fp32 }

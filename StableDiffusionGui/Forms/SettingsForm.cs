@@ -39,7 +39,7 @@ namespace StableDiffusionGui.Forms
         private void SettingsForm_Shown(object sender, EventArgs e)
         {
             Refresh();
-
+            comboxTimestampInFilename.FillFromEnum<Enums.Export.FilenameTimestamp>(Strings.TimestampModes);
             LoadSettings();
 
             TabOrderInit(new List<Control>() {
@@ -142,6 +142,7 @@ namespace StableDiffusionGui.Forms
             ConfigParser.LoadGuiElement(checkboxFolderPerSession, Config.Keys.FolderPerSession);
             ConfigParser.LoadGuiElement(checkboxAdvancedMode, Config.Keys.AdvancedUi);
             ConfigParser.LoadGuiElement(checkboxMultiPromptsSameSeed, Config.Keys.MultiPromptsSameSeed);
+            ConfigParser.LoadComboxIndex(comboxTimestampInFilename, Config.Keys.FilenameTimestampMode);
             ConfigParser.LoadGuiElement(checkboxPromptInFilename, Config.Keys.PromptInFilename);
             ConfigParser.LoadGuiElement(checkboxSeedInFilename, Config.Keys.SeedInFilename);
             ConfigParser.LoadGuiElement(checkboxScaleInFilename, Config.Keys.ScaleInFilename);
@@ -171,6 +172,7 @@ namespace StableDiffusionGui.Forms
             ConfigParser.SaveGuiElement(checkboxFolderPerSession, Config.Keys.FolderPerSession);
             ConfigParser.SaveGuiElement(checkboxAdvancedMode, Config.Keys.AdvancedUi);
             ConfigParser.SaveGuiElement(checkboxMultiPromptsSameSeed, Config.Keys.MultiPromptsSameSeed);
+            ConfigParser.SaveComboxIndex(comboxTimestampInFilename, Config.Keys.FilenameTimestampMode);
             ConfigParser.SaveGuiElement(checkboxPromptInFilename, Config.Keys.PromptInFilename);
             ConfigParser.SaveGuiElement(checkboxSeedInFilename, Config.Keys.SeedInFilename);
             ConfigParser.SaveGuiElement(checkboxScaleInFilename, Config.Keys.ScaleInFilename);
@@ -178,7 +180,7 @@ namespace StableDiffusionGui.Forms
             ConfigParser.SaveGuiElement(checkboxModelInFilename, Config.Keys.ModelInFilename);
             ConfigParser.SaveGuiElement(textboxOutPath, Config.Keys.OutPath);
             ConfigParser.SaveGuiElement(textboxFavsPath, Config.Keys.FavsPath);
-            if(!string.IsNullOrWhiteSpace(comboxSdModel.Text)) ConfigParser.SaveGuiElement(comboxSdModel, Config.Keys.Model);
+            if (!string.IsNullOrWhiteSpace(comboxSdModel.Text)) ConfigParser.SaveGuiElement(comboxSdModel, Config.Keys.Model);
             if (!string.IsNullOrWhiteSpace(comboxSdModelVae.Text)) ConfigParser.SaveGuiElement(comboxSdModelVae, Config.Keys.ModelVae);
             if (!comboxCudaDevice.Text.StartsWith("Loading")) ConfigParser.SaveComboxIndex(comboxCudaDevice, Config.Keys.CudaDeviceIdx);
             ConfigParser.SaveComboxIndex(comboxNotify, Config.Keys.NotifyModeIdx);
