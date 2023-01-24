@@ -6,6 +6,7 @@ using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -102,10 +103,11 @@ namespace StableDiffusionGui.Ui.MainFormUtils
         public static void TryOpenPostProcessingSettings()
         {
             var imp = ConfigParser.CurrentImplementation;
+            var supportedImps = new List<Implementation> { Implementation.InvokeAi };
 
-            if (imp == Implementation.OptimizedSd)
+            if (!supportedImps.Contains(imp))
             {
-                UiUtils.ShowMessageBox($"Post-processing is not available with your current implementation ({Strings.Implementation.Get(imp.ToString(), true)}).");
+                UiUtils.ShowMessageBox($"Post-processing is not available with your current implementation: {Strings.Implementation.Get(imp.ToString(), true)}.");
                 return;
             }
 
