@@ -135,7 +135,7 @@ namespace StableDiffusionGui.Io
                 case Keys.CodeformerFidelity: Set(key, 0.6f); return true;
                 case Keys.EnablePromptHistory: Set(key, true); return true;
                 case Keys.FaceRestoreStrength: Set(key, 0.8f); return true;
-                case Keys.FavsPath: Set(key, Path.Combine(Paths.GetExeDir(), "Images", "Favs")); return true;
+                case Keys.FavsPath: Set(key, Path.Combine(Paths.GetExeDir(), "Images", "Favs").Replace(@"\", "/")); return true;
                 case Keys.FilenameIgnoreWildcards: Set(key, true); return true;
                 case Keys.FolderPerPrompt: Set(key, true); return true;
                 case Keys.FullPrecision: Set(key, GpuUtils.CachedGpus.Count > 0 && GpuUtils.CachedGpus[0].FullName.Contains(" GTX 16")); return true;
@@ -147,7 +147,7 @@ namespace StableDiffusionGui.Io
                 case Keys.ModelInFilename: Set(key, true); return true;
                 case Keys.ModelVae: try { Set(key, Paths.GetModels(Enums.StableDiffusion.ModelType.Vae).Select(x => x.Name).First()); } catch { Set(key, ""); } return true;
                 case Keys.MultiPromptsSameSeed: Set(key, true); return true;
-                case Keys.OutPath: Set(key, Path.Combine(Paths.GetExeDir(), "Images")); return true;
+                case Keys.OutPath: Set(key, Path.Combine(Paths.GetExeDir(), "Images").Replace(@"\", "/")); return true;
                 case Keys.PromptInFilename: Set(key, true); return true;
                 case Keys.PruneDeleteInput: Set(key, true); return true;
                 case Keys.PrunePrecisionIdx: Set(key, true); return true;
@@ -260,7 +260,6 @@ namespace StableDiffusionGui.Io
             public const string HiresFix = "hiresFix";
             public const string FilenameTimestampMode = "filenameTimestampMode";
             public const string WildcardAllowEmptyEntries = "wildcardAllowEmptyEntries";
-            public const string AlwaysInstallOnnx = "alwaysInstallOnnx";
         }
     }
 }

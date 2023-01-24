@@ -88,7 +88,7 @@ namespace StableDiffusionGui.Io
 
                 foreach (ModelType type in Enum.GetValues(typeof(ModelType)).Cast<ModelType>())
                 {
-                    List<string> customModelDirsList = Config.Get<string>($"{Config.Keys.CustomModelDirsPfx}{type}").FromJson<List<string>>();
+                    List<string> customModelDirsList = Config.Get<List<string>>($"{Config.Keys.CustomModelDirsPfx}{type}");
 
                     if (customModelDirsList != null)
                         mdlFolders.AddRange(customModelDirsList, out mdlFolders);
@@ -144,7 +144,7 @@ namespace StableDiffusionGui.Io
             {
                 List<string> mdlFolders = new List<string>() { GetModelsPath(type) };
 
-                List<string> customModelDirsList = Config.Get<string>($"{Config.Keys.CustomModelDirsPfx}{type}").FromJson<List<string>>();
+                List<string> customModelDirsList = Config.Get<List<string>>($"{Config.Keys.CustomModelDirsPfx}{type}");
 
                 if (customModelDirsList != null)
                     mdlFolders.AddRange(customModelDirsList, out mdlFolders);

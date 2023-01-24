@@ -161,7 +161,10 @@ namespace StableDiffusionGui.Forms
 
         void SaveSettings()
         {
-            if(!comboxImplementation.Text.StartsWith("Loading")) Config.Set(Config.Keys.ImplementationName, Strings.Implementation.GetReverse(comboxImplementation.Text));
+            textboxOutPath.Text = textboxOutPath.Text.Replace(@"\", "/");
+            textboxFavsPath.Text = textboxFavsPath.Text.Replace(@"\", "/");
+
+            if (!comboxImplementation.Text.StartsWith("Loading")) Config.Set(Config.Keys.ImplementationName, Strings.Implementation.GetReverse(comboxImplementation.Text));
             ConfigParser.SaveGuiElement(checkboxFullPrecision, Config.Keys.FullPrecision);
             ConfigParser.SaveGuiElement(checkboxFolderPerPrompt, Config.Keys.FolderPerPrompt);
             ConfigParser.SaveGuiElement(checkboxOutputIgnoreWildcards, Config.Keys.FilenameIgnoreWildcards);
