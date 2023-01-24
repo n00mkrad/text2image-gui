@@ -5,6 +5,7 @@ using StableDiffusionGui.Forms;
 using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
+using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using System;
 using System.Collections.Generic;
@@ -19,8 +20,8 @@ namespace StableDiffusionGui.Ui.MainFormUtils
     internal class FormControls
     {
 
-        public static StableDiffusionGui.MainForm F { get { return Program.MainForm; } }
-        public static Implementation CurrImpl { get { return (Implementation)Config.Get<int>(Config.Keys.ImplementationIdx); } }
+        public static MainForm F { get { return Program.MainForm; } }
+        public static Implementation CurrImpl { get { return ParseUtils.GetEnum<Implementation>(Config.Get<string>(Config.Keys.ImplementationName)); } }
         public static bool IsUsingInpaintingModel { get { return Path.ChangeExtension(Config.Get<string>(Config.Keys.Model), null).EndsWith(Constants.SuffixesPrefixes.InpaintingMdlSuf); } }
 
         public static void InitializeControls()
@@ -76,29 +77,11 @@ namespace StableDiffusionGui.Ui.MainFormUtils
             F.comboxResW.SetItems(MainUi.Resolutions.Where(x => x <= (adv ? 2048 : 1024)).Select(x => x.ToString()), UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.Last);
             F.comboxResH.SetItems(MainUi.Resolutions.Where(x => x <= (adv ? 2048 : 1024)).Select(x => x.ToString()), UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.Last);
 
-            UpdateInitImgAndEmbeddingUi(false);
-
             if (!TtiUtils.CurrentSdModelExists())
                 Config.Set(Config.Keys.Model, "");
-        }
 
-        public static void OpenLogsMenu()
-        {
-            F.menuStripLogs.Items.Clear();
-            var openLogs = F.menuStripLogs.Items.Add($"Open Logs Folder");
-            openLogs.Click += (s, ea) => { Process.Start("explorer", Paths.GetLogPath().Wrap()); };
+            #region Init Img & Embeddings Stuff
 
-            foreach (var log in Logger.CachedEntries)
-            {
-                ToolStripItem newItem = F.menuStripLogs.Items.Add($"Copy {log.Key}");
-                newItem.Click += (s, ea) => { OsUtils.SetClipboard(Logger.EntriesToString(Logger.CachedEntries[log.Key], true, true)); };
-            }
-
-            F.menuStripLogs.Show(Cursor.Position);
-        }
-
-        public static void UpdateInitImgAndEmbeddingUi(bool refreshRemainingUi = true)
-        {
             TtiUtils.CleanInitImageList();
 
             if (!string.IsNullOrWhiteSpace(MainUi.CurrentEmbeddingPath) && !File.Exists(MainUi.CurrentEmbeddingPath))
@@ -122,8 +105,22 @@ namespace StableDiffusionGui.Ui.MainFormUtils
             F.labelCurrentConcept.Text = string.IsNullOrWhiteSpace(MainUi.CurrentEmbeddingPath) ? "No trained concept loaded." : $"Currently using {Path.GetFileName(MainUi.CurrentEmbeddingPath)}";
             F.toolTip.SetToolTip(F.labelCurrentImage, $"{F.labelCurrentImage.Text.Trunc(100)}\n\nShift + Hover to preview.");
 
-            if (refreshRemainingUi)
-                RefreshUiAfterSettingsChanged();
+            #endregion
+        }
+
+        public static void OpenLogsMenu()
+        {
+            F.menuStripLogs.Items.Clear();
+            var openLogs = F.menuStripLogs.Items.Add($"Open Logs Folder");
+            openLogs.Click += (s, ea) => { Process.Start("explorer", Paths.GetLogPath().Wrap()); };
+
+            foreach (var log in Logger.CachedEntries)
+            {
+                ToolStripItem newItem = F.menuStripLogs.Items.Add($"Copy {log.Key}");
+                newItem.Click += (s, ea) => { OsUtils.SetClipboard(Logger.EntriesToString(Logger.CachedEntries[log.Key], true, true)); };
+            }
+
+            F.menuStripLogs.Show(Cursor.Position);
         }
 
         public static void HandleImageViewerClick(bool rightClick)

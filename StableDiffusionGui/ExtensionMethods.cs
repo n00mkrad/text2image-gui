@@ -374,6 +374,12 @@ namespace StableDiffusionGui
             }
         }
 
+        public static string GetReverse(this Dictionary<string, string> dict, string key, bool returnKeyInsteadOfEmptyString = false, bool ignoreCase = false)
+        {
+            var reversedDict = dict.ToDictionary(pair => pair.Value, pair => pair.Key);
+            return reversedDict.Get(key, returnKeyInsteadOfEmptyString, ignoreCase);
+        }
+
         public static string Get(this Dictionary<string, string> dict, string key, bool returnKeyInsteadOfEmptyString = false, bool ignoreCase = false)
         {
             if (key == null)

@@ -81,7 +81,7 @@ namespace StableDiffusionGui
             Task.Run(() => MainUi.SetGpusInWindowTitle());
             Task.Run(() => MainUi.PrintVersion());
             upDownSeed.Text = "";
-            FormControls.UpdateInitImgAndEmbeddingUi();
+            FormControls.RefreshUiAfterSettingsChanged();
 
             TabOrderInit(new List<Control>() {
                 textboxPrompt, textboxPromptNeg,
@@ -476,7 +476,7 @@ namespace StableDiffusionGui
 
         private void comboxInpaintMode_SelectedIndexChanged(object sender, EventArgs e)
         {
-            FormControls.UpdateInitImgAndEmbeddingUi();
+            FormControls.RefreshUiAfterSettingsChanged();
         }
 
         private void labelCurrentImage_MouseEnter(object sender, EventArgs e)

@@ -155,7 +155,7 @@ namespace StableDiffusionGui.Ui
                         CurrentEmbeddingPath = paths[0];
                 }
 
-                FormControls.UpdateInitImgAndEmbeddingUi();
+                FormControls.RefreshUiAfterSettingsChanged();
             }
             else
             {
@@ -196,7 +196,7 @@ namespace StableDiffusionGui.Ui
                 CurrentInitImgPaths = paths;
             }
 
-            FormControls.UpdateInitImgAndEmbeddingUi();
+            FormControls.RefreshUiAfterSettingsChanged();
         }
 
         public static void HandlePaste()

@@ -2,6 +2,7 @@
 using StableDiffusionGui.Data;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
+using StableDiffusionGui.MiscUtils;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -34,7 +35,7 @@ namespace StableDiffusionGui.Ui.MainFormUtils
             if (meta.InitStrength > 0f)
                 F.sliderInitStrength.ActualValue = (decimal)meta.InitStrength;
 
-            FormControls.UpdateInitImgAndEmbeddingUi();
+            FormControls.RefreshUiAfterSettingsChanged();
         }
 
         public static void LoadTtiSettingsIntoUi(string[] prompts, string negPrompt = "")
@@ -72,7 +73,7 @@ namespace StableDiffusionGui.Ui.MainFormUtils
                 Logger.Log(ex.StackTrace, true);
             }
 
-            FormControls.UpdateInitImgAndEmbeddingUi();
+            FormControls.RefreshUiAfterSettingsChanged();
         }
 
         /// <summary> Set values that have a single slider value and optionally an advanced syntax entry textbox </summary>
@@ -97,7 +98,8 @@ namespace StableDiffusionGui.Ui.MainFormUtils
         {
             TtiSettings settings = new TtiSettings
             {
-                Implementation = (Implementation)Config.Get<int>(Config.Keys.ImplementationIdx),
+                Implementation = ParseUtils.GetEnum<Implementation>(Config.Get<string>(Config.Keys.ImplementationName)),
+
                 Prompts = F.textboxPrompt.TextNoPlaceholder.SplitIntoLines().Where(x => !string.IsNullOrWhiteSpace(x)).ToArray(),
                 NegativePrompt = F.textboxPromptNeg.Visible ? F.textboxPromptNeg.TextNoPlaceholder.Trim().Replace(Environment.NewLine, " ") : "",
                 Iterations = (int)F.upDownIterations.Value,

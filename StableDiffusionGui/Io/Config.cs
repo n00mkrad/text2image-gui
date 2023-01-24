@@ -161,6 +161,7 @@ namespace StableDiffusionGui.Io
                 case Keys.UpscaleStrength: Set(key, 1.0f); return true;
                 case Keys.AutoSetResForInitImg: Set(key, true); return true;
                 case Keys.InitImageRetainAspectRatio: Set(key, true); return true;
+                case Keys.ImplementationName: Set(key, Enums.StableDiffusion.Implementation.InvokeAi.ToString()); return true;
             }
 
             return false;
@@ -234,8 +235,7 @@ namespace StableDiffusionGui.Io
             public const string UpscaleEnable = "upscaleEnable";
             public const string UpscaleIdx = "upscaleIdx";
             public const string UpscaleStrength = "upscaleStrength";
-            public const string ImplementationIdx = "implementation";
-            // public const string ImplementationName = "implementationName";
+            public const string ImplementationName = "implementationName";
             public const string CudaDeviceIdx = "cudaDevice";
             public const string AdvancedUi = "advancedUi";
             public const string NotifyModeIdx = "motifyModeIdx";

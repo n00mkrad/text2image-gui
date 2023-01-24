@@ -179,6 +179,7 @@
             this.Name = "InstallerForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Installer";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.InstallerForm_FormClosing);
             this.Load += new System.EventHandler(this.InstallerForm_Load);
             this.Shown += new System.EventHandler(this.InstallerForm_Shown);
             this.groupBox1.ResumeLayout(false);

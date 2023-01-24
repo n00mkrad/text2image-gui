@@ -25,7 +25,7 @@ namespace StableDiffusionGui.Ui.MainFormUtils
             if (Program.Busy)
                 return;
 
-            var imp = (Implementation)Config.Get<int>(Config.Keys.ImplementationIdx);
+            var imp = ParseUtils.GetEnum<Implementation>(Config.Get<string>(Config.Keys.ImplementationName));
 
             if (imp == Implementation.OptimizedSd)
             {
@@ -52,7 +52,7 @@ namespace StableDiffusionGui.Ui.MainFormUtils
                 }
             }
 
-            FormControls.UpdateInitImgAndEmbeddingUi();
+            FormControls.RefreshUiAfterSettingsChanged();
         }
 
         public static void BrowseInitImage()
@@ -79,7 +79,7 @@ namespace StableDiffusionGui.Ui.MainFormUtils
                 }
             }
 
-            FormControls.UpdateInitImgAndEmbeddingUi();
+            FormControls.RefreshUiAfterSettingsChanged();
         }
 
         public static async Task RegenerateImageWithCurrentSettings()
@@ -101,7 +101,7 @@ namespace StableDiffusionGui.Ui.MainFormUtils
 
         public static void TryOpenPostProcessingSettings()
         {
-            var imp = (Implementation)Config.Get<int>(Config.Keys.ImplementationIdx);
+            var imp = ParseUtils.GetEnum<Implementation>(Config.Get<string>(Config.Keys.ImplementationName));
 
             if (imp == Implementation.OptimizedSd)
             {
@@ -179,7 +179,7 @@ namespace StableDiffusionGui.Ui.MainFormUtils
 
                     Logger.ClearLogBox();
                     F.CleanPrompt();
-                    FormControls.UpdateInitImgAndEmbeddingUi();
+                    FormControls.RefreshUiAfterSettingsChanged();
                     Inpainting.DeleteMaskedImage();
 
                     if (fromQueue)

@@ -1,7 +1,9 @@
 ﻿using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
+using StableDiffusionGui.MiscUtils;
 using System;
 using System.Windows.Forms;
+using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
 namespace StableDiffusionGui.Forms
 {
@@ -25,7 +27,7 @@ namespace StableDiffusionGui.Forms
         private void ModelQuickSelectForm_Shown(object sender, EventArgs e)
         {
             Refresh();
-            _implementation = (Enums.StableDiffusion.Implementation)Config.Get<int>(Config.Keys.ImplementationIdx);
+            _implementation = ParseUtils.GetEnum<Implementation>(Config.Get<string>(Config.Keys.ImplementationName));
             LoadModels(true);
 
             if (comboxModel.Items.Count > 0)
@@ -61,7 +63,7 @@ namespace StableDiffusionGui.Forms
                 if (IsModelValid())
                     ConfigParser.SaveGuiElement(comboxModel, ModelConfigKey);
 
-                Ui.MainFormUtils.FormControls.UpdateInitImgAndEmbeddingUi();
+                Ui.MainFormUtils.FormControls.RefreshUiAfterSettingsChanged();
                 Close();
             }
 

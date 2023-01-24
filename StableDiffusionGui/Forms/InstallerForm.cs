@@ -127,5 +127,10 @@ namespace StableDiffusionGui.Forms
             DialogResult res = UiUtils.ShowMessageBox("Do you want to pre-download the upscaling and face restoration models? (800 MB)", "Setup", MessageBoxButtons.YesNo);
             return res == DialogResult.Yes;
         }
+
+        private void InstallerForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Ui.MainFormUtils.FormControls.RefreshUiAfterSettingsChanged();
+        }
     }
 }

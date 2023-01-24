@@ -128,7 +128,8 @@ namespace StableDiffusionGui.Forms
                 disabledImplementations.Add(Implementation.DiffusersOnnx);
 
             comboxImplementation.FillFromEnum<Implementation>(Strings.Implementation, -1, disabledImplementations);
-            ConfigParser.LoadComboxIndex(comboxImplementation, Config.Keys.ImplementationIdx);
+            comboxImplementation.Text = Strings.Implementation.Get(Config.Get<string>(Config.Keys.ImplementationName));
+            // ConfigParser.LoadComboxIndex(comboxImplementation, Config.Keys.ImplementationIdx);
             _initialImplementationLoad = false;
         }
 
@@ -160,7 +161,7 @@ namespace StableDiffusionGui.Forms
 
         void SaveSettings()
         {
-            if(!comboxImplementation.Text.StartsWith("Loading")) ConfigParser.SaveComboxIndex(comboxImplementation, Config.Keys.ImplementationIdx);
+            if(!comboxImplementation.Text.StartsWith("Loading")) Config.Set(Config.Keys.ImplementationName, Strings.Implementation.GetReverse(comboxImplementation.Text));
             ConfigParser.SaveGuiElement(checkboxFullPrecision, Config.Keys.FullPrecision);
             ConfigParser.SaveGuiElement(checkboxFolderPerPrompt, Config.Keys.FolderPerPrompt);
             ConfigParser.SaveGuiElement(checkboxOutputIgnoreWildcards, Config.Keys.FilenameIgnoreWildcards);
