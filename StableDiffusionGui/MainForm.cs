@@ -171,7 +171,7 @@ namespace StableDiffusionGui
 
         private void btnOpenOutFolder_Click(object sender, EventArgs e)
         {
-            Process.Start("explorer", Config.Get<string>(Config.Keys.OutPath));
+            Process.Start("explorer", Config.Get<string>(Config.Keys.OutPath).Replace("/", @"\").Wrap());
         }
 
         #region Link Buttons
