@@ -3,13 +3,16 @@ SD GUI 1.9.0 Changelog:
 - New: Option to show the input image next to the output for comparisons
 - New: Option to choose output filename timestamp (None, Date, Date+Time, Epoch)
 - Improved: minor UI fixes, e.g. no more scrollbar in main view if there is enough space
+- Fixed: Dreambooth learning rate multiplier would default to 2x
 - Fixed: Minor PNG metadata parsing issues
 - Fixed: Various of other minor fixes
 
 Notes:
 - InstructPix2Pix will download its model files (2.6 GB) on the first run
 - InstructPix2Pix works with any resolution, not only those divisible by 64
+- InstructPix2Pix currently doesn't work with filenames containing special characters
 - SD 2.x models are not yet supported, scheduled for next major update
+- "Open Output Folder" button currently does not work, use the right-click menu instead
 
 
 

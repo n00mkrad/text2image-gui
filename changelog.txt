@@ -3,6 +3,7 @@ SD GUI 1.9.0 Changelog:
 - New: Added the option to show the input image next to the output for comparisons
 - New: Added option to choose output filename timestamp (None, Date, Date+Time, Epoch)
 - Improved: minor UI fixes, e.g. no more scrollbar in main view if there is enough space
+- Fixed: Dreambooth learning rate multiplier would default to 2x
 - Fixed: Minor PNG metadata parsing issues
 - Fixed: Various of other minor fixes
 
