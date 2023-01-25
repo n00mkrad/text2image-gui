@@ -72,7 +72,7 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code: [Cod
 
 ### Stable Diffusion Settings
 
-* **Steps:** More steps can increase detail, but only to a certain extend. Depending on the sampler, 20-60 is a good range.
+* **Steps:** More steps can increase detail, but only to a certain extent. Depending on the sampler, 20-60 is a good range.
   * Has a linear performance impact: Doubling the step count means each image takes twice as long to generate.
 * **Prompt Guidance (CFG Scale):** Lower values are closer to the raw output of the AI, higher values try to respect your prompt more accurately.
   * Use low values if you are happy with the AI's representation of your prompt. Use higher values if not - but going too high will degrade quality.
@@ -101,7 +101,7 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code: [Cod
 
 ### Settings Button (Top Bar)
 
-* **Image Generation Implementation:** Chose the AI implementation that's used for image generation.
+* **Image Generation Implementation:** Choose the AI implementation that's used for image generation.
   * Stable Diffusion - [InvokeAI](https://github.com/invoke-ai/InvokeAI/): Supports the most features, but struggles with 4 GB or less VRAM, requires an Nvidia GPU
   * Stable Diffusion - [OptimizedSD](https://github.com/basujindal/stable-diffusion): Lacks many features, but runs on 4 GB or even less VRAM, requires an Nvidia GPU
   * Stable Diffusion - [ONNX](https://github.com/huggingface/diffusers): Lacks some features and is relatively slow, but can utilize AMD GPUs (any DirectML capable card)
