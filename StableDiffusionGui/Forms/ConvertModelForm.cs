@@ -81,9 +81,9 @@ namespace StableDiffusionGui.Forms
             Model outModel = await ConvertModels.Convert(_currentInFormat, _currentOutFormat, model, true);
 
             Program.SetState(Program.BusyState.Standby);
+            LoadModels();
             Enabled = true;
             btnRun.Text = "Convert!";
-            
         }
 
         private void ConvertModelForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -93,19 +93,13 @@ namespace StableDiffusionGui.Forms
 
         private void SaveConfig ()
         {
-            // ConfigParser.SaveComboxIndex(comboxOutFormat, Config.Keys.PrunePrecisionIdx);
             ConfigParser.SaveGuiElement(checkboxDeleteInput, Config.Keys.ConvertModelsDeleteInput);
         }
 
         private void comboxInFormat_SelectedIndexChanged(object sender, EventArgs e)
         {
             _currentInFormat = ParseUtils.GetEnum<Enums.Models.Format>(comboxInFormat.Text, true, Strings.ModelFormats);
-            List<Enums.Models.Format> excludedFormats = new[] { _currentInFormat }.ToList();
-            
-            if(_currentInFormat == Enums.Models.Format.Safetensors)
-                excludedFormats.AddRange(Enum.GetValues(typeof(Enums.Models.Format)).Cast<Enums.Models.Format>().ToList().Except(new[] { Enums.Models.Format.Pytorch }.ToList()));
-
-            comboxOutFormat.FillFromEnum<Enums.Models.Format>(Strings.ModelFormats, 0, excludedFormats);
+            comboxOutFormat.FillFromEnum<Enums.Models.Format>(Strings.ModelFormats, 0, new[] { _currentInFormat }.ToList());
             LoadModels();
         }
 

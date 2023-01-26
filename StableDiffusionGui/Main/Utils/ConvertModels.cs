@@ -36,6 +36,8 @@ namespace StableDiffusionGui.Main.Utils
                     case Format.Safetensors: outPath = GetOutputPath(model, "_sft.safetensors"); break;
                 }
 
+                PatchConversionScripts();
+
                 // Pytorch -> Diffusers
                 if (formatIn == Format.Pytorch && formatOut == Format.Diffusers)
                 {
@@ -73,23 +75,21 @@ namespace StableDiffusionGui.Main.Utils
                 // Safetensors -> Pytorch
                 else if (formatIn == Format.Safetensors && formatOut == Format.Pytorch)
                 {
-                    await ConvSafetensorsPytorch(model.FullName, outPath);
+                    string tempPath = Path.Combine(Paths.GetSessionDataPath(), $"conv-temp-{FormatUtils.GetUnixTimestamp()}");
+                    await ConvSafetensorsDiffusers(model.FullName, tempPath);
+                    await ConvDiffusersPytorch(tempPath, outPath);
                 }
-                // Safetensors -> Diffusers (Does not appear to work? Currently disabled in UI)
+                // Safetensors -> Diffusers
                 else if (formatIn == Format.Safetensors && formatOut == Format.Diffusers)
                 {
-                    string tempPath = Path.Combine(Paths.GetSessionDataPath(), $"conv-temp-{FormatUtils.GetUnixTimestamp()}");
-                    await ConvSafetensorsPytorch(model.FullName, tempPath);
-                    await ConvPytorchDiffusers(tempPath, outPath, true);
+                    await ConvSafetensorsDiffusers(model.FullName, outPath);
                 }
-                // Safetensors -> Diffusers ONNX (Does not appear to work? Currently disabled in UI)
+                // Safetensors -> Diffusers ONNX
                 else if (formatIn == Format.Safetensors && formatOut == Format.DiffusersOnnx)
                 {
-                    string tempPath1 = Path.Combine(Paths.GetSessionDataPath(), $"conv-temp-{FormatUtils.GetUnixTimestamp()}");
-                    string tempPath2 = $"{tempPath1}_1";
-                    await ConvSafetensorsPytorch(model.FullName, tempPath1);
-                    await ConvPytorchDiffusers(tempPath1, tempPath2, true);
-                    await ConvDiffusersOnnx(tempPath2, outPath, true);
+                    string tempPath = GetTempPath();
+                    await ConvSafetensorsDiffusers(model.FullName, tempPath, true);
+                    await ConvDiffusersOnnx(tempPath, outPath, true);
                 }
                 else
                 {
@@ -121,6 +121,11 @@ namespace StableDiffusionGui.Main.Utils
             }
 
             return null;
+        }
+
+        private static string GetTempPath ()
+        {
+            return Path.Combine(Paths.GetSessionDataPath(), $"conv-temp-{FormatUtils.GetUnixTimestamp()}");
         }
 
         private static async Task ConvPytorchDiffusers (string inPath, string outPath, bool deleteInput = false)
@@ -156,13 +161,22 @@ namespace StableDiffusionGui.Main.Utils
                 IoUtils.TryDeleteIfExists(inPath);
         }
 
-        private static async Task ConvSafetensorsPytorch(string inPath, string outPath, bool deleteInput = false)
+        private static async Task ConvSafetensorsDiffusers(string inPath, string outPath, bool deleteInput = false)
         {
-            await RunPython($"python repo/scripts/st_to_ckpt.py -i {inPath.Wrap(true)} -o {outPath.Wrap(true)}");
+            await RunPython($"python repo/scripts/diff/convert_original_stable_diffusion_to_diffusers.py --from_safetensors --checkpoint_path {inPath.Wrap(true)} --dump_path {outPath.Wrap(true)} " +
+                        $"--original_config_file {Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdRepo, "configs", "stable-diffusion", "v1-inference.yaml").Wrap(true)}");
 
             if (deleteInput)
                 IoUtils.TryDeleteIfExists(inPath);
         }
+
+        // private static async Task ConvSafetensorsPytorch(string inPath, string outPath, bool deleteInput = false)
+        // {
+        //     await RunPython($"python repo/scripts/st_to_ckpt.py -i {inPath.Wrap(true)} -o {outPath.Wrap(true)}");
+        // 
+        //     if (deleteInput)
+        //         IoUtils.TryDeleteIfExists(inPath);
+        // }
 
 
         private static async Task RunPython (string cmd)
@@ -231,6 +245,25 @@ namespace StableDiffusionGui.Main.Utils
                 }
 
                 return path;
+            }
+        }
+
+        private static void PatchConversionScripts ()
+        {
+            string marker = "# PATCHED BY NMKD SD GUI";
+            string diffusersPath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdVenv, "Lib", "site-packages", "diffusers");
+            string convertScriptPath = Path.Combine(diffusersPath, "pipelines", "stable_diffusion", "convert_from_ckpt.py");
+            string text = File.ReadAllText(convertScriptPath);
+
+            if (text.SplitIntoLines()[0].Trim() != marker)
+            {
+                text = text.Replace(".parms.", ".params.");
+                text = text.Replace("model_type == \"FrozenCLIPEmbedder\"", "model_type.endswith(\"FrozenCLIPEmbedder\")");
+                text = text.Replace("safety_checker = StableDiffusionSafetyChecker.from_pretrained(\"CompVis/stable-diffusion-safety-checker\")", "safety_checker = None");
+                text = text.Replace("feature_extractor = AutoFeatureExtractor.from_pretrained(\"CompVis/stable-diffusion-safety-checker\")", "feature_extractor = None");
+                text = text.Replace("feature_extractor=feature_extractor,", "feature_extractor=feature_extractor, requires_safety_checker=False,");
+                File.WriteAllText(convertScriptPath, $"{marker}{Environment.NewLine}{text}");
+                Logger.Log($"Patched {Path.GetFileName(convertScriptPath)}", true);
             }
         }
     }
