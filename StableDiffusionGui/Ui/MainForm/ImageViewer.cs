@@ -101,7 +101,9 @@ namespace StableDiffusionGui.Ui.MainFormUtils
 
             Size res = Program.MainForm.pictBoxImgViewer.Image.Size;
 
-            if (!meta.GeneratedResolution.IsEmpty)
+            if (meta.GeneratedResolution.IsEmpty)
+                infos.Add($"{res.Width}x{res.Height}");
+            else
                 infos.Add($"{meta.GeneratedResolution.Width}x{meta.GeneratedResolution.Height}{(meta.GeneratedResolution == res ? "" : $" => {res.Width}x{res.Height}")}");
 
             if (meta.InitStrength > 0.0001f)
@@ -160,7 +162,7 @@ namespace StableDiffusionGui.Ui.MainFormUtils
             Show();
         }
 
-        private static void UpdateInitImgViewer (ImageMetadata metadata = null)
+        private static void UpdateInitImgViewer(ImageMetadata metadata = null)
         {
             if (metadata == null)
                 metadata = CurrentImageMetadata;
