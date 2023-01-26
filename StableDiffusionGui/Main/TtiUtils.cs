@@ -2,6 +2,7 @@
 using StableDiffusionGui.Data;
 using StableDiffusionGui.Extensions;
 using StableDiffusionGui.Forms;
+using StableDiffusionGui.Implementations;
 using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.MiscUtils;
@@ -261,7 +262,8 @@ namespace StableDiffusionGui.Main
         public static void ExportPostprocessedImage(string sourceImgPath, string processedImgPath)
         {
             string ext = Path.GetExtension(sourceImgPath);
-            string movePath = GetUniquePath(Path.ChangeExtension(sourceImgPath, null) + $".fix" + ext);
+            string key = new FileInfo(processedImgPath).Name.Split('.')[0];
+            string movePath = IoUtils.GetAvailableFilePath(InvokeAi.PostProcessMovePaths[key]);
 
             try
             {
@@ -281,27 +283,6 @@ namespace StableDiffusionGui.Main
             }
 
             Program.SetState(Program.BusyState.Standby);
-        }
-
-        private static string GetUniquePath(string preferredPath, string separator = "", int maxTries = 1000)
-        {
-            if (!File.Exists(preferredPath))
-                return preferredPath;
-
-            string pathNoExt = Path.ChangeExtension(preferredPath, null);
-            string ext = Path.GetExtension(preferredPath);
-
-            int counter = 1;
-
-            while (File.Exists($"{pathNoExt}{separator}{counter}{ext}"))
-            {
-                counter++;
-
-                if (counter >= maxTries)
-                    return "";
-            }
-
-            return $"{pathNoExt}{separator}{counter}{ext}";
         }
 
         public static async Task<EasyDict<string, bool>> VerifyModelsWithPseudoHash(IEnumerable<Model> models)

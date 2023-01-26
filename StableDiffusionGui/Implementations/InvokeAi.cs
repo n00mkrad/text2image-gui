@@ -21,6 +21,8 @@ namespace StableDiffusionGui.Implementations
     {
         public enum FixAction { Upscale, FaceRestoration }
 
+        public static Dictionary<string, string> PostProcessMovePaths = new Dictionary<string, string>();
+
         public static async Task Run(string[] prompts, string negPrompt, int iterations, Dictionary<string, string> parameters, string outPath)
         {
             try
@@ -271,7 +273,12 @@ namespace StableDiffusionGui.Implementations
 
                 Logger.Log($"InvokeAI !fix: {string.Join(", ", actions.Select(x => x.ToString()))}", true);
 
-                List<string> args = new List<string> { "!fix", imgPath.Wrap(true) };
+                string tempPath = IoUtils.GetAvailableFilePath(Path.Combine(Paths.GetSessionDataPath(), $"postproc{FormatUtils.GetUnixTimestamp()}.png"));
+                File.Copy(imgPath, tempPath);
+                string suffix = $"{(actions.Contains(FixAction.Upscale) ? ".upscale" : "")}{(actions.Contains(FixAction.FaceRestoration) ? ".facefix" : "")}";
+                PostProcessMovePaths.Add(Path.GetFileNameWithoutExtension(tempPath), IoUtils.FilenameSuffix(imgPath, suffix));
+
+                List<string> args = new List<string> { "!fix", tempPath.Wrap(true) };
 
                 if (actions.Contains(FixAction.Upscale))
                     args.Add(Args.InvokeAi.GetUpscaleArgs(true));
