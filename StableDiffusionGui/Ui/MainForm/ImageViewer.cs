@@ -198,7 +198,7 @@ namespace StableDiffusionGui.Ui.MainFormUtils
 
         public static void OpenFolderOfCurrent()
         {
-            Process.Start("explorer", $@"/select, {CurrentImagePath.Wrap()}");
+            Process.Start("explorer", $@"/select, {CurrentImagePath.Replace("/", @"\").Wrap()}");
         }
 
         public static void DeleteCurrent()
