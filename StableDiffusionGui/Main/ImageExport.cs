@@ -13,7 +13,7 @@ namespace StableDiffusionGui.Main
 {
     internal class ImageExport
     {
-        private static readonly int _maxPathLength = 255;
+        private static readonly int _maxPathLength = 230;
         private static readonly int _minimumImageAgeMs = 200;
         private static readonly int _loopWaitBeforeStartMs = 1000;
         private static readonly int _loopWaitTimeMs = 200;
@@ -71,7 +71,7 @@ namespace StableDiffusionGui.Main
                         {
                             var imgTimeSinceLastWrite = DateTime.Now - img.LastWriteTime;
                             string prompt = IoUtils.GetImageMetadata(img.FullName).CombinedPrompt;
-                            int pathBudget = 255 - img.Directory.FullName.Length - 65;
+                            int pathBudget = _maxPathLength - img.Directory.FullName.Length - 65;
                             prompt = currTask.IgnoreWildcardsForFilenames && currSettings.ProcessedAndRawPrompts.ContainsKey(prompt) ? currSettings.ProcessedAndRawPrompts[prompt] : prompt;
                             string dirName = string.IsNullOrWhiteSpace(prompt) ? $"unknown_prompt_{FormatUtils.GetUnixTimestamp()}" : FormatUtils.SanitizePromptFilename(FormatUtils.GetPromptWithoutModifiers(prompt), pathBudget);
                             string subDirPath = sessionDir ? Path.Combine(currTask.OutDir, Paths.SessionTimestamp, dirName) : Path.Combine(currTask.OutDir, dirName);
@@ -124,15 +124,12 @@ namespace StableDiffusionGui.Main
             {
                 ext = ext.StartsWith(".") ? ext : $".{ext}"; // Ensure extension always starts with a dot
                 string timestamp = GetExportTimestamp(Config.Get<FilenameTimestamp>(Config.Keys.FilenameTimestampMode, FilenameTimestamp.None));
-                int pathBudget = pathLimit - parentDir.Length - (timestamp.Length + 1) - (suffix.Length + 1) - 4;
+                int pathBudget = pathLimit - (parentDir.Length + 1) - (timestamp.Length + 1) - (suffix.Length + 1) - 4; // Remove 4 for extension
                 var meta = IoUtils.GetImageMetadata(filePath);
 
                 var filenameChunks = new List<string>();
                 filenameChunks.Add(timestamp);
                 filenameChunks.Add(suffix);
-
-                if (inclPrompt)
-                    filenameChunks.Add(FormatUtils.SanitizePromptFilename(meta.Prompt, pathBudget));
 
                 string seed = meta.Seed.ToString();
 
@@ -158,6 +155,13 @@ namespace StableDiffusionGui.Main
                     filenameChunks.Add(sampler);
                 }
 
+                if (inclPrompt && pathBudget >= 4) // Including prompt with less than 4 chars is kinda pointless
+                {
+                    string prompt = FormatUtils.SanitizePromptFilename(meta.Prompt, pathBudget);
+                    filenameChunks.Insert(2, prompt); // Insert after timestamp & suffix
+                    pathBudget -= (prompt.Length + 1);
+                }
+
                 string model = $"{Path.ChangeExtension(TextToImage.CurrentTaskSettings.Params.Get("model").FromJson<string>(), null).Trim().Trunc(20, false)}";
 
                 if (inclModel && model.Length > 1 && (pathBudget - model.Length > 0))
@@ -167,7 +171,7 @@ namespace StableDiffusionGui.Main
                 }
 
                 string finalPath = Path.Combine(parentDir, $"{string.Join("-", filenameChunks.Where(s => !string.IsNullOrWhiteSpace(s)))}{ext}");
-                return IoUtils.GetAvailableFilePath(finalPath);
+                return IoUtils.GetAvailableFilePath(finalPath).Replace(@"\\", "/").Replace(@"\", "/");
             }
             catch (Exception ex)
             {

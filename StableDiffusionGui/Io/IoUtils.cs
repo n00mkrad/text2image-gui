@@ -21,17 +21,22 @@ namespace StableDiffusionGui.Io
 {
     internal class IoUtils
     {
-        public static Image GetImage(string path, bool returnDummyIfNull = true)
+        public static Image GetImage(string path, bool returnDummyIfNull = true, Image dummy = null)
         {
             try
             {
-                return new MagickImage(path).ToBitmap();
+                if (!string.IsNullOrWhiteSpace(path))
+                    return new MagickImage(path).ToBitmap();
             }
             catch (Exception ex)
             {
                 Logger.Log($"Failed to load image from {path}: {ex.Message}", true);
-                return returnDummyIfNull ? Resources.imgNotFound : null;
             }
+
+            if (dummy == null)
+                dummy = Resources.imgNotFound;
+
+            return returnDummyIfNull ? dummy : null;
         }
 
         public static string[] ReadLines(string path)
