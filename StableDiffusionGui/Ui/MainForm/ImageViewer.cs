@@ -168,6 +168,9 @@ namespace StableDiffusionGui.Ui.MainFormUtils
             Image initImg = IoUtils.GetImage(metadata.InitImgName, false);
             Program.MainForm.checkboxShowInitImg.Visible = initImg != null;
             Program.MainForm.pictBoxInitImg.Image = initImg;
+
+            if (initImg == null)
+                Program.MainForm.checkboxShowInitImg.Checked = false;
         }
 
         public static void CopyCurrentToFavs()
