@@ -456,10 +456,12 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "ConvertModelForm";
+            this.Opacity = 0D;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Convert Models";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ConvertModelForm_FormClosing);
             this.Load += new System.EventHandler(this.ConvertModelForm_Load);
+            this.Shown += new System.EventHandler(this.ConvertModelForm_Shown);
             this.parentPanel.ResumeLayout(false);
             this.panelDelInput.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);

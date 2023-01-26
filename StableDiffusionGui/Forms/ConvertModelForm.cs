@@ -16,7 +16,7 @@ using System.Windows.Forms;
 
 namespace StableDiffusionGui.Forms
 {
-    public partial class ConvertModelForm : Form
+    public partial class ConvertModelForm : CustomForm
     {
         private Enums.Models.Format _currentInFormat;
         private Enums.Models.Format _currentOutFormat;
@@ -28,11 +28,7 @@ namespace StableDiffusionGui.Forms
 
         private void ConvertModelForm_Load(object sender, EventArgs e)
         {
-            // LoadModels();
-            comboxInFormat.FillFromEnum<Enums.Models.Format>(Strings.ModelFormats, 0, new[] { Enums.Models.Format.DiffusersOnnx }.ToList());
 
-            // ConfigParser.LoadComboxIndex(comboxOutFormat, Config.Keys.PrunePrecisionIdx);
-            ConfigParser.LoadGuiElement(checkboxDeleteInput, Config.Keys.ConvertModelsDeleteInput);
         }
 
         private void btnReloadModels_Click(object sender, EventArgs e)
@@ -106,6 +102,16 @@ namespace StableDiffusionGui.Forms
         private void comboxOutFormat_SelectedIndexChanged(object sender, EventArgs e)
         {
             _currentOutFormat = ParseUtils.GetEnum<Enums.Models.Format>(comboxOutFormat.Text, true, Strings.ModelFormats);
+        }
+
+        private async void ConvertModelForm_Shown(object sender, EventArgs e)
+        {
+            Refresh();
+            comboxInFormat.FillFromEnum<Enums.Models.Format>(Strings.ModelFormats, 0, new[] { Enums.Models.Format.DiffusersOnnx }.ToList());
+            ConfigParser.LoadGuiElement(checkboxDeleteInput, Config.Keys.ConvertModelsDeleteInput);
+            TabOrderInit(new List<Control>() { comboxInFormat, comboxModel, comboxOutFormat, checkboxDeleteInput, btnRun }, 0);
+            await Task.Delay(1);
+            Opacity = 1;
         }
     }
 }
