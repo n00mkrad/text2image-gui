@@ -163,6 +163,7 @@ namespace StableDiffusionGui.Io
                 case Keys.InitImageRetainAspectRatio: Set(key, true); return true;
                 case Keys.ImplementationName: Set(key, Enums.StableDiffusion.Implementation.InvokeAi.ToString()); return true;
                 case Keys.FilenameTimestampMode: Set(key, Enums.Export.FilenameTimestamp.DateTime); return true;
+                case Keys.InvokeAllowModelCaching: Set(key, HwInfo.GetTotalRamGb > 14f); return true;
             }
 
             return false;
@@ -252,7 +253,7 @@ namespace StableDiffusionGui.Io
             public const string DisableModelFileValidation = "disableModelFileValidation";
             public const string MedVramFreeGpuMem = "medVramFreeGpuMem";
             public const string MedVramDisablePostProcessing = "medVramDisablePostProcessing";
-            public const string DisableModelCaching = "disableModelCaching";
+            public const string InvokeAllowModelCaching = "invokeAllowModelCaching";
             public const string EnableTokenizationLogging = "enableTokenizationLogging";
             public const string PopupSlideshowEnabledByDefault = "popupSlideshowEnabledByDefault";
             public const string ConvertModelsDeleteInput = "convertModelsDeleteInput";
