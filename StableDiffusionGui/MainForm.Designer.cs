@@ -170,6 +170,7 @@ namespace StableDiffusionGui
             this.pictBoxInitImg = new System.Windows.Forms.PictureBox();
             this.tableLayoutPanelImgViewers = new System.Windows.Forms.TableLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.labelAspectRatio = new System.Windows.Forms.Label();
             this.menuStripOutputImg.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.upDownSeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
@@ -1285,12 +1286,12 @@ namespace StableDiffusionGui
             this.viewLogInRealtimeToolStripMenuItem});
             this.menuStripLogs.Name = "menuStripLogs";
             this.menuStripLogs.ShowImageMargin = false;
-            this.menuStripLogs.Size = new System.Drawing.Size(36, 4);
+            this.menuStripLogs.Size = new System.Drawing.Size(160, 26);
             // 
             // viewLogInRealtimeToolStripMenuItem
             // 
             this.viewLogInRealtimeToolStripMenuItem.Name = "viewLogInRealtimeToolStripMenuItem";
-            this.viewLogInRealtimeToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
+            this.viewLogInRealtimeToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
             this.viewLogInRealtimeToolStripMenuItem.Text = "View Log In Realtime";
             this.viewLogInRealtimeToolStripMenuItem.Click += new System.EventHandler(this.viewLogInRealtimeToolStripMenuItem_Click);
             // 
@@ -1677,6 +1678,7 @@ namespace StableDiffusionGui
             // 
             // panelRes
             // 
+            this.panelRes.Controls.Add(this.labelAspectRatio);
             this.panelRes.Controls.Add(this.checkboxHiresFix);
             this.panelRes.Controls.Add(this.comboxResH);
             this.panelRes.Controls.Add(this.comboxResW);
@@ -1699,6 +1701,7 @@ namespace StableDiffusionGui
             this.comboxResH.Name = "comboxResH";
             this.comboxResH.Size = new System.Drawing.Size(85, 21);
             this.comboxResH.TabIndex = 107;
+            this.comboxResH.SelectedIndexChanged += new System.EventHandler(this.comboxResH_SelectedIndexChanged);
             // 
             // comboxResW
             // 
@@ -1711,6 +1714,7 @@ namespace StableDiffusionGui
             this.comboxResW.Name = "comboxResW";
             this.comboxResW.Size = new System.Drawing.Size(85, 21);
             this.comboxResW.TabIndex = 106;
+            this.comboxResW.SelectedIndexChanged += new System.EventHandler(this.comboxResW_SelectedIndexChanged);
             // 
             // label6
             // 
@@ -2205,6 +2209,19 @@ namespace StableDiffusionGui
             this.panel1.Size = new System.Drawing.Size(512, 512);
             this.panel1.TabIndex = 0;
             // 
+            // labelAspectRatio
+            // 
+            this.labelAspectRatio.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelAspectRatio.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelAspectRatio.ForeColor = System.Drawing.Color.Silver;
+            this.labelAspectRatio.Location = new System.Drawing.Point(573, 10);
+            this.labelAspectRatio.Name = "labelAspectRatio";
+            this.labelAspectRatio.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.labelAspectRatio.Size = new System.Drawing.Size(69, 13);
+            this.labelAspectRatio.TabIndex = 110;
+            this.labelAspectRatio.Text = "Aspect";
+            this.labelAspectRatio.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
             // MainForm
             // 
             this.AllowDrop = true;
@@ -2447,6 +2464,7 @@ namespace StableDiffusionGui
         private System.Windows.Forms.Panel panel1;
         public System.Windows.Forms.CheckBox checkboxShowInitImg;
         public System.Windows.Forms.TableLayoutPanel tableLayoutPanelImgViewers;
+        private System.Windows.Forms.Label labelAspectRatio;
     }
 }
 

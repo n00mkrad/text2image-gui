@@ -17,6 +17,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Media.Media3D;
 
 namespace StableDiffusionGui
 {
@@ -506,6 +507,31 @@ namespace StableDiffusionGui
             tableLayoutPanelImgViewers.ColumnStyles[1].Width = checkboxShowInitImg.Checked ? 50 : 100;
             MainUi.FitWindowSizeToImageSize();
             CenterToScreen();
+        }
+
+        private void comboxResW_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateAspectRatio();
+        }
+
+        private void comboxResH_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateAspectRatio();
+        }
+
+        private void UpdateAspectRatio ()
+        {
+            int w = comboxResW.GetInt();
+            int h = comboxResH.GetInt();
+            int gcd = GCD(w, h);
+            int reducedWidth = w / gcd;
+            int reducedHeight = h / gcd;
+            labelAspectRatio.Text = $"Ratio: {reducedWidth}:{reducedHeight}".Replace("8:5", "8:5 (16:10)").Replace("7:3", "7:3 (21:9)");
+        }
+
+        private int GCD(int a, int b)
+        {
+            return b == 0 ? a : GCD(b, a % b);
         }
     }
 }
