@@ -27,8 +27,11 @@ namespace StableDiffusionGui.Main
 {
     internal class TtiUtils
     {
+        public static bool ImportBusy;
+
         public static async Task<OrderedDictionary> CreateResizedInitImagesIfNeeded(List<string> initImgPaths, Size targetSize, bool print = false)
         {
+            ImportBusy = true;
             Logger.Log($"Importing initialization images...", false, Logger.LastUiLine.EndsWith("..."));
 
             var sourceAndImportedPaths = new ConcurrentDictionary<string, string>(initImgPaths.ToDictionary(x => x, x => ""));
@@ -79,6 +82,7 @@ namespace StableDiffusionGui.Main
             for (int i = 0; i < initImgPaths.Count(); i++)
                 sorted.Add(initImgPaths[i], sourceAndImportedPaths[initImgPaths[i]]); // Add images in the correct order, since multithreading messes the order up
 
+            ImportBusy = false;
             return sorted;
         }
 

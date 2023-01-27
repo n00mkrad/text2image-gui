@@ -47,7 +47,7 @@ namespace StableDiffusionGui.Main
                     if (currSettings.Implementation == Enums.StableDiffusion.Implementation.InvokeAi)
                         running = (currTask.ImgCount - startingImgCount) < targetImgCount;
 
-                    if (!running && !files.Any())
+                    if (!running && !TtiUtils.ImportBusy && !files.Any())
                     {
                         Logger.Log($"ExportLoop: Breaking. Process running: {running} - Any files exist: {files.Any()}", true);
                         break;
