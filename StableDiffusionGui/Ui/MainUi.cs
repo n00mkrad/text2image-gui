@@ -62,10 +62,9 @@ namespace StableDiffusionGui.Ui
 
         public static List<TtiSettings> Queue = new List<TtiSettings>();
 
-        public static List<int> Resolutions { get { return GetNumbers(384, 2048, 64); } }
-
-        public static List<int> GetNumbers(int min, int max, int step)
+        public static List<int> GetResolutions(int min, int max)
         {
+            int step = ConfigParser.CurrentImplementation == Implementation.InstructPixToPix ? 8 : 64;
             return Enumerable.Range(min, (max - min) + 1).Where(x => x % step == 0).ToList();
         }
 
@@ -313,6 +312,9 @@ namespace StableDiffusionGui.Ui
 
         public static void FitWindowSizeToImageSize()
         {
+            if (Program.MainForm.pictBoxImgViewer.Image == null)
+                return;
+
             int picInWidth = Program.MainForm.tableLayoutPanelImgViewers.ColumnStyles[0].Width > 1 ? Program.MainForm.pictBoxImgViewer.Image.Width : 0;
             int picOutWidth = Program.MainForm.pictBoxImgViewer.Image.Width;
             int picOutHeight = Program.MainForm.pictBoxImgViewer.Image.Height;

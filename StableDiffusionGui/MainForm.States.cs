@@ -43,7 +43,7 @@ namespace StableDiffusionGui
             bool available = true;
 
             if (ConfigParser.CurrentImplementation == Implementation.InstructPixToPix)
-                available = false;
+                return MainUi.CurrentInitImgPaths != null; // Only visible if image is loaded
 
             return available;
         }

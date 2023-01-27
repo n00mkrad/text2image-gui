@@ -30,7 +30,7 @@ namespace StableDiffusionGui.Implementations
                 float[] scalesImg = parameters.FromJson<float[]>("scalesImg");
                 long seed = parameters.FromJson<long>("seed");
                 // string sampler = parameters.FromJson<string>("sampler");
-                // Size res = parameters.FromJson<Size>("res");
+                Size res = parameters.FromJson<Size>("res");
                 // string model = parameters.FromJson<string>("model");
 
                 // var cachedModels = Paths.GetModels(ModelType.Normal, Implementation.DiffusersOnnx);
@@ -39,7 +39,7 @@ namespace StableDiffusionGui.Implementations
                 // if (modelDir == null)
                 //     return;
 
-                OrderedDictionary initImages = initImgs != null && initImgs.Length > 0 ? await TtiUtils.CreateResizedInitImagesIfNeeded(initImgs.ToList(), new Size()) : null;
+                OrderedDictionary initImages = initImgs != null && initImgs.Length > 0 ? await TtiUtils.CreateResizedInitImagesIfNeeded(initImgs.ToList(), res) : null;
 
                 if(initImages == null || initImages.Count < 1)
                 {

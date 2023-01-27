@@ -28,10 +28,6 @@ namespace StableDiffusionGui.Ui.MainFormUtils
             F.comboxSampler.FillFromEnum<Sampler>(Strings.Samplers, 0);
             F.comboxSeamless.FillFromEnum<SeamlessMode>(Strings.SeamlessMode, 0);
             F.comboxInpaintMode.FillFromEnum<InpaintMode>(Strings.InpaintMode, 0);
-
-            var resItems = MainUi.Resolutions.Where(x => x <= (Config.Get<bool>(Config.Keys.AdvancedUi) ? 2048 : 1024)).Select(x => x.ToString());
-            F.comboxResW.SetItems(resItems, UiExtensions.SelectMode.Last);
-            F.comboxResH.SetItems(resItems, UiExtensions.SelectMode.Last);
         }
 
         public static void Load()
@@ -73,8 +69,8 @@ namespace StableDiffusionGui.Ui.MainFormUtils
             F.sliderSteps.ActualMaximum = !adv ? 120 : 500;
             F.sliderSteps.ValueStep = !adv ? 5 : 1;
             F.sliderScale.ActualMaximum = !adv ? 25 : 50;
-            F.comboxResW.SetItems(MainUi.Resolutions.Where(x => x <= (adv ? 2048 : 1024)).Select(x => x.ToString()), UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.Last);
-            F.comboxResH.SetItems(MainUi.Resolutions.Where(x => x <= (adv ? 2048 : 1024)).Select(x => x.ToString()), UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.Last);
+            F.comboxResW.SetItems(MainUi.GetResolutions(320, adv ? 2048 : 1280).Select(x => x.ToString()), UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.Last);
+            F.comboxResH.SetItems(MainUi.GetResolutions(320, adv ? 2048 : 1280).Select(x => x.ToString()), UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.Last);
 
             if (!TtiUtils.CurrentSdModelExists())
                 Config.Set(Config.Keys.Model, "");
