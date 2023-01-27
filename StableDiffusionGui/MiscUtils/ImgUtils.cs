@@ -30,6 +30,9 @@ namespace StableDiffusionGui.MiscUtils
 
         public static Image ResizeImage(Image image, int w, int h)
         {
+            if (image.Width == w && image.Height == h)
+                return image;
+
             Bitmap bmp = new Bitmap(w, h);
 
             using (Graphics g = Graphics.FromImage(bmp))
@@ -236,6 +239,21 @@ namespace StableDiffusionGui.MiscUtils
             color = color ?? MagickColors.Black;
             img.Scale(new MagickGeometry(scaleDimensions.Width, scaleDimensions.Height) { IgnoreAspectRatio = true });
             img = Pad(img, canvasSize, false, color);
+            return img;
+        }
+
+        public static Image Juxtapose(Image img1, Image img2, Size size)
+        {
+            img1 = ResizeImage(img1, size);
+            img2 = ResizeImage(img2, size);
+            Image img = new Bitmap(size.Width * 2, size.Height);
+
+            using (Graphics g = Graphics.FromImage(img))
+            {
+                g.DrawImage(img1, new Point(0, 0));
+                g.DrawImage(img2, new Point(size.Width, 0));
+            }
+
             return img;
         }
     }

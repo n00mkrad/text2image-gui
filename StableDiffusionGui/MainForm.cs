@@ -526,12 +526,17 @@ namespace StableDiffusionGui
             int gcd = GCD(w, h);
             int reducedWidth = w / gcd;
             int reducedHeight = h / gcd;
-            labelAspectRatio.Text = $"Ratio: {reducedWidth}:{reducedHeight}".Replace("8:5", "8:5 (16:10)").Replace("7:3", "7:3 (21:9)");
+            labelAspectRatio.Text = $"Ratio {reducedWidth}:{reducedHeight}".Replace("8:5", "8:5 (16:10)").Replace("7:3", "7:3 (21:9)");
         }
 
         private int GCD(int a, int b)
         {
             return b == 0 ? a : GCD(b, a % b);
+        }
+
+        private void copySidebySideComparisonImageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OsUtils.SetClipboard(ImageViewer.GetCurrentImageComparison());
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using StableDiffusionGui.Data;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
+using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using System;
 using System.Collections.Generic;
@@ -237,6 +238,18 @@ namespace StableDiffusionGui.Ui.MainFormUtils
                 Clear();
 
             parentDirs.Where(dir => !Directory.EnumerateFileSystemEntries(dir).Any()).ToList().ForEach(dir => IoUtils.TryDeleteIfExists(dir)); // Delete dir if it's now empty
+        }
+
+        public static Image GetCurrentImageComparison ()
+        {
+            if (Program.MainForm.pictBoxInitImg.Image == null)
+                return null;
+
+            if (Program.MainForm.pictBoxImgViewer.Image == null)
+                return null;
+
+            Image img = ImgUtils.Juxtapose(Program.MainForm.pictBoxInitImg.Image, Program.MainForm.pictBoxImgViewer.Image, Program.MainForm.pictBoxImgViewer.Image.Size);
+            return img;
         }
     }
 }

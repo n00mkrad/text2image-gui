@@ -43,6 +43,7 @@ namespace StableDiffusionGui
             this.openOutputFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyToFavoritesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyImageToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copySidebySideComparisonImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copySeedToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reGenerateImageWithCurrentSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.useAsInitImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -133,6 +134,7 @@ namespace StableDiffusionGui
             this.panelSampler = new System.Windows.Forms.Panel();
             this.label7 = new System.Windows.Forms.Label();
             this.panelRes = new System.Windows.Forms.Panel();
+            this.labelAspectRatio = new System.Windows.Forms.Label();
             this.comboxResH = new System.Windows.Forms.ComboBox();
             this.comboxResW = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
@@ -170,7 +172,6 @@ namespace StableDiffusionGui
             this.pictBoxInitImg = new System.Windows.Forms.PictureBox();
             this.tableLayoutPanelImgViewers = new System.Windows.Forms.TableLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.labelAspectRatio = new System.Windows.Forms.Label();
             this.menuStripOutputImg.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.upDownSeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
@@ -315,6 +316,7 @@ namespace StableDiffusionGui
             this.openOutputFolderToolStripMenuItem,
             this.copyToFavoritesToolStripMenuItem,
             this.copyImageToClipboardToolStripMenuItem,
+            this.copySidebySideComparisonImageToolStripMenuItem,
             this.copySeedToClipboardToolStripMenuItem,
             this.reGenerateImageWithCurrentSettingsToolStripMenuItem,
             this.useAsInitImageToolStripMenuItem,
@@ -322,7 +324,7 @@ namespace StableDiffusionGui
             this.fitWindowSizeToImageSizeToolStripMenuItem});
             this.menuStripOutputImg.Name = "menuStripOutputImg";
             this.menuStripOutputImg.ShowImageMargin = false;
-            this.menuStripOutputImg.Size = new System.Drawing.Size(285, 202);
+            this.menuStripOutputImg.Size = new System.Drawing.Size(285, 224);
             // 
             // openFileToolStripMenuItem
             // 
@@ -351,6 +353,13 @@ namespace StableDiffusionGui
             this.copyImageToClipboardToolStripMenuItem.Size = new System.Drawing.Size(284, 22);
             this.copyImageToClipboardToolStripMenuItem.Text = "Copy Image";
             this.copyImageToClipboardToolStripMenuItem.Click += new System.EventHandler(this.copyImageToClipboardToolStripMenuItem_Click);
+            // 
+            // copySidebySideComparisonImageToolStripMenuItem
+            // 
+            this.copySidebySideComparisonImageToolStripMenuItem.Name = "copySidebySideComparisonImageToolStripMenuItem";
+            this.copySidebySideComparisonImageToolStripMenuItem.Size = new System.Drawing.Size(284, 22);
+            this.copySidebySideComparisonImageToolStripMenuItem.Text = "Copy Side-by-Side Comparison Image";
+            this.copySidebySideComparisonImageToolStripMenuItem.Click += new System.EventHandler(this.copySidebySideComparisonImageToolStripMenuItem_Click);
             // 
             // copySeedToClipboardToolStripMenuItem
             // 
@@ -580,7 +589,7 @@ namespace StableDiffusionGui
             this.textboxSliderScale.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScale.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScale.Location = new System.Drawing.Point(302, 7);
+            this.textboxSliderScale.Location = new System.Drawing.Point(302, 9);
             this.textboxSliderScale.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScale.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScale.Name = "textboxSliderScale";
@@ -719,7 +728,7 @@ namespace StableDiffusionGui
             this.textboxSliderInitStrength.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderInitStrength.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderInitStrength.Location = new System.Drawing.Point(302, 7);
+            this.textboxSliderInitStrength.Location = new System.Drawing.Point(302, 9);
             this.textboxSliderInitStrength.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderInitStrength.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderInitStrength.Name = "textboxSliderInitStrength";
@@ -1241,7 +1250,7 @@ namespace StableDiffusionGui
             this.textboxSliderScaleImg.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScaleImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScaleImg.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScaleImg.Location = new System.Drawing.Point(302, 7);
+            this.textboxSliderScaleImg.Location = new System.Drawing.Point(302, 9);
             this.textboxSliderScaleImg.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScaleImg.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScaleImg.Name = "textboxSliderScaleImg";
@@ -1690,6 +1699,19 @@ namespace StableDiffusionGui
             this.panelRes.Size = new System.Drawing.Size(645, 35);
             this.panelRes.TabIndex = 5;
             // 
+            // labelAspectRatio
+            // 
+            this.labelAspectRatio.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelAspectRatio.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelAspectRatio.ForeColor = System.Drawing.Color.Silver;
+            this.labelAspectRatio.Location = new System.Drawing.Point(573, 10);
+            this.labelAspectRatio.Name = "labelAspectRatio";
+            this.labelAspectRatio.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.labelAspectRatio.Size = new System.Drawing.Size(69, 13);
+            this.labelAspectRatio.TabIndex = 110;
+            this.labelAspectRatio.Text = "Aspect";
+            this.labelAspectRatio.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
             // comboxResH
             // 
             this.comboxResH.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
@@ -1896,7 +1918,7 @@ namespace StableDiffusionGui
             this.textboxSliderSteps.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderSteps.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderSteps.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderSteps.Location = new System.Drawing.Point(302, 7);
+            this.textboxSliderSteps.Location = new System.Drawing.Point(302, 9);
             this.textboxSliderSteps.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderSteps.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderSteps.Name = "textboxSliderSteps";
@@ -2209,19 +2231,6 @@ namespace StableDiffusionGui
             this.panel1.Size = new System.Drawing.Size(512, 512);
             this.panel1.TabIndex = 0;
             // 
-            // labelAspectRatio
-            // 
-            this.labelAspectRatio.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelAspectRatio.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelAspectRatio.ForeColor = System.Drawing.Color.Silver;
-            this.labelAspectRatio.Location = new System.Drawing.Point(573, 10);
-            this.labelAspectRatio.Name = "labelAspectRatio";
-            this.labelAspectRatio.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.labelAspectRatio.Size = new System.Drawing.Size(69, 13);
-            this.labelAspectRatio.TabIndex = 110;
-            this.labelAspectRatio.Text = "Aspect";
-            this.labelAspectRatio.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
             // MainForm
             // 
             this.AllowDrop = true;
@@ -2465,6 +2474,7 @@ namespace StableDiffusionGui
         public System.Windows.Forms.CheckBox checkboxShowInitImg;
         public System.Windows.Forms.TableLayoutPanel tableLayoutPanelImgViewers;
         private System.Windows.Forms.Label labelAspectRatio;
+        private System.Windows.Forms.ToolStripMenuItem copySidebySideComparisonImageToolStripMenuItem;
     }
 }
 

@@ -131,6 +131,7 @@ namespace StableDiffusionGui.Ui.MainFormUtils
                     F.reGenerateImageWithCurrentSettingsToolStripMenuItem.Visible = !Program.Busy;
                     F.useAsInitImageToolStripMenuItem.Visible = !Program.Busy;
                     F.postProcessImageToolStripMenuItem.Visible = !Program.Busy && TextToImage.CurrentTaskSettings.Implementation == Implementation.InvokeAi;
+                    F.copyImageToClipboardToolStripMenuItem.Visible = F.pictBoxInitImg.Image != null;
                     F.menuStripOutputImg.Show(Cursor.Position);
                 }
             }
