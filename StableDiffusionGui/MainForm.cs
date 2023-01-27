@@ -5,7 +5,6 @@ using StableDiffusionGui.Implementations;
 using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
-using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
 using StableDiffusionGui.Ui.MainFormUtils;

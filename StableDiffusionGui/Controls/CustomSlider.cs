@@ -2,7 +2,9 @@
 using StableDiffusionGui.Main;
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace StableDiffusionGui.Controls
@@ -10,31 +12,40 @@ namespace StableDiffusionGui.Controls
     public class CustomSlider : HTSlider
     {
         public TextBox _valueBox;
-        public Control ValueBox {
-            get {
+        public Control ValueBox
+        {
+            get
+            {
                 return _valueBox;
             }
-            set {
+            set
+            {
                 if (!(value is TextBox)) return;
                 _valueBox = (TextBox)value;
                 value.Leave += new EventHandler(valueBox_Leave);
                 value.KeyPress += new KeyPressEventHandler(valueBox_KeyPress);
                 UpdateValueBox();
-            } }
+            }
+        }
         private bool HasValueBox { get { return ValueBox != null && ValueBox is TextBox; } }
 
-        public new int Value { get { return base.Value; } set { base.Value = value; } }
-
+        [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public decimal ActualValue { 
-            get {
-                return Value / _conversionFactor; 
-            } 
-            set {
+        public decimal ActualValue
+        {
+            get
+            {
+                return Value / _conversionFactor;
+            }
+            set
+            {
+                UpdateMinMax();
                 Value = ((double)(value * _conversionFactor)).RoundToInt().Clamp(Minimum, Maximum);
-                UpdateValueBox(); 
-            } }
-        
+                Console.WriteLine($"[{Name}] ActualValue set to {value}, Value should be {((double)(value * _conversionFactor)).RoundToInt()}, actual clamped Value is now {Value}");
+                UpdateValueBox();
+            }
+        }
+
         [Browsable(false)]
         public int ActualValueInt { get { return (int)ActualValue; } }
 
@@ -42,13 +53,41 @@ namespace StableDiffusionGui.Controls
         public float ActualValueFloat { get { return (float)ActualValue; } }
 
         private decimal _valueStep = 0.2m;
-        public decimal ValueStep { get { return _valueStep; } set { _valueStep = value; var oldVal = ActualValue; UpdateProperties(); ActualValue = oldVal; } }
+        public decimal ValueStep { get { return _valueStep; } set { _valueStep = value; } }
 
         private decimal _actualMinimum = 0.2m;
-        public decimal ActualMinimum { get { return _actualMinimum; } set { _actualMinimum = value; UpdateProperties(); } }
+        public decimal ActualMinimum { get { return _actualMinimum; } set { _actualMinimum = value; UpdateMinMax(); } }
 
         private decimal _actualMaximum = 10.0m;
-        public decimal ActualMaximum { get { return _actualMaximum; } set { _actualMaximum = value; UpdateProperties(); } }
+        public decimal ActualMaximum { get { return _actualMaximum; } set { _actualMaximum = value; UpdateMinMax(); } }
+
+        private decimal _initValue = -1m;
+        public decimal InitValue { get { return _initValue; } set { _initValue = value; } }
+
+        public CustomSlider()
+        {
+            Console.WriteLine($"ctor @ {Name} min {ActualMinimum} max {ActualMaximum} step {ValueStep} actval {ActualValue}");
+            Init();
+        }
+
+        private async void Init()
+        {
+            if (Process.GetCurrentProcess().ProcessName == "devenv")
+                return;
+
+            await Task.Delay(1);
+
+            if (InitValue >= 0m)
+                ActualValue = InitValue;
+        }
+
+        public void ChangeStep(decimal newStep)
+        {
+            var oldVal = ActualValue;
+            ValueStep = newStep;
+            UpdateMinMax();
+            ActualValue = oldVal;
+        }
 
         protected override void OnEnabledChanged(EventArgs e)
         {
@@ -80,14 +119,14 @@ namespace StableDiffusionGui.Controls
 
         private decimal _conversionFactor { get { return 1m / ValueStep; } }
 
-        private void UpdateProperties ()
+        private void UpdateMinMax()
         {
             Maximum = ((double)ActualMaximum * (double)_conversionFactor).RoundToInt();
             Minimum = ((double)ActualMinimum * (double)_conversionFactor).RoundToInt();
             UpdateValueBox();
         }
 
-        private void UpdateValueBox ()
+        private void UpdateValueBox()
         {
             if (HasValueBox && Visible && ValueBox.Visible)
                 ValueBox.Text = ActualValue.ToString("0.###");
@@ -104,7 +143,7 @@ namespace StableDiffusionGui.Controls
                 ParseFromValueBox();
         }
 
-        private void ParseFromValueBox ()
+        private void ParseFromValueBox()
         {
             if (!HasValueBox)
                 return;

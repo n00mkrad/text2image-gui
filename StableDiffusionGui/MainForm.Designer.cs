@@ -95,6 +95,7 @@ namespace StableDiffusionGui
             this.textboxExtraScalesImg = new System.Windows.Forms.TextBox();
             this.labelCurrentImage = new System.Windows.Forms.Label();
             this.menuStripLogs = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.viewLogInRealtimeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.progressBarImg = new HTAlt.WinForms.HTProgressBar();
             this.menuStripRunQueue = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.generateCurrentPromptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -110,7 +111,6 @@ namespace StableDiffusionGui
             this.openModelMergeToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openModelPruningTrimmingToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.convertModelsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.viewLogInRealtimeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStripPostProcess = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.upscaleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.faceRestorationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -173,6 +173,7 @@ namespace StableDiffusionGui
             this.menuStripOutputImg.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.upDownSeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
+            this.menuStripLogs.SuspendLayout();
             this.menuStripRunQueue.SuspendLayout();
             this.menuStripAddToQueue.SuspendLayout();
             this.menuStripDeleteImages.SuspendLayout();
@@ -543,6 +544,11 @@ namespace StableDiffusionGui
             this.sliderScale.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sliderScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
             this.sliderScale.ForeColor = System.Drawing.Color.Black;
+            this.sliderScale.InitValue = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
             this.sliderScale.LargeChange = ((uint)(5u));
             this.sliderScale.Location = new System.Drawing.Point(0, 0);
             this.sliderScale.Margin = new System.Windows.Forms.Padding(0);
@@ -573,7 +579,7 @@ namespace StableDiffusionGui
             this.textboxSliderScale.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScale.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScale.Location = new System.Drawing.Point(302, 9);
+            this.textboxSliderScale.Location = new System.Drawing.Point(302, 7);
             this.textboxSliderScale.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScale.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScale.Name = "textboxSliderScale";
@@ -676,6 +682,11 @@ namespace StableDiffusionGui
             this.sliderInitStrength.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sliderInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
             this.sliderInitStrength.ForeColor = System.Drawing.Color.Black;
+            this.sliderInitStrength.InitValue = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
             this.sliderInitStrength.LargeChange = ((uint)(2u));
             this.sliderInitStrength.Location = new System.Drawing.Point(0, 0);
             this.sliderInitStrength.Margin = new System.Windows.Forms.Padding(0);
@@ -707,7 +718,7 @@ namespace StableDiffusionGui
             this.textboxSliderInitStrength.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderInitStrength.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderInitStrength.Location = new System.Drawing.Point(302, 9);
+            this.textboxSliderInitStrength.Location = new System.Drawing.Point(302, 7);
             this.textboxSliderInitStrength.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderInitStrength.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderInitStrength.Name = "textboxSliderInitStrength";
@@ -1193,6 +1204,11 @@ namespace StableDiffusionGui
             this.sliderScaleImg.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sliderScaleImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
             this.sliderScaleImg.ForeColor = System.Drawing.Color.Black;
+            this.sliderScaleImg.InitValue = new decimal(new int[] {
+            15,
+            0,
+            0,
+            65536});
             this.sliderScaleImg.LargeChange = ((uint)(5u));
             this.sliderScaleImg.Location = new System.Drawing.Point(0, 0);
             this.sliderScaleImg.Margin = new System.Windows.Forms.Padding(0);
@@ -1224,7 +1240,7 @@ namespace StableDiffusionGui
             this.textboxSliderScaleImg.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScaleImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScaleImg.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScaleImg.Location = new System.Drawing.Point(302, 9);
+            this.textboxSliderScaleImg.Location = new System.Drawing.Point(302, 7);
             this.textboxSliderScaleImg.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScaleImg.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScaleImg.Name = "textboxSliderScaleImg";
@@ -1265,10 +1281,18 @@ namespace StableDiffusionGui
             // menuStripLogs
             // 
             this.menuStripLogs.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.menuStripLogs.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.viewLogInRealtimeToolStripMenuItem});
             this.menuStripLogs.Name = "menuStripLogs";
             this.menuStripLogs.ShowImageMargin = false;
-            this.menuStripLogs.Size = new System.Drawing.Size(156, 26);
-            this.menuStripLogs.Items.Add(this.viewLogInRealtimeToolStripMenuItem);
+            this.menuStripLogs.Size = new System.Drawing.Size(36, 4);
+            // 
+            // viewLogInRealtimeToolStripMenuItem
+            // 
+            this.viewLogInRealtimeToolStripMenuItem.Name = "viewLogInRealtimeToolStripMenuItem";
+            this.viewLogInRealtimeToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
+            this.viewLogInRealtimeToolStripMenuItem.Text = "View Log In Realtime";
+            this.viewLogInRealtimeToolStripMenuItem.Click += new System.EventHandler(this.viewLogInRealtimeToolStripMenuItem_Click);
             // 
             // progressBarImg
             // 
@@ -1359,7 +1383,7 @@ namespace StableDiffusionGui
             this.convertModelsToolStripMenuItem});
             this.menuStripDevTools.Name = "menuStripDevTools";
             this.menuStripDevTools.ShowImageMargin = false;
-            this.menuStripDevTools.Size = new System.Drawing.Size(234, 136);
+            this.menuStripDevTools.Size = new System.Drawing.Size(234, 114);
             // 
             // openCliToolStripMenuItem
             // 
@@ -1395,13 +1419,6 @@ namespace StableDiffusionGui
             this.convertModelsToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
             this.convertModelsToolStripMenuItem.Text = "Convert Models";
             this.convertModelsToolStripMenuItem.Click += new System.EventHandler(this.convertModelsToolStripMenuItem_Click);
-            // 
-            // viewLogInRealtimeToolStripMenuItem
-            // 
-            this.viewLogInRealtimeToolStripMenuItem.Name = "viewLogInRealtimeToolStripMenuItem";
-            this.viewLogInRealtimeToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
-            this.viewLogInRealtimeToolStripMenuItem.Text = "View Log In Realtime";
-            this.viewLogInRealtimeToolStripMenuItem.Click += new System.EventHandler(this.viewLogInRealtimeToolStripMenuItem_Click);
             // 
             // menuStripPostProcess
             // 
@@ -1875,7 +1892,7 @@ namespace StableDiffusionGui
             this.textboxSliderSteps.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderSteps.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderSteps.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderSteps.Location = new System.Drawing.Point(302, 9);
+            this.textboxSliderSteps.Location = new System.Drawing.Point(302, 7);
             this.textboxSliderSteps.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderSteps.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderSteps.Name = "textboxSliderSteps";
@@ -1900,10 +1917,15 @@ namespace StableDiffusionGui
             this.sliderSteps.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sliderSteps.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
             this.sliderSteps.ForeColor = System.Drawing.Color.Black;
+            this.sliderSteps.InitValue = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
             this.sliderSteps.LargeChange = ((uint)(5u));
             this.sliderSteps.Location = new System.Drawing.Point(0, 0);
             this.sliderSteps.Margin = new System.Windows.Forms.Padding(0);
-            this.sliderSteps.Maximum = 20;
+            this.sliderSteps.Maximum = 500;
             this.sliderSteps.Minimum = 1;
             this.sliderSteps.Name = "sliderSteps";
             this.sliderSteps.OverlayColor = System.Drawing.Color.White;
@@ -2230,6 +2252,7 @@ namespace StableDiffusionGui
             this.menuStripOutputImg.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.upDownSeed)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).EndInit();
+            this.menuStripLogs.ResumeLayout(false);
             this.menuStripRunQueue.ResumeLayout(false);
             this.menuStripAddToQueue.ResumeLayout(false);
             this.menuStripDeleteImages.ResumeLayout(false);

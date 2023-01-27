@@ -67,7 +67,7 @@ namespace StableDiffusionGui.Ui.MainFormUtils
             bool adv = Config.Get<bool>(Config.Keys.AdvancedUi);
             F.upDownIterations.Maximum = !adv ? 10000 : 100000;
             F.sliderSteps.ActualMaximum = !adv ? 120 : 500;
-            F.sliderSteps.ValueStep = !adv ? 5 : 1;
+            F.sliderSteps.ChangeStep(!adv ? 5 : 1);
             F.sliderScale.ActualMaximum = !adv ? 25 : 50;
             F.comboxResW.SetItems(MainUi.GetResolutions(320, adv ? 2048 : 1280).Select(x => x.ToString()), UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.Last);
             F.comboxResH.SetItems(MainUi.GetResolutions(320, adv ? 2048 : 1280).Select(x => x.ToString()), UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.Last);
