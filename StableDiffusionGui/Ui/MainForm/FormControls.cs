@@ -105,7 +105,9 @@ namespace StableDiffusionGui.Ui.MainFormUtils
 
         public static void OpenLogsMenu()
         {
+            var first = F.menuStripLogs.Items.Cast<ToolStripMenuItem>().First();
             F.menuStripLogs.Items.Clear();
+            F.menuStripLogs.Items.Add(first);
             var openLogs = F.menuStripLogs.Items.Add($"Open Logs Folder");
             openLogs.Click += (s, ea) => { Process.Start("explorer", Paths.GetLogPath().Wrap()); };
 
