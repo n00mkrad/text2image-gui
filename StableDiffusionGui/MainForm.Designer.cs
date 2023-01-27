@@ -1196,8 +1196,8 @@ namespace StableDiffusionGui
             this.sliderScaleImg.LargeChange = ((uint)(5u));
             this.sliderScaleImg.Location = new System.Drawing.Point(0, 0);
             this.sliderScaleImg.Margin = new System.Windows.Forms.Padding(0);
-            this.sliderScaleImg.Maximum = 25;
-            this.sliderScaleImg.Minimum = 5;
+            this.sliderScaleImg.Maximum = 50;
+            this.sliderScaleImg.Minimum = 10;
             this.sliderScaleImg.Name = "sliderScaleImg";
             this.sliderScaleImg.OverlayColor = System.Drawing.Color.White;
             this.sliderScaleImg.Size = new System.Drawing.Size(302, 35);
@@ -1207,13 +1207,12 @@ namespace StableDiffusionGui
             this.sliderScaleImg.ThumbSize = new System.Drawing.Size(14, 14);
             this.toolTip.SetToolTip(this.sliderScaleImg, "Higher tries to match your image better, but can get chaotic. 1-2 is a safe range" +
         " in most cases.");
-            this.sliderScaleImg.Value = 15;
             this.sliderScaleImg.ValueBox = this.textboxSliderScaleImg;
             this.sliderScaleImg.ValueStep = new decimal(new int[] {
-            1,
+            5,
             0,
             0,
-            65536});
+            131072});
             // 
             // textboxSliderScaleImg
             // 
