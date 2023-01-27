@@ -1,6 +1,9 @@
 ﻿using ImageMagick;
 using StableDiffusionGui.Data;
+using StableDiffusionGui.Extensions;
+using StableDiffusionGui.Forms;
 using StableDiffusionGui.Implementations;
+using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;

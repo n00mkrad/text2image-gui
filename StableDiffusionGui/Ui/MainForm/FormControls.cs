@@ -69,7 +69,6 @@ namespace StableDiffusionGui.Ui.MainFormUtils
             F.sliderSteps.ActualMaximum = !adv ? 120 : 500;
             F.sliderSteps.ValueStep = !adv ? 5 : 1;
             F.sliderScale.ActualMaximum = !adv ? 25 : 50;
-            F.sliderScaleImg.ActualMaximum = !adv ? 2.5m : 4.0m;
             F.comboxResW.SetItems(MainUi.GetResolutions(320, adv ? 2048 : 1280).Select(x => x.ToString()), UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.Last);
             F.comboxResH.SetItems(MainUi.GetResolutions(320, adv ? 2048 : 1280).Select(x => x.ToString()), UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.Last);
 
