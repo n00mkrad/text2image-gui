@@ -40,8 +40,6 @@ namespace StableDiffusionGui.Ui.MainFormUtils
 
             SetImages(imgPaths.Select(x => x.FullName).ToList(), showMode);
 
-            ImgViewList.Images.Add(new Bitmap(imagesDir));
-
             return imgPaths.Count;
         }
 
@@ -51,11 +49,6 @@ namespace StableDiffusionGui.Ui.MainFormUtils
                 return;
 
             _currentImages = imagePaths.ToArray();
-
-            foreach(var Img in imagePaths)
-            {
-                ImgViewList.Images.Add(new Bitmap(Img));
-            }
 
             if (showMode == ImgShowMode.DontShow)
                 return;
@@ -186,7 +179,15 @@ namespace StableDiffusionGui.Ui.MainFormUtils
             Program.MainForm.checkboxShowInitImg.Visible = initImg != null;
             Program.MainForm.pictBoxInitImg.Image = initImg;
 
+            ImgViewList.Images.Clear();
             ImgViewList.ImageSize = new Size(70, 70);
+
+            foreach (var Img in _currentImages)
+            {
+                ImgViewList.Images.Add(new Bitmap(Img));
+            }
+
+
             Program.MainForm.ImgListView.LargeImageList = ImgViewList;
 
             for (int i = 0; i < ImgViewList.Images.Count; i++)
