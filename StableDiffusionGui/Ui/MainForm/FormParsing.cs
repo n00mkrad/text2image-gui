@@ -85,7 +85,7 @@ namespace StableDiffusionGui.Ui.MainFormUtils
             }
             else
             {
-                var v = toInt ? values.Select(x => ((int)x).ToString()) : values.Select(x => x.ToString());
+                var v = toInt ? values.Select(x => ((int)x).ToString()) : values.Select(x => x.ToStringDot());
 
                 if (v.Count() > 1)
                     extraValuesTextbox.Text = string.Join(",", v);
