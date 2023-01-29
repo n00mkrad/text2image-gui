@@ -149,7 +149,7 @@ namespace StableDiffusionGui
             {
                 return new ZlpFileInfo(path).Directory.FullName;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return path;
             }

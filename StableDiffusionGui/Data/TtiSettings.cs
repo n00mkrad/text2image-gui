@@ -57,7 +57,7 @@ namespace StableDiffusionGui.Data
 
                 return count;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return -1;
             }

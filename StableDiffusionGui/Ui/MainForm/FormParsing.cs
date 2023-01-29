@@ -65,7 +65,6 @@ namespace StableDiffusionGui.Ui.MainFormUtils
                 F.comboxSeamless.SetIfTextMatches(s.Params.Get("seamless").FromJson<string>(), true, Strings.SeamlessMode);
                 F.comboxInpaintMode.SelectedIndex = (int)s.Params.Get("inpainting").FromJson<InpaintMode>();
                 F.checkboxHiresFix.Checked = s.Params.Get("hiresFix").FromJson<bool>();
-                F.checkboxLockSeed.Checked = s.Params.Get("lockSeed").FromJson<bool>();
             }
             catch (Exception ex)
             {
@@ -119,7 +118,6 @@ namespace StableDiffusionGui.Ui.MainFormUtils
                     { "clipSegMask", F.textboxClipsegMask.Text.Trim().ToJson() },
                     { "model", Config.Get<string>(Config.Keys.Model).ToJson() },
                     { "hiresFix", (F.checkboxHiresFix.Visible && F.checkboxHiresFix.Checked).ToJson() },
-                    { "lockSeed", F.checkboxLockSeed.Checked.ToJson() },
                     { "vae", Config.Get<string>(Config.Keys.ModelVae).ToJson() },
                     { "perlin", F.textboxPerlin.GetFloat().ToJson() },
                     { "threshold", F.textboxThresh.GetInt().ToJson() },

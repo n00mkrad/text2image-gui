@@ -90,7 +90,7 @@ namespace StableDiffusionGui
                 upDownIterations,
                 sliderSteps, textboxSliderSteps,
                 sliderScale, textboxSliderScale,
-                upDownSeed, checkboxLockSeed,
+                upDownSeed,
                 comboxResW, comboxResH, checkboxHiresFix,
                 comboxSampler,
                 comboxSeamless,
@@ -298,12 +298,6 @@ namespace StableDiffusionGui
         private void btnSeedUsePrevious_Click(object sender, EventArgs e)
         {
             upDownSeed.Value = TextToImage.PreviousSeed;
-        }
-
-        private void btnSeedResetToRandom_Click(object sender, EventArgs e)
-        {
-            upDownSeed.Value = -1;
-            upDownSeed.Text = "";
         }
 
         private void btnPromptHistory_Click(object sender, EventArgs e)
@@ -537,6 +531,12 @@ namespace StableDiffusionGui
         private void copySidebySideComparisonImageToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OsUtils.SetClipboard(ImageViewer.GetCurrentImageComparison());
+        }
+
+        private void htSwitch1_CheckedChanged(object sender, EventArgs e)
+        {
+            upDownSeed.Value = -1;
+            upDownSeed.Text = "";
         }
     }
 }
