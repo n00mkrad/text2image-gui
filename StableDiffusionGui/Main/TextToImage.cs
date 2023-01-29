@@ -4,8 +4,10 @@ using StableDiffusionGui.Io;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
+using StableDiffusionGui.Ui.MainFormUtils;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -108,14 +110,81 @@ namespace StableDiffusionGui.Main
 
         public enum NotifyMode { None, Ping, Notification, Both }
 
+        private static void PostProcessingVulkan()
+        {
+            Logger.Log("Postprocessing...");
+
+            List<string> imagePaths = new List<string>();
+
+            if (Config.Get<bool>(Config.Keys.UpscaleEnable))
+            {
+                for (int Iter = 0; CurrentTask.ImgCount > Iter; Iter++)
+                {
+                    string SType = Config.Get<string>(Config.Keys.UpscaleType);
+                    string File = ImageViewer._currentImages[Iter];
+
+                    Process process = new System.Diagnostics.Process();
+                    ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+
+                    string DopCmd = Config.Get<string>(Config.Keys.UpscaleStrength).Substring(0, 1);
+                    DopCmd = " -s " + (DopCmd.GetInt() + 1).ToString();
+
+                    string cmd = Paths.GetExeDir() + @"\tools";
+                    switch (SType)
+                    {
+                        case "Real-ESRGAN (Vulkan)":
+                            {
+                                cmd += @"\realesrgan\realesrgan-ncnn-vulkan.exe";
+                                startInfo.FileName = cmd;
+                                break;
+                            }
+
+                        case "Real-ESRGAN: Anime (Vulkan)":
+                            {
+                                cmd += @"\realesrgan\realesrgan-ncnn-vulkan.exe";
+                                startInfo.FileName = cmd;
+
+                                DopCmd += " -n realesrgan-x4plus-anime";
+                                break;
+                            }
+                        case "Real-SR (Vulkan)":
+                            {
+                                cmd += @"\realsr.exe\realsr-ncnn-vulkan.exe";
+                                startInfo.FileName = cmd;
+                                break;
+                            }
+                        case "SRMD (Vulkan)":
+                            {
+                                cmd += @"\srmd\srmd-ncnn-vulkan.exe";
+                                startInfo.FileName = cmd;
+                                break;
+                            }
+                    }
+
+                    string OutFile = File.Substring(0, File.Length - 4) + "_upscale.png";
+                    startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal;
+                    startInfo.Arguments = "-i " + File + " -o " + OutFile + DopCmd;
+                    process.StartInfo = startInfo;
+                    process.Start();
+
+                    imagePaths.Add(OutFile);
+                    process.WaitForExit();
+                }
+                ImageViewer.Clear();
+                ImageViewer.SetImages(imagePaths, ImageViewer.ImgShowMode.ShowLast);
+                ImageViewer.Show();
+            }
+
+        }
         public static void Done()
         {
             TimeSpan timeTaken = DateTime.Now - CurrentTask.StartTime;
+            Logger.Log($"Done! Generated {CurrentTask.ImgCount} images in {FormatUtils.Time(timeTaken, false)}.");
 
-            if (CurrentTask.ImgCount > 0)
-                Logger.Log($"Done! Generated {CurrentTask.ImgCount} images in {FormatUtils.Time(timeTaken, false)}.");
-            else
+            if (CurrentTask.ImgCount == 0)
                 Logger.Log($"No images generated.");
+
+            PostProcessingVulkan();
 
             Program.SetState(Program.BusyState.Standby);
 

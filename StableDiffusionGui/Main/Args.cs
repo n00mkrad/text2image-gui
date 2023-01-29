@@ -109,7 +109,7 @@ namespace StableDiffusionGui.Main
 
             public static string GetUpscaleArgs(bool force = false)
             {
-                if (!force && !Config.Get<bool>(Config.Keys.UpscaleEnable))
+                if (!force && !Config.Get<bool>(Config.Keys.UpscaleEnable) || Config.Get<string>(Config.Keys.UpscaleType) != "Real-ESRGAN (CUDA)")
                     return "";
 
                 var upscaleSetting = (Forms.PostProcSettingsForm.UpscaleOption)Config.Get<int>(Config.Keys.UpscaleIdx);

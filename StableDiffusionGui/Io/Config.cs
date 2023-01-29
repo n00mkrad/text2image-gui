@@ -220,6 +220,7 @@ namespace StableDiffusionGui.Io
             public const string ModelVae = "sdModelVae";
             public const string EnablePromptHistory = "enablePromptHistory";
             public const string CodeformerFidelity = "codeformerFidelity";
+            public const string UpscaleType = "UpscaleType";
             public const string ResW = "resW";
             public const string ResH = "resH";
             public const string FullPrecision = "fullPrecision";

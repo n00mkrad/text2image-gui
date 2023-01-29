@@ -1,5 +1,6 @@
 ﻿using MS.WindowsAPICodePack.Internal;
 using Newtonsoft.Json.Linq;
+using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Ui;
@@ -8,6 +9,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
 namespace StableDiffusionGui.Extensions
 {
@@ -15,7 +17,7 @@ namespace StableDiffusionGui.Extensions
     {
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         public static extern bool LockWindowUpdate(IntPtr hWndLock);
-
+        
         public static void Suspend(this Control control)
         {
             LockWindowUpdate(control.Handle);

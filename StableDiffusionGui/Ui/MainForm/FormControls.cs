@@ -97,7 +97,12 @@ namespace StableDiffusionGui.Ui.MainFormUtils
             F.btnEmbeddingBrowse.Text = embeddingExists ? "Clear Concept" : "Load Concept";
 
             F.labelCurrentImage.Text = !img2img ? "No initialization image loaded." : (MainUi.CurrentInitImgPaths.Count == 1 ? $"Currently using {Path.GetFileName(MainUi.CurrentInitImgPaths[0])}" : $"Currently using {MainUi.CurrentInitImgPaths.Count} images.");
-            F.labelCurrentConcept.Text = string.IsNullOrWhiteSpace(MainUi.CurrentEmbeddingPath) ? "No trained concept loaded." : $"Currently using {Path.GetFileName(MainUi.CurrentEmbeddingPath)}";
+            
+            if (!string.IsNullOrWhiteSpace(MainUi.CurrentEmbeddingPath))
+            {
+                F.labelCurrentImage.Text += $"Currently trained concept using {Path.GetFileName(MainUi.CurrentEmbeddingPath)}";
+            }
+            
             F.toolTip.SetToolTip(F.labelCurrentImage, $"{F.labelCurrentImage.Text.Trunc(100)}\n\nShift + Hover to preview.");
 
             #endregion

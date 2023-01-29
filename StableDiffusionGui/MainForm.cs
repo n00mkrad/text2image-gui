@@ -288,6 +288,8 @@ namespace StableDiffusionGui
         private void btnInitImgBrowse_Click(object sender, EventArgs e)
         {
             FormUtils.BrowseInitImage();
+
+            checkboxShowInitImg.Visible = true;
         }
 
         private void btnEmbeddingBrowse_Click(object sender, EventArgs e)

@@ -102,15 +102,6 @@ namespace StableDiffusionGui.Ui.MainFormUtils
 
         public static void TryOpenPostProcessingSettings()
         {
-            var imp = ConfigParser.CurrentImplementation;
-            var supportedImps = new List<Implementation> { Implementation.InvokeAi };
-
-            if (!supportedImps.Contains(imp))
-            {
-                UiUtils.ShowMessageBox($"Post-processing is not available with your current implementation: {Strings.Implementation.Get(imp.ToString(), true)}.");
-                return;
-            }
-
             new PostProcSettingsForm().ShowDialogForm();
         }
 

@@ -27,7 +27,7 @@ namespace StableDiffusionGui.Io
 
         public static string GetExeDir()
         {
-            return AppDomain.CurrentDomain.BaseDirectory;
+            return System.IO.Directory.GetCurrentDirectory();
         }
 
         public static string GetDataPath()

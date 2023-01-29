@@ -5,8 +5,10 @@ using StableDiffusionGui.Main;
 using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
 namespace StableDiffusionGui.Forms
 {
@@ -18,6 +20,21 @@ namespace StableDiffusionGui.Forms
         {
             Opacity = 0;
             InitializeComponent();
+
+            var imp = ConfigParser.CurrentImplementation;
+            var supportedImps = new List<Implementation> { Implementation.InvokeAi };
+
+            if (!supportedImps.Contains(imp))
+            {
+                panel2.Visible = false;
+                tableLayoutPanel8.Visible = false;
+                tableLayoutPanel2.Visible = false;
+                tableLayoutPanel5.Visible = false;
+
+                cbUpscaleType.Items.RemoveAt(0);
+            }
+
+            cbUpscaleType.SelectedItem = cbUpscaleType.Items[0];
         }
 
         private void PostProcSettingsForm_Load(object sender, EventArgs e)
@@ -28,11 +45,12 @@ namespace StableDiffusionGui.Forms
         private async void PostProcSettingsForm_Shown(object sender, EventArgs e)
         {
             Refresh();
+            TabOrderInit(new List<Control>() { checkboxUpscaleEnable, comboxUpscale, checkboxFaceRestorationEnable, comboxFaceRestoration, sliderFaceRestoreStrength, sliderCodeformerFidelity });
+
             comboxUpscale.FillFromEnum<UpscaleOption>(Strings.PostProcSettingsUiStrings);
             comboxFaceRestoration.FillFromEnum<Enums.Utils.FaceTool>(Strings.PostProcSettingsUiStrings);
             LoadSettings();
             UpdateVisibility();
-            TabOrderInit(new List<Control>() { checkboxUpscaleEnable, comboxUpscale, checkboxFaceRestorationEnable, comboxFaceRestoration, sliderFaceRestoreStrength, sliderCodeformerFidelity });
             await Task.Delay(1);
             Opacity = 1;
 
@@ -61,6 +79,7 @@ namespace StableDiffusionGui.Forms
             ConfigParser.LoadComboxIndex(comboxFaceRestoration, Config.Keys.FaceRestoreIdx);
             ConfigParser.LoadGuiElement(sliderFaceRestoreStrength, Config.Keys.FaceRestoreStrength);
             ConfigParser.LoadGuiElement(sliderCodeformerFidelity, Config.Keys.CodeformerFidelity);
+            ConfigParser.LoadGuiElement(cbUpscaleType, Config.Keys.UpscaleType);
         }
 
         void SaveSettings()
@@ -72,6 +91,7 @@ namespace StableDiffusionGui.Forms
             ConfigParser.SaveComboxIndex(comboxFaceRestoration, Config.Keys.FaceRestoreIdx);
             ConfigParser.SaveGuiElement(sliderFaceRestoreStrength, Config.Keys.FaceRestoreStrength);
             ConfigParser.SaveGuiElement(sliderCodeformerFidelity, Config.Keys.CodeformerFidelity);
+            ConfigParser.SaveGuiElement(cbUpscaleType, Config.Keys.UpscaleType);
         }
 
         private void checkboxUpscaleEnable_CheckedChanged(object sender, EventArgs e)
@@ -92,6 +112,27 @@ namespace StableDiffusionGui.Forms
         private void UpdateVisibility()
         {
             panelCodeformerFidelity.Visible = (Enums.Utils.FaceTool)comboxFaceRestoration.SelectedIndex == Enums.Utils.FaceTool.CodeFormer;
+
+
+            var imp = ConfigParser.CurrentImplementation;
+            var supportedImps = new List<Implementation> { Implementation.InvokeAi };
+
+            if (!supportedImps.Contains(imp))
+            {
+                panel2.Visible = false;
+                tableLayoutPanel8.Visible = false;
+                tableLayoutPanel2.Visible = false;
+                label5.Visible = false;
+                label4.Visible = false;
+                label3.Visible = false;
+                label6.Visible = false;
+                label8.Visible = false;
+                checkboxFaceRestorationEnable.Visible = false;
+                comboxFaceRestoration.Visible = false;
+                sliderCodeformerFidelity.Visible = false;
+                sliderFaceRestoreStrength.Visible = false;
+                tableLayoutPanel5.Visible = false;
+            }
         }
     }
 }

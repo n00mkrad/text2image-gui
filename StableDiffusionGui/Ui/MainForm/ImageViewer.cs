@@ -20,7 +20,7 @@ namespace StableDiffusionGui.Ui.MainFormUtils
         public static string CurrentImagePath { get { try { return _currentImages.Length > 0 ? _currentImages[_currIndex] : ""; } catch { return ""; } } }
         public static ImageMetadata CurrentImageMetadata { get { return IoUtils.GetImageMetadata(CurrentImagePath); } }
 
-        private static string[] _currentImages = new string[0];
+        public static string[] _currentImages = new string[0];
         private static int _currIndex = -1;
 
         public static DateTime TimeOfLastImageViewerInteraction;
