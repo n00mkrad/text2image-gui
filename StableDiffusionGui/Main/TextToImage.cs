@@ -126,8 +126,8 @@ namespace StableDiffusionGui.Main
                     Process process = new System.Diagnostics.Process();
                     ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
 
-                    string DopCmd = Config.Get<string>(Config.Keys.UpscaleStrength).Substring(0, 1);
-                    DopCmd = " -s " + (DopCmd.GetInt() + 1).ToString();
+                    string DopCmd = Config.Get<string>(Config.Keys.UpscaleIdx).Substring(0, 1);
+                    DopCmd = " -s " + (DopCmd.GetInt() + 2).ToString();
 
                     string cmd = Paths.GetExeDir() + @"\tools";
                     switch (SType)
@@ -136,6 +136,7 @@ namespace StableDiffusionGui.Main
                             {
                                 cmd += @"\realesrgan\realesrgan-ncnn-vulkan.exe";
                                 startInfo.FileName = cmd;
+                                DopCmd += " -n realesrgan-x4plus";
                                 break;
                             }
 

@@ -134,5 +134,10 @@ namespace StableDiffusionGui.Forms
                 tableLayoutPanel5.Visible = false;
             }
         }
+
+        private void comboxUpscale_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

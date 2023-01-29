@@ -763,6 +763,7 @@
             this.comboxUpscale.Name = "comboxUpscale";
             this.comboxUpscale.Size = new System.Drawing.Size(199, 24);
             this.comboxUpscale.TabIndex = 0;
+            this.comboxUpscale.SelectedIndexChanged += new System.EventHandler(this.comboxUpscale_SelectedIndexChanged);
             // 
             // panel7
             // 
