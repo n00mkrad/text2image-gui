@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -111,6 +112,7 @@ namespace StableDiffusionGui
             panelDebugPerlinThresh.Visible = Program.Debug;
             panelDebugSendStdin.Visible = Program.Debug;
 
+            ConfigParser.LoadGuiElement(textboxPromptNeg, Config.Keys.NegPromt);
             LoadModels();
         }
 
@@ -174,6 +176,8 @@ namespace StableDiffusionGui
                 FormUtils.TryUseCurrentImgAsInitImg(true);
                 runBtn_Click(null, null);
             }
+
+            ConfigParser.SaveGuiElement(textboxPromptNeg, Config.Keys.NegPromt);
         }
 
         public void SetProgress(int percent, bool taskbarProgress = true)
@@ -573,6 +577,16 @@ namespace StableDiffusionGui
         private void comboxSdModel_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (!string.IsNullOrWhiteSpace(comboxSdModel.Text)) ConfigParser.SaveGuiElement(comboxSdModel, Config.Keys.Model);
+        }
+
+        private void ImgListView_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (ImgListView.SelectedItems.Count > 0)
+            {
+                string Name = ImageViewer._currentImages[ImgListView.SelectedItems[0].Index];
+                pictBoxImgViewer.Image = new Bitmap(Name);
+                pictBoxImgViewer.Refresh();
+            }
         }
     }
 }

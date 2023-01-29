@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Windows.Controls;
 using System.Windows.Forms;
 
 namespace StableDiffusionGui.Ui.MainFormUtils
@@ -17,6 +18,7 @@ namespace StableDiffusionGui.Ui.MainFormUtils
     {
         public enum ImgShowMode { DontShow, ShowFirst, ShowLast }
 
+        static ImageList ImgViewList = new ImageList();
         public static string CurrentImagePath { get { try { return _currentImages.Length > 0 ? _currentImages[_currIndex] : ""; } catch { return ""; } } }
         public static ImageMetadata CurrentImageMetadata { get { return IoUtils.GetImageMetadata(CurrentImagePath); } }
 
@@ -38,6 +40,8 @@ namespace StableDiffusionGui.Ui.MainFormUtils
 
             SetImages(imgPaths.Select(x => x.FullName).ToList(), showMode);
 
+            ImgViewList.Images.Add(new Bitmap(imagesDir));
+
             return imgPaths.Count;
         }
 
@@ -47,6 +51,11 @@ namespace StableDiffusionGui.Ui.MainFormUtils
                 return;
 
             _currentImages = imagePaths.ToArray();
+
+            foreach(var Img in imagePaths)
+            {
+                ImgViewList.Images.Add(new Bitmap(Img));
+            }
 
             if (showMode == ImgShowMode.DontShow)
                 return;
@@ -130,6 +139,9 @@ namespace StableDiffusionGui.Ui.MainFormUtils
             Program.MainForm.labelImgPromptNeg.Text = _strNoPromptNeg;
             UpdateInitImgViewer();
             UpdatePromptLabelColors();
+
+            ImgViewList.Images.Clear();
+            Program.MainForm.ImgListView.Items.Clear();
         }
 
         public static void UpdatePromptLabelColors()
@@ -168,9 +180,19 @@ namespace StableDiffusionGui.Ui.MainFormUtils
             if (metadata == null)
                 metadata = CurrentImageMetadata;
 
-            Image initImg = IoUtils.GetImage(metadata.InitImgName, false);
+            Program.MainForm.ImgListView.Items.Clear();
+
+            var initImg = IoUtils.GetImage(metadata.InitImgName, false);
             Program.MainForm.checkboxShowInitImg.Visible = initImg != null;
             Program.MainForm.pictBoxInitImg.Image = initImg;
+
+            ImgViewList.ImageSize = new Size(70, 70);
+            Program.MainForm.ImgListView.LargeImageList = ImgViewList;
+
+            for (int i = 0; i < ImgViewList.Images.Count; i++)
+            {
+                Program.MainForm.ImgListView.Items.Add("", i);
+            }
 
             if (initImg == null)
                 Program.MainForm.checkboxShowInitImg.Checked = false;
@@ -240,7 +262,7 @@ namespace StableDiffusionGui.Ui.MainFormUtils
             parentDirs.Where(dir => !Directory.EnumerateFileSystemEntries(dir).Any()).ToList().ForEach(dir => IoUtils.TryDeleteIfExists(dir)); // Delete dir if it's now empty
         }
 
-        public static Image GetCurrentImageComparison ()
+        public static System.Drawing.Image GetCurrentImageComparison ()
         {
             if (Program.MainForm.pictBoxInitImg.Image == null)
                 return null;
@@ -248,7 +270,7 @@ namespace StableDiffusionGui.Ui.MainFormUtils
             if (Program.MainForm.pictBoxImgViewer.Image == null)
                 return null;
 
-            Image img = ImgUtils.Juxtapose(Program.MainForm.pictBoxInitImg.Image, Program.MainForm.pictBoxImgViewer.Image, Program.MainForm.pictBoxImgViewer.Image.Size);
+            var img = ImgUtils.Juxtapose(Program.MainForm.pictBoxInitImg.Image, Program.MainForm.pictBoxImgViewer.Image, Program.MainForm.pictBoxImgViewer.Image.Size);
             return img;
         }
     }

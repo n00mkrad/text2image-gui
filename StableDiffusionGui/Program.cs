@@ -16,7 +16,7 @@ namespace StableDiffusionGui
 {
     public static class Program
     {
-        public const string Version = "1.9.1";
+        public const string Version = "1.9.1: ForserX Edition for AMD GPU";
         public const Enums.Program.UpdateChannel ReleaseChannel = Enums.Program.UpdateChannel.Public;
 
         public static bool Debug { get { return Debugger.IsAttached || UserArgs.Get("debug").Lower() == true.ToString().Lower(); } }

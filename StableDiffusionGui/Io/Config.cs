@@ -218,6 +218,7 @@ namespace StableDiffusionGui.Io
             public const string Iterations = "iterations";
             public const string Model = "sdModel";
             public const string ModelVae = "sdModelVae";
+            public const string NegPromt = "NegPromt";
             public const string EnablePromptHistory = "enablePromptHistory";
             public const string CodeformerFidelity = "codeformerFidelity";
             public const string UpscaleType = "UpscaleType";

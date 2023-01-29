@@ -231,16 +231,15 @@ will run with step counts 20 to 60 with increments of 10.</value>
   </data>
   <data name="btnDeleteBatch.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
-        iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAHQSURBVHhe7daxbcNAFARRJmpGTaoDAXI5rkNuRLEB+n/eBA4MRZZ9c9gHXCrsHAFSW0RERERE
-        RERExH/a9/1S57dd+Pl4pi9q3NdL5CE80xc07uml8hB+0hcz7udPrPsQCFwWmfNi57LInBc7l0XmvNi5
-        LDLnxc5lkTkvdi6LzHmxc1lkzoudyyIzIiJifny7tMjwokOLDC86tMjwokOLDC86tMjwokOLDC86tMjw
-        okOLDC86tMjwokOLDC86tMjwokOLDC86tMjwokOLDC86tMjwokOLDC86tMjwokOLDC86tMjwokOLDC86
-        tMjwokOLDC86tMjwokOLDC86tMjwokOLDC86tMjwokOLDC86tMjwokOLDC86tMjwokOLDC86tMjwokOL
-        DC86tMjwokOLDC86tMjwokOLDC86tMjwokOLDC86tMjwokOLDC86tMjwokOLDC86tMjwokOLDC86tMjw
-        okOLDK9qeIwUpQcZXhVxHy1KdzK8KuI6WpSuZHhVxLnO55Hj0pvPZLhVyO1Icrkx369iTnXejyyH3npi
-        /ho6qM5bnZlfR72tN651+d9VXH8T+sP8UWeGv6i9obf0pjXe+RERERERERERMaFt+wK4zRB15nYqawAA
-        AABJRU5ErkJggg==
+        iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAABGdBTUEAALGPC/xhBQAAAdBJREFUeF7t
+        1rFtw0AUBFEmakZNqgMBcjmuQ25EsQH6f94EDgxFln1z2AdcKuwcAVJbRERERERERETEf9r3/VLnt134
+        +XimL2rc10vkITzTFzTu6aXyEH7SFzPu50+s+xAIXBaZ82LnssicFzuXRea82LksMufFzmWROS92LovM
+        ebFzWWTOi53LIjMiImJ+fLu0yPCiQ4sMLzq0yPCiQ4sMLzq0yPCiQ4sMLzq0yPCiQ4sMLzq0yPCiQ4sM
+        Lzq0yPCiQ4sMLzq0yPCiQ4sMLzq0yPCiQ4sMLzq0yPCiQ4sMLzq0yPCiQ4sMLzq0yPCiQ4sMLzq0yPCi
+        Q4sMLzq0yPCiQ4sMLzq0yPCiQ4sMLzq0yPCiQ4sMLzq0yPCiQ4sMLzq0yPCiQ4sMLzq0yPCiQ4sMLzq0
+        yPCiQ4sMLzq0yPCiQ4sMLzq0yPCiQ4sMLzq0yPCiQ4sMLzq0yPCiQ4sMLzq0yPCiQ4sMr2p4jBSlBxle
+        FXEfLUp3Mrwq4jpalK5keFXEuc7nkePSm89kuFXI7UhyuTHfr2JOdd6PLIfeemL+GjqozludmV9Hva03
+        rnX531VcfxP6w/xRZ4a/qL2ht/SmNd75ERERERERERExoW37ArjNEHXmdiprAAAAAElFTkSuQmCC
 </value>
   </data>
   <data name="btnPromptHistory.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
@@ -283,24 +282,24 @@ will run with step counts 20 to 60 with increments of 10.</value>
   </data>
   <data name="btnQueue.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
-        iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAPdSURBVHhe7dwhkhVXFMfhEcgsIAtgASwhe0IikcjISGQWgWQJkYiILCECMdx+76tUIf5D12H6
-        dGfu/ara/fqc++6EQD0xD8uyLMuyLMuyLEd7fHx8PZ734/k8ni/j+b/bPsOn8bwbz68+5vWMw70az4fx
-        fB3PS/XveN76yNcxDrVd/vZfySw++ujXMA70+/1cU7nGn4RxkDf380xn+9/R+X8njEP8cTvOnN65hvOM
-        Q7yEf+lUfXIN53GQWX1xDedxkGm5hvM4x7Rcw3mcY1qu4TzOMS3XcB7naGNtJGtj7Xmco421kayNtedx
-        jjbWRrI21p7HOdpYG8naWFtnTiSLZG2sjWRtrK0zJ5JFsjbWRrI21taZE8kiWRtrI1kba+vMiWSRrI21
-        kayNtXXmRLJI1sbaSNbG2jpzIlkka2NtJGtjbZ05kSyStbE2krWxts6cSBbJ2lgbydpYW2dOJItkbayN
-        ZG2srTMnkkWyNtZGsjbW1pkTySJZG2sjWRtr68yJZJGsjbWRrI21deZEski2m9cuyzF381qdOZEsku3m
-        tctyzN28VmdOJItku3ntshxzN6/VmRPJItluXrssx9zNa3XmRLJItpvXLssxd/NanTmRLJLt5rXLcszd
-        vFZnTiSLZLt57bIcczev1ZkTySLZbl67LMfczWt15kSySNbG2kjWxto6cyJZJGtjbSRrY22dOZEskrWx
-        NpK1sbbOnEgWydpYG8naWFtnTiSLZG2sjWRtrK0zJ5JFsjbWRrI21taZE8kiWRtrI1kba+vMiWSRrI21
-        kayNtXXmRLJI1sbaSNbG2jpzIlkka2NtJGtjbZ05kSyStbE2krWxts6cSBbJ2lgbydpYW2dOJItkbayN
-        ZG2srTMnkkWyNtZGsjbW1pkTySJZG2sjWRtr68yJZJGsjbWRrI21deZEskg2LddQZ04ki2TTcg115kSy
-        SDYt11BnTiSLZNNyDXXmRLJINqu/XUOdQZEsGsk/93JKn11DnUGRLBrJx3s5pfeuoc6gSBaN5Ld7OZ3t
-        NwS/dg1191mZ7Ekj+/NeT+WDj/9zDItkTxrZL+P56/bCHLZf0/zKx/8593mZ7IdGuv0QZviTsP2a5ue5
-        /M19Zibbbbyy/Z2w/cX8kv51tP1y2u03BL/xMZ/PbfwTZMtR3HMkW47iniPZchT3HMmWo7jnSLYcxT1H
-        suUo7jmSLUdxz5FsOYp7npZrOM84w8zf51/iBzDz9/mX+AHM+n3+jWs41zjHjN/n37iCc41zzPZ9/n9c
-        wfnGWWb5Pv87Pv51jDO9xO/zIx97WZZlWZZlWZblmTw8fANLPvsfrw3PnwAAAABJRU5ErkJggg==
+        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
 </value>
   </data>
   <data name="btnPostProc.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
@@ -380,7 +379,7 @@ will run with step counts 20 to 60 with increments of 10.</value>
   <data name="cliButton.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAd
-        ggAAHYIBol+UkwAAB9NJREFUeF7t3VeoJEUUBuA154QRc85ZVDC9KKZHFRMi+GAWI4o5ZzHHB5VFBREE
+        fgAAHX4BeAbjQAAAB9NJREFUeF7t3VeoJEUUBuA154QRc85ZVDC9KKZHFRMi+GAWI4o5ZzHHB5VFBREE
         FQXFHB7MWUwo5hwxYrz+/+pcxtr/nOrqnqnqmds/fLCe7Zod59ye6a6unjttYmKiU5AsdvKRxU4+stjJ
         RxY7+chiJx9Z7OQji0M0J2wKB8KlcDs8AM/CU//9+Q64HA6HbWF+UI81FmRxwPgC7gt3wo+Qmj/gaTgO
         lgf1b4wsWRyQleFq+AkGlb/gHtga1L85cmSxocWALzx/coeZh2AtUM9hZMhiA3vCN5Arv8PZMDuo59N6
@@ -418,38 +417,38 @@ will run with step counts 20 to 60 with increments of 10.</value>
   </data>
   <data name="btnOpenOutFolder.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
-        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
+        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
 </value>
   </data>
   <data name="btnPrevImg.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
-        iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAGdSURBVHhe7d2xbcMwAAVRIRk802RO5RgqhQHDsGVJV+QOYMGGxfsDcKmqqqqqqvpPrev6Nc52
-        rSvb8P9qhCsb4NP9pka4ogE9ve/WCGc2gKfzwxrhjAbs9H2qRjiyATpdX6oRjmhATs+X++Z8bM/UngB8
-        B/9ze6b2BGD4VgCGbwVg+FYAhm8FYPhWAIZvBWD4VgCGbwVg+FYAhm8FYPhWAIZvBWD4VgCGbwVg+FYA
-        hm8FYPhWAIZvBWD4VgCGbwVg+FYAhm8FYPhWAIZvBWD4VgCGbwVg+FYAhm8FYPhWAIZvBWD4ZiA2gB2Q
-        jWAHZCPYAdkIdkA2gh2QjWAHZCPYAdkIdkA2gh2QjWAHZCPYAdkIdkA2gh2QjWAHZCPYAdkIdkA2gh2Q
-        jWAHZCPYAdkIdkA2gh2QjWAHZCPYAdkIdkA2gh2QjWAHZCPYAdkIdkA2gh2QjWAHZCPYAdkIdkC+M0If
-        OBwRkHtG6AuTIxug0/Wpwj+jATt9Hxb+mQ3g6Xy38K9oQE/vm8K/sgE+3X8L32jAh19VVVVVVde2LD9Y
-        a6eSX1QnYgAAAABJRU5ErkJggg==
+        iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAABGdBTUEAALGPC/xhBQAAAZ1JREFUeF7t
+        3bFtwzAABVEhGTzTZE7lGCqFAcOwZUlX5A5gwYbF+wNwqaqqqqqq+k+t6/o1znatK9vw/2qEKxvg0/2m
+        RriiAT2979YIZzaAp/PDGuGMBuz0fapGOLIBOl1fqhGOaEBOz5f75nxsz9SeAHwH/3N7pvYEYPhWAIZv
+        BWD4VgCGbwVg+FYAhm8FYPhWAIZvBWD4VgCGbwVg+FYAhm8FYPhWAIZvBWD4VgCGbwVg+FYAhm8FYPhW
+        AIZvBWD4VgCGbwVg+FYAhm8FYPhWAIZvBWD4VgCGbwVg+FYAhm8FYPhmIDaAHZCNYAdkI9gB2Qh2QDaC
+        HZCNYAdkI9gB2Qh2QDaCHZCNYAdkI9gB2Qh2QDaCHZCNYAdkI9gB2Qh2QDaCHZCNYAdkI9gB2Qh2QDaC
+        HZCNYAdkI9gB2Qh2QDaCHZCNYAdkI9gB2Qh2QDaCHZCNYAdkI9gB2Qh2QL4zQh84HBGQe0boC5MjG6DT
+        9anCP6MBO30fFv6ZDeDpfLfwr2hAT++bwr+yAT7dfwvfaMCHX1VVVVVV17YsP1hrp5JfVCdiAAAAAElF
+        TkSuQmCC
 </value>
   </data>
   <data name="btnNextImg.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        wgAADsIBFShKgAAAAZRJREFUeF7t3UFqAkEUBmFJDu5pck5TzzYLQcSBmalFquAtevv9B+hLVVVVVVXV
+        vgAADr4B6kKxwAAAAZRJREFUeF7t3UFqAkEUBmFJDu5pck5TzzYLQcSBmalFquAtevv9B+hLVVVVVVXV
         md1ut+vc41ln9sD/qxHObMCX+1ONcEYDvbxf1ghHNsDL+W2NcEQDu3w/qhH2bECX66YaYY+A/OJ+7qTb
         a4Q9AvKbawQzIBvBDshGsAOyEeyAbAQ7IBvBDshGsAOyEeyAbAQ7IBvBDshGsAOyEeyAbAQ7IBvBDshG
         sAOyEeyAbAQ7IBvBDshGsAOyEeyAbAQ7IBvBDshGsAOyEeyAbAQ7IBvBDshGsAOyEeyAbAQ7IBvBDshG
@@ -514,7 +513,7 @@ will run scales 10 to 14 with steps of 0.5.</value>
   <data name="pictBoxImgViewer.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAgAAAAIAAQMAAADOtka5AAAABGdBTUEAALGPC/xhBQAAAAZQTFRFICAg
-        GBgYQHrOBAAAAAlwSFlzAAAOvwAADr8BOAVTJAAAALVJREFUeNrt0LEJADEAxLDbf+k8BDxBukeFWxXe
+        GBgYQHrOBAAAAAlwSFlzAAAOvAAADrwBlbxySQAAALVJREFUeNrt0LEJADEAxLDbf+k8BDxBukeFWxXe
         ds5bAADgL4ADAAAgwAUAAFAOAACAABcAAEA5AAAAAlwAAADlAAAACHABAACUAwAAIMAFAABQDgAAgAAX
         AABAOQAAAAJcAAAA5QAAAAhwAQAAlAMAACDABQAAUA4AAIAAFwAAQDkAAAACXAAAAOUAAAAIcAEAAJQD
         AAAgwAUAAFAOAACAABcAAEA5AAAAAlwAAADlAAAAuG0fXH3Dsp5rkBYAAAAASUVORK5CYII=
