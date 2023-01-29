@@ -204,7 +204,7 @@ namespace StableDiffusionGui.Main
 
                     if (percent > 0 && percent <= 100)
                     {
-                        if(line.Contains("Downloading: "))
+                        if(line.Contains("Downloading "))
                             Program.MainForm.SetProgress(percent);
                         else
                             Program.MainForm.SetProgressImg(percent);
