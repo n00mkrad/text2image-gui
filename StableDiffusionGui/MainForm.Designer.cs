@@ -2214,6 +2214,7 @@ namespace StableDiffusionGui
             this.comboxSdModel.Name = "comboxSdModel";
             this.comboxSdModel.Size = new System.Drawing.Size(265, 24);
             this.comboxSdModel.TabIndex = 112;
+            this.comboxSdModel.SelectedIndexChanged += new System.EventHandler(this.comboxSdModel_SelectedIndexChanged);
             // 
             // label19
             // 

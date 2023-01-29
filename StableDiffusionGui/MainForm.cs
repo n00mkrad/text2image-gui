@@ -565,7 +565,12 @@ namespace StableDiffusionGui
             upDownSeed.Value = -1;
             upDownSeed.Text = "";
 
-            upDownSeed.Enabled = htSwitch1.Checked;
+            upDownSeed.Enabled = !htSwitch1.Checked;
+        }
+
+        private void comboxSdModel_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(comboxSdModel.Text)) ConfigParser.SaveGuiElement(comboxSdModel, Config.Keys.Model);
         }
     }
 }
