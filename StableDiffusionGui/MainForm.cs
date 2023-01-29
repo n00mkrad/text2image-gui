@@ -5,6 +5,7 @@ using StableDiffusionGui.Implementations;
 using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
+using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
 using StableDiffusionGui.Ui.MainFormUtils;
@@ -18,6 +19,7 @@ using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Media.Media3D;
+using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
 namespace StableDiffusionGui
 {
@@ -108,11 +110,36 @@ namespace StableDiffusionGui
             panelDebugLoopback.Visible = Program.Debug;
             panelDebugPerlinThresh.Visible = Program.Debug;
             panelDebugSendStdin.Visible = Program.Debug;
+
+            LoadModels();
         }
 
         private void installerBtn_Click(object sender, EventArgs e)
         {
             new InstallerForm().ShowDialogForm();
+        }
+
+        string CurrImplText;
+        private void LoadImplementations()
+        {
+            CurrImplText = Strings.Implementation.Get(Config.Get<string>(Config.Keys.ImplementationName));
+        }
+        private Implementation CurrImplementation { get { return ParseUtils.GetEnum<Implementation>(CurrImplText, true, Strings.Implementation); } }
+
+        private void LoadModels()
+        {
+            LoadImplementations();
+
+            var combox = comboxSdModel;
+
+            combox.Items.Clear();
+
+            Paths.GetModels(ModelType.Normal, CurrImplementation).ForEach(x => combox.Items.Add(x.Name));
+
+            ConfigParser.LoadGuiElement(combox, Config.Keys.Model);
+
+            if (combox.Items.Count > 0 && combox.SelectedIndex == -1)
+                combox.SelectedIndex = 0;
         }
 
         public void CleanPrompt()
@@ -537,6 +564,8 @@ namespace StableDiffusionGui
         {
             upDownSeed.Value = -1;
             upDownSeed.Text = "";
+
+            upDownSeed.Enabled = htSwitch1.Checked;
         }
     }
 }

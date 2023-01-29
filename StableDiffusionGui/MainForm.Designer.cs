@@ -134,6 +134,8 @@ namespace StableDiffusionGui
             this.label6 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.panelSeed = new System.Windows.Forms.Panel();
+            this.label18 = new System.Windows.Forms.Label();
+            this.htSwitch1 = new HTAlt.WinForms.HTSwitch();
             this.label5 = new System.Windows.Forms.Label();
             this.panelScaleImg = new System.Windows.Forms.Panel();
             this.label17 = new System.Windows.Forms.Label();
@@ -166,8 +168,8 @@ namespace StableDiffusionGui
             this.pictBoxInitImg = new System.Windows.Forms.PictureBox();
             this.tableLayoutPanelImgViewers = new System.Windows.Forms.TableLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.htSwitch1 = new HTAlt.WinForms.HTSwitch();
-            this.label18 = new System.Windows.Forms.Label();
+            this.comboxSdModel = new System.Windows.Forms.ComboBox();
+            this.label19 = new System.Windows.Forms.Label();
             this.menuStripOutputImg.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.upDownSeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
@@ -211,8 +213,8 @@ namespace StableDiffusionGui
             this.runBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.runBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.25F);
             this.runBtn.ForeColor = System.Drawing.Color.White;
-            this.runBtn.Location = new System.Drawing.Point(907, 778);
-            this.runBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.runBtn.Location = new System.Drawing.Point(907, 911);
+            this.runBtn.Margin = new System.Windows.Forms.Padding(4);
             this.runBtn.Name = "runBtn";
             this.runBtn.Size = new System.Drawing.Size(160, 49);
             this.runBtn.TabIndex = 100;
@@ -229,9 +231,9 @@ namespace StableDiffusionGui
             this.titleLabel.Location = new System.Drawing.Point(15, 11);
             this.titleLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 12);
             this.titleLabel.Name = "titleLabel";
-            this.titleLabel.Size = new System.Drawing.Size(470, 50);
+            this.titleLabel.Size = new System.Drawing.Size(113, 50);
             this.titleLabel.TabIndex = 11;
-            this.titleLabel.Text = "NMKD Stable Diffusion GUI";
+            this.titleLabel.Text = "SD UI";
             // 
             // logBox
             // 
@@ -240,13 +242,13 @@ namespace StableDiffusionGui
             this.logBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
             this.logBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.logBox.ForeColor = System.Drawing.Color.Silver;
-            this.logBox.Location = new System.Drawing.Point(16, 756);
-            this.logBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.logBox.Location = new System.Drawing.Point(16, 933);
+            this.logBox.Margin = new System.Windows.Forms.Padding(4);
             this.logBox.Multiline = true;
             this.logBox.Name = "logBox";
             this.logBox.ReadOnly = true;
             this.logBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.logBox.Size = new System.Drawing.Size(882, 100);
+            this.logBox.Size = new System.Drawing.Size(882, 56);
             this.logBox.TabIndex = 78;
             this.logBox.TabStop = false;
             // 
@@ -255,7 +257,7 @@ namespace StableDiffusionGui
             this.labelImgInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.labelImgInfo.AutoSize = true;
             this.labelImgInfo.ForeColor = System.Drawing.Color.Silver;
-            this.labelImgInfo.Location = new System.Drawing.Point(905, 754);
+            this.labelImgInfo.Location = new System.Drawing.Point(905, 887);
             this.labelImgInfo.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelImgInfo.Name = "labelImgInfo";
             this.labelImgInfo.Size = new System.Drawing.Size(124, 16);
@@ -272,8 +274,8 @@ namespace StableDiffusionGui
             this.progressCircle.InnerColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.progressCircle.InnerMargin = 2;
             this.progressCircle.InnerWidth = -1;
-            this.progressCircle.Location = new System.Drawing.Point(512, 11);
-            this.progressCircle.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.progressCircle.Location = new System.Drawing.Point(136, 15);
+            this.progressCircle.Margin = new System.Windows.Forms.Padding(4);
             this.progressCircle.MarqueeAnimationSpeed = 2000;
             this.progressCircle.Name = "progressCircle";
             this.progressCircle.OuterColor = System.Drawing.Color.Gray;
@@ -282,7 +284,7 @@ namespace StableDiffusionGui
             this.progressCircle.ProgressColor = System.Drawing.Color.LimeGreen;
             this.progressCircle.ProgressWidth = 8;
             this.progressCircle.SecondaryFont = new System.Drawing.Font("Microsoft Sans Serif", 36F);
-            this.progressCircle.Size = new System.Drawing.Size(53, 49);
+            this.progressCircle.Size = new System.Drawing.Size(45, 45);
             this.progressCircle.StartAngle = 270;
             this.progressCircle.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
             this.progressCircle.SubscriptColor = System.Drawing.Color.FromArgb(((int)(((byte)(166)))), ((int)(((byte)(166)))), ((int)(((byte)(166)))));
@@ -302,8 +304,8 @@ namespace StableDiffusionGui
             | System.Windows.Forms.AnchorStyles.Right)));
             this.progressBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.progressBar.BorderThickness = 0;
-            this.progressBar.Location = new System.Drawing.Point(907, 838);
-            this.progressBar.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.progressBar.Location = new System.Drawing.Point(907, 971);
+            this.progressBar.Margin = new System.Windows.Forms.Padding(4);
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(683, 18);
             this.progressBar.TabIndex = 100;
@@ -442,7 +444,7 @@ namespace StableDiffusionGui
             this.comboxSampler.ForeColor = System.Drawing.Color.White;
             this.comboxSampler.FormattingEnabled = true;
             this.comboxSampler.Location = new System.Drawing.Point(311, 9);
-            this.comboxSampler.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.comboxSampler.Margin = new System.Windows.Forms.Padding(4);
             this.comboxSampler.Name = "comboxSampler";
             this.comboxSampler.Size = new System.Drawing.Size(265, 24);
             this.comboxSampler.TabIndex = 105;
@@ -453,9 +455,9 @@ namespace StableDiffusionGui
             // 
             this.checkboxHiresFix.ForeColor = System.Drawing.Color.White;
             this.checkboxHiresFix.Location = new System.Drawing.Point(585, 7);
-            this.checkboxHiresFix.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.checkboxHiresFix.Margin = new System.Windows.Forms.Padding(4);
             this.checkboxHiresFix.Name = "checkboxHiresFix";
-            this.checkboxHiresFix.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.checkboxHiresFix.Padding = new System.Windows.Forms.Padding(4);
             this.checkboxHiresFix.Size = new System.Drawing.Size(164, 28);
             this.checkboxHiresFix.TabIndex = 108;
             this.checkboxHiresFix.Text = "High-Resolution Fix";
@@ -467,7 +469,7 @@ namespace StableDiffusionGui
             this.upDownSeed.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.upDownSeed.ForeColor = System.Drawing.Color.White;
             this.upDownSeed.Location = new System.Drawing.Point(311, 10);
-            this.upDownSeed.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.upDownSeed.Margin = new System.Windows.Forms.Padding(4);
             this.upDownSeed.Maximum = new decimal(new int[] {
             1410065408,
             2,
@@ -517,7 +519,7 @@ namespace StableDiffusionGui
             this.sliderScale.Maximum = 20;
             this.sliderScale.Name = "sliderScale";
             this.sliderScale.OverlayColor = System.Drawing.Color.White;
-            this.sliderScale.Size = new System.Drawing.Size(404, 43);
+            this.sliderScale.Size = new System.Drawing.Size(425, 43);
             this.sliderScale.SmallChange = ((uint)(1u));
             this.sliderScale.TabIndex = 4;
             this.sliderScale.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
@@ -541,7 +543,7 @@ namespace StableDiffusionGui
             this.textboxSliderScale.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScale.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScale.Location = new System.Drawing.Point(404, 11);
+            this.textboxSliderScale.Location = new System.Drawing.Point(425, 11);
             this.textboxSliderScale.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScale.MinimumSize = new System.Drawing.Size(5, 21);
             this.textboxSliderScale.Name = "textboxSliderScale";
@@ -557,8 +559,8 @@ namespace StableDiffusionGui
             this.textboxExtraScales.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textboxExtraScales.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textboxExtraScales.ForeColor = System.Drawing.Color.White;
-            this.textboxExtraScales.Location = new System.Drawing.Point(455, 10);
-            this.textboxExtraScales.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textboxExtraScales.Location = new System.Drawing.Point(476, 10);
+            this.textboxExtraScales.Margin = new System.Windows.Forms.Padding(4);
             this.textboxExtraScales.MinimumSize = new System.Drawing.Size(5, 21);
             this.textboxExtraScales.Name = "textboxExtraScales";
             this.textboxExtraScales.Size = new System.Drawing.Size(92, 22);
@@ -570,7 +572,7 @@ namespace StableDiffusionGui
             this.upDownIterations.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.upDownIterations.ForeColor = System.Drawing.Color.White;
             this.upDownIterations.Location = new System.Drawing.Point(311, 10);
-            this.upDownIterations.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.upDownIterations.Margin = new System.Windows.Forms.Padding(4);
             this.upDownIterations.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -604,7 +606,7 @@ namespace StableDiffusionGui
             this.btnResetMask.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
             this.btnResetMask.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
             this.btnResetMask.Location = new System.Drawing.Point(585, 7);
-            this.btnResetMask.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnResetMask.Margin = new System.Windows.Forms.Padding(4);
             this.btnResetMask.Name = "btnResetMask";
             this.btnResetMask.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
             this.btnResetMask.Size = new System.Drawing.Size(105, 28);
@@ -623,8 +625,8 @@ namespace StableDiffusionGui
             this.textboxExtraInitStrengths.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textboxExtraInitStrengths.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textboxExtraInitStrengths.ForeColor = System.Drawing.Color.White;
-            this.textboxExtraInitStrengths.Location = new System.Drawing.Point(455, 10);
-            this.textboxExtraInitStrengths.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textboxExtraInitStrengths.Location = new System.Drawing.Point(476, 10);
+            this.textboxExtraInitStrengths.Margin = new System.Windows.Forms.Padding(4);
             this.textboxExtraInitStrengths.MinimumSize = new System.Drawing.Size(5, 21);
             this.textboxExtraInitStrengths.Name = "textboxExtraInitStrengths";
             this.textboxExtraInitStrengths.Size = new System.Drawing.Size(92, 22);
@@ -660,7 +662,7 @@ namespace StableDiffusionGui
             this.sliderInitStrength.Minimum = 2;
             this.sliderInitStrength.Name = "sliderInitStrength";
             this.sliderInitStrength.OverlayColor = System.Drawing.Color.White;
-            this.sliderInitStrength.Size = new System.Drawing.Size(404, 43);
+            this.sliderInitStrength.Size = new System.Drawing.Size(425, 43);
             this.sliderInitStrength.SmallChange = ((uint)(1u));
             this.sliderInitStrength.TabIndex = 4;
             this.sliderInitStrength.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
@@ -684,7 +686,7 @@ namespace StableDiffusionGui
             this.textboxSliderInitStrength.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderInitStrength.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderInitStrength.Location = new System.Drawing.Point(404, 11);
+            this.textboxSliderInitStrength.Location = new System.Drawing.Point(425, 11);
             this.textboxSliderInitStrength.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderInitStrength.MinimumSize = new System.Drawing.Size(5, 21);
             this.textboxSliderInitStrength.Name = "textboxSliderInitStrength";
@@ -704,7 +706,7 @@ namespace StableDiffusionGui
             this.btnInitImgBrowse.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
             this.btnInitImgBrowse.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
             this.btnInitImgBrowse.Location = new System.Drawing.Point(311, 7);
-            this.btnInitImgBrowse.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnInitImgBrowse.Margin = new System.Windows.Forms.Padding(4);
             this.btnInitImgBrowse.Name = "btnInitImgBrowse";
             this.btnInitImgBrowse.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
             this.btnInitImgBrowse.Size = new System.Drawing.Size(133, 28);
@@ -726,7 +728,7 @@ namespace StableDiffusionGui
             this.btnEmbeddingBrowse.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
             this.btnEmbeddingBrowse.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
             this.btnEmbeddingBrowse.Location = new System.Drawing.Point(311, 43);
-            this.btnEmbeddingBrowse.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnEmbeddingBrowse.Margin = new System.Windows.Forms.Padding(4);
             this.btnEmbeddingBrowse.Name = "btnEmbeddingBrowse";
             this.btnEmbeddingBrowse.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
             this.btnEmbeddingBrowse.Size = new System.Drawing.Size(133, 28);
@@ -746,14 +748,14 @@ namespace StableDiffusionGui
             this.textboxPromptNeg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textboxPromptNeg.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.textboxPromptNeg.Location = new System.Drawing.Point(4, 0);
-            this.textboxPromptNeg.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textboxPromptNeg.Margin = new System.Windows.Forms.Padding(4);
             this.textboxPromptNeg.MinimumSize = new System.Drawing.Size(4, 25);
             this.textboxPromptNeg.Multiline = true;
             this.textboxPromptNeg.Name = "textboxPromptNeg";
             this.textboxPromptNeg.Placeholder = "Enter your negative prompt here...";
             this.textboxPromptNeg.PlaceholderTextColor = System.Drawing.Color.Silver;
             this.textboxPromptNeg.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textboxPromptNeg.Size = new System.Drawing.Size(826, 45);
+            this.textboxPromptNeg.Size = new System.Drawing.Size(847, 45);
             this.textboxPromptNeg.TabIndex = 1;
             this.toolTip.SetToolTip(this.textboxPromptNeg, "Negative text prompt. The AI will try to avoid generating things you describe her" +
         "e.");
@@ -775,7 +777,7 @@ namespace StableDiffusionGui
             this.textboxPrompt.Placeholder = "Enter your prompt here...";
             this.textboxPrompt.PlaceholderTextColor = System.Drawing.Color.Silver;
             this.textboxPrompt.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textboxPrompt.Size = new System.Drawing.Size(826, 75);
+            this.textboxPrompt.Size = new System.Drawing.Size(847, 48);
             this.textboxPrompt.TabIndex = 0;
             this.toolTip.SetToolTip(this.textboxPrompt, "Text prompt. The AI will try to generate an image matching this description.");
             // 
@@ -787,7 +789,7 @@ namespace StableDiffusionGui
             this.comboxSeamless.ForeColor = System.Drawing.Color.White;
             this.comboxSeamless.FormattingEnabled = true;
             this.comboxSeamless.Location = new System.Drawing.Point(311, 9);
-            this.comboxSeamless.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.comboxSeamless.Margin = new System.Windows.Forms.Padding(4);
             this.comboxSeamless.Name = "comboxSeamless";
             this.comboxSeamless.Size = new System.Drawing.Size(265, 24);
             this.comboxSeamless.TabIndex = 107;
@@ -803,10 +805,10 @@ namespace StableDiffusionGui
             this.textboxClipsegMask.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textboxClipsegMask.ForeColor = System.Drawing.Color.White;
             this.textboxClipsegMask.Location = new System.Drawing.Point(585, 9);
-            this.textboxClipsegMask.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textboxClipsegMask.Margin = new System.Windows.Forms.Padding(4);
             this.textboxClipsegMask.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxClipsegMask.Name = "textboxClipsegMask";
-            this.textboxClipsegMask.Size = new System.Drawing.Size(271, 22);
+            this.textboxClipsegMask.Size = new System.Drawing.Size(292, 22);
             this.textboxClipsegMask.TabIndex = 110;
             this.toolTip.SetToolTip(this.textboxClipsegMask, "Describe what objects you want to replace");
             // 
@@ -818,8 +820,8 @@ namespace StableDiffusionGui
             this.textboxExtraSteps.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textboxExtraSteps.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textboxExtraSteps.ForeColor = System.Drawing.Color.White;
-            this.textboxExtraSteps.Location = new System.Drawing.Point(455, 10);
-            this.textboxExtraSteps.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textboxExtraSteps.Location = new System.Drawing.Point(476, 10);
+            this.textboxExtraSteps.Margin = new System.Windows.Forms.Padding(4);
             this.textboxExtraSteps.MinimumSize = new System.Drawing.Size(5, 21);
             this.textboxExtraSteps.Name = "textboxExtraSteps";
             this.textboxExtraSteps.Size = new System.Drawing.Size(92, 22);
@@ -838,7 +840,7 @@ namespace StableDiffusionGui
             this.btnEditMask.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
             this.btnEditMask.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
             this.btnEditMask.Location = new System.Drawing.Point(699, 7);
-            this.btnEditMask.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnEditMask.Margin = new System.Windows.Forms.Padding(4);
             this.btnEditMask.Name = "btnEditMask";
             this.btnEditMask.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
             this.btnEditMask.Size = new System.Drawing.Size(105, 28);
@@ -859,7 +861,7 @@ namespace StableDiffusionGui
             this.btnDreambooth.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnDreambooth.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
             this.btnDreambooth.Location = new System.Drawing.Point(1291, 15);
-            this.btnDreambooth.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnDreambooth.Margin = new System.Windows.Forms.Padding(4);
             this.btnDreambooth.Name = "btnDreambooth";
             this.btnDreambooth.Size = new System.Drawing.Size(53, 49);
             this.btnDreambooth.TabIndex = 117;
@@ -877,8 +879,8 @@ namespace StableDiffusionGui
             this.btnDeleteBatch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnDeleteBatch.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnDeleteBatch.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnDeleteBatch.Location = new System.Drawing.Point(1352, 778);
-            this.btnDeleteBatch.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnDeleteBatch.Location = new System.Drawing.Point(1352, 911);
+            this.btnDeleteBatch.Margin = new System.Windows.Forms.Padding(4);
             this.btnDeleteBatch.Name = "btnDeleteBatch";
             this.btnDeleteBatch.Size = new System.Drawing.Size(53, 49);
             this.btnDeleteBatch.TabIndex = 114;
@@ -896,8 +898,8 @@ namespace StableDiffusionGui
             this.btnPromptHistory.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnPromptHistory.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnPromptHistory.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnPromptHistory.Location = new System.Drawing.Point(1136, 778);
-            this.btnPromptHistory.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnPromptHistory.Location = new System.Drawing.Point(1136, 911);
+            this.btnPromptHistory.Margin = new System.Windows.Forms.Padding(4);
             this.btnPromptHistory.Name = "btnPromptHistory";
             this.btnPromptHistory.Size = new System.Drawing.Size(53, 49);
             this.btnPromptHistory.TabIndex = 112;
@@ -915,8 +917,8 @@ namespace StableDiffusionGui
             this.btnQueue.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnQueue.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnQueue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnQueue.Location = new System.Drawing.Point(1075, 778);
-            this.btnQueue.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnQueue.Location = new System.Drawing.Point(1075, 911);
+            this.btnQueue.Margin = new System.Windows.Forms.Padding(4);
             this.btnQueue.Name = "btnQueue";
             this.btnQueue.Size = new System.Drawing.Size(53, 49);
             this.btnQueue.TabIndex = 111;
@@ -936,7 +938,7 @@ namespace StableDiffusionGui
             this.btnPostProc.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnPostProc.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
             this.btnPostProc.Location = new System.Drawing.Point(1229, 15);
-            this.btnPostProc.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnPostProc.Margin = new System.Windows.Forms.Padding(4);
             this.btnPostProc.Name = "btnPostProc";
             this.btnPostProc.Size = new System.Drawing.Size(53, 49);
             this.btnPostProc.TabIndex = 109;
@@ -955,7 +957,7 @@ namespace StableDiffusionGui
             this.btnSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSettings.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
             this.btnSettings.Location = new System.Drawing.Point(1536, 15);
-            this.btnSettings.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnSettings.Margin = new System.Windows.Forms.Padding(4);
             this.btnSettings.Name = "btnSettings";
             this.btnSettings.Size = new System.Drawing.Size(53, 49);
             this.btnSettings.TabIndex = 108;
@@ -974,7 +976,7 @@ namespace StableDiffusionGui
             this.btnDebug.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnDebug.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
             this.btnDebug.Location = new System.Drawing.Point(1475, 15);
-            this.btnDebug.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnDebug.Margin = new System.Windows.Forms.Padding(4);
             this.btnDebug.Name = "btnDebug";
             this.btnDebug.Size = new System.Drawing.Size(53, 49);
             this.btnDebug.TabIndex = 107;
@@ -993,7 +995,7 @@ namespace StableDiffusionGui
             this.btnExpandPromptNegField.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnExpandPromptNegField.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnExpandPromptNegField.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnExpandPromptNegField.Location = new System.Drawing.Point(831, 0);
+            this.btnExpandPromptNegField.Location = new System.Drawing.Point(852, 0);
             this.btnExpandPromptNegField.Margin = new System.Windows.Forms.Padding(0);
             this.btnExpandPromptNegField.Name = "btnExpandPromptNegField";
             this.btnExpandPromptNegField.Size = new System.Drawing.Size(27, 46);
@@ -1013,10 +1015,10 @@ namespace StableDiffusionGui
             this.btnExpandPromptField.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnExpandPromptField.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnExpandPromptField.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnExpandPromptField.Location = new System.Drawing.Point(831, 0);
+            this.btnExpandPromptField.Location = new System.Drawing.Point(852, 0);
             this.btnExpandPromptField.Margin = new System.Windows.Forms.Padding(0);
             this.btnExpandPromptField.Name = "btnExpandPromptField";
-            this.btnExpandPromptField.Size = new System.Drawing.Size(27, 76);
+            this.btnExpandPromptField.Size = new System.Drawing.Size(27, 52);
             this.btnExpandPromptField.TabIndex = 86;
             this.btnExpandPromptField.TabStop = false;
             this.toolTip.SetToolTip(this.btnExpandPromptField, "Expand/Collapse Prompt Field");
@@ -1033,7 +1035,7 @@ namespace StableDiffusionGui
             this.cliButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cliButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
             this.cliButton.Location = new System.Drawing.Point(1352, 15);
-            this.cliButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cliButton.Margin = new System.Windows.Forms.Padding(4);
             this.cliButton.Name = "cliButton";
             this.cliButton.Size = new System.Drawing.Size(53, 49);
             this.cliButton.TabIndex = 103;
@@ -1051,8 +1053,8 @@ namespace StableDiffusionGui
             this.btnOpenOutFolder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnOpenOutFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnOpenOutFolder.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnOpenOutFolder.Location = new System.Drawing.Point(1413, 778);
-            this.btnOpenOutFolder.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnOpenOutFolder.Location = new System.Drawing.Point(1413, 911);
+            this.btnOpenOutFolder.Margin = new System.Windows.Forms.Padding(4);
             this.btnOpenOutFolder.Name = "btnOpenOutFolder";
             this.btnOpenOutFolder.Size = new System.Drawing.Size(53, 49);
             this.btnOpenOutFolder.TabIndex = 94;
@@ -1070,8 +1072,8 @@ namespace StableDiffusionGui
             this.btnPrevImg.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnPrevImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnPrevImg.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnPrevImg.Location = new System.Drawing.Point(1475, 778);
-            this.btnPrevImg.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnPrevImg.Location = new System.Drawing.Point(1475, 911);
+            this.btnPrevImg.Margin = new System.Windows.Forms.Padding(4);
             this.btnPrevImg.Name = "btnPrevImg";
             this.btnPrevImg.Size = new System.Drawing.Size(53, 49);
             this.btnPrevImg.TabIndex = 82;
@@ -1089,8 +1091,8 @@ namespace StableDiffusionGui
             this.btnNextImg.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnNextImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnNextImg.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnNextImg.Location = new System.Drawing.Point(1536, 778);
-            this.btnNextImg.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnNextImg.Location = new System.Drawing.Point(1536, 911);
+            this.btnNextImg.Margin = new System.Windows.Forms.Padding(4);
             this.btnNextImg.Name = "btnNextImg";
             this.btnNextImg.Size = new System.Drawing.Size(53, 49);
             this.btnNextImg.TabIndex = 80;
@@ -1109,7 +1111,7 @@ namespace StableDiffusionGui
             this.installerBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.installerBtn.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
             this.installerBtn.Location = new System.Drawing.Point(1413, 15);
-            this.installerBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.installerBtn.Margin = new System.Windows.Forms.Padding(4);
             this.installerBtn.Name = "installerBtn";
             this.installerBtn.Size = new System.Drawing.Size(53, 49);
             this.installerBtn.TabIndex = 76;
@@ -1147,7 +1149,7 @@ namespace StableDiffusionGui
             this.sliderScaleImg.Minimum = 5;
             this.sliderScaleImg.Name = "sliderScaleImg";
             this.sliderScaleImg.OverlayColor = System.Drawing.Color.White;
-            this.sliderScaleImg.Size = new System.Drawing.Size(404, 43);
+            this.sliderScaleImg.Size = new System.Drawing.Size(425, 43);
             this.sliderScaleImg.SmallChange = ((uint)(1u));
             this.sliderScaleImg.TabIndex = 4;
             this.sliderScaleImg.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
@@ -1171,7 +1173,7 @@ namespace StableDiffusionGui
             this.textboxSliderScaleImg.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScaleImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScaleImg.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScaleImg.Location = new System.Drawing.Point(404, 11);
+            this.textboxSliderScaleImg.Location = new System.Drawing.Point(425, 11);
             this.textboxSliderScaleImg.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScaleImg.MinimumSize = new System.Drawing.Size(5, 21);
             this.textboxSliderScaleImg.Name = "textboxSliderScaleImg";
@@ -1187,8 +1189,8 @@ namespace StableDiffusionGui
             this.textboxExtraScalesImg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textboxExtraScalesImg.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textboxExtraScalesImg.ForeColor = System.Drawing.Color.White;
-            this.textboxExtraScalesImg.Location = new System.Drawing.Point(455, 10);
-            this.textboxExtraScalesImg.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textboxExtraScalesImg.Location = new System.Drawing.Point(476, 10);
+            this.textboxExtraScalesImg.Margin = new System.Windows.Forms.Padding(4);
             this.textboxExtraScalesImg.MinimumSize = new System.Drawing.Size(5, 21);
             this.textboxExtraScalesImg.Name = "textboxExtraScalesImg";
             this.textboxExtraScalesImg.Size = new System.Drawing.Size(92, 22);
@@ -1205,7 +1207,7 @@ namespace StableDiffusionGui
             this.labelCurrentImage.Location = new System.Drawing.Point(459, 12);
             this.labelCurrentImage.Margin = new System.Windows.Forms.Padding(11, 0, 4, 0);
             this.labelCurrentImage.Name = "labelCurrentImage";
-            this.labelCurrentImage.Size = new System.Drawing.Size(336, 16);
+            this.labelCurrentImage.Size = new System.Drawing.Size(357, 16);
             this.labelCurrentImage.TabIndex = 91;
             this.labelCurrentImage.MouseEnter += new System.EventHandler(this.labelCurrentImage_MouseEnter);
             this.labelCurrentImage.MouseLeave += new System.EventHandler(this.labelCurrentImage_MouseLeave);
@@ -1232,7 +1234,7 @@ namespace StableDiffusionGui
             | System.Windows.Forms.AnchorStyles.Right)));
             this.progressBarImg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.progressBarImg.BorderThickness = 0;
-            this.progressBarImg.Location = new System.Drawing.Point(907, 742);
+            this.progressBarImg.Location = new System.Drawing.Point(907, 875);
             this.progressBarImg.Margin = new System.Windows.Forms.Padding(0);
             this.progressBarImg.Name = "progressBarImg";
             this.progressBarImg.Size = new System.Drawing.Size(683, 6);
@@ -1408,10 +1410,10 @@ namespace StableDiffusionGui
             this.panelSettings.Controls.Add(this.panelPrompt);
             this.panelSettings.CtrlDisablesScrolling = true;
             this.panelSettings.Location = new System.Drawing.Point(16, 76);
-            this.panelSettings.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelSettings.Margin = new System.Windows.Forms.Padding(4);
             this.panelSettings.Name = "panelSettings";
             this.panelSettings.OnlyAllowScrollIfNeeded = true;
-            this.panelSettings.Size = new System.Drawing.Size(883, 672);
+            this.panelSettings.Size = new System.Drawing.Size(883, 805);
             this.panelSettings.TabIndex = 106;
             this.panelSettings.SizeChanged += new System.EventHandler(this.panelSettings_SizeChanged);
             this.panelSettings.Click += new System.EventHandler(this.panel1_Click);
@@ -1421,10 +1423,10 @@ namespace StableDiffusionGui
             this.panelDebugLoopback.Controls.Add(this.checkboxLoopback);
             this.panelDebugLoopback.Controls.Add(this.label16);
             this.panelDebugLoopback.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelDebugLoopback.Location = new System.Drawing.Point(0, 725);
-            this.panelDebugLoopback.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelDebugLoopback.Location = new System.Drawing.Point(0, 711);
+            this.panelDebugLoopback.Margin = new System.Windows.Forms.Padding(4);
             this.panelDebugLoopback.Name = "panelDebugLoopback";
-            this.panelDebugLoopback.Size = new System.Drawing.Size(862, 43);
+            this.panelDebugLoopback.Size = new System.Drawing.Size(883, 43);
             this.panelDebugLoopback.TabIndex = 19;
             this.panelDebugLoopback.Visible = false;
             // 
@@ -1433,9 +1435,9 @@ namespace StableDiffusionGui
             this.checkboxLoopback.AutoSize = true;
             this.checkboxLoopback.ForeColor = System.Drawing.Color.White;
             this.checkboxLoopback.Location = new System.Drawing.Point(311, 9);
-            this.checkboxLoopback.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.checkboxLoopback.Margin = new System.Windows.Forms.Padding(4);
             this.checkboxLoopback.Name = "checkboxLoopback";
-            this.checkboxLoopback.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.checkboxLoopback.Padding = new System.Windows.Forms.Padding(4);
             this.checkboxLoopback.Size = new System.Drawing.Size(26, 25);
             this.checkboxLoopback.TabIndex = 110;
             this.checkboxLoopback.UseVisualStyleBackColor = true;
@@ -1460,10 +1462,10 @@ namespace StableDiffusionGui
             this.panelDebugPerlinThresh.Controls.Add(this.label13);
             this.panelDebugPerlinThresh.Controls.Add(this.textboxPerlin);
             this.panelDebugPerlinThresh.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelDebugPerlinThresh.Location = new System.Drawing.Point(0, 682);
-            this.panelDebugPerlinThresh.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelDebugPerlinThresh.Location = new System.Drawing.Point(0, 658);
+            this.panelDebugPerlinThresh.Margin = new System.Windows.Forms.Padding(4);
             this.panelDebugPerlinThresh.Name = "panelDebugPerlinThresh";
-            this.panelDebugPerlinThresh.Size = new System.Drawing.Size(862, 43);
+            this.panelDebugPerlinThresh.Size = new System.Drawing.Size(883, 53);
             this.panelDebugPerlinThresh.TabIndex = 18;
             this.panelDebugPerlinThresh.Visible = false;
             // 
@@ -1474,7 +1476,7 @@ namespace StableDiffusionGui
             this.textboxThresh.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textboxThresh.ForeColor = System.Drawing.Color.White;
             this.textboxThresh.Location = new System.Drawing.Point(627, 9);
-            this.textboxThresh.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textboxThresh.Margin = new System.Windows.Forms.Padding(4);
             this.textboxThresh.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxThresh.Name = "textboxThresh";
             this.textboxThresh.Size = new System.Drawing.Size(132, 22);
@@ -1524,7 +1526,7 @@ namespace StableDiffusionGui
             this.textboxPerlin.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textboxPerlin.ForeColor = System.Drawing.Color.White;
             this.textboxPerlin.Location = new System.Drawing.Point(399, 9);
-            this.textboxPerlin.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textboxPerlin.Margin = new System.Windows.Forms.Padding(4);
             this.textboxPerlin.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxPerlin.Name = "textboxPerlin";
             this.textboxPerlin.Size = new System.Drawing.Size(132, 22);
@@ -1536,10 +1538,10 @@ namespace StableDiffusionGui
             this.panelDebugSendStdin.Controls.Add(this.label12);
             this.panelDebugSendStdin.Controls.Add(this.textboxCliTest);
             this.panelDebugSendStdin.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelDebugSendStdin.Location = new System.Drawing.Point(0, 639);
-            this.panelDebugSendStdin.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelDebugSendStdin.Location = new System.Drawing.Point(0, 615);
+            this.panelDebugSendStdin.Margin = new System.Windows.Forms.Padding(4);
             this.panelDebugSendStdin.Name = "panelDebugSendStdin";
-            this.panelDebugSendStdin.Size = new System.Drawing.Size(862, 43);
+            this.panelDebugSendStdin.Size = new System.Drawing.Size(883, 43);
             this.panelDebugSendStdin.TabIndex = 14;
             this.panelDebugSendStdin.Visible = false;
             // 
@@ -1564,10 +1566,10 @@ namespace StableDiffusionGui
             this.textboxCliTest.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textboxCliTest.ForeColor = System.Drawing.Color.White;
             this.textboxCliTest.Location = new System.Drawing.Point(311, 9);
-            this.textboxCliTest.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textboxCliTest.Margin = new System.Windows.Forms.Padding(4);
             this.textboxCliTest.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxCliTest.Name = "textboxCliTest";
-            this.textboxCliTest.Size = new System.Drawing.Size(546, 22);
+            this.textboxCliTest.Size = new System.Drawing.Size(567, 22);
             this.textboxCliTest.TabIndex = 4;
             this.textboxCliTest.DoubleClick += new System.EventHandler(this.textboxCliTest_DoubleClick);
             // 
@@ -1576,10 +1578,10 @@ namespace StableDiffusionGui
             this.panelSeamless.Controls.Add(this.comboxSeamless);
             this.panelSeamless.Controls.Add(this.label8);
             this.panelSeamless.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSeamless.Location = new System.Drawing.Point(0, 596);
-            this.panelSeamless.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelSeamless.Location = new System.Drawing.Point(0, 572);
+            this.panelSeamless.Margin = new System.Windows.Forms.Padding(4);
             this.panelSeamless.Name = "panelSeamless";
-            this.panelSeamless.Size = new System.Drawing.Size(862, 43);
+            this.panelSeamless.Size = new System.Drawing.Size(883, 43);
             this.panelSeamless.TabIndex = 9;
             // 
             // label8
@@ -1599,10 +1601,10 @@ namespace StableDiffusionGui
             this.panelSampler.Controls.Add(this.label7);
             this.panelSampler.Controls.Add(this.comboxSampler);
             this.panelSampler.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSampler.Location = new System.Drawing.Point(0, 553);
-            this.panelSampler.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelSampler.Location = new System.Drawing.Point(0, 529);
+            this.panelSampler.Margin = new System.Windows.Forms.Padding(4);
             this.panelSampler.Name = "panelSampler";
-            this.panelSampler.Size = new System.Drawing.Size(862, 43);
+            this.panelSampler.Size = new System.Drawing.Size(883, 43);
             this.panelSampler.TabIndex = 6;
             // 
             // label7
@@ -1626,10 +1628,10 @@ namespace StableDiffusionGui
             this.panelRes.Controls.Add(this.label6);
             this.panelRes.Controls.Add(this.label9);
             this.panelRes.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelRes.Location = new System.Drawing.Point(0, 510);
-            this.panelRes.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelRes.Location = new System.Drawing.Point(0, 486);
+            this.panelRes.Margin = new System.Windows.Forms.Padding(4);
             this.panelRes.Name = "panelRes";
-            this.panelRes.Size = new System.Drawing.Size(862, 43);
+            this.panelRes.Size = new System.Drawing.Size(883, 43);
             this.panelRes.TabIndex = 5;
             // 
             // labelAspectRatio
@@ -1637,7 +1639,7 @@ namespace StableDiffusionGui
             this.labelAspectRatio.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelAspectRatio.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelAspectRatio.ForeColor = System.Drawing.Color.Silver;
-            this.labelAspectRatio.Location = new System.Drawing.Point(766, 12);
+            this.labelAspectRatio.Location = new System.Drawing.Point(787, 12);
             this.labelAspectRatio.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelAspectRatio.Name = "labelAspectRatio";
             this.labelAspectRatio.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -1653,7 +1655,7 @@ namespace StableDiffusionGui
             this.comboxResH.ForeColor = System.Drawing.Color.White;
             this.comboxResH.FormattingEnabled = true;
             this.comboxResH.Location = new System.Drawing.Point(464, 9);
-            this.comboxResH.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.comboxResH.Margin = new System.Windows.Forms.Padding(4);
             this.comboxResH.Name = "comboxResH";
             this.comboxResH.Size = new System.Drawing.Size(112, 24);
             this.comboxResH.TabIndex = 107;
@@ -1667,7 +1669,7 @@ namespace StableDiffusionGui
             this.comboxResW.ForeColor = System.Drawing.Color.White;
             this.comboxResW.FormattingEnabled = true;
             this.comboxResW.Location = new System.Drawing.Point(311, 9);
-            this.comboxResW.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.comboxResW.Margin = new System.Windows.Forms.Padding(4);
             this.comboxResW.Name = "comboxResW";
             this.comboxResW.Size = new System.Drawing.Size(112, 24);
             this.comboxResW.TabIndex = 106;
@@ -1704,11 +1706,31 @@ namespace StableDiffusionGui
             this.panelSeed.Controls.Add(this.label5);
             this.panelSeed.Controls.Add(this.upDownSeed);
             this.panelSeed.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSeed.Location = new System.Drawing.Point(0, 467);
-            this.panelSeed.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelSeed.Location = new System.Drawing.Point(0, 443);
+            this.panelSeed.Margin = new System.Windows.Forms.Padding(4);
             this.panelSeed.Name = "panelSeed";
-            this.panelSeed.Size = new System.Drawing.Size(862, 43);
+            this.panelSeed.Size = new System.Drawing.Size(883, 43);
             this.panelSeed.TabIndex = 4;
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label18.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            this.label18.Location = new System.Drawing.Point(521, 12);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(71, 20);
+            this.label18.TabIndex = 94;
+            this.label18.Text = "Random";
+            // 
+            // htSwitch1
+            // 
+            this.htSwitch1.BackColor = System.Drawing.Color.Transparent;
+            this.htSwitch1.Location = new System.Drawing.Point(464, 12);
+            this.htSwitch1.Name = "htSwitch1";
+            this.htSwitch1.Size = new System.Drawing.Size(50, 19);
+            this.htSwitch1.TabIndex = 93;
+            this.htSwitch1.CheckedChanged += new HTAlt.WinForms.HTSwitch.CheckedChangedDelegate(this.htSwitch1_CheckedChanged);
             // 
             // label5
             // 
@@ -1727,10 +1749,10 @@ namespace StableDiffusionGui
             this.panelScaleImg.Controls.Add(this.label17);
             this.panelScaleImg.Controls.Add(this.tableLayoutPanel2);
             this.panelScaleImg.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelScaleImg.Location = new System.Drawing.Point(0, 424);
-            this.panelScaleImg.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelScaleImg.Location = new System.Drawing.Point(0, 400);
+            this.panelScaleImg.Margin = new System.Windows.Forms.Padding(4);
             this.panelScaleImg.Name = "panelScaleImg";
-            this.panelScaleImg.Size = new System.Drawing.Size(862, 43);
+            this.panelScaleImg.Size = new System.Drawing.Size(883, 43);
             this.panelScaleImg.TabIndex = 20;
             // 
             // label17
@@ -1761,7 +1783,7 @@ namespace StableDiffusionGui
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(551, 43);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(572, 43);
             this.tableLayoutPanel2.TabIndex = 91;
             // 
             // panelScale
@@ -1769,10 +1791,10 @@ namespace StableDiffusionGui
             this.panelScale.Controls.Add(this.label4);
             this.panelScale.Controls.Add(this.tableLayoutPanel1);
             this.panelScale.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelScale.Location = new System.Drawing.Point(0, 381);
-            this.panelScale.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelScale.Location = new System.Drawing.Point(0, 357);
+            this.panelScale.Margin = new System.Windows.Forms.Padding(4);
             this.panelScale.Name = "panelScale";
-            this.panelScale.Size = new System.Drawing.Size(862, 43);
+            this.panelScale.Size = new System.Drawing.Size(883, 43);
             this.panelScale.TabIndex = 3;
             // 
             // label4
@@ -1803,7 +1825,7 @@ namespace StableDiffusionGui
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(551, 43);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(572, 43);
             this.tableLayoutPanel1.TabIndex = 91;
             // 
             // panelSteps
@@ -1811,10 +1833,10 @@ namespace StableDiffusionGui
             this.panelSteps.Controls.Add(this.label3);
             this.panelSteps.Controls.Add(this.tableLayoutPanel6);
             this.panelSteps.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSteps.Location = new System.Drawing.Point(0, 338);
-            this.panelSteps.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelSteps.Location = new System.Drawing.Point(0, 314);
+            this.panelSteps.Margin = new System.Windows.Forms.Padding(4);
             this.panelSteps.Name = "panelSteps";
-            this.panelSteps.Size = new System.Drawing.Size(862, 43);
+            this.panelSteps.Size = new System.Drawing.Size(883, 43);
             this.panelSteps.TabIndex = 2;
             // 
             // label3
@@ -1841,11 +1863,11 @@ namespace StableDiffusionGui
             this.tableLayoutPanel6.Controls.Add(this.textboxSliderSteps, 0, 0);
             this.tableLayoutPanel6.Controls.Add(this.sliderSteps, 0, 0);
             this.tableLayoutPanel6.Location = new System.Drawing.Point(311, 0);
-            this.tableLayoutPanel6.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tableLayoutPanel6.Margin = new System.Windows.Forms.Padding(4);
             this.tableLayoutPanel6.Name = "tableLayoutPanel6";
             this.tableLayoutPanel6.RowCount = 1;
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel6.Size = new System.Drawing.Size(551, 43);
+            this.tableLayoutPanel6.Size = new System.Drawing.Size(572, 43);
             this.tableLayoutPanel6.TabIndex = 88;
             // 
             // textboxSliderSteps
@@ -1857,7 +1879,7 @@ namespace StableDiffusionGui
             this.textboxSliderSteps.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderSteps.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderSteps.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderSteps.Location = new System.Drawing.Point(404, 11);
+            this.textboxSliderSteps.Location = new System.Drawing.Point(425, 11);
             this.textboxSliderSteps.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderSteps.MinimumSize = new System.Drawing.Size(5, 21);
             this.textboxSliderSteps.Name = "textboxSliderSteps";
@@ -1894,7 +1916,7 @@ namespace StableDiffusionGui
             this.sliderSteps.Minimum = 1;
             this.sliderSteps.Name = "sliderSteps";
             this.sliderSteps.OverlayColor = System.Drawing.Color.White;
-            this.sliderSteps.Size = new System.Drawing.Size(404, 43);
+            this.sliderSteps.Size = new System.Drawing.Size(425, 43);
             this.sliderSteps.SmallChange = ((uint)(1u));
             this.sliderSteps.TabIndex = 13;
             this.sliderSteps.Text = "sliderSteps";
@@ -1913,10 +1935,10 @@ namespace StableDiffusionGui
             this.panelIterations.Controls.Add(this.label1);
             this.panelIterations.Controls.Add(this.upDownIterations);
             this.panelIterations.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelIterations.Location = new System.Drawing.Point(0, 295);
-            this.panelIterations.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelIterations.Location = new System.Drawing.Point(0, 271);
+            this.panelIterations.Margin = new System.Windows.Forms.Padding(4);
             this.panelIterations.Name = "panelIterations";
-            this.panelIterations.Size = new System.Drawing.Size(862, 43);
+            this.panelIterations.Size = new System.Drawing.Size(883, 43);
             this.panelIterations.TabIndex = 1;
             // 
             // label1
@@ -1939,10 +1961,10 @@ namespace StableDiffusionGui
             this.panelInpainting.Controls.Add(this.btnResetMask);
             this.panelInpainting.Controls.Add(this.label10);
             this.panelInpainting.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelInpainting.Location = new System.Drawing.Point(0, 252);
-            this.panelInpainting.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelInpainting.Location = new System.Drawing.Point(0, 228);
+            this.panelInpainting.Margin = new System.Windows.Forms.Padding(4);
             this.panelInpainting.Name = "panelInpainting";
-            this.panelInpainting.Size = new System.Drawing.Size(862, 43);
+            this.panelInpainting.Size = new System.Drawing.Size(883, 43);
             this.panelInpainting.TabIndex = 12;
             this.panelInpainting.Visible = false;
             // 
@@ -1954,7 +1976,7 @@ namespace StableDiffusionGui
             this.comboxInpaintMode.ForeColor = System.Drawing.Color.White;
             this.comboxInpaintMode.FormattingEnabled = true;
             this.comboxInpaintMode.Location = new System.Drawing.Point(311, 9);
-            this.comboxInpaintMode.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.comboxInpaintMode.Margin = new System.Windows.Forms.Padding(4);
             this.comboxInpaintMode.Name = "comboxInpaintMode";
             this.comboxInpaintMode.Size = new System.Drawing.Size(265, 24);
             this.comboxInpaintMode.TabIndex = 109;
@@ -1977,10 +1999,10 @@ namespace StableDiffusionGui
             this.panelInitImgStrength.Controls.Add(this.label11);
             this.panelInitImgStrength.Controls.Add(this.tableLayoutPanel4);
             this.panelInitImgStrength.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelInitImgStrength.Location = new System.Drawing.Point(0, 209);
-            this.panelInitImgStrength.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelInitImgStrength.Location = new System.Drawing.Point(0, 185);
+            this.panelInitImgStrength.Margin = new System.Windows.Forms.Padding(4);
             this.panelInitImgStrength.Name = "panelInitImgStrength";
-            this.panelInitImgStrength.Size = new System.Drawing.Size(862, 43);
+            this.panelInitImgStrength.Size = new System.Drawing.Size(883, 43);
             this.panelInitImgStrength.TabIndex = 8;
             this.panelInitImgStrength.Visible = false;
             // 
@@ -2012,7 +2034,7 @@ namespace StableDiffusionGui
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             this.tableLayoutPanel4.RowCount = 1;
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(551, 43);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(572, 43);
             this.tableLayoutPanel4.TabIndex = 89;
             // 
             // panelAiInputs
@@ -2024,18 +2046,18 @@ namespace StableDiffusionGui
             this.panelAiInputs.Controls.Add(this.btnInitImgBrowse);
             this.panelAiInputs.Controls.Add(this.btnEmbeddingBrowse);
             this.panelAiInputs.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelAiInputs.Location = new System.Drawing.Point(0, 129);
-            this.panelAiInputs.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelAiInputs.Location = new System.Drawing.Point(0, 105);
+            this.panelAiInputs.Margin = new System.Windows.Forms.Padding(4);
             this.panelAiInputs.Name = "panelAiInputs";
-            this.panelAiInputs.Size = new System.Drawing.Size(862, 80);
+            this.panelAiInputs.Size = new System.Drawing.Size(883, 80);
             this.panelAiInputs.TabIndex = 17;
             // 
             // checkboxShowInitImg
             // 
             this.checkboxShowInitImg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.checkboxShowInitImg.ForeColor = System.Drawing.Color.Silver;
-            this.checkboxShowInitImg.Location = new System.Drawing.Point(791, 7);
-            this.checkboxShowInitImg.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.checkboxShowInitImg.Location = new System.Drawing.Point(812, 7);
+            this.checkboxShowInitImg.Margin = new System.Windows.Forms.Padding(4);
             this.checkboxShowInitImg.Name = "checkboxShowInitImg";
             this.checkboxShowInitImg.Size = new System.Drawing.Size(71, 28);
             this.checkboxShowInitImg.TabIndex = 93;
@@ -2054,7 +2076,7 @@ namespace StableDiffusionGui
             this.labelCurrentConcept.Location = new System.Drawing.Point(459, 48);
             this.labelCurrentConcept.Margin = new System.Windows.Forms.Padding(11, 0, 4, 0);
             this.labelCurrentConcept.Name = "labelCurrentConcept";
-            this.labelCurrentConcept.Size = new System.Drawing.Size(399, 16);
+            this.labelCurrentConcept.Size = new System.Drawing.Size(420, 16);
             this.labelCurrentConcept.TabIndex = 92;
             // 
             // label2
@@ -2074,11 +2096,11 @@ namespace StableDiffusionGui
             this.panelPromptNeg.Controls.Add(this.btnExpandPromptNegField);
             this.panelPromptNeg.Controls.Add(this.textboxPromptNeg);
             this.panelPromptNeg.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelPromptNeg.Location = new System.Drawing.Point(0, 80);
-            this.panelPromptNeg.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelPromptNeg.Location = new System.Drawing.Point(0, 56);
+            this.panelPromptNeg.Margin = new System.Windows.Forms.Padding(4);
             this.panelPromptNeg.Name = "panelPromptNeg";
-            this.panelPromptNeg.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.panelPromptNeg.Size = new System.Drawing.Size(862, 49);
+            this.panelPromptNeg.Padding = new System.Windows.Forms.Padding(4);
+            this.panelPromptNeg.Size = new System.Drawing.Size(883, 49);
             this.panelPromptNeg.TabIndex = 16;
             // 
             // panelPrompt
@@ -2087,10 +2109,10 @@ namespace StableDiffusionGui
             this.panelPrompt.Controls.Add(this.btnExpandPromptField);
             this.panelPrompt.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelPrompt.Location = new System.Drawing.Point(0, 0);
-            this.panelPrompt.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelPrompt.Margin = new System.Windows.Forms.Padding(4);
             this.panelPrompt.Name = "panelPrompt";
-            this.panelPrompt.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.panelPrompt.Size = new System.Drawing.Size(862, 80);
+            this.panelPrompt.Padding = new System.Windows.Forms.Padding(4);
+            this.panelPrompt.Size = new System.Drawing.Size(883, 56);
             this.panelPrompt.TabIndex = 15;
             // 
             // promptAutocomplete
@@ -2114,7 +2136,7 @@ namespace StableDiffusionGui
             this.pictBoxImgViewer.Location = new System.Drawing.Point(0, 0);
             this.pictBoxImgViewer.Margin = new System.Windows.Forms.Padding(0);
             this.pictBoxImgViewer.Name = "pictBoxImgViewer";
-            this.pictBoxImgViewer.Size = new System.Drawing.Size(683, 630);
+            this.pictBoxImgViewer.Size = new System.Drawing.Size(683, 763);
             this.pictBoxImgViewer.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictBoxImgViewer.TabIndex = 113;
             this.pictBoxImgViewer.TabStop = false;
@@ -2131,7 +2153,7 @@ namespace StableDiffusionGui
             this.separator.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.separator.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.separator.Location = new System.Drawing.Point(1168, 15);
-            this.separator.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.separator.Margin = new System.Windows.Forms.Padding(4);
             this.separator.Name = "separator";
             this.separator.Size = new System.Drawing.Size(53, 49);
             this.separator.TabIndex = 75;
@@ -2147,7 +2169,7 @@ namespace StableDiffusionGui
             this.pictBoxInitImg.Location = new System.Drawing.Point(0, 0);
             this.pictBoxInitImg.Margin = new System.Windows.Forms.Padding(0);
             this.pictBoxInitImg.Name = "pictBoxInitImg";
-            this.pictBoxInitImg.Size = new System.Drawing.Size(1, 630);
+            this.pictBoxInitImg.Size = new System.Drawing.Size(1, 763);
             this.pictBoxInitImg.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictBoxInitImg.TabIndex = 118;
             this.pictBoxInitImg.TabStop = false;
@@ -2163,11 +2185,11 @@ namespace StableDiffusionGui
             this.tableLayoutPanelImgViewers.Controls.Add(this.panel1, 1, 0);
             this.tableLayoutPanelImgViewers.Controls.Add(this.pictBoxInitImg, 0, 0);
             this.tableLayoutPanelImgViewers.Location = new System.Drawing.Point(907, 118);
-            this.tableLayoutPanelImgViewers.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tableLayoutPanelImgViewers.Margin = new System.Windows.Forms.Padding(4);
             this.tableLayoutPanelImgViewers.Name = "tableLayoutPanelImgViewers";
             this.tableLayoutPanelImgViewers.RowCount = 1;
             this.tableLayoutPanelImgViewers.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanelImgViewers.Size = new System.Drawing.Size(683, 630);
+            this.tableLayoutPanelImgViewers.Size = new System.Drawing.Size(683, 763);
             this.tableLayoutPanelImgViewers.TabIndex = 119;
             // 
             // panel1
@@ -2177,28 +2199,33 @@ namespace StableDiffusionGui
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Margin = new System.Windows.Forms.Padding(0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(683, 630);
+            this.panel1.Size = new System.Drawing.Size(683, 763);
             this.panel1.TabIndex = 0;
             // 
-            // htSwitch1
+            // comboxSdModel
             // 
-            this.htSwitch1.BackColor = System.Drawing.Color.Transparent;
-            this.htSwitch1.Location = new System.Drawing.Point(464, 12);
-            this.htSwitch1.Name = "htSwitch1";
-            this.htSwitch1.Size = new System.Drawing.Size(50, 19);
-            this.htSwitch1.TabIndex = 93;
-            this.htSwitch1.CheckedChanged += new HTAlt.WinForms.HTSwitch.CheckedChangedDelegate(this.htSwitch1_CheckedChanged);
+            this.comboxSdModel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.comboxSdModel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboxSdModel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboxSdModel.ForeColor = System.Drawing.Color.White;
+            this.comboxSdModel.FormattingEnabled = true;
+            this.comboxSdModel.Location = new System.Drawing.Point(224, 37);
+            this.comboxSdModel.Margin = new System.Windows.Forms.Padding(4);
+            this.comboxSdModel.Name = "comboxSdModel";
+            this.comboxSdModel.Size = new System.Drawing.Size(265, 24);
+            this.comboxSdModel.TabIndex = 112;
             // 
-            // label18
+            // label19
             // 
-            this.label18.AutoSize = true;
-            this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label18.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label18.Location = new System.Drawing.Point(521, 12);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(71, 20);
-            this.label18.TabIndex = 94;
-            this.label18.Text = "Random";
+            this.label19.AutoSize = true;
+            this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label19.ForeColor = System.Drawing.Color.White;
+            this.label19.Location = new System.Drawing.Point(221, 11);
+            this.label19.Margin = new System.Windows.Forms.Padding(11, 0, 4, 0);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(50, 17);
+            this.label19.TabIndex = 112;
+            this.label19.Text = "Model:";
             // 
             // MainForm
             // 
@@ -2206,7 +2233,9 @@ namespace StableDiffusionGui
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.ClientSize = new System.Drawing.Size(1605, 865);
+            this.ClientSize = new System.Drawing.Size(1605, 998);
+            this.Controls.Add(this.label19);
+            this.Controls.Add(this.comboxSdModel);
             this.Controls.Add(this.progressBarImg);
             this.Controls.Add(this.tableLayoutPanelImgViewers);
             this.Controls.Add(this.btnDreambooth);
@@ -2233,7 +2262,7 @@ namespace StableDiffusionGui
             this.Controls.Add(this.runBtn);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Stable Diffusion GUI";
@@ -2438,6 +2467,8 @@ namespace StableDiffusionGui
         private System.Windows.Forms.ToolStripMenuItem copySidebySideComparisonImageToolStripMenuItem;
         private HTAlt.WinForms.HTSwitch htSwitch1;
         private System.Windows.Forms.Label label18;
+        public System.Windows.Forms.ComboBox comboxSdModel;
+        private System.Windows.Forms.Label label19;
     }
 }
 
