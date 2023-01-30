@@ -1,3 +1,21 @@
+SD GUI 1.9.1 Changelog:
+- New: Resolution can now also be adjusted in InstructPix2Pix mode (resizes input image)
+- New: Resulting aspect ratio is shown next to resolution option
+- New: Right-click image menu in InstructPix2Pix has an option to copy a comparison image
+- Improved: Model compatibility, any Safetensors file should now work fine after conversion
+- Improved: Model converter no longer includes 1 GB safety checker in ONNX outputs
+- Improved: Image Viewer now shows image resolution info in InstructPix2Pix mode
+- Improved: InstructPix2Pix no longer downloads unnecessary files, now <2GB
+- Fixed: InstructPix2Pix errors when trying to run it without internet connection
+- Fixed: Certain options result in filenames being too long causing issues
+- Fixed: Stable Diffusion model gets reloaded if amount of free RAM changed
+- Fixed: Image export breaks if initialization image(s) import takes too long
+- Fixed: "Open Output Folder" opens Documents folder
+- Fixed: ONNX and InstructPix2Pix don't accept images with UTF8 characters in path
+- Fixed: Running InvokeAI post-processing sometimes fails due to long paths
+- Fixed: Issues with comma vs dot, depending on Windows region settings
+
+
 SD GUI 1.9.0 Changelog:
 - New: Added InstructPix2Pix (Use with Settings -> Implementation -> InstructPix2Pix)
 - New: Added the option to show the input image next to the output for comparisons
