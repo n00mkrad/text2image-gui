@@ -132,9 +132,12 @@ namespace StableDiffusionGui.Implementations
                         mode = "inpaint";
                 }
 
+                string ScMode = Program.MainForm.cbScheduler.GetItemText(Program.MainForm.cbScheduler.SelectedItem);
+                ScMode = ScMode.ToLower();
+
                 py.StartInfo.RedirectStandardInput = true;
                 py.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand()} && " +
-                    $"python \"{Constants.Dirs.SdRepo}/sd_onnx/sd_onnx.py\" -m {modelDir.FullName.Wrap(true)} -j {jsonPath.Wrap(true)} -o {outPath.Wrap(true)} -mode {mode}";
+                    $"python \"{Constants.Dirs.SdRepo}/sd_onnx/sd_onnx.py\" -m {modelDir.FullName.Wrap(true)} -j {jsonPath.Wrap(true)} -o {outPath.Wrap(true)} -mode {mode} -scmode {ScMode}";
 
                 Logger.Log("cmd.exe " + py.StartInfo.Arguments, true);
 

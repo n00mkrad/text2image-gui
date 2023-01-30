@@ -108,6 +108,8 @@ namespace StableDiffusionGui
             this.faceRestorationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.applyAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelSettings = new StableDiffusionGui.Controls.CustomPanel();
+            this.panelRes = new System.Windows.Forms.Panel();
+            this.panelIterations = new System.Windows.Forms.Panel();
             this.panelInitImgStrength = new System.Windows.Forms.Panel();
             this.panelPromptNeg = new System.Windows.Forms.Panel();
             this.panelDebugPerlinThresh = new System.Windows.Forms.Panel();
@@ -123,10 +125,10 @@ namespace StableDiffusionGui
             this.label8 = new System.Windows.Forms.Label();
             this.panelSampler = new System.Windows.Forms.Panel();
             this.label7 = new System.Windows.Forms.Label();
-            this.panelRes = new System.Windows.Forms.Panel();
-            this.labelAspectRatio = new System.Windows.Forms.Label();
             this.panelSeed = new System.Windows.Forms.Panel();
+            this.checkboxLoopback = new System.Windows.Forms.CheckBox();
             this.label18 = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
             this.htSwitch1 = new HTAlt.WinForms.HTSwitch();
             this.label5 = new System.Windows.Forms.Label();
             this.panelScaleImg = new System.Windows.Forms.Panel();
@@ -140,14 +142,12 @@ namespace StableDiffusionGui
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
             this.textboxSliderSteps = new System.Windows.Forms.TextBox();
             this.sliderSteps = new StableDiffusionGui.Controls.CustomSlider();
-            this.panelIterations = new System.Windows.Forms.Panel();
-            this.checkboxLoopback = new System.Windows.Forms.CheckBox();
-            this.label16 = new System.Windows.Forms.Label();
             this.panelInpainting = new System.Windows.Forms.Panel();
             this.comboxInpaintMode = new System.Windows.Forms.ComboBox();
             this.label10 = new System.Windows.Forms.Label();
             this.panelAiInputs = new System.Windows.Forms.Panel();
             this.panelDebugLoopback = new System.Windows.Forms.Panel();
+            this.labelAspectRatio = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.pictBoxInitImg = new System.Windows.Forms.PictureBox();
             this.label11 = new System.Windows.Forms.Label();
@@ -168,6 +168,8 @@ namespace StableDiffusionGui
             this.ImgListView = new System.Windows.Forms.ListView();
             this.label2 = new System.Windows.Forms.Label();
             this.comboxVaeModel = new System.Windows.Forms.ComboBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.cbScheduler = new System.Windows.Forms.ComboBox();
             this.menuStripOutputImg.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.upDownSeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
@@ -1041,10 +1043,10 @@ namespace StableDiffusionGui
             this.sliderScaleImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
             this.sliderScaleImg.ForeColor = System.Drawing.Color.Black;
             this.sliderScaleImg.InitValue = new decimal(new int[] {
-            15,
+            1,
             0,
             0,
-            65536});
+            0});
             this.sliderScaleImg.LargeChange = ((uint)(5u));
             this.sliderScaleImg.Location = new System.Drawing.Point(0, 0);
             this.sliderScaleImg.Margin = new System.Windows.Forms.Padding(0);
@@ -1354,6 +1356,24 @@ namespace StableDiffusionGui
             this.panelSettings.SizeChanged += new System.EventHandler(this.panelSettings_SizeChanged);
             this.panelSettings.Click += new System.EventHandler(this.panel1_Click);
             // 
+            // panelRes
+            // 
+            this.panelRes.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelRes.Location = new System.Drawing.Point(0, 928);
+            this.panelRes.Margin = new System.Windows.Forms.Padding(4);
+            this.panelRes.Name = "panelRes";
+            this.panelRes.Size = new System.Drawing.Size(878, 43);
+            this.panelRes.TabIndex = 5;
+            // 
+            // panelIterations
+            // 
+            this.panelIterations.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelIterations.Location = new System.Drawing.Point(0, 885);
+            this.panelIterations.Margin = new System.Windows.Forms.Padding(4);
+            this.panelIterations.Name = "panelIterations";
+            this.panelIterations.Size = new System.Drawing.Size(878, 43);
+            this.panelIterations.TabIndex = 1;
+            // 
             // panelInitImgStrength
             // 
             this.panelInitImgStrength.Dock = System.Windows.Forms.DockStyle.Top;
@@ -1539,28 +1559,6 @@ namespace StableDiffusionGui
             this.label7.TabIndex = 104;
             this.label7.Text = "Sampler";
             // 
-            // panelRes
-            // 
-            this.panelRes.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelRes.Location = new System.Drawing.Point(0, 928);
-            this.panelRes.Margin = new System.Windows.Forms.Padding(4);
-            this.panelRes.Name = "panelRes";
-            this.panelRes.Size = new System.Drawing.Size(878, 43);
-            this.panelRes.TabIndex = 5;
-            // 
-            // labelAspectRatio
-            // 
-            this.labelAspectRatio.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelAspectRatio.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelAspectRatio.ForeColor = System.Drawing.Color.Silver;
-            this.labelAspectRatio.Location = new System.Drawing.Point(773, 8);
-            this.labelAspectRatio.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.labelAspectRatio.Name = "labelAspectRatio";
-            this.labelAspectRatio.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.labelAspectRatio.Size = new System.Drawing.Size(80, 27);
-            this.labelAspectRatio.TabIndex = 110;
-            this.labelAspectRatio.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
             // panelSeed
             // 
             this.panelSeed.Controls.Add(this.checkboxLoopback);
@@ -1576,6 +1574,18 @@ namespace StableDiffusionGui
             this.panelSeed.Size = new System.Drawing.Size(878, 43);
             this.panelSeed.TabIndex = 4;
             // 
+            // checkboxLoopback
+            // 
+            this.checkboxLoopback.AutoSize = true;
+            this.checkboxLoopback.ForeColor = System.Drawing.Color.White;
+            this.checkboxLoopback.Location = new System.Drawing.Point(854, 12);
+            this.checkboxLoopback.Margin = new System.Windows.Forms.Padding(4);
+            this.checkboxLoopback.Name = "checkboxLoopback";
+            this.checkboxLoopback.Padding = new System.Windows.Forms.Padding(4);
+            this.checkboxLoopback.Size = new System.Drawing.Size(26, 25);
+            this.checkboxLoopback.TabIndex = 110;
+            this.checkboxLoopback.UseVisualStyleBackColor = true;
+            // 
             // label18
             // 
             this.label18.AutoSize = true;
@@ -1586,6 +1596,18 @@ namespace StableDiffusionGui
             this.label18.Size = new System.Drawing.Size(71, 20);
             this.label18.TabIndex = 94;
             this.label18.Text = "Random";
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label16.ForeColor = System.Drawing.Color.White;
+            this.label16.Location = new System.Drawing.Point(728, 14);
+            this.label16.Margin = new System.Windows.Forms.Padding(11, 0, 4, 0);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(126, 17);
+            this.label16.TabIndex = 105;
+            this.label16.Text = "Loopback Img2Img";
             // 
             // htSwitch1
             // 
@@ -1795,39 +1817,6 @@ namespace StableDiffusionGui
             0,
             0});
             // 
-            // panelIterations
-            // 
-            this.panelIterations.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelIterations.Location = new System.Drawing.Point(0, 885);
-            this.panelIterations.Margin = new System.Windows.Forms.Padding(4);
-            this.panelIterations.Name = "panelIterations";
-            this.panelIterations.Size = new System.Drawing.Size(878, 43);
-            this.panelIterations.TabIndex = 1;
-            // 
-            // checkboxLoopback
-            // 
-            this.checkboxLoopback.AutoSize = true;
-            this.checkboxLoopback.ForeColor = System.Drawing.Color.White;
-            this.checkboxLoopback.Location = new System.Drawing.Point(854, 12);
-            this.checkboxLoopback.Margin = new System.Windows.Forms.Padding(4);
-            this.checkboxLoopback.Name = "checkboxLoopback";
-            this.checkboxLoopback.Padding = new System.Windows.Forms.Padding(4);
-            this.checkboxLoopback.Size = new System.Drawing.Size(26, 25);
-            this.checkboxLoopback.TabIndex = 110;
-            this.checkboxLoopback.UseVisualStyleBackColor = true;
-            // 
-            // label16
-            // 
-            this.label16.AutoSize = true;
-            this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label16.ForeColor = System.Drawing.Color.White;
-            this.label16.Location = new System.Drawing.Point(728, 14);
-            this.label16.Margin = new System.Windows.Forms.Padding(11, 0, 4, 0);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(126, 17);
-            this.label16.TabIndex = 105;
-            this.label16.Text = "Loopback Img2Img";
-            // 
             // panelInpainting
             // 
             this.panelInpainting.Controls.Add(this.textboxClipsegMask);
@@ -1906,6 +1895,19 @@ namespace StableDiffusionGui
             this.panelDebugLoopback.Size = new System.Drawing.Size(878, 215);
             this.panelDebugLoopback.TabIndex = 19;
             // 
+            // labelAspectRatio
+            // 
+            this.labelAspectRatio.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelAspectRatio.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelAspectRatio.ForeColor = System.Drawing.Color.Silver;
+            this.labelAspectRatio.Location = new System.Drawing.Point(773, 8);
+            this.labelAspectRatio.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelAspectRatio.Name = "labelAspectRatio";
+            this.labelAspectRatio.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.labelAspectRatio.Size = new System.Drawing.Size(80, 27);
+            this.labelAspectRatio.TabIndex = 110;
+            this.labelAspectRatio.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -1947,9 +1949,9 @@ namespace StableDiffusionGui
             this.label6.Location = new System.Drawing.Point(690, 7);
             this.label6.Margin = new System.Windows.Forms.Padding(11, 0, 4, 0);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(109, 17);
+            this.label6.Size = new System.Drawing.Size(35, 17);
             this.label6.TabIndex = 95;
-            this.label6.Text = "(Width x Height)";
+            this.label6.Text = "Size";
             // 
             // comboxResH
             // 
@@ -2104,10 +2106,10 @@ namespace StableDiffusionGui
             this.comboxSdModel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.comboxSdModel.ForeColor = System.Drawing.Color.White;
             this.comboxSdModel.FormattingEnabled = true;
-            this.comboxSdModel.Location = new System.Drawing.Point(155, 37);
+            this.comboxSdModel.Location = new System.Drawing.Point(155, 35);
             this.comboxSdModel.Margin = new System.Windows.Forms.Padding(4);
             this.comboxSdModel.Name = "comboxSdModel";
-            this.comboxSdModel.Size = new System.Drawing.Size(265, 24);
+            this.comboxSdModel.Size = new System.Drawing.Size(195, 24);
             this.comboxSdModel.TabIndex = 112;
             this.comboxSdModel.SelectedIndexChanged += new System.EventHandler(this.comboxSdModel_SelectedIndexChanged);
             // 
@@ -2143,7 +2145,7 @@ namespace StableDiffusionGui
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(440, 11);
+            this.label2.Location = new System.Drawing.Point(373, 9);
             this.label2.Margin = new System.Windows.Forms.Padding(11, 0, 4, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(39, 17);
@@ -2157,12 +2159,46 @@ namespace StableDiffusionGui
             this.comboxVaeModel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.comboxVaeModel.ForeColor = System.Drawing.Color.White;
             this.comboxVaeModel.FormattingEnabled = true;
-            this.comboxVaeModel.Location = new System.Drawing.Point(441, 37);
+            this.comboxVaeModel.Location = new System.Drawing.Point(374, 35);
             this.comboxVaeModel.Margin = new System.Windows.Forms.Padding(4);
             this.comboxVaeModel.Name = "comboxVaeModel";
-            this.comboxVaeModel.Size = new System.Drawing.Size(265, 24);
+            this.comboxVaeModel.Size = new System.Drawing.Size(226, 24);
             this.comboxVaeModel.TabIndex = 121;
             this.comboxVaeModel.SelectedIndexChanged += new System.EventHandler(this.comboxVaeModel_SelectedIndexChanged);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.ForeColor = System.Drawing.Color.White;
+            this.label9.Location = new System.Drawing.Point(622, 9);
+            this.label9.Margin = new System.Windows.Forms.Padding(11, 0, 4, 0);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(76, 17);
+            this.label9.TabIndex = 122;
+            this.label9.Text = "Scheduler:";
+            // 
+            // cbScheduler
+            // 
+            this.cbScheduler.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.cbScheduler.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbScheduler.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cbScheduler.ForeColor = System.Drawing.Color.White;
+            this.cbScheduler.FormattingEnabled = true;
+            this.cbScheduler.Items.AddRange(new object[] {
+            "EulerA",
+            "EulerD",
+            "PNDM",
+            "DDPM",
+            "LMSD",
+            "DDIM",
+            "DPMSM"});
+            this.cbScheduler.Location = new System.Drawing.Point(623, 35);
+            this.cbScheduler.Margin = new System.Windows.Forms.Padding(4);
+            this.cbScheduler.Name = "cbScheduler";
+            this.cbScheduler.Size = new System.Drawing.Size(119, 24);
+            this.cbScheduler.TabIndex = 123;
+            this.cbScheduler.SelectedIndexChanged += new System.EventHandler(this.cbScheduler_SelectedIndexChanged);
             // 
             // MainForm
             // 
@@ -2171,6 +2207,8 @@ namespace StableDiffusionGui
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.ClientSize = new System.Drawing.Size(1605, 1052);
+            this.Controls.Add(this.label9);
+            this.Controls.Add(this.cbScheduler);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.comboxVaeModel);
             this.Controls.Add(this.ImgListView);
@@ -2393,6 +2431,8 @@ namespace StableDiffusionGui
         public System.Windows.Forms.CheckBox checkboxHiresFix;
         private System.Windows.Forms.Label label2;
         public System.Windows.Forms.ComboBox comboxVaeModel;
+        private System.Windows.Forms.Label label9;
+        public System.Windows.Forms.ComboBox cbScheduler;
     }
 }
 

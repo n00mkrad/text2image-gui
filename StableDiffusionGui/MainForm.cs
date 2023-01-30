@@ -167,6 +167,12 @@ namespace StableDiffusionGui
             else
             {
                 comboxVaeModel.Enabled = false;
+
+
+                if (CurrImplementation == Implementation.DiffusersOnnx)
+                {
+                    ConfigParser.LoadGuiElement(cbScheduler, Config.Keys.ModelSchd);
+                }
             }
         }
 
@@ -609,6 +615,11 @@ namespace StableDiffusionGui
         private void comboxVaeModel_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (!string.IsNullOrWhiteSpace(comboxSdModel.Text)) ConfigParser.SaveGuiElement(comboxVaeModel, Config.Keys.ModelVae);
+        }
+
+        private void cbScheduler_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ConfigParser.SaveGuiElement(cbScheduler, Config.Keys.ModelSchd);
         }
     }
 }
