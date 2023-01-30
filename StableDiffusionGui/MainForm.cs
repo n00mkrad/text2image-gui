@@ -114,6 +114,18 @@ namespace StableDiffusionGui
 
             ConfigParser.LoadGuiElement(textboxPromptNeg, Config.Keys.NegPromt);
             LoadModels();
+
+            panelDebugLoopback.Size = new Size(Program.MainForm.panelDebugLoopback.Size.Width, Program.MainForm.panelDebugLoopback.Size.Height / 2);
+
+            sliderInitStrength.Visible = false;
+            textboxSliderInitStrength.Visible = false;
+            pictBoxInitImg.Visible = false;
+            label11.Visible = false;
+
+            cbBaW.Location = new Point(cbBaW.Location.X - pictBoxInitImg.Size.Width, cbBaW.Location.Y);
+            cbDetFace.Location = new Point(cbDetFace.Location.X - pictBoxInitImg.Size.Width, cbDetFace.Location.Y);
+            cbSepia.Location = new Point(cbSepia.Location.X - pictBoxInitImg.Size.Width, cbSepia.Location.Y);
+            checkboxHiresFix.Location = new Point(checkboxHiresFix.Location.X - pictBoxInitImg.Size.Width, checkboxHiresFix.Location.Y);
         }
 
         private void installerBtn_Click(object sender, EventArgs e)
@@ -128,7 +140,7 @@ namespace StableDiffusionGui
         }
         private Implementation CurrImplementation { get { return ParseUtils.GetEnum<Implementation>(CurrImplText, true, Strings.Implementation); } }
 
-        private void LoadModels()
+        public void LoadModels()
         {
             LoadImplementations();
 
@@ -142,6 +154,20 @@ namespace StableDiffusionGui
 
             if (combox.Items.Count > 0 && combox.SelectedIndex == -1)
                 combox.SelectedIndex = 0;
+
+            if (CurrImplementation != Implementation.DiffusersOnnx && CurrImplementation != Implementation.InstructPixToPix)
+            {
+                Paths.GetModels(ModelType.Vae, CurrImplementation).ForEach(x => comboxVaeModel.Items.Add(x.Name));
+
+                if (comboxVaeModel.Items.Count > 0 && comboxVaeModel.SelectedIndex == -1)
+                    comboxVaeModel.SelectedIndex = 0;
+
+                ConfigParser.LoadGuiElement(comboxVaeModel, Config.Keys.ModelVae);
+            }
+            else
+            {
+                comboxVaeModel.Enabled = false;
+            }
         }
 
         public void CleanPrompt()
@@ -580,9 +606,9 @@ namespace StableDiffusionGui
             }
         }
 
-        private void checkboxShowInitImg_CheckedChanged(object sender, EventArgs e)
+        private void comboxVaeModel_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            if (!string.IsNullOrWhiteSpace(comboxSdModel.Text)) ConfigParser.SaveGuiElement(comboxVaeModel, Config.Keys.ModelVae);
         }
     }
 }

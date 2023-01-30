@@ -105,6 +105,7 @@ namespace StableDiffusionGui.Ui.MainFormUtils
             
             F.toolTip.SetToolTip(F.labelCurrentImage, $"{F.labelCurrentImage.Text.Trunc(100)}\n\nShift + Hover to preview.");
 
+            F.LoadModels();
             #endregion
         }
 

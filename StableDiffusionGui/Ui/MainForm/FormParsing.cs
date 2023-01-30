@@ -60,7 +60,7 @@ namespace StableDiffusionGui.Ui.MainFormUtils
                 F.upDownSeed.Value = s.Params.Get("seed").FromJson<long>();
                 F.comboxSampler.SetIfTextMatches(s.Params.Get("sampler").FromJson<string>(), true, Strings.Samplers);
                 MainUi.CurrentInitImgPaths = s.Params.Get("initImgs").FromJson<List<string>>();
-                SetSliderValues(s.Params.FromJson<List<float>>("initStrengths"), false, F.sliderInitStrength, F.textboxExtraInitStrengths);
+                SetSliderValues(s.Params.FromJson<List<float>>("initStrengths"), false, F.sliderInitStrength, null);
                 MainUi.CurrentEmbeddingPath = s.Params.Get("embedding").FromJson<string>();
                 F.comboxSeamless.SetIfTextMatches(s.Params.Get("seamless").FromJson<string>(), true, Strings.SeamlessMode);
                 F.comboxInpaintMode.SelectedIndex = (int)s.Params.Get("inpainting").FromJson<InpaintMode>();
@@ -143,7 +143,7 @@ namespace StableDiffusionGui.Ui.MainFormUtils
                     { "seed", (F.upDownSeed.Value < 0 ? new Random().Next(0, int.MaxValue) : ((long)F.upDownSeed.Value)).ToJson() },
                     { "sampler", ((Sampler)F.comboxSampler.SelectedIndex).ToString().Lower().ToJson() },
                     { "initImgs", MainUi.CurrentInitImgPaths.ToJson() },
-                    { "initStrengths", F.panelInitImgStrength.Visible ? MainUi.GetExtraValues(F.textboxExtraInitStrengths.Text, F.sliderInitStrength.ActualValueFloat).ToJson() : new List<float>() { 0.5f }.ToJson() },
+                    { "initStrengths", F.panelInitImgStrength.Visible ? MainUi.GetExtraValues(F.sliderInitStrength.ActualValueFloat.ToString(), F.sliderInitStrength.ActualValueFloat).ToJson() : new List<float>() { 0.5f }.ToJson() },
                     { "embedding", MainUi.CurrentEmbeddingPath.ToJson() },
                     { "seamless", ((SeamlessMode)F.comboxSeamless.SelectedIndex).ToJson() },
                     { "inpainting", ((InpaintMode)F.comboxInpaintMode.SelectedIndex).ToJson() },

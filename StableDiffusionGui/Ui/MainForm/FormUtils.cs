@@ -66,6 +66,17 @@ namespace StableDiffusionGui.Ui.MainFormUtils
             {
                 Program.MainForm.pictBoxInitImg.BackgroundImage = null;
                 MainUi.CurrentInitImgPaths = null;
+                Program.MainForm.panelDebugLoopback.Size = new Size(Program.MainForm.panelDebugLoopback.Size.Width, Program.MainForm.panelDebugLoopback.Size.Height / 2);
+
+                Program.MainForm.sliderInitStrength.Visible = false;
+                Program.MainForm.textboxSliderInitStrength.Visible = false;
+                Program.MainForm.pictBoxInitImg.Visible = false;
+                Program.MainForm.label11.Visible = false;
+
+                Program.MainForm.cbBaW.Location = new Point(Program.MainForm.cbBaW.Location.X - Program.MainForm.pictBoxInitImg.Size.Width, Program.MainForm.cbBaW.Location.Y);
+                Program.MainForm.cbDetFace.Location = new Point(Program.MainForm.cbDetFace.Location.X - Program.MainForm.pictBoxInitImg.Size.Width, Program.MainForm.cbDetFace.Location.Y);
+                Program.MainForm.cbSepia.Location = new Point(Program.MainForm.cbSepia.Location.X - Program.MainForm.pictBoxInitImg.Size.Width, Program.MainForm.cbSepia.Location.Y);
+                Program.MainForm.checkboxHiresFix.Location = new Point(Program.MainForm.checkboxHiresFix.Location.X - Program.MainForm.pictBoxInitImg.Size.Width, Program.MainForm.checkboxHiresFix.Location.Y);
             }
             else
             {
@@ -76,6 +87,17 @@ namespace StableDiffusionGui.Ui.MainFormUtils
                     var paths = dialog.FileNames.Where(path => Constants.FileExts.ValidImages.Contains(Path.GetExtension(path).Lower()));
 
                     Program.MainForm.pictBoxInitImg.BackgroundImage = new Bitmap(dialog.FileName);
+
+                    Program.MainForm.panelDebugLoopback.Size = new Size(Program.MainForm.panelDebugLoopback.Size.Width, Program.MainForm.panelDebugLoopback.Size.Height * 2);
+                    Program.MainForm.sliderInitStrength.Visible = true;
+                    Program.MainForm.textboxSliderInitStrength.Visible = true;
+                    Program.MainForm.pictBoxInitImg.Visible = true;
+                    Program.MainForm.label11.Visible = true;
+
+                    Program.MainForm.cbBaW.Location = new Point(Program.MainForm.cbBaW.Location.X + Program.MainForm.pictBoxInitImg.Size.Width, Program.MainForm.cbBaW.Location.Y);
+                    Program.MainForm.cbDetFace.Location = new Point(Program.MainForm.cbDetFace.Location.X + Program.MainForm.pictBoxInitImg.Size.Width, Program.MainForm.cbDetFace.Location.Y);
+                    Program.MainForm.cbSepia.Location = new Point(Program.MainForm.cbSepia.Location.X + Program.MainForm.pictBoxInitImg.Size.Width, Program.MainForm.cbSepia.Location.Y);
+                    Program.MainForm.checkboxHiresFix.Location = new Point(Program.MainForm.checkboxHiresFix.Location.X + Program.MainForm.pictBoxInitImg.Size.Width, Program.MainForm.checkboxHiresFix.Location.Y);
 
                     if (paths.Count() > 0)
                         MainUi.HandleDroppedFiles(paths.ToArray(), true);
