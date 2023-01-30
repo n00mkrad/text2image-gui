@@ -176,7 +176,6 @@ namespace StableDiffusionGui.Ui.MainFormUtils
             Program.MainForm.ImgListView.Items.Clear();
 
             var initImg = IoUtils.GetImage(metadata.InitImgName, false);
-            Program.MainForm.checkboxShowInitImg.Visible = initImg != null;
             Program.MainForm.pictBoxInitImg.Image = initImg;
 
             ImgViewList.Images.Clear();
@@ -194,9 +193,6 @@ namespace StableDiffusionGui.Ui.MainFormUtils
             {
                 Program.MainForm.ImgListView.Items.Add("", i);
             }
-
-            if (initImg == null)
-                Program.MainForm.checkboxShowInitImg.Checked = false;
 
             if(_currentImages.Length > 0)
                 Program.MainForm.pictBoxImgViewer.Image = new Bitmap(_currentImages[_currentImages.Length - 1]);

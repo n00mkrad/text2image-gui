@@ -292,8 +292,6 @@ namespace StableDiffusionGui
         private void btnInitImgBrowse_Click(object sender, EventArgs e)
         {
             FormUtils.BrowseInitImage();
-
-            checkboxShowInitImg.Visible = true;
         }
 
         private void btnEmbeddingBrowse_Click(object sender, EventArgs e)
@@ -528,13 +526,6 @@ namespace StableDiffusionGui
             new ConvertModelForm().ShowDialog();
         }
 
-        private void checkboxShowInitImg_CheckedChanged(object sender, EventArgs e)
-        {
-            tableLayoutPanelImgViewers.ColumnStyles[0].Width = checkboxShowInitImg.Checked ? 50 : 0;
-            tableLayoutPanelImgViewers.ColumnStyles[1].Width = checkboxShowInitImg.Checked ? 50 : 100;
-            MainUi.FitWindowSizeToImageSize();
-            CenterToScreen();
-        }
 
         private void comboxResW_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -587,6 +578,11 @@ namespace StableDiffusionGui
                 pictBoxImgViewer.Image = new Bitmap(Name);
                 pictBoxImgViewer.Refresh();
             }
+        }
+
+        private void checkboxShowInitImg_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

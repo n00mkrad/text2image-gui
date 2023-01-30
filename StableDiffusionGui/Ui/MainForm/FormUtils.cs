@@ -13,6 +13,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 using Paths = StableDiffusionGui.Io.Paths;
 
 namespace StableDiffusionGui.Ui.MainFormUtils
@@ -63,6 +64,7 @@ namespace StableDiffusionGui.Ui.MainFormUtils
 
             if (MainUi.CurrentInitImgPaths != null)
             {
+                Program.MainForm.pictBoxInitImg.BackgroundImage = null;
                 MainUi.CurrentInitImgPaths = null;
             }
             else
@@ -72,6 +74,8 @@ namespace StableDiffusionGui.Ui.MainFormUtils
                 if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
                 {
                     var paths = dialog.FileNames.Where(path => Constants.FileExts.ValidImages.Contains(Path.GetExtension(path).Lower()));
+
+                    Program.MainForm.pictBoxInitImg.BackgroundImage = new Bitmap(dialog.FileName);
 
                     if (paths.Count() > 0)
                         MainUi.HandleDroppedFiles(paths.ToArray(), true);
