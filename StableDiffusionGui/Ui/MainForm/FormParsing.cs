@@ -93,13 +93,45 @@ namespace StableDiffusionGui.Ui.MainFormUtils
             }
         }
 
+        private static List<string> Prompt
+        {
+            get
+            {
+                var Res = F.textboxPrompt.TextNoPlaceholder.SplitIntoLines().Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+
+                string Add = "";
+
+                if (Program.MainForm.cbBaW.Checked)
+                {
+                    Add += ", (black and white image)++";
+                }
+                
+                if (Program.MainForm.cbSepia.Checked)
+                {
+                    Add += ", (sepia)++";
+                }
+
+                if (Program.MainForm.cbDetFace.Checked)
+                {
+                    Add += ", (detailed eyes)++, (detailed hair)+, (detailed face)+";
+                }
+
+                for (int i = 0; i < Res.Count; i++)
+                {
+                    Res[i] += Add;
+                }
+
+                return Res;
+            }
+        }
+
         public static TtiSettings GetCurrentTtiSettings()
         {
             TtiSettings settings = new TtiSettings
             {
                 Implementation = ParseUtils.GetEnum<Implementation>(Config.Get<string>(Config.Keys.ImplementationName)),
 
-                Prompts = F.textboxPrompt.TextNoPlaceholder.SplitIntoLines().Where(x => !string.IsNullOrWhiteSpace(x)).ToArray(),
+                Prompts = Prompt.ToArray(),
                 NegativePrompt = F.textboxPromptNeg.Visible ? F.textboxPromptNeg.TextNoPlaceholder.Trim().Replace(Environment.NewLine, " ") : "",
                 Iterations = (int)F.upDownIterations.Value,
                 Params = new Dictionary<string, string>

@@ -197,6 +197,9 @@ namespace StableDiffusionGui.Ui.MainFormUtils
 
             if (initImg == null)
                 Program.MainForm.checkboxShowInitImg.Checked = false;
+
+
+            Program.MainForm.pictBoxImgViewer.Image = new Bitmap(_currentImages[_currentImages.Length - 1]);
         }
 
         public static void CopyCurrentToFavs()

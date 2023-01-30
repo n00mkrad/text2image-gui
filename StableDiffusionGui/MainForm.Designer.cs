@@ -78,8 +78,6 @@ namespace StableDiffusionGui
             this.btnPostProc = new System.Windows.Forms.Button();
             this.btnSettings = new System.Windows.Forms.Button();
             this.btnDebug = new System.Windows.Forms.Button();
-            this.btnExpandPromptNegField = new System.Windows.Forms.Button();
-            this.btnExpandPromptField = new System.Windows.Forms.Button();
             this.cliButton = new System.Windows.Forms.Button();
             this.btnOpenOutFolder = new System.Windows.Forms.Button();
             this.btnPrevImg = new System.Windows.Forms.Button();
@@ -169,6 +167,9 @@ namespace StableDiffusionGui
             this.comboxSdModel = new System.Windows.Forms.ComboBox();
             this.label19 = new System.Windows.Forms.Label();
             this.ImgListView = new System.Windows.Forms.ListView();
+            this.cbDetFace = new System.Windows.Forms.CheckBox();
+            this.cbBaW = new System.Windows.Forms.CheckBox();
+            this.cbSepia = new System.Windows.Forms.CheckBox();
             this.menuStripOutputImg.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.upDownSeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
@@ -179,7 +180,6 @@ namespace StableDiffusionGui
             this.menuStripDevTools.SuspendLayout();
             this.menuStripPostProcess.SuspendLayout();
             this.panelSettings.SuspendLayout();
-            this.panelDebugLoopback.SuspendLayout();
             this.panelDebugPerlinThresh.SuspendLayout();
             this.panelDebugSendStdin.SuspendLayout();
             this.panelSeamless.SuspendLayout();
@@ -757,7 +757,7 @@ namespace StableDiffusionGui
             this.textboxPromptNeg.Placeholder = "Enter your negative prompt here...";
             this.textboxPromptNeg.PlaceholderTextColor = System.Drawing.Color.Silver;
             this.textboxPromptNeg.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textboxPromptNeg.Size = new System.Drawing.Size(847, 45);
+            this.textboxPromptNeg.Size = new System.Drawing.Size(878, 35);
             this.textboxPromptNeg.TabIndex = 1;
             this.toolTip.SetToolTip(this.textboxPromptNeg, "Negative text prompt. The AI will try to avoid generating things you describe her" +
         "e.");
@@ -771,15 +771,14 @@ namespace StableDiffusionGui
             this.promptAutocomplete.SetAutocompleteMenu(this.textboxPrompt, null);
             this.textboxPrompt.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textboxPrompt.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.textboxPrompt.Location = new System.Drawing.Point(4, 0);
+            this.textboxPrompt.Location = new System.Drawing.Point(4, 2);
             this.textboxPrompt.Margin = new System.Windows.Forms.Padding(4, 4, 0, 4);
             this.textboxPrompt.MinimumSize = new System.Drawing.Size(4, 25);
             this.textboxPrompt.Multiline = true;
             this.textboxPrompt.Name = "textboxPrompt";
             this.textboxPrompt.Placeholder = "Enter your prompt here...";
             this.textboxPrompt.PlaceholderTextColor = System.Drawing.Color.Silver;
-            this.textboxPrompt.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textboxPrompt.Size = new System.Drawing.Size(847, 48);
+            this.textboxPrompt.Size = new System.Drawing.Size(755, 127);
             this.textboxPrompt.TabIndex = 0;
             this.toolTip.SetToolTip(this.textboxPrompt, "Text prompt. The AI will try to generate an image matching this description.");
             // 
@@ -986,44 +985,6 @@ namespace StableDiffusionGui
             this.toolTip.SetToolTip(this.btnDebug, "Logs...");
             this.btnDebug.UseVisualStyleBackColor = false;
             this.btnDebug.Click += new System.EventHandler(this.btnDebug_Click);
-            // 
-            // btnExpandPromptNegField
-            // 
-            this.btnExpandPromptNegField.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnExpandPromptNegField.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnExpandPromptNegField.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnExpandPromptNegField.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnExpandPromptNegField.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnExpandPromptNegField.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnExpandPromptNegField.Location = new System.Drawing.Point(852, 0);
-            this.btnExpandPromptNegField.Margin = new System.Windows.Forms.Padding(0);
-            this.btnExpandPromptNegField.Name = "btnExpandPromptNegField";
-            this.btnExpandPromptNegField.Size = new System.Drawing.Size(27, 46);
-            this.btnExpandPromptNegField.TabIndex = 87;
-            this.btnExpandPromptNegField.TabStop = false;
-            this.toolTip.SetToolTip(this.btnExpandPromptNegField, "Expand/Collapse Prompt Field");
-            this.btnExpandPromptNegField.UseVisualStyleBackColor = false;
-            this.btnExpandPromptNegField.Click += new System.EventHandler(this.btnExpandPromptNegField_Click);
-            // 
-            // btnExpandPromptField
-            // 
-            this.btnExpandPromptField.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnExpandPromptField.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnExpandPromptField.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnExpandPromptField.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnExpandPromptField.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnExpandPromptField.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnExpandPromptField.Location = new System.Drawing.Point(852, 0);
-            this.btnExpandPromptField.Margin = new System.Windows.Forms.Padding(0);
-            this.btnExpandPromptField.Name = "btnExpandPromptField";
-            this.btnExpandPromptField.Size = new System.Drawing.Size(27, 52);
-            this.btnExpandPromptField.TabIndex = 86;
-            this.btnExpandPromptField.TabStop = false;
-            this.toolTip.SetToolTip(this.btnExpandPromptField, "Expand/Collapse Prompt Field");
-            this.btnExpandPromptField.UseVisualStyleBackColor = false;
-            this.btnExpandPromptField.Click += new System.EventHandler(this.btnExpandPromptField_Click);
             // 
             // cliButton
             // 
@@ -1420,10 +1381,8 @@ namespace StableDiffusionGui
             // 
             // panelDebugLoopback
             // 
-            this.panelDebugLoopback.Controls.Add(this.checkboxLoopback);
-            this.panelDebugLoopback.Controls.Add(this.label16);
             this.panelDebugLoopback.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelDebugLoopback.Location = new System.Drawing.Point(0, 678);
+            this.panelDebugLoopback.Location = new System.Drawing.Point(0, 751);
             this.panelDebugLoopback.Margin = new System.Windows.Forms.Padding(4);
             this.panelDebugLoopback.Name = "panelDebugLoopback";
             this.panelDebugLoopback.Size = new System.Drawing.Size(883, 43);
@@ -1434,7 +1393,7 @@ namespace StableDiffusionGui
             // 
             this.checkboxLoopback.AutoSize = true;
             this.checkboxLoopback.ForeColor = System.Drawing.Color.White;
-            this.checkboxLoopback.Location = new System.Drawing.Point(311, 9);
+            this.checkboxLoopback.Location = new System.Drawing.Point(850, 11);
             this.checkboxLoopback.Margin = new System.Windows.Forms.Padding(4);
             this.checkboxLoopback.Name = "checkboxLoopback";
             this.checkboxLoopback.Padding = new System.Windows.Forms.Padding(4);
@@ -1447,12 +1406,12 @@ namespace StableDiffusionGui
             this.label16.AutoSize = true;
             this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label16.ForeColor = System.Drawing.Color.White;
-            this.label16.Location = new System.Drawing.Point(3, 14);
+            this.label16.Location = new System.Drawing.Point(724, 13);
             this.label16.Margin = new System.Windows.Forms.Padding(11, 0, 4, 0);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(213, 17);
+            this.label16.Size = new System.Drawing.Size(126, 17);
             this.label16.TabIndex = 105;
-            this.label16.Text = "Enable Loopback Img2Img Mode";
+            this.label16.Text = "Loopback Img2Img";
             // 
             // panelDebugPerlinThresh
             // 
@@ -1462,7 +1421,7 @@ namespace StableDiffusionGui
             this.panelDebugPerlinThresh.Controls.Add(this.label13);
             this.panelDebugPerlinThresh.Controls.Add(this.textboxPerlin);
             this.panelDebugPerlinThresh.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelDebugPerlinThresh.Location = new System.Drawing.Point(0, 625);
+            this.panelDebugPerlinThresh.Location = new System.Drawing.Point(0, 698);
             this.panelDebugPerlinThresh.Margin = new System.Windows.Forms.Padding(4);
             this.panelDebugPerlinThresh.Name = "panelDebugPerlinThresh";
             this.panelDebugPerlinThresh.Size = new System.Drawing.Size(883, 53);
@@ -1538,7 +1497,7 @@ namespace StableDiffusionGui
             this.panelDebugSendStdin.Controls.Add(this.label12);
             this.panelDebugSendStdin.Controls.Add(this.textboxCliTest);
             this.panelDebugSendStdin.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelDebugSendStdin.Location = new System.Drawing.Point(0, 582);
+            this.panelDebugSendStdin.Location = new System.Drawing.Point(0, 655);
             this.panelDebugSendStdin.Margin = new System.Windows.Forms.Padding(4);
             this.panelDebugSendStdin.Name = "panelDebugSendStdin";
             this.panelDebugSendStdin.Size = new System.Drawing.Size(883, 43);
@@ -1578,7 +1537,7 @@ namespace StableDiffusionGui
             this.panelSeamless.Controls.Add(this.comboxSeamless);
             this.panelSeamless.Controls.Add(this.label8);
             this.panelSeamless.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSeamless.Location = new System.Drawing.Point(0, 539);
+            this.panelSeamless.Location = new System.Drawing.Point(0, 612);
             this.panelSeamless.Margin = new System.Windows.Forms.Padding(4);
             this.panelSeamless.Name = "panelSeamless";
             this.panelSeamless.Size = new System.Drawing.Size(883, 43);
@@ -1601,7 +1560,7 @@ namespace StableDiffusionGui
             this.panelSampler.Controls.Add(this.label7);
             this.panelSampler.Controls.Add(this.comboxSampler);
             this.panelSampler.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSampler.Location = new System.Drawing.Point(0, 496);
+            this.panelSampler.Location = new System.Drawing.Point(0, 569);
             this.panelSampler.Margin = new System.Windows.Forms.Padding(4);
             this.panelSampler.Name = "panelSampler";
             this.panelSampler.Size = new System.Drawing.Size(883, 43);
@@ -1628,7 +1587,7 @@ namespace StableDiffusionGui
             this.panelRes.Controls.Add(this.label6);
             this.panelRes.Controls.Add(this.label9);
             this.panelRes.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelRes.Location = new System.Drawing.Point(0, 453);
+            this.panelRes.Location = new System.Drawing.Point(0, 526);
             this.panelRes.Margin = new System.Windows.Forms.Padding(4);
             this.panelRes.Name = "panelRes";
             this.panelRes.Size = new System.Drawing.Size(883, 43);
@@ -1706,7 +1665,7 @@ namespace StableDiffusionGui
             this.panelSeed.Controls.Add(this.label5);
             this.panelSeed.Controls.Add(this.upDownSeed);
             this.panelSeed.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSeed.Location = new System.Drawing.Point(0, 410);
+            this.panelSeed.Location = new System.Drawing.Point(0, 483);
             this.panelSeed.Margin = new System.Windows.Forms.Padding(4);
             this.panelSeed.Name = "panelSeed";
             this.panelSeed.Size = new System.Drawing.Size(883, 43);
@@ -1750,7 +1709,7 @@ namespace StableDiffusionGui
             this.panelScaleImg.Controls.Add(this.label17);
             this.panelScaleImg.Controls.Add(this.tableLayoutPanel2);
             this.panelScaleImg.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelScaleImg.Location = new System.Drawing.Point(0, 367);
+            this.panelScaleImg.Location = new System.Drawing.Point(0, 440);
             this.panelScaleImg.Margin = new System.Windows.Forms.Padding(4);
             this.panelScaleImg.Name = "panelScaleImg";
             this.panelScaleImg.Size = new System.Drawing.Size(883, 43);
@@ -1792,7 +1751,7 @@ namespace StableDiffusionGui
             this.panelScale.Controls.Add(this.label4);
             this.panelScale.Controls.Add(this.tableLayoutPanel1);
             this.panelScale.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelScale.Location = new System.Drawing.Point(0, 324);
+            this.panelScale.Location = new System.Drawing.Point(0, 397);
             this.panelScale.Margin = new System.Windows.Forms.Padding(4);
             this.panelScale.Name = "panelScale";
             this.panelScale.Size = new System.Drawing.Size(883, 43);
@@ -1834,7 +1793,7 @@ namespace StableDiffusionGui
             this.panelSteps.Controls.Add(this.label3);
             this.panelSteps.Controls.Add(this.tableLayoutPanel6);
             this.panelSteps.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSteps.Location = new System.Drawing.Point(0, 281);
+            this.panelSteps.Location = new System.Drawing.Point(0, 354);
             this.panelSteps.Margin = new System.Windows.Forms.Padding(4);
             this.panelSteps.Name = "panelSteps";
             this.panelSteps.Size = new System.Drawing.Size(883, 43);
@@ -1934,9 +1893,11 @@ namespace StableDiffusionGui
             // panelIterations
             // 
             this.panelIterations.Controls.Add(this.label1);
+            this.panelIterations.Controls.Add(this.checkboxLoopback);
             this.panelIterations.Controls.Add(this.upDownIterations);
+            this.panelIterations.Controls.Add(this.label16);
             this.panelIterations.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelIterations.Location = new System.Drawing.Point(0, 238);
+            this.panelIterations.Location = new System.Drawing.Point(0, 311);
             this.panelIterations.Margin = new System.Windows.Forms.Padding(4);
             this.panelIterations.Name = "panelIterations";
             this.panelIterations.Size = new System.Drawing.Size(883, 43);
@@ -1962,7 +1923,7 @@ namespace StableDiffusionGui
             this.panelInpainting.Controls.Add(this.btnResetMask);
             this.panelInpainting.Controls.Add(this.label10);
             this.panelInpainting.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelInpainting.Location = new System.Drawing.Point(0, 195);
+            this.panelInpainting.Location = new System.Drawing.Point(0, 268);
             this.panelInpainting.Margin = new System.Windows.Forms.Padding(4);
             this.panelInpainting.Name = "panelInpainting";
             this.panelInpainting.Size = new System.Drawing.Size(883, 43);
@@ -2000,7 +1961,7 @@ namespace StableDiffusionGui
             this.panelInitImgStrength.Controls.Add(this.label11);
             this.panelInitImgStrength.Controls.Add(this.tableLayoutPanel4);
             this.panelInitImgStrength.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelInitImgStrength.Location = new System.Drawing.Point(0, 152);
+            this.panelInitImgStrength.Location = new System.Drawing.Point(0, 225);
             this.panelInitImgStrength.Margin = new System.Windows.Forms.Padding(4);
             this.panelInitImgStrength.Name = "panelInitImgStrength";
             this.panelInitImgStrength.Size = new System.Drawing.Size(883, 43);
@@ -2045,7 +2006,7 @@ namespace StableDiffusionGui
             this.panelAiInputs.Controls.Add(this.btnInitImgBrowse);
             this.panelAiInputs.Controls.Add(this.btnEmbeddingBrowse);
             this.panelAiInputs.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelAiInputs.Location = new System.Drawing.Point(0, 105);
+            this.panelAiInputs.Location = new System.Drawing.Point(0, 178);
             this.panelAiInputs.Margin = new System.Windows.Forms.Padding(4);
             this.panelAiInputs.Name = "panelAiInputs";
             this.panelAiInputs.Size = new System.Drawing.Size(883, 47);
@@ -2067,26 +2028,27 @@ namespace StableDiffusionGui
             // 
             // panelPromptNeg
             // 
-            this.panelPromptNeg.Controls.Add(this.btnExpandPromptNegField);
             this.panelPromptNeg.Controls.Add(this.textboxPromptNeg);
             this.panelPromptNeg.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelPromptNeg.Location = new System.Drawing.Point(0, 56);
+            this.panelPromptNeg.Location = new System.Drawing.Point(0, 135);
             this.panelPromptNeg.Margin = new System.Windows.Forms.Padding(4);
             this.panelPromptNeg.Name = "panelPromptNeg";
             this.panelPromptNeg.Padding = new System.Windows.Forms.Padding(4);
-            this.panelPromptNeg.Size = new System.Drawing.Size(883, 49);
+            this.panelPromptNeg.Size = new System.Drawing.Size(883, 43);
             this.panelPromptNeg.TabIndex = 16;
             // 
             // panelPrompt
             // 
+            this.panelPrompt.Controls.Add(this.cbSepia);
+            this.panelPrompt.Controls.Add(this.cbBaW);
+            this.panelPrompt.Controls.Add(this.cbDetFace);
             this.panelPrompt.Controls.Add(this.textboxPrompt);
-            this.panelPrompt.Controls.Add(this.btnExpandPromptField);
             this.panelPrompt.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelPrompt.Location = new System.Drawing.Point(0, 0);
             this.panelPrompt.Margin = new System.Windows.Forms.Padding(4);
             this.panelPrompt.Name = "panelPrompt";
             this.panelPrompt.Padding = new System.Windows.Forms.Padding(4);
-            this.panelPrompt.Size = new System.Drawing.Size(883, 56);
+            this.panelPrompt.Size = new System.Drawing.Size(883, 135);
             this.panelPrompt.TabIndex = 15;
             // 
             // promptAutocomplete
@@ -2217,6 +2179,39 @@ namespace StableDiffusionGui
             this.ImgListView.UseCompatibleStateImageBehavior = false;
             this.ImgListView.SelectedIndexChanged += new System.EventHandler(this.ImgListView_SelectedIndexChanged);
             // 
+            // cbDetFace
+            // 
+            this.cbDetFace.AutoSize = true;
+            this.cbDetFace.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.cbDetFace.Location = new System.Drawing.Point(768, 7);
+            this.cbDetFace.Name = "cbDetFace";
+            this.cbDetFace.Size = new System.Drawing.Size(109, 20);
+            this.cbDetFace.TabIndex = 112;
+            this.cbDetFace.Text = "Detailed face";
+            this.cbDetFace.UseVisualStyleBackColor = true;
+            // 
+            // cbBaW
+            // 
+            this.cbBaW.AutoSize = true;
+            this.cbBaW.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.cbBaW.Location = new System.Drawing.Point(768, 104);
+            this.cbBaW.Name = "cbBaW";
+            this.cbBaW.Size = new System.Drawing.Size(96, 20);
+            this.cbBaW.TabIndex = 113;
+            this.cbBaW.Text = "b&&w image";
+            this.cbBaW.UseVisualStyleBackColor = true;
+            // 
+            // cbSepia
+            // 
+            this.cbSepia.AutoSize = true;
+            this.cbSepia.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.cbSepia.Location = new System.Drawing.Point(768, 80);
+            this.cbSepia.Name = "cbSepia";
+            this.cbSepia.Size = new System.Drawing.Size(65, 20);
+            this.cbSepia.TabIndex = 114;
+            this.cbSepia.Text = "Sepia";
+            this.cbSepia.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AllowDrop = true;
@@ -2270,8 +2265,6 @@ namespace StableDiffusionGui
             this.menuStripDevTools.ResumeLayout(false);
             this.menuStripPostProcess.ResumeLayout(false);
             this.panelSettings.ResumeLayout(false);
-            this.panelDebugLoopback.ResumeLayout(false);
-            this.panelDebugLoopback.PerformLayout();
             this.panelDebugPerlinThresh.ResumeLayout(false);
             this.panelDebugPerlinThresh.PerformLayout();
             this.panelDebugSendStdin.ResumeLayout(false);
@@ -2373,11 +2366,9 @@ namespace StableDiffusionGui
         public HTAlt.WinForms.HTButton btnInitImgBrowse;
         public CustomSlider sliderInitStrength;
         public HTAlt.WinForms.HTButton btnEmbeddingBrowse;
-        public System.Windows.Forms.Button btnExpandPromptField;
         public CustomSlider sliderSteps;
         public System.Windows.Forms.Label labelImgPrompt;
         public CustomTextbox textboxPromptNeg;
-        public System.Windows.Forms.Button btnExpandPromptNegField;
         public System.Windows.Forms.Label labelImgPromptNeg;
         public System.Windows.Forms.TextBox textboxClipsegMask;
         public System.Windows.Forms.ComboBox comboxInpaintMode;
@@ -2456,6 +2447,9 @@ namespace StableDiffusionGui
         public System.Windows.Forms.ComboBox comboxSdModel;
         private System.Windows.Forms.Label label19;
         public System.Windows.Forms.ListView ImgListView;
+        public System.Windows.Forms.CheckBox cbDetFace;
+        public System.Windows.Forms.CheckBox cbBaW;
+        public System.Windows.Forms.CheckBox cbSepia;
     }
 }
 

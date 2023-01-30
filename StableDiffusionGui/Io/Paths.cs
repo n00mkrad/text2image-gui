@@ -1,4 +1,5 @@
 ﻿using StableDiffusionGui.Data;
+using StableDiffusionGui.Forms;
 using StableDiffusionGui.Main;
 using System;
 using System.Collections.Generic;
@@ -51,12 +52,17 @@ namespace StableDiffusionGui.Io
             return path;
         }
 
-        public static string GetModelsPath(ModelType type = ModelType.Normal)
+        public static string GetModelsPath(ModelType type = ModelType.Normal, bool bCP = false)
         {
             string path = "";
 
             if (type == ModelType.Normal)
-                path = Path.Combine(GetDataPath(), "models");
+            {
+                if (!bCP && SettingsForm.IsONNX())
+                    path = Path.Combine(GetDataPath(), @"models\onnx");
+                else
+                    path = Path.Combine(GetDataPath(), @"models\stable-diffusion");
+            }
             else if (type == ModelType.Vae)
                 path = Path.Combine(GetDataPath(), "models", "vae");
 
@@ -78,13 +84,13 @@ namespace StableDiffusionGui.Io
             return path;
         }
 
-        public static List<Model> GetModelsAll(bool removeUnknownModels = true)
+        public static List<Model> GetModelsAll(bool removeUnknownModels = true, bool bCP = false)
         {
             List<Model> list = new List<Model>();
 
             try
             {
-                List<string> mdlFolders = new List<string>() { GetModelsPath() };
+                List<string> mdlFolders = new List<string>() { GetModelsPath(ModelType.Normal, bCP) };
 
                 foreach (ModelType type in Enum.GetValues(typeof(ModelType)).Cast<ModelType>())
                 {
@@ -142,14 +148,15 @@ namespace StableDiffusionGui.Io
 
             try
             {
-                List<string> mdlFolders = new List<string>() { GetModelsPath(type) };
+                bool CudaUse = implementation == Implementation.InvokeAi || implementation == Implementation.OptimizedSd;
+                List<string> mdlFolders = new List<string>() { GetModelsPath(type, CudaUse) };
 
                 List<string> customModelDirsList = Config.Get<List<string>>($"{Config.Keys.CustomModelDirsPfx}{type}");
 
                 if (customModelDirsList != null)
                     mdlFolders.AddRange(customModelDirsList, out mdlFolders);
 
-                if (implementation == Implementation.InvokeAi || implementation == Implementation.OptimizedSd)
+                if (CudaUse)
                 {
                     var fileList = new List<ZlpFileInfo>();
 

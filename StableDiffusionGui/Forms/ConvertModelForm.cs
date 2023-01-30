@@ -45,7 +45,7 @@ namespace StableDiffusionGui.Forms
         private void LoadModels()
         {
             comboxModel.Items.Clear();
-            Paths.GetModelsAll().Where(m => m.Format == _currentInFormat).ToList().ForEach(x => comboxModel.Items.Add(x.Name));
+            Paths.GetModelsAll(true, true).Where(m => m.Format == _currentInFormat).ToList().ForEach(x => comboxModel.Items.Add(x.Name));
 
             if (comboxModel.SelectedIndex < 0 && comboxModel.Items.Count > 0)
                 comboxModel.SelectedIndex = 0;
@@ -73,7 +73,7 @@ namespace StableDiffusionGui.Forms
             Enabled = false;
             btnRun.Text = "Converting...";
 
-            var model = Paths.GetModelsAll().Where(m => m.Name == comboxModel.Text).FirstOrDefault();
+            var model = Paths.GetModelsAll(true, true).Where(m => m.Name == comboxModel.Text).FirstOrDefault();
             Model outModel = await ConvertModels.Convert(_currentInFormat, _currentOutFormat, model, true);
 
             Program.SetState(Program.BusyState.Standby);

@@ -36,6 +36,8 @@ namespace StableDiffusionGui.Forms
             MaximumSize = new System.Drawing.Size(Size.Width, (Size.Height * 1.25f).RoundToInt());
         }
 
+        public static bool IsONNX() => ParseUtils.GetEnum<Implementation>(Config.Get<string>(Config.Keys.ImplementationName)) == Implementation.DiffusersOnnx;
+
         private void SettingsForm_Shown(object sender, EventArgs e)
         {
             Refresh();

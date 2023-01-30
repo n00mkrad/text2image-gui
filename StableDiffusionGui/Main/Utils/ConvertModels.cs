@@ -32,11 +32,15 @@ namespace StableDiffusionGui.Main.Utils
                 {
                     case Format.Pytorch: outPath = GetOutputPath(model, "_ckpt.ckpt"); break;
                     case Format.Diffusers: outPath = GetOutputPath(model, "_diff"); break;
-                    case Format.DiffusersOnnx: outPath = GetOutputPath(model, "_onnx"); break;
                     case Format.Safetensors: outPath = GetOutputPath(model, "_sft.safetensors"); break;
+                    case Format.DiffusersOnnx:
+                        {
+                            string TryONNX = System.IO.Directory.GetParent(model.Directory.FullName) + @"\onnx\" + Path.GetFileNameWithoutExtension(model.Name);
+                            outPath = TryONNX + "_onnx";
+                            break;
+                        }
                 }
-
-                PatchConversionScripts();
+                        PatchConversionScripts();
 
                 // Pytorch -> Diffusers
                 if (formatIn == Format.Pytorch && formatOut == Format.Diffusers)

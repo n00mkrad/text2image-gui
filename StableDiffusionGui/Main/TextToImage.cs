@@ -163,7 +163,7 @@ namespace StableDiffusionGui.Main
                     }
 
                     string OutFile = File.Substring(0, File.Length - 4) + "_upscale.png";
-                    startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal;
+                    startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
                     startInfo.Arguments = "-i " + File + " -o " + OutFile + DopCmd;
                     process.StartInfo = startInfo;
                     process.Start();

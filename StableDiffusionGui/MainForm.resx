@@ -143,9 +143,6 @@
   <metadata name="menuStripOutputImg.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
-  <metadata name="toolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>185, 17</value>
-  </metadata>
   <data name="textboxExtraScales.ToolTip" xml:space="preserve">
     <value>Here you can custom additional scale values to run per image.
 
@@ -379,7 +376,7 @@ will run with step counts 20 to 60 with increments of 10.</value>
   <data name="cliButton.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAd
-        fgAAHX4BeAbjQAAAB9NJREFUeF7t3VeoJEUUBuA154QRc85ZVDC9KKZHFRMi+GAWI4o5ZzHHB5VFBREE
+        fQAAHX0B1b/CLQAAB9NJREFUeF7t3VeoJEUUBuA154QRc85ZVDC9KKZHFRMi+GAWI4o5ZzHHB5VFBREE
         FQXFHB7MWUwo5hwxYrz+/+pcxtr/nOrqnqnqmds/fLCe7Zod59ye6a6unjttYmKiU5AsdvKRxU4+stjJ
         RxY7+chiJx9Z7OQji0M0J2wKB8KlcDs8AM/CU//9+Q64HA6HbWF+UI81FmRxwPgC7gt3wo+Qmj/gaTgO
         lgf1b4wsWRyQleFq+AkGlb/gHtga1L85cmSxocWALzx/coeZh2AtUM9hZMhiA3vCN5Arv8PZMDuo59N6
@@ -448,7 +445,7 @@ will run with step counts 20 to 60 with increments of 10.</value>
   <data name="btnNextImg.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        vgAADr4B6kKxwAAAAZRJREFUeF7t3UFqAkEUBmFJDu5pck5TzzYLQcSBmalFquAtevv9B+hLVVVVVVXV
+        vAAADrwBlbxySQAAAZRJREFUeF7t3UFqAkEUBmFJDu5pck5TzzYLQcSBmalFquAtevv9B+hLVVVVVVXV
         md1ut+vc41ln9sD/qxHObMCX+1ONcEYDvbxf1ghHNsDL+W2NcEQDu3w/qhH2bECX66YaYY+A/OJ+7qTb
         a4Q9AvKbawQzIBvBDshGsAOyEeyAbAQ7IBvBDshGsAOyEeyAbAQ7IBvBDshGsAOyEeyAbAQ7IBvBDshG
         sAOyEeyAbAQ7IBvBDshGsAOyEeyAbAQ7IBvBDshGsAOyEeyAbAQ7IBvBDshGsAOyEeyAbAQ7IBvBDshG
