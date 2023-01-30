@@ -1256,7 +1256,7 @@ namespace StableDiffusionGui
             this.textboxSliderScaleImg.Name = "textboxSliderScaleImg";
             this.textboxSliderScaleImg.Size = new System.Drawing.Size(35, 21);
             this.textboxSliderScaleImg.TabIndex = 93;
-            this.textboxSliderScaleImg.Text = "1,5";
+            this.textboxSliderScaleImg.Text = "0,75";
             // 
             // textboxExtraScalesImg
             // 
