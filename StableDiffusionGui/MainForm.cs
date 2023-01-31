@@ -203,6 +203,7 @@ namespace StableDiffusionGui
 
         public async void runBtn_Click(object sender, EventArgs e)
         {
+            ImageViewer.Clear();
             await FormUtils.TryRun();
 
             if (checkboxLoopback.Checked)

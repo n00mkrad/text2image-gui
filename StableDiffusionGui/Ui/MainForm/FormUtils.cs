@@ -1,5 +1,6 @@
 ﻿using ImageMagick;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using StableDiffusionGui.Data;
 using StableDiffusionGui.Extensions;
 using StableDiffusionGui.Forms;
 using StableDiffusionGui.Io;
@@ -220,7 +221,25 @@ namespace StableDiffusionGui.Ui.MainFormUtils
                         }
 
                         FormControls.Save();
-                        await TextToImage.RunTti(FormParsing.GetCurrentTtiSettings());
+
+                        bool PilotEnable = Pilot.GetTaskCount() > 0;
+
+                        if (PilotEnable)
+                        {
+                            List<TtiSettings> PilotTasks = new List<TtiSettings>();
+
+                            for(int i = 0; i < Pilot.GetTaskCount(); i++)
+                            {
+                                PilotTasks.Add(FormParsing.GetCurrentTtiSettings());
+                            }
+
+                            Pilot.ClearTask();
+                            await TextToImage.RunTti(PilotTasks, true);
+                        }
+                        else
+                        {
+                            await TextToImage.RunTti(FormParsing.GetCurrentTtiSettings());
+                        }
                     }
                 }
             }

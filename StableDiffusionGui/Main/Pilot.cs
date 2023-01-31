@@ -1,4 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using StableDiffusionGui.Data;
+using StableDiffusionGui.Io;
+using StableDiffusionGui.MiscUtils;
+using StableDiffusionGui.Ui;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
 namespace StableDiffusionGui.Main
 {
@@ -25,7 +32,7 @@ namespace StableDiffusionGui.Main
             PilotIterationX.Clear();
             PilotIterationY.Clear();
 
-            ReadFromType(XType, true); 
+            ReadFromType(XType, true);
             ReadFromType(YType, false);
         }
 
@@ -33,9 +40,9 @@ namespace StableDiffusionGui.Main
         {
             var TestA = Text.Split('-');
 
-            if(TestA.Length > 1 )
+            if (TestA.Length > 1)
             {
-                for(float i = TestA[0].Replace('.', ',').GetFloat(); i <= TestA[1].Replace('.', ',').GetFloat(); i++)
+                for (float i = TestA[0].Replace('.', ',').GetFloat(); i <= TestA[1].Replace('.', ',').GetFloat(); i++)
                 {
                     Data.Add(i);
                 }
@@ -43,7 +50,7 @@ namespace StableDiffusionGui.Main
             else
             {
                 var TestB = Text.Split(',');
-                foreach(string i in TestB)
+                foreach (string i in TestB)
                 {
                     Data.Add(i.GetFloat());
                 }
@@ -55,29 +62,29 @@ namespace StableDiffusionGui.Main
             switch (Type)
             {
                 case PType.None: break;
-                case PType.Seed: 
+                case PType.Seed:
                 case PType.Prompt:
-                {
-                    if (IsX)
                     {
-                        ParseString(Program.MainForm.tbXPilot.Text , ref PilotIterationX);
-                        break;
+                        if (IsX)
+                        {
+                            ParseString(Program.MainForm.tbXPilot.Text, ref PilotIterationX);
+                            break;
+                        }
+                        else
+                        {
+                            ParseString(Program.MainForm.tbYPilot.Text, ref PilotIterationY);
+                            break;
+                        }
                     }
-                    else
-                    {
-                        ParseString(Program.MainForm.tbYPilot.Text, ref PilotIterationY); 
-                        break;
-                    }
-                }
             }
         }
 
         public static int GetTaskCount()
         {
-            if(XType == PType.None) 
+            if (XType == PType.None)
                 return 0;
 
-            if(YType != PType.None)
+            if (YType != PType.None)
             {
                 return PilotIterationX.Count * PilotIterationY.Count;
             }
@@ -85,6 +92,35 @@ namespace StableDiffusionGui.Main
             {
                 return PilotIterationX.Count;
             }
+        }
+
+        static int SeedStep = 0;
+        public static int Seed()
+        {
+            if (XType != PType.Seed && YType != PType.Seed)
+                return (int)Program.MainForm.upDownSeed.Value;
+
+            if (YType == PType.None)
+            {
+                int Step = (int)PilotIterationX[SeedStep];
+                SeedStep++;
+
+                return Step;
+            }
+            else
+            {
+                int Step = (int)PilotIterationX[SeedStep / PilotIterationX.Count];
+                SeedStep++;
+
+                return Step;
+            }
+
+            return (int)Program.MainForm.upDownSeed.Value;
+        }
+
+        public static void ClearTask()
+        {
+            SeedStep = 0;
         }
     }
 }

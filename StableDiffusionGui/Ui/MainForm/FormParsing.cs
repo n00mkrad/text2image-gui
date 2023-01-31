@@ -128,21 +128,21 @@ namespace StableDiffusionGui.Ui.MainFormUtils
         public static TtiSettings GetCurrentTtiSettings()
         {
             bool PilotEnable = Pilot.GetTaskCount() > 0;
-
+            long seed = Pilot.Seed();
             TtiSettings settings = new TtiSettings
             {
                 Implementation = ParseUtils.GetEnum<Implementation>(Config.Get<string>(Config.Keys.ImplementationName)),
 
                 Prompts = Prompt.ToArray(),
                 NegativePrompt = F.textboxPromptNeg.Visible ? F.textboxPromptNeg.TextNoPlaceholder.Trim().Replace(Environment.NewLine, " ") : "",
-                Iterations = PilotEnable ? Pilot.GetTaskCount() : (int)F.upDownIterations.Value,
+                Iterations = PilotEnable ? 1 : (int)F.upDownIterations.Value,
                 Params = new Dictionary<string, string>
                 {
                     { "steps", MainUi.GetExtraValues(F.textboxExtraSteps.Text, F.sliderSteps.ActualValueFloat).Select(x => (int)x).ToArray().ToJson() },
                     { "scales", MainUi.GetExtraValues(F.textboxExtraScales.Text, F.sliderScale.ActualValueFloat).ToJson() },
                     { "scalesImg", MainUi.GetExtraValues(F.textboxExtraScalesImg.Text, F.sliderScaleImg.ActualValueFloat).ToJson() },
                     { "res", new Size(F.comboxResW.Text.GetInt(), F.comboxResH.Text.GetInt()).ToJson() },
-                    { "seed", (F.upDownSeed.Value < 0 ? new Random().Next(0, int.MaxValue) : ((long)F.upDownSeed.Value)).ToJson() },
+                    { "seed", (seed < 0 ? new Random().Next(0, int.MaxValue) : ((long)seed)).ToJson() },
                     { "sampler", ((Sampler)F.comboxSampler.SelectedIndex).ToString().Lower().ToJson() },
                     { "initImgs", MainUi.CurrentInitImgPaths.ToJson() },
                     { "initStrengths", F.panelInitImgStrength.Visible ? MainUi.GetExtraValues("", F.sliderInitStrength.ActualValueFloat).ToJson() : new List<float>() { 0.5f }.ToJson() },

@@ -47,12 +47,24 @@ namespace StableDiffusionGui.Ui.MainFormUtils
             return imgPaths.Count;
         }
 
-        public static void SetImages(List<string> imagePaths, ImgShowMode showMode, bool ignoreTimeout = false)
+        public static void SetImages(List<string> imagePaths, ImgShowMode showMode, bool ignoreTimeout = false, bool Pilot = false)
         {
             if (Enumerable.SequenceEqual(imagePaths, _currentImages))
                 return;
 
-            _currentImages = imagePaths.ToArray();
+            if (Pilot)
+            {
+                List<string> images = imagePaths.ToList();
+
+                foreach (var a in _currentImages)
+                    images.Add(a);
+
+                _currentImages = images.ToArray();
+
+            }
+            else
+                _currentImages = imagePaths.ToArray();
+
 
             if (showMode == ImgShowMode.DontShow)
                 return;
@@ -137,6 +149,7 @@ namespace StableDiffusionGui.Ui.MainFormUtils
             UpdateInitImgViewer();
             UpdatePromptLabelColors();
 
+            _currentImages = new string[0];
             ImgViewList.Images.Clear();
             Program.MainForm.ImgListView.Items.Clear();
         }

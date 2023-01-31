@@ -18,7 +18,7 @@ namespace StableDiffusionGui.Main
         private static readonly int _loopWaitBeforeStartMs = 1000;
         private static readonly int _loopWaitTimeMs = 200;
 
-        public static async Task ExportLoop(string imagesDir, int startingImgCount, int targetImgCount, bool show)
+        public static async Task ExportLoop(string imagesDir, int startingImgCount, int targetImgCount, bool show, bool Pilot = false)
         {
             TtiTaskInfo currTask = TextToImage.CurrentTask;
             TtiSettings currSettings = TextToImage.CurrentTaskSettings;
@@ -103,7 +103,7 @@ namespace StableDiffusionGui.Main
                     outImgs.AddRange(renamedImgPaths);
 
                     if (outImgs.Count > 0 && show)
-                        Ui.MainFormUtils.ImageViewer.SetImages(outImgs.Where(x => File.Exists(x)).ToList(), Ui.MainFormUtils.ImageViewer.ImgShowMode.ShowLast);
+                        Ui.MainFormUtils.ImageViewer.SetImages(outImgs.Where(x => File.Exists(x)).ToList(), Ui.MainFormUtils.ImageViewer.ImgShowMode.ShowLast, false, Pilot);
 
                     await Task.Delay(_loopWaitTimeMs);
                 }

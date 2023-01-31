@@ -32,7 +32,7 @@ namespace StableDiffusionGui.Main
             await RunTti(new List<TtiSettings>() { settings });
         }
 
-        public static async Task RunTti(List<TtiSettings> batches)
+        public static async Task RunTti(List<TtiSettings> batches, bool IsPilot = false)
         {
             if (batches == null || batches.Count < 1)
                 return;
@@ -98,7 +98,7 @@ namespace StableDiffusionGui.Main
                     case Implementation.InstructPixToPix: tasks.Add(InstructPixToPix.Run(s.Prompts, s.NegativePrompt, s.Iterations, s.Params, tempOutDir)); break;
                 }
 
-                tasks.Add(ImageExport.ExportLoop(tempOutDir, CurrentTask.ImgCount, s.GetTargetImgCount(), true));
+                tasks.Add(ImageExport.ExportLoop(tempOutDir, CurrentTask.ImgCount, s.GetTargetImgCount(), true, IsPilot));
 
                 await Task.WhenAll(tasks);
 

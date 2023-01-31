@@ -499,16 +499,14 @@ will run scales 10 to 14 with steps of 0.5.</value>
   <metadata name="menuStripPostProcess.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 56</value>
   </metadata>
-  <data name="tbYPilot.ToolTip" xml:space="preserve">
-    <value>Here you can custom additional scale values to run per image.
-
-Basic Syntax:
-10,12,14
-will run scales 10, 12 and 14.
-
-Incremental Syntax:
-10 &gt; 14 : 0.5
-will run scales 10 to 14 with steps of 0.5.</value>
+  <data name="pictBoxImgViewer.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAAgAAAAIAAQMAAADOtka5AAAABGdBTUEAALGPC/xhBQAAAAZQTFRFICAg
+        GBgYQHrOBAAAAAlwSFlzAAAOvAAADrwBlbxySQAAALVJREFUeNrt0LEJADEAxLDbf+k8BDxBukeFWxXe
+        ds5bAADgL4ADAAAgwAUAAFAOAACAABcAAEA5AAAAAlwAAADlAAAACHABAACUAwAAIMAFAABQDgAAgAAX
+        AABAOQAAAAJcAAAA5QAAAAhwAQAAlAMAACDABQAAUA4AAIAAFwAAQDkAAAACXAAAAOUAAAAIcAEAAJQD
+        AAAgwAUAAFAOAACAABcAAEA5AAAAAlwAAADlAAAAuG0fXH3Dsp5rkBYAAAAASUVORK5CYII=
+</value>
   </data>
   <data name="tbXPilot.ToolTip" xml:space="preserve">
     <value>Here you can custom additional scale values to run per image.
@@ -521,14 +519,16 @@ Incremental Syntax:
 10 &gt; 14 : 0.5
 will run scales 10 to 14 with steps of 0.5.</value>
   </data>
-  <data name="pictBoxImgViewer.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAAgAAAAIAAQMAAADOtka5AAAABGdBTUEAALGPC/xhBQAAAAZQTFRFICAg
-        GBgYQHrOBAAAAAlwSFlzAAAOvAAADrwBlbxySQAAALVJREFUeNrt0LEJADEAxLDbf+k8BDxBukeFWxXe
-        ds5bAADgL4ADAAAgwAUAAFAOAACAABcAAEA5AAAAAlwAAADlAAAACHABAACUAwAAIMAFAABQDgAAgAAX
-        AABAOQAAAAJcAAAA5QAAAAhwAQAAlAMAACDABQAAUA4AAIAAFwAAQDkAAAACXAAAAOUAAAAIcAEAAJQD
-        AAAgwAUAAFAOAACAABcAAEA5AAAAAlwAAADlAAAAuG0fXH3Dsp5rkBYAAAAASUVORK5CYII=
-</value>
+  <data name="tbYPilot.ToolTip" xml:space="preserve">
+    <value>Here you can custom additional scale values to run per image.
+
+Basic Syntax:
+10,12,14
+will run scales 10, 12 and 14.
+
+Incremental Syntax:
+10 &gt; 14 : 0.5
+will run scales 10 to 14 with steps of 0.5.</value>
   </data>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>72</value>
