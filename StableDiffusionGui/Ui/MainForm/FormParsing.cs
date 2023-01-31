@@ -127,13 +127,15 @@ namespace StableDiffusionGui.Ui.MainFormUtils
 
         public static TtiSettings GetCurrentTtiSettings()
         {
+            bool PilotEnable = Pilot.GetTaskCount() > 0;
+
             TtiSettings settings = new TtiSettings
             {
                 Implementation = ParseUtils.GetEnum<Implementation>(Config.Get<string>(Config.Keys.ImplementationName)),
 
                 Prompts = Prompt.ToArray(),
                 NegativePrompt = F.textboxPromptNeg.Visible ? F.textboxPromptNeg.TextNoPlaceholder.Trim().Replace(Environment.NewLine, " ") : "",
-                Iterations = (int)F.upDownIterations.Value,
+                Iterations = PilotEnable ? Pilot.GetTaskCount() : (int)F.upDownIterations.Value,
                 Params = new Dictionary<string, string>
                 {
                     { "steps", MainUi.GetExtraValues(F.textboxExtraSteps.Text, F.sliderSteps.ActualValueFloat).Select(x => (int)x).ToArray().ToJson() },

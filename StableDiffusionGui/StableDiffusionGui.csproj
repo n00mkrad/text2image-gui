@@ -251,6 +251,7 @@
     <Compile Include="Implementations\InvokeAiUtils.cs" />
     <Compile Include="Main\Logger.cs" />
     <Compile Include="Main\ImageExport.cs" />
+    <Compile Include="Main\Pilot.cs" />
     <Compile Include="Main\PromptHistory.cs" />
     <Compile Include="Main\TtiProcessOutputHandler.cs" />
     <Compile Include="Main\Utils\ConvertModels.cs" />

@@ -85,6 +85,9 @@ namespace StableDiffusionGui
             this.textboxExtraScalesImg = new System.Windows.Forms.TextBox();
             this.textboxPromptNeg = new StableDiffusionGui.Controls.CustomTextbox();
             this.checkboxHiresFix = new System.Windows.Forms.CheckBox();
+            this.cbBaW = new System.Windows.Forms.CheckBox();
+            this.cbDetFace = new System.Windows.Forms.CheckBox();
+            this.cbSepia = new System.Windows.Forms.CheckBox();
             this.labelCurrentImage = new System.Windows.Forms.Label();
             this.menuStripLogs = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.viewLogInRealtimeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -151,9 +154,6 @@ namespace StableDiffusionGui
             this.label11 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.comboxResH = new System.Windows.Forms.ComboBox();
-            this.cbBaW = new System.Windows.Forms.CheckBox();
-            this.cbDetFace = new System.Windows.Forms.CheckBox();
-            this.cbSepia = new System.Windows.Forms.CheckBox();
             this.comboxResW = new System.Windows.Forms.ComboBox();
             this.panelPrompt = new System.Windows.Forms.Panel();
             this.promptAutocomplete = new AutocompleteMenuNS.AutocompleteMenu();
@@ -168,6 +168,14 @@ namespace StableDiffusionGui
             this.comboxVaeModel = new System.Windows.Forms.ComboBox();
             this.label9 = new System.Windows.Forms.Label();
             this.cbScheduler = new System.Windows.Forms.ComboBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.cbXPilot = new System.Windows.Forms.ComboBox();
+            this.cbYPilot = new System.Windows.Forms.ComboBox();
+            this.label20 = new System.Windows.Forms.Label();
+            this.label21 = new System.Windows.Forms.Label();
+            this.tbXPilot = new System.Windows.Forms.TextBox();
+            this.tbYPilot = new System.Windows.Forms.TextBox();
+            this.cbXYPilot = new System.Windows.Forms.CheckBox();
             this.menuStripOutputImg.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.upDownSeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
@@ -178,6 +186,7 @@ namespace StableDiffusionGui
             this.menuStripDevTools.SuspendLayout();
             this.menuStripPostProcess.SuspendLayout();
             this.panelSettings.SuspendLayout();
+            this.panelPromptNeg.SuspendLayout();
             this.panelDebugPerlinThresh.SuspendLayout();
             this.panelDebugSendStdin.SuspendLayout();
             this.panelSeamless.SuspendLayout();
@@ -440,10 +449,10 @@ namespace StableDiffusionGui
             this.comboxSampler.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.comboxSampler.ForeColor = System.Drawing.Color.White;
             this.comboxSampler.FormattingEnabled = true;
-            this.comboxSampler.Location = new System.Drawing.Point(665, 34);
+            this.comboxSampler.Location = new System.Drawing.Point(727, 34);
             this.comboxSampler.Margin = new System.Windows.Forms.Padding(4);
             this.comboxSampler.Name = "comboxSampler";
-            this.comboxSampler.Size = new System.Drawing.Size(133, 26);
+            this.comboxSampler.Size = new System.Drawing.Size(187, 26);
             this.comboxSampler.TabIndex = 105;
             this.toolTip.SetToolTip(this.comboxSampler, "Changes how the image is sampled.\r\nEuler Ancestral works very well at low step co" +
         "unts.");
@@ -1144,6 +1153,46 @@ namespace StableDiffusionGui
             this.toolTip.SetToolTip(this.checkboxHiresFix, "Avoid duplications in high-resolution images, at the cost of generation speed.");
             this.checkboxHiresFix.UseVisualStyleBackColor = true;
             // 
+            // cbBaW
+            // 
+            this.cbBaW.AutoSize = true;
+            this.cbBaW.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.cbBaW.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.cbBaW.Location = new System.Drawing.Point(255, 60);
+            this.cbBaW.Name = "cbBaW";
+            this.cbBaW.Size = new System.Drawing.Size(98, 21);
+            this.cbBaW.TabIndex = 113;
+            this.cbBaW.Text = "b&&w image";
+            this.toolTip.SetToolTip(this.cbBaW, "Adds an image \"black and white\" filter to the request. (Not supported on some mod" +
+        "els)");
+            this.cbBaW.UseVisualStyleBackColor = true;
+            // 
+            // cbDetFace
+            // 
+            this.cbDetFace.AutoSize = true;
+            this.cbDetFace.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.cbDetFace.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.cbDetFace.Location = new System.Drawing.Point(255, 8);
+            this.cbDetFace.Name = "cbDetFace";
+            this.cbDetFace.Size = new System.Drawing.Size(113, 21);
+            this.cbDetFace.TabIndex = 112;
+            this.cbDetFace.Text = "Detailed face";
+            this.toolTip.SetToolTip(this.cbDetFace, "Adds hair, eye, and face details to the query.");
+            this.cbDetFace.UseVisualStyleBackColor = true;
+            // 
+            // cbSepia
+            // 
+            this.cbSepia.AutoSize = true;
+            this.cbSepia.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.cbSepia.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.cbSepia.Location = new System.Drawing.Point(255, 34);
+            this.cbSepia.Name = "cbSepia";
+            this.cbSepia.Size = new System.Drawing.Size(66, 21);
+            this.cbSepia.TabIndex = 114;
+            this.cbSepia.Text = "Sepia";
+            this.toolTip.SetToolTip(this.cbSepia, "Adds an image sepia filter to the request. (Not supported on some models)");
+            this.cbSepia.UseVisualStyleBackColor = true;
+            // 
             // labelCurrentImage
             // 
             this.labelCurrentImage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -1367,7 +1416,7 @@ namespace StableDiffusionGui
             // panelRes
             // 
             this.panelRes.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelRes.Location = new System.Drawing.Point(0, 885);
+            this.panelRes.Location = new System.Drawing.Point(0, 998);
             this.panelRes.Margin = new System.Windows.Forms.Padding(4);
             this.panelRes.Name = "panelRes";
             this.panelRes.Size = new System.Drawing.Size(878, 43);
@@ -1376,7 +1425,7 @@ namespace StableDiffusionGui
             // panelIterations
             // 
             this.panelIterations.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelIterations.Location = new System.Drawing.Point(0, 842);
+            this.panelIterations.Location = new System.Drawing.Point(0, 955);
             this.panelIterations.Margin = new System.Windows.Forms.Padding(4);
             this.panelIterations.Name = "panelIterations";
             this.panelIterations.Size = new System.Drawing.Size(878, 43);
@@ -1385,7 +1434,7 @@ namespace StableDiffusionGui
             // panelInitImgStrength
             // 
             this.panelInitImgStrength.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelInitImgStrength.Location = new System.Drawing.Point(0, 799);
+            this.panelInitImgStrength.Location = new System.Drawing.Point(0, 912);
             this.panelInitImgStrength.Margin = new System.Windows.Forms.Padding(4);
             this.panelInitImgStrength.Name = "panelInitImgStrength";
             this.panelInitImgStrength.Size = new System.Drawing.Size(878, 43);
@@ -1394,12 +1443,20 @@ namespace StableDiffusionGui
             // 
             // panelPromptNeg
             // 
+            this.panelPromptNeg.Controls.Add(this.cbXYPilot);
+            this.panelPromptNeg.Controls.Add(this.tbYPilot);
+            this.panelPromptNeg.Controls.Add(this.tbXPilot);
+            this.panelPromptNeg.Controls.Add(this.label21);
+            this.panelPromptNeg.Controls.Add(this.label20);
+            this.panelPromptNeg.Controls.Add(this.cbYPilot);
+            this.panelPromptNeg.Controls.Add(this.cbXPilot);
+            this.panelPromptNeg.Controls.Add(this.label7);
             this.panelPromptNeg.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelPromptNeg.Location = new System.Drawing.Point(0, 759);
             this.panelPromptNeg.Margin = new System.Windows.Forms.Padding(4);
             this.panelPromptNeg.Name = "panelPromptNeg";
             this.panelPromptNeg.Padding = new System.Windows.Forms.Padding(4);
-            this.panelPromptNeg.Size = new System.Drawing.Size(878, 40);
+            this.panelPromptNeg.Size = new System.Drawing.Size(878, 153);
             this.panelPromptNeg.TabIndex = 16;
             // 
             // panelDebugPerlinThresh
@@ -1957,46 +2014,6 @@ namespace StableDiffusionGui
             this.comboxResH.TabIndex = 107;
             this.comboxResH.SelectedIndexChanged += new System.EventHandler(this.comboxResH_SelectedIndexChanged);
             // 
-            // cbBaW
-            // 
-            this.cbBaW.AutoSize = true;
-            this.cbBaW.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.cbBaW.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.cbBaW.Location = new System.Drawing.Point(255, 60);
-            this.cbBaW.Name = "cbBaW";
-            this.cbBaW.Size = new System.Drawing.Size(98, 21);
-            this.cbBaW.TabIndex = 113;
-            this.cbBaW.Text = "b&&w image";
-            this.toolTip.SetToolTip(this.cbBaW, "Adds an image \"black and white\" filter to the request. (Not supported on some mod" +
-        "els)");
-            this.cbBaW.UseVisualStyleBackColor = true;
-            // 
-            // cbDetFace
-            // 
-            this.cbDetFace.AutoSize = true;
-            this.cbDetFace.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.cbDetFace.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.cbDetFace.Location = new System.Drawing.Point(255, 8);
-            this.cbDetFace.Name = "cbDetFace";
-            this.cbDetFace.Size = new System.Drawing.Size(113, 21);
-            this.cbDetFace.TabIndex = 112;
-            this.cbDetFace.Text = "Detailed face";
-            this.toolTip.SetToolTip(this.cbDetFace, "Adds hair, eye, and face details to the query.");
-            this.cbDetFace.UseVisualStyleBackColor = true;
-            // 
-            // cbSepia
-            // 
-            this.cbSepia.AutoSize = true;
-            this.cbSepia.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.cbSepia.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.cbSepia.Location = new System.Drawing.Point(255, 34);
-            this.cbSepia.Name = "cbSepia";
-            this.cbSepia.Size = new System.Drawing.Size(66, 21);
-            this.cbSepia.TabIndex = 114;
-            this.cbSepia.Text = "Sepia";
-            this.toolTip.SetToolTip(this.cbSepia, "Adds an image sepia filter to the request. (Not supported on some models)");
-            this.cbSepia.UseVisualStyleBackColor = true;
-            // 
             // comboxResW
             // 
             this.comboxResW.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
@@ -2105,10 +2122,10 @@ namespace StableDiffusionGui
             this.comboxSdModel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.comboxSdModel.ForeColor = System.Drawing.Color.White;
             this.comboxSdModel.FormattingEnabled = true;
-            this.comboxSdModel.Location = new System.Drawing.Point(155, 35);
+            this.comboxSdModel.Location = new System.Drawing.Point(139, 35);
             this.comboxSdModel.Margin = new System.Windows.Forms.Padding(4);
             this.comboxSdModel.Name = "comboxSdModel";
-            this.comboxSdModel.Size = new System.Drawing.Size(252, 24);
+            this.comboxSdModel.Size = new System.Drawing.Size(337, 24);
             this.comboxSdModel.TabIndex = 112;
             this.comboxSdModel.SelectedIndexChanged += new System.EventHandler(this.comboxSdModel_SelectedIndexChanged);
             // 
@@ -2117,7 +2134,7 @@ namespace StableDiffusionGui
             this.label19.AutoSize = true;
             this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label19.ForeColor = System.Drawing.Color.White;
-            this.label19.Location = new System.Drawing.Point(152, 11);
+            this.label19.Location = new System.Drawing.Point(136, 11);
             this.label19.Margin = new System.Windows.Forms.Padding(11, 0, 4, 0);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(50, 17);
@@ -2144,7 +2161,7 @@ namespace StableDiffusionGui
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(421, 9);
+            this.label2.Location = new System.Drawing.Point(483, 9);
             this.label2.Margin = new System.Windows.Forms.Padding(11, 0, 4, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(39, 17);
@@ -2159,10 +2176,10 @@ namespace StableDiffusionGui
             this.comboxVaeModel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.comboxVaeModel.ForeColor = System.Drawing.Color.White;
             this.comboxVaeModel.FormattingEnabled = true;
-            this.comboxVaeModel.Location = new System.Drawing.Point(422, 34);
+            this.comboxVaeModel.Location = new System.Drawing.Point(484, 34);
             this.comboxVaeModel.Margin = new System.Windows.Forms.Padding(4);
             this.comboxVaeModel.Name = "comboxVaeModel";
-            this.comboxVaeModel.Size = new System.Drawing.Size(226, 26);
+            this.comboxVaeModel.Size = new System.Drawing.Size(237, 26);
             this.comboxVaeModel.TabIndex = 121;
             this.comboxVaeModel.SelectedIndexChanged += new System.EventHandler(this.comboxVaeModel_SelectedIndexChanged);
             // 
@@ -2171,7 +2188,7 @@ namespace StableDiffusionGui
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label9.ForeColor = System.Drawing.Color.White;
-            this.label9.Location = new System.Drawing.Point(663, 9);
+            this.label9.Location = new System.Drawing.Point(725, 9);
             this.label9.Margin = new System.Windows.Forms.Padding(11, 0, 4, 0);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(76, 17);
@@ -2193,12 +2210,143 @@ namespace StableDiffusionGui
             "LMSD",
             "DDIM",
             "DPMSM"});
-            this.cbScheduler.Location = new System.Drawing.Point(664, 36);
+            this.cbScheduler.Location = new System.Drawing.Point(729, 35);
             this.cbScheduler.Margin = new System.Windows.Forms.Padding(4);
             this.cbScheduler.Name = "cbScheduler";
             this.cbScheduler.Size = new System.Drawing.Size(119, 24);
             this.cbScheduler.TabIndex = 123;
             this.cbScheduler.SelectedIndexChanged += new System.EventHandler(this.cbScheduler_SelectedIndexChanged);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.ForeColor = System.Drawing.Color.White;
+            this.label7.Location = new System.Drawing.Point(7, 13);
+            this.label7.Margin = new System.Windows.Forms.Padding(11, 0, 4, 0);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(106, 18);
+            this.label7.TabIndex = 109;
+            this.label7.Text = "X/Y Pilot (WIP)";
+            // 
+            // cbXPilot
+            // 
+            this.cbXPilot.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.cbXPilot.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbXPilot.Enabled = false;
+            this.cbXPilot.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cbXPilot.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.cbXPilot.ForeColor = System.Drawing.Color.White;
+            this.cbXPilot.FormattingEnabled = true;
+            this.cbXPilot.Items.AddRange(new object[] {
+            "None",
+            "Seed",
+            "Prompt Scale"});
+            this.cbXPilot.Location = new System.Drawing.Point(29, 45);
+            this.cbXPilot.Margin = new System.Windows.Forms.Padding(4);
+            this.cbXPilot.Name = "cbXPilot";
+            this.cbXPilot.Size = new System.Drawing.Size(205, 26);
+            this.cbXPilot.TabIndex = 108;
+            this.toolTip.SetToolTip(this.cbXPilot, "Changes how the image is sampled.\r\nEuler Ancestral works very well at low step co" +
+        "unts.");
+            this.cbXPilot.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            // 
+            // cbYPilot
+            // 
+            this.cbYPilot.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.cbYPilot.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbYPilot.Enabled = false;
+            this.cbYPilot.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cbYPilot.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.cbYPilot.ForeColor = System.Drawing.Color.White;
+            this.cbYPilot.FormattingEnabled = true;
+            this.cbYPilot.Items.AddRange(new object[] {
+            "None",
+            "Seed",
+            "Prompt Scale"});
+            this.cbYPilot.Location = new System.Drawing.Point(29, 89);
+            this.cbYPilot.Margin = new System.Windows.Forms.Padding(4);
+            this.cbYPilot.Name = "cbYPilot";
+            this.cbYPilot.Size = new System.Drawing.Size(205, 26);
+            this.cbYPilot.TabIndex = 110;
+            this.toolTip.SetToolTip(this.cbYPilot, "Changes how the image is sampled.\r\nEuler Ancestral works very well at low step co" +
+        "unts.");
+            this.cbYPilot.SelectedIndexChanged += new System.EventHandler(this.cbYPilot_SelectedIndexChanged);
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label20.ForeColor = System.Drawing.Color.White;
+            this.label20.Location = new System.Drawing.Point(4, 48);
+            this.label20.Margin = new System.Windows.Forms.Padding(11, 0, 4, 0);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(18, 18);
+            this.label20.TabIndex = 111;
+            this.label20.Text = "X";
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label21.ForeColor = System.Drawing.Color.White;
+            this.label21.Location = new System.Drawing.Point(3, 92);
+            this.label21.Margin = new System.Windows.Forms.Padding(11, 0, 4, 0);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(17, 18);
+            this.label21.TabIndex = 112;
+            this.label21.Text = "Y";
+            // 
+            // tbXPilot
+            // 
+            this.tbXPilot.AllowDrop = true;
+            this.tbXPilot.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.promptAutocomplete.SetAutocompleteMenu(this.tbXPilot, null);
+            this.tbXPilot.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.tbXPilot.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tbXPilot.Enabled = false;
+            this.tbXPilot.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.tbXPilot.ForeColor = System.Drawing.Color.White;
+            this.tbXPilot.Location = new System.Drawing.Point(311, 43);
+            this.tbXPilot.Margin = new System.Windows.Forms.Padding(4);
+            this.tbXPilot.MinimumSize = new System.Drawing.Size(5, 21);
+            this.tbXPilot.Name = "tbXPilot";
+            this.tbXPilot.Size = new System.Drawing.Size(448, 24);
+            this.tbXPilot.TabIndex = 113;
+            this.toolTip.SetToolTip(this.tbXPilot, resources.GetString("tbXPilot.ToolTip"));
+            this.tbXPilot.TextChanged += new System.EventHandler(this.tbXPilot_TextChanged);
+            // 
+            // tbYPilot
+            // 
+            this.tbYPilot.AllowDrop = true;
+            this.tbYPilot.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.promptAutocomplete.SetAutocompleteMenu(this.tbYPilot, null);
+            this.tbYPilot.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.tbYPilot.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tbYPilot.Enabled = false;
+            this.tbYPilot.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.tbYPilot.ForeColor = System.Drawing.Color.White;
+            this.tbYPilot.Location = new System.Drawing.Point(311, 91);
+            this.tbYPilot.Margin = new System.Windows.Forms.Padding(4);
+            this.tbYPilot.MinimumSize = new System.Drawing.Size(5, 21);
+            this.tbYPilot.Name = "tbYPilot";
+            this.tbYPilot.Size = new System.Drawing.Size(448, 24);
+            this.tbYPilot.TabIndex = 114;
+            this.toolTip.SetToolTip(this.tbYPilot, resources.GetString("tbYPilot.ToolTip"));
+            this.tbYPilot.TextChanged += new System.EventHandler(this.tbYPilot_TextChanged);
+            // 
+            // cbXYPilot
+            // 
+            this.cbXYPilot.AutoSize = true;
+            this.cbXYPilot.ForeColor = System.Drawing.Color.White;
+            this.cbXYPilot.Location = new System.Drawing.Point(121, 12);
+            this.cbXYPilot.Margin = new System.Windows.Forms.Padding(4);
+            this.cbXYPilot.Name = "cbXYPilot";
+            this.cbXYPilot.Padding = new System.Windows.Forms.Padding(4);
+            this.cbXYPilot.Size = new System.Drawing.Size(26, 25);
+            this.cbXYPilot.TabIndex = 111;
+            this.cbXYPilot.UseVisualStyleBackColor = true;
+            this.cbXYPilot.CheckedChanged += new System.EventHandler(this.cbXYPilot_CheckedChanged);
             // 
             // MainForm
             // 
@@ -2257,6 +2405,8 @@ namespace StableDiffusionGui
             this.menuStripDevTools.ResumeLayout(false);
             this.menuStripPostProcess.ResumeLayout(false);
             this.panelSettings.ResumeLayout(false);
+            this.panelPromptNeg.ResumeLayout(false);
+            this.panelPromptNeg.PerformLayout();
             this.panelDebugPerlinThresh.ResumeLayout(false);
             this.panelDebugPerlinThresh.PerformLayout();
             this.panelDebugSendStdin.ResumeLayout(false);
@@ -2430,6 +2580,14 @@ namespace StableDiffusionGui
         public System.Windows.Forms.ComboBox comboxVaeModel;
         private System.Windows.Forms.Label label9;
         public System.Windows.Forms.ComboBox cbScheduler;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.Label label20;
+        public System.Windows.Forms.ComboBox cbYPilot;
+        public System.Windows.Forms.ComboBox cbXPilot;
+        private System.Windows.Forms.Label label7;
+        public System.Windows.Forms.TextBox tbYPilot;
+        public System.Windows.Forms.TextBox tbXPilot;
+        public System.Windows.Forms.CheckBox cbXYPilot;
     }
 }
 

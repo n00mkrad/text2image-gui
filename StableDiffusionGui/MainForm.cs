@@ -19,7 +19,6 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Media.Media3D;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
 namespace StableDiffusionGui
@@ -125,6 +124,9 @@ namespace StableDiffusionGui
             cbDetFace.Location = new Point(cbDetFace.Location.X - pictBoxInitImg.Size.Width, cbDetFace.Location.Y);
             cbSepia.Location = new Point(cbSepia.Location.X - pictBoxInitImg.Size.Width, cbSepia.Location.Y);
             checkboxHiresFix.Location = new Point(checkboxHiresFix.Location.X - pictBoxInitImg.Size.Width, checkboxHiresFix.Location.Y);
+
+            cbXPilot.SelectedItem = cbXPilot.Items[0];
+            cbYPilot.SelectedItem = cbYPilot.Items[0];
         }
 
         private void installerBtn_Click(object sender, EventArgs e)
@@ -621,6 +623,34 @@ namespace StableDiffusionGui
         private void cbScheduler_SelectedIndexChanged(object sender, EventArgs e)
         {
             ConfigParser.SaveGuiElement(cbScheduler, Config.Keys.ModelSchd);
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Pilot.Sync();
+        }
+
+        private void cbXYPilot_CheckedChanged(object sender, EventArgs e)
+        {
+            cbXPilot.Enabled = cbXYPilot.Checked;
+            cbYPilot.Enabled = cbXYPilot.Checked;
+            tbXPilot.Enabled = cbXYPilot.Checked;
+            tbYPilot.Enabled = cbXYPilot.Checked;
+        }
+
+        private void tbXPilot_TextChanged(object sender, EventArgs e)
+        {
+            Pilot.Sync();
+        }
+
+        private void tbYPilot_TextChanged(object sender, EventArgs e)
+        {
+            Pilot.Sync();
+        }
+
+        private void cbYPilot_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Pilot.Sync();
         }
     }
 }
