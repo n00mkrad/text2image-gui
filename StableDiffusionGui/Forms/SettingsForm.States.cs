@@ -49,7 +49,7 @@ namespace StableDiffusionGui.Forms
 
         private static bool CudaDeviceSelectionAvailable()
         {
-            var unloadModelImps = new List<Implementation> { Implementation.InvokeAi, Implementation.OptimizedSd, Implementation.InstructPixToPix };
+            var unloadModelImps = new List<Implementation> { Implementation.InvokeAi, Implementation.OptimizedSd, Implementation.InstructPixToPix, Implementation.DiffusersOnnx };
             return unloadModelImps.Contains(ConfigParser.CurrentImplementation);
         }
 

@@ -135,9 +135,18 @@ namespace StableDiffusionGui.Implementations
                 string ScMode = Program.MainForm.cbScheduler.GetItemText(Program.MainForm.cbScheduler.SelectedItem);
                 ScMode = ScMode.ToLower();
 
+                int ONNXDeviceID = Config.Get<int>(Config.Keys.CudaDeviceIdx);
+                string ONNXDevice = "dml";
+                switch (ONNXDeviceID)
+                {
+                    case 0: ONNXDevice = "dml"; break;
+                    case 1: ONNXDevice = "cuda"; break;
+                    case 2: ONNXDevice = "cpu"; break;
+                }
+
                 py.StartInfo.RedirectStandardInput = true;
                 py.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand()} && " +
-                    $"python \"{Constants.Dirs.SdRepo}/sd_onnx/sd_onnx.py\" -m {modelDir.FullName.Wrap(true)} -j {jsonPath.Wrap(true)} -o {outPath.Wrap(true)} -mode {mode} -scmode {ScMode}";
+                    $"python \"{Constants.Dirs.SdRepo}/sd_onnx/sd_onnx.py\" -m {modelDir.FullName.Wrap(true)} -j {jsonPath.Wrap(true)} -o {outPath.Wrap(true)} -mode {mode} -scmode {ScMode} -device {ONNXDevice}";
 
                 Logger.Log("cmd.exe " + py.StartInfo.Arguments, true);
 

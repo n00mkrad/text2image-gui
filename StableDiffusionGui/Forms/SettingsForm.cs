@@ -63,8 +63,8 @@ namespace StableDiffusionGui.Forms
                 comboxNotify
             }, -1);
 
+            LoadImplementations();
             Task.Run(() => LoadGpus());
-            Task.Run(() => LoadImplementations());
             UpdateComboxStates();
             Opacity = 1;
         }
@@ -106,14 +106,26 @@ namespace StableDiffusionGui.Forms
             comboxCudaDevice.Items.Add("Loading CUDA devices...");
             comboxCudaDevice.SelectedIndex = 0;
 
-            var gpus = await GpuUtils.GetCudaGpusCached();
+            if (CurrImplementation == Implementation.DiffusersOnnx)
+            {
+                comboxCudaDevice.Items.Clear();
 
-            comboxCudaDevice.Items.Clear();
-            comboxCudaDevice.Items.Add("Automatic");
-            comboxCudaDevice.Items.Add("CPU (Experimental, may not work at all)");
+                comboxCudaDevice.Items.Add("DirectML (AMD)");
+                comboxCudaDevice.Items.Add("CUDA");
+                comboxCudaDevice.Items.Add("CPU");
+            }
+            else
+            {
+                comboxCudaDevice.Items.Clear();
 
-            foreach (var g in gpus)
-                comboxCudaDevice.Items.Add($"GPU {g.CudaDeviceId} ({g.FullName} - {g.VramGb} GB)");
+                var gpus = await GpuUtils.GetCudaGpusCached();
+
+                comboxCudaDevice.Items.Add("Auto");
+                comboxCudaDevice.Items.Add("CPU (Experimental, may not work at all)");
+
+                foreach (var g in gpus)
+                    comboxCudaDevice.Items.Add($"GPU {g.CudaDeviceId} ({g.FullName} - {g.VramGb} GB)");
+            }
 
             ConfigParser.LoadComboxIndex(comboxCudaDevice, Config.Keys.CudaDeviceIdx);
         }
@@ -154,12 +166,12 @@ namespace StableDiffusionGui.Forms
             ConfigParser.LoadGuiElement(textboxFavsPath, Config.Keys.FavsPath);
             //ConfigParser.LoadGuiElement(comboxSdModel, Config.Keys.Model);
             ConfigParser.LoadGuiElement(comboxSdModelVae, Config.Keys.ModelVae);
-            // ConfigParser.LoadComboxIndex(comboxCudaDevice);
             ConfigParser.LoadComboxIndex(comboxNotify, Config.Keys.NotifyModeIdx);
             ConfigParser.LoadGuiElement(checkboxSaveUnprocessedImages, Config.Keys.SaveUnprocessedImages);
             ConfigParser.LoadGuiElement(checkboxUnloadModel, Config.Keys.UnloadModel);
             ConfigParser.LoadGuiElement(checkboxAutoSetResForInitImg, Config.Keys.AutoSetResForInitImg);
             ConfigParser.LoadGuiElement(checkboxInitImageRetainAspectRatio, Config.Keys.InitImageRetainAspectRatio);
+            ConfigParser.LoadComboxIndex(comboxCudaDevice, Config.Keys.CudaDeviceIdx);
         }
 
         void SaveSettings()
@@ -241,22 +253,36 @@ namespace StableDiffusionGui.Forms
             Config.Set(Config.Keys.ImplementationName, CurrImplementation.ToString());
             panelFullPrecision.Visible = ShouldControlBeVisible(this, panelFullPrecision);
             panelUnloadModel.Visible = ShouldControlBeVisible(this, panelUnloadModel);
-            panelCudaDevice.Visible = ShouldControlBeVisible(this, panelCudaDevice);
             panelSdModel.Visible = ShouldControlBeVisible(this, panelSdModel);
             panelVae.Visible = ShouldControlBeVisible(this, panelVae);
+
+            comboxCudaDevice.Items.Clear();
 
             LoadModels(true, ModelType.Normal);
             LoadModels(true, ModelType.Vae);
 
-            if (_ready && CurrImplementation != Implementation.InvokeAi)
+            if (CurrImplementation != Implementation.InvokeAi)
             {
-                if (_initialImplementationLoad)
+                if (CurrImplementation == Implementation.DiffusersOnnx)
                 {
-                    _initialImplementationLoad = false;
-                    return; // Supress once, as we only want to show this if the user selects it, not if it's loaded from config
+                    comboxCudaDevice.Items.Add("DirectML (AMD)");
+                    comboxCudaDevice.Items.Add("CUDA");
+                    comboxCudaDevice.Items.Add("CPU");
                 }
+                if (_ready)
+                {
+                    if (_initialImplementationLoad)
+                    {
+                        _initialImplementationLoad = false;
+                        return; // Supress once, as we only want to show this if the user selects it, not if it's loaded from config
+                    }
 
-                UiUtils.ShowMessageBox($"Warning: This implementation disables several features.\nOnly use it if you need it due to compatibility or hardware limitations.");
+                    UiUtils.ShowMessageBox($"Warning: This implementation disables several features.\nOnly use it if you need it due to compatibility or hardware limitations.");
+                }
+            }
+            else
+            {
+                LoadGpus();
             }
         }
 
