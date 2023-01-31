@@ -59,7 +59,9 @@ namespace StableDiffusionGui.Ui.MainFormUtils
             F.panelPromptNeg.Visible = ConfigParser.CurrentImplementation != Implementation.OptimizedSd && !IsUsingInpaintingModel;
             F.btnEmbeddingBrowse.Visible = MainForm.ShouldControlBeVisible(F, F.btnEmbeddingBrowse);
             F.panelAiInputs.Height = MainForm.ShouldControlBeVisible(F, F.btnEmbeddingBrowse) ? 65 : 35;
-            F.panelSampler.Visible = ConfigParser.CurrentImplementation == Implementation.InvokeAi;
+            F.cbScheduler.Visible = ConfigParser.CurrentImplementation == Implementation.DiffusersOnnx;
+
+            F.comboxSampler.Visible = ConfigParser.CurrentImplementation == Implementation.InvokeAi;
             F.panelSeamless.Visible = ConfigParser.CurrentImplementation == Implementation.InvokeAi;
             F.panelRes.Visible = MainForm.ShouldControlBeVisible(F, F.panelRes);
             F.panelScaleImg.Visible = MainForm.ShouldControlBeVisible(F, F.panelScaleImg);

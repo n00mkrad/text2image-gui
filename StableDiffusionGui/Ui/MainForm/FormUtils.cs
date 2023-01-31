@@ -66,7 +66,7 @@ namespace StableDiffusionGui.Ui.MainFormUtils
             {
                 Program.MainForm.pictBoxInitImg.BackgroundImage = null;
                 MainUi.CurrentInitImgPaths = null;
-                Program.MainForm.panelDebugLoopback.Size = new Size(Program.MainForm.panelDebugLoopback.Size.Width, Program.MainForm.panelDebugLoopback.Size.Height / 2);
+                Program.MainForm.panelTest.Size = new Size(Program.MainForm.panelTest.Size.Width, Program.MainForm.panelTest.Size.Height / 2);
 
                 Program.MainForm.sliderInitStrength.Visible = false;
                 Program.MainForm.textboxSliderInitStrength.Visible = false;
@@ -88,7 +88,7 @@ namespace StableDiffusionGui.Ui.MainFormUtils
 
                     Program.MainForm.pictBoxInitImg.BackgroundImage = new Bitmap(dialog.FileName);
 
-                    Program.MainForm.panelDebugLoopback.Size = new Size(Program.MainForm.panelDebugLoopback.Size.Width, Program.MainForm.panelDebugLoopback.Size.Height * 2);
+                    Program.MainForm.panelTest.Size = new Size(Program.MainForm.panelTest.Size.Width, Program.MainForm.panelTest.Size.Height * 2);
                     Program.MainForm.sliderInitStrength.Visible = true;
                     Program.MainForm.textboxSliderInitStrength.Visible = true;
                     Program.MainForm.pictBoxInitImg.Visible = true;

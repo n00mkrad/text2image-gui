@@ -123,8 +123,6 @@ namespace StableDiffusionGui
             this.textboxCliTest = new System.Windows.Forms.TextBox();
             this.panelSeamless = new System.Windows.Forms.Panel();
             this.label8 = new System.Windows.Forms.Label();
-            this.panelSampler = new System.Windows.Forms.Panel();
-            this.label7 = new System.Windows.Forms.Label();
             this.panelSeed = new System.Windows.Forms.Panel();
             this.checkboxLoopback = new System.Windows.Forms.CheckBox();
             this.label18 = new System.Windows.Forms.Label();
@@ -146,7 +144,7 @@ namespace StableDiffusionGui
             this.comboxInpaintMode = new System.Windows.Forms.ComboBox();
             this.label10 = new System.Windows.Forms.Label();
             this.panelAiInputs = new System.Windows.Forms.Panel();
-            this.panelDebugLoopback = new System.Windows.Forms.Panel();
+            this.panelTest = new System.Windows.Forms.Panel();
             this.labelAspectRatio = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.pictBoxInitImg = new System.Windows.Forms.PictureBox();
@@ -183,7 +181,6 @@ namespace StableDiffusionGui
             this.panelDebugPerlinThresh.SuspendLayout();
             this.panelDebugSendStdin.SuspendLayout();
             this.panelSeamless.SuspendLayout();
-            this.panelSampler.SuspendLayout();
             this.panelSeed.SuspendLayout();
             this.panelScaleImg.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -193,7 +190,7 @@ namespace StableDiffusionGui
             this.tableLayoutPanel6.SuspendLayout();
             this.panelInpainting.SuspendLayout();
             this.panelAiInputs.SuspendLayout();
-            this.panelDebugLoopback.SuspendLayout();
+            this.panelTest.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictBoxInitImg)).BeginInit();
             this.panelPrompt.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictBoxImgViewer)).BeginInit();
@@ -237,6 +234,7 @@ namespace StableDiffusionGui
             this.promptAutocomplete.SetAutocompleteMenu(this.logBox, null);
             this.logBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
             this.logBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.logBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.logBox.ForeColor = System.Drawing.Color.Silver;
             this.logBox.Location = new System.Drawing.Point(16, 943);
             this.logBox.Margin = new System.Windows.Forms.Padding(4);
@@ -439,12 +437,13 @@ namespace StableDiffusionGui
             this.comboxSampler.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.comboxSampler.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboxSampler.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboxSampler.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.comboxSampler.ForeColor = System.Drawing.Color.White;
             this.comboxSampler.FormattingEnabled = true;
-            this.comboxSampler.Location = new System.Drawing.Point(311, 9);
+            this.comboxSampler.Location = new System.Drawing.Point(624, 35);
             this.comboxSampler.Margin = new System.Windows.Forms.Padding(4);
             this.comboxSampler.Name = "comboxSampler";
-            this.comboxSampler.Size = new System.Drawing.Size(265, 24);
+            this.comboxSampler.Size = new System.Drawing.Size(133, 26);
             this.comboxSampler.TabIndex = 105;
             this.toolTip.SetToolTip(this.comboxSampler, "Changes how the image is sampled.\r\nEuler Ancestral works very well at low step co" +
         "unts.");
@@ -453,6 +452,7 @@ namespace StableDiffusionGui
             // 
             this.upDownSeed.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.upDownSeed.Enabled = false;
+            this.upDownSeed.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.upDownSeed.ForeColor = System.Drawing.Color.White;
             this.upDownSeed.Location = new System.Drawing.Point(311, 10);
             this.upDownSeed.Margin = new System.Windows.Forms.Padding(4);
@@ -467,7 +467,7 @@ namespace StableDiffusionGui
             0,
             -2147483648});
             this.upDownSeed.Name = "upDownSeed";
-            this.upDownSeed.Size = new System.Drawing.Size(133, 22);
+            this.upDownSeed.Size = new System.Drawing.Size(133, 24);
             this.upDownSeed.TabIndex = 4;
             this.toolTip.SetToolTip(this.upDownSeed, "Set this to a specific value to reproduce the same image.\r\nImportant: Resolution " +
         "and sampler need to be identical as well.");
@@ -544,20 +544,22 @@ namespace StableDiffusionGui
             this.promptAutocomplete.SetAutocompleteMenu(this.textboxExtraScales, null);
             this.textboxExtraScales.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textboxExtraScales.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textboxExtraScales.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.textboxExtraScales.ForeColor = System.Drawing.Color.White;
-            this.textboxExtraScales.Location = new System.Drawing.Point(471, 10);
+            this.textboxExtraScales.Location = new System.Drawing.Point(471, 9);
             this.textboxExtraScales.Margin = new System.Windows.Forms.Padding(4);
             this.textboxExtraScales.MinimumSize = new System.Drawing.Size(5, 21);
             this.textboxExtraScales.Name = "textboxExtraScales";
-            this.textboxExtraScales.Size = new System.Drawing.Size(92, 22);
+            this.textboxExtraScales.Size = new System.Drawing.Size(92, 24);
             this.textboxExtraScales.TabIndex = 3;
             this.toolTip.SetToolTip(this.textboxExtraScales, resources.GetString("textboxExtraScales.ToolTip"));
             // 
             // upDownIterations
             // 
             this.upDownIterations.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.upDownIterations.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.upDownIterations.ForeColor = System.Drawing.Color.White;
-            this.upDownIterations.Location = new System.Drawing.Point(809, 80);
+            this.upDownIterations.Location = new System.Drawing.Point(812, 78);
             this.upDownIterations.Margin = new System.Windows.Forms.Padding(4);
             this.upDownIterations.Maximum = new decimal(new int[] {
             1000,
@@ -570,7 +572,7 @@ namespace StableDiffusionGui
             0,
             0});
             this.upDownIterations.Name = "upDownIterations";
-            this.upDownIterations.Size = new System.Drawing.Size(60, 22);
+            this.upDownIterations.Size = new System.Drawing.Size(60, 24);
             this.upDownIterations.TabIndex = 2;
             this.toolTip.SetToolTip(this.upDownIterations, "Amount of images to create for the entered promt.\r\nThe seed will be incremented b" +
         "y 1 for each image after the first.");
@@ -714,6 +716,7 @@ namespace StableDiffusionGui
             | System.Windows.Forms.AnchorStyles.Right)));
             this.promptAutocomplete.SetAutocompleteMenu(this.textboxPrompt, null);
             this.textboxPrompt.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textboxPrompt.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.textboxPrompt.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.textboxPrompt.Location = new System.Drawing.Point(4, 8);
             this.textboxPrompt.Margin = new System.Windows.Forms.Padding(4, 4, 0, 4);
@@ -731,12 +734,13 @@ namespace StableDiffusionGui
             this.comboxSeamless.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.comboxSeamless.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboxSeamless.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboxSeamless.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.comboxSeamless.ForeColor = System.Drawing.Color.White;
             this.comboxSeamless.FormattingEnabled = true;
             this.comboxSeamless.Location = new System.Drawing.Point(311, 9);
             this.comboxSeamless.Margin = new System.Windows.Forms.Padding(4);
             this.comboxSeamless.Name = "comboxSeamless";
-            this.comboxSeamless.Size = new System.Drawing.Size(265, 24);
+            this.comboxSeamless.Size = new System.Drawing.Size(265, 26);
             this.comboxSeamless.TabIndex = 107;
             this.toolTip.SetToolTip(this.comboxSeamless, "Changes how the image is sampled.\r\nEuler Ancestral works very well at low step co" +
         "unts.");
@@ -748,12 +752,13 @@ namespace StableDiffusionGui
             | System.Windows.Forms.AnchorStyles.Right)));
             this.promptAutocomplete.SetAutocompleteMenu(this.textboxClipsegMask, null);
             this.textboxClipsegMask.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textboxClipsegMask.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.textboxClipsegMask.ForeColor = System.Drawing.Color.White;
             this.textboxClipsegMask.Location = new System.Drawing.Point(585, 9);
             this.textboxClipsegMask.Margin = new System.Windows.Forms.Padding(4);
             this.textboxClipsegMask.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxClipsegMask.Name = "textboxClipsegMask";
-            this.textboxClipsegMask.Size = new System.Drawing.Size(287, 22);
+            this.textboxClipsegMask.Size = new System.Drawing.Size(287, 24);
             this.textboxClipsegMask.TabIndex = 110;
             this.toolTip.SetToolTip(this.textboxClipsegMask, "Describe what objects you want to replace");
             // 
@@ -764,12 +769,13 @@ namespace StableDiffusionGui
             this.promptAutocomplete.SetAutocompleteMenu(this.textboxExtraSteps, null);
             this.textboxExtraSteps.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textboxExtraSteps.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textboxExtraSteps.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.textboxExtraSteps.ForeColor = System.Drawing.Color.White;
-            this.textboxExtraSteps.Location = new System.Drawing.Point(471, 10);
+            this.textboxExtraSteps.Location = new System.Drawing.Point(471, 9);
             this.textboxExtraSteps.Margin = new System.Windows.Forms.Padding(4);
             this.textboxExtraSteps.MinimumSize = new System.Drawing.Size(5, 21);
             this.textboxExtraSteps.Name = "textboxExtraSteps";
-            this.textboxExtraSteps.Size = new System.Drawing.Size(92, 22);
+            this.textboxExtraSteps.Size = new System.Drawing.Size(92, 24);
             this.textboxExtraSteps.TabIndex = 93;
             this.toolTip.SetToolTip(this.textboxExtraSteps, resources.GetString("textboxExtraSteps.ToolTip"));
             // 
@@ -1093,12 +1099,13 @@ namespace StableDiffusionGui
             this.promptAutocomplete.SetAutocompleteMenu(this.textboxExtraScalesImg, null);
             this.textboxExtraScalesImg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textboxExtraScalesImg.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textboxExtraScalesImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.textboxExtraScalesImg.ForeColor = System.Drawing.Color.White;
-            this.textboxExtraScalesImg.Location = new System.Drawing.Point(471, 10);
+            this.textboxExtraScalesImg.Location = new System.Drawing.Point(471, 9);
             this.textboxExtraScalesImg.Margin = new System.Windows.Forms.Padding(4);
             this.textboxExtraScalesImg.MinimumSize = new System.Drawing.Size(5, 21);
             this.textboxExtraScalesImg.Name = "textboxExtraScalesImg";
-            this.textboxExtraScalesImg.Size = new System.Drawing.Size(92, 22);
+            this.textboxExtraScalesImg.Size = new System.Drawing.Size(92, 24);
             this.textboxExtraScalesImg.TabIndex = 3;
             this.toolTip.SetToolTip(this.textboxExtraScalesImg, resources.GetString("textboxExtraScalesImg.ToolTip"));
             // 
@@ -1109,6 +1116,7 @@ namespace StableDiffusionGui
             | System.Windows.Forms.AnchorStyles.Right)));
             this.promptAutocomplete.SetAutocompleteMenu(this.textboxPromptNeg, null);
             this.textboxPromptNeg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textboxPromptNeg.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.textboxPromptNeg.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.textboxPromptNeg.Location = new System.Drawing.Point(4, 93);
             this.textboxPromptNeg.Margin = new System.Windows.Forms.Padding(4);
@@ -1126,10 +1134,11 @@ namespace StableDiffusionGui
             // checkboxHiresFix
             // 
             this.checkboxHiresFix.AutoSize = true;
+            this.checkboxHiresFix.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.checkboxHiresFix.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.checkboxHiresFix.Location = new System.Drawing.Point(255, 86);
             this.checkboxHiresFix.Name = "checkboxHiresFix";
-            this.checkboxHiresFix.Size = new System.Drawing.Size(145, 20);
+            this.checkboxHiresFix.Size = new System.Drawing.Size(152, 21);
             this.checkboxHiresFix.TabIndex = 115;
             this.checkboxHiresFix.Text = "High-Resolution Fix";
             this.toolTip.SetToolTip(this.checkboxHiresFix, "Avoid duplications in high-resolution images, at the cost of generation speed.");
@@ -1337,14 +1346,13 @@ namespace StableDiffusionGui
             this.panelSettings.Controls.Add(this.panelDebugPerlinThresh);
             this.panelSettings.Controls.Add(this.panelDebugSendStdin);
             this.panelSettings.Controls.Add(this.panelSeamless);
-            this.panelSettings.Controls.Add(this.panelSampler);
             this.panelSettings.Controls.Add(this.panelSeed);
             this.panelSettings.Controls.Add(this.panelScaleImg);
             this.panelSettings.Controls.Add(this.panelScale);
             this.panelSettings.Controls.Add(this.panelSteps);
             this.panelSettings.Controls.Add(this.panelInpainting);
             this.panelSettings.Controls.Add(this.panelAiInputs);
-            this.panelSettings.Controls.Add(this.panelDebugLoopback);
+            this.panelSettings.Controls.Add(this.panelTest);
             this.panelSettings.Controls.Add(this.panelPrompt);
             this.panelSettings.CtrlDisablesScrolling = true;
             this.panelSettings.Location = new System.Drawing.Point(16, 76);
@@ -1359,7 +1367,7 @@ namespace StableDiffusionGui
             // panelRes
             // 
             this.panelRes.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelRes.Location = new System.Drawing.Point(0, 928);
+            this.panelRes.Location = new System.Drawing.Point(0, 885);
             this.panelRes.Margin = new System.Windows.Forms.Padding(4);
             this.panelRes.Name = "panelRes";
             this.panelRes.Size = new System.Drawing.Size(878, 43);
@@ -1368,7 +1376,7 @@ namespace StableDiffusionGui
             // panelIterations
             // 
             this.panelIterations.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelIterations.Location = new System.Drawing.Point(0, 885);
+            this.panelIterations.Location = new System.Drawing.Point(0, 842);
             this.panelIterations.Margin = new System.Windows.Forms.Padding(4);
             this.panelIterations.Name = "panelIterations";
             this.panelIterations.Size = new System.Drawing.Size(878, 43);
@@ -1377,7 +1385,7 @@ namespace StableDiffusionGui
             // panelInitImgStrength
             // 
             this.panelInitImgStrength.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelInitImgStrength.Location = new System.Drawing.Point(0, 842);
+            this.panelInitImgStrength.Location = new System.Drawing.Point(0, 799);
             this.panelInitImgStrength.Margin = new System.Windows.Forms.Padding(4);
             this.panelInitImgStrength.Name = "panelInitImgStrength";
             this.panelInitImgStrength.Size = new System.Drawing.Size(878, 43);
@@ -1387,7 +1395,7 @@ namespace StableDiffusionGui
             // panelPromptNeg
             // 
             this.panelPromptNeg.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelPromptNeg.Location = new System.Drawing.Point(0, 802);
+            this.panelPromptNeg.Location = new System.Drawing.Point(0, 759);
             this.panelPromptNeg.Margin = new System.Windows.Forms.Padding(4);
             this.panelPromptNeg.Name = "panelPromptNeg";
             this.panelPromptNeg.Padding = new System.Windows.Forms.Padding(4);
@@ -1402,7 +1410,7 @@ namespace StableDiffusionGui
             this.panelDebugPerlinThresh.Controls.Add(this.label13);
             this.panelDebugPerlinThresh.Controls.Add(this.textboxPerlin);
             this.panelDebugPerlinThresh.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelDebugPerlinThresh.Location = new System.Drawing.Point(0, 749);
+            this.panelDebugPerlinThresh.Location = new System.Drawing.Point(0, 706);
             this.panelDebugPerlinThresh.Margin = new System.Windows.Forms.Padding(4);
             this.panelDebugPerlinThresh.Name = "panelDebugPerlinThresh";
             this.panelDebugPerlinThresh.Size = new System.Drawing.Size(878, 53);
@@ -1414,48 +1422,49 @@ namespace StableDiffusionGui
             this.textboxThresh.AllowDrop = true;
             this.promptAutocomplete.SetAutocompleteMenu(this.textboxThresh, null);
             this.textboxThresh.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textboxThresh.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.textboxThresh.ForeColor = System.Drawing.Color.White;
             this.textboxThresh.Location = new System.Drawing.Point(627, 9);
             this.textboxThresh.Margin = new System.Windows.Forms.Padding(4);
             this.textboxThresh.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxThresh.Name = "textboxThresh";
-            this.textboxThresh.Size = new System.Drawing.Size(132, 22);
+            this.textboxThresh.Size = new System.Drawing.Size(132, 24);
             this.textboxThresh.TabIndex = 108;
             this.textboxThresh.Text = "0";
             // 
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label15.ForeColor = System.Drawing.Color.White;
             this.label15.Location = new System.Drawing.Point(547, 14);
             this.label15.Margin = new System.Windows.Forms.Padding(11, 0, 4, 0);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(72, 17);
+            this.label15.Size = new System.Drawing.Size(74, 18);
             this.label15.TabIndex = 107;
             this.label15.Text = "Threshold";
             // 
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label14.ForeColor = System.Drawing.Color.White;
             this.label14.Location = new System.Drawing.Point(307, 14);
             this.label14.Margin = new System.Windows.Forms.Padding(11, 0, 4, 0);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(84, 17);
+            this.label14.Size = new System.Drawing.Size(88, 18);
             this.label14.TabIndex = 106;
             this.label14.Text = "Perlin Noise";
             // 
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label13.ForeColor = System.Drawing.Color.White;
             this.label13.Location = new System.Drawing.Point(3, 14);
             this.label13.Margin = new System.Windows.Forms.Padding(11, 0, 4, 0);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(193, 17);
+            this.label13.Size = new System.Drawing.Size(201, 18);
             this.label13.TabIndex = 105;
             this.label13.Text = "Set Perlin Noise + Threshold ";
             // 
@@ -1464,12 +1473,13 @@ namespace StableDiffusionGui
             this.textboxPerlin.AllowDrop = true;
             this.promptAutocomplete.SetAutocompleteMenu(this.textboxPerlin, null);
             this.textboxPerlin.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textboxPerlin.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.textboxPerlin.ForeColor = System.Drawing.Color.White;
             this.textboxPerlin.Location = new System.Drawing.Point(399, 9);
             this.textboxPerlin.Margin = new System.Windows.Forms.Padding(4);
             this.textboxPerlin.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxPerlin.Name = "textboxPerlin";
-            this.textboxPerlin.Size = new System.Drawing.Size(132, 22);
+            this.textboxPerlin.Size = new System.Drawing.Size(132, 24);
             this.textboxPerlin.TabIndex = 4;
             this.textboxPerlin.Text = "0.0";
             // 
@@ -1478,7 +1488,7 @@ namespace StableDiffusionGui
             this.panelDebugSendStdin.Controls.Add(this.label12);
             this.panelDebugSendStdin.Controls.Add(this.textboxCliTest);
             this.panelDebugSendStdin.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelDebugSendStdin.Location = new System.Drawing.Point(0, 706);
+            this.panelDebugSendStdin.Location = new System.Drawing.Point(0, 663);
             this.panelDebugSendStdin.Margin = new System.Windows.Forms.Padding(4);
             this.panelDebugSendStdin.Name = "panelDebugSendStdin";
             this.panelDebugSendStdin.Size = new System.Drawing.Size(878, 43);
@@ -1488,12 +1498,12 @@ namespace StableDiffusionGui
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label12.ForeColor = System.Drawing.Color.White;
             this.label12.Location = new System.Drawing.Point(3, 14);
             this.label12.Margin = new System.Windows.Forms.Padding(11, 0, 4, 0);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(224, 17);
+            this.label12.Size = new System.Drawing.Size(231, 18);
             this.label12.TabIndex = 105;
             this.label12.Text = "Send stdin to running InvokeAI CLI";
             // 
@@ -1504,12 +1514,13 @@ namespace StableDiffusionGui
             | System.Windows.Forms.AnchorStyles.Right)));
             this.promptAutocomplete.SetAutocompleteMenu(this.textboxCliTest, null);
             this.textboxCliTest.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textboxCliTest.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.textboxCliTest.ForeColor = System.Drawing.Color.White;
             this.textboxCliTest.Location = new System.Drawing.Point(311, 9);
             this.textboxCliTest.Margin = new System.Windows.Forms.Padding(4);
             this.textboxCliTest.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxCliTest.Name = "textboxCliTest";
-            this.textboxCliTest.Size = new System.Drawing.Size(562, 22);
+            this.textboxCliTest.Size = new System.Drawing.Size(562, 24);
             this.textboxCliTest.TabIndex = 4;
             this.textboxCliTest.DoubleClick += new System.EventHandler(this.textboxCliTest_DoubleClick);
             // 
@@ -1518,7 +1529,7 @@ namespace StableDiffusionGui
             this.panelSeamless.Controls.Add(this.comboxSeamless);
             this.panelSeamless.Controls.Add(this.label8);
             this.panelSeamless.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSeamless.Location = new System.Drawing.Point(0, 663);
+            this.panelSeamless.Location = new System.Drawing.Point(0, 620);
             this.panelSeamless.Margin = new System.Windows.Forms.Padding(4);
             this.panelSeamless.Name = "panelSeamless";
             this.panelSeamless.Size = new System.Drawing.Size(878, 43);
@@ -1527,37 +1538,14 @@ namespace StableDiffusionGui
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label8.ForeColor = System.Drawing.Color.White;
             this.label8.Location = new System.Drawing.Point(3, 14);
             this.label8.Margin = new System.Windows.Forms.Padding(11, 0, 4, 0);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(246, 17);
+            this.label8.Size = new System.Drawing.Size(255, 18);
             this.label8.TabIndex = 105;
             this.label8.Text = "Generate Seamless (Tileable) Images";
-            // 
-            // panelSampler
-            // 
-            this.panelSampler.Controls.Add(this.label7);
-            this.panelSampler.Controls.Add(this.comboxSampler);
-            this.panelSampler.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSampler.Location = new System.Drawing.Point(0, 620);
-            this.panelSampler.Margin = new System.Windows.Forms.Padding(4);
-            this.panelSampler.Name = "panelSampler";
-            this.panelSampler.Size = new System.Drawing.Size(878, 43);
-            this.panelSampler.TabIndex = 6;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.ForeColor = System.Drawing.Color.White;
-            this.label7.Location = new System.Drawing.Point(3, 14);
-            this.label7.Margin = new System.Windows.Forms.Padding(11, 0, 4, 0);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(60, 17);
-            this.label7.TabIndex = 104;
-            this.label7.Text = "Sampler";
             // 
             // panelSeed
             // 
@@ -1600,12 +1588,12 @@ namespace StableDiffusionGui
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label16.ForeColor = System.Drawing.Color.White;
-            this.label16.Location = new System.Drawing.Point(728, 14);
+            this.label16.Location = new System.Drawing.Point(718, 14);
             this.label16.Margin = new System.Windows.Forms.Padding(11, 0, 4, 0);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(126, 17);
+            this.label16.Size = new System.Drawing.Size(134, 18);
             this.label16.TabIndex = 105;
             this.label16.Text = "Loopback Img2Img";
             // 
@@ -1622,12 +1610,12 @@ namespace StableDiffusionGui
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.ForeColor = System.Drawing.Color.White;
             this.label5.Location = new System.Drawing.Point(3, 14);
             this.label5.Margin = new System.Windows.Forms.Padding(11, 0, 4, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(163, 17);
+            this.label5.Size = new System.Drawing.Size(172, 18);
             this.label5.TabIndex = 92;
             this.label5.Text = "Seed (Empty = Random)";
             // 
@@ -1645,12 +1633,12 @@ namespace StableDiffusionGui
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label17.ForeColor = System.Drawing.Color.White;
             this.label17.Location = new System.Drawing.Point(3, 14);
             this.label17.Margin = new System.Windows.Forms.Padding(11, 0, 4, 0);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(192, 17);
+            this.label17.Size = new System.Drawing.Size(202, 18);
             this.label17.TabIndex = 90;
             this.label17.Text = "Image Guidance (CFG Scale)";
             // 
@@ -1687,12 +1675,12 @@ namespace StableDiffusionGui
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.ForeColor = System.Drawing.Color.White;
             this.label4.Location = new System.Drawing.Point(3, 14);
             this.label4.Margin = new System.Windows.Forms.Padding(11, 0, 4, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(199, 17);
+            this.label4.Size = new System.Drawing.Size(211, 18);
             this.label4.TabIndex = 90;
             this.label4.Text = "Prompt Guidance (CFG Scale)";
             // 
@@ -1729,12 +1717,12 @@ namespace StableDiffusionGui
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.Color.White;
             this.label3.Location = new System.Drawing.Point(3, 14);
             this.label3.Margin = new System.Windows.Forms.Padding(11, 0, 4, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(119, 17);
+            this.label3.Size = new System.Drawing.Size(123, 18);
             this.label3.TabIndex = 89;
             this.label3.Text = "Generation Steps";
             // 
@@ -1837,24 +1825,25 @@ namespace StableDiffusionGui
             this.comboxInpaintMode.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.comboxInpaintMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboxInpaintMode.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboxInpaintMode.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.comboxInpaintMode.ForeColor = System.Drawing.Color.White;
             this.comboxInpaintMode.FormattingEnabled = true;
             this.comboxInpaintMode.Location = new System.Drawing.Point(311, 9);
             this.comboxInpaintMode.Margin = new System.Windows.Forms.Padding(4);
             this.comboxInpaintMode.Name = "comboxInpaintMode";
-            this.comboxInpaintMode.Size = new System.Drawing.Size(265, 24);
+            this.comboxInpaintMode.Size = new System.Drawing.Size(265, 26);
             this.comboxInpaintMode.TabIndex = 109;
             this.comboxInpaintMode.SelectedIndexChanged += new System.EventHandler(this.comboxInpaintMode_SelectedIndexChanged);
             // 
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label10.ForeColor = System.Drawing.Color.White;
             this.label10.Location = new System.Drawing.Point(3, 14);
             this.label10.Margin = new System.Windows.Forms.Padding(11, 0, 4, 0);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(69, 17);
+            this.label10.Size = new System.Drawing.Size(69, 18);
             this.label10.TabIndex = 105;
             this.label10.Text = "Inpainting";
             // 
@@ -1870,30 +1859,30 @@ namespace StableDiffusionGui
             this.panelAiInputs.Size = new System.Drawing.Size(878, 47);
             this.panelAiInputs.TabIndex = 17;
             // 
-            // panelDebugLoopback
+            // panelTest
             // 
-            this.panelDebugLoopback.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panelDebugLoopback.Controls.Add(this.labelAspectRatio);
-            this.panelDebugLoopback.Controls.Add(this.checkboxHiresFix);
-            this.panelDebugLoopback.Controls.Add(this.label1);
-            this.panelDebugLoopback.Controls.Add(this.upDownIterations);
-            this.panelDebugLoopback.Controls.Add(this.pictBoxInitImg);
-            this.panelDebugLoopback.Controls.Add(this.textboxSliderInitStrength);
-            this.panelDebugLoopback.Controls.Add(this.label11);
-            this.panelDebugLoopback.Controls.Add(this.sliderInitStrength);
-            this.panelDebugLoopback.Controls.Add(this.label6);
-            this.panelDebugLoopback.Controls.Add(this.comboxResH);
-            this.panelDebugLoopback.Controls.Add(this.cbBaW);
-            this.panelDebugLoopback.Controls.Add(this.cbDetFace);
-            this.panelDebugLoopback.Controls.Add(this.cbSepia);
-            this.panelDebugLoopback.Controls.Add(this.comboxResW);
-            this.panelDebugLoopback.Controls.Add(this.progressCircle);
-            this.panelDebugLoopback.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelDebugLoopback.Location = new System.Drawing.Point(0, 143);
-            this.panelDebugLoopback.Margin = new System.Windows.Forms.Padding(4);
-            this.panelDebugLoopback.Name = "panelDebugLoopback";
-            this.panelDebugLoopback.Size = new System.Drawing.Size(878, 215);
-            this.panelDebugLoopback.TabIndex = 19;
+            this.panelTest.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelTest.Controls.Add(this.labelAspectRatio);
+            this.panelTest.Controls.Add(this.checkboxHiresFix);
+            this.panelTest.Controls.Add(this.label1);
+            this.panelTest.Controls.Add(this.upDownIterations);
+            this.panelTest.Controls.Add(this.pictBoxInitImg);
+            this.panelTest.Controls.Add(this.textboxSliderInitStrength);
+            this.panelTest.Controls.Add(this.label11);
+            this.panelTest.Controls.Add(this.sliderInitStrength);
+            this.panelTest.Controls.Add(this.label6);
+            this.panelTest.Controls.Add(this.comboxResH);
+            this.panelTest.Controls.Add(this.cbBaW);
+            this.panelTest.Controls.Add(this.cbDetFace);
+            this.panelTest.Controls.Add(this.cbSepia);
+            this.panelTest.Controls.Add(this.comboxResW);
+            this.panelTest.Controls.Add(this.progressCircle);
+            this.panelTest.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelTest.Location = new System.Drawing.Point(0, 143);
+            this.panelTest.Margin = new System.Windows.Forms.Padding(4);
+            this.panelTest.Name = "panelTest";
+            this.panelTest.Size = new System.Drawing.Size(878, 215);
+            this.panelTest.TabIndex = 19;
             // 
             // labelAspectRatio
             // 
@@ -1911,12 +1900,12 @@ namespace StableDiffusionGui
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.White;
-            this.label1.Location = new System.Drawing.Point(688, 81);
+            this.label1.Location = new System.Drawing.Point(684, 81);
             this.label1.Margin = new System.Windows.Forms.Padding(11, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(119, 17);
+            this.label1.Size = new System.Drawing.Size(125, 18);
             this.label1.TabIndex = 85;
             this.label1.Text = "Out images count";
             // 
@@ -1932,24 +1921,24 @@ namespace StableDiffusionGui
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label11.ForeColor = System.Drawing.Color.White;
-            this.label11.Location = new System.Drawing.Point(252, 156);
+            this.label11.Location = new System.Drawing.Point(248, 156);
             this.label11.Margin = new System.Windows.Forms.Padding(11, 0, 4, 0);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(252, 17);
+            this.label11.Size = new System.Drawing.Size(258, 18);
             this.label11.TabIndex = 90;
             this.label11.Text = "Initialization Image Strength (Influence)";
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.ForeColor = System.Drawing.Color.White;
-            this.label6.Location = new System.Drawing.Point(690, 7);
+            this.label6.Location = new System.Drawing.Point(686, 7);
             this.label6.Margin = new System.Windows.Forms.Padding(11, 0, 4, 0);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(35, 17);
+            this.label6.Size = new System.Drawing.Size(37, 18);
             this.label6.TabIndex = 95;
             this.label6.Text = "Size";
             // 
@@ -1958,22 +1947,24 @@ namespace StableDiffusionGui
             this.comboxResH.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.comboxResH.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboxResH.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboxResH.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.comboxResH.ForeColor = System.Drawing.Color.White;
             this.comboxResH.FormattingEnabled = true;
             this.comboxResH.Location = new System.Drawing.Point(790, 37);
             this.comboxResH.Margin = new System.Windows.Forms.Padding(4);
             this.comboxResH.Name = "comboxResH";
-            this.comboxResH.Size = new System.Drawing.Size(80, 24);
+            this.comboxResH.Size = new System.Drawing.Size(80, 26);
             this.comboxResH.TabIndex = 107;
             this.comboxResH.SelectedIndexChanged += new System.EventHandler(this.comboxResH_SelectedIndexChanged);
             // 
             // cbBaW
             // 
             this.cbBaW.AutoSize = true;
+            this.cbBaW.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.cbBaW.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.cbBaW.Location = new System.Drawing.Point(255, 60);
             this.cbBaW.Name = "cbBaW";
-            this.cbBaW.Size = new System.Drawing.Size(96, 20);
+            this.cbBaW.Size = new System.Drawing.Size(98, 21);
             this.cbBaW.TabIndex = 113;
             this.cbBaW.Text = "b&&w image";
             this.cbBaW.UseVisualStyleBackColor = true;
@@ -1981,10 +1972,11 @@ namespace StableDiffusionGui
             // cbDetFace
             // 
             this.cbDetFace.AutoSize = true;
+            this.cbDetFace.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.cbDetFace.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.cbDetFace.Location = new System.Drawing.Point(255, 8);
             this.cbDetFace.Name = "cbDetFace";
-            this.cbDetFace.Size = new System.Drawing.Size(109, 20);
+            this.cbDetFace.Size = new System.Drawing.Size(113, 21);
             this.cbDetFace.TabIndex = 112;
             this.cbDetFace.Text = "Detailed face";
             this.cbDetFace.UseVisualStyleBackColor = true;
@@ -1992,10 +1984,11 @@ namespace StableDiffusionGui
             // cbSepia
             // 
             this.cbSepia.AutoSize = true;
+            this.cbSepia.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.cbSepia.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.cbSepia.Location = new System.Drawing.Point(255, 34);
             this.cbSepia.Name = "cbSepia";
-            this.cbSepia.Size = new System.Drawing.Size(65, 20);
+            this.cbSepia.Size = new System.Drawing.Size(66, 21);
             this.cbSepia.TabIndex = 114;
             this.cbSepia.Text = "Sepia";
             this.cbSepia.UseVisualStyleBackColor = true;
@@ -2005,12 +1998,13 @@ namespace StableDiffusionGui
             this.comboxResW.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.comboxResW.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboxResW.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboxResW.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.comboxResW.ForeColor = System.Drawing.Color.White;
             this.comboxResW.FormattingEnabled = true;
             this.comboxResW.Location = new System.Drawing.Point(693, 37);
             this.comboxResW.Margin = new System.Windows.Forms.Padding(4);
             this.comboxResW.Name = "comboxResW";
-            this.comboxResW.Size = new System.Drawing.Size(85, 24);
+            this.comboxResW.Size = new System.Drawing.Size(85, 26);
             this.comboxResW.TabIndex = 106;
             this.comboxResW.SelectedIndexChanged += new System.EventHandler(this.comboxResW_SelectedIndexChanged);
             // 
@@ -2104,12 +2098,13 @@ namespace StableDiffusionGui
             this.comboxSdModel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.comboxSdModel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboxSdModel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboxSdModel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.comboxSdModel.ForeColor = System.Drawing.Color.White;
             this.comboxSdModel.FormattingEnabled = true;
             this.comboxSdModel.Location = new System.Drawing.Point(155, 35);
             this.comboxSdModel.Margin = new System.Windows.Forms.Padding(4);
             this.comboxSdModel.Name = "comboxSdModel";
-            this.comboxSdModel.Size = new System.Drawing.Size(195, 24);
+            this.comboxSdModel.Size = new System.Drawing.Size(195, 26);
             this.comboxSdModel.TabIndex = 112;
             this.comboxSdModel.SelectedIndexChanged += new System.EventHandler(this.comboxSdModel_SelectedIndexChanged);
             // 
@@ -2157,12 +2152,13 @@ namespace StableDiffusionGui
             this.comboxVaeModel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.comboxVaeModel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboxVaeModel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboxVaeModel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.comboxVaeModel.ForeColor = System.Drawing.Color.White;
             this.comboxVaeModel.FormattingEnabled = true;
             this.comboxVaeModel.Location = new System.Drawing.Point(374, 35);
             this.comboxVaeModel.Margin = new System.Windows.Forms.Padding(4);
             this.comboxVaeModel.Name = "comboxVaeModel";
-            this.comboxVaeModel.Size = new System.Drawing.Size(226, 24);
+            this.comboxVaeModel.Size = new System.Drawing.Size(226, 26);
             this.comboxVaeModel.TabIndex = 121;
             this.comboxVaeModel.SelectedIndexChanged += new System.EventHandler(this.comboxVaeModel_SelectedIndexChanged);
             // 
@@ -2207,6 +2203,7 @@ namespace StableDiffusionGui
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.ClientSize = new System.Drawing.Size(1605, 1052);
+            this.Controls.Add(this.comboxSampler);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.cbScheduler);
             this.Controls.Add(this.label2);
@@ -2262,8 +2259,6 @@ namespace StableDiffusionGui
             this.panelDebugSendStdin.PerformLayout();
             this.panelSeamless.ResumeLayout(false);
             this.panelSeamless.PerformLayout();
-            this.panelSampler.ResumeLayout(false);
-            this.panelSampler.PerformLayout();
             this.panelSeed.ResumeLayout(false);
             this.panelSeed.PerformLayout();
             this.panelScaleImg.ResumeLayout(false);
@@ -2281,8 +2276,8 @@ namespace StableDiffusionGui
             this.panelInpainting.ResumeLayout(false);
             this.panelInpainting.PerformLayout();
             this.panelAiInputs.ResumeLayout(false);
-            this.panelDebugLoopback.ResumeLayout(false);
-            this.panelDebugLoopback.PerformLayout();
+            this.panelTest.ResumeLayout(false);
+            this.panelTest.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictBoxInitImg)).EndInit();
             this.panelPrompt.ResumeLayout(false);
             this.panelPrompt.PerformLayout();
@@ -2308,7 +2303,6 @@ namespace StableDiffusionGui
         public System.Windows.Forms.ToolStripMenuItem openOutputFolderToolStripMenuItem;
         public System.Windows.Forms.ToolStripMenuItem copyImageToClipboardToolStripMenuItem;
         public System.Windows.Forms.ToolStripMenuItem copySeedToClipboardToolStripMenuItem;
-        private System.Windows.Forms.Label label7;
         public System.Windows.Forms.ToolStripMenuItem useAsInitImageToolStripMenuItem;
         private System.Windows.Forms.Label label8;
         public System.Windows.Forms.ToolStripMenuItem generateCurrentPromptToolStripMenuItem;
@@ -2384,7 +2378,6 @@ namespace StableDiffusionGui
         public CustomPanel panelSettings;
         public System.Windows.Forms.Panel panelSteps;
         public System.Windows.Forms.Panel panelIterations;
-        public System.Windows.Forms.Panel panelSampler;
         public System.Windows.Forms.Panel panelRes;
         public System.Windows.Forms.Panel panelSeed;
         public System.Windows.Forms.Panel panelScale;
@@ -2401,7 +2394,7 @@ namespace StableDiffusionGui
         public CircularProgressBar.CircularProgressBar progressCircle;
         public System.Windows.Forms.TextBox textboxExtraScales;
         public System.Windows.Forms.TextBox textboxExtraSteps;
-        public System.Windows.Forms.Panel panelDebugLoopback;
+        public System.Windows.Forms.Panel panelTest;
         public System.Windows.Forms.CheckBox checkboxLoopback;
         private System.Windows.Forms.Label label16;
         private HTAlt.WinForms.HTButton btnEditMask;

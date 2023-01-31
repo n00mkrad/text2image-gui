@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Windows.Controls;
 using System.Windows.Forms;
 
@@ -29,6 +30,9 @@ namespace StableDiffusionGui.Ui.MainFormUtils
 
         private const string _strNoPrompt = "No prompt to display.";
         private const string _strNoPromptNeg = "No negative prompt to display.";
+
+        [DllImport("user32")]
+        static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
 
         /// <returns> The amount of images shown </returns>
         public static int SetImages(string imagesDir, ImgShowMode showMode, int amount = -1, string pattern = "*.png", bool recursive = false)
@@ -196,6 +200,8 @@ namespace StableDiffusionGui.Ui.MainFormUtils
 
             if(_currentImages.Length > 0)
                 Program.MainForm.pictBoxImgViewer.Image = new Bitmap(_currentImages[_currentImages.Length - 1]);
+
+            SendMessage(Program.MainForm.ImgListView.Handle, 0x1035, IntPtr.Zero, new IntPtr(75));
         }
 
         public static void CopyCurrentToFavs()

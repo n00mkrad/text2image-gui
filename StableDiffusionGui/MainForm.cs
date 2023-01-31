@@ -108,14 +108,13 @@ namespace StableDiffusionGui
             if (!Program.Debug && !(Config.Get<bool>(Config.Keys.HideMotd) && Config.Get<string>(Config.Keys.MotdShownVersion) == Program.Version))
                 new WelcomeForm().ShowDialogForm();
 
-            panelDebugLoopback.Visible = Program.Debug;
             panelDebugPerlinThresh.Visible = Program.Debug;
             panelDebugSendStdin.Visible = Program.Debug;
 
             ConfigParser.LoadGuiElement(textboxPromptNeg, Config.Keys.NegPromt);
             LoadModels();
 
-            panelDebugLoopback.Size = new Size(Program.MainForm.panelDebugLoopback.Size.Width, Program.MainForm.panelDebugLoopback.Size.Height / 2);
+            panelTest.Size = new Size(Program.MainForm.panelTest.Size.Width, Program.MainForm.panelTest.Size.Height / 2);
 
             sliderInitStrength.Visible = false;
             textboxSliderInitStrength.Visible = false;
@@ -167,7 +166,6 @@ namespace StableDiffusionGui
             else
             {
                 comboxVaeModel.Enabled = false;
-
 
                 if (CurrImplementation == Implementation.DiffusersOnnx)
                 {
@@ -604,6 +602,7 @@ namespace StableDiffusionGui
 
         private void ImgListView_SelectedIndexChanged(object sender, EventArgs e)
         {
+            
             if (ImgListView.SelectedItems.Count > 0)
             {
                 string Name = ImageViewer._currentImages[ImgListView.SelectedItems[0].Index];

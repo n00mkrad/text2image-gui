@@ -130,6 +130,7 @@ namespace StableDiffusionGui.Main
                     DopCmd = " -s " + (DopCmd.GetInt() + 2).ToString();
 
                     string cmd = Paths.GetExeDir() + @"\tools";
+
                     switch (SType)
                     {
                         case "Real-ESRGAN (Vulkan)":
@@ -160,6 +161,8 @@ namespace StableDiffusionGui.Main
                                 startInfo.FileName = cmd;
                                 break;
                             }
+                        default:
+                            return;
                     }
 
                     string OutFile = File.Substring(0, File.Length - 4) + "_upscale.png";
