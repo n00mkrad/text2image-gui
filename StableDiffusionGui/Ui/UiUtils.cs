@@ -10,11 +10,12 @@ namespace StableDiffusionGui.Ui
 
         public static DialogResult ShowMessageBox(string text, MessageType type = MessageType.Message, MessageForm.FontSize fontSize = MessageForm.FontSize.Normal)
         {
-            MessageBoxIcon icon = MessageBoxIcon.Information;
-            if (type == MessageType.Warning) icon = MessageBoxIcon.Warning;
-            else if (type == MessageType.Error) icon = MessageBoxIcon.Error;
+           // MessageBoxIcon icon = MessageBoxIcon.Information;
+           // if (type == MessageType.Warning) icon = MessageBoxIcon.Warning;
+           // else if (type == MessageType.Error) icon = MessageBoxIcon.Error;
 
             MessageForm form = new MessageForm(text, $"{type}");
+            //form.Icon = icon;
             form.MsgFontSize = fontSize;
             form.ShowDialogForm(Program.MainForm);
             return DialogResult.OK;

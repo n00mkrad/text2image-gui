@@ -156,6 +156,8 @@ namespace StableDiffusionGui
 
             if (CurrImplementation != Implementation.DiffusersOnnx && CurrImplementation != Implementation.InstructPixToPix)
             {
+                comboxVaeModel.Items.Clear();
+
                 Paths.GetModels(ModelType.Vae, CurrImplementation).ForEach(x => comboxVaeModel.Items.Add(x.Name));
 
                 if (comboxVaeModel.Items.Count > 0 && comboxVaeModel.SelectedIndex == -1)

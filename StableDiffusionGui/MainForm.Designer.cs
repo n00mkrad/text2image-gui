@@ -440,7 +440,7 @@ namespace StableDiffusionGui
             this.comboxSampler.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.comboxSampler.ForeColor = System.Drawing.Color.White;
             this.comboxSampler.FormattingEnabled = true;
-            this.comboxSampler.Location = new System.Drawing.Point(624, 35);
+            this.comboxSampler.Location = new System.Drawing.Point(665, 34);
             this.comboxSampler.Margin = new System.Windows.Forms.Padding(4);
             this.comboxSampler.Name = "comboxSampler";
             this.comboxSampler.Size = new System.Drawing.Size(133, 26);
@@ -1902,7 +1902,7 @@ namespace StableDiffusionGui
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.White;
-            this.label1.Location = new System.Drawing.Point(684, 81);
+            this.label1.Location = new System.Drawing.Point(676, 81);
             this.label1.Margin = new System.Windows.Forms.Padding(11, 0, 4, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(125, 18);
@@ -1967,6 +1967,8 @@ namespace StableDiffusionGui
             this.cbBaW.Size = new System.Drawing.Size(98, 21);
             this.cbBaW.TabIndex = 113;
             this.cbBaW.Text = "b&&w image";
+            this.toolTip.SetToolTip(this.cbBaW, "Adds an image \"black and white\" filter to the request. (Not supported on some mod" +
+        "els)");
             this.cbBaW.UseVisualStyleBackColor = true;
             // 
             // cbDetFace
@@ -1979,6 +1981,7 @@ namespace StableDiffusionGui
             this.cbDetFace.Size = new System.Drawing.Size(113, 21);
             this.cbDetFace.TabIndex = 112;
             this.cbDetFace.Text = "Detailed face";
+            this.toolTip.SetToolTip(this.cbDetFace, "Adds hair, eye, and face details to the query.");
             this.cbDetFace.UseVisualStyleBackColor = true;
             // 
             // cbSepia
@@ -1991,6 +1994,7 @@ namespace StableDiffusionGui
             this.cbSepia.Size = new System.Drawing.Size(66, 21);
             this.cbSepia.TabIndex = 114;
             this.cbSepia.Text = "Sepia";
+            this.toolTip.SetToolTip(this.cbSepia, "Adds an image sepia filter to the request. (Not supported on some models)");
             this.cbSepia.UseVisualStyleBackColor = true;
             // 
             // comboxResW
@@ -2098,13 +2102,13 @@ namespace StableDiffusionGui
             this.comboxSdModel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.comboxSdModel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboxSdModel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.comboxSdModel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.comboxSdModel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.comboxSdModel.ForeColor = System.Drawing.Color.White;
             this.comboxSdModel.FormattingEnabled = true;
             this.comboxSdModel.Location = new System.Drawing.Point(155, 35);
             this.comboxSdModel.Margin = new System.Windows.Forms.Padding(4);
             this.comboxSdModel.Name = "comboxSdModel";
-            this.comboxSdModel.Size = new System.Drawing.Size(195, 26);
+            this.comboxSdModel.Size = new System.Drawing.Size(252, 24);
             this.comboxSdModel.TabIndex = 112;
             this.comboxSdModel.SelectedIndexChanged += new System.EventHandler(this.comboxSdModel_SelectedIndexChanged);
             // 
@@ -2140,7 +2144,7 @@ namespace StableDiffusionGui
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(373, 9);
+            this.label2.Location = new System.Drawing.Point(421, 9);
             this.label2.Margin = new System.Windows.Forms.Padding(11, 0, 4, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(39, 17);
@@ -2155,7 +2159,7 @@ namespace StableDiffusionGui
             this.comboxVaeModel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.comboxVaeModel.ForeColor = System.Drawing.Color.White;
             this.comboxVaeModel.FormattingEnabled = true;
-            this.comboxVaeModel.Location = new System.Drawing.Point(374, 35);
+            this.comboxVaeModel.Location = new System.Drawing.Point(422, 34);
             this.comboxVaeModel.Margin = new System.Windows.Forms.Padding(4);
             this.comboxVaeModel.Name = "comboxVaeModel";
             this.comboxVaeModel.Size = new System.Drawing.Size(226, 26);
@@ -2167,7 +2171,7 @@ namespace StableDiffusionGui
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label9.ForeColor = System.Drawing.Color.White;
-            this.label9.Location = new System.Drawing.Point(622, 9);
+            this.label9.Location = new System.Drawing.Point(663, 9);
             this.label9.Margin = new System.Windows.Forms.Padding(11, 0, 4, 0);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(76, 17);
@@ -2189,7 +2193,7 @@ namespace StableDiffusionGui
             "LMSD",
             "DDIM",
             "DPMSM"});
-            this.cbScheduler.Location = new System.Drawing.Point(623, 35);
+            this.cbScheduler.Location = new System.Drawing.Point(664, 36);
             this.cbScheduler.Margin = new System.Windows.Forms.Padding(4);
             this.cbScheduler.Name = "cbScheduler";
             this.cbScheduler.Size = new System.Drawing.Size(119, 24);
