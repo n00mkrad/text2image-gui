@@ -1,4 +1,5 @@
-﻿using StableDiffusionGui.Data;
+﻿using Microsoft.VisualBasic.Devices;
+using StableDiffusionGui.Data;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
@@ -54,10 +55,17 @@ namespace StableDiffusionGui.Ui.MainFormUtils
 
             if (Pilot)
             {
-                List<string> images = imagePaths.ToList();
+                List<string> images = _currentImages.ToList();
 
-                foreach (var a in _currentImages)
-                    images.Add(a);
+                foreach (var a in imagePaths)
+                {
+                    string e = images.Find(x => x.Equals(a));
+
+                    if(e == null)
+                    {
+                        images.Add(a);
+                    }
+                }
 
                 _currentImages = images.ToArray();
 
