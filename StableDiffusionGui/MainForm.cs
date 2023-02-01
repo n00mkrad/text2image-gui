@@ -628,6 +628,8 @@ namespace StableDiffusionGui
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
+            tbXPilot.Enabled = cbXPilot.SelectedIndex != 0;
+
             Pilot.Sync();
         }
 
@@ -635,8 +637,8 @@ namespace StableDiffusionGui
         {
             cbXPilot.Enabled = cbXYPilot.Checked;
             cbYPilot.Enabled = cbXYPilot.Checked;
-            tbXPilot.Enabled = cbXYPilot.Checked;
-            tbYPilot.Enabled = cbXYPilot.Checked;
+            tbXPilot.Enabled = cbXPilot.SelectedIndex != 0;
+            tbYPilot.Enabled = cbYPilot.SelectedIndex != 0;
         }
 
         private void tbXPilot_TextChanged(object sender, EventArgs e)
@@ -651,6 +653,8 @@ namespace StableDiffusionGui
 
         private void cbYPilot_SelectedIndexChanged(object sender, EventArgs e)
         {
+            tbYPilot.Enabled = cbYPilot.SelectedIndex != 0;
+
             Pilot.Sync();
         }
     }

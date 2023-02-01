@@ -446,6 +446,9 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="FreeImage.Standard">
+      <Version>4.3.8</Version>
+    </PackageReference>
     <PackageReference Include="HTAlt.WinForms">
       <Version>0.1.7.5</Version>
     </PackageReference>
