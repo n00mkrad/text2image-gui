@@ -297,7 +297,7 @@ namespace StableDiffusionGui.Os
             text = null;
             try
             {
-                if (Clipboard.ContainsText()) return false;
+                if (!Clipboard.ContainsText()) return false;
                 text = Clipboard.GetText();
                 return true;
             }
