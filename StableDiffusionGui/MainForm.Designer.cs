@@ -172,6 +172,7 @@ namespace StableDiffusionGui
             this.pictBoxInitImg = new System.Windows.Forms.PictureBox();
             this.tableLayoutPanelImgViewers = new System.Windows.Forms.TableLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.importPromptFromClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStripOutputImg.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.upDownSeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
@@ -1390,10 +1391,11 @@ namespace StableDiffusionGui
             this.openCmdInPythonEnvironmentToolStripMenuItem,
             this.openModelMergeToolToolStripMenuItem,
             this.openModelPruningTrimmingToolToolStripMenuItem,
-            this.convertModelsToolStripMenuItem});
+            this.convertModelsToolStripMenuItem,
+            this.importPromptFromClipboardToolStripMenuItem});
             this.menuStripDevTools.Name = "menuStripDevTools";
             this.menuStripDevTools.ShowImageMargin = false;
-            this.menuStripDevTools.Size = new System.Drawing.Size(234, 114);
+            this.menuStripDevTools.Size = new System.Drawing.Size(234, 158);
             // 
             // openCliToolStripMenuItem
             // 
@@ -2230,6 +2232,13 @@ namespace StableDiffusionGui
             this.panel1.Size = new System.Drawing.Size(512, 512);
             this.panel1.TabIndex = 0;
             // 
+            // importPromptFromClipboardToolStripMenuItem
+            // 
+            this.importPromptFromClipboardToolStripMenuItem.Name = "importPromptFromClipboardToolStripMenuItem";
+            this.importPromptFromClipboardToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
+            this.importPromptFromClipboardToolStripMenuItem.Text = "Import prompt from clipboard";
+            this.importPromptFromClipboardToolStripMenuItem.Click += new System.EventHandler(this.importPromptFromClipboardToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AllowDrop = true;
@@ -2474,6 +2483,7 @@ namespace StableDiffusionGui
         public System.Windows.Forms.TableLayoutPanel tableLayoutPanelImgViewers;
         private System.Windows.Forms.Label labelAspectRatio;
         private System.Windows.Forms.ToolStripMenuItem copySidebySideComparisonImageToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem importPromptFromClipboardToolStripMenuItem;
     }
 }
 

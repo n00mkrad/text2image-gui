@@ -538,5 +538,18 @@ namespace StableDiffusionGui
         {
             OsUtils.SetClipboard(ImageViewer.GetCurrentImageComparison());
         }
+
+        private void importPromptFromClipboardToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!OsUtils.GetClipboard(out string text))
+            {
+                MessageBox.Show("Clipboard is empty");
+                return;
+            }
+
+            Data.TtiSettings tti = MiscUtils.PromptImporterUtils.Import(text);
+            FormParsing.LoadTtiSettingsIntoUi(tti);
+
+        }
     }
 }
