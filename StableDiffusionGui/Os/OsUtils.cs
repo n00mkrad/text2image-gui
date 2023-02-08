@@ -292,6 +292,21 @@ namespace StableDiffusionGui.Os
                 return false;
             }
         }
+        public static bool GetClipboard(out string text)
+        {
+            text = null;
+            try
+            {
+                if (Clipboard.ContainsText()) return false;
+                text = Clipboard.GetText();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Logger.Log($"Error getting clipboard text: {ex.Message}");
+                return false;
+            }
+        }
 
         public static void SendCtrlC(int pid)
         {
@@ -369,7 +384,7 @@ namespace StableDiffusionGui.Os
             string output = await Task.Run(() => GetProcStdOut(p, true));
             list = output.SplitIntoLines().Where(l => !string.IsNullOrWhiteSpace(l)).ToList();
 
-            for(int i = 0; i < list.Count; i++)
+            for (int i = 0; i < list.Count; i++)
             {
                 if (list[i].Contains("#egg="))
                     list[i] = list[i].Split("#egg=")[1].Split("&subdirectory=")[0];
