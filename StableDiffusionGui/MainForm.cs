@@ -547,8 +547,9 @@ namespace StableDiffusionGui
                 return;
             }
 
-            Data.TtiSettings tti = MiscUtils.PromptImporterUtils.Import(text);
-            FormParsing.LoadTtiSettingsIntoUi(tti);
+            var current = FormParsing.GetCurrentTtiSettings();
+            Data.TtiSettings newTti = MiscUtils.PromptImporterUtils.Import(text, current);
+            FormParsing.LoadTtiSettingsIntoUi(newTti);
 
         }
     }
