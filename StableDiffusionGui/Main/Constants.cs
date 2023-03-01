@@ -2,6 +2,13 @@
 {
     public class Constants
     {
+        public class Args
+        {
+            public const string Install = "install";
+            public const string InstallOnnx = "install-onnx";
+            public const string InstallUpscalers = "install-upscalers";
+        }
+
         public class Lognames
         {
             public const string General = "general";

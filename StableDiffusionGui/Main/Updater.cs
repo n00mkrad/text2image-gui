@@ -4,6 +4,7 @@ using StableDiffusionGui.Io;
 using StableDiffusionGui.MiscUtils;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -25,10 +26,15 @@ namespace StableDiffusionGui.Main
 
             await Setup.Clone(_basefilesGitUrl, tempDir, release.HashBasefiles);
             string exePath = Path.Combine(tempDir, "StableDiffusionGui.exe");
-            await Download($"https://github.com/n00mkrad/text2image-gui/raw/main/builds/{release.Version}.exe", exePath);
+            await Download($"https://github.com/n00mkrad/text2image-gui/raw/main/builds/{release.Channel}/{release.Version}.exe", exePath);
             string gitPath = Path.Combine(tempDir, ".git");
-            IoUtils.SetAttributes(gitPath, ZetaLongPaths.Native.FileAttributes.Normal);
+            IoUtils.SetAttributes(gitPath);
             IoUtils.TryDeleteIfExists(gitPath);
+
+            bool onnx = InstallationStatus.HasOnnx();
+            bool up = InstallationStatus.HasSdUpscalers();
+            Process.Start(exePath, $"-{Constants.Args.Install}={true} -{Constants.Args.InstallOnnx}={onnx} -{Constants.Args.InstallUpscalers}={up}");
+            Program.MainForm.Close();
         }
 
         public static async Task Download (string url, string savePath)

@@ -10,7 +10,7 @@ namespace StableDiffusionGui.Data
 {
     internal class MdlRelease
     {
-        public Version Version { get; set; } = new Version(0, 0, 0);
+        public string Version { get; set; } = "0.0.0";
         public string Channel { get; set; } = "";
         public DateTime ReleaseDate { get; set; }
         public string HashBasefiles { get; set; } = "";
@@ -19,7 +19,7 @@ namespace StableDiffusionGui.Data
 
         public MdlRelease (EasyDict<string, string> properties)
         {
-            Version = new Version(properties.Get("version", "0.0.0"));
+            Version = properties.Get("version", "0.0.0");
             Channel = properties.Get("channel", "none");
             ReleaseDate = DateTime.ParseExact(properties.Get("date", "2000-01-01"), "yyyy-MM-dd", CultureInfo.InvariantCulture);
             HashBasefiles = properties.Get("hashBasefiles", "");

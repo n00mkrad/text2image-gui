@@ -98,10 +98,19 @@ namespace StableDiffusionGui.Ui
                 Logger.Log("Debugger is attached.");
             }
 
-            if (!InstallationStatus.IsInstalledBasic)
+            if(Program.UserArgs.Get(Constants.Args.Install) == true.ToString())
             {
-                UiUtils.ShowMessageBox("No complete installation of the Stable Diffusion files was found.\n\nThe GUI will now open the installer.\nPlease press \"Install\" in the next window to install all required files.");
-                new InstallerForm().ShowDialogForm();
+                bool onnx = Program.UserArgs.Get(Constants.Args.InstallOnnx) == true.ToString();
+                bool upscalers = Program.UserArgs.Get(Constants.Args.InstallUpscalers) == true.ToString();
+                new InstallerForm(onnx, upscalers).ShowDialogForm();
+            }
+            else
+            {
+                if (!InstallationStatus.IsInstalledBasic)
+                {
+                    UiUtils.ShowMessageBox("No complete installation of the Stable Diffusion files was found.\n\nThe GUI will now open the installer.\nPlease press \"Install\" in the next window to install all required files.");
+                    new InstallerForm().ShowDialogForm();
+                }
             }
 
             if (ConfigParser.CurrentImplementation != Implementation.InstructPixToPix && Paths.GetModelsAll().Count <= 0) // TODO: Rework and use an info class for the implementation check bla

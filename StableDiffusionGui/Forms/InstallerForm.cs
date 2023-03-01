@@ -9,8 +9,20 @@ namespace StableDiffusionGui.Forms
 {
     public partial class InstallerForm : CustomForm
     {
+        private bool _overrideInstall = false;
+        private bool _overrideInstallOnnx = false;
+        private bool _overrideInstallUpscalers = false;
+
         public InstallerForm()
         {
+            InitializeComponent();
+        }
+
+        public InstallerForm(bool overrideInstallOnnx, bool overrideInstallUpscalers)
+        {
+            _overrideInstall = true;
+            _overrideInstallOnnx = overrideInstallOnnx;
+            _overrideInstallUpscalers = overrideInstallUpscalers;
             InitializeComponent();
         }
 
@@ -29,8 +41,8 @@ namespace StableDiffusionGui.Forms
             }
             else
             {
-                bool installOnnxDml = AskInstallOnnxDml();
-                bool installUpscalers = AskInstallUpscalers();
+                bool installOnnxDml = _overrideInstall ? _overrideInstallOnnx : AskInstallOnnxDml();
+                bool installUpscalers = _overrideInstall ? _overrideInstallUpscalers : AskInstallUpscalers();
                 await Setup.Install(false, installOnnxDml, installUpscalers);
             }
             
@@ -44,6 +56,9 @@ namespace StableDiffusionGui.Forms
             Refresh();
             UpdateStatus();
             Enabled = true;
+
+            if (_overrideInstall)
+                installBtn_Click(null, null);
         }
 
         public void UpdateStatus ()

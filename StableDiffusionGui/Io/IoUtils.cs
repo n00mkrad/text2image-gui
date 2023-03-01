@@ -647,7 +647,7 @@ namespace StableDiffusionGui.Io
             p.WaitForExit();
         }
 
-        public static bool SetAttributes(string rootDir, ZetaLongPaths.Native.FileAttributes newAttributes, bool recursive = true)
+        public static bool SetAttributes(string rootDir, ZetaLongPaths.Native.FileAttributes newAttributes = ZetaLongPaths.Native.FileAttributes.Normal, bool recursive = true)
         {
             try
             {
