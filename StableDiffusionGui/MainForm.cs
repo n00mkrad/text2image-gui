@@ -5,6 +5,7 @@ using StableDiffusionGui.Implementations;
 using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
+using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
 using StableDiffusionGui.Ui.MainFormUtils;
@@ -73,6 +74,8 @@ namespace StableDiffusionGui
             PromptHistory.Load();
             Setup.PatchFiles();
 
+            textboxPrompt.MaxLength = 0;
+            textboxPromptNeg.MaxLength = 0;
             pictBoxImgViewer.MouseWheel += (s, e) => { ImageViewer.Move(e.Delta > 0); }; // Scroll on MouseWheel
             comboxResW.SelectedIndexChanged += (s, e) => { FormControls.SetHiresFixVisible(); }; // Show/Hide HiRes Fix depending on chosen res
             comboxResH.SelectedIndexChanged += (s, e) => { FormControls.SetHiresFixVisible(); }; // Show/Hide HiRes Fix depending on chosen res
@@ -140,6 +143,12 @@ namespace StableDiffusionGui
 
         public async void runBtn_Click(object sender, EventArgs e)
         {
+            if (InputUtils.IsHoldingCtrl)
+            {
+                await GetWebInfo.LoadReleases();
+                return;
+            }
+
             await FormUtils.TryRun();
 
             if (checkboxLoopback.Checked)

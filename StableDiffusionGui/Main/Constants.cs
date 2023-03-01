@@ -18,6 +18,7 @@
             // Top Level
             public const string Wildcards = "Wildcards";
             public const string Masks = "Masks";
+            public const string Update = "update";
             // Data and below
             public const string Bins = "bin";
             public const string SdRepo = "repo";

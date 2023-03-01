@@ -119,7 +119,7 @@ namespace StableDiffusionGui.Io
 
                 var dirList = new List<ZlpDirectoryInfo>();
 
-                foreach (string folderPath in mdlFolders)
+                foreach (string folderPath in mdlFolders.Where(dir => Directory.Exists(dir)))
                     dirList.AddRange(Directory.GetDirectories(folderPath, "*", SearchOption.TopDirectoryOnly).Select(x => new ZlpDirectoryInfo(x)).ToList());
 
                 list.AddRange(dirList.Select(f => new Model(f))); // Add folder-based models to final list
