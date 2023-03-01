@@ -1,5 +1,4 @@
 ﻿using HTAlt.WinForms;
-using StableDiffusionGui.Main;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -41,7 +40,6 @@ namespace StableDiffusionGui.Controls
             {
                 UpdateMinMax();
                 Value = ((double)(value * _conversionFactor)).RoundToInt().Clamp(Minimum, Maximum);
-                Console.WriteLine($"[{Name}] ActualValue set to {value}, Value should be {((double)(value * _conversionFactor)).RoundToInt()}, actual clamped Value is now {Value}");
                 UpdateValueBox();
             }
         }
@@ -66,7 +64,6 @@ namespace StableDiffusionGui.Controls
 
         public CustomSlider()
         {
-            Console.WriteLine($"ctor @ {Name} min {ActualMinimum} max {ActualMaximum} step {ValueStep} actval {ActualValue}");
             Init();
         }
 
