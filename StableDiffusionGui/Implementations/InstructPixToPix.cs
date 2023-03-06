@@ -29,6 +29,7 @@ namespace StableDiffusionGui.Implementations
                 float[] scalesTxt = parameters.FromJson<float[]>("scales");
                 float[] scalesImg = parameters.FromJson<float[]>("scalesImg");
                 long seed = parameters.FromJson<long>("seed");
+                bool lockSeed = parameters.FromJson<bool>("lockSeed"); // Lock seed (disable auto-increment)
                 // string sampler = parameters.FromJson<string>("sampler");
                 Size res = parameters.FromJson<Size>("res");
                 // string model = parameters.FromJson<string>("model");
@@ -92,6 +93,9 @@ namespace StableDiffusionGui.Implementations
                                 }
                             }
                         }
+
+                        if (!lockSeed)
+                            seed++;
 
                         seed++;
                     }
