@@ -96,8 +96,6 @@ namespace StableDiffusionGui.Implementations
 
                         if (!lockSeed)
                             seed++;
-
-                        seed++;
                     }
 
                     if (Config.Get<bool>(Config.Keys.MultiPromptsSameSeed))
