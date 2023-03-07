@@ -116,7 +116,7 @@ namespace StableDiffusionGui.Implementations
 
                     py.StartInfo.RedirectStandardInput = true;
                     py.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand()} && " +
-                        $"python \"{Constants.Dirs.SdRepo}/sd_ip2p/ip2p_batch.py\" -o {outPath.Wrap(true)}";
+                        $"python \"{Constants.Dirs.SdRepo}/sd_ip2p/ip2p.py\" -o {outPath.Wrap(true)}";
 
                     Logger.Log("cmd.exe " + py.StartInfo.Arguments, true);
 
