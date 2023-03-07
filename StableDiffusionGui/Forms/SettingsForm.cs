@@ -230,7 +230,6 @@ namespace StableDiffusionGui.Forms
 
         private void comboxImplementation_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var test = CurrImplementation;
             Console.WriteLine($"CurrImplementation: {CurrImplementation} (from '{comboxImplementation.Text}')");
 
             if (CurrImplementation < 0)

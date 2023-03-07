@@ -12,7 +12,9 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using static StableDiffusionGui.Main.Constants;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace StableDiffusionGui.Implementations
 {
@@ -42,7 +44,7 @@ namespace StableDiffusionGui.Implementations
 
                 OrderedDictionary initImages = initImgs != null && initImgs.Length > 0 ? await TtiUtils.CreateResizedInitImagesIfNeeded(initImgs.ToList(), res) : null;
 
-                if(initImages == null || initImages.Count < 1)
+                if (initImages == null || initImages.Count < 1)
                 {
                     UiUtils.ShowMessageBox("Please load an image first.", "No image loaded!");
                     return;
@@ -102,55 +104,110 @@ namespace StableDiffusionGui.Implementations
                         seed = startSeed;
                 }
 
-                string jsonPath = Path.Combine(Paths.GetSessionDataPath(), "prompts-ip2p.json");
-                File.WriteAllText(jsonPath, argLists.ToJson(true));
-
                 Logger.Log($"Running Stable Diffusion - {iterations} Iterations, {steps.Length} Steps, Scales {(scalesTxt.Length < 4 ? string.Join(", ", scalesTxt.Select(x => x.ToStringDot())) : $"{scalesTxt.First()}->{scalesTxt.Last()}")}, Starting Seed: {startSeed}");
 
                 string initsStr = initImages != null ? $" and {initImages.Count} image{(initImages.Count != 1 ? "s" : "")} using {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
                 Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} * {iterations} image{(iterations != 1 ? "s" : "")} * {steps.Length} step value{(steps.Length != 1 ? "s" : "")} * {scalesTxt.Length} scale{(scalesTxt.Length != 1 ? "s" : "")}{initsStr} = {argLists.Count} images total.");
 
-                Process py = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
-                TextToImage.CurrentTask.Processes.Add(py);
-
-                py.StartInfo.RedirectStandardInput = true;
-                py.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand()} && " +
-                    $"python \"{Constants.Dirs.SdRepo}/sd_ip2p/ip2p_batch.py\" -j {jsonPath.Wrap(true)} -o {outPath.Wrap(true)}";
-
-                Logger.Log("cmd.exe " + py.StartInfo.Arguments, true);
-
-                if (!OsUtils.ShowHiddenCmd())
+                if (!TtiProcess.IsAiProcessRunning)
                 {
-                    py.OutputDataReceived += (sender, line) => { TtiProcessOutputHandler.LogOutput(line.Data); };
-                    py.ErrorDataReceived += (sender, line) => { TtiProcessOutputHandler.LogOutput(line.Data, true); };
+                    Process py = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
+                    TextToImage.CurrentTask.Processes.Add(py);
+
+                    py.StartInfo.RedirectStandardInput = true;
+                    py.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand()} && " +
+                        $"python \"{Constants.Dirs.SdRepo}/sd_ip2p/ip2p_batch.py\" -o {outPath.Wrap(true)}";
+
+                    Logger.Log("cmd.exe " + py.StartInfo.Arguments, true);
+
+                    if (!OsUtils.ShowHiddenCmd())
+                    {
+                        py.OutputDataReceived += (sender, line) => { TtiProcessOutputHandler.LogOutput(line.Data); };
+                        py.ErrorDataReceived += (sender, line) => { TtiProcessOutputHandler.LogOutput(line.Data, true); };
+                    }
+
+                    if (TtiProcess.CurrentProcess != null)
+                    {
+                        TtiProcess.ProcessExistWasIntentional = true;
+                        OsUtils.KillProcessTree(TtiProcess.CurrentProcess.Id);
+                    }
+
+                    Logger.Log($"Loading Stable Diffusion (InstructPix2Pix)...");
+
+                    TtiProcessOutputHandler.Reset();
+                    TtiProcess.CurrentProcess = py;
+                    TtiProcess.ProcessExistWasIntentional = false;
+                    py.Start();
+                    OsUtils.AttachOrphanHitman(py);
+
+                    if (!OsUtils.ShowHiddenCmd())
+                    {
+                        py.BeginOutputReadLine();
+                        py.BeginErrorReadLine();
+                    }
+
+                    Task.Run(() => TtiProcess.CheckStillRunning());
+                    TtiProcess.CurrentStdInWriter = new NmkdStreamWriter(py);
+                }
+                else
+                {
+                    TtiProcessOutputHandler.Reset();
+                    TextToImage.CurrentTask.Processes.Add(TtiProcess.CurrentProcess);
                 }
 
-                if (TtiProcess.CurrentProcess != null)
-                {
-                    TtiProcess.ProcessExistWasIntentional = true;
-                    OsUtils.KillProcessTree(TtiProcess.CurrentProcess.Id);
-                }
+                foreach (var argList in argLists)
+                    await TtiProcess.WriteStdIn($"generate {argList.ToJson()}", true);
 
-                TtiProcessOutputHandler.Reset();
-
-                Logger.Log($"Loading Stable Diffusion (InstructPix2Pix)...");
-
-                TtiProcess.ProcessExistWasIntentional = false;
-                py.Start();
-                TtiProcess.CurrentProcess = py;
-                OsUtils.AttachOrphanHitman(py);
-
-                if (!OsUtils.ShowHiddenCmd())
-                {
-                    py.BeginOutputReadLine();
-                    py.BeginErrorReadLine();
-                }
+                // await TtiProcess.WriteStdIn("exit", true);
             }
             catch (Exception ex)
             {
                 Logger.Log($"Unhandled Stable Diffusion Error: {ex.Message}");
                 Logger.Log(ex.StackTrace, true);
             }
+        }
+
+        public static async Task Test()
+        {
+            Process py = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd(), Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdVenv, "Scripts", "python.exe"));
+            py.StartInfo.RedirectStandardInput = true;
+            py.StartInfo.WorkingDirectory = Paths.GetDataPath();
+            py.StartInfo.Arguments = $"\"{Constants.Dirs.SdRepo}/sd_onnx/tests.py\"";
+
+            foreach (var pair in TtiUtils.GetEnvVarsSd(false, Paths.GetDataPath()))
+                py.StartInfo.EnvironmentVariables[pair.Key] = pair.Value;
+
+            Logger.Log($"{py.StartInfo.FileName} {py.StartInfo.Arguments}", true);
+
+            py.OutputDataReceived += (sender, line) => { Logger.Log($"{line?.Data}"); };
+            py.ErrorDataReceived += (sender, line) => { Logger.Log($"{line?.Data}"); };
+
+            Logger.Log($"Running test script");
+
+            TtiProcess.CurrentProcess = py;
+            TtiProcess.ProcessExistWasIntentional = false;
+
+            py.Start();
+            OsUtils.AttachOrphanHitman(py);
+            TtiProcess.CurrentStdInWriter = new NmkdStreamWriter(py);
+
+            if (!OsUtils.ShowHiddenCmd())
+            {
+                py.BeginOutputReadLine();
+                py.BeginErrorReadLine();
+            }
+
+            Task.Run(() => TtiProcess.CheckStillRunning());
+
+            await Task.Delay(5000);
+
+            await TtiProcess.WriteStdIn("msg1", true);
+            await TtiProcess.WriteStdIn("msg2", true);
+            await TtiProcess.WriteStdIn("msg3", true);
+
+            await Task.Delay(15000);
+
+            await TtiProcess.WriteStdIn("msg4", true);
         }
     }
 }

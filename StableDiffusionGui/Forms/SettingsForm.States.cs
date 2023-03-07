@@ -43,7 +43,7 @@ namespace StableDiffusionGui.Forms
 
         private static bool UnloadModelAvailable()
         {
-            var unloadModelImps = new List<Implementation> { Implementation.InvokeAi, Implementation.OptimizedSd };
+            var unloadModelImps = new List<Implementation> { Implementation.InvokeAi, Implementation.OptimizedSd, Implementation.InstructPixToPix };
             return unloadModelImps.Contains(ConfigParser.CurrentImplementation);
         }
 

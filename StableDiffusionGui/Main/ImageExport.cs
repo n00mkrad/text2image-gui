@@ -44,7 +44,7 @@ namespace StableDiffusionGui.Main
 
                     if (currSettings.Implementation == Enums.StableDiffusion.Implementation.OptimizedSd)
                         running = IoUtils.GetFileInfosSorted(Paths.GetSessionDataPath(), false, "prompts*.*").Any();
-                    if (currSettings.Implementation == Enums.StableDiffusion.Implementation.InvokeAi)
+                    if (currSettings.Implementation == Enums.StableDiffusion.Implementation.InvokeAi || currSettings.Implementation == Enums.StableDiffusion.Implementation.InstructPixToPix)
                         running = (currTask.ImgCount - startingImgCount) < targetImgCount;
 
                     if (!running && !TtiUtils.ImportBusy && !files.Any())

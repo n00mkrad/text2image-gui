@@ -143,7 +143,7 @@ namespace StableDiffusionGui
 
         public async void runBtn_Click(object sender, EventArgs e)
         {
-            if (InputUtils.IsHoldingCtrl)
+            if (InputUtils.IsHoldingCtrl && InputUtils.IsHoldingShift)
             {
                 await GetWebInfo.LoadReleases();
                 return;
