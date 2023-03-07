@@ -174,7 +174,8 @@ namespace StableDiffusionGui
 
         private void btnOpenOutFolder_Click(object sender, EventArgs e)
         {
-            Process.Start("explorer", Config.Get<string>(Config.Keys.OutPath).Replace("/", @"\").Wrap());
+            string dir = Directory.CreateDirectory(Config.Get<string>(Config.Keys.OutPath)).FullName;
+            Process.Start("explorer", dir.Replace("/", @"\").Wrap());
         }
 
         #region Link Buttons
