@@ -1,15 +1,11 @@
 ﻿using StableDiffusionGui.Data;
 using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
-using StableDiffusionGui.MiscUtils;
-using StableDiffusionGui.Os;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace StableDiffusionGui.Main
@@ -20,26 +16,35 @@ namespace StableDiffusionGui.Main
 
         public static async Task Install (MdlRelease release, bool copyImages, bool copyModels, bool copyConfig)
         {
+            Logger.ClearLogBox();
             string tempDir = IoUtils.GetAvailableFilePath(Paths.GetExeDir().TrimEnd('\\') + "-upd");
+
+            if (!InstallationStatus.HasBins())
+            {
+                Logger.Log($"Error: Can't install update because required files are missing.");
+                return;
+            }
 
             try
             {
                 IoUtils.TryDeleteIfExists(tempDir);
-                Directory.CreateDirectory(tempDir);
-
+                Logger.Log("Downloading base dependencies...", false, Logger.LastUiLine.EndsWith("..."));
                 await Setup.Clone(_basefilesGitUrl, tempDir, release.HashBasefiles);
                 string exePath = Path.Combine(tempDir, "StableDiffusionGui.exe");
+                Logger.Log("Downloading executable...", false, Logger.LastUiLine.EndsWith("..."));
                 await Download($"https://github.com/n00mkrad/text2image-gui/raw/main/builds/{release.Channel}/{release.Version}.exe", exePath);
                 string gitPath = Path.Combine(tempDir, ".git");
                 IoUtils.SetAttributes(gitPath);
                 IoUtils.TryDeleteIfExists(gitPath);
 
+                Logger.Log("Moving files...", false, Logger.LastUiLine.EndsWith("..."));
                 bool moveFilesSuccess = await Task.Run(() => Move(tempDir, copyImages, copyModels, copyConfig));
-                Logger.Log($"Move success: {moveFilesSuccess}");
-
+                Logger.Log($"Move success: {moveFilesSuccess}", true);
+                Logger.Log("Preparing to start new version and delete old files...", false, Logger.LastUiLine.EndsWith("..."));
                 bool onnx = InstallationStatus.HasOnnx();
                 bool up = InstallationStatus.HasSdUpscalers();
-                Process.Start(exePath, $"-{Constants.Args.Install}={true} -{Constants.Args.InstallOnnx}={onnx} -{Constants.Args.InstallUpscalers}={up}");
+                string launchCmd = $"{Paths.GetExe().Wrap()} -{Constants.Args.Install}={true} -{Constants.Args.InstallOnnx}={onnx} -{Constants.Args.InstallUpscalers}={up}";
+                Process.Start("cmd", $"/C cd /D C:/ && timeout 2 && rmdir /s/q {Paths.GetExeDir().Wrap().TrimEnd('\\')} && move {tempDir.TrimEnd('\\').Wrap()} {Paths.GetExeDir().TrimEnd('\\').Wrap()} && {launchCmd}");
                 Program.MainForm.Close();
             }
             catch(Exception ex)

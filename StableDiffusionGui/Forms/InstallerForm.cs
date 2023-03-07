@@ -45,6 +45,9 @@ namespace StableDiffusionGui.Forms
                 bool installUpscalers = _overrideInstall ? _overrideInstallUpscalers : AskInstallUpscalers();
                 await Setup.Install(false, installOnnxDml, installUpscalers);
             }
+
+            if (_overrideInstall)
+                Close();
             
             BringToFront();
             UpdateStatus();

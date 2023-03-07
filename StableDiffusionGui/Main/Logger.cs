@@ -150,18 +150,18 @@ namespace StableDiffusionGui.Main
                     Textbox.Suspend();
                     string[] lines = Textbox.Text.SplitIntoLines();
                     Textbox.Text = string.Join(Environment.NewLine, lines.Take(lines.Length - 1));
-
-                    if (!entry.Hidden && Textbox != null && !Textbox.IsDisposed)
-                        Textbox.AppendText((string.IsNullOrWhiteSpace(Textbox.Text) ? "" : Environment.NewLine) + entry.Message.Replace("\n", Environment.NewLine));
-
-                    if (entry.ReplaceLastLine)
-                        Textbox.Resume();
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Logging Error: {ex.Message}\n{ex.StackTrace}");
             }
+
+            if (!entry.Hidden && Textbox != null && !Textbox.IsDisposed)
+                Textbox.AppendText((string.IsNullOrWhiteSpace(Textbox.Text) ? "" : Environment.NewLine) + entry.Message.Replace("\n", Environment.NewLine));
+
+            if (entry.ReplaceLastLine && !Textbox.IsDisposed)
+                Textbox.Resume();
 
             LogToFile(entry);
         }
