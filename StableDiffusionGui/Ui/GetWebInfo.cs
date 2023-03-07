@@ -27,27 +27,19 @@ namespace StableDiffusionGui.Ui
             }
         }
 
-        public static async Task<string> LoadReleases()
+        public static async Task<List<MdlRelease>> LoadReleases()
         {
             try
             {
                 string url = $"https://raw.githubusercontent.com/n00mkrad/text2image-gui/main/meta/versions.json";
                 string text = await new WebClient().DownloadStringTaskAsync(new Uri(url));
                 List<EasyDict<string, string>> data = text.FromJson<List<EasyDict<string, string>>>();
-
-                foreach(var dict in data)
-                {
-                    Logger.Log($"Release: {new MdlRelease(dict)}");
-                }
-
-                await Updater.Install(new MdlRelease(data.First()));
-
-                return "";
+                return data.ToList().Select(dict => new MdlRelease(dict)).ToList();
             }
             catch (Exception e)
             {
-                Logger.Log($"Failed to load version info: {e.Message}", true);
-                return "0.0.0";
+                Logger.Log($"Failed to load versions: {e.Message}", true);
+                return new List<MdlRelease>();
             }
         }
 

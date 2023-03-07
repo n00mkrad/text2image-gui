@@ -554,5 +554,19 @@ namespace StableDiffusionGui
             else
                 return $"{s.Width}{delimiter}{s.Height}";
         }
+
+        /// <summary> Shortcut for !string.IsNullOrWhiteSpace </summary>
+        /// <returns> If the string is NOT null or whitespace </returns>
+        public static bool IsNotEmpty(this string s)
+        {
+            return !string.IsNullOrWhiteSpace(s);
+        }
+
+        /// <summary> Shortcut for string.IsNullOrWhiteSpace </summary>
+        /// <returns> If the string is null or whitespace </returns>
+        public static bool IsEmpty(this string s)
+        {
+            return string.IsNullOrWhiteSpace(s);
+        }
     }
 }

@@ -115,7 +115,7 @@ namespace StableDiffusionGui
 
         private void installerBtn_Click(object sender, EventArgs e)
         {
-            new InstallerForm().ShowDialogForm();
+            menuStripInstall.Show(Cursor.Position);
         }
 
         public void CleanPrompt()
@@ -143,12 +143,6 @@ namespace StableDiffusionGui
 
         public async void runBtn_Click(object sender, EventArgs e)
         {
-            if (InputUtils.IsHoldingCtrl && InputUtils.IsHoldingShift)
-            {
-                await GetWebInfo.LoadReleases();
-                return;
-            }
-
             await FormUtils.TryRun();
 
             if (checkboxLoopback.Checked)
@@ -546,6 +540,16 @@ namespace StableDiffusionGui
         private void copySidebySideComparisonImageToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OsUtils.SetClipboard(ImageViewer.GetCurrentImageComparison());
+        }
+
+        private void manageInstallationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new InstallerForm().ShowDialogForm();
+        }
+
+        private void installUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new UpdaterForm().ShowDialogForm();
         }
     }
 }

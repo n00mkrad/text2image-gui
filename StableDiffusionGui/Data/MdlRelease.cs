@@ -27,7 +27,7 @@ namespace StableDiffusionGui.Data
 
         public override string ToString()
         {
-            return $"{Channel} {Version} ({ReleaseDate.ToString("yyyy-MM-dd")})";
+            return $"{Version} ({CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Channel)} Branch) ({ReleaseDate.ToString("yyyy-MM-dd")})";
         }
     }
 }

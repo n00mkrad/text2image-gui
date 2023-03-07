@@ -27,7 +27,7 @@ namespace StableDiffusionGui.Io
 
         public static string GetExeDir()
         {
-            return AppDomain.CurrentDomain.BaseDirectory;
+            return new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory).FullName;
         }
 
         public static string GetDataPath()
@@ -78,22 +78,31 @@ namespace StableDiffusionGui.Io
             return path;
         }
 
+        public static List<string> GetAllModelDirs (bool includeBuiltin = true)
+        {
+            List<string> mdlFolders = new List<string>();
+
+            if (includeBuiltin)
+                mdlFolders.Add(GetModelsPath());
+
+            foreach (ModelType type in Enum.GetValues(typeof(ModelType)).Cast<ModelType>())
+            {
+                List<string> customModelDirsList = Config.Get<List<string>>($"{Config.Keys.CustomModelDirsPfx}{type}");
+
+                if (customModelDirsList != null)
+                    mdlFolders.AddRange(customModelDirsList, out mdlFolders);
+            }
+
+            return mdlFolders;
+        }
+
         public static List<Model> GetModelsAll(bool removeUnknownModels = true)
         {
             List<Model> list = new List<Model>();
 
             try
             {
-                List<string> mdlFolders = new List<string>() { GetModelsPath() };
-
-                foreach (ModelType type in Enum.GetValues(typeof(ModelType)).Cast<ModelType>())
-                {
-                    List<string> customModelDirsList = Config.Get<List<string>>($"{Config.Keys.CustomModelDirsPfx}{type}");
-
-                    if (customModelDirsList != null)
-                        mdlFolders.AddRange(customModelDirsList, out mdlFolders);
-                }
-
+                List<string> mdlFolders = GetAllModelDirs();
                 var fileList = new List<ZlpFileInfo>();
 
                 foreach (string folderPath in mdlFolders)

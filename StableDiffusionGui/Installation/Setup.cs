@@ -16,7 +16,7 @@ namespace StableDiffusionGui.Installation
     {
         private static readonly string _gitFile = "n00mkrad/stable-diffusion-cust.git";
         private static readonly string _gitBranch = "main";
-        private static readonly string _gitCommit = "8ee17eda2e235673d0fc8227d153c9621d1cc23a";
+        public static readonly string GitCommit = "48aab146aaf1c27321e978f1734abc99a519db38";
 
         private static readonly bool _allowModelDownload = false;
 
@@ -202,7 +202,7 @@ namespace StableDiffusionGui.Installation
 
         public static async Task InstallRepo(bool installOnnx, string overrideCommit = "", bool setupVenvAfterwards = true)
         {
-            string commit = string.IsNullOrWhiteSpace(overrideCommit) ? _gitCommit : overrideCommit;
+            string commit = string.IsNullOrWhiteSpace(overrideCommit) ? GitCommit : overrideCommit;
             TtiProcess.ProcessExistWasIntentional = true;
             ProcessManager.FindAndKillOrphans($"*invoke.py*{Paths.SessionTimestamp}*");
             await CloneSdRepo($"https://github.com/{_gitFile}", GetDataSubPath(Constants.Dirs.SdRepo), _gitBranch, commit);

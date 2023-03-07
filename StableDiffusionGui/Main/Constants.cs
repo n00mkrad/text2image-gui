@@ -23,10 +23,14 @@
         public class Dirs
         {
             // Top Level
+            public const string Data = "Data";
+            public const string Images = "Images";
+            public const string ImgFavs = "Favs";
             public const string Wildcards = "Wildcards";
             public const string Masks = "Masks";
             public const string Update = "update";
             // Data and below
+            public const string Models = "models";
             public const string Bins = "bin";
             public const string SdRepo = "repo";
             public const string Dreambooth = "db";

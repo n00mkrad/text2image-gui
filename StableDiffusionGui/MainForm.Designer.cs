@@ -172,6 +172,9 @@ namespace StableDiffusionGui
             this.pictBoxInitImg = new System.Windows.Forms.PictureBox();
             this.tableLayoutPanelImgViewers = new System.Windows.Forms.TableLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.menuStripInstall = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.manageInstallationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.installUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStripOutputImg.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.upDownSeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
@@ -206,6 +209,7 @@ namespace StableDiffusionGui
             ((System.ComponentModel.ISupportInitialize)(this.pictBoxInitImg)).BeginInit();
             this.tableLayoutPanelImgViewers.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.menuStripInstall.SuspendLayout();
             this.SuspendLayout();
             // 
             // runBtn
@@ -2230,6 +2234,28 @@ namespace StableDiffusionGui
             this.panel1.Size = new System.Drawing.Size(512, 512);
             this.panel1.TabIndex = 0;
             // 
+            // menuStripInstall
+            // 
+            this.menuStripInstall.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.manageInstallationToolStripMenuItem,
+            this.installUpdatesToolStripMenuItem});
+            this.menuStripInstall.Name = "menuStripInstall";
+            this.menuStripInstall.Size = new System.Drawing.Size(179, 48);
+            // 
+            // manageInstallationToolStripMenuItem
+            // 
+            this.manageInstallationToolStripMenuItem.Name = "manageInstallationToolStripMenuItem";
+            this.manageInstallationToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
+            this.manageInstallationToolStripMenuItem.Text = "Manage Installation";
+            this.manageInstallationToolStripMenuItem.Click += new System.EventHandler(this.manageInstallationToolStripMenuItem_Click);
+            // 
+            // installUpdatesToolStripMenuItem
+            // 
+            this.installUpdatesToolStripMenuItem.Name = "installUpdatesToolStripMenuItem";
+            this.installUpdatesToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
+            this.installUpdatesToolStripMenuItem.Text = "Install Updates";
+            this.installUpdatesToolStripMenuItem.Click += new System.EventHandler(this.installUpdatesToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AllowDrop = true;
@@ -2328,6 +2354,7 @@ namespace StableDiffusionGui
             ((System.ComponentModel.ISupportInitialize)(this.pictBoxInitImg)).EndInit();
             this.tableLayoutPanelImgViewers.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
+            this.menuStripInstall.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2474,6 +2501,9 @@ namespace StableDiffusionGui
         public System.Windows.Forms.TableLayoutPanel tableLayoutPanelImgViewers;
         private System.Windows.Forms.Label labelAspectRatio;
         private System.Windows.Forms.ToolStripMenuItem copySidebySideComparisonImageToolStripMenuItem;
+        private System.Windows.Forms.ContextMenuStrip menuStripInstall;
+        private System.Windows.Forms.ToolStripMenuItem manageInstallationToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem installUpdatesToolStripMenuItem;
     }
 }
 
