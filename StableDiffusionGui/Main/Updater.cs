@@ -2,6 +2,7 @@
 using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.MiscUtils;
+using StableDiffusionGui.Os;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -19,15 +20,12 @@ namespace StableDiffusionGui.Main
 
         public static async Task Install (MdlRelease release, bool copyImages, bool copyModels, bool copyConfig)
         {
-            string tempDir = Paths.GetExeDir() + "-update";
+            string tempDir = IoUtils.GetAvailableFilePath(Paths.GetExeDir().TrimEnd('\\') + "-upd");
 
             try
             {
                 IoUtils.TryDeleteIfExists(tempDir);
                 Directory.CreateDirectory(tempDir);
-
-                bool moveFilesSuccess = await Task.Run(() => Copy(tempDir, copyImages, copyModels, copyConfig));
-                Logger.Log($"Move success: {moveFilesSuccess}");
 
                 await Setup.Clone(_basefilesGitUrl, tempDir, release.HashBasefiles);
                 string exePath = Path.Combine(tempDir, "StableDiffusionGui.exe");
@@ -35,6 +33,9 @@ namespace StableDiffusionGui.Main
                 string gitPath = Path.Combine(tempDir, ".git");
                 IoUtils.SetAttributes(gitPath);
                 IoUtils.TryDeleteIfExists(gitPath);
+
+                bool moveFilesSuccess = await Task.Run(() => Move(tempDir, copyImages, copyModels, copyConfig));
+                Logger.Log($"Move success: {moveFilesSuccess}");
 
                 bool onnx = InstallationStatus.HasOnnx();
                 bool up = InstallationStatus.HasSdUpscalers();
@@ -44,12 +45,28 @@ namespace StableDiffusionGui.Main
             catch(Exception ex)
             {
                 Logger.Log($"Error: {ex.Message}");
+                Logger.Log(ex.StackTrace, true, false, Constants.Lognames.Installer);
                 IoUtils.TryDeleteIfExists(tempDir);
             }
         }
 
-        private static bool Copy (string newInstallPath, bool images, bool models, bool config)
+        private static bool Move (string newInstallPath, bool images, bool models, bool config)
         {
+            string targetDataDir = Directory.CreateDirectory(Path.Combine(newInstallPath, Constants.Dirs.Data)).FullName;
+
+            try
+            {
+                string cachePath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.Cache.Root);
+
+                if(Directory.Exists(cachePath))
+                    Directory.Move(cachePath, Path.Combine(targetDataDir, Constants.Dirs.Cache.Root));
+            }
+            catch (Exception ex)
+            {
+                Logger.Log($"Error moving cache: {ex.Message}", true);
+                Logger.Log(ex.StackTrace, true, false, Constants.Lognames.Installer);
+            }
+
             if (images)
             {
                 try
@@ -67,6 +84,7 @@ namespace StableDiffusionGui.Main
                 catch (Exception ex)
                 {
                     Logger.Log($"Error moving images: {ex.Message}");
+                    Logger.Log(ex.StackTrace, true, false, Constants.Lognames.Installer);
                     return false;
                 }
             }
@@ -81,12 +99,13 @@ namespace StableDiffusionGui.Main
                             continue;
 
                         var dirInfo = new DirectoryInfo(dir);
-                        MoveDirIfInsideInstallFolder(dirInfo.FullName, Path.Combine(newInstallPath, Constants.Dirs.Data, Constants.Dirs.Models));
+                        MoveDirIfInsideInstallFolder(dirInfo.FullName, Path.Combine(targetDataDir, Constants.Dirs.Models));
                     }
                 }
                 catch (Exception ex)
                 {
                     Logger.Log($"Error moving models: {ex.Message}");
+                    Logger.Log(ex.StackTrace, true, false, Constants.Lognames.Installer);
                     return false;
                 }
             }
@@ -95,12 +114,13 @@ namespace StableDiffusionGui.Main
             {
                 try
                 {
-                    string targetPath = Path.Combine(newInstallPath, Constants.Dirs.Data, Constants.Files.Config);
+                    string targetPath = Path.Combine(targetDataDir, Constants.Files.Config);
                     File.Copy(Path.Combine(Paths.GetDataPath(), Constants.Files.Config), targetPath);
                 }
                 catch(Exception ex)
                 {
                     Logger.Log($"Error moving config: {ex.Message}");
+                    Logger.Log(ex.StackTrace, true, false, Constants.Lognames.Installer);
                     return false;
                 }
             }
@@ -115,7 +135,7 @@ namespace StableDiffusionGui.Main
             if (!source.Contains(Paths.GetExeDir()))
                 return;
 
-            IoUtils.CopyDir(source, target, true);
+            Directory.Move(source, target);
         }
 
         private static void MoveFileIfInsideInstallFolder(string source, string target)
