@@ -39,6 +39,11 @@ namespace StableDiffusionGui.Main
             public enum TrainPreset { VeryHighQuality, HighQuality, MedQuality, LowQuality }
         }
 
+        public class Ai
+        {
+            public enum Backend { Cuda, DirectMl }
+        }
+
         public class Cuda
         {
             public enum Device { Automatic, Cpu }

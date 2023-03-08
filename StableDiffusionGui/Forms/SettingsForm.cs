@@ -236,11 +236,11 @@ namespace StableDiffusionGui.Forms
                 return;
 
             Config.Set(Config.Keys.ImplementationName, CurrImplementation.ToString());
-            panelFullPrecision.Visible = ShouldControlBeVisible(this, panelFullPrecision);
-            panelUnloadModel.Visible = ShouldControlBeVisible(this, panelUnloadModel);
-            panelCudaDevice.Visible = ShouldControlBeVisible(this, panelCudaDevice);
-            panelSdModel.Visible = ShouldControlBeVisible(this, panelSdModel);
-            panelVae.Visible = ShouldControlBeVisible(this, panelVae);
+            panelFullPrecision.Visible = CurrImplementation.GetInfo().HasPrecisionOpt;
+            panelUnloadModel.Visible = CurrImplementation.GetInfo().IsInteractive;
+            panelCudaDevice.Visible = CurrImplementation.GetInfo().SupportsDeviceSelection;
+            panelSdModel.Visible = CurrImplementation.GetInfo().SupportsCustomModels;
+            panelVae.Visible = CurrImplementation.GetInfo().SupportsCustomVaeModels;
 
             LoadModels(true, ModelType.Normal);
             LoadModels(true, ModelType.Vae);

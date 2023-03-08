@@ -113,7 +113,7 @@ namespace StableDiffusionGui.Ui
                 }
             }
 
-            if (ConfigParser.CurrentImplementation != Implementation.InstructPixToPix && Paths.GetModelsAll().Count <= 0) // TODO: Rework and use an info class for the implementation check bla
+            if (ConfigParser.CurrentImplementation.GetInfo().SupportsCustomModels && Paths.GetModelsAll().Count <= 0)
                 UiUtils.ShowMessageBox($"No model files have been found. You will not be able to generate images until you either place a model in Data/models, or set an external folder in the settings.",
                     UiUtils.MessageType.Warning, Nmkoder.Forms.MessageForm.FontSize.Normal);
         }

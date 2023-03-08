@@ -56,7 +56,7 @@ namespace StableDiffusionGui.Ui.MainFormUtils
 
         public static void RefreshUiAfterSettingsChanged()
         {
-            F.panelPromptNeg.Visible = ConfigParser.CurrentImplementation != Implementation.OptimizedSd && !IsUsingInpaintingModel;
+            F.panelPromptNeg.Visible = ConfigParser.CurrentImplementation.GetInfo().SupportsNegativePrompt && !IsUsingInpaintingModel;
             F.btnEmbeddingBrowse.Visible = MainForm.ShouldControlBeVisible(F, F.btnEmbeddingBrowse);
             F.panelAiInputs.Height = MainForm.ShouldControlBeVisible(F, F.btnEmbeddingBrowse) ? 65 : 35;
             F.panelSampler.Visible = ConfigParser.CurrentImplementation == Implementation.InvokeAi;

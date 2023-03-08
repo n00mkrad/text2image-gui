@@ -165,6 +165,7 @@
     <Compile Include="Data\EasyDict.cs" />
     <Compile Include="Data\Gpu.cs" />
     <Compile Include="Data\ImageMetadata.cs" />
+    <Compile Include="Data\ImplementationInfo.cs" />
     <Compile Include="Data\MdlRelease.cs" />
     <Compile Include="Data\Model.cs" />
     <Compile Include="Data\TtiSettings.cs" />
@@ -278,9 +279,6 @@
     </Compile>
     <Compile Include="Forms\SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\SettingsForm.States.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\UpdaterForm.cs">
       <SubType>Form</SubType>

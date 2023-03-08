@@ -568,5 +568,10 @@ namespace StableDiffusionGui
         {
             return string.IsNullOrWhiteSpace(s);
         }
+
+        public static Data.ImplementationInfo GetInfo(this Enums.StableDiffusion.Implementation imp)
+        {
+            return new Data.ImplementationInfo(imp);
+        }
     }
 }

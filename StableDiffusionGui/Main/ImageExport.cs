@@ -44,7 +44,7 @@ namespace StableDiffusionGui.Main
 
                     if (currSettings.Implementation == Enums.StableDiffusion.Implementation.OptimizedSd)
                         running = IoUtils.GetFileInfosSorted(Paths.GetSessionDataPath(), false, "prompts*.*").Any();
-                    if (currSettings.Implementation == Enums.StableDiffusion.Implementation.InvokeAi || currSettings.Implementation == Enums.StableDiffusion.Implementation.InstructPixToPix)
+                    else if (currSettings.Implementation.GetInfo().IsInteractive)
                         running = (currTask.ImgCount - startingImgCount) < targetImgCount;
 
                     if (!running && !TtiUtils.ImportBusy && !files.Any())
@@ -194,7 +194,7 @@ namespace StableDiffusionGui.Main
 
         private static void OverlayMaskIfExists(string imgPath, bool copyMetadata = true)
         {
-            if (TextToImage.CurrentTaskSettings.Implementation == Enums.StableDiffusion.Implementation.InvokeAi)
+            if (TextToImage.CurrentTaskSettings.Implementation.GetInfo().SupportsNativeInpainting)
                 return; // InvokeAI has proper built-in inpainting - Skip for this implementation
 
             string maskPath = Inpainting.MaskedImagePath;

@@ -88,7 +88,7 @@ namespace StableDiffusionGui
             bool available = false;
 
             bool img2img = MainUi.CurrentInitImgPaths != null;
-            bool inpaintCompat = ConfigParser.CurrentImplementation == Implementation.InvokeAi || ConfigParser.CurrentImplementation == Implementation.DiffusersOnnx;
+            bool inpaintCompat = ConfigParser.CurrentImplementation.GetInfo().SupportsNativeInpainting;
 
             if (img2img && inpaintCompat)
                 available = true;
