@@ -76,6 +76,19 @@ namespace StableDiffusionGui.Main
                 Logger.Log(ex.StackTrace, true, false, Constants.Lognames.Installer);
             }
 
+            try
+            {
+                string wildcardsPath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.Cache.Root, Constants.Dirs.Wildcards);
+
+                if (Directory.Exists(wildcardsPath))
+                    Directory.Move(wildcardsPath, Path.Combine(targetDataDir, Constants.Dirs.Cache.Root, Constants.Dirs.Wildcards));
+            }
+            catch (Exception ex)
+            {
+                Logger.Log($"Error copying wildcards: {ex.Message}", true);
+                Logger.Log(ex.StackTrace, true, false, Constants.Lognames.Installer);
+            }
+
             if (images)
             {
                 try
