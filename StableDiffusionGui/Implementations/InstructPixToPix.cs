@@ -167,47 +167,36 @@ namespace StableDiffusionGui.Implementations
             }
         }
 
-        public static async Task Test()
+        public static async Task Cancel()
         {
-            Process py = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd(), Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdVenv, "Scripts", "python.exe"));
-            py.StartInfo.RedirectStandardInput = true;
-            py.StartInfo.WorkingDirectory = Paths.GetDataPath();
-            py.StartInfo.Arguments = $"\"{Constants.Dirs.SdRepo}/sd_onnx/tests.py\"";
+            Program.MainForm.runBtn.Enabled = false;
 
-            foreach (var pair in TtiUtils.GetEnvVarsSd(false, Paths.GetDataPath()))
-                py.StartInfo.EnvironmentVariables[pair.Key] = pair.Value;
+            await TtiProcess.WriteStdIn($"stop", true);
 
-            Logger.Log($"{py.StartInfo.FileName} {py.StartInfo.Arguments}", true);
+            await Task.Delay(100);
 
-            py.OutputDataReceived += (sender, line) => { Logger.Log($"{line?.Data}"); };
-            py.ErrorDataReceived += (sender, line) => { Logger.Log($"{line?.Data}"); };
-
-            Logger.Log($"Running test script");
-
-            TtiProcess.CurrentProcess = py;
-            TtiProcess.ProcessExistWasIntentional = false;
-
-            py.Start();
-            OsUtils.AttachOrphanHitman(py);
-            TtiProcess.CurrentStdInWriter = new NmkdStreamWriter(py);
-
-            if (!OsUtils.ShowHiddenCmd())
+            while (true)
             {
-                py.BeginOutputReadLine();
-                py.BeginErrorReadLine();
+                var entries = Logger.GetLastEntries(Constants.Lognames.Sd, 5);
+                Dictionary<string, TimeSpan> linesWithAge = new Dictionary<string, TimeSpan>();
+
+                foreach (Logger.Entry entry in entries)
+                    linesWithAge[entry.Message] = DateTime.Now - entry.TimeDequeue;
+
+                linesWithAge = linesWithAge.Where(x => x.Value.TotalMilliseconds >= 0).ToDictionary(p => p.Key, p => p.Value);
+
+                if (linesWithAge.Count > 0)
+                {
+                    var lastLine = linesWithAge.Last();
+
+                    if (lastLine.Value.TotalMilliseconds > 2000)
+                        break;
+                }
+
+                await Task.Delay(100);
             }
 
-            Task.Run(() => TtiProcess.CheckStillRunning());
-
-            await Task.Delay(5000);
-
-            await TtiProcess.WriteStdIn("msg1", true);
-            await TtiProcess.WriteStdIn("msg2", true);
-            await TtiProcess.WriteStdIn("msg3", true);
-
-            await Task.Delay(15000);
-
-            await TtiProcess.WriteStdIn("msg4", true);
+            Program.MainForm.runBtn.Enabled = true;
         }
     }
 }

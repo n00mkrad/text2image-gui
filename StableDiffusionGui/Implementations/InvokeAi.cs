@@ -361,5 +361,56 @@ namespace StableDiffusionGui.Implementations
                 }
             }
         }
+
+        public static async Task Cancel ()
+        {
+            List<string> lastLogLines = Logger.GetLastLines(Constants.Lognames.Sd, 15);
+
+            if (lastLogLines.Where(x => x.MatchesWildcard("*step */*") || x.Contains("error occurred")).Any()) // Only attempt a soft cancel if we've been generating anything
+                await WaitForCancel();
+            else // This condition should be true if we cancel while it's still initializing, so we can just force kill the process
+                TtiProcess.Kill();
+        }
+
+        private static async Task WaitForCancel()
+        {
+            Program.MainForm.runBtn.Enabled = false;
+            DateTime cancelTime = DateTime.Now;
+            TtiUtils.SoftCancelInvokeAi();
+            await Task.Delay(100);
+
+            KeyValuePair<string, TimeSpan> previousLastLine = new KeyValuePair<string, TimeSpan>();
+
+            while (true)
+            {
+                var entries = Logger.GetLastEntries(Constants.Lognames.Sd, 5);
+                Dictionary<string, TimeSpan> linesWithAge = new Dictionary<string, TimeSpan>();
+
+                foreach (Logger.Entry entry in entries)
+                    linesWithAge[entry.Message] = DateTime.Now - entry.TimeDequeue;
+
+                linesWithAge = linesWithAge.Where(x => x.Value.TotalMilliseconds >= 0).ToDictionary(p => p.Key, p => p.Value);
+
+                if (linesWithAge.Count > 0)
+                {
+                    var lastLine = linesWithAge.Last();
+
+                    if (lastLine.Value.TotalMilliseconds > 2000)
+                        break;
+
+                    bool linesChanged = !string.IsNullOrWhiteSpace(previousLastLine.Key) && lastLine.Key != previousLastLine.Key && lastLine.Value.TotalMilliseconds < 500;
+
+                    if (linesChanged && !lastLine.Key.Contains("skipped")) // If lines changed (= still outputting), send ctrl+c again
+                        TtiUtils.SoftCancelInvokeAi();
+
+                    previousLastLine = lastLine;
+                }
+
+                await Task.Delay(100);
+            }
+
+            await TtiProcess.WriteStdIn("!reset", true);
+            Program.MainForm.runBtn.Enabled = true;
+        }
     }
 }

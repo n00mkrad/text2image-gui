@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace StableDiffusionGui.Main
 {
@@ -148,20 +149,16 @@ namespace StableDiffusionGui.Main
 
             Logger.Log($"Canceling. Reason: {(string.IsNullOrWhiteSpace(reason) ? "None" : reason)} - Implementation: {(CurrentTaskSettings != null ? CurrentTaskSettings.Implementation.ToString() : "None")} - Force Kill: {forceKill}", true);
 
-            if (CurrentTaskSettings != null && CurrentTaskSettings.Implementation != Implementation.InvokeAi)
+            if (CurrentTaskSettings != null && (CurrentTaskSettings.Implementation != Implementation.InvokeAi && CurrentTaskSettings.Implementation != Implementation.InstructPixToPix))
                 forceKill = true;
 
             if (!forceKill && TtiProcess.IsAiProcessRunning)
             {
                 if (CurrentTaskSettings.Implementation == Implementation.InvokeAi)
-                {
-                    List<string> lastLogLines = Logger.GetLastLines(Constants.Lognames.Sd, 15);
+                    await InvokeAi.Cancel();
 
-                    if (lastLogLines.Where(x => x.MatchesWildcard("*step */*") || x.Contains("error occurred")).Any()) // Only attempt a soft cancel if we've been generating anything
-                        await WaitForInvokeAiCancel();
-                    else // This condition should be true if we cancel while it's still initializing, so we can just force kill the process
-                        TtiProcess.Kill();
-                }
+                if (CurrentTaskSettings.Implementation == Implementation.InstructPixToPix)
+                    await InstructPixToPix.Cancel();
             }
             else
             {
@@ -175,47 +172,6 @@ namespace StableDiffusionGui.Main
 
             if (Program.State == Program.BusyState.PostProcessing)
                 Program.SetState(Program.BusyState.Standby);
-        }
-
-        public static async Task WaitForInvokeAiCancel()
-        {
-            Program.MainForm.runBtn.Enabled = false;
-            DateTime cancelTime = DateTime.Now;
-            TtiUtils.SoftCancelInvokeAi();
-            await Task.Delay(100);
-
-            KeyValuePair<string, TimeSpan> previousLastLine = new KeyValuePair<string, TimeSpan>();
-
-            while (true)
-            {
-                var entries = Logger.GetLastEntries(Constants.Lognames.Sd, 5);
-                Dictionary<string, TimeSpan> linesWithAge = new Dictionary<string, TimeSpan>();
-
-                foreach (Logger.Entry entry in entries)
-                    linesWithAge[entry.Message] = DateTime.Now - entry.TimeDequeue;
-
-                linesWithAge = linesWithAge.Where(x => x.Value.TotalMilliseconds >= 0).ToDictionary(p => p.Key, p => p.Value);
-
-                if (linesWithAge.Count > 0)
-                {
-                    var lastLine = linesWithAge.Last();
-
-                    if (lastLine.Value.TotalMilliseconds > 2000)
-                        break;
-
-                    bool linesChanged = !string.IsNullOrWhiteSpace(previousLastLine.Key) && lastLine.Key != previousLastLine.Key && lastLine.Value.TotalMilliseconds < 500;
-
-                    if (linesChanged && !lastLine.Key.Contains("skipped")) // If lines changed (= still outputting), send ctrl+c again
-                        TtiUtils.SoftCancelInvokeAi();
-
-                    previousLastLine = lastLine;
-                }
-
-                await Task.Delay(100);
-            }
-
-            await TtiProcess.WriteStdIn("!reset", true);
-            Program.MainForm.runBtn.Enabled = true;
         }
     }
 }
