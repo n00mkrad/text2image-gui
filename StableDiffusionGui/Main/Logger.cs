@@ -1,5 +1,6 @@
 ﻿using StableDiffusionGui.Data;
 using StableDiffusionGui.Extensions;
+using StableDiffusionGui.Forms;
 using StableDiffusionGui.Io;
 using System;
 using System.Collections.Concurrent;
@@ -13,9 +14,7 @@ namespace StableDiffusionGui.Main
 {
     internal class Logger
     {
-        public static TextBox Textbox;
-        public static TextBox TextboxDebug;
-
+        public static RealtimeLoggerForm RealtimeLoggerForm;
         public static EasyDict<string, ConcurrentQueue<Entry>> CachedEntries = new EasyDict<string, ConcurrentQueue<Entry>>();
         public static EasyDict<string, ConcurrentQueue<string>> CachedLines = new EasyDict<string, ConcurrentQueue<string>>();
 
@@ -143,25 +142,11 @@ namespace StableDiffusionGui.Main
 
             Console.WriteLine(entry.ToString(true, true, true));
 
-            try
-            {
-                if (!entry.Hidden && entry.ReplaceLastLine)
-                {
-                    Textbox.Suspend();
-                    string[] lines = Textbox.Text.SplitIntoLines();
-                    Textbox.Text = string.Join(Environment.NewLine, lines.Take(lines.Length - 1));
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Logging Error: {ex.Message}\n{ex.StackTrace}");
-            }
+            if(RealtimeLoggerForm != null)
+                RealtimeLoggerForm.LogAppend(entry.Message.Replace("\n", Environment.NewLine), entry.ReplaceLastLine);
 
-            if (!entry.Hidden && Textbox != null && !Textbox.IsDisposed)
-                Textbox.AppendText((string.IsNullOrWhiteSpace(Textbox.Text) ? "" : Environment.NewLine) + entry.Message.Replace("\n", Environment.NewLine));
-
-            if (entry.ReplaceLastLine && !Textbox.IsDisposed)
-                Textbox.Resume();
+            if (!entry.Hidden)
+                Program.MainForm.LogAppend(entry.Message.Replace("\n", Environment.NewLine), entry.ReplaceLastLine);
 
             LogToFile(entry);
         }
@@ -250,17 +235,13 @@ namespace StableDiffusionGui.Main
 
         public static void ClearLogBox()
         {
-            Textbox.Text = "";
+            if (Program.MainForm != null)
+                Program.MainForm.LogText = "";
         }
 
         public static string GetLastLine(bool includeHidden = false)
         {
             return includeHidden ? _lastLogLine : _lastUiLine;
-        }
-
-        public static void RemoveLastLine()
-        {
-            Textbox.Text = Textbox.Text.Remove(Textbox.Text.LastIndexOf(Environment.NewLine));
         }
 
         public static string AddTxt(string name)

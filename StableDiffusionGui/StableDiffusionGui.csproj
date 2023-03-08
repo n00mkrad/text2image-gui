@@ -270,6 +270,9 @@
     <Compile Include="Forms\RealtimeLoggerForm.Designer.cs">
       <DependentUpon>RealtimeLoggerForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\RealtimeLoggerForm.Interaction.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\SettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -308,6 +311,9 @@
     </Compile>
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainForm.Interaction.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="MainForm.States.cs">
       <SubType>Form</SubType>

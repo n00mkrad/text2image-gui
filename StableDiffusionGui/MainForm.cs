@@ -43,7 +43,6 @@ namespace StableDiffusionGui
         {
             CheckForIllegalCrossThreadCalls = false;
             AllowEscClose = false;
-            Logger.Textbox = logBox;
             Task.Run(() => Logger.QueueLoop());
             MinimumSize = Size;
             Text = $"Stable Diffusion GUI {Program.Version}";
