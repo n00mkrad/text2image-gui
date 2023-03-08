@@ -82,8 +82,13 @@ namespace StableDiffusionGui.Main
 
                 if (Directory.Exists(wildcardsPath))
                 {
-                    foreach(var wc in IoUtils.GetFileInfosSorted(wildcardsPath, false, "*.*"))
-                        wc.MoveTo(Path.Combine(newInstallPath, Constants.Dirs.Wildcards, wc.Name), true);
+                    foreach (var wc in IoUtils.GetFileInfosSorted(wildcardsPath, false, "*.*"))
+                    {
+                        string targetPath = Path.Combine(newInstallPath, Constants.Dirs.Wildcards, wc.Name);
+
+                        if (!File.Exists(targetPath)) // Only copy additional files, otherwise it would be impossible to update existing wc files
+                            wc.MoveTo(targetPath);
+                    }
                 }
             }
             catch (Exception ex)
