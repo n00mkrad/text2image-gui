@@ -529,7 +529,8 @@ namespace StableDiffusionGui
             int gcd = GCD(w, h);
             int reducedWidth = w / gcd;
             int reducedHeight = h / gcd;
-            labelAspectRatio.Text = $"Ratio {reducedWidth}:{reducedHeight}".Replace("8:5", "8:5 (16:10)").Replace("7:3", "7:3 (21:9)");
+            string ratioText = $"{reducedWidth}:{reducedHeight}";
+            labelAspectRatio.Text = ratioText.Length <= 5 ? $"Ratio {ratioText.Replace("8:5", "8:5 (16:10)").Replace("7:3", "7:3 (21:9)")}" : "";
         }
 
         private int GCD(int a, int b)
