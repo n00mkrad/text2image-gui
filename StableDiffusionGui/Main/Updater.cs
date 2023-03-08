@@ -78,10 +78,13 @@ namespace StableDiffusionGui.Main
 
             try
             {
-                string wildcardsPath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.Cache.Root, Constants.Dirs.Wildcards);
+                string wildcardsPath = Path.Combine(Paths.GetExeDir(), Constants.Dirs.Wildcards);
 
                 if (Directory.Exists(wildcardsPath))
-                    Directory.Move(wildcardsPath, Path.Combine(targetDataDir, Constants.Dirs.Cache.Root, Constants.Dirs.Wildcards));
+                {
+                    foreach(var wc in IoUtils.GetFileInfosSorted(wildcardsPath, false, "*.*"))
+                        wc.MoveTo(Path.Combine(newInstallPath, Constants.Dirs.Wildcards, wc.Name), true);
+                }
             }
             catch (Exception ex)
             {
