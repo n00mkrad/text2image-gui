@@ -19,7 +19,7 @@ namespace StableDiffusionGui.Implementations
 {
     internal class SdOnnx
     {
-        public static async Task Run(string[] prompts, string negPrompt, int iterations, Dictionary<string, string> parameters, string outPath)
+        public static async Task Run(string[] prompts, string promptNeg, int iterations, Dictionary<string, string> parameters, string outPath)
         {
             try
             {
@@ -62,7 +62,7 @@ namespace StableDiffusionGui.Implementations
                         args["initStrength"] = "0";
                         args["inpaintMask"] = "";
                         args["prompt"] = processedPrompts[i];
-                        args["negprompt"] = negPrompt;
+                        args["promptNeg"] = promptNeg;
                         args["w"] = $"{res.Width}";
                         args["h"] = $"{res.Height}";
                         args["seed"] = $"{seed}";
@@ -106,64 +106,73 @@ namespace StableDiffusionGui.Implementations
                         seed = startSeed;
                 }
 
-                string jsonPath = Path.Combine(Paths.GetSessionDataPath(), "prompts-onnx.json");
-                File.WriteAllText(jsonPath, argLists.ToJson(true));
-
                 Logger.Log($"Running Stable Diffusion - {iterations} Iterations, {steps.Length} Steps, Scales {(scales.Length < 4 ? string.Join(", ", scales.Select(x => x.ToStringDot())) : $"{scales.First()}->{scales.Last()}")}, {res.Width}x{res.Height}, Starting Seed: {startSeed}");
-
-                //string argsStartup = Args.InvokeAi.GetArgsStartup(embedding);
 
                 string initsStr = initImages != null ? $" and {initImages.Count} image{(initImages.Count != 1 ? "s" : "")} using {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
                 Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} * {iterations} image{(iterations != 1 ? "s" : "")} * {steps.Length} step value{(steps.Length != 1 ? "s" : "")} * {scales.Length} scale{(scales.Length != 1 ? "s" : "")}{initsStr} = {argLists.Count} images total.");
 
-                PatchDiffusersIfNeeded();
-
-                Process py = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
-                TextToImage.CurrentTask.Processes.Add(py);
-
-                string mode = "txt2img";
-                bool inpaintingMdl = modelDir.Name.EndsWith(Constants.SuffixesPrefixes.InpaintingMdlSuf);
-
-                if (initImgs != null && initImgs.Length > 0)
+                if (!TtiProcess.IsAiProcessRunning)
                 {
-                    mode = "img2img";
+                    PatchDiffusersIfNeeded();
 
-                    if (inpaintingMdl && inpaint != InpaintMode.Disabled)
-                        mode = "inpaint";
+                    Process py = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
+                    TextToImage.CurrentTask.Processes.Add(py);
+
+                    string mode = "txt2img";
+                    bool inpaintingMdl = modelDir.Name.EndsWith(Constants.SuffixesPrefixes.InpaintingMdlSuf);
+
+                    if (initImgs != null && initImgs.Length > 0)
+                    {
+                        mode = "img2img";
+
+                        if (inpaintingMdl && inpaint != InpaintMode.Disabled)
+                            mode = "inpaint";
+                    }
+
+                    py.StartInfo.RedirectStandardInput = true;
+                    py.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand()} && " +
+                        $"python \"{Constants.Dirs.SdRepo}/nmkdiff/nmkdiffusers.py\" -p SdOnnx -g {mode} -m {modelDir.FullName.Wrap(true)} -o {outPath.Wrap(true)}";
+
+                    Logger.Log("cmd.exe " + py.StartInfo.Arguments, true);
+
+                    if (!OsUtils.ShowHiddenCmd())
+                    {
+                        py.OutputDataReceived += (sender, line) => { TtiProcessOutputHandler.LogOutput(line.Data); };
+                        py.ErrorDataReceived += (sender, line) => { TtiProcessOutputHandler.LogOutput(line.Data, true); };
+                    }
+
+                    if (TtiProcess.CurrentProcess != null)
+                    {
+                        TtiProcess.ProcessExistWasIntentional = true;
+                        OsUtils.KillProcessTree(TtiProcess.CurrentProcess.Id);
+                    }
+
+                    TtiProcessOutputHandler.Reset();
+
+                    Logger.Log($"Loading Stable Diffusion (ONNX) with model {model.Trunc(80).Wrap()}...");
+
+                    TtiProcess.ProcessExistWasIntentional = false;
+                    py.Start();
+                    TtiProcess.CurrentProcess = py;
+                    OsUtils.AttachOrphanHitman(py);
+
+                    if (!OsUtils.ShowHiddenCmd())
+                    {
+                        py.BeginOutputReadLine();
+                        py.BeginErrorReadLine();
+                    }
+
+                    Task.Run(() => TtiProcess.CheckStillRunning());
+                    TtiProcess.CurrentStdInWriter = new NmkdStreamWriter(py);
+                }
+                else
+                {
+                    TtiProcessOutputHandler.Reset();
+                    TextToImage.CurrentTask.Processes.Add(TtiProcess.CurrentProcess);
                 }
 
-                py.StartInfo.RedirectStandardInput = true;
-                py.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand()} && " +
-                    $"python \"{Constants.Dirs.SdRepo}/sd_onnx/sd_onnx.py\" -m {modelDir.FullName.Wrap(true)} -j {jsonPath.Wrap(true)} -o {outPath.Wrap(true)} -mode {mode}";
-
-                Logger.Log("cmd.exe " + py.StartInfo.Arguments, true);
-
-                if (!OsUtils.ShowHiddenCmd())
-                {
-                    py.OutputDataReceived += (sender, line) => { TtiProcessOutputHandler.LogOutput(line.Data); };
-                    py.ErrorDataReceived += (sender, line) => { TtiProcessOutputHandler.LogOutput(line.Data, true); };
-                }
-
-                if (TtiProcess.CurrentProcess != null)
-                {
-                    TtiProcess.ProcessExistWasIntentional = true;
-                    OsUtils.KillProcessTree(TtiProcess.CurrentProcess.Id);
-                }
-
-                TtiProcessOutputHandler.Reset();
-
-                Logger.Log($"Loading Stable Diffusion (ONNX) with model {model.Trunc(80).Wrap()}...");
-
-                TtiProcess.ProcessExistWasIntentional = false;
-                py.Start();
-                TtiProcess.CurrentProcess = py;
-                OsUtils.AttachOrphanHitman(py);
-
-                if (!OsUtils.ShowHiddenCmd())
-                {
-                    py.BeginOutputReadLine();
-                    py.BeginErrorReadLine();
-                }
+                foreach (var argList in argLists)
+                    await TtiProcess.WriteStdIn($"generate {argList.ToJson()}", true);
             }
             catch (Exception ex)
             {

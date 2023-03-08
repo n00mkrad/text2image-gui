@@ -55,7 +55,6 @@ namespace StableDiffusionGui.Implementations
                 List<Dictionary<string, string>> argLists = new List<Dictionary<string, string>>(); // List of all args for each command
                 Dictionary<string, string> args = new Dictionary<string, string>(); // List of args for current command
                 args["prompt"] = "";
-                args["default"] = "";
 
                 foreach (string prompt in prompts)
                 {
@@ -67,16 +66,16 @@ namespace StableDiffusionGui.Implementations
                         args["initImg"] = "";
                         args["initStrength"] = "0";
                         args["prompt"] = processedPrompts[i];
-                        args["prompt_neg"] = negPrompt;
+                        args["promptNeg"] = negPrompt;
                         args["seed"] = $"{seed}";
 
                         foreach (float scale in scalesTxt)
                         {
-                            args["scale_txt"] = $"{scale.ToStringDot()}";
+                            args["scaleTxt"] = $"{scale.ToStringDot()}";
 
                             foreach (float scaleImg in scalesImg)
                             {
-                                args["scale_img"] = $"{scaleImg.ToStringDot()}";
+                                args["scaleImg"] = $"{scaleImg.ToStringDot()}";
 
                                 foreach (int stepCount in steps)
                                 {
@@ -116,7 +115,7 @@ namespace StableDiffusionGui.Implementations
 
                     py.StartInfo.RedirectStandardInput = true;
                     py.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand()} && " +
-                        $"python \"{Constants.Dirs.SdRepo}/sd_ip2p/ip2p.py\" -o {outPath.Wrap(true)}";
+                        $"python \"{Constants.Dirs.SdRepo}/nmkdiff/nmkdiffusers.py\" -p InstructPix2Pix -o {outPath.Wrap(true)}";
 
                     Logger.Log("cmd.exe " + py.StartInfo.Arguments, true);
 
@@ -157,8 +156,6 @@ namespace StableDiffusionGui.Implementations
 
                 foreach (var argList in argLists)
                     await TtiProcess.WriteStdIn($"generate {argList.ToJson()}", true);
-
-                // await TtiProcess.WriteStdIn("exit", true);
             }
             catch (Exception ex)
             {
