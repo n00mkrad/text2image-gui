@@ -213,16 +213,16 @@
             0,
             0,
             65536});
-            this.sliderSteps.ActualValue = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
             this.sliderSteps.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.sliderSteps.BorderRoundRectSize = new System.Drawing.Size(12, 12);
             this.sliderSteps.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sliderSteps.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
             this.sliderSteps.ForeColor = System.Drawing.Color.Black;
+            this.sliderSteps.InitValue = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
             this.sliderSteps.LargeChange = ((uint)(5u));
             this.sliderSteps.Location = new System.Drawing.Point(0, 0);
             this.sliderSteps.Margin = new System.Windows.Forms.Padding(0);
@@ -236,6 +236,7 @@
             this.sliderSteps.ThumbSize = new System.Drawing.Size(14, 14);
             this.toolTip.SetToolTip(this.sliderSteps, "More steps can help the model learn better, but if it\'s too high it will overfit " +
         "and the model becomes less flexible.");
+            this.sliderSteps.Value = 0;
             this.sliderSteps.ValueBox = this.textBox1;
             this.sliderSteps.ValueStep = new decimal(new int[] {
             10,
@@ -327,7 +328,7 @@
             this.textboxSliderLrMultiplier.Name = "textboxSliderLrMultiplier";
             this.textboxSliderLrMultiplier.Size = new System.Drawing.Size(40, 17);
             this.textboxSliderLrMultiplier.TabIndex = 93;
-            this.textboxSliderLrMultiplier.Text = "2";
+            this.textboxSliderLrMultiplier.Text = "1";
             // 
             // sliderLrMultiplier
             // 
@@ -341,16 +342,16 @@
             0,
             0,
             65536});
-            this.sliderLrMultiplier.ActualValue = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
             this.sliderLrMultiplier.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.sliderLrMultiplier.BorderRoundRectSize = new System.Drawing.Size(12, 12);
             this.sliderLrMultiplier.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sliderLrMultiplier.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
             this.sliderLrMultiplier.ForeColor = System.Drawing.Color.Black;
+            this.sliderLrMultiplier.InitValue = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
             this.sliderLrMultiplier.LargeChange = ((uint)(5u));
             this.sliderLrMultiplier.Location = new System.Drawing.Point(0, 0);
             this.sliderLrMultiplier.Margin = new System.Windows.Forms.Padding(0);
@@ -365,6 +366,7 @@
             this.sliderLrMultiplier.ThumbSize = new System.Drawing.Size(14, 14);
             this.toolTip.SetToolTip(this.sliderLrMultiplier, "A higher learning rate can help the model learn faster, but if it\'s too high it w" +
         "ill overfit and the model becomes less flexible.");
+            this.sliderLrMultiplier.Value = 10;
             this.sliderLrMultiplier.ValueBox = this.textboxSliderLrMultiplier;
             this.sliderLrMultiplier.ValueStep = new decimal(new int[] {
             1,

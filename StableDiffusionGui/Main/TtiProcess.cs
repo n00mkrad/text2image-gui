@@ -1,14 +1,18 @@
 ﻿using StableDiffusionGui.Io;
 using StableDiffusionGui.Os;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace StableDiffusionGui.Main
 {
     internal class TtiProcess
     {
-        public static Process CurrentProcess;
+        public static List<Process> AllProcesses = new List<Process>(); // TODO: Track all started processes here
+        private static Process _currentProcess;
+        public static Process CurrentProcess { get { return _currentProcess; } set { _currentProcess = value; AllProcesses.Add(value); } }
         public static NmkdStreamWriter CurrentStdInWriter;
         public static bool ProcessExistWasIntentional = false;
         public static bool IsAiProcessRunning { get { return CurrentProcess != null && !CurrentProcess.HasExited; } }
@@ -48,13 +52,15 @@ namespace StableDiffusionGui.Main
             }
         }
 
-        public static void Kill()
+        public static void Kill(bool all = true)
         {
-            Logger.Log($"Killing current task's processes.", true);
+            Logger.Log($"Killing current processes.", true);
+            AllProcesses = AllProcesses.Where(p => p != null && !p.HasExited).ToList();
+            var procList = all ? AllProcesses : TextToImage.CurrentTask.Processes;
 
             if (TextToImage.CurrentTask != null)
             {
-                foreach (var process in TextToImage.CurrentTask.Processes)
+                foreach (Process process in procList)
                 {
                     try
                     {
@@ -64,6 +70,7 @@ namespace StableDiffusionGui.Main
                                 ProcessExistWasIntentional = true;
 
                             OsUtils.KillProcessTree(process.Id);
+                            Logger.Log($"Killed proc tree with PID {process.Id}", true);
                         }
                     }
                     catch (Exception e)

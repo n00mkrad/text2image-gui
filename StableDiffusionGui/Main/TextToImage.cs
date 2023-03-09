@@ -10,7 +10,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace StableDiffusionGui.Main
 {
@@ -18,6 +17,7 @@ namespace StableDiffusionGui.Main
     {
         public static TtiTaskInfo CurrentTask { get; set; } = null;
         public static TtiSettings CurrentTaskSettings { get; set; } = null;
+        public static Implementation LastImplementation { get; set; } = (Implementation)(-1);
         public static long PreviousSeed = -1;
         public static bool Canceled = false;
 
@@ -88,6 +88,11 @@ namespace StableDiffusionGui.Main
                 Directory.CreateDirectory(CurrentTask.OutDir);
 
                 List<Task> tasks = new List<Task>();
+
+                if (LastImplementation != s.Implementation)
+                    TtiProcess.Kill();
+
+                LastImplementation = s.Implementation;
 
                 switch (s.Implementation)
                 {
