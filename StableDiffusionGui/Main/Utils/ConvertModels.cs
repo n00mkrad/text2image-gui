@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using ZetaLongPaths;
 using static StableDiffusionGui.Main.Enums.Models;
 
 namespace StableDiffusionGui.Main.Utils
@@ -170,14 +171,18 @@ namespace StableDiffusionGui.Main.Utils
                 IoUtils.TryDeleteIfExists(inPath);
         }
 
-        // private static async Task ConvSafetensorsPytorch(string inPath, string outPath, bool deleteInput = false)
-        // {
-        //     await RunPython($"python repo/scripts/st_to_ckpt.py -i {inPath.Wrap(true)} -o {outPath.Wrap(true)}");
-        // 
-        //     if (deleteInput)
-        //         IoUtils.TryDeleteIfExists(inPath);
-        // }
+        public static async Task<string> ConvVaePytorchDiffusers (string inPath, string outPath = "", bool deleteInput = false)
+        {
+            if (outPath.IsEmpty())
+                outPath = Path.ChangeExtension(inPath, null);
 
+            await RunPython($"python repo/scripts/diff/convert_vae_pt_to_diffusers.py --vae_pt_path {inPath.Wrap(true)} --dump_path {outPath.Wrap(true)}");
+
+            if (deleteInput && Directory.Exists(outPath))
+                IoUtils.TryDeleteIfExists(inPath);
+
+            return Directory.Exists(outPath) ? outPath : "";
+        }
 
         private static async Task RunPython (string cmd)
         {
@@ -246,6 +251,57 @@ namespace StableDiffusionGui.Main.Utils
 
                 return path;
             }
+        }
+
+        public static Format DetectModelFormat (string modelPath, bool print = true)
+        {
+            try
+            {
+                if (File.Exists(modelPath)) // Is file
+                {
+                    var file = new ZlpFileInfo(modelPath);
+
+                    if (file.Length < 16 * 1024 * 1024) // Assume that a <16 MB file is not a valid model
+                        return (Format)(-1);
+
+                    if (file.FullName.Lower().EndsWith(".ckpt") || file.FullName.Lower().EndsWith(".pt"))
+                        return Format.Pytorch;
+
+                    if (file.FullName.Lower().EndsWith(".safetensors"))
+                        return Format.Safetensors;
+                }
+                else if (Directory.Exists(modelPath)) // Is directory
+                {
+                    var dir = new ZlpDirectoryInfo(modelPath);
+
+
+                    // List<string> subDirs = dir.GetDirectories().Select(d => d.Name).ToList();
+                    // 
+                    // bool diffusersStructureValid = new[] { "text_encoder", "tokenizer", "unet" }.All(d => subDirs.Contains(d));
+                    // var unetDir = new ZlpDirectoryInfo(Path.Combine(dir.FullName, "unet"));
+                    // bool unetValid = unetDir.Exists && IoUtils.GetDirSize(unetDir.FullName, false) >= 64 * 1024 * 1024; // Assume that a <64 MB unet file is not valid
+                    string indexJsonPath = IoUtils.GetFileInfosSorted(dir.FullName, false, "*.json").OrderByDescending(f => f.Length).FirstOrDefault()?.FullName;
+                    
+                    if (File.Exists(indexJsonPath))
+                    {
+                        var lines = File.ReadAllLines(indexJsonPath);
+
+                        if(lines.Any(l => l.Contains("_diffusers_version")))
+                        {
+                            if (File.ReadAllLines(indexJsonPath).Any(l => l.Contains(@"""_class_name"": ""Onnx")))
+                                return Format.DiffusersOnnx;
+                            if (File.ReadAllLines(indexJsonPath).Any(l => l.Contains(@"""_class_name"":")))
+                                return Format.Diffusers;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Log($"Failed to detect model format: {ex.Message} ({modelPath})", !print);
+            }
+
+            return (Format)(-1);
         }
 
         private static void PatchConversionScripts ()

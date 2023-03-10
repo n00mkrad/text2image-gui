@@ -1,14 +1,11 @@
 ﻿using StableDiffusionGui.Data;
-using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
-using StableDiffusionGui.MiscUtils;
-using StableDiffusionGui.Os;
+using StableDiffusionGui.Main.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -17,6 +14,33 @@ namespace StableDiffusionGui.Implementations
     internal class InvokeAiUtils
     {
         public static string ModelsYamlPath { get { return Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdRepo, "invoke", "configs", "models.yaml"); } }
+
+        public static async Task<Model> ConvertVae(Model vae, bool print = true)
+        {
+            string outPath = Path.ChangeExtension(vae.FullName, null);
+
+            if (ConvertModels.DetectModelFormat(vae.FullName) == Enums.Models.Format.Diffusers) // Is already correct format
+                return vae;
+
+            if (ConvertModels.DetectModelFormat(outPath) == Enums.Models.Format.Diffusers) // Conversion already exists at output path
+            {
+                Model existingVae = new Model(outPath);
+                existingVae.CompatibleImplementations = vae.CompatibleImplementations; // TODO: This sucks. Need to rewrite the compat stuff
+                return existingVae;
+            }
+
+            if (print)
+                Logger.Log($"VAE '{vae.FormatIndependentName.Trunc(50)}' is in legacy format, converting to Diffusers format...");
+
+            await ConvertModels.ConvVaePytorchDiffusers(vae.FullName, outPath);
+            Model convertedVae = new Model(outPath);
+            convertedVae.CompatibleImplementations = vae.CompatibleImplementations; // TODO: This sucks. Need to rewrite the compat stuff
+
+            if (print)
+                Logger.Log("Converted VAE to Diffusers format.", false, Logger.LastUiLine.EndsWith("converting to Diffusers format..."));
+
+            return convertedVae;
+        }
 
         public static void WriteModelsYaml(string mdlName, string vaeName = "", string keyName = "default")
         {
@@ -75,20 +99,23 @@ namespace StableDiffusionGui.Implementations
                 string text = "";
 
                 cachedModelsVae.Insert(0, null); // Insert null entry, for looping
+                string dataPath = Paths.GetDataPath();//.Replace("\\", "/").TrimEnd('/');
 
                 foreach (Model mdl in cachedModels)
                 {
                     bool inpaint = mdl.Name.MatchesWildcard("*-inpainting.*");
 
-                    foreach (Model vae in cachedModelsVae)
+                    foreach (Model mdlVae in cachedModelsVae)
                     {
+                        var vae = mdlVae == null ? null : mdlVae.Format == Enums.Models.Format.Diffusers ? mdlVae : await ConvertVae(mdlVae, !quiet);
+
                         string configFile = File.Exists(mdl.FullName + ".yaml") ? (mdl.FullName + ".yaml").Wrap(true) : $"configs/stable-diffusion/{(inpaint ? "v1-inpainting-inference" : "v1-inference")}.yaml";
 
                         text += $"{GetMdlNameForYaml(mdl, vae)}:\n" +
                         $"    config: {configFile}\n" +
-                        $"    weights: {mdl.FullName.Wrap(true)}\n" +
-                        $"{(vae != null && File.Exists(vae.FullName) ? $"    vae: {vae.FullName.Wrap(true)}\n" : "")}" +
-                        $"    description: {mdl.Name}\n" +
+                        $"    weights: {mdl.FullName.Replace(dataPath, "../..").Wrap(true)}\n" +
+                        $"{(vae != null && vae.FullName.IsNotEmpty() ? $"    vae: {vae.FullName.Replace(dataPath, "../..").Wrap(true)}\n" : "")}" +
+                        // $"    description: {mdl.Name}\n" +
                         $"    width: 512\n" +
                         $"    height: 512\n" +
                         $"    default: {IsModelDefault(mdl, vae, selectedMdl, selectedVae).ToString().Lower()}\n\n";
@@ -116,14 +143,14 @@ namespace StableDiffusionGui.Implementations
             if (selectedVae == null)
                 vaeMatch = vae == null;
             else
-                vaeMatch = vae != null && selectedVae.FullName == vae.FullName;
+                vaeMatch = vae != null && selectedVae.FormatIndependentName == vae.FormatIndependentName;
 
             return mdlMatch && vaeMatch;
         }
 
         public static string GetMdlNameForYaml(Model mdl, Model vae)
         {
-            return $"{mdl.Name}{(vae == null ? "-noVae" : $"-{vae.Name}")}";
+            return $"{mdl.Name}{(vae == null ? "-none" : $"-{vae.Name}")}";
         }
 
         public static string GetModelsYamlHash(IoUtils.Hash hashType = IoUtils.Hash.CRC32, bool ignoreDefaultKey = true)
