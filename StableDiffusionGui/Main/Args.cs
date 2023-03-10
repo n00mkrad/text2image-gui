@@ -37,8 +37,7 @@ namespace StableDiffusionGui.Main
 
                 if (!args.Contains("--no_restore"))
                 {
-                    args.Add("--gfpgan_dir ../gfpgan");
-                    args.Add("--gfpgan_model_path gfpgan.pth");
+                    args.Add("--gfpgan_model_path ../gfpgan/gfpgan.pth");
                 }
 
                 int maxCachedModels = 0;

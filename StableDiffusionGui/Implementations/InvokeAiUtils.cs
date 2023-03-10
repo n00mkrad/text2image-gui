@@ -16,7 +16,7 @@ namespace StableDiffusionGui.Implementations
 {
     internal class InvokeAiUtils
     {
-        public static string ModelsYamlPath { get { return Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdRepo, "configs", "models.yaml"); } }
+        public static string ModelsYamlPath { get { return Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdRepo, "invoke", "configs", "models.yaml"); } }
 
         public static void WriteModelsYaml(string mdlName, string vaeName = "", string keyName = "default")
         {

@@ -230,6 +230,14 @@ namespace StableDiffusionGui.Main
             return string.Join(" && ", cmds);
         }
 
+        public static void ApplyEnvVarsSd(System.Diagnostics.Process p, bool allCudaDevices = false, string baseDir = ".")
+        {
+            Dictionary<string, string> envVars = GetEnvVarsSd(allCudaDevices, baseDir);
+
+            foreach (var envVar in envVars)
+                p.StartInfo.EnvironmentVariables[envVar.Key] = envVar.Value;
+        }
+
         public static bool ModelFilesizeValid(string path, ModelType type = ModelType.Normal)
         {
             if (!File.Exists(path))

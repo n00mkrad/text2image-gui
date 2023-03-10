@@ -149,7 +149,7 @@ namespace StableDiffusionGui.Implementations
                     Process py = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd(), Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdVenv, "Scripts", "python.exe"));
                     py.StartInfo.RedirectStandardInput = true;
                     py.StartInfo.WorkingDirectory = Paths.GetDataPath();
-                    py.StartInfo.Arguments = $"\"{Constants.Dirs.SdRepo}/scripts/invoke.py\" -o {outPath.Wrap(true)} {argsStartup}";
+                    py.StartInfo.Arguments = $"\"{Constants.Dirs.SdRepo}/invoke/scripts/invoke.py\" -o {outPath.Wrap(true)} {argsStartup}";
 
                     foreach (var pair in TtiUtils.GetEnvVarsSd(false, Paths.GetDataPath()))
                         py.StartInfo.EnvironmentVariables[pair.Key] = pair.Value;
@@ -197,8 +197,6 @@ namespace StableDiffusionGui.Implementations
                     TextToImage.CurrentTask.Processes.Add(TtiProcess.CurrentProcess);
                 }
 
-                await TtiProcess.WriteStdIn("!reset");
-
                 foreach (string command in cmds)
                     await TtiProcess.WriteStdIn(command);
             }
@@ -232,10 +230,9 @@ namespace StableDiffusionGui.Implementations
                 $"title Stable Diffusion CLI (InvokeAI)\n" +
                 $"cd /D {Paths.GetDataPath().Wrap()}\n" +
                 $"{TtiUtils.GetEnvVarsSdCommand()}\n" +
-                $"python {Constants.Dirs.SdRepo}/scripts/invoke.py -o {outPath.Wrap(true)} {Args.InvokeAi.GetArgsStartup()}";
+                $"python {Constants.Dirs.SdRepo}/invoke/scripts/invoke.py -o {outPath.Wrap(true)} {Args.InvokeAi.GetArgsStartup()}";
 
             File.WriteAllText(batPath, batText);
-            ProcessManager.FindAndKillOrphans($"*invoke.py*{outPath}*");
             Process cli = Process.Start(batPath);
             OsUtils.AttachOrphanHitman(cli);
         }
@@ -304,62 +301,61 @@ namespace StableDiffusionGui.Implementations
 
         public static async Task SwitchModel (string modelNameInYaml)
         {
-            NmkdStopwatch timeoutSw = new NmkdStopwatch();
-            await TtiProcess.WriteStdIn($"!reset");
+            //NmkdStopwatch timeoutSw = new NmkdStopwatch();
             await TtiProcess.WriteStdIn($"!switch {modelNameInYaml}");
 
-            Logger.Log("SwitchModel waiting...", true);
-
-            while (true)
-            {
-                await Task.Delay(1);
-                var last2 = Logger.GetLastLines(Constants.Lognames.Sd, 2).Select(l => l.Split("invoke> ").Last().Trim());
-
-                if (last2.Where(l => l.StartsWith($"New model is current model")).Any())
-                    return;
-
-                if (last2.Where(l => l.StartsWith($"Changing model")).Any())
-                    break;
-
-                if(timeoutSw.ElapsedMs > 10000)
-                {
-                    Logger.Log($"Error switching model: Timed out. (1)");
-                    return;
-                }
-            }
-
-            Logger.Log("Loading model...");
-
-            while (true)
-            {
-                await Task.Delay(10);
-
-                if (Logger.GetLastLines(Constants.Lognames.Sd, 15).Where(l => l.Trim().EndsWith($" is not a known model name. Please check your models.yaml file")).Any())
-                    break;
-
-                if (Logger.GetLastLines(Constants.Lognames.Sd, 15).Where(l => l.Contains($" {modelNameInYaml} from ")).Any())
-                    break;
-
-                if (timeoutSw.ElapsedMs > 60000)
-                {
-                    Logger.Log($"Error switching model: Timed out. (2)");
-                    return;
-                }
-            }
-
-            while (true)
-            {
-                await Task.Delay(10);
-
-                if (Logger.GetLastLines(Constants.Lognames.Sd, 5).Where(l => l.StartsWith(">> Setting Sampler to ")).Any())
-                    break;
-
-                if (timeoutSw.ElapsedMs > 60000)
-                {
-                    Logger.Log($"Error switching model: Timed out. (3)");
-                    return;
-                }
-            }
+            // Logger.Log("SwitchModel waiting...", true);
+            // 
+            // while (true)
+            // {
+            //     await Task.Delay(1);
+            //     var last2 = Logger.GetLastLines(Constants.Lognames.Sd, 2).Select(l => l.Split("invoke> ").Last().Trim());
+            // 
+            //     if (last2.Where(l => l.StartsWith($"New model is current model")).Any())
+            //         return;
+            // 
+            //     if (last2.Where(l => l.StartsWith($"Changing model")).Any())
+            //         break;
+            // 
+            //     if(timeoutSw.ElapsedMs > 10000)
+            //     {
+            //         Logger.Log($"Error switching model: Timed out. (1)");
+            //         return;
+            //     }
+            // }
+            // 
+            // Logger.Log("Loading model...");
+            // 
+            // while (true)
+            // {
+            //     await Task.Delay(10);
+            // 
+            //     if (Logger.GetLastLines(Constants.Lognames.Sd, 15).Where(l => l.Trim().EndsWith($" is not a known model name. Please check your models.yaml file")).Any())
+            //         break;
+            // 
+            //     if (Logger.GetLastLines(Constants.Lognames.Sd, 15).Where(l => l.Contains($" {modelNameInYaml} from ")).Any())
+            //         break;
+            // 
+            //     if (timeoutSw.ElapsedMs > 60000)
+            //     {
+            //         Logger.Log($"Error switching model: Timed out. (2)");
+            //         return;
+            //     }
+            // }
+            // 
+            // while (true)
+            // {
+            //     await Task.Delay(10);
+            // 
+            //     if (Logger.GetLastLines(Constants.Lognames.Sd, 5).Where(l => l.StartsWith(">> Setting Sampler to ")).Any())
+            //         break;
+            // 
+            //     if (timeoutSw.ElapsedMs > 60000)
+            //     {
+            //         Logger.Log($"Error switching model: Timed out. (3)");
+            //         return;
+            //     }
+            // }
         }
 
         public static async Task Cancel ()
@@ -409,7 +405,6 @@ namespace StableDiffusionGui.Implementations
                 await Task.Delay(100);
             }
 
-            await TtiProcess.WriteStdIn("!reset", true);
             Program.MainForm.runBtn.Enabled = true;
         }
     }

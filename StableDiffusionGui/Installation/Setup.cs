@@ -224,7 +224,7 @@ namespace StableDiffusionGui.Installation
             }
         }
 
-        public static async Task Clone (string gitUrl, string dir, string commit = "", string branch = "main")
+        public static async Task Clone(string gitUrl, string dir, string commit = "", string branch = "main")
         {
             if (Directory.Exists(dir))
             {
@@ -271,7 +271,7 @@ namespace StableDiffusionGui.Installation
                         IoUtils.TryDeleteIfExists(dir.FullName);
                 }
 
-                foreach(var dir in Directory.GetDirectories(sitePkgsPath, "*", SearchOption.TopDirectoryOnly).Select(x => new ZlpDirectoryInfo(x)))
+                foreach (var dir in Directory.GetDirectories(sitePkgsPath, "*", SearchOption.TopDirectoryOnly).Select(x => new ZlpDirectoryInfo(x)))
                 {
                     if (dir.Name.StartsWith("~"))
                         dir.Delete(true);
@@ -429,20 +429,44 @@ namespace StableDiffusionGui.Installation
                 }
 
                 #endregion
-                #region Finders (k-diffusion)
-                var finderFiles = IoUtils.GetFileInfosSorted(sitePkgsDir, false, "*_finder.py");
+                #region Finder File (InvokeAI)
+                var finderFiles = IoUtils.GetFileInfosSorted(sitePkgsDir, false, "*invokeai*_finder.py");
 
                 foreach (var file in finderFiles)
                 {
                     var lines = File.ReadAllLines(file.FullName);
-                    
-                    for(int i = 0; i < lines.Length; i++)
+
+                    for (int i = 0; i < lines.Length; i++)
                     {
                         if (lines[i].StartsWith("MAPPING = {"))
                         {
-                            string name = lines[i].Split('\'')[1].Split('\'')[0];
-                            string relPath = lines[i].Split('\'')[3].Split(@"\\Data").Reverse().Take(1).Reverse().First().TrimStart('\\');
-                            lines[i] = $"import os; import sys; MAPPING = {{'{name}': os.path.join(sys.path[0], \"..\", \"..\", \"{relPath}\")}}";
+                            var entries = lines[i].Split('{')[1].Split('}')[0].Split(',');
+                            var newEntries = new Dictionary<string, string>();
+
+                            foreach (string entry in entries)
+                            {
+                                string name = entry.Split(':')[0].Trim().Trim('\'').TrimEnd().TrimEnd('\'');
+                                string relPath = entry.Split("': '")[1].Trim().Trim('\'').TrimEnd().TrimEnd('\'').Split(@"\\Data").Reverse().Take(1).Reverse().First().TrimStart('\\');
+                                newEntries[name] = relPath;
+                            }
+
+                            lines[i] = $"import os; import sys; MAPPING = {{ {string.Join(", ", newEntries.ToList().Select(x => $"'{x.Key}' : os.path.join(sys.path[0], \"..\", \"..\", \"{x.Value}\")"))} }}";
+                        }
+
+                        if (lines[i].StartsWith("NAMESPACES = {"))
+                        {
+                            var entries = lines[i].Split('{')[1].Split('}')[0].Split(',');
+                            var newEntries = new Dictionary<string, string>();
+
+                            foreach (string entry in entries)
+                            {
+                                string name = entry.Split(':')[0].Trim().Trim('\'').TrimEnd().TrimEnd('\'');
+                                string relPath = entry.Split(": [")[1].Trim().Trim('\'').Split(@"\\Data").Reverse().Take(1).Reverse().First().TrimStart('\\').Split('\'')[0].TrimEnd(']');
+                                newEntries[name] = relPath;
+                            }
+
+                            string join = string.Join(", ", newEntries.ToList().Select(x => $"'{x.Key}' : {(x.Value.IsNotEmpty() ? $"[os.path.join(sys.path[0], \"..\", \"..\", \"{x.Value}\")]" : "[]")}"));
+                            lines[i] = $"import os; import sys; NAMESPACES = {{ {join} }}";
                         }
                     }
 

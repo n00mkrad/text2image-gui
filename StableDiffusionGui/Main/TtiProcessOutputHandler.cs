@@ -53,16 +53,22 @@ namespace StableDiffusionGui.Main
                     Logger.Log($"Model {(_invokeAiLastModelCached ? " retrieved from RAM cache" : "loaded")}.", false, ellipsis);
                 }
 
-                if (!TextToImage.Canceled && line.MatchesWildcard("step */*"))
+                if (!TextToImage.Canceled && line.MatchesWildcard("*%|*|*/*"))
                 {
+                    string progStr = line.Split('|')[2].Trim().Split(' ')[0].Trim(); // => e.g. "3/50"
+
                     if (!Logger.LastUiLine.MatchesWildcard("*Generated*image*in*"))
                         Logger.LogIfLastLineDoesNotContainMsg($"Generating...");
 
-                    int[] stepsCurrentTarget = line.Split("step ")[1].Split('/').Select(x => x.GetInt()).ToArray();
-                    int percent = (((float)stepsCurrentTarget[0] / stepsCurrentTarget[1]) * 100f).RoundToInt();
+                    try
+                    {
+                        int[] stepsCurrentTarget = progStr.Split('/').Select(x => x.GetInt()).ToArray();
+                        int percent = (((float)stepsCurrentTarget[0] / stepsCurrentTarget[1]) * 100f).RoundToInt();
 
-                    if (percent > 0 && percent <= 100)
-                        Program.MainForm.SetProgressImg(percent);
+                        if (percent > 0 && percent <= 100)
+                            Program.MainForm.SetProgressImg(percent);
+                    }
+                    catch { }
                 }
 
                 if (!TextToImage.Canceled && line.Contains("image(s) generated in "))
@@ -108,7 +114,7 @@ namespace StableDiffusionGui.Main
                 {
                     errMsg = $"Failed to load model.";
 
-                    if(line.Contains("state_dict"))
+                    if (line.Contains("state_dict"))
                         errMsg += $"\n\nThe model appears to be incompatible.";
 
                     if (line.Contains("pytorch_model.bin"))

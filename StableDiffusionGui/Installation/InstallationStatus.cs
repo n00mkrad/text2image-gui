@@ -30,11 +30,11 @@ namespace StableDiffusionGui.Installation
         public static bool HasSdRepo ()
         {
             string repoPath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdRepo);
-            bool hasDreamScript = File.Exists(Path.Combine(repoPath, "scripts", "invoke.py"));
+            bool hasInvoke = File.Exists(Path.Combine(repoPath, "invoke", "scripts", "invoke.py"));
 
-            Logger.Log($"HasSdRepo - Has invoke.py: {hasDreamScript}", true);
+            Logger.Log($"HasSdRepo - Has invoke.py: {hasInvoke}", true);
 
-            return hasDreamScript;
+            return hasInvoke;
         }
 
         public static bool HasSdEnv()
