@@ -31,7 +31,8 @@ namespace StableDiffusionGui.Main
             //if (noLogWildcards.Where(w => !line.MatchesWildcard(w)).Any())
             Logger.Log(line, true, false, Constants.Lognames.Sd);
 
-            bool ellipsis = Logger.LastUiLine.Contains("...");
+            bool ellipsis = Program.MainForm.LogText.EndsWith("...");
+                        string l = Program.MainForm.LogText;
             string errMsg = "";
 
             if (TextToImage.CurrentTaskSettings != null && TextToImage.CurrentTaskSettings.Implementation == Enums.StableDiffusion.Implementation.InvokeAi)
@@ -48,17 +49,12 @@ namespace StableDiffusionGui.Main
                     _invokeAiLastModelCached = false;
                 }
 
-                if (!TextToImage.Canceled && line.StartsWith(">> Setting Sampler to "))
-                {
-                    Logger.Log($"Model {(_invokeAiLastModelCached ? " retrieved from RAM cache" : "loaded")}.", false, ellipsis);
-                }
-
                 if (!TextToImage.Canceled && line.MatchesWildcard("*%|*|*/*"))
                 {
                     string progStr = line.Split('|')[2].Trim().Split(' ')[0].Trim(); // => e.g. "3/50"
 
                     if (!Logger.LastUiLine.MatchesWildcard("*Generated*image*in*"))
-                        Logger.LogIfLastLineDoesNotContainMsg($"Generating...");
+                        Logger.LogIfLastLineDoesNotContainMsg($"Generating...", false, ellipsis);
 
                     try
                     {
@@ -96,6 +92,16 @@ namespace StableDiffusionGui.Main
                     {
                         Logger.Log($"Error parsing !fix log message: {ex.Message}\n{ex.StackTrace}", true);
                     }
+                }
+
+                if (line.Trim().StartsWith(">> Textual inversion triggers: "))
+                {
+                    Logger.Log($"Model {(_invokeAiLastModelCached ? " retrieved from RAM cache" : "loaded")}.\nAvailable Embeddings: {line.Substring(line.Split("triggers: ")[0].Length + 10)}", false, ellipsis);
+                }
+
+                if(line.Trim().StartsWith(">> Preparing tokens for textual inversion"))
+                {
+                    Logger.Log("Loading textual inversion...", false, ellipsis);
                 }
 
                 if (!_hasErrored && line.Contains("An error occurred while processing your prompt"))

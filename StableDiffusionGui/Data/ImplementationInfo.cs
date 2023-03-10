@@ -17,6 +17,8 @@ namespace StableDiffusionGui.Data
         public bool SupportsCustomVaeModels { get; set; } = false;
         public bool SupportsNativeInpainting { get; set; } = false;
         public bool SupportsNegativePrompt { get; set; } = false;
+        public string[] ValidModelExts { get; set; } = new string[] { ".ckpt", ".safetensors" };
+        public string[] ValidModelExtsVae { get; set; } = new string[] { ".ckpt", ".safetensors", ".pt" };
 
         public ImplementationInfo() { }
 

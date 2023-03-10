@@ -150,7 +150,7 @@ namespace StableDiffusionGui.Implementations
 
         public static string GetMdlNameForYaml(Model mdl, Model vae)
         {
-            return $"{mdl.Name}{(vae == null ? "-none" : $"-{vae.Name}")}";
+            return $"{mdl.Name}{(vae == null ? "-none" : $"-{vae.FormatIndependentName}")}";
         }
 
         public static string GetModelsYamlHash(IoUtils.Hash hashType = IoUtils.Hash.CRC32, bool ignoreDefaultKey = true)

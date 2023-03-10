@@ -170,9 +170,9 @@ namespace StableDiffusionGui.Io
                         fileList = fileList.Where(f => TtiUtils.ModelFilesizeValid(f.Length, type)).ToList();
 
                         if (type == ModelType.Normal)
-                            fileList = fileList.Where(f => Constants.FileExts.ValidSdModels.Contains(f.Extension)).ToList();
+                            fileList = fileList.Where(f => implementation.GetInfo().ValidModelExts.Contains(f.Extension)).ToList();
                         else if (type == ModelType.Vae)
-                            fileList = fileList.Where(f => Constants.FileExts.ValidSdVaeModels.Contains(f.Extension)).ToList();
+                            fileList = fileList.Where(f => implementation.GetInfo().ValidModelExtsVae.Contains(f.Extension)).ToList();
                     }
 
                     list = fileList.Select(f => new Model(f, new[] { Implementation.InvokeAi, Implementation.OptimizedSd })).ToList();
@@ -201,7 +201,7 @@ namespace StableDiffusionGui.Io
                 Logger.Log(ex.StackTrace, true);
             }
 
-            return list.DistinctBy(x => x.Name).OrderBy(x => x.Name).ToList();
+            return list.DistinctBy(x => x.FormatIndependentName).OrderBy(x => x.FormatIndependentName).ToList();
         }
 
 

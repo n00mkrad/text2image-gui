@@ -1,4 +1,5 @@
-﻿using StableDiffusionGui.Data;
+﻿
+using StableDiffusionGui.Data;
 using StableDiffusionGui.Extensions;
 using StableDiffusionGui.Forms;
 using StableDiffusionGui.Io;
