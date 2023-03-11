@@ -103,6 +103,14 @@ namespace StableDiffusionGui.Ui
                 return;
             }
 
+            if (keys == (Keys.Control | Keys.I)) // Hotkey: Toggle input image preview
+            {
+                if(Program.MainForm.checkboxShowInitImg.Visible)
+                    Program.MainForm.checkboxShowInitImg.Checked = !Program.MainForm.checkboxShowInitImg.Checked;
+
+                return;
+            }
+
             if (keys == Keys.F1) // Hotkey: Help
             {
                 Process.Start("https://github.com/n00mkrad/text2image-gui/blob/main/README.md");

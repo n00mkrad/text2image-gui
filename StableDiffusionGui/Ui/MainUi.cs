@@ -324,12 +324,23 @@ namespace StableDiffusionGui.Ui
 
         public static void FitWindowSizeToImageSize()
         {
-            if (Program.MainForm.pictBoxImgViewer.Image == null)
-                return;
+            Size outputImgSize = new Size();
 
-            int picInWidth = Program.MainForm.tableLayoutPanelImgViewers.ColumnStyles[0].Width > 1 ? Program.MainForm.pictBoxImgViewer.Image.Width : 0;
-            int picOutWidth = Program.MainForm.pictBoxImgViewer.Image.Width;
-            int picOutHeight = Program.MainForm.pictBoxImgViewer.Image.Height;
+            if (Program.MainForm.pictBoxImgViewer.Image == null)
+            {
+                if (Program.MainForm.pictBoxInitImg.Image == null)
+                    return;
+                else
+                    outputImgSize = Program.MainForm.pictBoxInitImg.Image.Size;
+            }
+            else
+            {
+                outputImgSize = Program.MainForm.pictBoxImgViewer.Image.Size;
+            }
+
+            int picInWidth = Program.MainForm.tableLayoutPanelImgViewers.ColumnStyles[0].Width > 1 ? outputImgSize.Width : 0;
+            int picOutWidth = outputImgSize.Width;
+            int picOutHeight = outputImgSize.Height;
             int formWidthWithoutImgViewer = Program.MainForm.Size.Width - Program.MainForm.tableLayoutPanelImgViewers.Width;
             int formHeightWithoutImgViewer = Program.MainForm.Size.Height - Program.MainForm.tableLayoutPanelImgViewers.Height;
 

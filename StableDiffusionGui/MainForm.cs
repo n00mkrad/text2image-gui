@@ -508,8 +508,12 @@ namespace StableDiffusionGui
         {
             tableLayoutPanelImgViewers.ColumnStyles[0].Width = checkboxShowInitImg.Checked ? 50 : 0;
             tableLayoutPanelImgViewers.ColumnStyles[1].Width = checkboxShowInitImg.Checked ? 50 : 100;
-            MainUi.FitWindowSizeToImageSize();
-            CenterToScreen();
+
+            if (WindowState != FormWindowState.Maximized)
+            {
+                MainUi.FitWindowSizeToImageSize();
+                CenterToScreen();
+            }
         }
 
         private void comboxResW_SelectedIndexChanged(object sender, EventArgs e)
@@ -522,7 +526,7 @@ namespace StableDiffusionGui
             UpdateAspectRatio();
         }
 
-        private void UpdateAspectRatio ()
+        private void UpdateAspectRatio()
         {
             int w = comboxResW.GetInt();
             int h = comboxResH.GetInt();

@@ -84,7 +84,6 @@ namespace StableDiffusionGui.Ui.MainFormUtils
             ImagePopup.UpdateSlideshow(Program.MainForm.pictBoxImgViewer.Image);
 
             ImageMetadata meta = CurrentImageMetadata;
-            UpdateInitImgViewer(meta);
 
             List<string> infos = new List<string>();
 
@@ -128,7 +127,6 @@ namespace StableDiffusionGui.Ui.MainFormUtils
             Program.MainForm.labelImgInfo.Text = "No images to show.";
             Program.MainForm.labelImgPrompt.Text = _strNoPrompt;
             Program.MainForm.labelImgPromptNeg.Text = _strNoPromptNeg;
-            UpdateInitImgViewer();
             UpdatePromptLabelColors();
         }
 
@@ -163,15 +161,12 @@ namespace StableDiffusionGui.Ui.MainFormUtils
             Show();
         }
 
-        private static void UpdateInitImgViewer(ImageMetadata metadata = null)
+        public static void UpdateInitImgViewer()
         {
-            if (metadata == null)
-                metadata = CurrentImageMetadata;
-
-            Image initImg = IoUtils.GetImage(metadata.InitImgName, false);
+            Image initImg = IoUtils.GetImage(MainUi.CurrentInitImgPaths.FirstOrDefault(), false);
             Program.MainForm.pictBoxInitImg.Image = initImg;
 
-            if (initImg == null)
+            if (!Program.MainForm.checkboxShowInitImg.Visible)
                 Program.MainForm.checkboxShowInitImg.Checked = false;
         }
 

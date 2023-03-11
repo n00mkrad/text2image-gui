@@ -101,6 +101,7 @@ namespace StableDiffusionGui.Ui.MainFormUtils
             F.toolTip.SetToolTip(F.labelCurrentImage, $"{F.labelCurrentImage.Text.Trunc(100)}\n\nShift + Hover to preview.");
 
             Program.MainForm.checkboxShowInitImg.Visible = MainUi.CurrentInitImgPaths.Any();
+            ImageViewer.UpdateInitImgViewer();
 
             #endregion
         }
