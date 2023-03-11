@@ -36,7 +36,7 @@ namespace StableDiffusionGui.Implementations
                 bool lockSeed = parameters.FromJson<bool>("lockSeed");
                 InpaintMode inpaint = parameters.FromJson<InpaintMode>("inpainting");
 
-                var cachedModels = Paths.GetModels(ModelType.Normal, Implementation.DiffusersOnnx);
+                var cachedModels = Models.GetModels(Enums.Models.Type.Normal, Implementation.DiffusersOnnx);
                 Model modelDir = TtiUtils.CheckIfCurrentSdModelExists();
 
                 if (modelDir == null)

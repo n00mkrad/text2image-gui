@@ -45,10 +45,10 @@ namespace StableDiffusionGui.Implementations
                 InpaintMode inpaint = parameters.FromJson<InpaintMode>("inpainting"); // Inpainting mode
                 string clipSegMask = parameters.FromJson<string>("clipSegMask"); // ClipSeg text-based masking prompt
 
-                var cachedModels = Paths.GetModels(ModelType.Normal);
-                var cachedModelsVae = Paths.GetModels(ModelType.Vae);
+                var cachedModels = Models.GetModels(Enums.Models.Type.Normal);
+                var cachedModelsVae = Models.GetModels(Enums.Models.Type.Vae);
                 Model modelFile = TtiUtils.CheckIfCurrentSdModelExists();
-                Model vaeFile = Paths.GetModel(cachedModelsVae, vae, false, ModelType.Vae);
+                Model vaeFile = Models.GetModel(cachedModelsVae, vae, false, Enums.Models.Type.Vae);
 
                 if (modelFile == null)
                     return;
@@ -213,10 +213,10 @@ namespace StableDiffusionGui.Implementations
                 return;
 
             TextToImage.Canceled = false;
-            var cachedModels = Paths.GetModels(ModelType.Normal);
-            var cachedModelsVae = Paths.GetModels(ModelType.Vae);
+            var cachedModels = Models.GetModels(Enums.Models.Type.Normal);
+            var cachedModelsVae = Models.GetModels(Enums.Models.Type.Vae);
             Model modelFile = TtiUtils.CheckIfCurrentSdModelExists();
-            Model vaeFile = Paths.GetModel(cachedModelsVae, Path.GetFileName(vaePath), false, ModelType.Vae);
+            Model vaeFile = Models.GetModel(cachedModelsVae, Path.GetFileName(vaePath), false, Enums.Models.Type.Vae);
 
             if (modelFile == null)
                 return;

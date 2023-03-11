@@ -106,14 +106,14 @@ namespace StableDiffusionGui.Forms
 
         private void btnOpenModelFolder_Click(object sender, EventArgs e)
         {
-            new ModelFoldersForm(Enums.StableDiffusion.ModelType.Normal).ShowDialogForm();
+            new ModelFoldersForm().ShowDialogForm();
             LoadModels();
         }
 
         private void LoadModels()
         {
             comboxBaseModel.Items.Clear();
-            Paths.GetModels().ForEach(x => comboxBaseModel.Items.Add(x.Name));
+            Models.GetModels().ForEach(x => comboxBaseModel.Items.Add(x.Name));
 
             if (comboxBaseModel.SelectedIndex < 0 && comboxBaseModel.Items.Count > 0)
                 comboxBaseModel.SelectedIndex = 0;
@@ -145,7 +145,7 @@ namespace StableDiffusionGui.Forms
                 return;
             }
 
-            Model baseModel = Paths.GetModel(comboxBaseModel.Text);
+            Model baseModel = Models.GetModel(comboxBaseModel.Text);
 
             if (baseModel == null)
             {

@@ -36,7 +36,7 @@ namespace StableDiffusionGui.Implementations
                 Size res = parameters.FromJson<Size>("res");
                 // string model = parameters.FromJson<string>("model");
 
-                // var cachedModels = Paths.GetModels(ModelType.Normal, Implementation.DiffusersOnnx);
+                // var cachedModels = Models.GetModels(ModelType.Normal, Implementation.DiffusersOnnx);
                 // Model modelDir = TtiUtils.CheckIfCurrentSdModelExists();
                 // 
                 // if (modelDir == null)

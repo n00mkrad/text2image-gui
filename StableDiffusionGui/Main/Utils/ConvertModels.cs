@@ -107,7 +107,7 @@ namespace StableDiffusionGui.Main.Utils
                         Logger.Log($"{(deleteSuccess ? "Deleted" : "Failed to delete")} input file '{model.Name}'.");
                     }
 
-                    return Paths.GetModelsAll().Where(m => m.FullName == outPath).FirstOrDefault();
+                    return Models.GetModelsAll().Where(m => m.FullName == outPath).FirstOrDefault();
                 }
                 else
                 {
@@ -251,57 +251,6 @@ namespace StableDiffusionGui.Main.Utils
 
                 return path;
             }
-        }
-
-        public static Format DetectModelFormat (string modelPath, bool print = true)
-        {
-            try
-            {
-                if (File.Exists(modelPath)) // Is file
-                {
-                    var file = new ZlpFileInfo(modelPath);
-
-                    if (file.Length < 16 * 1024 * 1024) // Assume that a <16 MB file is not a valid model
-                        return (Format)(-1);
-
-                    if (file.FullName.Lower().EndsWith(".ckpt") || file.FullName.Lower().EndsWith(".pt"))
-                        return Format.Pytorch;
-
-                    if (file.FullName.Lower().EndsWith(".safetensors"))
-                        return Format.Safetensors;
-                }
-                else if (Directory.Exists(modelPath)) // Is directory
-                {
-                    var dir = new ZlpDirectoryInfo(modelPath);
-
-
-                    // List<string> subDirs = dir.GetDirectories().Select(d => d.Name).ToList();
-                    // 
-                    // bool diffusersStructureValid = new[] { "text_encoder", "tokenizer", "unet" }.All(d => subDirs.Contains(d));
-                    // var unetDir = new ZlpDirectoryInfo(Path.Combine(dir.FullName, "unet"));
-                    // bool unetValid = unetDir.Exists && IoUtils.GetDirSize(unetDir.FullName, false) >= 64 * 1024 * 1024; // Assume that a <64 MB unet file is not valid
-                    string indexJsonPath = IoUtils.GetFileInfosSorted(dir.FullName, false, "*.json").OrderByDescending(f => f.Length).FirstOrDefault()?.FullName;
-                    
-                    if (File.Exists(indexJsonPath))
-                    {
-                        var lines = File.ReadAllLines(indexJsonPath);
-
-                        if(lines.Any(l => l.Contains("_diffusers_version")))
-                        {
-                            if (File.ReadAllLines(indexJsonPath).Any(l => l.Contains(@"""_class_name"": ""Onnx")))
-                                return Format.DiffusersOnnx;
-                            if (File.ReadAllLines(indexJsonPath).Any(l => l.Contains(@"""_class_name"":")))
-                                return Format.Diffusers;
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Log($"Failed to detect model format: {ex.Message} ({modelPath})", !print);
-            }
-
-            return (Format)(-1);
         }
 
         private static void PatchConversionScripts ()

@@ -43,7 +43,7 @@ namespace StableDiffusionGui
             bool available = true;
 
             if (ConfigParser.CurrentImplementation == Implementation.InstructPixToPix)
-                return MainUi.CurrentInitImgPaths != null; // Only visible if image is loaded
+                return MainUi.CurrentInitImgPaths.Any(); // Only visible if image is loaded
 
             return available;
         }
@@ -75,7 +75,7 @@ namespace StableDiffusionGui
             if (ConfigParser.CurrentImplementation == Implementation.InstructPixToPix)
                 return false;
 
-            bool img2img = MainUi.CurrentInitImgPaths != null;
+            bool img2img = MainUi.CurrentInitImgPaths.Any();
 
             if (img2img && !FormControls.IsUsingInpaintingModel)
                 available = true;
@@ -87,7 +87,7 @@ namespace StableDiffusionGui
         {
             bool available = false;
 
-            bool img2img = MainUi.CurrentInitImgPaths != null;
+            bool img2img = MainUi.CurrentInitImgPaths.Any();
             bool inpaintCompat = ConfigParser.CurrentImplementation.GetInfo().SupportsNativeInpainting;
 
             if (img2img && inpaintCompat)

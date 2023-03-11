@@ -25,12 +25,15 @@ namespace StableDiffusionGui.Ui
 {
     internal class MainUi
     {
-        private static List<string> _currentInitImgPaths;
+        private static List<string> _currentInitImgPaths = new List<string>();
         public static List<string> CurrentInitImgPaths
         {
             get => _currentInitImgPaths;
             set
             {
+                if (value == null)
+                    value = new List<string>();
+
                 _currentInitImgPaths = value;
 
                 if (value != null && value.Count() > 0)
@@ -113,7 +116,7 @@ namespace StableDiffusionGui.Ui
                 }
             }
 
-            if (ConfigParser.CurrentImplementation.GetInfo().SupportsCustomModels && Paths.GetModelsAll().Count <= 0)
+            if (ConfigParser.CurrentImplementation.GetInfo().SupportsCustomModels && Models.GetModelsAll().Count <= 0)
                 UiUtils.ShowMessageBox($"No model files have been found. You will not be able to generate images until you either place a model in Data/models, or set an external folder in the settings.",
                     UiUtils.MessageType.Warning, Nmkoder.Forms.MessageForm.FontSize.Normal);
         }
@@ -185,7 +188,7 @@ namespace StableDiffusionGui.Ui
             if (paths.Count < 1)
                 return;
 
-            if (CurrentInitImgPaths != null)
+            if (CurrentInitImgPaths.Any())
             {
                 bool oldIs1 = CurrentInitImgPaths.Count == 1;
                 bool newIs1 = paths.Count == 1;

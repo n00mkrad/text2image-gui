@@ -169,7 +169,6 @@ namespace StableDiffusionGui.Ui.MainFormUtils
                 metadata = CurrentImageMetadata;
 
             Image initImg = IoUtils.GetImage(metadata.InitImgName, false);
-            Program.MainForm.checkboxShowInitImg.Visible = initImg != null;
             Program.MainForm.pictBoxInitImg.Image = initImg;
 
             if (initImg == null)

@@ -19,10 +19,10 @@ namespace StableDiffusionGui.Implementations
         {
             string outPath = Path.ChangeExtension(vae.FullName, null);
 
-            if (ConvertModels.DetectModelFormat(vae.FullName) == Enums.Models.Format.Diffusers) // Is already correct format
+            if (Models.DetectModelFormat(vae.FullName) == Enums.Models.Format.Diffusers) // Is already correct format
                 return vae;
 
-            if (ConvertModels.DetectModelFormat(outPath) == Enums.Models.Format.Diffusers) // Conversion already exists at output path
+            if (Models.DetectModelFormat(outPath) == Enums.Models.Format.Diffusers) // Conversion already exists at output path
             {
                 Model existingVae = new Model(outPath);
                 existingVae.CompatibleImplementations = vae.CompatibleImplementations; // TODO: This sucks. Need to rewrite the compat stuff
@@ -44,8 +44,8 @@ namespace StableDiffusionGui.Implementations
 
         public static void WriteModelsYaml(string mdlName, string vaeName = "", string keyName = "default")
         {
-            var mdl = Paths.GetModel(mdlName, false, Enums.StableDiffusion.ModelType.Normal);
-            var vae = Paths.GetModel(vaeName, false, Enums.StableDiffusion.ModelType.Vae);
+            var mdl = Models.GetModel(mdlName, false, Enums.Models.Type.Normal);
+            var vae = Models.GetModel(vaeName, false, Enums.Models.Type.Vae);
             WriteModelsYaml(mdl, vae, keyName);
         }
 
@@ -69,10 +69,10 @@ namespace StableDiffusionGui.Implementations
             try
             {
                 if (cachedModels == null || cachedModels.Count < 1)
-                    cachedModels = Paths.GetModels(Enums.StableDiffusion.ModelType.Normal);
+                    cachedModels = Models.GetModels(Enums.Models.Type.Normal);
 
                 if (cachedModelsVae == null || cachedModelsVae.Count < 1)
-                    cachedModelsVae = Paths.GetModels(Enums.StableDiffusion.ModelType.Vae);
+                    cachedModelsVae = Models.GetModels(Enums.Models.Type.Vae);
 
                 if (!Config.Get<bool>(Config.Keys.DisablePickleScanner))
                 {

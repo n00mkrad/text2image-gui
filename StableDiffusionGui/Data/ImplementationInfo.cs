@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static StableDiffusionGui.Main.Enums.Models;
 
 namespace StableDiffusionGui.Data
 {
@@ -17,8 +18,9 @@ namespace StableDiffusionGui.Data
         public bool SupportsCustomVaeModels { get; set; } = false;
         public bool SupportsNativeInpainting { get; set; } = false;
         public bool SupportsNegativePrompt { get; set; } = false;
-        public string[] ValidModelExts { get; set; } = new string[] { ".ckpt", ".safetensors" };
-        public string[] ValidModelExtsVae { get; set; } = new string[] { ".ckpt", ".safetensors", ".pt" };
+        public string[] ValidModelExts { get; set; } = new string[0];
+        public string[] ValidModelExtsVae { get; set; } = new string[0];
+        public Format[] SupportedModelFormats { get; set; } = new Format[0];
 
         public ImplementationInfo() { }
 
@@ -27,6 +29,9 @@ namespace StableDiffusionGui.Data
             if (imp == Enums.StableDiffusion.Implementation.InvokeAi)
             {
                 Backend = Enums.Ai.Backend.Cuda;
+                SupportedModelFormats = new Format[] { Format.Pytorch, Format.Safetensors, Format.Diffusers };
+                ValidModelExts = new string[] { ".ckpt", ".safetensors" };
+                ValidModelExtsVae = new string[] { ".ckpt", ".pt" };
                 SupportsDeviceSelection = true;
                 IsInteractive = true;
                 HasPrecisionOpt = true;
@@ -38,6 +43,8 @@ namespace StableDiffusionGui.Data
             else if (imp == Enums.StableDiffusion.Implementation.OptimizedSd)
             {
                 Backend = Enums.Ai.Backend.Cuda;
+                SupportedModelFormats = new Format[] { Format.Pytorch };
+                ValidModelExts = new string[] { ".ckpt" };
                 SupportsDeviceSelection = true;
                 IsInteractive = false;
                 HasPrecisionOpt = true;
@@ -47,6 +54,7 @@ namespace StableDiffusionGui.Data
             else if (imp == Enums.StableDiffusion.Implementation.DiffusersOnnx)
             {
                 Backend = Enums.Ai.Backend.DirectMl;
+                SupportedModelFormats = new Format[] { Format.DiffusersOnnx };
                 SupportsDeviceSelection = false;
                 IsInteractive = true;
                 HasPrecisionOpt = true;

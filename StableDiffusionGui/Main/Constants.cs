@@ -30,13 +30,19 @@
             public const string Masks = "Masks";
             public const string Update = "update";
             // Data and below
-            public const string Models = "models";
             public const string Bins = "bin";
             public const string SdRepo = "repo";
             public const string Dreambooth = "db";
             public const string SdVenv = "venv";
             public const string Python = "py";
             public const string Git = "git";
+
+            public class Models
+            {
+                public const string Root = "models";
+                public const string Vae = "vae";
+                public const string Embeddings = "embeddings";
+            }
 
             public class Cache
             {

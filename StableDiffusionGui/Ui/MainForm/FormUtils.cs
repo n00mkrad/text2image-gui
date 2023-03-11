@@ -61,9 +61,9 @@ namespace StableDiffusionGui.Ui.MainFormUtils
             if (Program.Busy)
                 return;
 
-            if (MainUi.CurrentInitImgPaths != null)
+            if (MainUi.CurrentInitImgPaths.Any())
             {
-                MainUi.CurrentInitImgPaths = null;
+                MainUi.CurrentInitImgPaths.Clear();
             }
             else
             {
@@ -226,7 +226,7 @@ namespace StableDiffusionGui.Ui.MainFormUtils
 
         public static void EditMask()
         {
-            if (MainUi.CurrentInitImgPaths == null || MainUi.CurrentInitImgPaths.Count < 1)
+            if (!MainUi.CurrentInitImgPaths.Any())
                 return;
 
             Image img = IoUtils.GetImage(MainUi.CurrentInitImgPaths[0], false);

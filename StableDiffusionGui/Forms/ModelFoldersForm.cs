@@ -1,17 +1,11 @@
 ﻿using Microsoft.WindowsAPICodePack.Dialogs;
-using Newtonsoft.Json;
-using StableDiffusionGui.Data;
 using StableDiffusionGui.Io;
-using StableDiffusionGui.Main;
-using StableDiffusionGui.Os;
-using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace StableDiffusionGui.Forms
@@ -20,12 +14,9 @@ namespace StableDiffusionGui.Forms
     {
         public List<string> Folders = new List<string>();
 
-        private Enums.StableDiffusion.ModelType _modelType;
-
-        public ModelFoldersForm(Enums.StableDiffusion.ModelType modelType)
+        public ModelFoldersForm()
         {
             InitializeComponent();
-            _modelType = modelType;
         }
 
         private void ModelFoldersForm_Load(object sender, EventArgs e)
@@ -47,8 +38,8 @@ namespace StableDiffusionGui.Forms
 
         private void LoadDirs()
         {
-            Folders = new List<string>() { Paths.GetModelsPath(_modelType) };
-            List<string> serializedPaths = Config.Get<List<string>>($"{Config.Keys.CustomModelDirsPfx}{_modelType}");
+            Folders = new List<string>() { Paths.GetModelsPath() };
+            List<string> serializedPaths = Config.Get<List<string>>(Config.Keys.CustomModelDirsPfx);
 
             if (serializedPaths != null)
                 Folders.AddRange(serializedPaths, out Folders);
@@ -56,7 +47,7 @@ namespace StableDiffusionGui.Forms
 
         private void SaveDirs()
         {
-            Config.Set($"{Config.Keys.CustomModelDirsPfx}{_modelType}", Folders.Where(x => x != Paths.GetModelsPath(_modelType)).Select(s => s.Replace(@"\", "/")).ToList());
+            Config.Set(Config.Keys.CustomModelDirsPfx, Folders.Where(x => x != Paths.GetModelsPath()).Select(s => s.Replace(@"\", "/")).ToList());
         }
 
         private void FillList()

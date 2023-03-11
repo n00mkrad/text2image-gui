@@ -51,17 +51,10 @@ namespace StableDiffusionGui.Io
             return path;
         }
 
-        public static string GetModelsPath(ModelType type = ModelType.Normal)
+        public static string GetModelsPath()
         {
-            string path = "";
-
-            if (type == ModelType.Normal)
-                path = Path.Combine(GetDataPath(), "models");
-            else if (type == ModelType.Vae)
-                path = Path.Combine(GetDataPath(), "models", "vae");
-
-            Directory.CreateDirectory(path);
-            return path;
+            string path = Path.Combine(GetDataPath(), Constants.Dirs.Models.Root);
+            return Directory.CreateDirectory(path).FullName;
         }
 
         public static string GetSessionDataPath()
@@ -76,143 +69,6 @@ namespace StableDiffusionGui.Io
             string path = Path.Combine(GetDataPath(), Constants.Dirs.Bins);
             Directory.CreateDirectory(path);
             return path;
-        }
-
-        public static List<string> GetAllModelDirs (bool includeBuiltin = true)
-        {
-            List<string> mdlFolders = new List<string>();
-
-            if (includeBuiltin)
-                mdlFolders.Add(GetModelsPath());
-
-            foreach (ModelType type in Enum.GetValues(typeof(ModelType)).Cast<ModelType>())
-            {
-                List<string> customModelDirsList = Config.Get<List<string>>($"{Config.Keys.CustomModelDirsPfx}{type}");
-
-                if (customModelDirsList != null)
-                    mdlFolders.AddRange(customModelDirsList, out mdlFolders);
-            }
-
-            return mdlFolders;
-        }
-
-        public static List<Model> GetModelsAll(bool removeUnknownModels = true)
-        {
-            List<Model> list = new List<Model>();
-
-            try
-            {
-                List<string> mdlFolders = GetAllModelDirs();
-                var fileList = new List<ZlpFileInfo>();
-
-                foreach (string folderPath in mdlFolders)
-                    fileList.AddRange(IoUtils.GetFileInfosSorted(folderPath, false, $"*.*").ToList());
-
-                // foreach (ModelType type in Enum.GetValues(typeof(ModelType)).Cast<ModelType>())
-                // {
-                //     if (!Config.Get<bool>(Config.Keys.DisableModelFileValidation))
-                //     {
-                //         fileList = fileList.Where(f => f.).Where(f => TtiUtils.ModelFilesizeValid(f.Length, type)).ToList();
-                // 
-                //         // if (type == ModelType.Normal)
-                //         //     fileList = fileList.Where(f => Constants.FileExts.ValidSdModels.Contains(f.Extension)).ToList();
-                //         // else if (type == ModelType.Vae)
-                //         //     fileList = fileList.Where(f => Constants.FileExts.ValidSdVaeModels.Contains(f.Extension)).ToList();
-                //     }   
-                // }
-
-                // if (!Config.Get<bool>(Config.Keys.DisableModelFileValidation))
-                //     fileList = fileList.Where(f => TtiUtils.ModelFilesizeValid(f.Length, ModelType.Normal)).ToList();
-
-                list.AddRange(fileList.Select(f => new Model(f))); // Add file-based models to final list
-
-                var dirList = new List<ZlpDirectoryInfo>();
-
-                foreach (string folderPath in mdlFolders.Where(dir => Directory.Exists(dir)))
-                    dirList.AddRange(Directory.GetDirectories(folderPath, "*", SearchOption.TopDirectoryOnly).Select(x => new ZlpDirectoryInfo(x)).ToList());
-
-                list.AddRange(dirList.Select(f => new Model(f))); // Add folder-based models to final list
-            }
-            catch (Exception ex)
-            {
-                Logger.Log($"Error getting models: {ex.Message}");
-                Logger.Log(ex.StackTrace, true);
-            }
-
-            if (removeUnknownModels)
-                list = list.Where(m => m.Format != (Enums.Models.Format)(-1)).ToList();
-
-            return list.DistinctBy(x => x.Name).OrderBy(x => x.Name).ToList();
-        }
-
-        public static List<Model> GetModels(ModelType type = ModelType.Normal, Implementation implementation = Implementation.InvokeAi)
-        {
-            List<Model> list = new List<Model>();
-
-            try
-            {
-                List<string> mdlFolders = new List<string>() { GetModelsPath(type) };
-
-                List<string> customModelDirsList = Config.Get<List<string>>($"{Config.Keys.CustomModelDirsPfx}{type}");
-
-                if (customModelDirsList != null)
-                    mdlFolders.AddRange(customModelDirsList, out mdlFolders);
-
-                if (implementation == Implementation.InvokeAi || implementation == Implementation.OptimizedSd)
-                {
-                    var fileList = new List<ZlpFileInfo>();
-
-                    foreach (string folderPath in mdlFolders)
-                        fileList.AddRange(IoUtils.GetFileInfosSorted(folderPath, false, $"*.*").ToList());
-
-                    if (!Config.Get<bool>(Config.Keys.DisableModelFileValidation))
-                    {
-                        fileList = fileList.Where(f => TtiUtils.ModelFilesizeValid(f.Length, type)).ToList();
-
-                        if (type == ModelType.Normal)
-                            fileList = fileList.Where(f => implementation.GetInfo().ValidModelExts.Contains(f.Extension)).ToList();
-                        else if (type == ModelType.Vae)
-                            fileList = fileList.Where(f => implementation.GetInfo().ValidModelExtsVae.Contains(f.Extension)).ToList();
-                    }
-
-                    list = fileList.Select(f => new Model(f, new[] { Implementation.InvokeAi, Implementation.OptimizedSd })).ToList();
-                }
-                else if (implementation == Implementation.DiffusersOnnx)
-                {
-                    var dirList = new List<ZlpDirectoryInfo>();
-
-                    foreach (string folderPath in mdlFolders.Where(d => Directory.Exists(d)))
-                        dirList.AddRange(Directory.GetDirectories(folderPath, "*", SearchOption.TopDirectoryOnly).Select(x => new ZlpDirectoryInfo(x)).ToList());
-
-                    foreach (ZlpDirectoryInfo dir in new List<ZlpDirectoryInfo>(dirList)) // Filter for valid model folders
-                    {
-                        List<string> subDirs = dir.GetDirectories().Select(d => d.Name).ToList();
-
-                        if (!(new[] { "unet", "text_encoder", "vae_decoder", "vae_encoder", "tokenizer" }.All(d => subDirs.Contains(d))))
-                            dirList.Remove(dir);
-                    }
-
-                    list = dirList.Select(f => new Model(f, new[] { Implementation.DiffusersOnnx })).ToList();
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Log($"Error getting models: {ex.Message}");
-                Logger.Log(ex.StackTrace, true);
-            }
-
-            return list.DistinctBy(x => x.FormatIndependentName).OrderBy(x => x.FormatIndependentName).ToList();
-        }
-
-
-        public static Model GetModel(string filename, bool anyExtension = false, ModelType type = ModelType.Normal, Implementation imp = Implementation.InvokeAi)
-        {
-            return GetModels(type, imp).Where(x => x.Name == filename).FirstOrDefault();
-        }
-
-        public static Model GetModel(List<Model> cachedModels, string filename, bool anyExtension = false, ModelType type = ModelType.Normal, Implementation imp = Implementation.InvokeAi)
-        {
-            return cachedModels.Where(x => x.Name == filename).FirstOrDefault();
         }
 
         public static string GetClipboardFilename(string extension)

@@ -29,7 +29,7 @@ namespace StableDiffusionGui.Ui.MainFormUtils
             F.upDownSeed.Value = meta.Seed;
             F.comboxSampler.SetIfTextMatches(meta.Sampler, true, Strings.Samplers);
             // MainUi.CurrentInitImgPaths = new[] { meta.InitImgName }.Where(x => string.IsNullOrWhiteSpace(x)).ToList(); // Does this even work if we only store the temp path?
-            MainUi.CurrentInitImgPaths = null;
+            MainUi.CurrentInitImgPaths.Clear();
             F.comboxSeamless.SelectedIndex = meta.SeamlessMode == SeamlessMode.Disabled ? 0 : 1;
 
             if (meta.InitStrength > 0f)

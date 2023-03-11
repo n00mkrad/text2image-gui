@@ -148,7 +148,7 @@ namespace StableDiffusionGui.Ui.DrawForm
         public static void SaveMask()
         {
             string initDir = Directory.CreateDirectory(Path.Combine(Paths.GetExeDir(), Constants.Dirs.Masks)).FullName;
-            string fname = Path.GetFileNameWithoutExtension(MainUi.CurrentInitImgPaths.FirstOrDefault()).Trunc(20);
+            string fname = Path.GetFileNameWithoutExtension(MainUi.CurrentInitImgPaths.First()).Trunc(20);
             string initFilename = $"mask_{fname}_{F.RawMask.Size.AsString()}_{DateTime.Now.ToString("MM-dd-yyyy_HH-mm-ss")}";
 
             CommonSaveFileDialog dialog = new CommonSaveFileDialog

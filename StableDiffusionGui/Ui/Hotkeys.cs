@@ -86,14 +86,14 @@ namespace StableDiffusionGui.Ui
             if (keys == (Keys.Control | Keys.M)) // Hotkey: Model quick switcher
             {
                 Program.MainForm.panelSettings.Focus();
-                new ModelQuickSelectForm(Enums.StableDiffusion.ModelType.Normal).ShowDialogForm();
+                new ModelQuickSelectForm(Enums.Models.Type.Normal).ShowDialogForm();
                 return;
             }
 
             if (keys == (Keys.Control | Keys.Shift | Keys.M)) // Hotkey: VAE quick switcher
             {
                 Program.MainForm.panelSettings.Focus();
-                new ModelQuickSelectForm(Enums.StableDiffusion.ModelType.Vae).ShowDialogForm();
+                new ModelQuickSelectForm(Enums.Models.Type.Vae).ShowDialogForm();
                 return;
             }
 

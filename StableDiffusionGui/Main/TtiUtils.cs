@@ -89,21 +89,13 @@ namespace StableDiffusionGui.Main
         /// <returns> Amount of removed images </returns>
         public static int CleanInitImageList()
         {
-            if (MainUi.CurrentInitImgPaths == null)
-                return 0;
-
             var modifiedList = MainUi.CurrentInitImgPaths.Where(path => File.Exists(path)).ToList();
             int removed = modifiedList.Count - MainUi.CurrentInitImgPaths.Count;
 
-            if (MainUi.CurrentInitImgPaths.Count < 1)
-            {
-                MainUi.CurrentInitImgPaths = null;
-                Logger.Log($"{(removed == 1 ? "Initialization image was cleared because the file no longer exists." : "Initialization images were cleared because the files no longer exist.")}");
-            }
-            else if (removed > 0)
+            if (removed > 0)
             {
                 MainUi.CurrentInitImgPaths = modifiedList;
-                Logger.Log($"{removed} initialization image were removed because the files no longer exist.");
+                Logger.Log($"{removed} initialization images were removed because the files no longer exist.");
             }
 
             return removed;
@@ -161,7 +153,7 @@ namespace StableDiffusionGui.Main
             }
             else
             {
-                var model = cachedModels == null ? Paths.GetModel(name, false, ModelType.Normal, imp) : Paths.GetModel(cachedModels, name, false, ModelType.Normal, imp);
+                var model = cachedModels == null ? Models.GetModel(name, false, Enums.Models.Type.Normal, imp) : Models.GetModel(cachedModels, name, false, Enums.Models.Type.Normal, imp);
 
                 if (model == null)
                 {
@@ -183,7 +175,7 @@ namespace StableDiffusionGui.Main
             if (string.IsNullOrWhiteSpace(name))
                 return false;
 
-            var model = cachedModels == null ? Paths.GetModel(name, false, ModelType.Normal, imp) : Paths.GetModel(cachedModels, name, false, ModelType.Normal, imp);
+            var model = cachedModels == null ? Models.GetModel(name, false, Enums.Models.Type.Normal, imp) : Models.GetModel(cachedModels, name, false, Enums.Models.Type.Normal, imp);
 
             return model != null;
         }
@@ -238,7 +230,7 @@ namespace StableDiffusionGui.Main
                 p.StartInfo.EnvironmentVariables[envVar.Key] = envVar.Value;
         }
 
-        public static bool ModelFilesizeValid(string path, ModelType type = ModelType.Normal)
+        public static bool ModelFilesizeValid(string path, Enums.Models.Type type = Enums.Models.Type.Normal)
         {
             if (!File.Exists(path))
                 return false;
@@ -246,7 +238,7 @@ namespace StableDiffusionGui.Main
             return ModelFilesizeValid(new ZlpFileInfo(path).Length);
         }
 
-        public static bool ModelFilesizeValid(Model model, ModelType type = ModelType.Normal)
+        public static bool ModelFilesizeValid(Model model, Enums.Models.Type type = Enums.Models.Type.Normal)
         {
             if (!File.Exists(model.FullName))
                 return false;
@@ -254,13 +246,13 @@ namespace StableDiffusionGui.Main
             return ModelFilesizeValid(model.Size);
         }
 
-        public static bool ModelFilesizeValid(long size, ModelType type = ModelType.Normal)
+        public static bool ModelFilesizeValid(long size, Enums.Models.Type type = Enums.Models.Type.Normal)
         {
             try
             {
-                if (type == ModelType.Normal)
+                if (type == Enums.Models.Type.Normal)
                     return size > 2000 * 1024 * 1024;
-                else if (type == ModelType.Vae)
+                else if (type == Enums.Models.Type.Vae)
                     return size > 100 * 1024 * 1024 && size < 1500 * 1024 * 1024;
             }
             catch
@@ -273,7 +265,7 @@ namespace StableDiffusionGui.Main
 
         public static void ExportPostprocessedImage(string sourceImgPath, string processedImgPath)
         {
-            string ext = Path.GetExtension(sourceImgPath);
+            // string ext = Path.GetExtension(sourceImgPath);
             string key = new FileInfo(processedImgPath).Name.Split('.')[0];
             string movePath = IoUtils.GetAvailableFilePath(InvokeAi.PostProcessMovePaths[key]);
 
@@ -307,10 +299,18 @@ namespace StableDiffusionGui.Main
             foreach (Model m in models)
             {
                 string pseudoHash = IoUtils.GetPseudoHash(m.FullName);
-                bool safe = safeModels.ContainsKey(pseudoHash) ? safeModels[pseudoHash] : await OsUtils.ScanPickle(m.FullName);
 
-                if (safe) // Only save safe models to force re-checking of unsafe models
-                    safeModels[pseudoHash] = safe;
+                if (m.Format == Enums.Models.Format.Pytorch)
+                {
+                    bool safe = safeModels.ContainsKey(pseudoHash) ? safeModels[pseudoHash] : await OsUtils.ScanPickle(m.FullName);
+
+                    if (safe) // Only save safe models to force re-checking of unsafe models
+                        safeModels[pseudoHash] = safe;
+                }
+                else
+                {
+                    safeModels[pseudoHash] = true;
+                }
             }
 
             Config.Set(Config.Keys.SafeModels, safeModels.ToJson());

@@ -34,13 +34,13 @@ namespace StableDiffusionGui.Forms
 
         private void btnOpenModelFolder_Click(object sender, EventArgs e)
         {
-            new ModelFoldersForm(Enums.StableDiffusion.ModelType.Normal).ShowDialogForm();
+            new ModelFoldersForm().ShowDialogForm();
             LoadModels();
         }
 
         private void LoadModels()
         {
-            var ckptFiles = Paths.GetModels();
+            var ckptFiles = Models.GetModels();
 
             comboxModel1.Items.Clear();
             comboxModel2.Items.Clear();
@@ -69,8 +69,8 @@ namespace StableDiffusionGui.Forms
         {
             try
             {
-                Model model1 = Paths.GetModel(comboxModel1.Text);
-                Model model2 = Paths.GetModel(comboxModel2.Text);
+                Model model1 = Models.GetModel(comboxModel1.Text);
+                Model model2 = Models.GetModel(comboxModel2.Text);
 
                 Logger.ClearLogBox();
                 Logger.Log($"Merging models '{Path.GetFileNameWithoutExtension(model1.Name)}' ({PercentModel1}%) and '{Path.GetFileNameWithoutExtension(model2.Name)}' ({PercentModel2}%)...");

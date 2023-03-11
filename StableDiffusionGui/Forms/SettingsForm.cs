@@ -73,23 +73,25 @@ namespace StableDiffusionGui.Forms
             Ui.MainFormUtils.FormControls.RefreshUiAfterSettingsChanged();
         }
 
-        private void LoadModels(bool loadCombox, ModelType type)
+        private void LoadModels()
         {
             if (CurrImplementation < 0)
                 return;
 
-            var combox = type == ModelType.Normal ? comboxSdModel : comboxSdModelVae;
+            var types = new List<Enums.Models.Type>() { Enums.Models.Type.Normal, Enums.Models.Type.Vae };
 
-            combox.Items.Clear();
-
-            if (type == ModelType.Vae)
-                combox.Items.Add("None");
-
-            Paths.GetModels(type, CurrImplementation).ForEach(x => combox.Items.Add(x.Name));
-
-            if (loadCombox)
+            foreach(var type in types)
             {
-                ConfigParser.LoadGuiElement(combox, type == ModelType.Normal ? Config.Keys.Model : Config.Keys.ModelVae);
+                var combox = type == Enums.Models.Type.Normal ? comboxSdModel : comboxSdModelVae;
+
+                combox.Items.Clear();
+
+                if (type == Enums.Models.Type.Vae)
+                    combox.Items.Add("None");
+
+                Models.GetModels(type, CurrImplementation).ForEach(x => combox.Items.Add(x.Name));
+
+                ConfigParser.LoadGuiElement(combox, type == Enums.Models.Type.Normal ? Config.Keys.Model : Config.Keys.ModelVae);
 
                 if (combox.Items.Count > 0 && combox.SelectedIndex == -1)
                     combox.SelectedIndex = 0;
@@ -200,24 +202,28 @@ namespace StableDiffusionGui.Forms
 
         private void btnOpenModelsFolder_Click(object sender, EventArgs e)
         {
-            new ModelFoldersForm(ModelType.Normal).ShowDialogForm();
-            LoadModels(true, ModelType.Normal);
+            SetupModelDirs();
         }
 
         private void btnOpenModelsFolderVae_Click(object sender, EventArgs e)
         {
-            new ModelFoldersForm(ModelType.Vae).ShowDialogForm();
-            LoadModels(true, ModelType.Vae);
+            SetupModelDirs();
+        }
+
+        private void SetupModelDirs ()
+        {
+            new ModelFoldersForm().ShowDialogForm();
+            LoadModels();
         }
 
         private void btnRefreshModelsDropdown_Click(object sender, EventArgs e)
         {
-            LoadModels(true, ModelType.Normal);
+            LoadModels();
         }
 
         private void btnRefreshModelsDropdownVae_Click(object sender, EventArgs e)
         {
-            LoadModels(true, ModelType.Vae);
+            LoadModels();
         }
 
         private void btnFavsPathBrowse_Click(object sender, EventArgs e)
@@ -242,8 +248,7 @@ namespace StableDiffusionGui.Forms
             panelSdModel.Visible = CurrImplementation.GetInfo().SupportsCustomModels;
             panelVae.Visible = CurrImplementation.GetInfo().SupportsCustomVaeModels;
 
-            LoadModels(true, ModelType.Normal);
-            LoadModels(true, ModelType.Vae);
+            LoadModels();
 
             if (_ready && CurrImplementation != Implementation.InvokeAi)
             {

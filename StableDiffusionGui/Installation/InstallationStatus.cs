@@ -49,7 +49,7 @@ namespace StableDiffusionGui.Installation
 
         public static bool HasSdModel ()
         {
-            return Paths.GetModels().Count() > 0;
+            return Models.GetModels().Count() > 0;
         }
 
         public static bool HasSdUpscalers()

@@ -752,9 +752,12 @@ namespace StableDiffusionGui.Io
             return hashStr;
         }
 
-        public static string GetPseudoHash(string path)
+        public static string GetPseudoHash(string path, bool onlyFiles = true)
         {
-            return GetPseudoHash(new ZlpFileInfo(path));
+            if (File.Exists(path))
+                return GetPseudoHash(new ZlpFileInfo(path));
+            else
+                return "";
         }
 
         public static string GetPseudoHash(ZlpFileInfo f, bool crc32 = true)

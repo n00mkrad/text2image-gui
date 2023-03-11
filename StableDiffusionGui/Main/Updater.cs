@@ -124,13 +124,13 @@ namespace StableDiffusionGui.Main
             {
                 try
                 {
-                    foreach (string dir in Paths.GetAllModelDirs())
+                    foreach (string dir in Models.GetAllModelDirs())
                     {
                         if (!Directory.Exists(dir))
                             continue;
 
                         var dirInfo = new DirectoryInfo(dir);
-                        MoveDirIfInsideInstallFolder(dirInfo.FullName, Path.Combine(targetDataDir, Constants.Dirs.Models));
+                        MoveDirIfInsideInstallFolder(dirInfo.FullName, Path.Combine(targetDataDir, Constants.Dirs.Models.Root));
                     }
                 }
                 catch (Exception ex)

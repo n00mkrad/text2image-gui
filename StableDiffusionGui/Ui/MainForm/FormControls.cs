@@ -85,7 +85,7 @@ namespace StableDiffusionGui.Ui.MainFormUtils
                 Logger.Log($"Concept was cleared because the file no longer exists.");
             }
 
-            bool img2img = MainUi.CurrentInitImgPaths != null;
+            bool img2img = MainUi.CurrentInitImgPaths.Any();
 
             F.panelInpainting.Visible = MainForm.ShouldControlBeVisible(F, F.panelInpainting);
             F.panelInitImgStrength.Visible = MainForm.ShouldControlBeVisible(F, F.panelInitImgStrength);
@@ -99,6 +99,8 @@ namespace StableDiffusionGui.Ui.MainFormUtils
             F.labelCurrentImage.Text = !img2img ? "No initialization image loaded." : (MainUi.CurrentInitImgPaths.Count == 1 ? $"Currently using {Path.GetFileName(MainUi.CurrentInitImgPaths[0])}" : $"Currently using {MainUi.CurrentInitImgPaths.Count} images.");
             F.labelCurrentConcept.Text = string.IsNullOrWhiteSpace(MainUi.CurrentEmbeddingPath) ? "No trained concept loaded." : $"Currently using {Path.GetFileName(MainUi.CurrentEmbeddingPath)}";
             F.toolTip.SetToolTip(F.labelCurrentImage, $"{F.labelCurrentImage.Text.Trunc(100)}\n\nShift + Hover to preview.");
+
+            Program.MainForm.checkboxShowInitImg.Visible = MainUi.CurrentInitImgPaths.Any();
 
             #endregion
         }
@@ -166,7 +168,7 @@ namespace StableDiffusionGui.Ui.MainFormUtils
 
         public static void SetHiresFixVisible()
         {
-            bool txt2img = MainUi.CurrentInitImgPaths == null;
+            bool txt2img = !MainUi.CurrentInitImgPaths.Any();
             bool compatible = ConfigParser.CurrentImplementation == Implementation.InvokeAi;
             F.checkboxHiresFix.Visible = (F.comboxResW.GetInt() > 512 || F.comboxResH.GetInt() > 512) && txt2img && compatible;
         }

@@ -43,14 +43,14 @@ namespace StableDiffusionGui.Forms
 
         private void btnOpenModelFolder_Click(object sender, EventArgs e)
         {
-            new ModelFoldersForm(Enums.StableDiffusion.ModelType.Normal).ShowDialogForm();
+            new ModelFoldersForm().ShowDialogForm();
             LoadModels();
         }
 
         private void LoadModels()
         {
             comboxModel.Items.Clear();
-            Paths.GetModels().ForEach(x => comboxModel.Items.Add(x.Name));
+            Models.GetModels().ForEach(x => comboxModel.Items.Add(x.Name));
 
             if (comboxModel.SelectedIndex < 0 && comboxModel.Items.Count > 0)
                 comboxModel.SelectedIndex = 0;
@@ -61,7 +61,7 @@ namespace StableDiffusionGui.Forms
             try
             {
                 bool fp16 = (Enums.Models.Precision)comboxPrunePrecision.SelectedIndex == Enums.Models.Precision.Fp16;
-                Model model = Paths.GetModel(comboxModel.Text);
+                Model model = Models.GetModel(comboxModel.Text);
 
                 Logger.ClearLogBox();
                 Logger.Log($"Pruning model '{Path.GetFileNameWithoutExtension(model.Name)}' and saving as fp{(fp16 ? "16" : "32")} checkpoint...");
@@ -135,7 +135,7 @@ namespace StableDiffusionGui.Forms
 
                 if (checkboxPruneDeleteInput.Checked)
                 {
-                    var inputFile = Paths.GetModel(comboxModel.Text);
+                    var inputFile = Models.GetModel(comboxModel.Text);
                     bool deleteSuccess = IoUtils.TryDeleteIfExists(inputFile.FullName);
                     Logger.Log($"{(deleteSuccess ? "Deleted" : "Failed to delete")} input file '{inputFile.Name}'.");
 
