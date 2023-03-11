@@ -111,14 +111,25 @@ namespace StableDiffusionGui.Implementations
 
                         string configFile = File.Exists(mdl.FullName + ".yaml") ? (mdl.FullName + ".yaml").Wrap(true) : $"configs/stable-diffusion/{(inpaint ? "v1-inpainting-inference" : "v1-inference")}.yaml";
 
-                        text += $"{GetMdlNameForYaml(mdl, vae)}:\n" +
-                        $"    config: {configFile}\n" +
-                        $"    weights: {mdl.FullName.Replace(dataPath, "../..").Wrap(true)}\n" +
-                        $"{(vae != null && vae.FullName.IsNotEmpty() ? $"    vae: {vae.FullName.Replace(dataPath, "../..").Wrap(true)}\n" : "")}" +
-                        // $"    description: {mdl.Name}\n" +
-                        $"    width: 512\n" +
-                        $"    height: 512\n" +
-                        $"    default: {IsModelDefault(mdl, vae, selectedMdl, selectedVae).ToString().Lower()}\n\n";
+                        var properties = new List<string>();
+
+                        if (mdl.Format == Enums.Models.Format.Pytorch)
+                            properties.Add($"config: {configFile}"); // Neeed to specify config path for ckpt models
+                        else if (mdl.Format == Enums.Models.Format.Diffusers)
+                            properties.Add($"format: diffusers"); // Need to specify format for diffusers models
+
+                        properties.Add($"{(mdl.Format == Enums.Models.Format.Diffusers ? "path" : "weights")}: {mdl.FullName.Replace(dataPath, "../..").Wrap(true)}"); // Weights path, use relative path if possible
+
+                        if (vae != null && vae.FullName.IsNotEmpty())
+                            properties.Add($"vae: {vae.FullName.Replace(dataPath, "../..").Wrap(true)}");
+
+                        properties.Add("width: 512");
+                        properties.Add("height: 512");
+
+                        if (IsModelDefault(mdl, vae, selectedMdl, selectedVae))
+                            properties.Add($"default: true");
+
+                        text += $"{GetMdlNameForYaml(mdl, vae)}:\n    {string.Join("\n    ", properties)}\n\n";
                     }
                 }
 
