@@ -9,7 +9,7 @@ namespace StableDiffusionGui.Data
 {
     public class ImageMetadata
     {
-        public enum MetadataType { InvokeAi, Auto1111, NmkdInstructPixToPix, Unknown }
+        public enum MetadataType { InvokeAi, Auto1111, Nmkdiffusers, Unknown }
         public MetadataType Type { get; set; } = MetadataType.Unknown;
         public string Path { get; set; } = "";
         public string AllText { get; set; } = "";
@@ -31,7 +31,7 @@ namespace StableDiffusionGui.Data
 
         private readonly Dictionary<MetadataType, string> _tags = new Dictionary<MetadataType, string>() {
             { MetadataType.InvokeAi, "Dream: " },
-            { MetadataType.NmkdInstructPixToPix, "InstructPixToPix:" },
+            { MetadataType.Nmkdiffusers, "Nmkdiffusers:" },
             { MetadataType.Auto1111, "parameters:" },
         };
 
@@ -68,9 +68,9 @@ namespace StableDiffusionGui.Data
                         return;
                     }
 
-                    if (tag.Description.Contains(_tags[MetadataType.NmkdInstructPixToPix]))
+                    if (tag.Description.Contains(_tags[MetadataType.Nmkdiffusers]))
                     {
-                        LoadInfoNmkdInstructPixToPix(tag.Description.Split(_tags[MetadataType.NmkdInstructPixToPix]).Last());
+                        LoadInfoNmkdiffusers(tag.Description.Split(_tags[MetadataType.Nmkdiffusers]).Last());
                         return;
                     }
                 }
@@ -197,7 +197,7 @@ namespace StableDiffusionGui.Data
             }
         }
 
-        public void LoadInfoNmkdInstructPixToPix(string info)
+        public void LoadInfoNmkdiffusers(string info)
         {
             ParsedText = info;
 
@@ -205,26 +205,20 @@ namespace StableDiffusionGui.Data
 
             foreach (var pair in dict)
             {
-                if (pair.Key.Lower() == "prompt")
-                    Prompt = pair.Value;
-
-                if (pair.Key.Lower() == "image")
-                    InitImgName = pair.Value;
-
-                if (pair.Key.Lower() == "prompt_neg")
-                    NegativePrompt = pair.Value;
-
-                if (pair.Key.Lower() == "steps")
-                    Steps = pair.Value.GetInt();
-
-                if (pair.Key.Lower() == "seed")
-                    Seed = pair.Value.GetInt();
-
-                if (pair.Key.Lower() == "cfg_txt")
-                    Scale = pair.Value.GetFloat();
-
-                if (pair.Key.Lower() == "cfg_img")
-                    ScaleImg = pair.Value.GetFloat();
+                switch (pair.Key)
+                {
+                    case "prompt": Prompt = pair.Value; break;
+                    case "promptNeg": NegativePrompt = pair.Value; break;
+                    case "initImg": InitImgName = pair.Value; break;
+                    case "initStrength": InitStrength = pair.Value.GetFloat(); break;
+                    case "steps": Steps = pair.Value.GetInt(); break;
+                    case "seed": Seed = pair.Value.GetInt(); break;
+                    case "scaleTxt": Scale = pair.Value.GetFloat(); break;
+                    case "scaleImg": ScaleImg = pair.Value.GetFloat(); break;
+                    case "w": GeneratedResolution = new Size(pair.Value.GetInt(), GeneratedResolution.Height); break;
+                    case "h": GeneratedResolution = new Size(GeneratedResolution.Width, pair.Value.GetInt()); break;
+                    default: continue;
+                }
             }
         }
     }
