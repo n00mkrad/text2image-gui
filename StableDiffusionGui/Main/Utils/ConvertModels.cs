@@ -15,6 +15,8 @@ namespace StableDiffusionGui.Main.Utils
 {
     internal class ConvertModels
     {
+        private static string InferenceYaml { get { return Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdRepo, "invoke", "configs", "stable-diffusion", "v1-inference.yaml"); } }
+
         /// <summary> Converts model weights </summary>
         /// <returns> A model class of the newly created model, or null if it failed </returns>
         public static async Task<Model> Convert (Format formatIn, Format formatOut, Model model, bool fp16, bool quiet = false)
@@ -132,7 +134,7 @@ namespace StableDiffusionGui.Main.Utils
         private static async Task ConvPytorchDiffusers (string inPath, string outPath, bool deleteInput = false)
         {
             await RunPython($"python repo/scripts/diff/convert_original_stable_diffusion_to_diffusers.py --checkpoint_path {inPath.Wrap(true)} --dump_path {outPath.Wrap(true)} " +
-                        $"--original_config_file {Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdRepo, "configs", "stable-diffusion", "v1-inference.yaml").Wrap(true)}");
+                        $"--original_config_file {InferenceYaml.Wrap(true)}");
 
             if(deleteInput)
                 IoUtils.TryDeleteIfExists(inPath);
@@ -165,7 +167,7 @@ namespace StableDiffusionGui.Main.Utils
         private static async Task ConvSafetensorsDiffusers(string inPath, string outPath, bool deleteInput = false)
         {
             await RunPython($"python repo/scripts/diff/convert_original_stable_diffusion_to_diffusers.py --from_safetensors --checkpoint_path {inPath.Wrap(true)} --dump_path {outPath.Wrap(true)} " +
-                        $"--original_config_file {Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdRepo, "configs", "stable-diffusion", "v1-inference.yaml").Wrap(true)}");
+                        $"--original_config_file {InferenceYaml.Wrap(true)}");
 
             if (deleteInput)
                 IoUtils.TryDeleteIfExists(inPath);
