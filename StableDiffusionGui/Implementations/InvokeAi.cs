@@ -84,8 +84,8 @@ namespace StableDiffusionGui.Implementations
                         args["res"] = $"-W {res.Width} -H {res.Height}";
                         args["sampler"] = $"-A {sampler}";
                         args["seed"] = $"-S {seed}";
-                        args["perlin"] = $"--perlin {perlin.ToStringDot()}";
-                        args["threshold"] = $"--threshold {threshold}";
+                        args["perlin"] = perlin > 0f ? $"--perlin {perlin.ToStringDot()}" : "";
+                        args["threshold"] = threshold > 0 ? $"--threshold {threshold}" : "";
                         args["clipSegMask"] = (inpaint == InpaintMode.TextMask && !string.IsNullOrWhiteSpace(clipSegMask)) ? $"-tm {clipSegMask.Wrap()}" : "";
 
                         foreach (float scale in scales)
@@ -107,7 +107,7 @@ namespace StableDiffusionGui.Implementations
                                         foreach (float strength in initStrengths)
                                         {
                                             args["initImg"] = $"-I {initImg.Wrap()}";
-                                            args["initStrength"] = $"-f {strength.ToStringDot("0.###")}";
+                                            args["initStrength"] = inpaint != InpaintMode.Disabled ? "-f 1.0" : $"-f {strength.ToStringDot("0.###")}"; // Lock to 1.0 when using inpainting
 
                                             if (inpaint == InpaintMode.ImageMask)
                                                 args["inpaintMask"] = $"-M {Inpainting.MaskedImagePath.Wrap()}";
@@ -127,7 +127,7 @@ namespace StableDiffusionGui.Implementations
                         seed = startSeed;
                 }
 
-                List<string> cmds = argLists.Select(argList => string.Join(" ", argList.Where(argEntry => !string.IsNullOrWhiteSpace(argEntry.Value)).Select(argEntry => argEntry.Value))).ToList();
+                List<string> cmds = argLists.Select(argList => string.Join(" ", argList.Where(argEntry => argEntry.Value.IsNotEmpty()).Select(argEntry => argEntry.Value))).ToList();
 
                 Logger.Log($"Running Stable Diffusion - {iterations} Iterations, {steps.Length} Steps, Scales {(scales.Length < 4 ? string.Join(", ", scales.Select(x => x.ToStringDot())) : $"{scales.First()}->{scales.Last()}")}, {res.Width}x{res.Height}, Starting Seed: {startSeed}", false, Logger.LastUiLine.EndsWith("..."));
 
