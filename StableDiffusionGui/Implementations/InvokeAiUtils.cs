@@ -108,12 +108,10 @@ namespace StableDiffusionGui.Implementations
                     foreach (Model mdlVae in cachedModelsVae)
                     {
                         var vae = mdlVae == null ? null : mdlVae.Format == Enums.Models.Format.Diffusers ? mdlVae : await ConvertVae(mdlVae, !quiet);
-
-                        string configFile = File.Exists(mdl.FullName + ".yaml") ? (mdl.FullName + ".yaml").Wrap(true) : $"configs/stable-diffusion/{(inpaint ? "v1-inpainting-inference" : "v1-inference")}.yaml";
-
+                        string configFile = File.Exists(mdl.FullName + ".yaml") ? $"{(mdl.FullName + ".yaml").Wrap(true)} # custom" : $"configs/stable-diffusion/{(inpaint ? "v1-inpainting-inference" : "v1-inference")}.yaml";
                         var properties = new List<string>();
 
-                        if (mdl.Format == Enums.Models.Format.Pytorch)
+                        if (mdl.Format != Enums.Models.Format.Diffusers)
                             properties.Add($"config: {configFile}"); // Neeed to specify config path for ckpt models
                         else if (mdl.Format == Enums.Models.Format.Diffusers)
                             properties.Add($"format: diffusers"); // Need to specify format for diffusers models
@@ -123,14 +121,14 @@ namespace StableDiffusionGui.Implementations
                         if (vae != null && vae.FullName.IsNotEmpty())
                             properties.Add($"vae: {vae.FullName.Replace(dataPath, "../..").Wrap(true)}");
 
-                        properties.Add("width: 512");
-                        properties.Add("height: 512");
+                        properties.Add($"width: {(mdl.Name.Contains("768") ? "768" : "512")}");
+                        properties.Add($"height: {(mdl.Name.Contains("768") ? "768" : "512")}");
 
                         if (IsModelDefault(mdl, vae, selectedMdl, selectedVae))
                             properties.Add($"default: true");
 
                         text += $"{GetMdlNameForYaml(mdl, vae)}:\n    {string.Join("\n    ", properties)}\n\n";
-                    }
+                    } 
                 }
 
                 File.WriteAllText(ModelsYamlPath, text);
