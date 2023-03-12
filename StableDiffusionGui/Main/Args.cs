@@ -48,7 +48,7 @@ namespace StableDiffusionGui.Main
                     Logger.Log($"InvokeAI model caching: Cache up to {maxCachedModels} models in RAM", true);
                 }
 
-                args.Add($"--max_loaded_models {maxCachedModels + 1}"); // Add 1 because the arg counts the VRAM loaded model as well
+                args.Add($"--max_loaded_models {maxCachedModels + 1} --no-nsfw_checker --no-patchmatch"); // Add 1 to model count because the arg counts the VRAM loaded model as well
 
                 return string.Join(" ", args);
             }
