@@ -19,7 +19,7 @@ namespace StableDiffusionGui.Main
                 if (Config.Get<bool>(Config.Keys.FullPrecision))
                     args.Add("--precision float32");
 
-                bool lowVram = GpuUtils.CachedGpus.Count > 0 && GpuUtils.CachedGpus.First().VramGb < 7.0f;
+                bool lowVram = GpuUtils.CachedGpus.Count > 0 && GpuUtils.CachedGpus.First().VramGb < 25.0f;
 
                 if (lowVram)
                 {
@@ -41,7 +41,7 @@ namespace StableDiffusionGui.Main
                 if (Config.Get<bool>(Config.Keys.InvokeAllowModelCaching)) // Disable caching if <6GB free, no matter the total RAM
                 {
                     maxCachedModels = (int)Math.Floor((HwInfo.GetTotalRamGb - 11f) / 4f); // >16GB => 1 - >20GB => 2 - >24GB => 3 - >24GB => 4 - ...
-                    Logger.Log($"InvokeAI model caching: Cache up to {maxCachedModels} models in RAM", true);
+                    Logger.Log($"InvokeAI Caching: Store up to {maxCachedModels} models in RAM", true);
                 }
 
                 args.Add($"--max_loaded_models {maxCachedModels + 1}"); // Add 1 to model count because the arg counts the VRAM loaded model as well
@@ -56,7 +56,7 @@ namespace StableDiffusionGui.Main
                 args.Add($"--png_compression 1"); // Higher compression levels are barely worth it
 
                 string joinedArgs = string.Join(" ", args);
-                Logger.Log($"InvokeAI Args: {joinedArgs}");
+                Logger.Log($"InvokeAI Args: {joinedArgs}", true);
                 return joinedArgs;
             }
 
