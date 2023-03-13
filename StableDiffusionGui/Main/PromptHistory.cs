@@ -11,7 +11,7 @@ namespace StableDiffusionGui.Main
     {
         public static List<TtiSettings> History = new List<TtiSettings>();
 
-        private static readonly int _maxEntries = 500;
+        private static readonly int _maxEntries = 1000;
 
         public static void Add(TtiSettings batch)
         {

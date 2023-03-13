@@ -7,12 +7,11 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace StableDiffusionGui.Forms
 {
-    public partial class PromptListForm : Form
+    public partial class PromptListForm : CustomForm
     {
         public enum ListMode { History, Queue }
         private ListMode _promptListMode = ListMode.History;
@@ -42,13 +41,13 @@ namespace StableDiffusionGui.Forms
             }
 
             titleLabel.Text = Text;
-
             ConfigParser.LoadGuiElement(checkboxEnableHistory, Config.Keys.EnablePromptHistory);
         }
 
         private void PromptListForm_Shown(object sender, EventArgs e)
         {
             Refresh();
+            TabOrderInit(new List<Control>() { checkboxEnableHistory, promptListView }, 0);
 
             if (_promptListMode == ListMode.History)
                 LoadPromptHistory();
