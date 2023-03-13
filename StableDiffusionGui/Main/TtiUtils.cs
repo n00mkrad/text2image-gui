@@ -29,7 +29,12 @@ namespace StableDiffusionGui.Main
     {
         public static bool ImportBusy;
 
-        public static async Task<OrderedDictionary> CreateResizedInitImagesIfNeeded(List<string> initImgPaths, Size targetSize, bool print = false)
+        /// <summary> Resizes init images to <paramref name="targetSize"/>. If <paramref name="canvasMode"/> is true, cropping/extending will be used instead of scaling. </summary>
+        /// <param name="initImgPaths"></param>
+        /// <param name="targetSize"></param>
+        /// <param name="canvasMode"></param>
+        /// <returns></returns>
+        public static async Task<OrderedDictionary> CreateResizedInitImagesIfNeeded(List<string> initImgPaths, Size targetSize, bool canvasMode = false)
         {
             ImportBusy = true;
             Logger.Log($"Importing initialization images...", false, Logger.LastUiLine.EndsWith("..."));
@@ -40,7 +45,7 @@ namespace StableDiffusionGui.Main
             string initImgsDir = Directory.CreateDirectory(Path.Combine(Paths.GetSessionDataPath(), "inits")).FullName;
 
             var opts = new ParallelOptions() { MaxDegreeOfParallelism = Environment.ProcessorCount };
-            Task parallelTask = Task.Run(async () => Parallel.For(0, sourceAndImportedPaths.Count, opts, async i =>
+            Task parallelTask = Task.Run(async () => Parallel.For(0, sourceAndImportedPaths.Count, opts, i =>
             {
                 var pair = sourceAndImportedPaths.ElementAt(i);
                 int index = initImgPaths.IndexOf(pair.Key);
@@ -56,11 +61,22 @@ namespace StableDiffusionGui.Main
                     try
                     {
                         Logger.Log($"Init img '{Path.GetFileName(pair.Key)}' has bad dimensions ({img.Width}x{img.Height}), resizing to {targetSize.Width}x{targetSize.Height}.", true);
-                        Size scaleSize = Config.Get<bool>(Config.Keys.InitImageRetainAspectRatio) ? ImgMaths.FitIntoFrame(new Size(img.Width, img.Height), targetSize) : targetSize;
-                        img = ImgUtils.ScaleAndPad(img, scaleSize, targetSize);
                         string resizedImgPath = Path.Combine(initImgsDir, $"{index}.png");
-                        img.Write(resizedImgPath);
-                        img.Dispose();
+
+                        if (canvasMode) // Extend/Crop
+                        {
+                            img = ImgUtils.ResizeCanvas(img, targetSize, Gravity.South); // TODO: Gravity needs to be a variable passed from UI
+                            img.Write(resizedImgPath);
+                            img.Dispose();
+                        }
+                        else // Resize (Fit)
+                        {
+                            Size scaleSize = Config.Get<bool>(Config.Keys.InitImageRetainAspectRatio) ? ImgMaths.FitIntoFrame(new Size(img.Width, img.Height), targetSize) : targetSize;
+                            img = ImgUtils.ScaleAndPad(img, scaleSize, targetSize);
+                            img.Write(resizedImgPath);
+                            img.Dispose();
+                        }
+
                         sourceAndImportedPaths[pair.Key] = resizedImgPath;
                         Interlocked.Increment(ref imgsSucessful);
                         Interlocked.Increment(ref imgsResized);

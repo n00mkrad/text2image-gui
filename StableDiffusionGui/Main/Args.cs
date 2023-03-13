@@ -51,7 +51,7 @@ namespace StableDiffusionGui.Main
 
                 args.Add($"--embedding_path {Path.Combine(Paths.GetDataPath(), Constants.Dirs.Models.Root, Constants.Dirs.Models.Embeddings)}"); // Embeddings folder path
                 args.Add($"--no-nsfw_checker"); // Disable NSFW checker (might become optional in the future)
-                args.Add($"--no-patchmatch"); // Disable patchmatch (might become optional if outpainting is implemented)
+                // args.Add($"--no-patchmatch"); // Disable patchmatch (might become optional if outpainting is implemented)
                 args.Add($"--no-xformers"); // Disable xformers until Pytorch >1.11 slowdown is investigated and xformers works
                 args.Add($"--png_compression 1"); // Higher compression levels are barely worth it
 

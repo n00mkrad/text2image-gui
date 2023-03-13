@@ -55,7 +55,7 @@ namespace StableDiffusionGui.Implementations
                 await InvokeAiUtils.WriteModelsYamlAll(modelFile, vaeFile, cachedModels, cachedModelsVae);
                 if (TextToImage.Canceled) return;
 
-                OrderedDictionary initImages = initImgs != null && initImgs.Length > 0 ? await TtiUtils.CreateResizedInitImagesIfNeeded(initImgs.ToList(), res) : null;
+                OrderedDictionary initImages = initImgs != null && initImgs.Length > 0 ? await TtiUtils.CreateResizedInitImagesIfNeeded(initImgs.ToList(), res, inpaint == InpaintMode.Outpaint) : null;
 
                 long startSeed = seed;
                 prompts = prompts.Select(p => FormatUtils.GetCombinedPrompt(p, negPrompt)).ToArray(); // Apply negative prompt
@@ -68,6 +68,7 @@ namespace StableDiffusionGui.Implementations
                 args["facefix"] = Args.InvokeAi.GetFaceRestoreArgs();
                 args["seamless"] = Args.InvokeAi.GetSeamlessArg(seamless);
                 args["hiresFix"] = hiresFix ? "--hires_fix" : "";
+                bool fixedStrength = inpaint == InpaintMode.ImageMask || inpaint == InpaintMode.TextMask;
 
                 foreach (string prompt in prompts)
                 {
@@ -106,10 +107,13 @@ namespace StableDiffusionGui.Implementations
                                         foreach (float strength in initStrengths)
                                         {
                                             args["initImg"] = $"-I {initImg.Wrap()}";
-                                            args["initStrength"] = inpaint != InpaintMode.Disabled ? "-f 1.0" : $"-f {strength.ToStringDot("0.###")}"; // Lock to 1.0 when using inpainting
+                                            args["initStrength"] = fixedStrength ? "-f 1.0" : $"-f {strength.ToStringDot("0.###")}"; // Lock to 1.0 when using inpainting
 
                                             if (inpaint == InpaintMode.ImageMask)
                                                 args["inpaintMask"] = $"-M {Inpainting.MaskedImagePath.Wrap()}";
+
+                                            if (inpaint == InpaintMode.Outpaint)
+                                                args["inpaintMask"] = "--force_outpaint";
 
                                             argLists.Add(new Dictionary<string, string>(args));
                                         }

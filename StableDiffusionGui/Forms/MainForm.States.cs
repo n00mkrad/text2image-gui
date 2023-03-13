@@ -53,8 +53,9 @@ namespace StableDiffusionGui.Forms
                 return false;
 
             bool img2img = MainUi.CurrentInitImgPaths.Any();
+            bool inpaint = IsUsingInpaintingModel && (InpaintMode)comboxInpaintMode.SelectedIndex != InpaintMode.Outpaint;
 
-            if (img2img && !IsUsingInpaintingModel)
+            if (img2img && !inpaint)
                 available = true;
 
             return available;

@@ -242,6 +242,14 @@ namespace StableDiffusionGui.MiscUtils
             return img;
         }
 
+        public static MagickImage ResizeCanvas(MagickImage img, Size newDimensions, Gravity gravity = Gravity.Center, MagickColor fillColor = null)
+        {
+            fillColor = fillColor ?? MagickColors.Transparent;
+            img.BackgroundColor = fillColor;
+            img.Extent(newDimensions.Width, newDimensions.Height, gravity);
+            return img;
+        }
+
         public static Image Juxtapose(Image img1, Image img2, Size size)
         {
             img1 = ResizeImage(img1, size);
