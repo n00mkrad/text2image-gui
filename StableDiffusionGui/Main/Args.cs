@@ -19,7 +19,7 @@ namespace StableDiffusionGui.Main
                 if (Config.Get<bool>(Config.Keys.FullPrecision))
                     args.Add("--precision float32");
 
-                bool lowVram = GpuUtils.CachedGpus.Count > 0 && GpuUtils.CachedGpus.First().VramGb < 25.0f;
+                bool lowVram = GpuUtils.CachedGpus.Count > 0 && GpuUtils.CachedGpus.First().VramGb < 7.0f;
 
                 if (lowVram)
                 {
