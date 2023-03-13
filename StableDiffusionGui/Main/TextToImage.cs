@@ -142,7 +142,9 @@ namespace StableDiffusionGui.Main
             Cancel("Canceled manually.", false);
         }
 
-        public static async void Cancel(string reason, bool showMsgBox)
+        public enum CancelMode { DoNotKill, SoftKill, ForceKill }
+
+        public static async void Cancel(string reason, bool showMsgBox, CancelMode cancelMode = CancelMode.SoftKill)
         {
             if (Canceled)
                 return;
@@ -154,20 +156,23 @@ namespace StableDiffusionGui.Main
 
             Logger.Log($"Canceling. Reason: {(string.IsNullOrWhiteSpace(reason) ? "None" : reason)} - Implementation: {(CurrentTaskSettings != null ? CurrentTaskSettings.Implementation.ToString() : "None")} - Force Kill: {forceKill}", true);
 
-            if (CurrentTaskSettings != null && !CurrentTaskSettings.Implementation.GetInfo().IsInteractive)
+            if (cancelMode == CancelMode.ForceKill || (CurrentTaskSettings != null && !CurrentTaskSettings.Implementation.GetInfo().IsInteractive))
                 forceKill = true;
 
-            if (!forceKill && TtiProcess.IsAiProcessRunning)
+            if (cancelMode != CancelMode.DoNotKill)
             {
-                if (CurrentTaskSettings.Implementation == Implementation.InvokeAi)
-                    await InvokeAi.Cancel(); // TODO: Make an interface IImplementation to avoid duplicate lines for each implementation
+                if (!forceKill && TtiProcess.IsAiProcessRunning)
+                {
+                    if (CurrentTaskSettings.Implementation == Implementation.InvokeAi)
+                        await InvokeAi.Cancel(); // TODO: Make an interface IImplementation to avoid duplicate lines for each implementation
 
-                if (CurrentTaskSettings.Implementation == Implementation.InstructPixToPix)
-                    await InstructPixToPix.Cancel(); // TODO: Make an interface IImplementation to avoid duplicate lines for each implementation
-            }
-            else
-            {
-                TtiProcess.Kill();
+                    if (CurrentTaskSettings.Implementation == Implementation.InstructPixToPix)
+                        await InstructPixToPix.Cancel(); // TODO: Make an interface IImplementation to avoid duplicate lines for each implementation
+                }
+                else
+                {
+                    TtiProcess.Kill();
+                }
             }
 
             Logger.LogIfLastLineDoesNotContainMsg(showMsgBox || manual ? "Canceled." : $"Canceled: {reason.Replace("\n", " ").Trunc(200)}");

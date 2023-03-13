@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static StableDiffusionGui.Main.TextToImage;
 
 namespace StableDiffusionGui.Main
 {
@@ -250,6 +251,7 @@ namespace StableDiffusionGui.Main
                     Logger.Log($"Concept keyword: <{line.Split("Added terms: *, ").LastOrDefault()}>", false, ellipsis);
             }
 
+            TextToImage.CancelMode cancelMode = TextToImage.CancelMode.SoftKill;
             string lastLogLines = string.Join("\n", Logger.GetLastLines(Constants.Lognames.Sd, 6));
 
             if (!_hasErrored && line.Contains("CUDA out of memory"))
@@ -280,11 +282,12 @@ namespace StableDiffusionGui.Main
             {
                 _hasErrored = true;
                 errMsg = $"Python Error:\n\n{line}";
+                cancelMode = TextToImage.CancelMode.ForceKill;
             }
 
             if (_hasErrored)
             {
-                TextToImage.Cancel($"Process has errored: {errMsg}", false);
+                TextToImage.Cancel($"Process has errored: {errMsg}", false, cancelMode);
 
                 if (!string.IsNullOrWhiteSpace(errMsg))
                     Task.Run(() => UiUtils.ShowMessageBox(errMsg, UiUtils.MessageType.Error));
