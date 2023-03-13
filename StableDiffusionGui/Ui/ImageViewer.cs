@@ -11,7 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace StableDiffusionGui.Ui.MainFormUtils
+namespace StableDiffusionGui.Ui
 {
     internal class ImageViewer
     {

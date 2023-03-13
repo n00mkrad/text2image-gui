@@ -7,7 +7,6 @@ using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
-using StableDiffusionGui.Ui.MainFormUtils;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -48,7 +47,7 @@ namespace StableDiffusionGui.Forms
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            FormControls.Save();
+            SaveControls();
 
             if (Program.Busy)
             {
@@ -65,23 +64,23 @@ namespace StableDiffusionGui.Forms
 
         private async Task Initialize()
         {
-            FormControls.InitializeControls();
-            FormControls.RefreshUiAfterSettingsChanged();
-            FormControls.Load();
+            InitializeControls();
+            RefreshUiAfterSettingsChanged();
+            LoadControls();
             PromptHistory.Load();
             Setup.PatchFiles();
 
             textboxPrompt.MaxLength = 0;
             textboxPromptNeg.MaxLength = 0;
             pictBoxImgViewer.MouseWheel += (s, e) => { ImageViewer.Move(e.Delta > 0); }; // Scroll on MouseWheel
-            comboxResW.SelectedIndexChanged += (s, e) => { FormControls.SetHiresFixVisible(); }; // Show/Hide HiRes Fix depending on chosen res
-            comboxResH.SelectedIndexChanged += (s, e) => { FormControls.SetHiresFixVisible(); }; // Show/Hide HiRes Fix depending on chosen res
+            comboxResW.SelectedIndexChanged += (s, e) => { SetHiresFixVisible(); }; // Show/Hide HiRes Fix depending on chosen res
+            comboxResH.SelectedIndexChanged += (s, e) => { SetHiresFixVisible(); }; // Show/Hide HiRes Fix depending on chosen res
 
             MainUi.LoadAutocompleteData(promptAutocomplete, new[] { textboxPrompt, textboxPromptNeg });
             Task.Run(() => MainUi.SetGpusInWindowTitle());
             Task.Run(() => MainUi.PrintVersion());
             upDownSeed.Text = "";
-            FormControls.RefreshUiAfterSettingsChanged();
+            RefreshUiAfterSettingsChanged();
 
             TabOrderInit(new List<Control>() {
                 textboxPrompt, textboxPromptNeg,
@@ -134,23 +133,13 @@ namespace StableDiffusionGui.Forms
 
         public async void runBtn_Click(object sender, EventArgs e)
         {
-            await FormUtils.TryRun();
+            await TryRun();
 
             if (checkboxLoopback.Checked)
             {
-                FormUtils.TryUseCurrentImgAsInitImg(true);
+                TryUseCurrentImgAsInitImg(true);
                 runBtn_Click(null, null);
             }
-        }
-
-        public void SetProgress(int percent, bool taskbarProgress = true)
-        {
-            FormControls.SetProgress(percent, taskbarProgress, progressBar);
-        }
-
-        public void SetProgressImg(int percent, bool taskbarProgress = false)
-        {
-            FormControls.SetProgress(percent, taskbarProgress, progressBarImg);
         }
 
         private void btnPrevImg_Click(object sender, EventArgs e)
@@ -212,7 +201,7 @@ namespace StableDiffusionGui.Forms
 
         private void useAsInitImageToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FormUtils.TryUseCurrentImgAsInitImg();
+            TryUseCurrentImgAsInitImg();
         }
 
         private void copyToFavoritesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -234,7 +223,7 @@ namespace StableDiffusionGui.Forms
 
         private void pictBoxImgViewer_Click(object sender, EventArgs e)
         {
-            FormControls.HandleImageViewerClick(((MouseEventArgs)e).Button == MouseButtons.Right);
+            HandleImageViewerClick(((MouseEventArgs)e).Button == MouseButtons.Right);
         }
 
         #region Drag N Drop
@@ -255,14 +244,14 @@ namespace StableDiffusionGui.Forms
 
         private void btnInitImgBrowse_Click(object sender, EventArgs e)
         {
-            FormUtils.BrowseInitImage();
+            BrowseInitImage();
         }
 
         #endregion
 
         private void btnDebug_Click(object sender, EventArgs e)
         {
-            FormControls.OpenLogsMenu();
+            OpenLogsMenu();
         }
 
         private void btnSettings_Click(object sender, EventArgs e)
@@ -272,7 +261,7 @@ namespace StableDiffusionGui.Forms
 
         private void btnPostProc_Click(object sender, EventArgs e)
         {
-            FormUtils.TryOpenPostProcessingSettings();
+            TryOpenPostProcessingSettings();
         }
 
         private void btnExpandPromptField_Click(object sender, EventArgs e)
@@ -310,12 +299,12 @@ namespace StableDiffusionGui.Forms
 
         private async void generateCurrentPromptToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            await FormUtils.Run();
+            await Run();
         }
 
         private async void generateAllQueuedPromptsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            await FormUtils.Run(true);
+            await Run(true);
         }
 
         public void UpdateInpaintUi()
@@ -337,7 +326,7 @@ namespace StableDiffusionGui.Forms
 
         private void addCurrentSettingsToQueueToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var settings = FormParsing.GetCurrentTtiSettings();
+            var settings = GetCurrentTtiSettings();
 
             if (settings.Prompts.Where(x => !string.IsNullOrWhiteSpace(x)).Any())
                 MainUi.Queue.Add(settings);
@@ -351,7 +340,7 @@ namespace StableDiffusionGui.Forms
 
         private async void reGenerateImageWithCurrentSettingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            await FormUtils.RegenerateImageWithCurrentSettings();
+            await RegenerateImageWithCurrentSettings();
         }
 
         private void btnDeleteBatch_Click(object sender, EventArgs e)
@@ -465,7 +454,7 @@ namespace StableDiffusionGui.Forms
 
         private void comboxInpaintMode_SelectedIndexChanged(object sender, EventArgs e)
         {
-            FormControls.RefreshUiAfterSettingsChanged();
+            RefreshUiAfterSettingsChanged();
         }
 
         private void labelCurrentImage_MouseEnter(object sender, EventArgs e)
@@ -482,7 +471,7 @@ namespace StableDiffusionGui.Forms
 
         private void btnEditMask_Click(object sender, EventArgs e)
         {
-            FormUtils.EditMask();
+            EditMask();
         }
 
         private void convertModelsToolStripMenuItem_Click(object sender, EventArgs e)

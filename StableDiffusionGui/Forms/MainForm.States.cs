@@ -1,11 +1,6 @@
 ﻿using StableDiffusionGui.Io;
 using StableDiffusionGui.Ui;
-using StableDiffusionGui.Ui.MainFormUtils;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
@@ -13,23 +8,18 @@ namespace StableDiffusionGui.Forms
 {
     public partial class MainForm
     {
-        public bool ShouldControlBeVisible (Control control)
+        public bool ShouldControlBeVisible(Control control)
         {
-            return ShouldControlBeVisible(this, control);
-        }
-
-        public static bool ShouldControlBeVisible(MainForm instance, Control control)
-        {
-            if (control == instance.panelRes)
+            if (control == panelRes)
                 return ResolutionAdjustAvailable();
 
-            if (control == instance.panelScaleImg)
+            if (control == panelScaleImg)
                 return ImgScaleAvailable();
 
-            if (control == instance.panelInitImgStrength)
+            if (control == panelInitImgStrength)
                 return InitImgStrengthAvailable();
 
-            if (control == instance.panelInpainting)
+            if (control == panelInpainting)
                 return InpaintingAvailable();
 
             return false;
@@ -55,7 +45,7 @@ namespace StableDiffusionGui.Forms
             return available;
         }
 
-        private static bool InitImgStrengthAvailable()
+        private bool InitImgStrengthAvailable()
         {
             bool available = false;
 
@@ -64,7 +54,7 @@ namespace StableDiffusionGui.Forms
 
             bool img2img = MainUi.CurrentInitImgPaths.Any();
 
-            if (img2img && !FormControls.IsUsingInpaintingModel)
+            if (img2img && !IsUsingInpaintingModel)
                 available = true;
 
             return available;

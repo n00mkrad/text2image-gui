@@ -3,7 +3,6 @@ using StableDiffusionGui.Forms;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
-using StableDiffusionGui.Ui.MainFormUtils;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;

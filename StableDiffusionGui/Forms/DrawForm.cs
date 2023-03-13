@@ -6,8 +6,6 @@ using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using StableDiffusionGui.Ui.DrawForm;
-using System.Runtime.InteropServices;
 
 namespace StableDiffusionGui.Forms
 {
@@ -25,9 +23,7 @@ namespace StableDiffusionGui.Forms
 
         public DrawForm(Image background, Image mask = null, bool disableBlurOption = false)
         {
-            FormControls.F = this;
-            FormUtils.F = this;
-            FormUtils.Reset();
+            Reset();
 
             Opacity = 0;
             BackgroundImg = background;
@@ -41,7 +37,7 @@ namespace StableDiffusionGui.Forms
             float pixelCountFactor = (512 * 512) / (float)(BackgroundImg.Width * BackgroundImg.Height);
             HistoryLimitNormalized = (_historyLimit * pixelCountFactor).RoundToInt().Clamp(10, _historyLimit * 2);
 
-            FormUtils.HistorySave();
+            HistorySave();
             InitializeComponent();
         }
 
@@ -73,8 +69,8 @@ namespace StableDiffusionGui.Forms
             }
 
             pictBox.BackgroundImage = BackgroundImg;
-            FormControls.SetPictureBoxPadding();
-            FormUtils.Apply();
+            SetPictureBoxPadding();
+            Apply();
             await Task.Delay(1);
             Opacity = 1;
         }
@@ -82,28 +78,28 @@ namespace StableDiffusionGui.Forms
         private void pictBox_Click(object sender, EventArgs e)
         {
             if (((MouseEventArgs)e).Button == MouseButtons.Right)
-                FormControls.ShowContextMenu();
+                ShowContextMenu();
         }
 
         private void pictBox_MouseDown(object sender, MouseEventArgs e)
         {
-            FormUtils.DrawStart(e.Location);
+            DrawStart(e.Location);
         }
 
         private void pictBox_MouseMove(object sender, MouseEventArgs e)
         {
-            FormUtils.Draw(e);
+            Draw(e);
         }
 
         private void pictBox_MouseUp(object sender, MouseEventArgs e)
         {
-            FormUtils.DrawEnd();
+            DrawEnd();
         }
 
         public void sliderBlur_Scroll(object sender, ScrollEventArgs e)
         {
             Inpainting.CurrentBlurValue = sliderBlur.Value;
-            FormUtils.Apply();
+            Apply();
         }
 
         private void btnOk_Click(object sender, EventArgs e)
@@ -115,19 +111,19 @@ namespace StableDiffusionGui.Forms
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             if (keyData == (Keys.Control | Keys.I)) // Hotkey: Invert
-                FormUtils.InvertMask();
+                InvertMask();
 
             if (keyData == (Keys.Control | Keys.V)) // Hotkey: Paste mask
-                FormUtils.PasteMask();
+                PasteMask();
 
             if (keyData == (Keys.Control | Keys.S)) // Hotkey: Save
-                FormUtils.SaveMask();
+                SaveMask();
 
             if (keyData == (Keys.Control | Keys.O)) // Hotkey: Load
-                FormUtils.LoadMask();
+                LoadMask();
 
             if (keyData == (Keys.Control | Keys.Z)) // Hotkey: Undo
-                FormUtils.HistoryUndo();
+                HistoryUndo();
 
             if (keyData == Keys.Return) // Hotkey: OK
                 btnOk_Click(null, null);
@@ -137,34 +133,34 @@ namespace StableDiffusionGui.Forms
 
         private void DrawForm_SizeChanged(object sender, EventArgs e)
         {
-            FormControls.SetPictureBoxPadding();
+            SetPictureBoxPadding();
         }
 
         #region Context Menu
 
         private void clearToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FormUtils.ClearMask();
+            ClearMask();
         }
 
         private void invertMaskToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FormUtils.InvertMask();
+            InvertMask();
         }
 
         private void pasteMaskToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FormUtils.PasteMask();
+            PasteMask();
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FormUtils.SaveMask();
+            SaveMask();
         }
 
         private void loadToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FormUtils.LoadMask();
+            LoadMask();
         }
 
         #endregion
@@ -173,24 +169,24 @@ namespace StableDiffusionGui.Forms
 
         private void btnClear_Click(object sender, EventArgs e)
         {
-            FormUtils.ClearMask();
+            ClearMask();
         }
 
         private void btnMaskSave_Click(object sender, EventArgs e)
         {
-            FormUtils.SaveMask();
+            SaveMask();
         }
 
         private void btnMaskLoad_Click(object sender, EventArgs e)
         {
-            FormUtils.LoadMask();
+            LoadMask();
         }
 
         #endregion
 
         private void undoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FormUtils.HistoryUndo();
+            HistoryUndo();
         }
 
         private void DrawForm_FormClosing(object sender, FormClosingEventArgs e)

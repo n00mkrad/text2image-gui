@@ -63,7 +63,7 @@ namespace StableDiffusionGui.Forms
                 if (IsModelValid())
                     ConfigParser.SaveGuiElement(comboxModel, ModelConfigKey);
 
-                Ui.MainFormUtils.FormControls.RefreshUiAfterSettingsChanged();
+                Program.MainForm.RefreshUiAfterSettingsChanged();
                 Close();
             }
 

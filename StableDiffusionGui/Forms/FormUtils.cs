@@ -3,6 +3,7 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
+using StableDiffusionGui.Ui;
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -11,18 +12,16 @@ using System.Linq;
 using System.Windows.Forms;
 using Paths = StableDiffusionGui.Io.Paths;
 
-namespace StableDiffusionGui.Ui.DrawForm
+namespace StableDiffusionGui.Forms
 {
-    internal class FormUtils
+    public partial class DrawForm
     {
-        public static Forms.DrawForm F;
+        public float ScaleFactor = 1f;
+        public int LastPointX = 0;
+        public int LastPointY = 0;
+        public bool MouseIsDown = false;
 
-        public static float ScaleFactor = 1f;
-        public static int LastPointX = 0;
-        public static int LastPointY = 0;
-        public static bool MouseIsDown = false;
-
-        public static void Reset ()
+        public void Reset ()
         {
             ScaleFactor = 1f;
             LastPointX = 0;
@@ -30,15 +29,15 @@ namespace StableDiffusionGui.Ui.DrawForm
             MouseIsDown = false;
         }
 
-        public static void DrawStart (Point mouseLocation)
+        public void DrawStart (Point mouseLocation)
         {
-            ScaleFactor = F.pictBox.Image == null ? 1f : (float)F.pictBox.Width / F.pictBox.Image.Width;
+            ScaleFactor = pictBox.Image == null ? 1f : (float)pictBox.Width / pictBox.Image.Width;
             LastPointX = mouseLocation.X;
             LastPointY = mouseLocation.Y;
             MouseIsDown = true;
         }
 
-        public static void DrawEnd()
+        public void DrawEnd()
         {
             MouseIsDown = false;
             LastPointX = 0;
@@ -47,17 +46,17 @@ namespace StableDiffusionGui.Ui.DrawForm
             HistorySave();
         }
 
-        public static void Draw (MouseEventArgs e)
+        public void Draw (MouseEventArgs e)
         {
             if (!MouseIsDown || e.Button != MouseButtons.Left)
                 return;
 
-            if (F.pictBox.Image == null)
-                F.pictBox.Image = new Bitmap(F.BackgroundImg.Width, F.BackgroundImg.Height);
+            if (pictBox.Image == null)
+                pictBox.Image = new Bitmap(BackgroundImg.Width, BackgroundImg.Height);
 
-            int brushSize = F.sliderBrushSize.Value;
+            int brushSize = sliderBrushSize.Value;
 
-            using (Graphics g = Graphics.FromImage(F.RawMask))
+            using (Graphics g = Graphics.FromImage(RawMask))
             {
                 Point scaledPoint = new Point((LastPointX / ScaleFactor).RoundToInt(), (LastPointY / ScaleFactor).RoundToInt());
                 g.DrawEllipse(new Pen(Color.Black, brushSize), new RectangleF(scaledPoint, new SizeF(brushSize, brushSize)));
@@ -65,91 +64,91 @@ namespace StableDiffusionGui.Ui.DrawForm
             }
 
             Apply(false); // Disable blur while drawing for performance reasons
-            F.pictBox.Invalidate();
+            pictBox.Invalidate();
             LastPointX = e.Location.X;
             LastPointY = e.Location.Y;
         }
 
-        public static void Apply(bool blur = true)
+        public void Apply(bool blur = true)
         {
-            if (F.RawMask != null)
+            if (RawMask != null)
             {
-                if (blur && !F.DisableBlurOption && Inpainting.CurrentBlurValue > 0)
-                    F.pictBox.Image = new GaussianBlur(F.RawMask).Process(Inpainting.CurrentBlurValue);
+                if (blur && !DisableBlurOption && Inpainting.CurrentBlurValue > 0)
+                    pictBox.Image = new GaussianBlur(RawMask).Process(Inpainting.CurrentBlurValue);
                 else
-                    F.pictBox.Image = F.RawMask;
+                    pictBox.Image = RawMask;
             }
         }
 
-        public static void PasteMask()
+        public void PasteMask()
         {
             Image clipboardImg = Clipboard.GetImage();
 
             if (clipboardImg != null)
             {
-                if (clipboardImg.Size != F.pictBox.Image.Size)
+                if (clipboardImg.Size != pictBox.Image.Size)
                 {
-                    UiUtils.ShowMessageBox($"The pasted mask ({clipboardImg.Width}x{clipboardImg.Height}) needs to have the same dimensions as the initialization image ({F.pictBox.Image.Width}x{F.pictBox.Image.Height}).");
+                    UiUtils.ShowMessageBox($"The pasted mask ({clipboardImg.Width}x{clipboardImg.Height}) needs to have the same dimensions as the initialization image ({pictBox.Image.Width}x{pictBox.Image.Height}).");
                     return;
                 }
 
                 var magickImg = ImgUtils.GetMagickImage(clipboardImg);
                 Image pastedMask = ImgUtils.ReplaceOtherColorsWithTransparency(magickImg).ToBitmap();
-                F.RawMask = (Bitmap)pastedMask;
-                F.sliderBlur.Value = 0;
-                F.sliderBlur_Scroll(null, null);
-                F.pictBox.Invalidate();
+                RawMask = (Bitmap)pastedMask;
+                sliderBlur.Value = 0;
+                sliderBlur_Scroll(null, null);
+                pictBox.Invalidate();
                 HistorySave();
             }
         }
 
         #region History
 
-        public static void HistorySave()
+        public void HistorySave()
         {
-            if (F.History.Count >= F.HistoryLimitNormalized)
-                F.History = F.History.Skip(1).ToList(); // Remove first (oldest) entry if we maxed out the capacity
+            if (History.Count >= HistoryLimitNormalized)
+                History = History.Skip(1).ToList(); // Remove first (oldest) entry if we maxed out the capacity
 
-            F.History.Add(new Bitmap(F.RawMask));
+            History.Add(new Bitmap(RawMask));
         }
 
-        public static void HistoryUndo()
+        public void HistoryUndo()
         {
-            if (F.History.Count <= 1)
+            if (History.Count <= 1)
                 return;
 
-            F.History.Remove(F.History.Last());
-            F.RawMask = new Bitmap(F.History.Last());
+            History.Remove(History.Last());
+            RawMask = new Bitmap(History.Last());
 
-            F.sliderBlur_Scroll(null, null);
-            F.pictBox.Invalidate();
+            sliderBlur_Scroll(null, null);
+            pictBox.Invalidate();
         }
 
         #endregion
 
-        public static void ClearMask()
+        public void ClearMask()
         {
-            F.RawMask = new Bitmap(F.BackgroundImg.Width, F.BackgroundImg.Height);
-            F.pictBox.Image = null;
-            F.Invalidate();
+            RawMask = new Bitmap(BackgroundImg.Width, BackgroundImg.Height);
+            pictBox.Image = null;
+            Invalidate();
         }
 
-        public static void InvertMask()
+        public void InvertMask()
         {
-            var magickImg = ImgUtils.GetMagickImage(F.RawMask);
+            var magickImg = ImgUtils.GetMagickImage(RawMask);
             magickImg = ImgUtils.RemoveTransparency(magickImg, ImgUtils.NoAlphaMode.Fill, MagickColors.White);
             magickImg = ImgUtils.Invert(magickImg);
             magickImg = ImgUtils.ReplaceColorWithTransparency(magickImg, MagickColors.White);
-            F.RawMask = magickImg.ToBitmap();
+            RawMask = magickImg.ToBitmap();
             Apply();
-            F.pictBox.Invalidate();
+            pictBox.Invalidate();
         }
 
-        public static void SaveMask()
+        public void SaveMask()
         {
             string initDir = Directory.CreateDirectory(Path.Combine(Paths.GetExeDir(), Constants.Dirs.Masks)).FullName;
             string fname = Path.GetFileNameWithoutExtension(MainUi.CurrentInitImgPaths.First()).Trunc(20);
-            string initFilename = $"mask_{fname}_{F.RawMask.Size.AsString()}_{DateTime.Now.ToString("MM-dd-yyyy_HH-mm-ss")}";
+            string initFilename = $"mask_{fname}_{RawMask.Size.AsString()}_{DateTime.Now.ToString("MM-dd-yyyy_HH-mm-ss")}";
 
             CommonSaveFileDialog dialog = new CommonSaveFileDialog
             {
@@ -167,7 +166,7 @@ namespace StableDiffusionGui.Ui.DrawForm
             try
             {
                 if (!string.IsNullOrWhiteSpace(dialog.FileName))
-                    F.RawMask.Save(dialog.FileName);
+                    RawMask.Save(dialog.FileName);
             }
             catch (Exception ex)
             {
@@ -176,7 +175,7 @@ namespace StableDiffusionGui.Ui.DrawForm
             }
         }
 
-        public static void LoadMask()
+        public void LoadMask()
         {
             string initDir = Directory.CreateDirectory(Path.Combine(Paths.GetExeDir(), Constants.Dirs.Masks)).FullName;
 
@@ -201,14 +200,14 @@ namespace StableDiffusionGui.Ui.DrawForm
 
                 Image mask = IoUtils.GetImage(dialog.FileName);
 
-                if (mask.Size != F.pictBox.Image.Size)
+                if (mask.Size != pictBox.Image.Size)
                 {
-                    Logger.Log($"Can't load mask: Mask ({mask.Size.AsString()}) does not match image dimensions ({F.pictBox.Image.Size.AsString()}).");
+                    Logger.Log($"Can't load mask: Mask ({mask.Size.AsString()}) does not match image dimensions ({pictBox.Image.Size.AsString()}).");
                     return;
                 }
 
-                F.RawMask = (Bitmap)mask;
-                F.sliderBlur_Scroll(null, null);
+                RawMask = (Bitmap)mask;
+                sliderBlur_Scroll(null, null);
             }
             catch (Exception ex)
             {

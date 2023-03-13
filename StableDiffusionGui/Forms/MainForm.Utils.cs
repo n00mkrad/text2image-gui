@@ -1,10 +1,10 @@
 ﻿using ImageMagick;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using StableDiffusionGui.Extensions;
-using StableDiffusionGui.Forms;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
+using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -14,13 +14,11 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
-namespace StableDiffusionGui.Ui.MainFormUtils
+namespace StableDiffusionGui.Forms
 {
-    internal class FormUtils
+    public partial class MainForm
     {
-        private static MainForm F { get { return Program.MainForm; } }
-
-        public static void BrowseInitImage()
+        public void BrowseInitImage()
         {
             if (Program.Busy)
                 return;
@@ -44,10 +42,10 @@ namespace StableDiffusionGui.Ui.MainFormUtils
                 }
             }
 
-            FormControls.RefreshUiAfterSettingsChanged();
+            RefreshUiAfterSettingsChanged();
         }
 
-        public static async Task RegenerateImageWithCurrentSettings()
+        public async Task RegenerateImageWithCurrentSettings()
         {
             if (Program.Busy)
             {
@@ -55,16 +53,16 @@ namespace StableDiffusionGui.Ui.MainFormUtils
                 return;
             }
 
-            var prevSeedVal = F.upDownSeed.Value;
-            var prevIterVal = F.upDownIterations.Value;
-            F.upDownSeed.Value = ImageViewer.CurrentImageMetadata.Seed;
-            F.upDownIterations.Value = 1;
+            var prevSeedVal = upDownSeed.Value;
+            var prevIterVal = upDownIterations.Value;
+            upDownSeed.Value = ImageViewer.CurrentImageMetadata.Seed;
+            upDownIterations.Value = 1;
             await TryRun();
-            F.SetSeed((long)prevSeedVal);
-            F.upDownIterations.Value = prevIterVal;
+            SetSeed((long)prevSeedVal);
+            upDownIterations.Value = prevIterVal;
         }
 
-        public static void TryOpenPostProcessingSettings()
+        public void TryOpenPostProcessingSettings()
         {
             var imp = ConfigParser.CurrentImplementation;
             var supportedImps = new List<Implementation> { Implementation.InvokeAi };
@@ -78,20 +76,17 @@ namespace StableDiffusionGui.Ui.MainFormUtils
             new PostProcSettingsForm().ShowDialogForm();
         }
 
-        public static void UpdateBusyState()
+        public void UpdateBusyState()
         {
-            if (F == null)
-                return;
-
-            FormControls.SetProgress(0);
+            SetProgress(0);
 
             bool imageGen = Program.State == Program.BusyState.ImageGeneration;
 
-            F.runBtn.Text = imageGen ? "Cancel" : "Generate!";
-            F.runBtn.ForeColor = imageGen ? Color.IndianRed : Color.White;
+            runBtn.Text = imageGen ? "Cancel" : "Generate!";
+            runBtn.ForeColor = imageGen ? Color.IndianRed : Color.White;
             Control[] controlsToDisable = new Control[] { };
             Control[] controlsToHide = new Control[] { };
-            F.progressCircle.Visible = Program.State != Program.BusyState.Standby;
+            progressCircle.Visible = Program.State != Program.BusyState.Standby;
 
             foreach (Control c in controlsToDisable)
                 c.Enabled = !imageGen;
@@ -100,15 +95,15 @@ namespace StableDiffusionGui.Ui.MainFormUtils
                 c.Visible = !imageGen;
 
             if (Program.State == Program.BusyState.Standby)
-                F.SetProgress(0);
+                SetProgress(0);
 
             if (!imageGen)
-                F.SetProgressImg(0);
+                SetProgressImg(0);
 
-            F.progressBarImg.Visible = imageGen;
+            progressBarImg.Visible = imageGen;
         }
 
-        public static async Task TryRun()
+        public async Task TryRun()
         {
             if (Program.Busy)
             {
@@ -118,8 +113,8 @@ namespace StableDiffusionGui.Ui.MainFormUtils
 
             if (MainUi.Queue.Count > 0)
             {
-                F.generateAllQueuedPromptsToolStripMenuItem.Text = $"Generate Queued Prompts ({MainUi.Queue.Count})";
-                F.menuStripRunQueue.Show(Cursor.Position);
+                generateAllQueuedPromptsToolStripMenuItem.Text = $"Generate Queued Prompts ({MainUi.Queue.Count})";
+                menuStripRunQueue.Show(Cursor.Position);
             }
             else
             {
@@ -127,7 +122,7 @@ namespace StableDiffusionGui.Ui.MainFormUtils
             }
         }
 
-        public static async Task Run(bool fromQueue = false)
+        public async Task Run(bool fromQueue = false)
         {
             try
             {
@@ -144,8 +139,8 @@ namespace StableDiffusionGui.Ui.MainFormUtils
                         return;
 
                     Logger.ClearLogBox();
-                    F.CleanPrompt();
-                    FormControls.RefreshUiAfterSettingsChanged();
+                    CleanPrompt();
+                    RefreshUiAfterSettingsChanged();
                     Inpainting.DeleteMaskedImage();
 
                     if (fromQueue)
@@ -160,14 +155,14 @@ namespace StableDiffusionGui.Ui.MainFormUtils
                     }
                     else
                     {
-                        if (string.IsNullOrWhiteSpace(F.textboxPrompt.Text))
+                        if (string.IsNullOrWhiteSpace(textboxPrompt.Text))
                         {
                             TextToImage.Cancel("No prompt was entered.", true);
                             return;
                         }
 
-                        FormControls.Save();
-                        await TextToImage.RunTti(FormParsing.GetCurrentTtiSettings());
+                        SaveControls();
+                        await TextToImage.RunTti(GetCurrentTtiSettings());
                     }
                 }
             }
@@ -177,7 +172,7 @@ namespace StableDiffusionGui.Ui.MainFormUtils
             }
         }
 
-        public static void TryUseCurrentImgAsInitImg(bool ignoreBusy = false)
+        public void TryUseCurrentImgAsInitImg(bool ignoreBusy = false)
         {
             if (Program.Busy && !ignoreBusy)
             {
@@ -188,7 +183,7 @@ namespace StableDiffusionGui.Ui.MainFormUtils
             MainUi.AddInitImages(new[] { ImageViewer.CurrentImagePath }.ToList(), true);
         }
 
-        public static void EditMask()
+        public void EditMask()
         {
             if (!MainUi.CurrentInitImgPaths.Any())
                 return;
@@ -202,7 +197,7 @@ namespace StableDiffusionGui.Ui.MainFormUtils
             Size scaleSize = Config.Get<bool>(Config.Keys.InitImageRetainAspectRatio) ? ImgMaths.FitIntoFrame(img.Size, targetSize) : targetSize;
             img = ImgUtils.ScaleAndPad(ImgUtils.GetMagickImage(img), scaleSize, targetSize).ToBitmap();
 
-            Inpainting.EditCurrentMask(img, MainFormUtils.FormControls.IsUsingInpaintingModel);
+            Inpainting.EditCurrentMask(img, IsUsingInpaintingModel);
         }
     }
 }

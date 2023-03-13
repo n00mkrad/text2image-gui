@@ -8,7 +8,6 @@ using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Properties;
-using StableDiffusionGui.Ui.MainFormUtils;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -138,7 +137,7 @@ namespace StableDiffusionGui.Ui
                     imgForm.ShowDialogForm();
 
                     if (imgForm.Action == ImageImportAction.LoadSettings || imgForm.Action == ImageImportAction.LoadImageAndSettings)
-                        FormParsing.LoadMetadataIntoUi(imgForm.CurrentMetadata);
+                        Program.MainForm.LoadMetadataIntoUi(imgForm.CurrentMetadata);
 
                     if (imgForm.Action == ImageImportAction.LoadImage || imgForm.Action == ImageImportAction.LoadImageAndSettings)
                         AddInitImages(paths.ToList());
@@ -147,7 +146,7 @@ namespace StableDiffusionGui.Ui
                         OsUtils.SetClipboard(imgForm.CurrentMetadata.Prompt);
                 }
 
-                FormControls.RefreshUiAfterSettingsChanged();
+                Program.MainForm.RefreshUiAfterSettingsChanged();
             }
             else
             {
@@ -188,7 +187,7 @@ namespace StableDiffusionGui.Ui
                 CurrentInitImgPaths = paths;
             }
 
-            FormControls.RefreshUiAfterSettingsChanged();
+            Program.MainForm.RefreshUiAfterSettingsChanged();
         }
 
         public static void HandlePaste()

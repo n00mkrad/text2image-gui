@@ -103,7 +103,7 @@ namespace StableDiffusionGui.Main
                     outImgs.AddRange(renamedImgPaths);
 
                     if (outImgs.Count > 0 && show)
-                        Ui.MainFormUtils.ImageViewer.SetImages(outImgs.Where(x => File.Exists(x)).ToList(), Ui.MainFormUtils.ImageViewer.ImgShowMode.ShowLast);
+                        ImageViewer.SetImages(outImgs.Where(x => File.Exists(x)).ToList(), ImageViewer.ImgShowMode.ShowLast);
 
                     await Task.Delay(_loopWaitTimeMs);
                 }
