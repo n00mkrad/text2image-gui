@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
-namespace StableDiffusionGui
+namespace StableDiffusionGui.Forms
 {
     public partial class MainForm
     {

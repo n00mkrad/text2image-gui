@@ -1,6 +1,6 @@
 ﻿using StableDiffusionGui.Controls;
 
-namespace StableDiffusionGui
+namespace StableDiffusionGui.Forms
 {
     partial class MainForm
     {

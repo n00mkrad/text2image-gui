@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace StableDiffusionGui
+namespace StableDiffusionGui.Forms
 {
     public partial class MainForm
     {

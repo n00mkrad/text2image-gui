@@ -1,4 +1,5 @@
 ﻿using Dasync.Collections;
+using StableDiffusionGui.Forms;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;

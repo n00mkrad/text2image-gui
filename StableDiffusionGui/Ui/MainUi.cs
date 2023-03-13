@@ -377,7 +377,7 @@ namespace StableDiffusionGui.Ui
             AutocompleteMenuNS.AutocompleteMenu menu = new AutocompleteMenuNS.AutocompleteMenu();
             menu.AllowsTabKey = true;
             menu.AppearInterval = 250;
-            menu.Colors = ((AutocompleteMenuNS.Colors)(new ResourceManager(typeof(StableDiffusionGui.MainForm)).GetObject("promptAutocomplete.Colors")));
+            menu.Colors = ((AutocompleteMenuNS.Colors)(new ResourceManager(typeof(StableDiffusionGui.Forms.MainForm)).GetObject("promptAutocomplete.Colors")));
             menu.Font = font;
             menu.Items = GetAutocompleteStrings();
             menu.LeftPadding = 0;

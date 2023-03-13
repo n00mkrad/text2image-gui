@@ -1,5 +1,6 @@
 ﻿using StableDiffusionGui.Controls;
 using StableDiffusionGui.Data;
+using StableDiffusionGui.Forms;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
@@ -7,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
@@ -15,7 +15,7 @@ namespace StableDiffusionGui.Ui.MainFormUtils
 {
     internal class FormParsing
     {
-        private static StableDiffusionGui.MainForm F { get { return Program.MainForm; } }
+        private static MainForm F { get { return Program.MainForm; } }
 
         public static void LoadMetadataIntoUi(ImageMetadata meta)
         {

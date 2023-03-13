@@ -5,7 +5,6 @@ using StableDiffusionGui.Implementations;
 using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
-using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
 using StableDiffusionGui.Ui.MainFormUtils;
@@ -18,9 +17,8 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Media.Media3D;
 
-namespace StableDiffusionGui
+namespace StableDiffusionGui.Forms
 {
     public partial class MainForm : CustomForm
     {
