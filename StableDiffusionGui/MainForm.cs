@@ -289,13 +289,12 @@ namespace StableDiffusionGui
 
         private void btnSeedUsePrevious_Click(object sender, EventArgs e)
         {
-            upDownSeed.Value = TextToImage.PreviousSeed;
+            SetSeed(TextToImage.PreviousSeed);
         }
 
         private void btnSeedResetToRandom_Click(object sender, EventArgs e)
         {
-            upDownSeed.Value = -1;
-            upDownSeed.Text = "";
+            SetSeed();
         }
 
         private void btnPromptHistory_Click(object sender, EventArgs e)
