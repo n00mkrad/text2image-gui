@@ -12,22 +12,20 @@ namespace StableDiffusionGui.Main
     {
         public class InvokeAi
         {
-            public static string GetArgsStartup(string embedding = "", string model = "")
+            public static string GetArgsStartup()
             {
-                bool lowVram = GpuUtils.CachedGpus.Count > 0 && GpuUtils.CachedGpus.First().VramGb < 7.9f;
-
                 List<string> args = new List<string>();
-
-                if (!string.IsNullOrWhiteSpace(model))
-                    args.Add($"--model {model}");
 
                 if (Config.Get<bool>(Config.Keys.FullPrecision))
                     args.Add("--precision float32");
 
-                args.Add(GetEmbeddingArg(embedding));
+                bool lowVram = GpuUtils.CachedGpus.Count > 0 && GpuUtils.CachedGpus.First().VramGb < 7.0f;
 
                 if (lowVram)
                 {
+                    args.Add("--sequential_guidance");
+                    args.Add("--free_gpu_mem");
+
                     if (Config.Get<bool>(Config.Keys.MedVramDisablePostProcessing, false))
                     {
                         args.Add("--no_upscale");
@@ -36,9 +34,7 @@ namespace StableDiffusionGui.Main
                 }
 
                 if (!args.Contains("--no_restore"))
-                {
-                    args.Add("--gfpgan_model_path ../gfpgan/gfpgan.pth");
-                }
+                    args.Add("--gfpgan_model_path ../gfpgan/gfpgan.pth"); // Only specify GFPGAN path if face restoration is enabled
 
                 int maxCachedModels = 0;
 
@@ -48,15 +44,25 @@ namespace StableDiffusionGui.Main
                     Logger.Log($"InvokeAI model caching: Cache up to {maxCachedModels} models in RAM", true);
                 }
 
-                args.Add($"--max_loaded_models {maxCachedModels + 1} --no-nsfw_checker --no-patchmatch --no-xformers"); // Add 1 to model count because the arg counts the VRAM loaded model as well
-                return string.Join(" ", args);
+                args.Add($"--max_loaded_models {maxCachedModels + 1}"); // Add 1 to model count because the arg counts the VRAM loaded model as well
+
+                if (Config.Get<bool>(Config.Keys.OfflineMode, false))
+                    args.Add($"--no-internet");
+
+                args.Add($"--embedding_path {Path.Combine(Paths.GetDataPath(), Constants.Dirs.Models.Root, Constants.Dirs.Models.Embeddings)}"); // Embeddings folder path
+                args.Add($"--no-nsfw_checker"); // Disable NSFW checker (might become optional in the future)
+                args.Add($"--no-patchmatch"); // Disable patchmatch (might become optional if outpainting is implemented)
+                args.Add($"--no-xformers"); // Disable xformers until Pytorch >1.11 slowdown is investigated and xformers works
+                args.Add($"--png_compression 1"); // Higher compression levels are barely worth it
+
+                string joinedArgs = string.Join(" ", args);
+                Logger.Log($"InvokeAI Args: {joinedArgs}");
+                return joinedArgs;
             }
 
             public static string GetDefaultArgsCommand()
             {
-                var args = new List<string>();
-
-                args.Add("-n 1");
+                var args = new List<string> { "-n 1" }; // Always generate 1 image per command
 
                 if (Config.Get<bool>(Config.Keys.SaveUnprocessedImages))
                     args.Add("-save_orig");
@@ -71,17 +77,12 @@ namespace StableDiffusionGui.Main
             {
                 switch (mode)
                 {
-                    case Enums.StableDiffusion.SeamlessMode.Disabled:     return "";
+                    case Enums.StableDiffusion.SeamlessMode.Disabled: return "";
                     case Enums.StableDiffusion.SeamlessMode.SeamlessBoth: return "--seamless";
-                    case Enums.StableDiffusion.SeamlessMode.SeamlessHor:  return "--seamless --seamless_axes x";
+                    case Enums.StableDiffusion.SeamlessMode.SeamlessHor: return "--seamless --seamless_axes x";
                     case Enums.StableDiffusion.SeamlessMode.SeamlessVert: return "--seamless --seamless_axes y";
                     default: return "";
                 }
-            }
-
-            public static string GetEmbeddingArg(string embeddingPath)
-            {
-                return File.Exists(embeddingPath) ? $"--embedding_path {embeddingPath.Wrap()}" : "";
             }
 
             public static string GetFaceRestoreArgs(bool force = false)

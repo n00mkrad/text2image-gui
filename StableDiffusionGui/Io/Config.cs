@@ -263,6 +263,7 @@ namespace StableDiffusionGui.Io
             public const string FilenameTimestampMode = "filenameTimestampMode";
             public const string WildcardAllowEmptyEntries = "wildcardAllowEmptyEntries";
             public const string LogStdin = "logStdin";
+            public const string OfflineMode = "offlineMode";
         }
     }
 }

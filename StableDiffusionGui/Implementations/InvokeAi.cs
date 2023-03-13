@@ -28,7 +28,6 @@ namespace StableDiffusionGui.Implementations
             try
             {
                 string[] initImgs = parameters.FromJson<string[]>("initImgs"); // List of init images
-                string embedding = parameters.FromJson<string>("embedding"); // Textual Inversion embedding file
                 float[] initStrengths = parameters.FromJson<float[]>("initStrengths").Select(n => 1f - n).ToArray(); ; // List of init strength values to run
                 int[] steps = parameters.FromJson<int[]>("steps"); // List of diffusion step counts
                 float[] scales = parameters.FromJson<float[]>("scales"); // List of CFG scale values to run
@@ -132,7 +131,7 @@ namespace StableDiffusionGui.Implementations
                 Logger.Log($"Running Stable Diffusion - {iterations} Iterations, {steps.Length} Steps, Scales {(scales.Length < 4 ? string.Join(", ", scales.Select(x => x.ToStringDot())) : $"{scales.First()}->{scales.Last()}")}, {res.Width}x{res.Height}, Starting Seed: {startSeed}", false, Logger.LastUiLine.EndsWith("..."));
 
                 string modelsChecksumStartup = InvokeAiUtils.GetModelsYamlHash();
-                string argsStartup = Args.InvokeAi.GetArgsStartup(embedding);
+                string argsStartup = Args.InvokeAi.GetArgsStartup();
                 string newStartupSettings = $"{argsStartup} {modelsChecksumStartup} {Config.Get<int>(Config.Keys.CudaDeviceIdx)}"; // Check if startup settings match - If not, we need to restart the process
 
                 string initsStr = initImages != null ? $" and {initImages.Count} image{(initImages.Count != 1 ? "s" : "")} using {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
