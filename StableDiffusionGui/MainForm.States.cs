@@ -23,9 +23,6 @@ namespace StableDiffusionGui
             if (control == instance.panelRes)
                 return ResolutionAdjustAvailable();
 
-            if (control == instance.btnEmbeddingBrowse)
-                return EmbeddingsAvailable();
-
             if (control == instance.panelScaleImg)
                 return ImgScaleAvailable();
 
@@ -44,16 +41,6 @@ namespace StableDiffusionGui
 
             if (ConfigParser.CurrentImplementation == Implementation.InstructPixToPix)
                 return MainUi.CurrentInitImgPaths.Any(); // Only visible if image is loaded
-
-            return available;
-        }
-
-        private static bool EmbeddingsAvailable()
-        {
-            bool available = true;
-
-            if (ConfigParser.CurrentImplementation != Implementation.InvokeAi)
-                available = false;
 
             return available;
         }

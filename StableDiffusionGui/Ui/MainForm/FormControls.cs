@@ -57,8 +57,6 @@ namespace StableDiffusionGui.Ui.MainFormUtils
         public static void RefreshUiAfterSettingsChanged()
         {
             F.panelPromptNeg.Visible = ConfigParser.CurrentImplementation.GetInfo().SupportsNegativePrompt && !IsUsingInpaintingModel;
-            F.btnEmbeddingBrowse.Visible = MainForm.ShouldControlBeVisible(F, F.btnEmbeddingBrowse);
-            F.panelAiInputs.Height = MainForm.ShouldControlBeVisible(F, F.btnEmbeddingBrowse) ? 65 : 35;
             F.panelSampler.Visible = ConfigParser.CurrentImplementation == Implementation.InvokeAi;
             F.panelSeamless.Visible = ConfigParser.CurrentImplementation == Implementation.InvokeAi;
             F.panelRes.Visible = MainForm.ShouldControlBeVisible(F, F.panelRes);
@@ -79,12 +77,6 @@ namespace StableDiffusionGui.Ui.MainFormUtils
 
             TtiUtils.CleanInitImageList();
 
-            if (!string.IsNullOrWhiteSpace(MainUi.CurrentEmbeddingPath) && !File.Exists(MainUi.CurrentEmbeddingPath))
-            {
-                MainUi.CurrentEmbeddingPath = "";
-                Logger.Log($"Concept was cleared because the file no longer exists.");
-            }
-
             bool img2img = MainUi.CurrentInitImgPaths.Any();
 
             F.panelInpainting.Visible = MainForm.ShouldControlBeVisible(F, F.panelInpainting);
@@ -93,11 +85,7 @@ namespace StableDiffusionGui.Ui.MainFormUtils
 
             F.btnInitImgBrowse.Text = img2img ? $"Clear Image{(MainUi.CurrentInitImgPaths.Count == 1 ? "" : "s")}" : "Load Image(s)";
 
-            bool embeddingExists = File.Exists(MainUi.CurrentEmbeddingPath);
-            F.btnEmbeddingBrowse.Text = embeddingExists ? "Clear Concept" : "Load Concept";
-
             F.labelCurrentImage.Text = !img2img ? "No initialization image loaded." : (MainUi.CurrentInitImgPaths.Count == 1 ? $"Currently using {Path.GetFileName(MainUi.CurrentInitImgPaths[0])}" : $"Currently using {MainUi.CurrentInitImgPaths.Count} images.");
-            F.labelCurrentConcept.Text = string.IsNullOrWhiteSpace(MainUi.CurrentEmbeddingPath) ? "No trained concept loaded." : $"Currently using {Path.GetFileName(MainUi.CurrentEmbeddingPath)}";
             F.toolTip.SetToolTip(F.labelCurrentImage, $"{F.labelCurrentImage.Text.Trunc(100)}\n\nShift + Hover to preview.");
 
             Program.MainForm.checkboxShowInitImg.Visible = MainUi.CurrentInitImgPaths.Any();

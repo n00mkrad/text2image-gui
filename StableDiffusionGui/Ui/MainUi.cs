@@ -52,17 +52,6 @@ namespace StableDiffusionGui.Ui
             }
         }
 
-        private static string _currentEmbeddingPath;
-        public static string CurrentEmbeddingPath
-        {
-            get => _currentEmbeddingPath;
-            set
-            {
-                _currentEmbeddingPath = value;
-                Logger.Log(string.IsNullOrWhiteSpace(value) ? "" : $"Now using learned concept {Path.GetFileName(value).Wrap()}.");
-            }
-        }
-
         public static List<TtiSettings> Queue = new List<TtiSettings>();
 
         public static List<int> GetResolutions(int min, int max)
@@ -156,14 +145,6 @@ namespace StableDiffusionGui.Ui
 
                     if (imgForm.Action == ImageImportAction.CopyPrompt)
                         OsUtils.SetClipboard(imgForm.CurrentMetadata.Prompt);
-                }
-
-                if (Constants.FileExts.ValidEmbeddings.Contains(Path.GetExtension(paths[0]).Lower())) // Ask to use as embedding (TI)
-                {
-                    DialogResult dialogResult = UiUtils.ShowMessageBox($"Do you want to load this concept?", $"Dropped {Path.GetFileName(paths[0]).Trunc(40)}", MessageBoxButtons.YesNo);
-
-                    if (dialogResult == DialogResult.Yes)
-                        CurrentEmbeddingPath = paths[0];
                 }
 
                 FormControls.RefreshUiAfterSettingsChanged();

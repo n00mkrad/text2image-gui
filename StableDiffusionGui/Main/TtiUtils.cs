@@ -121,12 +121,6 @@ namespace StableDiffusionGui.Main
                 UiUtils.ShowMessageBox($"{(prompts.Count > 1 ? "One of your prompts" : "Your prompt")} contains square brackets used for exclusion words.\n\n" +
                     $"This is not supported with your current implementation ({Strings.Implementation.Get(imp.ToString(), true)}).");
             }
-
-            if (MainUi.CurrentEmbeddingPath != null && MainUi.CurrentEmbeddingPath.ToLowerInvariant().EndsWith(".pt") && prompts.Any(x => !x.Contains("*") && !x.MatchesWildcard("*<*>*")))
-            {
-                UiUtils.ShowMessageBox($"{(prompts.Count > 1 ? "One of your prompts" : "Your prompt")} does not contain a concept placeholder (* or <ConceptName>).\n\n" +
-                    $"It will not use your loaded concept.");
-            }
         }
 
         public static void SoftCancelInvokeAi()

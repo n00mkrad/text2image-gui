@@ -119,12 +119,6 @@ namespace StableDiffusionGui
 
         public void CleanPrompt()
         {
-            if (File.Exists(MainUi.CurrentEmbeddingPath) && Path.GetExtension(MainUi.CurrentEmbeddingPath).Lower() == ".bin")
-            {
-                string conceptName = Path.GetFileNameWithoutExtension(MainUi.CurrentEmbeddingPath);
-                textboxPrompt.Text = textboxPrompt.Text.Replace("*", $"<{conceptName.Trim()}>");
-            }
-
             textboxPrompt.Text = string.Join(Environment.NewLine, textboxPrompt.Text.SplitIntoLines().Select(x => MainUi.SanitizePrompt(x)));
             textboxPromptNeg.Text = MainUi.SanitizePrompt(textboxPromptNeg.Text);
 
@@ -264,11 +258,6 @@ namespace StableDiffusionGui
         private void btnInitImgBrowse_Click(object sender, EventArgs e)
         {
             FormUtils.BrowseInitImage();
-        }
-
-        private void btnEmbeddingBrowse_Click(object sender, EventArgs e)
-        {
-            FormUtils.BrowseEmbedding();
         }
 
         #endregion

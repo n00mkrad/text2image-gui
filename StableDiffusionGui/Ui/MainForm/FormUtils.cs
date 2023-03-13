@@ -13,48 +13,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
-using Paths = StableDiffusionGui.Io.Paths;
 
 namespace StableDiffusionGui.Ui.MainFormUtils
 {
     internal class FormUtils
     {
-        private static StableDiffusionGui.MainForm F { get { return Program.MainForm; } }
-
-        public static void BrowseEmbedding()
-        {
-            if (Program.Busy)
-                return;
-
-            var imp = ConfigParser.CurrentImplementation;
-
-            if (imp == Implementation.OptimizedSd)
-            {
-                Logger.Log($"Not supported with your current implementation ({Strings.Implementation.Get(imp.ToString(), true)}).");
-                return;
-            }
-
-            if (!string.IsNullOrWhiteSpace(MainUi.CurrentEmbeddingPath))
-            {
-                MainUi.CurrentEmbeddingPath = "";
-            }
-            else
-            {
-                string initDir = File.Exists(MainUi.CurrentEmbeddingPath) ? MainUi.CurrentEmbeddingPath.GetParentDirOfFile() : Path.Combine(Paths.GetExeDir(), "ExampleConcepts");
-
-                CommonOpenFileDialog dialog = new CommonOpenFileDialog { InitialDirectory = initDir, IsFolderPicker = false };
-
-                if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
-                {
-                    if (Constants.FileExts.ValidEmbeddings.Contains(Path.GetExtension(dialog.FileName.Lower())))
-                        MainUi.CurrentEmbeddingPath = dialog.FileName;
-                    else
-                        UiUtils.ShowMessageBox("Invalid file type.");
-                }
-            }
-
-            FormControls.RefreshUiAfterSettingsChanged();
-        }
+        private static MainForm F { get { return Program.MainForm; } }
 
         public static void BrowseInitImage()
         {
