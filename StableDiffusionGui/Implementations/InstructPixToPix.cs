@@ -25,7 +25,6 @@ namespace StableDiffusionGui.Implementations
             try
             {
                 string[] initImgs = parameters.FromJson<string[]>("initImgs");
-                // string embedding = parameters.FromJson<string>("embedding");
                 float[] initStrengths = parameters.FromJson<float[]>("initStrengths").Select(n => 1f - n).ToArray();
                 int[] steps = parameters.FromJson<int[]>("steps");
                 float[] scalesTxt = parameters.FromJson<float[]>("scales");
@@ -59,7 +58,7 @@ namespace StableDiffusionGui.Implementations
                 foreach (string prompt in prompts)
                 {
                     List<string> processedPrompts = PromptWildcardUtils.ApplyWildcardsAll(prompt, iterations, false);
-                    TextToImage.CurrentTaskSettings.ProcessedAndRawPrompts = processedPrompts.Distinct().ToDictionary(x => x, x => prompt);
+                    TextToImage.CurrentTaskSettings.ProcessedAndRawPrompts = new EasyDict<string, string>(processedPrompts.Distinct().ToDictionary(x => x, x => prompt));
 
                     for (int i = 0; i < iterations; i++)
                     {

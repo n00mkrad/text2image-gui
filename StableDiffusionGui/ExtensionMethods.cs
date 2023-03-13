@@ -12,6 +12,7 @@ using System.Management.Automation;
 using Newtonsoft.Json;
 using StableDiffusionGui.Main;
 using ZetaLongPaths;
+using StableDiffusionGui.Data;
 
 namespace StableDiffusionGui
 {
@@ -449,9 +450,9 @@ namespace StableDiffusionGui
             }
         }
 
-        public static Dictionary<V, K> SwapKeysValues<V, K>(this Dictionary<K, V> dict)
+        public static EasyDict<V, K> SwapKeysValues<V, K>(this EasyDict<K, V> dict)
         {
-            Dictionary<V, K> result = new Dictionary<V, K>();
+            EasyDict<V, K> result = new EasyDict<V, K>();
 
             foreach (var pair in dict)
             {

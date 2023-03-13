@@ -6,6 +6,17 @@ namespace StableDiffusionGui.Data
 {
     public class EasyDict<TKey, TValue> : Dictionary<TKey, TValue>
     {
+        public EasyDict()
+        {
+
+        }
+
+        public EasyDict(Dictionary<TKey, TValue> dictionary)
+        {
+            foreach (KeyValuePair<TKey, TValue> kvp in dictionary)
+                Add(kvp.Key, kvp.Value);
+        }
+
         /// <returns> Value for requested key. Returns <paramref name="fallback"/> if the dictionary did not contain <paramref name="key"/>. </returns>
         public TValue Get(TKey key, TValue fallback = default)
         {
@@ -38,11 +49,11 @@ namespace StableDiffusionGui.Data
             base[key] = value;
         }
 
-        public void CloneTo (ref EasyDict<TKey, TValue> dict)
+        public void CloneTo(ref EasyDict<TKey, TValue> dict)
         {
             dict = new EasyDict<TKey, TValue>();
 
-            foreach(KeyValuePair<TKey, TValue> kvp in this)
+            foreach (KeyValuePair<TKey, TValue> kvp in this)
                 dict.Add(kvp.Key, kvp.Value);
         }
 

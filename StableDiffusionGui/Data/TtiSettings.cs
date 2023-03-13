@@ -14,9 +14,9 @@ namespace StableDiffusionGui.Data
         public string[] Prompts { get; set; } = new string[] { "" };
         public string NegativePrompt { get; set; } = "";
         public int Iterations { get; set; } = 1;
-        public Dictionary<string, string> Params { get; set; } = new Dictionary<string, string>();
-        public Dictionary<string, string> ProcessedAndRawPrompts { get; set; } = new Dictionary<string, string>();
-        public Dictionary<string, string> RawAndProcessedPrompts { get { return ProcessedAndRawPrompts.SwapKeysValues(); } } // Same as above but Key/Value swapped
+        public EasyDict<string, string> Params { get; set; } = new EasyDict<string, string>();
+        public EasyDict<string, string> ProcessedAndRawPrompts { get; set; } = new EasyDict<string, string>();
+        public EasyDict<string, string> RawAndProcessedPrompts { get { return ProcessedAndRawPrompts.SwapKeysValues(); } } // Same as above but Key/Value swapped
 
 
         public int GetTargetImgCount()
@@ -29,12 +29,12 @@ namespace StableDiffusionGui.Data
                 {
                     for (int i = 0; i < Iterations; i++)
                     {
-                        foreach (float scale in Params["scales"].FromJson<List<float>>())
+                        foreach (float scale in Params.Get("scales").FromJson<List<float>>())
                         {
-                            foreach (int stepCount in Params["steps"].FromJson<List<int>>())
+                            foreach (int stepCount in Params.Get("steps").FromJson<List<int>>())
                             {
 
-                                List<string> initImages = Params["initImgs"].FromJson<List<string>>();
+                                List<string> initImages = Params.Get("initImgs").FromJson<List<string>>();
 
                                 if (initImages == null || initImages.Count < 1) // No init image(s)
                                 {
@@ -44,7 +44,7 @@ namespace StableDiffusionGui.Data
                                 {
                                     foreach (string initImg in initImages)
                                     {
-                                        foreach (float strength in Params["initStrengths"].FromJson<List<float>>())
+                                        foreach (float strength in Params.Get("initStrengths").FromJson<List<float>>())
                                         {
                                             count++;
                                         }
@@ -67,21 +67,19 @@ namespace StableDiffusionGui.Data
         {
             try // New format
             {
-                Size s = Params["res"].FromJson<Size>();
-                var initImgs = Params["initImgs"].FromJson<List<string>>();
+                Size s = Params.Get("res").FromJson<Size>();
+                var initImgs = Params.Get("initImgs").FromJson<List<string>>();
                 string init = initImgs != null && initImgs.Count > 0 ? $" - With Image(s)" : "";
-                string emb = !string.IsNullOrWhiteSpace(Params["embedding"].FromJson<string>()) ? $" - With Concept" : "";
                 string extraPrompts = Prompts.Length > 1 ? $" (+{Prompts.Length - 1})" : "";
-                return $"\"{Prompts.FirstOrDefault().Trunc(85)}\"{extraPrompts} - {Iterations} Images - {Params["steps"].FromJson<int[]>().FirstOrDefault()} Steps - Seed {Params["seed"].FromJson<long>()} - {s.Width}x{s.Height} - {Params["sampler"].FromJson<string>()}{init}{emb}";
+                return $"\"{Prompts.FirstOrDefault().Trunc(85)}\"{extraPrompts} - {Iterations} Images - {Params.Get("steps").FromJson<int[]>().FirstOrDefault()} Steps - Seed {Params.Get("seed").FromJson<long>()} - {s.Width}x{s.Height} - {Params.Get("sampler").FromJson<string>()}{init}";
             }
             catch
             {
                 try // Old format
                 {
-                    string init = !string.IsNullOrWhiteSpace(Params["initImg"]) ? $" - With Image" : "";
-                    string emb = !string.IsNullOrWhiteSpace(Params["embedding"]) ? $" - With Concept" : "";
+                    string init = !string.IsNullOrWhiteSpace(Params.Get("initImg")) ? $" - With Image" : "";
                     string extraPrompts = Prompts.Length > 1 ? $" (+{Prompts.Length - 1})" : "";
-                    return $"\"{Prompts.FirstOrDefault().Trunc(85)}\"{extraPrompts} - {Iterations} Images - {Params["steps"]} Steps - Seed {Params["seed"]} - {Params["res"]} - {Params["sampler"]}{init}{emb}";
+                    return $"\"{Prompts.FirstOrDefault().Trunc(85)}\"{extraPrompts} - {Iterations} Images - {Params.Get("steps")} Steps - Seed {Params.Get("seed")} - {Params.Get("res")} - {Params.Get("sampler")}{init}";
                 }
                 catch
                 {

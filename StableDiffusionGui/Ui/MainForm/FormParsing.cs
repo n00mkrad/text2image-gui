@@ -102,7 +102,7 @@ namespace StableDiffusionGui.Ui.MainFormUtils
                 Prompts = F.textboxPrompt.TextNoPlaceholder.SplitIntoLines().Where(x => !string.IsNullOrWhiteSpace(x)).ToArray(),
                 NegativePrompt = F.textboxPromptNeg.Visible ? F.textboxPromptNeg.TextNoPlaceholder.Trim().Replace(Environment.NewLine, " ") : "",
                 Iterations = (int)F.upDownIterations.Value,
-                Params = new Dictionary<string, string>
+                Params = new EasyDict<string, string>
                 {
                     { "steps", MainUi.GetExtraValues(F.textboxExtraSteps.Text, F.sliderSteps.ActualValueFloat).Select(x => (int)x).ToArray().ToJson() },
                     { "scales", MainUi.GetExtraValues(F.textboxExtraScales.Text, F.sliderScale.ActualValueFloat).ToJson() },

@@ -72,7 +72,7 @@ namespace StableDiffusionGui.Implementations
                 foreach (string prompt in prompts)
                 {
                     List<string> processedPrompts = PromptWildcardUtils.ApplyWildcardsAll(prompt, iterations, false);
-                    TextToImage.CurrentTaskSettings.ProcessedAndRawPrompts = processedPrompts.Distinct().ToDictionary(x => x, x => prompt);
+                    TextToImage.CurrentTaskSettings.ProcessedAndRawPrompts = new EasyDict<string, string>(processedPrompts.Distinct().ToDictionary(x => x, x => prompt));
 
                     for (int i = 0; i < iterations; i++)
                     {
