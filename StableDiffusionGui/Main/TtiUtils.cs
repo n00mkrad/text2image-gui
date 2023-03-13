@@ -259,9 +259,18 @@ namespace StableDiffusionGui.Main
 
         public static void ExportPostprocessedImage(string sourceImgPath, string processedImgPath)
         {
-            // string ext = Path.GetExtension(sourceImgPath);
-            string key = new FileInfo(processedImgPath).Name.Split('.')[0];
-            string movePath = IoUtils.GetAvailableFilePath(InvokeAi.PostProcessMovePaths[key]);
+            string movePath = "";
+
+            try
+            {
+                string key = new FileInfo(processedImgPath).Name.Split('.')[0];
+                movePath = IoUtils.GetAvailableFilePath(InvokeAi.PostProcessMovePaths[key]);
+            }
+            catch (Exception ex)
+            {
+                Logger.Log($"Failed to save post-processed image: {ex.Message}");
+                return;
+            }
 
             try
             {
@@ -271,7 +280,7 @@ namespace StableDiffusionGui.Main
                 IoUtils.SetImageMetadata(movePath, meta.ParsedText);
 
                 Ui.MainFormUtils.ImageViewer.AppendImage(movePath, Ui.MainFormUtils.ImageViewer.ImgShowMode.ShowLast, false);
-                // OsUtils.ShowNotification("Stable Diffusion GUI", $"Saved post-processed image as '{Path.GetFileName(movePath)}'.", false, 2.5f); // WHY DOES THIS NOT WORK
+                // OsUtils.ShowNotification("Stable Diffusion GUI", $"Saved post-processed image as '{Path.GetFileName(movePath)}'.", false, 2.5f); // WHY DOES THIS NOT WORK - Threading problem?
                 Logger.Log($"Saved post-processed image as '{Path.GetFileName(movePath)}'.");
             }
             catch (Exception ex)
