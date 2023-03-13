@@ -67,7 +67,6 @@ namespace StableDiffusionGui
             this.sliderInitStrength = new StableDiffusionGui.Controls.CustomSlider();
             this.textboxSliderInitStrength = new System.Windows.Forms.TextBox();
             this.btnInitImgBrowse = new HTAlt.WinForms.HTButton();
-            this.btnEmbeddingBrowse = new HTAlt.WinForms.HTButton();
             this.textboxPromptNeg = new StableDiffusionGui.Controls.CustomTextbox();
             this.textboxPrompt = new StableDiffusionGui.Controls.CustomTextbox();
             this.comboxSeamless = new System.Windows.Forms.ComboBox();
@@ -162,7 +161,6 @@ namespace StableDiffusionGui
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.panelAiInputs = new System.Windows.Forms.Panel();
             this.checkboxShowInitImg = new System.Windows.Forms.CheckBox();
-            this.labelCurrentConcept = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.panelPromptNeg = new System.Windows.Forms.Panel();
             this.panelPrompt = new System.Windows.Forms.Panel();
@@ -760,27 +758,6 @@ namespace StableDiffusionGui
             this.btnInitImgBrowse.Text = "Load Image";
             this.toolTip.SetToolTip(this.btnInitImgBrowse, "Load initialization image");
             this.btnInitImgBrowse.Click += new System.EventHandler(this.btnInitImgBrowse_Click);
-            // 
-            // btnEmbeddingBrowse
-            // 
-            this.btnEmbeddingBrowse.AutoColor = true;
-            this.btnEmbeddingBrowse.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnEmbeddingBrowse.ButtonImage = null;
-            this.btnEmbeddingBrowse.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
-            this.btnEmbeddingBrowse.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
-            this.btnEmbeddingBrowse.DrawImage = false;
-            this.btnEmbeddingBrowse.ForeColor = System.Drawing.Color.White;
-            this.btnEmbeddingBrowse.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
-            this.btnEmbeddingBrowse.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
-            this.btnEmbeddingBrowse.Location = new System.Drawing.Point(233, 35);
-            this.btnEmbeddingBrowse.Name = "btnEmbeddingBrowse";
-            this.btnEmbeddingBrowse.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
-            this.btnEmbeddingBrowse.Size = new System.Drawing.Size(100, 23);
-            this.btnEmbeddingBrowse.TabIndex = 84;
-            this.btnEmbeddingBrowse.TabStop = false;
-            this.btnEmbeddingBrowse.Text = "Load Concept";
-            this.toolTip.SetToolTip(this.btnEmbeddingBrowse, "Load a concept trained using Textual Inversion");
-            this.btnEmbeddingBrowse.Click += new System.EventHandler(this.btnEmbeddingBrowse_Click);
             // 
             // textboxPromptNeg
             // 
@@ -1502,7 +1479,7 @@ namespace StableDiffusionGui
             this.panelDebugLoopback.Controls.Add(this.checkboxLoopback);
             this.panelDebugLoopback.Controls.Add(this.label16);
             this.panelDebugLoopback.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelDebugLoopback.Location = new System.Drawing.Point(0, 590);
+            this.panelDebugLoopback.Location = new System.Drawing.Point(0, 560);
             this.panelDebugLoopback.Name = "panelDebugLoopback";
             this.panelDebugLoopback.Size = new System.Drawing.Size(645, 35);
             this.panelDebugLoopback.TabIndex = 19;
@@ -1539,7 +1516,7 @@ namespace StableDiffusionGui
             this.panelDebugPerlinThresh.Controls.Add(this.label13);
             this.panelDebugPerlinThresh.Controls.Add(this.textboxPerlin);
             this.panelDebugPerlinThresh.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelDebugPerlinThresh.Location = new System.Drawing.Point(0, 555);
+            this.panelDebugPerlinThresh.Location = new System.Drawing.Point(0, 525);
             this.panelDebugPerlinThresh.Name = "panelDebugPerlinThresh";
             this.panelDebugPerlinThresh.Size = new System.Drawing.Size(645, 35);
             this.panelDebugPerlinThresh.TabIndex = 18;
@@ -1612,7 +1589,7 @@ namespace StableDiffusionGui
             this.panelDebugSendStdin.Controls.Add(this.label12);
             this.panelDebugSendStdin.Controls.Add(this.textboxCliTest);
             this.panelDebugSendStdin.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelDebugSendStdin.Location = new System.Drawing.Point(0, 520);
+            this.panelDebugSendStdin.Location = new System.Drawing.Point(0, 490);
             this.panelDebugSendStdin.Name = "panelDebugSendStdin";
             this.panelDebugSendStdin.Size = new System.Drawing.Size(645, 35);
             this.panelDebugSendStdin.TabIndex = 14;
@@ -1626,9 +1603,9 @@ namespace StableDiffusionGui
             this.label12.Location = new System.Drawing.Point(2, 11);
             this.label12.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(172, 13);
+            this.label12.Size = new System.Drawing.Size(147, 13);
             this.label12.TabIndex = 105;
-            this.label12.Text = "Send stdin to running InvokeAI CLI";
+            this.label12.Text = "Send stdin to running process";
             // 
             // textboxCliTest
             // 
@@ -1650,7 +1627,7 @@ namespace StableDiffusionGui
             this.panelSeamless.Controls.Add(this.comboxSeamless);
             this.panelSeamless.Controls.Add(this.label8);
             this.panelSeamless.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSeamless.Location = new System.Drawing.Point(0, 485);
+            this.panelSeamless.Location = new System.Drawing.Point(0, 455);
             this.panelSeamless.Name = "panelSeamless";
             this.panelSeamless.Size = new System.Drawing.Size(645, 35);
             this.panelSeamless.TabIndex = 9;
@@ -1672,7 +1649,7 @@ namespace StableDiffusionGui
             this.panelSampler.Controls.Add(this.label7);
             this.panelSampler.Controls.Add(this.comboxSampler);
             this.panelSampler.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSampler.Location = new System.Drawing.Point(0, 450);
+            this.panelSampler.Location = new System.Drawing.Point(0, 420);
             this.panelSampler.Name = "panelSampler";
             this.panelSampler.Size = new System.Drawing.Size(645, 35);
             this.panelSampler.TabIndex = 6;
@@ -1698,7 +1675,7 @@ namespace StableDiffusionGui
             this.panelRes.Controls.Add(this.label6);
             this.panelRes.Controls.Add(this.label9);
             this.panelRes.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelRes.Location = new System.Drawing.Point(0, 415);
+            this.panelRes.Location = new System.Drawing.Point(0, 385);
             this.panelRes.Name = "panelRes";
             this.panelRes.Size = new System.Drawing.Size(645, 35);
             this.panelRes.TabIndex = 5;
@@ -1773,7 +1750,7 @@ namespace StableDiffusionGui
             this.panelSeed.Controls.Add(this.label5);
             this.panelSeed.Controls.Add(this.upDownSeed);
             this.panelSeed.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSeed.Location = new System.Drawing.Point(0, 380);
+            this.panelSeed.Location = new System.Drawing.Point(0, 350);
             this.panelSeed.Name = "panelSeed";
             this.panelSeed.Size = new System.Drawing.Size(645, 35);
             this.panelSeed.TabIndex = 4;
@@ -1795,7 +1772,7 @@ namespace StableDiffusionGui
             this.panelScaleImg.Controls.Add(this.label17);
             this.panelScaleImg.Controls.Add(this.tableLayoutPanel2);
             this.panelScaleImg.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelScaleImg.Location = new System.Drawing.Point(0, 345);
+            this.panelScaleImg.Location = new System.Drawing.Point(0, 315);
             this.panelScaleImg.Name = "panelScaleImg";
             this.panelScaleImg.Size = new System.Drawing.Size(645, 35);
             this.panelScaleImg.TabIndex = 20;
@@ -1836,7 +1813,7 @@ namespace StableDiffusionGui
             this.panelScale.Controls.Add(this.label4);
             this.panelScale.Controls.Add(this.tableLayoutPanel1);
             this.panelScale.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelScale.Location = new System.Drawing.Point(0, 310);
+            this.panelScale.Location = new System.Drawing.Point(0, 280);
             this.panelScale.Name = "panelScale";
             this.panelScale.Size = new System.Drawing.Size(645, 35);
             this.panelScale.TabIndex = 3;
@@ -1877,7 +1854,7 @@ namespace StableDiffusionGui
             this.panelSteps.Controls.Add(this.label3);
             this.panelSteps.Controls.Add(this.tableLayoutPanel6);
             this.panelSteps.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSteps.Location = new System.Drawing.Point(0, 275);
+            this.panelSteps.Location = new System.Drawing.Point(0, 245);
             this.panelSteps.Name = "panelSteps";
             this.panelSteps.Size = new System.Drawing.Size(645, 35);
             this.panelSteps.TabIndex = 2;
@@ -1977,7 +1954,7 @@ namespace StableDiffusionGui
             this.panelIterations.Controls.Add(this.label1);
             this.panelIterations.Controls.Add(this.upDownIterations);
             this.panelIterations.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelIterations.Location = new System.Drawing.Point(0, 240);
+            this.panelIterations.Location = new System.Drawing.Point(0, 210);
             this.panelIterations.Name = "panelIterations";
             this.panelIterations.Size = new System.Drawing.Size(645, 35);
             this.panelIterations.TabIndex = 1;
@@ -2002,7 +1979,7 @@ namespace StableDiffusionGui
             this.panelInpainting.Controls.Add(this.btnResetMask);
             this.panelInpainting.Controls.Add(this.label10);
             this.panelInpainting.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelInpainting.Location = new System.Drawing.Point(0, 205);
+            this.panelInpainting.Location = new System.Drawing.Point(0, 175);
             this.panelInpainting.Name = "panelInpainting";
             this.panelInpainting.Size = new System.Drawing.Size(645, 35);
             this.panelInpainting.TabIndex = 12;
@@ -2038,7 +2015,7 @@ namespace StableDiffusionGui
             this.panelInitImgStrength.Controls.Add(this.label11);
             this.panelInitImgStrength.Controls.Add(this.tableLayoutPanel4);
             this.panelInitImgStrength.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelInitImgStrength.Location = new System.Drawing.Point(0, 170);
+            this.panelInitImgStrength.Location = new System.Drawing.Point(0, 140);
             this.panelInitImgStrength.Name = "panelInitImgStrength";
             this.panelInitImgStrength.Size = new System.Drawing.Size(645, 35);
             this.panelInitImgStrength.TabIndex = 8;
@@ -2078,15 +2055,13 @@ namespace StableDiffusionGui
             // panelAiInputs
             // 
             this.panelAiInputs.Controls.Add(this.checkboxShowInitImg);
-            this.panelAiInputs.Controls.Add(this.labelCurrentConcept);
             this.panelAiInputs.Controls.Add(this.label2);
             this.panelAiInputs.Controls.Add(this.labelCurrentImage);
             this.panelAiInputs.Controls.Add(this.btnInitImgBrowse);
-            this.panelAiInputs.Controls.Add(this.btnEmbeddingBrowse);
             this.panelAiInputs.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelAiInputs.Location = new System.Drawing.Point(0, 105);
             this.panelAiInputs.Name = "panelAiInputs";
-            this.panelAiInputs.Size = new System.Drawing.Size(645, 65);
+            this.panelAiInputs.Size = new System.Drawing.Size(645, 35);
             this.panelAiInputs.TabIndex = 17;
             // 
             // checkboxShowInitImg
@@ -2102,19 +2077,6 @@ namespace StableDiffusionGui
             this.checkboxShowInitImg.Visible = false;
             this.checkboxShowInitImg.CheckedChanged += new System.EventHandler(this.checkboxShowInitImg_CheckedChanged);
             // 
-            // labelCurrentConcept
-            // 
-            this.labelCurrentConcept.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelCurrentConcept.AutoEllipsis = true;
-            this.labelCurrentConcept.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelCurrentConcept.ForeColor = System.Drawing.Color.Silver;
-            this.labelCurrentConcept.Location = new System.Drawing.Point(344, 39);
-            this.labelCurrentConcept.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
-            this.labelCurrentConcept.Name = "labelCurrentConcept";
-            this.labelCurrentConcept.Size = new System.Drawing.Size(298, 13);
-            this.labelCurrentConcept.TabIndex = 92;
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -2123,9 +2085,9 @@ namespace StableDiffusionGui
             this.label2.Location = new System.Drawing.Point(2, 11);
             this.label2.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(106, 13);
+            this.label2.Size = new System.Drawing.Size(93, 13);
             this.label2.TabIndex = 83;
-            this.label2.Text = "Additional Input Data";
+            this.label2.Text = "Initialization Image";
             // 
             // panelPromptNeg
             // 
@@ -2418,7 +2380,6 @@ namespace StableDiffusionGui
         public System.Windows.Forms.NumericUpDown upDownSeed;
         public HTAlt.WinForms.HTButton btnInitImgBrowse;
         public CustomSlider sliderInitStrength;
-        public HTAlt.WinForms.HTButton btnEmbeddingBrowse;
         public HTAlt.WinForms.HTButton btnSeedUsePrevious;
         public HTAlt.WinForms.HTButton btnSeedResetToRandom;
         public System.Windows.Forms.Button btnExpandPromptField;
@@ -2477,7 +2438,6 @@ namespace StableDiffusionGui
         public System.Windows.Forms.Panel panelDebugPerlinThresh;
         public System.Windows.Forms.Panel panelPromptNeg;
         public System.Windows.Forms.Panel panelPrompt;
-        public System.Windows.Forms.Label labelCurrentConcept;
         public System.Windows.Forms.Label labelCurrentImage;
         public HTAlt.WinForms.HTProgressBar progressBar;
         public CircularProgressBar.CircularProgressBar progressCircle;
