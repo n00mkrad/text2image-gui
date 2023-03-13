@@ -66,8 +66,8 @@ namespace StableDiffusionGui.Forms
             sliderSteps.ActualMaximum = !adv ? 120 : 500;
             sliderSteps.ChangeStep(!adv ? 5 : 1);
             sliderScale.ActualMaximum = !adv ? 25 : 50;
-            comboxResW.SetItems(MainUi.GetResolutions(320, adv ? 2048 : 1280).Select(x => x.ToString()), UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.Last);
-            comboxResH.SetItems(MainUi.GetResolutions(320, adv ? 2048 : 1280).Select(x => x.ToString()), UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.Last);
+            comboxResW.SetItems(MainUi.GetResolutions(320, adv ? 4096 : 2048).Select(x => x.ToString()), UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.Last);
+            comboxResH.SetItems(MainUi.GetResolutions(320, adv ? 4096 : 2048).Select(x => x.ToString()), UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.Last);
 
             if (!TtiUtils.CurrentSdModelExists())
                 Config.Set(Config.Keys.Model, "");
