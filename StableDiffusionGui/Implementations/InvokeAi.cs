@@ -68,7 +68,6 @@ namespace StableDiffusionGui.Implementations
                 args["facefix"] = Args.InvokeAi.GetFaceRestoreArgs();
                 args["seamless"] = Args.InvokeAi.GetSeamlessArg(seamless);
                 args["hiresFix"] = hiresFix ? "--hires_fix" : "";
-                bool fixedStrength = inpaint == InpaintMode.ImageMask || inpaint == InpaintMode.TextMask;
 
                 foreach (string prompt in prompts)
                 {
@@ -87,6 +86,7 @@ namespace StableDiffusionGui.Implementations
                         args["perlin"] = perlin > 0f ? $"--perlin {perlin.ToStringDot()}" : "";
                         args["threshold"] = threshold > 0 ? $"--threshold {threshold}" : "";
                         args["clipSegMask"] = (inpaint == InpaintMode.TextMask && !string.IsNullOrWhiteSpace(clipSegMask)) ? $"-tm {clipSegMask.Wrap()}" : "";
+                        args["debug"] = parameters.FromJson<string>("appendArgs");
 
                         foreach (float scale in scales)
                         {
@@ -107,7 +107,7 @@ namespace StableDiffusionGui.Implementations
                                         foreach (float strength in initStrengths)
                                         {
                                             args["initImg"] = $"-I {initImg.Wrap()}";
-                                            args["initStrength"] = fixedStrength ? "-f 1.0" : $"-f {strength.ToStringDot("0.###")}"; // Lock to 1.0 when using inpainting
+                                            args["initStrength"] = inpaint != InpaintMode.Disabled ? "-f 1.0" : $"-f {strength.ToStringDot("0.###")}"; // Lock to 1.0 when using inpainting
 
                                             if (inpaint == InpaintMode.ImageMask)
                                                 args["inpaintMask"] = $"-M {Inpainting.MaskedImagePath.Wrap()}";

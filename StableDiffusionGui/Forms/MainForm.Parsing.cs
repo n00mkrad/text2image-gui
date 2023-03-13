@@ -119,6 +119,7 @@ namespace StableDiffusionGui.Forms
                     { "vae", Config.Get<string>(Config.Keys.ModelVae).ToJson() },
                     { "perlin", textboxPerlin.GetFloat().ToJson() },
                     { "threshold", textboxThresh.GetInt().ToJson() },
+                    { "appendArgs", textboxDebugAppendArgs.Text.ToJson() },
                 },
             };
 

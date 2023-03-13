@@ -52,10 +52,12 @@ namespace StableDiffusionGui.Forms
             if (ConfigParser.CurrentImplementation == Implementation.InstructPixToPix)
                 return false;
 
-            bool img2img = MainUi.CurrentInitImgPaths.Any();
-            bool inpaint = IsUsingInpaintingModel && (InpaintMode)comboxInpaintMode.SelectedIndex != InpaintMode.Outpaint;
+            if ((InpaintMode)comboxInpaintMode.SelectedIndex != InpaintMode.Disabled)
+                return false;
 
-            if (img2img && !inpaint)
+            bool img2img = MainUi.CurrentInitImgPaths.Any();
+
+            if (img2img && !IsUsingInpaintingModel)
                 available = true;
 
             return available;

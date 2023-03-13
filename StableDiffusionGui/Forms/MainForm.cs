@@ -107,6 +107,7 @@ namespace StableDiffusionGui.Forms
             panelDebugLoopback.Visible = Program.Debug;
             panelDebugPerlinThresh.Visible = Program.Debug;
             panelDebugSendStdin.Visible = Program.Debug;
+            panelDebugAppendArgs.Visible = Program.Debug;
         }
 
         private void installerBtn_Click(object sender, EventArgs e)

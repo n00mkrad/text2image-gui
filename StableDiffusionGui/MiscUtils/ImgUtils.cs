@@ -245,8 +245,7 @@ namespace StableDiffusionGui.MiscUtils
         public static MagickImage ResizeCanvas(MagickImage img, Size newDimensions, Gravity gravity = Gravity.Center, MagickColor fillColor = null)
         {
             fillColor = fillColor ?? MagickColors.Transparent;
-            img.BackgroundColor = fillColor;
-            img.Extent(newDimensions.Width, newDimensions.Height, gravity);
+            img.Extent(newDimensions.Width, newDimensions.Height, gravity, fillColor);
             return img;
         }
 

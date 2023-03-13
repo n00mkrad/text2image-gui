@@ -49,7 +49,7 @@ namespace StableDiffusionGui.Main
             {
                 var pair = sourceAndImportedPaths.ElementAt(i);
                 int index = initImgPaths.IndexOf(pair.Key);
-                MagickImage img = new MagickImage(pair.Key) { Format = MagickFormat.Png24, Quality = 30 };
+                MagickImage img = new MagickImage(pair.Key) { Format = canvasMode ? MagickFormat.Png32 : MagickFormat.Png24, Quality = 30 };
 
                 if (targetSize.IsEmpty || (img.Width == targetSize.Width && img.Height == targetSize.Height)) // Size already matches
                 {
@@ -65,18 +65,16 @@ namespace StableDiffusionGui.Main
 
                         if (canvasMode) // Extend/Crop
                         {
-                            img = ImgUtils.ResizeCanvas(img, targetSize, Gravity.South); // TODO: Gravity needs to be a variable passed from UI
-                            img.Write(resizedImgPath);
-                            img.Dispose();
+                            img = ImgUtils.ResizeCanvas(img, targetSize, Gravity.Center); // TODO: Gravity needs to be a variable passed from UI
                         }
                         else // Resize (Fit)
                         {
                             Size scaleSize = Config.Get<bool>(Config.Keys.InitImageRetainAspectRatio) ? ImgMaths.FitIntoFrame(new Size(img.Width, img.Height), targetSize) : targetSize;
                             img = ImgUtils.ScaleAndPad(img, scaleSize, targetSize);
-                            img.Write(resizedImgPath);
-                            img.Dispose();
                         }
 
+                        img.Write(resizedImgPath);
+                        img.Dispose();
                         sourceAndImportedPaths[pair.Key] = resizedImgPath;
                         Interlocked.Increment(ref imgsSucessful);
                         Interlocked.Increment(ref imgsResized);

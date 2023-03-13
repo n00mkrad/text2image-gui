@@ -128,6 +128,9 @@ namespace StableDiffusionGui.Forms
             this.panelDebugSendStdin = new System.Windows.Forms.Panel();
             this.label12 = new System.Windows.Forms.Label();
             this.textboxCliTest = new System.Windows.Forms.TextBox();
+            this.panelDebugAppendArgs = new System.Windows.Forms.Panel();
+            this.label18 = new System.Windows.Forms.Label();
+            this.textboxDebugAppendArgs = new System.Windows.Forms.TextBox();
             this.panelSeamless = new System.Windows.Forms.Panel();
             this.label8 = new System.Windows.Forms.Label();
             this.panelSampler = new System.Windows.Forms.Panel();
@@ -186,6 +189,7 @@ namespace StableDiffusionGui.Forms
             this.panelDebugLoopback.SuspendLayout();
             this.panelDebugPerlinThresh.SuspendLayout();
             this.panelDebugSendStdin.SuspendLayout();
+            this.panelDebugAppendArgs.SuspendLayout();
             this.panelSeamless.SuspendLayout();
             this.panelSampler.SuspendLayout();
             this.panelRes.SuspendLayout();
@@ -1452,6 +1456,7 @@ namespace StableDiffusionGui.Forms
             this.panelSettings.Controls.Add(this.panelDebugLoopback);
             this.panelSettings.Controls.Add(this.panelDebugPerlinThresh);
             this.panelSettings.Controls.Add(this.panelDebugSendStdin);
+            this.panelSettings.Controls.Add(this.panelDebugAppendArgs);
             this.panelSettings.Controls.Add(this.panelSeamless);
             this.panelSettings.Controls.Add(this.panelSampler);
             this.panelSettings.Controls.Add(this.panelRes);
@@ -1479,7 +1484,7 @@ namespace StableDiffusionGui.Forms
             this.panelDebugLoopback.Controls.Add(this.checkboxLoopback);
             this.panelDebugLoopback.Controls.Add(this.label16);
             this.panelDebugLoopback.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelDebugLoopback.Location = new System.Drawing.Point(0, 560);
+            this.panelDebugLoopback.Location = new System.Drawing.Point(0, 595);
             this.panelDebugLoopback.Name = "panelDebugLoopback";
             this.panelDebugLoopback.Size = new System.Drawing.Size(645, 35);
             this.panelDebugLoopback.TabIndex = 19;
@@ -1516,7 +1521,7 @@ namespace StableDiffusionGui.Forms
             this.panelDebugPerlinThresh.Controls.Add(this.label13);
             this.panelDebugPerlinThresh.Controls.Add(this.textboxPerlin);
             this.panelDebugPerlinThresh.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelDebugPerlinThresh.Location = new System.Drawing.Point(0, 525);
+            this.panelDebugPerlinThresh.Location = new System.Drawing.Point(0, 560);
             this.panelDebugPerlinThresh.Name = "panelDebugPerlinThresh";
             this.panelDebugPerlinThresh.Size = new System.Drawing.Size(645, 35);
             this.panelDebugPerlinThresh.TabIndex = 18;
@@ -1589,7 +1594,7 @@ namespace StableDiffusionGui.Forms
             this.panelDebugSendStdin.Controls.Add(this.label12);
             this.panelDebugSendStdin.Controls.Add(this.textboxCliTest);
             this.panelDebugSendStdin.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelDebugSendStdin.Location = new System.Drawing.Point(0, 490);
+            this.panelDebugSendStdin.Location = new System.Drawing.Point(0, 525);
             this.panelDebugSendStdin.Name = "panelDebugSendStdin";
             this.panelDebugSendStdin.Size = new System.Drawing.Size(645, 35);
             this.panelDebugSendStdin.TabIndex = 14;
@@ -1603,9 +1608,9 @@ namespace StableDiffusionGui.Forms
             this.label12.Location = new System.Drawing.Point(2, 11);
             this.label12.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(147, 13);
+            this.label12.Size = new System.Drawing.Size(155, 13);
             this.label12.TabIndex = 105;
-            this.label12.Text = "Send stdin to running process";
+            this.label12.Text = "Send Stdin to Running Process";
             // 
             // textboxCliTest
             // 
@@ -1621,6 +1626,43 @@ namespace StableDiffusionGui.Forms
             this.textboxCliTest.Size = new System.Drawing.Size(409, 21);
             this.textboxCliTest.TabIndex = 4;
             this.textboxCliTest.DoubleClick += new System.EventHandler(this.textboxCliTest_DoubleClick);
+            // 
+            // panelDebugAppendArgs
+            // 
+            this.panelDebugAppendArgs.Controls.Add(this.label18);
+            this.panelDebugAppendArgs.Controls.Add(this.textboxDebugAppendArgs);
+            this.panelDebugAppendArgs.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelDebugAppendArgs.Location = new System.Drawing.Point(0, 490);
+            this.panelDebugAppendArgs.Name = "panelDebugAppendArgs";
+            this.panelDebugAppendArgs.Size = new System.Drawing.Size(645, 35);
+            this.panelDebugAppendArgs.TabIndex = 21;
+            this.panelDebugAppendArgs.Visible = false;
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label18.ForeColor = System.Drawing.Color.White;
+            this.label18.Location = new System.Drawing.Point(2, 11);
+            this.label18.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(158, 13);
+            this.label18.TabIndex = 105;
+            this.label18.Text = "Append Args to Each Command";
+            // 
+            // textboxDebugAppendArgs
+            // 
+            this.textboxDebugAppendArgs.AllowDrop = true;
+            this.textboxDebugAppendArgs.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.promptAutocomplete.SetAutocompleteMenu(this.textboxDebugAppendArgs, null);
+            this.textboxDebugAppendArgs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textboxDebugAppendArgs.ForeColor = System.Drawing.Color.White;
+            this.textboxDebugAppendArgs.Location = new System.Drawing.Point(233, 7);
+            this.textboxDebugAppendArgs.MinimumSize = new System.Drawing.Size(4, 21);
+            this.textboxDebugAppendArgs.Name = "textboxDebugAppendArgs";
+            this.textboxDebugAppendArgs.Size = new System.Drawing.Size(409, 21);
+            this.textboxDebugAppendArgs.TabIndex = 4;
             // 
             // panelSeamless
             // 
@@ -2278,6 +2320,8 @@ namespace StableDiffusionGui.Forms
             this.panelDebugPerlinThresh.PerformLayout();
             this.panelDebugSendStdin.ResumeLayout(false);
             this.panelDebugSendStdin.PerformLayout();
+            this.panelDebugAppendArgs.ResumeLayout(false);
+            this.panelDebugAppendArgs.PerformLayout();
             this.panelSeamless.ResumeLayout(false);
             this.panelSeamless.PerformLayout();
             this.panelSampler.ResumeLayout(false);
@@ -2464,6 +2508,9 @@ namespace StableDiffusionGui.Forms
         private System.Windows.Forms.ContextMenuStrip menuStripInstall;
         private System.Windows.Forms.ToolStripMenuItem manageInstallationToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem installUpdatesToolStripMenuItem;
+        public System.Windows.Forms.Panel panelDebugAppendArgs;
+        private System.Windows.Forms.Label label18;
+        public System.Windows.Forms.TextBox textboxDebugAppendArgs;
     }
 }
 
