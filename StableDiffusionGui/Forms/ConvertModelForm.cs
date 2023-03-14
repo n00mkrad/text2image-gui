@@ -45,7 +45,7 @@ namespace StableDiffusionGui.Forms
         private void LoadModels()
         {
             comboxModel.Items.Clear();
-            Models.GetModelsAll().Where(m => m.Format == _currentInFormat).ToList().ForEach(x => comboxModel.Items.Add(x.Name));
+            Models.GetModelsAll().Where(m => m.Format == _currentInFormat && m.Type == Enums.Models.Type.Normal).ToList().ForEach(x => comboxModel.Items.Add(x.Name));
 
             if (comboxModel.SelectedIndex < 0 && comboxModel.Items.Count > 0)
                 comboxModel.SelectedIndex = 0;

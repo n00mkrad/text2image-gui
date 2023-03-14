@@ -15,11 +15,11 @@ namespace StableDiffusionGui.Main.Utils
 {
     internal class ConvertModels
     {
-        private static string InferenceYaml { get { return Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdRepo, "invoke", "configs", "stable-diffusion", "v1-inference.yaml"); } }
+        private static string _ckptConfigPath;
 
         /// <summary> Converts model weights </summary>
         /// <returns> A model class of the newly created model, or null if it failed </returns>
-        public static async Task<Model> Convert (Format formatIn, Format formatOut, Model model, bool fp16, bool quiet = false)
+        public static async Task<Model> Convert(Format formatIn, Format formatOut, Model model, bool fp16, bool quiet = false)
         {
             try
             {
@@ -33,12 +33,19 @@ namespace StableDiffusionGui.Main.Utils
 
                 switch (formatOut)
                 {
-                    case Format.Pytorch: outPath = GetOutputPath(model, "_ckpt.ckpt"); break;
-                    case Format.Diffusers: outPath = GetOutputPath(model, "_diff"); break;
-                    case Format.DiffusersOnnx: outPath = GetOutputPath(model, "_onnx"); break;
-                    case Format.Safetensors: outPath = GetOutputPath(model, "_sft.safetensors"); break;
+                    case Format.Pytorch: outPath = GetOutputPath(model, ".ckpt"); break;
+                    case Format.Diffusers: outPath = GetOutputPath(model, ".diff"); break;
+                    case Format.DiffusersOnnx: outPath = GetOutputPath(model, ".onnx"); break;
+                    case Format.Safetensors: outPath = GetOutputPath(model, ".safetensors"); break;
                 }
 
+                if (File.Exists(outPath) || Directory.Exists(outPath))
+                {
+                    Logger.Log($"Can't convert model because a file or directory already exists at the output path: {outPath}");
+                    return null;
+                }
+
+                _ckptConfigPath = TtiUtils.GetCkptConfig(model, false);
                 PatchConversionScripts();
 
                 // Pytorch -> Diffusers
@@ -126,17 +133,17 @@ namespace StableDiffusionGui.Main.Utils
             return null;
         }
 
-        private static string GetTempPath ()
+        private static string GetTempPath()
         {
             return Path.Combine(Paths.GetSessionDataPath(), $"conv-temp-{FormatUtils.GetUnixTimestamp()}");
         }
 
-        private static async Task ConvPytorchDiffusers (string inPath, string outPath, bool deleteInput = false)
+        private static async Task ConvPytorchDiffusers(string inPath, string outPath, bool deleteInput = false)
         {
             await RunPython($"python repo/scripts/diff/convert_original_stable_diffusion_to_diffusers.py --checkpoint_path {inPath.Wrap(true)} --dump_path {outPath.Wrap(true)} " +
-                        $"--original_config_file {InferenceYaml.Wrap(true)}");
+                        $"--original_config_file {_ckptConfigPath.Wrap(true)}");
 
-            if(deleteInput)
+            if (deleteInput)
                 IoUtils.TryDeleteIfExists(inPath);
         }
 
@@ -167,13 +174,13 @@ namespace StableDiffusionGui.Main.Utils
         private static async Task ConvSafetensorsDiffusers(string inPath, string outPath, bool deleteInput = false)
         {
             await RunPython($"python repo/scripts/diff/convert_original_stable_diffusion_to_diffusers.py --from_safetensors --checkpoint_path {inPath.Wrap(true)} --dump_path {outPath.Wrap(true)} " +
-                        $"--original_config_file {InferenceYaml.Wrap(true)}");
+                        $"--original_config_file {_ckptConfigPath.Wrap(true)}");
 
             if (deleteInput)
                 IoUtils.TryDeleteIfExists(inPath);
         }
 
-        public static async Task<string> ConvVaePytorchDiffusers (string inPath, string outPath = "", bool deleteInput = false)
+        public static async Task<string> ConvVaePytorchDiffusers(string inPath, string outPath = "", bool deleteInput = false)
         {
             if (outPath.IsEmpty())
                 outPath = Path.ChangeExtension(inPath, null);
@@ -186,7 +193,7 @@ namespace StableDiffusionGui.Main.Utils
             return Directory.Exists(outPath) ? outPath : "";
         }
 
-        private static async Task RunPython (string cmd)
+        private static async Task RunPython(string cmd)
         {
             Process p = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
             p.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand(true, Paths.GetDataPath())} && {cmd}";
@@ -255,7 +262,7 @@ namespace StableDiffusionGui.Main.Utils
             }
         }
 
-        private static void PatchConversionScripts ()
+        private static void PatchConversionScripts()
         {
             string marker = "# PATCHED BY NMKD SD GUI";
             string diffusersPath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdVenv, "Lib", "site-packages", "diffusers");
