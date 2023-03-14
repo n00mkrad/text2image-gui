@@ -201,7 +201,12 @@ namespace StableDiffusionGui.Implementations
                 }
 
                 foreach (string command in cmds)
+                {
+                    if (TextToImage.Canceled)
+                        break;
+
                     await TtiProcess.WriteStdIn(command);
+                }
             }
             catch (Exception ex)
             {

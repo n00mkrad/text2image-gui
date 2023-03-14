@@ -34,13 +34,13 @@ namespace StableDiffusionGui.Main
                 }
 
                 if (!args.Contains("--no_restore"))
-                    args.Add("--gfpgan_model_path ../gfpgan/gfpgan.pth"); // Only specify GFPGAN path if face restoration is enabled
+                    args.Add("--gfpgan_model_path ../../gfpgan/gfpgan.pth"); // Only specify GFPGAN path if face restoration is enabled
 
                 int maxCachedModels = 0;
 
                 if (Config.Get<bool>(Config.Keys.InvokeAllowModelCaching)) // Disable caching if <6GB free, no matter the total RAM
                 {
-                    maxCachedModels = (int)Math.Floor((HwInfo.GetTotalRamGb - 11f) / 4f); // >16GB => 1 - >20GB => 2 - >24GB => 3 - >24GB => 4 - ...
+                    maxCachedModels = ((int)Math.Floor((HwInfo.GetTotalRamGb - 11f) / 4f)).Clamp(0, 16); // >16GB => 1 - >20GB => 2 - >24GB => 3 - >28GB => 4 - ...
                     Logger.Log($"InvokeAI Caching: Store up to {maxCachedModels} models in RAM", true);
                 }
 
