@@ -93,6 +93,7 @@ namespace StableDiffusionGui.Forms
             this.sliderScaleImg = new StableDiffusionGui.Controls.CustomSlider();
             this.textboxSliderScaleImg = new System.Windows.Forms.TextBox();
             this.textboxExtraScalesImg = new System.Windows.Forms.TextBox();
+            this.comboxResizeGravity = new System.Windows.Forms.ComboBox();
             this.labelCurrentImage = new System.Windows.Forms.Label();
             this.menuStripLogs = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.viewLogInRealtimeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -1258,6 +1259,20 @@ namespace StableDiffusionGui.Forms
             this.textboxExtraScalesImg.TabIndex = 3;
             this.toolTip.SetToolTip(this.textboxExtraScalesImg, resources.GetString("textboxExtraScalesImg.ToolTip"));
             // 
+            // comboxResizeGravity
+            // 
+            this.comboxResizeGravity.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.comboxResizeGravity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboxResizeGravity.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboxResizeGravity.ForeColor = System.Drawing.Color.White;
+            this.comboxResizeGravity.FormattingEnabled = true;
+            this.comboxResizeGravity.Location = new System.Drawing.Point(439, 7);
+            this.comboxResizeGravity.Name = "comboxResizeGravity";
+            this.comboxResizeGravity.Size = new System.Drawing.Size(131, 21);
+            this.comboxResizeGravity.TabIndex = 106;
+            this.toolTip.SetToolTip(this.comboxResizeGravity, "Change from which point the image will be expanded.");
+            this.comboxResizeGravity.Visible = false;
+            // 
             // labelCurrentImage
             // 
             this.labelCurrentImage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -1710,6 +1725,7 @@ namespace StableDiffusionGui.Forms
             // 
             // panelRes
             // 
+            this.panelRes.Controls.Add(this.comboxResizeGravity);
             this.panelRes.Controls.Add(this.labelAspectRatio);
             this.panelRes.Controls.Add(this.checkboxHiresFix);
             this.panelRes.Controls.Add(this.comboxResH);
@@ -2511,6 +2527,7 @@ namespace StableDiffusionGui.Forms
         public System.Windows.Forms.Panel panelDebugAppendArgs;
         private System.Windows.Forms.Label label18;
         public System.Windows.Forms.TextBox textboxDebugAppendArgs;
+        public System.Windows.Forms.ComboBox comboxResizeGravity;
     }
 }
 

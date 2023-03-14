@@ -81,5 +81,18 @@ namespace StableDiffusionGui.Ui
             { Enums.Export.FilenameTimestamp.DateTime.ToString(), "Date and Time" },
             { Enums.Export.FilenameTimestamp.UnixEpoch.ToString(), "Unix Epoch" },
         };
+
+        public static Dictionary<string, string> ImageGravity = new Dictionary<string, string>
+        {
+            { ImageMagick.Gravity.West.ToString(), "Resize from Center Left" },
+            { ImageMagick.Gravity.Center.ToString(), "Resize from Center" },
+            { ImageMagick.Gravity.East.ToString(), "Resize from Center Right" },
+            { ImageMagick.Gravity.Northwest.ToString(), "Resize from Top Left" },
+            { ImageMagick.Gravity.North.ToString(), "Resize from Top Middle" },
+            { ImageMagick.Gravity.Northeast.ToString(), "Resize from Top Right" },
+            { ImageMagick.Gravity.Southwest.ToString(), "Resize from Bottom Left" },
+            { ImageMagick.Gravity.South.ToString(), "Resize from Bottom Middle" },
+            { ImageMagick.Gravity.Southeast.ToString(), "Resize from Bottom Right" },
+        };
     }
 }

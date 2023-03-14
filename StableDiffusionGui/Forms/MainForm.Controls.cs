@@ -27,6 +27,7 @@ namespace StableDiffusionGui.Forms
             comboxSampler.FillFromEnum<Sampler>(Strings.Samplers, 0);
             comboxSeamless.FillFromEnum<SeamlessMode>(Strings.SeamlessMode, 0);
             comboxInpaintMode.FillFromEnum<InpaintMode>(Strings.InpaintMode, 0);
+            comboxResizeGravity.FillFromEnum<ImageMagick.Gravity>(Strings.ImageGravity, 4, new List<ImageMagick.Gravity> { ImageMagick.Gravity.Undefined });
         }
 
         public void LoadControls()
@@ -81,6 +82,7 @@ namespace StableDiffusionGui.Forms
             panelInpainting.Visible = ShouldControlBeVisible(panelInpainting);
             panelInitImgStrength.Visible = ShouldControlBeVisible(panelInitImgStrength);
             textboxClipsegMask.Visible = (InpaintMode)comboxInpaintMode.SelectedIndex == InpaintMode.TextMask;
+            comboxResizeGravity.Visible = (InpaintMode)comboxInpaintMode.SelectedIndex == InpaintMode.Outpaint;
 
             btnInitImgBrowse.Text = img2img ? $"Clear Image{(MainUi.CurrentInitImgPaths.Count == 1 ? "" : "s")}" : "Load Image(s)";
 

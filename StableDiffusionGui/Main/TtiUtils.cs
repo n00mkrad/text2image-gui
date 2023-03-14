@@ -29,12 +29,8 @@ namespace StableDiffusionGui.Main
     {
         public static bool ImportBusy;
 
-        /// <summary> Resizes init images to <paramref name="targetSize"/>. If <paramref name="canvasMode"/> is true, cropping/extending will be used instead of scaling. </summary>
-        /// <param name="initImgPaths"></param>
-        /// <param name="targetSize"></param>
-        /// <param name="canvasMode"></param>
-        /// <returns></returns>
-        public static async Task<OrderedDictionary> CreateResizedInitImagesIfNeeded(List<string> initImgPaths, Size targetSize, bool canvasMode = false)
+        /// <summary> Resizes init images to <paramref name="targetSize"/>. If <paramref name="extendGravity"/> is specified, cropping/extending will be used instead of scaling. </summary>
+        public static async Task<OrderedDictionary> CreateResizedInitImagesIfNeeded(List<string> initImgPaths, Size targetSize, Gravity extendGravity = (Gravity)(-1))
         {
             ImportBusy = true;
             Logger.Log($"Importing initialization images...", false, Logger.LastUiLine.EndsWith("..."));
@@ -49,7 +45,7 @@ namespace StableDiffusionGui.Main
             {
                 var pair = sourceAndImportedPaths.ElementAt(i);
                 int index = initImgPaths.IndexOf(pair.Key);
-                MagickImage img = new MagickImage(pair.Key) { Format = canvasMode ? MagickFormat.Png32 : MagickFormat.Png24, Quality = 30 };
+                MagickImage img = new MagickImage(pair.Key) { Format = extendGravity != (Gravity)(-1) ? MagickFormat.Png32 : MagickFormat.Png24, Quality = 30 };
 
                 if (targetSize.IsEmpty || (img.Width == targetSize.Width && img.Height == targetSize.Height)) // Size already matches
                 {
@@ -63,9 +59,9 @@ namespace StableDiffusionGui.Main
                         Logger.Log($"Init img '{Path.GetFileName(pair.Key)}' has bad dimensions ({img.Width}x{img.Height}), resizing to {targetSize.Width}x{targetSize.Height}.", true);
                         string resizedImgPath = Path.Combine(initImgsDir, $"{index}.png");
 
-                        if (canvasMode) // Extend/Crop
+                        if (extendGravity != (Gravity)(-1)) // Extend/Crop
                         {
-                            img = ImgUtils.ResizeCanvas(img, targetSize, Gravity.Center); // TODO: Gravity needs to be a variable passed from UI
+                            img = ImgUtils.ResizeCanvas(img, targetSize, extendGravity); // TODO: Gravity needs to be a variable passed from UI
                         }
                         else // Resize (Fit)
                         {

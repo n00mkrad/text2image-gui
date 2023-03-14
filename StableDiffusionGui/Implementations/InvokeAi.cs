@@ -43,6 +43,7 @@ namespace StableDiffusionGui.Implementations
                 int threshold = parameters.FromJson<int>("threshold"); // Threshold value
                 InpaintMode inpaint = parameters.FromJson<InpaintMode>("inpainting"); // Inpainting mode
                 string clipSegMask = parameters.FromJson<string>("clipSegMask"); // ClipSeg text-based masking prompt
+                ImageMagick.Gravity resizeGravity = parameters.FromJson<ImageMagick.Gravity>("resizeGravity", (ImageMagick.Gravity)(1)); // Inpainting mode
 
                 var cachedModels = Models.GetModels(Enums.Models.Type.Normal);
                 var cachedModelsVae = Models.GetModels(Enums.Models.Type.Vae);
@@ -55,7 +56,7 @@ namespace StableDiffusionGui.Implementations
                 await InvokeAiUtils.WriteModelsYamlAll(modelFile, vaeFile, cachedModels, cachedModelsVae);
                 if (TextToImage.Canceled) return;
 
-                OrderedDictionary initImages = initImgs != null && initImgs.Length > 0 ? await TtiUtils.CreateResizedInitImagesIfNeeded(initImgs.ToList(), res, inpaint == InpaintMode.Outpaint) : null;
+                OrderedDictionary initImages = initImgs != null && initImgs.Length > 0 ? await TtiUtils.CreateResizedInitImagesIfNeeded(initImgs.ToList(), res, resizeGravity) : null;
 
                 long startSeed = seed;
                 prompts = prompts.Select(p => FormatUtils.GetCombinedPrompt(p, negPrompt)).ToArray(); // Apply negative prompt

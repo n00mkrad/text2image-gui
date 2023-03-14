@@ -120,6 +120,7 @@ namespace StableDiffusionGui.Forms
                     { "perlin", textboxPerlin.GetFloat().ToJson() },
                     { "threshold", textboxThresh.GetInt().ToJson() },
                     { "appendArgs", textboxDebugAppendArgs.Text.ToJson() },
+                    { "resizeGravity", comboxResizeGravity.Visible ? ParseUtils.GetEnum<ImageMagick.Gravity>(comboxResizeGravity.Text, true, Strings.ImageGravity).ToJson() : "" },
                 },
             };
 

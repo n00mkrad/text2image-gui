@@ -341,10 +341,10 @@
     <Compile Include="Os\HwInfo.cs" />
     <Compile Include="Os\ProcessManager.cs" />
     <Compile Include="Os\SdGuiProcess.cs" />
-    <Compile Include="Forms\FormControls.cs">
+    <Compile Include="Forms\DrawForm.Controls.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FormUtils.cs">
+    <Compile Include="Forms\DrawForm.Utils.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Ui\GetWebInfo.cs" />
@@ -513,9 +513,7 @@
     <None Include="Resources\shareIco.png" />
     <None Include="Resources\baseline_folder_open_white_48dp.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Ui\DrawForm\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
