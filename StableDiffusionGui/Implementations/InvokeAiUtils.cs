@@ -14,53 +14,37 @@ namespace StableDiffusionGui.Implementations
     internal class InvokeAiUtils
     {
         public static string ModelsYamlPath { get { return Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdRepo, "invoke", "configs", "models.yaml"); } }
+        private static EasyDict<string, Enums.Models.Format> _modelFormatCache = new EasyDict<string, Enums.Models.Format>();
 
         public static async Task<Model> ConvertVae(Model vae, bool print = true)
         {
             string outPath = Path.ChangeExtension(vae.FullName, null);
 
-            if (Models.DetectModelFormat(vae.FullName) == Enums.Models.Format.Diffusers) // Is already correct format
+            if (DetectModelFormatCached(vae.FullName) == Enums.Models.Format.Diffusers) // Is already correct format
                 return vae;
 
-            if (Models.DetectModelFormat(outPath) == Enums.Models.Format.Diffusers) // Conversion already exists at output path
-            {
-                Model existingVae = new Model(outPath);
-                existingVae.CompatibleImplementations = vae.CompatibleImplementations; // TODO: This sucks. Need to rewrite the compat stuff
-                return existingVae;
-            }
+            if (DetectModelFormatCached(outPath) == Enums.Models.Format.Diffusers) // Conversion already exists at output path
+                return new Model(outPath, Enums.Models.Format.Diffusers);
 
             if (print)
                 Logger.Log($"VAE '{vae.FormatIndependentName.Trunc(50)}' is in legacy format, converting to Diffusers format...");
 
             await ConvertModels.ConvVaePytorchDiffusers(vae.FullName, outPath);
+            _modelFormatCache.Clear(); // Clear model type detection cache because we just converted one
             Model convertedVae = new Model(outPath);
-            convertedVae.CompatibleImplementations = vae.CompatibleImplementations; // TODO: This sucks. Need to rewrite the compat stuff
 
             if (print)
-                Logger.Log("Converted VAE to Diffusers format.", false, Logger.LastUiLine.EndsWith("converting to Diffusers format..."));
+                Logger.Log($"Converted '{vae.FormatIndependentName.Trunc(50)}' to Diffusers format.", false, Logger.LastUiLine.EndsWith("converting to Diffusers format..."));
 
             return convertedVae;
         }
 
-        public static void WriteModelsYaml(string mdlName, string vaeName = "", string keyName = "default")
+        private static Enums.Models.Format DetectModelFormatCached (string path)
         {
-            var mdl = Models.GetModel(mdlName, false, Enums.Models.Type.Normal);
-            var vae = Models.GetModel(vaeName, false, Enums.Models.Type.Vae);
-            WriteModelsYaml(mdl, vae, keyName);
-        }
+            if (!_modelFormatCache.ContainsKey(path))
+                _modelFormatCache[path] = Models.DetectModelFormat(path);
 
-        public static void WriteModelsYaml(Model mdl, Model vae, string keyName = "default")
-        {
-            string text = $"{keyName}:\n" +
-                $"    config: configs/stable-diffusion/v1-inference.yaml\n" +
-                $"    weights: {(mdl == null ? $"unknown{Constants.FileExts.ValidSdModels.First()}" : mdl.FullName.Wrap(true))}\n" +
-                $"    {(vae != null && File.Exists(vae.FullName) ? $"vae: {vae.FullName.Wrap(true)}" : "")}\n" +
-                $"    description: Current NMKD SD GUI model\n" +
-                $"    width: 512\n" +
-                $"    height: 512\n" +
-                $"    default: true";
-
-            File.WriteAllText(ModelsYamlPath, text);
+            return _modelFormatCache[path];
         }
 
         /// <summary> Writes all models into models.yml for InvokeAI to use </summary>
@@ -68,6 +52,8 @@ namespace StableDiffusionGui.Implementations
         {
             try
             {
+                _modelFormatCache.Clear();
+
                 if (cachedModels == null || cachedModels.Count < 1)
                     cachedModels = Models.GetModels(Enums.Models.Type.Normal);
 
@@ -121,8 +107,9 @@ namespace StableDiffusionGui.Implementations
                         if (vae != null && vae.FullName.IsNotEmpty())
                             properties.Add($"vae: {vae.FullName.Replace(dataPath, "../..").Wrap(true)}");
 
-                        properties.Add($"width: {(mdl.Name.Contains("768") ? "768" : "512")}");
-                        properties.Add($"height: {(mdl.Name.Contains("768") ? "768" : "512")}");
+                        string res = mdl.Name.Contains("768") ? "768" : "512";
+                        properties.Add($"width: {res}");
+                        properties.Add($"height: {res}");
 
                         if (IsModelDefault(mdl, vae, selectedMdl, selectedVae))
                             properties.Add($"default: true");
@@ -159,7 +146,7 @@ namespace StableDiffusionGui.Implementations
 
         public static string GetMdlNameForYaml(Model mdl, Model vae)
         {
-            return $"{mdl.Name}{(vae == null ? "-none" : $"-{vae.FormatIndependentName}")}";
+            return $"{mdl.FormatIndependentName}{(vae == null ? "" : $"-{vae.FormatIndependentName}")}";
         }
 
         public static string GetModelsYamlHash(IoUtils.Hash hashType = IoUtils.Hash.CRC32, bool ignoreDefaultKey = true)

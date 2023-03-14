@@ -574,5 +574,10 @@ namespace StableDiffusionGui
         {
             return new Data.ImplementationInfo(imp);
         }
+
+        public static bool IsUnset<TEnum> (this TEnum myEnum)
+        {
+            return myEnum.Equals(Enum.ToObject(typeof(TEnum), -1));
+        }
     }
 }

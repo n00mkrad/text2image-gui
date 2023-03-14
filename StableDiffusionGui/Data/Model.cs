@@ -21,39 +21,35 @@ namespace StableDiffusionGui.Data
         public string Extension { get { return _file == null ? "" : _file.Extension; } }
         public long Size { get { return _file == null ? IoUtils.GetDirSize(_dir.FullName, true) : _file.Length; } }
         public bool IsDirectory { get { return _dir != null; } }
-        public Enums.StableDiffusion.Implementation[] CompatibleImplementations { get; set; }
 
         private ZlpFileInfo _file = null;
         private ZlpDirectoryInfo _dir = null;
 
         public Model() { }
 
-        public Model(string dataPath, IEnumerable<Enums.StableDiffusion.Implementation> compatibleImplementations = null)
+        public Model(string dataPath, Enums.Models.Format format = (Enums.Models.Format)(-1), Enums.Models.Type type = (Enums.Models.Type)(-1))
         {
             if (IoUtils.IsPathDirectory(dataPath))
                 _dir = new ZlpDirectoryInfo(dataPath);
             else
                 _file = new ZlpFileInfo(dataPath);
 
-            CompatibleImplementations = compatibleImplementations == null ? new List<Enums.StableDiffusion.Implementation>().ToArray() : compatibleImplementations.ToArray();
-            Format = Models.DetectModelFormat(FullName);
-            Type = Models.GetModelType(FullName);
+            Format = format == (Enums.Models.Format)(-1) ? Models.DetectModelFormat(FullName) : format;
+            Type = type == (Enums.Models.Type)(-1) ? Models.GetModelType(FullName) : type;
         }
 
-        public Model(ZlpFileInfo file, IEnumerable<Enums.StableDiffusion.Implementation> compatibleImplementations = null)
+        public Model(ZlpFileInfo file, Enums.Models.Format format = (Enums.Models.Format)(-1), Enums.Models.Type type = (Enums.Models.Type)(-1))
         {
             _file = file;
-            CompatibleImplementations = compatibleImplementations == null ? new List<Enums.StableDiffusion.Implementation>().ToArray() : compatibleImplementations.ToArray();
-            Format = Models.DetectModelFormat(FullName);
-            Type = Models.GetModelType(FullName);
+            Format = format == (Enums.Models.Format)(-1) ? Models.DetectModelFormat(FullName) : format;
+            Type = type == (Enums.Models.Type)(-1) ? Models.GetModelType(FullName) : type;
         }
 
-        public Model(ZlpDirectoryInfo dir, IEnumerable<Enums.StableDiffusion.Implementation> compatibleImplementations = null)
+        public Model(ZlpDirectoryInfo dir, Enums.Models.Format format = (Enums.Models.Format)(-1), Enums.Models.Type type = (Enums.Models.Type)(-1))
         {
             _dir = dir;
-            CompatibleImplementations = compatibleImplementations == null ? new List<Enums.StableDiffusion.Implementation>().ToArray() : compatibleImplementations.ToArray();
-            Format = Models.DetectModelFormat(FullName);
-            Type = Models.GetModelType(FullName);
+            Format = format == (Enums.Models.Format)(-1) ? Models.DetectModelFormat(FullName) : format;
+            Type = type == (Enums.Models.Type)(-1) ? Models.GetModelType(FullName) : type;
         }
 
         public override string ToString()

@@ -45,15 +45,11 @@ namespace StableDiffusionGui.Implementations
                 string clipSegMask = parameters.FromJson<string>("clipSegMask"); // ClipSeg text-based masking prompt
                 ImageMagick.Gravity resizeGravity = parameters.FromJson<ImageMagick.Gravity>("resizeGravity", (ImageMagick.Gravity)(1)); // Inpainting mode
 
-                var cachedModels = Models.GetModels(Enums.Models.Type.Normal);
-                var cachedModelsVae = Models.GetModels(Enums.Models.Type.Vae);
+                var allModels = Models.GetModelsAll();
+                var cachedModels = allModels.Where(m => m.Type == Enums.Models.Type.Normal).ToList();
+                var cachedModelsVae = allModels.Where(m => m.Type == Enums.Models.Type.Vae).ToList();
                 Model modelFile = TtiUtils.CheckIfCurrentSdModelExists();
                 Model vaeFile = Models.GetModel(cachedModelsVae, vae, false, Enums.Models.Type.Vae);
-
-                if (modelFile == null)
-                    return;
-
-                await InvokeAiUtils.WriteModelsYamlAll(modelFile, vaeFile, cachedModels, cachedModelsVae);
                 if (TextToImage.Canceled) return;
 
                 OrderedDictionary initImages = initImgs != null && initImgs.Length > 0 ? await TtiUtils.CreateResizedInitImagesIfNeeded(initImgs.ToList(), res, resizeGravity) : null;
@@ -146,6 +142,9 @@ namespace StableDiffusionGui.Implementations
 
                 if (!TtiProcess.IsAiProcessRunning || (TtiProcess.IsAiProcessRunning && TtiProcess.LastStartupSettings != newStartupSettings))
                 {
+                    await InvokeAiUtils.WriteModelsYamlAll(modelFile, vaeFile, cachedModels, cachedModelsVae);
+                    if (TextToImage.Canceled) return;
+
                     Logger.Log($"(Re)starting InvokeAI. Process running: {TtiProcess.IsAiProcessRunning} - Prev startup string: '{TtiProcess.LastStartupSettings}' - New startup string: '{newStartupSettings}'", true);
 
                     TtiProcess.LastStartupSettings = newStartupSettings;
