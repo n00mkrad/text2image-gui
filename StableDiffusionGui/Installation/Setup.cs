@@ -16,7 +16,7 @@ namespace StableDiffusionGui.Installation
     {
         private static readonly string _gitFile = "n00mkrad/stable-diffusion-cust.git";
         private static readonly string _gitBranch = "main";
-        public static readonly string GitCommit = "c4d5a2d16440b7711927ac81a0f75dcaea148df9";
+        public static readonly string GitCommit = "d6f90ae4eb29f33c1064587722d504fe994e2f89";
 
         private static readonly bool _allowModelDownload = false;
 
