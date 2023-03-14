@@ -50,10 +50,10 @@ namespace StableDiffusionGui.Main
                     args.Add($"--no-internet");
 
                 args.Add($"--embedding_path {Path.Combine(Paths.GetDataPath(), Constants.Dirs.Models.Root, Constants.Dirs.Models.Embeddings)}"); // Embeddings folder path
-                args.Add($"--no-nsfw_checker"); // Disable NSFW checker (might become optional in the future)
+                args.Add("--no-nsfw_checker"); // Disable NSFW checker (might become optional in the future)
                 // args.Add($"--no-patchmatch"); // Disable patchmatch (might become optional if outpainting is implemented)
-                args.Add($"--no-xformers"); // Disable xformers until Pytorch >1.11 slowdown is investigated and xformers works
-                args.Add($"--png_compression 1"); // Higher compression levels are barely worth it
+                args.Add("--no-xformers"); // Disable xformers until Pytorch >1.11 slowdown is investigated and xformers works
+                args.Add("--png_compression 1"); // Higher compression levels are barely worth it
 
                 string joinedArgs = string.Join(" ", args);
                 Logger.Log($"InvokeAI Args: {joinedArgs}", true);
@@ -62,7 +62,11 @@ namespace StableDiffusionGui.Main
 
             public static string GetDefaultArgsCommand()
             {
-                var args = new List<string> { "-n 1" }; // Always generate 1 image per command
+                var args = new List<string>
+                {
+                    "-n 1", // Always generate 1 image per command
+                    "--fnformat {prefix}.png" // Only use prefix as output name since we rename it anyway
+                }; 
 
                 if (Config.Get<bool>(Config.Keys.SaveUnprocessedImages))
                     args.Add("-save_orig");
