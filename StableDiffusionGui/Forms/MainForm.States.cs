@@ -57,7 +57,7 @@ namespace StableDiffusionGui.Forms
 
             bool img2img = MainUi.CurrentInitImgPaths.Any();
 
-            if (img2img && !IsUsingInpaintingModel)
+            if (img2img)
                 available = true;
 
             return available;
