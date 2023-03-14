@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -60,6 +61,8 @@ namespace StableDiffusionGui.Implementations
                 if (cachedModelsVae == null || cachedModelsVae.Count < 1)
                     cachedModelsVae = Models.GetModels(Enums.Models.Type.Vae);
 
+                cachedModelsVae = cachedModelsVae.DistinctBy(m => m.FormatIndependentName).ToList();
+
                 if (!Config.Get<bool>(Config.Keys.DisablePickleScanner))
                 {
                     if (!quiet)
@@ -85,29 +88,29 @@ namespace StableDiffusionGui.Implementations
                 string text = "";
 
                 cachedModelsVae.Insert(0, null); // Insert null entry, for looping
-                string dataPath = Paths.GetDataPath();//.Replace("\\", "/").TrimEnd('/');
+                string dataPath = Paths.GetDataPath();
 
                 foreach (Model mdl in cachedModels)
                 {
-                    bool inpaint = mdl.Name.MatchesWildcard("*-inpainting.*");
+                    string config = mdl.Format != Enums.Models.Format.Diffusers ? TtiUtils.GetCkptConfig(mdl, true) : "";
+                    string weightsPath = $"{(mdl.Format == Enums.Models.Format.Diffusers ? "path" : "weights")}: {mdl.FullName.Replace(dataPath, "../..").Wrap(true)}"; // Weights path, use relative path if possible
+                    string res = mdl.Name.Contains("768") ? "768" : "512";
 
                     foreach (Model mdlVae in cachedModelsVae)
                     {
                         var vae = mdlVae == null ? null : mdlVae.Format == Enums.Models.Format.Diffusers ? mdlVae : await ConvertVae(mdlVae, !quiet);
-                        string configFile = File.Exists(mdl.FullName + ".yaml") ? $"{(mdl.FullName + ".yaml").Wrap(true)} # custom" : $"configs/stable-diffusion/{(inpaint ? "v1-inpainting-inference" : "v1-inference")}.yaml";
                         var properties = new List<string>();
 
-                        if (mdl.Format != Enums.Models.Format.Diffusers)
-                            properties.Add($"config: {configFile}"); // Neeed to specify config path for ckpt models
+                        if (config.IsNotEmpty())
+                            properties.Add($"config: {config}"); // Neeed to specify config path for ckpt models
                         else if (mdl.Format == Enums.Models.Format.Diffusers)
                             properties.Add($"format: diffusers"); // Need to specify format for diffusers models
 
-                        properties.Add($"{(mdl.Format == Enums.Models.Format.Diffusers ? "path" : "weights")}: {mdl.FullName.Replace(dataPath, "../..").Wrap(true)}"); // Weights path, use relative path if possible
+                        properties.Add(weightsPath);
 
                         if (vae != null && vae.FullName.IsNotEmpty())
                             properties.Add($"vae: {vae.FullName.Replace(dataPath, "../..").Wrap(true)}");
 
-                        string res = mdl.Name.Contains("768") ? "768" : "512";
                         properties.Add($"width: {res}");
                         properties.Add($"height: {res}");
 
@@ -146,7 +149,7 @@ namespace StableDiffusionGui.Implementations
 
         public static string GetMdlNameForYaml(Model mdl, Model vae)
         {
-            return $"{mdl.FormatIndependentName}{(vae == null ? "" : $"-{vae.FormatIndependentName}")}";
+            return $"{mdl.Name}{(vae == null ? "" : $"-{vae.FormatIndependentName}")}";
         }
 
         public static string GetModelsYamlHash(IoUtils.Hash hashType = IoUtils.Hash.CRC32, bool ignoreDefaultKey = true)

@@ -1,9 +1,6 @@
 ﻿using ImageMagick;
 using StableDiffusionGui.Data;
-using StableDiffusionGui.Extensions;
-using StableDiffusionGui.Forms;
 using StableDiffusionGui.Implementations;
-using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
@@ -328,6 +325,30 @@ namespace StableDiffusionGui.Main
 
             Config.Set(Config.Keys.SafeModels, safeModels.ToJson());
             return safeModels;
+        }
+
+        /// <summary> Finds the model config file for a given ckpt, either for use with models.yaml (<paramref name="modelsYamlFormat"/> == true) or as full path. </summary>
+        public static string GetCkptConfig (Model model, bool modelsYamlFormat)
+        {
+            bool inpaint = model.FormatIndependentName.EndsWith("inpainting");
+            var custConfigs = new List<string> { $"{model.FullName}.yaml", $"{model.FullName}.yml" }.Where(path => File.Exists(path));
+
+            if (custConfigs.Any())
+            {
+                if (modelsYamlFormat)
+                    return $"{custConfigs.First().Wrap(true)} # custom"; // Return formatted path for models.yaml
+                else
+                    return custConfigs.First(); // Return path
+            }
+            else
+            {
+                string file = inpaint ? "v1-inpainting-inference.yaml" : "v1-inference.yaml";
+
+                if (modelsYamlFormat)
+                    return $"configs/stable-diffusion/{file}"; // Return relative path for models.yaml
+                else
+                    return Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdRepo, "invoke", "invokeai", "configs", "stable-diffusion", file); // Return full path
+            }
         }
     }
 }

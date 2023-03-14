@@ -76,7 +76,7 @@ namespace StableDiffusionGui.Io
             if (removeUnknownModels)
                 list = list.Where(m => m.Format != (Enums.Models.Format)(-1)).ToList();
 
-            return list.DistinctBy(x => x.FormatIndependentName).OrderBy(x => x.Name).ToList();
+            return list.DistinctBy(x => x.Name).OrderBy(x => x.Name).ToList();
         }
 
         public static List<Model> GetModels(Enums.Models.Type type = Enums.Models.Type.Normal, Implementation implementation = Implementation.InvokeAi)
@@ -85,7 +85,7 @@ namespace StableDiffusionGui.Io
             IEnumerable<Model> models = GetModelsAll();
             Format[] supportedFormats = implementation.GetInfo().SupportedModelFormats;
             models = models.Where(m => m.Type == type && supportedFormats.Contains(m.Format));
-            List<Model> distinctOrderedList = models.DistinctBy(x => x.FormatIndependentName).OrderBy(x => x.FormatIndependentName).ToList();
+            List<Model> distinctOrderedList = models.DistinctBy(x => x.Name).OrderBy(x => x.FormatIndependentName).ToList();
             if (Program.Debug) Logger.Log($"GetModels took {sw.ElapsedMilliseconds} ms", true);
             return distinctOrderedList;
         }
