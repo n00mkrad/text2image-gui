@@ -82,7 +82,7 @@ namespace StableDiffusionGui.Forms
             panelInpainting.Visible = ShouldControlBeVisible(panelInpainting);
             panelInitImgStrength.Visible = ShouldControlBeVisible(panelInitImgStrength);
             textboxClipsegMask.Visible = (InpaintMode)comboxInpaintMode.SelectedIndex == InpaintMode.TextMask;
-            comboxResizeGravity.Visible = (InpaintMode)comboxInpaintMode.SelectedIndex == InpaintMode.Outpaint;
+            comboxResizeGravity.Visible = comboxInpaintMode.Visible && (InpaintMode)comboxInpaintMode.SelectedIndex == InpaintMode.Outpaint;
 
             btnInitImgBrowse.Text = img2img ? $"Clear Image{(MainUi.CurrentInitImgPaths.Count == 1 ? "" : "s")}" : "Load Image(s)";
 
