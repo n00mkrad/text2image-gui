@@ -475,7 +475,12 @@ namespace StableDiffusionGui
         {
             if (jsonDict.ContainsKey(key))
             {
-                var value = jsonDict.Get(key).FromJson<T>();
+                string valueStr = jsonDict.Get(key);
+
+                if (valueStr.IsEmpty())
+                    return fallbackValue;
+
+                var value = valueStr.FromJson<T>();
                 return value != null ? value : fallbackValue;
             }
 

@@ -43,7 +43,7 @@ namespace StableDiffusionGui.Implementations
                 int threshold = parameters.FromJson<int>("threshold"); // Threshold value
                 InpaintMode inpaint = parameters.FromJson<InpaintMode>("inpainting"); // Inpainting mode
                 string clipSegMask = parameters.FromJson<string>("clipSegMask"); // ClipSeg text-based masking prompt
-                ImageMagick.Gravity resizeGravity = parameters.FromJson<ImageMagick.Gravity>("resizeGravity", (ImageMagick.Gravity)(1)); // Inpainting mode
+                ImageMagick.Gravity resizeGravity = parameters.FromJson<ImageMagick.Gravity>("resizeGravity", (ImageMagick.Gravity)(-1)); // Inpainting mode
 
                 var allModels = Models.GetModelsAll();
                 var cachedModels = allModels.Where(m => m.Type == Enums.Models.Type.Normal).ToList();
