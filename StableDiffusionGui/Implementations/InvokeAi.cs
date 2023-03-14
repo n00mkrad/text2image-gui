@@ -152,7 +152,7 @@ namespace StableDiffusionGui.Implementations
                     Process py = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd(), Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdVenv, "Scripts", "python.exe"));
                     py.StartInfo.RedirectStandardInput = true;
                     py.StartInfo.WorkingDirectory = Paths.GetDataPath();
-                    py.StartInfo.Arguments = $"\"{Constants.Dirs.SdRepo}/invoke/scripts/invoke.py\" -o {outPath.Wrap(true)} {argsStartup}";
+                    py.StartInfo.Arguments = $"\"{Constants.Dirs.SdRepo}/invoke/scripts/invoke.py\" --model {InvokeAiUtils.GetMdlNameForYaml(modelFile, vaeFile)} -o {outPath.Wrap(true)} {argsStartup}";
 
                     foreach (var pair in TtiUtils.GetEnvVarsSd(false, Paths.GetDataPath()))
                         py.StartInfo.EnvironmentVariables[pair.Key] = pair.Value;
@@ -233,7 +233,7 @@ namespace StableDiffusionGui.Implementations
                 $"title Stable Diffusion CLI (InvokeAI)\n" +
                 $"cd /D {Paths.GetDataPath().Wrap()}\n" +
                 $"{TtiUtils.GetEnvVarsSdCommand()}\n" +
-                $"python {Constants.Dirs.SdRepo}/invoke/scripts/invoke.py -o {outPath.Wrap(true)} {Args.InvokeAi.GetArgsStartup()}";
+                $"python {Constants.Dirs.SdRepo}/invoke/scripts/invoke.py --model {InvokeAiUtils.GetMdlNameForYaml(modelFile, vaeFile)} -o {outPath.Wrap(true)} {Args.InvokeAi.GetArgsStartup()}";
 
             File.WriteAllText(batPath, batText);
             Process cli = Process.Start(batPath);

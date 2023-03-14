@@ -114,9 +114,6 @@ namespace StableDiffusionGui.Implementations
                         properties.Add($"width: {res}");
                         properties.Add($"height: {res}");
 
-                        if (IsModelDefault(mdl, vae, selectedMdl, selectedVae))
-                            properties.Add($"default: true");
-
                         text += $"{GetMdlNameForYaml(mdl, vae)}:\n    {string.Join("\n    ", properties)}\n\n";
                     } 
                 }
@@ -149,7 +146,7 @@ namespace StableDiffusionGui.Implementations
 
         public static string GetMdlNameForYaml(Model mdl, Model vae)
         {
-            return $"{mdl.Name}{(vae == null ? "" : $"-{vae.FormatIndependentName}")}";
+            return $"{mdl.Name}{(vae == null ? "" : $"-{vae.FormatIndependentName}")}".Replace(" ", "");
         }
 
         public static string GetModelsYamlHash(IoUtils.Hash hashType = IoUtils.Hash.CRC32, bool ignoreDefaultKey = true)
