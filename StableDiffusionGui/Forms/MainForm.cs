@@ -1,6 +1,5 @@
 ﻿using Dasync.Collections;
 using StableDiffusionGui.Extensions;
-using StableDiffusionGui.Forms;
 using StableDiffusionGui.Implementations;
 using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
@@ -11,7 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -66,8 +64,6 @@ namespace StableDiffusionGui.Forms
         private async Task Initialize()
         {
             InitializeControls();
-            RefreshUiAfterSettingsChanged();
-            LoadControls();
             PromptHistory.Load();
             Setup.PatchFiles();
 
@@ -81,7 +77,6 @@ namespace StableDiffusionGui.Forms
             Task.Run(() => MainUi.SetGpusInWindowTitle());
             Task.Run(() => MainUi.PrintVersion());
             upDownSeed.Text = "";
-            RefreshUiAfterSettingsChanged();
 
             TabOrderInit(new List<Control>() {
                 textboxPrompt, textboxPromptNeg,
@@ -98,17 +93,13 @@ namespace StableDiffusionGui.Forms
             }, -1);
 
             await Task.Delay(1); // Don't ask. Just keep it here
-
+            RefreshUiAfterSettingsChanged(false);
+            LoadControls();
             Opacity = 1.0;
             MainUi.DoStartupChecks();
 
             if (!Program.Debug && !(Config.Get<bool>(Config.Keys.HideMotd) && Config.Get<string>(Config.Keys.MotdShownVersion) == Program.Version))
                 new WelcomeForm().ShowDialogForm();
-
-            panelDebugLoopback.Visible = Program.Debug;
-            panelDebugPerlinThresh.Visible = Program.Debug;
-            panelDebugSendStdin.Visible = Program.Debug;
-            panelDebugAppendArgs.Visible = Program.Debug;
         }
 
         private void installerBtn_Click(object sender, EventArgs e)

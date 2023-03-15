@@ -24,6 +24,8 @@ namespace StableDiffusionGui.Forms
         private Dictionary<Control, List<Control>> _categoryPanels = new Dictionary<Control, List<Control>>(); // Key: Collapse Button - Value: Child Panels
         private List<Control> _expandedCategories = new List<Control>();
 
+        private List<Control> _debugControls { get { return new List<Control> { panelDebugLoopback, panelDebugPerlinThresh, panelDebugSendStdin, panelDebugAppendArgs }; } }
+
         public bool IsUsingInpaintingModel { get { return Path.ChangeExtension(Config.Get<string>(Config.Keys.Model), null).EndsWith(Constants.SuffixesPrefixes.InpaintingMdlSuf); } }
 
         public void InitializeControls()
@@ -41,6 +43,8 @@ namespace StableDiffusionGui.Forms
             _expandedCategories = new List<Control> { btnCollapseRendering, btnCollapseGeneration };
             _categoryPanels.Keys.ToList().ForEach(c => c.Click += (s, e) => CollapseToggle((Control)s));
             _categoryPanels.Keys.ToList().ForEach(c => CollapseToggle(c, _expandedCategories.Contains(c)));
+
+            _debugControls.ForEach(c => c.SetVisible(Program.Debug)); // Show debug controls if debug mode is enabled
         }
 
         public void LoadControls()
@@ -67,8 +71,11 @@ namespace StableDiffusionGui.Forms
             ConfigParser.SaveGuiElement(checkboxHiresFix, Config.Keys.HiresFix);
         }
 
-        public void RefreshUiAfterSettingsChanged()
+        public void RefreshUiAfterSettingsChanged(bool skipIfHidden = true)
         {
+            if (skipIfHidden && Opacity < 1f)
+                return;
+
             Console.WriteLine("RefreshUiAfterSettingsChanged");
             panelPromptNeg.SetVisible(ConfigParser.CurrentImplementation.GetInfo().SupportsNegativePrompt && !IsUsingInpaintingModel);
             panelSampler.SetVisible(ConfigParser.CurrentImplementation == Implementation.InvokeAi);

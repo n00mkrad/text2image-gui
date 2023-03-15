@@ -86,7 +86,7 @@ namespace StableDiffusionGui.Ui
             }
             else
             {
-                Logger.Log("Debugger is attached.");
+                Logger.Log($"Debug mode enabled. {(System.Diagnostics.Debugger.IsAttached ? "Debugger is attached." : "")}");
             }
 
             if(Program.UserArgs.Get(Constants.Args.Install) == true.ToString())

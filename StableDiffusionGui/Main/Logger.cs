@@ -49,9 +49,9 @@ namespace StableDiffusionGui.Main
 
             }
 
-            public Entry(string message, bool hidden = false, bool replaceLastLine = false, string logName = "")
+            public Entry(object message, bool hidden = false, bool replaceLastLine = false, string logName = "")
             {
-                Message = message;
+                Message = message.ToString().TrimEnd();
                 Hidden = hidden;
                 ReplaceLastLine = replaceLastLine;
 
@@ -90,17 +90,17 @@ namespace StableDiffusionGui.Main
 
         public static void LogReplace(object msg, string filename = Constants.Lognames.General)
         {
-            Log(new Entry(msg.ToString(), false, true, filename));
+            Log(new Entry(msg, false, true, filename));
         }
 
         public static void Log(object msg, bool hidden = false, bool replaceLastLine = false, string filename = Constants.Lognames.General)
         {
-            Log(new Entry(msg.ToString(), hidden, replaceLastLine, filename));
+            Log(new Entry(msg, hidden, replaceLastLine, filename));
         }
 
         public static void LogHidden(object msg, string filename = Constants.Lognames.General)
         {
-            Log(new Entry(msg.ToString(), true, false, filename));
+            Log(new Entry(msg, true, false, filename));
         }
 
         public static void QueueLoop()
