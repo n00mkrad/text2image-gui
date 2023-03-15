@@ -120,6 +120,7 @@ namespace StableDiffusionGui.Forms
 
             Program.MainForm.checkboxShowInitImg.SetVisible(MainUi.CurrentInitImgPaths.Any());
             ImageViewer.UpdateInitImgViewer();
+            _categoryPanels.Keys.ToList().ForEach(btn => btn.SetVisible(_categoryPanels[btn].Any(p => p.Visible))); // Hide collapse buttons if their category has 0 visible panels
 
             #endregion
         }
