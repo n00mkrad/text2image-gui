@@ -11,6 +11,7 @@ using StableDiffusionGui.Properties;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
 using System.Resources;
@@ -275,6 +276,8 @@ namespace StableDiffusionGui.Ui
                     btn.BackgroundImage = Resources.downArrowIcon;
                     panel.Height = smallHeight;
                 }
+
+                Program.MainForm.panelSettings.Focus();
             })).RunWithUiStopped(Program.MainForm);
         }
 

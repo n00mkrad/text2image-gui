@@ -80,14 +80,14 @@ namespace StableDiffusionGui.Forms
                 RefreshUiState();
                 this.ResumeRendering();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 this.ResumeRendering();
                 Logger.LogException(ex, true, "TryRefreshUiState:");
             }
         }
 
-        private void RefreshUiState ()
+        private void RefreshUiState()
         {
             panelPromptNeg.SetVisible(ConfigParser.CurrentImplementation.GetInfo().SupportsNegativePrompt && !IsUsingInpaintingModel);
             panelSampler.SetVisible(ConfigParser.CurrentImplementation == Implementation.InvokeAi);
@@ -213,10 +213,13 @@ namespace StableDiffusionGui.Forms
 
         public void CollapseToggle(Control collapseBtn, bool? overrideState = null)
         {
-            List<Control> controls = _categoryPanels[collapseBtn];
-            bool show = overrideState != null ? (bool)overrideState : controls.Any(c => c.Height == 0);
-            controls.ForEach(c => c.Height = show ? 35 : 0);
-            collapseBtn.Text = $"{(show ? "Hide" : "Show")} {Strings.MainUiCategories.Get(collapseBtn.Name, true)}";
+            ((Action)(() =>
+            {
+                List<Control> controls = _categoryPanels[collapseBtn];
+                bool show = overrideState != null ? (bool)overrideState : controls.Any(c => c.Height == 0);
+                controls.ForEach(c => c.Height = show ? 35 : 0);
+                collapseBtn.Text = $"{(show ? "Hide" : "Show")} {Strings.MainUiCategories.Get(collapseBtn.Name, true)}";
+            })).RunWithUiStopped(this);
         }
     }
 }
