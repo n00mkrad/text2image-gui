@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Windows.Documents;
 using System.Windows.Forms;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
@@ -68,11 +69,12 @@ namespace StableDiffusionGui.Forms
 
         public void RefreshUiAfterSettingsChanged()
         {
-            panelPromptNeg.Visible = ConfigParser.CurrentImplementation.GetInfo().SupportsNegativePrompt && !IsUsingInpaintingModel;
-            panelSampler.Visible = ConfigParser.CurrentImplementation == Implementation.InvokeAi;
-            panelSeamless.Visible = ConfigParser.CurrentImplementation == Implementation.InvokeAi;
-            panelRes.Visible = ShouldControlBeVisible(panelRes);
-            panelScaleImg.Visible = ShouldControlBeVisible(panelScaleImg);
+            Console.WriteLine("RefreshUiAfterSettingsChanged");
+            panelPromptNeg.SetVisible(ConfigParser.CurrentImplementation.GetInfo().SupportsNegativePrompt && !IsUsingInpaintingModel);
+            panelSampler.SetVisible(ConfigParser.CurrentImplementation == Implementation.InvokeAi);
+            panelSeamless.SetVisible(ConfigParser.CurrentImplementation == Implementation.InvokeAi);
+            panelRes.SetVisible(ShouldControlBeVisible(panelRes));
+            panelScaleImg.SetVisible(ShouldControlBeVisible(panelScaleImg));
 
             bool adv = Config.Get<bool>(Config.Keys.AdvancedUi);
             upDownIterations.Maximum = !adv ? 10000 : 100000;
@@ -91,18 +93,18 @@ namespace StableDiffusionGui.Forms
 
             bool img2img = MainUi.CurrentInitImgPaths.Any();
 
-            panelInpainting.Visible = ShouldControlBeVisible(panelInpainting);
-            panelInitImgStrength.Visible = ShouldControlBeVisible(panelInitImgStrength);
-            textboxClipsegMask.Visible = (InpaintMode)comboxInpaintMode.SelectedIndex == InpaintMode.TextMask;
-            comboxResizeGravity.Visible = comboxInpaintMode.Visible && (InpaintMode)comboxInpaintMode.SelectedIndex == InpaintMode.Outpaint;
-            panelSeamless.Visible = !comboxInpaintMode.Visible || (InpaintMode)comboxInpaintMode.SelectedIndex == InpaintMode.Disabled;
+            panelInpainting.SetVisible(ShouldControlBeVisible(panelInpainting));
+            panelInitImgStrength.SetVisible(ShouldControlBeVisible(panelInitImgStrength));
+            textboxClipsegMask.SetVisible((InpaintMode)comboxInpaintMode.SelectedIndex == InpaintMode.TextMask);
+            comboxResizeGravity.SetVisible(comboxInpaintMode.Visible && (InpaintMode)comboxInpaintMode.SelectedIndex == InpaintMode.Outpaint);
+            panelSeamless.SetVisible(!comboxInpaintMode.Visible || (InpaintMode)comboxInpaintMode.SelectedIndex == InpaintMode.Disabled);
 
             btnInitImgBrowse.Text = img2img ? $"Clear Image{(MainUi.CurrentInitImgPaths.Count == 1 ? "" : "s")}" : "Load Image(s)";
 
             labelCurrentImage.Text = !img2img ? "No initialization image loaded." : (MainUi.CurrentInitImgPaths.Count == 1 ? $"Currently using {Path.GetFileName(MainUi.CurrentInitImgPaths[0])}" : $"Currently using {MainUi.CurrentInitImgPaths.Count} images.");
             toolTip.SetToolTip(labelCurrentImage, $"{labelCurrentImage.Text.Trunc(100)}\n\nShift + Hover to preview.");
 
-            Program.MainForm.checkboxShowInitImg.Visible = MainUi.CurrentInitImgPaths.Any();
+            Program.MainForm.checkboxShowInitImg.SetVisible(MainUi.CurrentInitImgPaths.Any());
             ImageViewer.UpdateInitImgViewer();
 
             #endregion

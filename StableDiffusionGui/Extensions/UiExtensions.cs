@@ -84,5 +84,12 @@ namespace StableDiffusionGui.Extensions
             controls.ForEach(c => list.AddRange(c.GetControls()));
             return list;
         }
+
+        /// <summary> Sets the visibility of a control while avoiding unnecessary setter calls.  </summary>
+        public static void SetVisible (this Control c, bool targetState)
+        {
+            if (c.Visible != targetState)
+                c.Visible = targetState;
+        }
     }
 }
