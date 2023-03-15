@@ -94,5 +94,13 @@ namespace StableDiffusionGui.Ui
             { ImageMagick.Gravity.South.ToString(), "Resize from Bottom Middle" },
             { ImageMagick.Gravity.Southeast.ToString(), "Resize from Bottom Right" },
         };
+
+        public static Dictionary<string, string> MainUiCategories = new Dictionary<string, string>()
+        {
+            { "btnCollapseDebug", "Debug Settings" },
+            { "btnCollapseRendering", "Rendering Settings" },
+            { "btnCollapseSymmetry", "Symmetry Settings" },
+            { "btnCollapseGeneration", "Generation Settings" },
+        };
     }
 }

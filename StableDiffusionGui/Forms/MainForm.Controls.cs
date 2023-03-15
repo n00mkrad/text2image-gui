@@ -20,6 +20,9 @@ namespace StableDiffusionGui.Forms
 {
     public partial class MainForm
     {
+        private Dictionary<Control, List<Control>> _categoryPanels = new Dictionary<Control, List<Control>>(); // Key: Collapse Button - Value: Child Panels
+        private List<Control> _expandedCategories = new List<Control>();
+
         public bool IsUsingInpaintingModel { get { return Path.ChangeExtension(Config.Get<string>(Config.Keys.Model), null).EndsWith(Constants.SuffixesPrefixes.InpaintingMdlSuf); } }
 
         public void InitializeControls()
@@ -28,6 +31,15 @@ namespace StableDiffusionGui.Forms
             comboxSeamless.FillFromEnum<SeamlessMode>(Strings.SeamlessMode, 0);
             comboxInpaintMode.FillFromEnum<InpaintMode>(Strings.InpaintMode, 0);
             comboxResizeGravity.FillFromEnum<ImageMagick.Gravity>(Strings.ImageGravity, 4, new List<ImageMagick.Gravity> { ImageMagick.Gravity.Undefined });
+
+            _categoryPanels.Add(btnCollapseDebug, new List<Control> { panelDebugAppendArgs, panelDebugSendStdin, panelDebugPerlinThresh, panelDebugLoopback });
+            _categoryPanels.Add(btnCollapseRendering, new List<Control> { panelRes, panelSampler });
+            _categoryPanels.Add(btnCollapseSymmetry, new List<Control> { panelSeamless });
+            _categoryPanels.Add(btnCollapseGeneration, new List<Control> { panelInpainting, panelIterations, panelSteps, panelScale, panelScaleImg, panelSeed });
+
+            _expandedCategories = new List<Control> { btnCollapseRendering, btnCollapseGeneration };
+            _categoryPanels.Keys.ToList().ForEach(c => c.Click += (s, e) => CollapseToggle((Control)s));
+            _categoryPanels.Keys.ToList().ForEach(c => CollapseToggle(c, _expandedCategories.Contains(c)));
         }
 
         public void LoadControls()
@@ -172,6 +184,14 @@ namespace StableDiffusionGui.Forms
             bool txt2img = !MainUi.CurrentInitImgPaths.Any();
             bool compatible = ConfigParser.CurrentImplementation == Implementation.InvokeAi;
             checkboxHiresFix.Visible = (comboxResW.GetInt() > 512 || comboxResH.GetInt() > 512) && txt2img && compatible;
+        }
+
+        public void CollapseToggle(Control collapseBtn, bool? overrideState = null)
+        {
+            List<Control> controls = _categoryPanels[collapseBtn];
+            bool show = overrideState != null ? (bool)overrideState : controls.Any(c => c.Height == 0);
+            controls.ForEach(c => c.Height = show ? 35 : 0);
+            collapseBtn.Text = $"{(show ? "Hide" : "Show")} {Strings.MainUiCategories.Get(collapseBtn.Name, true)}";
         }
     }
 }

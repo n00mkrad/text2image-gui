@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -73,8 +74,8 @@ namespace StableDiffusionGui.Forms
             textboxPrompt.MaxLength = 0;
             textboxPromptNeg.MaxLength = 0;
             pictBoxImgViewer.MouseWheel += (s, e) => { ImageViewer.Move(e.Delta > 0); }; // Scroll on MouseWheel
-            comboxResW.SelectedIndexChanged += (s, e) => { SetHiresFixVisible(); }; // Show/Hide HiRes Fix depending on chosen res
-            comboxResH.SelectedIndexChanged += (s, e) => { SetHiresFixVisible(); }; // Show/Hide HiRes Fix depending on chosen res
+            comboxResW.SelectedIndexChanged += (s, e) => SetHiresFixVisible(); // Show/Hide HiRes Fix depending on chosen res
+            comboxResH.SelectedIndexChanged += (s, e) => SetHiresFixVisible(); // Show/Hide HiRes Fix depending on chosen res
 
             MainUi.LoadAutocompleteData(promptAutocomplete, new[] { textboxPrompt, textboxPromptNeg });
             Task.Run(() => MainUi.SetGpusInWindowTitle());
