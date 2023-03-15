@@ -103,6 +103,11 @@ namespace StableDiffusionGui.Main
             Log(new Entry(msg, true, false, filename));
         }
 
+        public static void LogException(Exception ex, bool includeTrace = true, string prefix = "Exception:", string filename = Constants.Lognames.General)
+        {
+            Log(new Entry($"{prefix} {ex.Message}{(includeTrace ? $"\n{ex.StackTrace}" : "")}".Trim(), true, false, filename));
+        }
+
         public static void QueueLoop()
         {
             try
@@ -155,11 +160,7 @@ namespace StableDiffusionGui.Main
 
         public static void LogToFile(Entry entry)
         {
-            string filename = entry.LogName;
-
-            if (string.IsNullOrWhiteSpace(filename))
-                filename = Constants.Lognames.General;
-
+            string filename = entry.LogName.IsEmpty() ? Constants.Lognames.General : entry.LogName;
             filename = AddTxt(filename);
 
             try

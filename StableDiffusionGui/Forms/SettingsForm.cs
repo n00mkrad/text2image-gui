@@ -236,30 +236,39 @@ namespace StableDiffusionGui.Forms
 
         private void comboxImplementation_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Console.WriteLine($"CurrImplementation: {CurrImplementation} (from '{comboxImplementation.Text}')");
-
             if (CurrImplementation < 0)
                 return;
 
-            Config.Set(Config.Keys.ImplementationName, CurrImplementation.ToString());
-            panelFullPrecision.Visible = CurrImplementation.GetInfo().HasPrecisionOpt;
-            panelUnloadModel.Visible = CurrImplementation.GetInfo().IsInteractive;
-            panelCudaDevice.Visible = CurrImplementation.GetInfo().SupportsDeviceSelection;
-            panelSdModel.Visible = CurrImplementation.GetInfo().SupportsCustomModels;
-            panelVae.Visible = CurrImplementation.GetInfo().SupportsCustomVaeModels;
+            this.StopRendering();
 
-            LoadModels();
-
-            if (_ready && CurrImplementation != Implementation.InvokeAi)
+            try
             {
-                if (_initialImplementationLoad)
-                {
-                    _initialImplementationLoad = false;
-                    return; // Supress once, as we only want to show this if the user selects it, not if it's loaded from config
-                }
+                Config.Set(Config.Keys.ImplementationName, CurrImplementation.ToString());
+                panelFullPrecision.SetVisible(CurrImplementation.GetInfo().HasPrecisionOpt);
+                panelUnloadModel.SetVisible(CurrImplementation.GetInfo().IsInteractive);
+                panelCudaDevice.SetVisible(CurrImplementation.GetInfo().SupportsDeviceSelection);
+                panelSdModel.SetVisible(CurrImplementation.GetInfo().SupportsCustomModels);
+                panelVae.SetVisible(CurrImplementation.GetInfo().SupportsCustomVaeModels);
 
-                UiUtils.ShowMessageBox($"Warning: This implementation disables several features.\nOnly use it if you need it due to compatibility or hardware limitations.");
+                LoadModels();
+
+                if (_ready && CurrImplementation != Implementation.InvokeAi)
+                {
+                    if (_initialImplementationLoad)
+                    {
+                        _initialImplementationLoad = false;
+                        return; // Supress once, as we only want to show this if the user selects it, not if it's loaded from config
+                    }
+
+                    UiUtils.ShowMessageBox($"Warning: This implementation disables several features.\nOnly use it if you need it due to compatibility or hardware limitations.");
+                }
             }
+            catch (Exception ex)
+            {
+                Logger.LogException(ex);
+            }
+
+            this.ResumeRendering();
         }
 
         private void UpdateComboxStates()
