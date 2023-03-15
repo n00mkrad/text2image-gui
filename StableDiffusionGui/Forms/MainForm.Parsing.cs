@@ -33,7 +33,7 @@ namespace StableDiffusionGui.Forms
             if (meta.InitStrength > 0f)
                 sliderInitStrength.ActualValue = (decimal)meta.InitStrength;
 
-            RefreshUiAfterSettingsChanged();
+            TryRefreshUiState();
         }
 
         public void LoadTtiSettingsIntoUi(string[] prompts, string negPrompt = "")
@@ -70,7 +70,7 @@ namespace StableDiffusionGui.Forms
                 Logger.Log(ex.StackTrace, true);
             }
 
-            RefreshUiAfterSettingsChanged();
+            TryRefreshUiState();
         }
 
         /// <summary> Set values that have a single slider value and optionally an advanced syntax entry textbox </summary>

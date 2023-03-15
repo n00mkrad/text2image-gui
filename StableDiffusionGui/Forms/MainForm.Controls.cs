@@ -1,8 +1,6 @@
 ﻿using HTAlt.WinForms;
 using Microsoft.WindowsAPICodePack.Taskbar;
 using StableDiffusionGui.Extensions;
-using StableDiffusionGui.Forms;
-using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
@@ -13,7 +11,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Windows.Documents;
 using System.Windows.Forms;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
@@ -71,18 +68,31 @@ namespace StableDiffusionGui.Forms
             ConfigParser.SaveGuiElement(checkboxHiresFix, Config.Keys.HiresFix);
         }
 
-        public void RefreshUiAfterSettingsChanged(bool skipIfHidden = true)
+        public void TryRefreshUiState(bool skipIfHidden = true)
         {
             if (skipIfHidden && Opacity < 1f)
                 return;
 
-            Console.WriteLine("RefreshUiAfterSettingsChanged");
+            try
+            {
+                this.StopRendering();
+                RefreshUiState();
+                this.ResumeRendering();
+            }
+            catch(Exception ex)
+            {
+                this.ResumeRendering();
+                Logger.LogException(ex, true, "TryRefreshUiState:");
+            }
+        }
+
+        private void RefreshUiState ()
+        {
             panelPromptNeg.SetVisible(ConfigParser.CurrentImplementation.GetInfo().SupportsNegativePrompt && !IsUsingInpaintingModel);
             panelSampler.SetVisible(ConfigParser.CurrentImplementation == Implementation.InvokeAi);
             panelSeamless.SetVisible(ConfigParser.CurrentImplementation == Implementation.InvokeAi);
             panelRes.SetVisible(ShouldControlBeVisible(panelRes));
             panelScaleImg.SetVisible(ShouldControlBeVisible(panelScaleImg));
-
             bool adv = Config.Get<bool>(Config.Keys.AdvancedUi);
             upDownIterations.Maximum = !adv ? 10000 : 100000;
             sliderSteps.ActualMaximum = !adv ? 120 : 500;
@@ -90,9 +100,6 @@ namespace StableDiffusionGui.Forms
             sliderScale.ActualMaximum = !adv ? 25 : 50;
             comboxResW.SetItems(MainUi.GetResolutions(320, adv ? 4096 : 2048).Select(x => x.ToString()), UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.Last);
             comboxResH.SetItems(MainUi.GetResolutions(320, adv ? 4096 : 2048).Select(x => x.ToString()), UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.Last);
-
-            if (!TtiUtils.CurrentSdModelExists())
-                Config.Set(Config.Keys.Model, "");
 
             #region Init Img & Embeddings Stuff
 
@@ -115,6 +122,12 @@ namespace StableDiffusionGui.Forms
             ImageViewer.UpdateInitImgViewer();
 
             #endregion
+        }
+
+        public void UpdateInpaintUi()
+        {
+            btnResetMask.SetVisible(Inpainting.CurrentMask != null);
+            btnEditMask.SetVisible(Inpainting.CurrentMask != null);
         }
 
         public void OpenLogsMenu()
@@ -142,10 +155,10 @@ namespace StableDiffusionGui.Forms
             {
                 if (!string.IsNullOrWhiteSpace(ImageViewer.CurrentImagePath) && File.Exists(ImageViewer.CurrentImagePath))
                 {
-                    reGenerateImageWithCurrentSettingsToolStripMenuItem.Visible = !Program.Busy;
-                    useAsInitImageToolStripMenuItem.Visible = !Program.Busy;
-                    postProcessImageToolStripMenuItem.Visible = !Program.Busy && TextToImage.CurrentTaskSettings.Implementation == Implementation.InvokeAi;
-                    copyImageToClipboardToolStripMenuItem.Visible = pictBoxImgViewer.Image != null;
+                    reGenerateImageWithCurrentSettingsToolStripMenuItem.SetVisible(!Program.Busy);
+                    useAsInitImageToolStripMenuItem.SetVisible(!Program.Busy);
+                    postProcessImageToolStripMenuItem.SetVisible(!Program.Busy && TextToImage.CurrentTaskSettings.Implementation == Implementation.InvokeAi);
+                    copyImageToClipboardToolStripMenuItem.SetVisible(pictBoxImgViewer.Image != null);
                     menuStripOutputImg.Show(Cursor.Position);
                 }
             }
@@ -192,7 +205,7 @@ namespace StableDiffusionGui.Forms
         {
             bool txt2img = !MainUi.CurrentInitImgPaths.Any();
             bool compatible = ConfigParser.CurrentImplementation == Implementation.InvokeAi;
-            checkboxHiresFix.Visible = (comboxResW.GetInt() > 512 || comboxResH.GetInt() > 512) && txt2img && compatible;
+            checkboxHiresFix.SetVisible((comboxResW.GetInt() > 512 || comboxResH.GetInt() > 512) && txt2img && compatible);
         }
 
         public void CollapseToggle(Control collapseBtn, bool? overrideState = null)

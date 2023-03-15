@@ -1,4 +1,5 @@
 ﻿using Microsoft.WindowsAPICodePack.Dialogs;
+using StableDiffusionGui.Data;
 using StableDiffusionGui.Extensions;
 using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
@@ -70,7 +71,7 @@ namespace StableDiffusionGui.Forms
         private void SettingsForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             SaveSettings();
-            Program.MainForm.RefreshUiAfterSettingsChanged();
+            Program.MainForm.TryRefreshUiState();
         }
 
         private void LoadModels()
@@ -78,19 +79,18 @@ namespace StableDiffusionGui.Forms
             if (CurrImplementation < 0)
                 return;
 
+            List<Model> models = Models.GetModelsAll().Where(m => CurrImplementation.GetInfo().SupportedModelFormats.Contains(m.Format)).ToList();
             var types = new List<Enums.Models.Type>() { Enums.Models.Type.Normal, Enums.Models.Type.Vae };
 
             foreach(var type in types)
             {
                 var combox = type == Enums.Models.Type.Normal ? comboxSdModel : comboxSdModelVae;
-
                 combox.Items.Clear();
 
                 if (type == Enums.Models.Type.Vae)
                     combox.Items.Add("None");
 
-                Models.GetModels(type, CurrImplementation).ForEach(x => combox.Items.Add(x.Name));
-
+                models.Where(m => m.Type == type).ToList().ForEach(m => combox.Items.Add(m.Name));
                 ConfigParser.LoadGuiElement(combox, type == Enums.Models.Type.Normal ? Config.Keys.Model : Config.Keys.ModelVae);
 
                 if (combox.Items.Count > 0 && combox.SelectedIndex == -1)

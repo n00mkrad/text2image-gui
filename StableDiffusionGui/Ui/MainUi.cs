@@ -146,7 +146,7 @@ namespace StableDiffusionGui.Ui
                         OsUtils.SetClipboard(imgForm.CurrentMetadata.Prompt);
                 }
 
-                Program.MainForm.RefreshUiAfterSettingsChanged();
+                Program.MainForm.TryRefreshUiState();
             }
             else
             {
@@ -187,7 +187,7 @@ namespace StableDiffusionGui.Ui
                 CurrentInitImgPaths = paths;
             }
 
-            Program.MainForm.RefreshUiAfterSettingsChanged();
+            Program.MainForm.TryRefreshUiState();
         }
 
         public static void HandlePaste()

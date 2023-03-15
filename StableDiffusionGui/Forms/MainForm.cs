@@ -93,7 +93,7 @@ namespace StableDiffusionGui.Forms
             }, -1);
 
             await Task.Delay(1); // Don't ask. Just keep it here
-            RefreshUiAfterSettingsChanged(false);
+            TryRefreshUiState(false);
             LoadControls();
             Opacity = 1.0;
             MainUi.DoStartupChecks();
@@ -300,12 +300,6 @@ namespace StableDiffusionGui.Forms
             await Run(true);
         }
 
-        public void UpdateInpaintUi()
-        {
-            btnResetMask.Visible = Inpainting.CurrentMask != null;
-            btnEditMask.Visible = Inpainting.CurrentMask != null;
-        }
-
         private void btnResetMask_Click(object sender, EventArgs e)
         {
             Inpainting.ClearMask();
@@ -447,7 +441,7 @@ namespace StableDiffusionGui.Forms
 
         private void comboxInpaintMode_SelectedIndexChanged(object sender, EventArgs e)
         {
-            RefreshUiAfterSettingsChanged();
+            TryRefreshUiState();
         }
 
         private void labelCurrentImage_MouseEnter(object sender, EventArgs e)

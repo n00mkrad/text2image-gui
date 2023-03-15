@@ -42,7 +42,7 @@ namespace StableDiffusionGui.Forms
                 }
             }
 
-            RefreshUiAfterSettingsChanged();
+            TryRefreshUiState();
         }
 
         public async Task RegenerateImageWithCurrentSettings()
@@ -140,7 +140,7 @@ namespace StableDiffusionGui.Forms
 
                     Logger.ClearLogBox();
                     CleanPrompt();
-                    RefreshUiAfterSettingsChanged();
+                    TryRefreshUiState();
                     Inpainting.DeleteMaskedImage();
 
                     if (fromQueue)

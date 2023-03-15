@@ -148,7 +148,7 @@ namespace StableDiffusionGui.Forms
 
         private void InstallerForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Program.MainForm.RefreshUiAfterSettingsChanged();
+            Program.MainForm.TryRefreshUiState();
         }
     }
 }

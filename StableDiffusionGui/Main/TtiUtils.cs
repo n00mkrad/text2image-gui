@@ -135,7 +135,7 @@ namespace StableDiffusionGui.Main
             OsUtils.SendCtrlC(TtiProcess.CurrentProcess.Id);
 
             var childProcesses = OsUtils.GetChildProcesses(TtiProcess.CurrentProcess);
-            
+
             foreach (System.Diagnostics.Process p in childProcesses)
                 OsUtils.SendCtrlC(p.Id);
         }
@@ -144,7 +144,13 @@ namespace StableDiffusionGui.Main
         /// <returns> Model ZlpFileInfo , if it exists - null if not </returns>
         public static Model CheckIfCurrentSdModelExists(List<Model> cachedModels = null)
         {
-            string name = Config.Get<string>(Config.Keys.Model);
+            string name = "";
+
+            if (!CurrentSdModelExists())
+                Config.Set(Config.Keys.Model, "");
+            else
+                name = Config.Get<string>(Config.Keys.Model);
+
             var imp = ConfigParser.CurrentImplementation;
 
             if (string.IsNullOrWhiteSpace(name))
@@ -328,7 +334,7 @@ namespace StableDiffusionGui.Main
         }
 
         /// <summary> Finds the model config file for a given ckpt, either for use with models.yaml (<paramref name="modelsYamlFormat"/> == true) or as full path. </summary>
-        public static string GetCkptConfig (Model model, bool modelsYamlFormat)
+        public static string GetCkptConfig(Model model, bool modelsYamlFormat)
         {
             bool inpaint = model.FormatIndependentName.EndsWith("inpainting");
             var custConfigs = new List<string> { $"{model.FullName}.yaml", $"{model.FullName}.yml" }.Where(path => File.Exists(path));

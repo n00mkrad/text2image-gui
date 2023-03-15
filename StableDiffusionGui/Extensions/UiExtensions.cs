@@ -30,6 +30,9 @@ namespace StableDiffusionGui.Extensions
 
         public static void SetItems(this ComboBox combox, IEnumerable<object> items, SelectMode select = SelectMode.Retain, SelectMode fallback = SelectMode.First)
         {
+            if (combox.AreItemsEqualToList(items.ToArray()))
+                return;
+
             string prevText = combox.Text;
 
             combox.Items.Clear();
@@ -71,6 +74,20 @@ namespace StableDiffusionGui.Extensions
             }
         }
 
+        private static bool AreItemsEqualToList(this ComboBox combox, object[] newItems)
+        {
+            if (combox.Items.Count != newItems.Count())
+                return false;
+
+            for (int i = 0; i < combox.Items.Count; i++)
+            {
+                if (combox.Items[i].ToString() != newItems[i].ToString())
+                    return false;
+            }
+
+            return true;
+        }
+
         public static DialogResult ShowDialogForm(this Form form, IWin32Window owner = null)
         {
             return form.ShowDialog(owner);
@@ -90,6 +107,13 @@ namespace StableDiffusionGui.Extensions
         {
             if (c.Visible != targetState)
                 c.Visible = targetState;
+        }
+
+        /// <summary> Sets the visibility of a ToolStripItem while avoiding unnecessary setter calls.  </summary>
+        public static void SetVisible(this ToolStripItem item, bool targetState)
+        {
+            if (item.Visible != targetState)
+                item.Visible = targetState;
         }
 
         /// <summary> WM_SETREDRAW message is sent to a window to allow changes to be redrawn or to prevent changes from being redrawn. </summary>

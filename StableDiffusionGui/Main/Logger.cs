@@ -105,7 +105,8 @@ namespace StableDiffusionGui.Main
 
         public static void LogException(Exception ex, bool includeTrace = true, string prefix = "Exception:", string filename = Constants.Lognames.General)
         {
-            Log(new Entry($"{prefix} {ex.Message}{(includeTrace ? $"\n{ex.StackTrace}" : "")}".Trim(), true, false, filename));
+            string msg = $"{prefix} {ex.Message}{(includeTrace ? $"\n{ex.StackTrace}" : "")}".Trim();
+            Log(new Entry($"[EX] {msg}", true, false, filename));
         }
 
         public static void QueueLoop()
