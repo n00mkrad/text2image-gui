@@ -39,7 +39,7 @@ namespace StableDiffusionGui.Forms
         {
             CheckForIllegalCrossThreadCalls = false;
             AllowEscClose = false;
-            Task.Run(() => Logger.QueueLoop());
+            Task.Run(() => Logger.QueueLoopOuter());
             MinimumSize = Size;
             Text = $"Stable Diffusion GUI {Program.Version}";
         }

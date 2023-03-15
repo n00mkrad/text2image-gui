@@ -109,17 +109,24 @@ namespace StableDiffusionGui.Main
             Log(new Entry($"[EX] {msg}", true, false, filename));
         }
 
-        public static void QueueLoop()
+        public static void QueueLoopOuter()
+        {
+            while (true)
+                QueueLoop(); // Restarts loop in case it throws an exception
+        }
+
+        private static void QueueLoop ()
         {
             try
             {
                 foreach (Entry message in _logQueue.GetConsumingEnumerable())
                     Show(message);
             }
-            catch(ObjectDisposedException ex)
+            catch (ObjectDisposedException ex)
             {
                 Console.WriteLine($"Logger Loop ObjectDisposedException: {ex.Message}\n{ex.StackTrace}");
-                System.Diagnostics.Debugger.Break();
+                if (System.Diagnostics.Debugger.IsAttached) System.Diagnostics.Debugger.Break();
+                QueueLoopOuter();
             }
             catch (Exception ex)
             {
