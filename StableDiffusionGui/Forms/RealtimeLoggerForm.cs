@@ -1,11 +1,7 @@
-﻿using StableDiffusionGui.Extensions;
-using StableDiffusionGui.Main;
+﻿using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace StableDiffusionGui.Forms
@@ -43,6 +39,11 @@ namespace StableDiffusionGui.Forms
         {
             if (e.KeyData == (Keys.Escape))
                 BeginInvoke(new MethodInvoker(Close));
+        }
+
+        private void RealtimeLoggerForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Logger.RealtimeLoggerForm = null;
         }
     }
 }

@@ -27,7 +27,7 @@ namespace StableDiffusionGui.Main
         public static string LastLogLine { get { return _lastLogLine; } }
 
         private static long _currentId;
-        private static ConcurrentQueue<Entry> _logQueue = new ConcurrentQueue<Entry>();
+        private static BlockingCollection<Entry> _logQueue = new BlockingCollection<Entry>();
 
 
         public class Entry
@@ -79,45 +79,46 @@ namespace StableDiffusionGui.Main
         }
 
 
-        public static void Log(Entry entry)
+        private static void Log(Entry entry)
         {
             if (string.IsNullOrWhiteSpace(entry.Message))
                 return;
 
             entry.TimeEnqueue = DateTime.Now;
-            _logQueue.Enqueue(entry);
+            _logQueue.Add(entry);
         }
 
-        public static void LogReplace(string msg, string filename = Constants.Lognames.General)
+        public static void LogReplace(object msg, string filename = Constants.Lognames.General)
         {
-            Log(new Entry(msg, false, true, filename));
+            Log(new Entry(msg.ToString(), false, true, filename));
         }
 
-        public static void Log(string msg, bool hidden = false, bool replaceLastLine = false, string filename = Constants.Lognames.General)
+        public static void Log(object msg, bool hidden = false, bool replaceLastLine = false, string filename = Constants.Lognames.General)
         {
-            Log(new Entry(msg, hidden, replaceLastLine, filename));
+            Log(new Entry(msg.ToString(), hidden, replaceLastLine, filename));
         }
 
-        public static void LogHidden(string msg, string filename = Constants.Lognames.General)
+        public static void LogHidden(object msg, string filename = Constants.Lognames.General)
         {
-            Log(new Entry(msg, true, false, filename));
+            Log(new Entry(msg.ToString(), true, false, filename));
         }
 
-        public static async Task QueueLoop()
+        public static void QueueLoop()
         {
-            while (true)
+            try
             {
-                if (_logQueue.Count >= 1)
-                    ShowNext();
-                else
-                    await Task.Delay(1);
+                foreach (Entry message in _logQueue.GetConsumingEnumerable())
+                    Show(message);
             }
-        }
-
-        public static void ShowNext()
-        {
-            if (_logQueue.TryDequeue(out Entry entry))
-                Show(entry);
+            catch(ObjectDisposedException ex)
+            {
+                Console.WriteLine($"Logger Loop ObjectDisposedException: {ex.Message}\n{ex.StackTrace}");
+                System.Diagnostics.Debugger.Break();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Logger Loop Exception: {ex.Message}\n{ex.StackTrace}");
+            }
         }
 
         public static void Show(Entry entry)

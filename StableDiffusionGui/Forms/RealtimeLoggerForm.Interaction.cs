@@ -1,16 +1,11 @@
 ﻿using StableDiffusionGui.Extensions;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StableDiffusionGui.Forms
 {
     public partial class RealtimeLoggerForm
     {
-        public bool CanBeUsed { get { return !Disposing && !IsDisposed; } }
-
         public string LogText
         {
             get { return logBox.InvokeRequired ? (string)logBox.Invoke(new Func<string>(() => logBox.Text)) : logBox.Text; }
@@ -19,14 +14,14 @@ namespace StableDiffusionGui.Forms
 
         public void LogAppend(string s, bool replaceLastLine = false)
         {
+            if (this.IsDisposed || logBox.IsDisposed || this.Disposing || logBox.Disposing)
+                return;
+
             if (logBox.InvokeRequired)
             {
                 Invoke(new Action<string, bool>(LogAppend), s, replaceLastLine);
                 return;
             }
-
-            if (!CanBeUsed)
-                return;
 
             if (replaceLastLine)
             {
