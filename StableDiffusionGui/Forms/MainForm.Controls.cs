@@ -32,6 +32,7 @@ namespace StableDiffusionGui.Forms
             comboxSymmetry.FillFromEnum<SymmetryMode>(Strings.SymmetryMode, 0);
             comboxInpaintMode.FillFromEnum<InpaintMode>(Strings.InpaintMode, 0);
             comboxResizeGravity.FillFromEnum<ImageMagick.Gravity>(Strings.ImageGravity, 4, new List<ImageMagick.Gravity> { ImageMagick.Gravity.Undefined });
+            comboxEmbeddingList.SetItems(new[] { "None" }.Concat(Models.GetEmbeddings().Select(m => m.FormatIndependentName)), UiExtensions.SelectMode.First);
 
             _categoryPanels.Add(btnCollapseDebug, new List<Control> { panelDebugAppendArgs, panelDebugSendStdin, panelDebugPerlinThresh, panelDebugLoopback });
             _categoryPanels.Add(btnCollapseRendering, new List<Control> { panelRes, panelSampler });

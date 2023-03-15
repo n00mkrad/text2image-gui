@@ -4,6 +4,7 @@ using StableDiffusionGui.Implementations;
 using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
+using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
 using System;
@@ -518,5 +519,28 @@ namespace StableDiffusionGui.Forms
         {
             new UpdaterForm().ShowDialogForm();
         }
+
+        #region Embeddings
+
+        private void comboxEmbeddingList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            bool vis = comboxEmbeddingList.Visible && comboxEmbeddingList.SelectedIndex > 0;
+            btnEmbeddingCopy.SetVisible(vis);
+            btnEmbeddingAppend.SetVisible(vis);
+        }
+
+        private void btnEmbeddingCopy_Click(object sender, EventArgs e)
+        {
+            OsUtils.SetClipboard(comboxEmbeddingList.Text);
+        }
+
+        private void btnEmbeddingAppend_Click(object sender, EventArgs e)
+        {
+            TextBox textbox = InputUtils.IsHoldingShift ? textboxPromptNeg : textboxPrompt;
+            textbox.Focus();
+            textbox.AppendText($"{(textbox.Text.TrimStart().Length == 0 ? "" : " ")}<{comboxEmbeddingList.Text}>");
+        }
+
+        #endregion
     }
 }

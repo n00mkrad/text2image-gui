@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Windows.Documents;
 using ZetaLongPaths;
 using static StableDiffusionGui.Main.Enums.Models;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
@@ -30,6 +31,17 @@ namespace StableDiffusionGui.Io
             }
 
             return mdlFolders;
+        }
+
+        public static List<Model> GetEmbeddings ()
+        {
+            List<string> mdlFolders = GetAllModelDirs();
+            var fileList = new List<ZlpFileInfo>();
+
+            foreach (string folderPath in mdlFolders)
+                fileList.AddRange(IoUtils.GetFileInfosSorted(Path.Combine(folderPath, Constants.Dirs.Models.Embeddings), false, "*.*").ToList());
+
+            return fileList.Select(f => new Model(f, Format.Pytorch, Enums.Models.Type.Embedding)).ToList();
         }
 
         public static List<Model> GetModelsAll(bool removeUnknownModels = true)

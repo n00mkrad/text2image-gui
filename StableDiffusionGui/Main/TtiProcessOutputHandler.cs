@@ -97,12 +97,18 @@ namespace StableDiffusionGui.Main
 
                 if (line.Trim().StartsWith(">> Textual inversion triggers: "))
                 {
-                    Logger.Log($"Model {(_invokeAiLastModelCached ? " retrieved from RAM cache" : "loaded")}.\nAvailable Embeddings: {line.Substring(line.Split("triggers: ")[0].Length + 10)}", false, ellipsis);
+                    Logger.Log($"Model {(_invokeAiLastModelCached ? " retrieved from RAM cache" : "loaded")}.\nCompatible Embeddings: {line.Substring(line.Split("triggers: ")[0].Length + 10)}", false, ellipsis);
                 }
 
                 if(line.Trim().StartsWith(">> Preparing tokens for textual inversion"))
                 {
                     Logger.Log("Loading textual inversion...", false, ellipsis);
+                }
+
+                if (line.Trim().StartsWith(">> Embedding not found:"))
+                {
+                    string emb = line.Split(": ").Last();
+                    Logger.Log($"Warning: No compatible embedding with trigger '{emb}' found!", false, ellipsis);
                 }
 
                 if (!_hasErrored && line.Contains("An error occurred while processing your prompt"))
