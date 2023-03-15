@@ -89,6 +89,20 @@ namespace StableDiffusionGui.Main
                 }
             }
 
+            public static string GetSymmetryArg(Enums.StableDiffusion.SymmetryMode mode)
+            {
+                string t = Config.Get<float>(Config.Keys.SymmetryTimepoint, 0.9f).ToStringDot("0.0");
+
+                switch (mode)
+                {
+                    case Enums.StableDiffusion.SymmetryMode.Disabled: return "";
+                    case Enums.StableDiffusion.SymmetryMode.SymVert: return $"--h_symmetry_time_pct {t}"; // [sic] - h seems to be vertical
+                    case Enums.StableDiffusion.SymmetryMode.SymHor: return $"--v_symmetry_time_pct {t}"; // [sic] - v seems to be horizontal
+                    case Enums.StableDiffusion.SymmetryMode.SymBoth: return $"--v_symmetry_time_pct {t} --h_symmetry_time_pct {t}";
+                    default: return "";
+                }
+            }
+
             public static string GetFaceRestoreArgs(bool force = false)
             {
                 if (!force && !Config.Get<bool>(Config.Keys.FaceRestoreEnable))

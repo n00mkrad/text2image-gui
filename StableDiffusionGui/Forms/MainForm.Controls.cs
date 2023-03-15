@@ -29,12 +29,13 @@ namespace StableDiffusionGui.Forms
         {
             comboxSampler.FillFromEnum<Sampler>(Strings.Samplers, 0);
             comboxSeamless.FillFromEnum<SeamlessMode>(Strings.SeamlessMode, 0);
+            comboxSymmetry.FillFromEnum<SymmetryMode>(Strings.SymmetryMode, 0);
             comboxInpaintMode.FillFromEnum<InpaintMode>(Strings.InpaintMode, 0);
             comboxResizeGravity.FillFromEnum<ImageMagick.Gravity>(Strings.ImageGravity, 4, new List<ImageMagick.Gravity> { ImageMagick.Gravity.Undefined });
 
             _categoryPanels.Add(btnCollapseDebug, new List<Control> { panelDebugAppendArgs, panelDebugSendStdin, panelDebugPerlinThresh, panelDebugLoopback });
             _categoryPanels.Add(btnCollapseRendering, new List<Control> { panelRes, panelSampler });
-            _categoryPanels.Add(btnCollapseSymmetry, new List<Control> { panelSeamless });
+            _categoryPanels.Add(btnCollapseSymmetry, new List<Control> { panelSeamless, panelSymmetry });
             _categoryPanels.Add(btnCollapseGeneration, new List<Control> { panelInpainting, panelIterations, panelSteps, panelScale, panelScaleImg, panelSeed });
 
             _expandedCategories = new List<Control> { btnCollapseRendering, btnCollapseGeneration };
@@ -156,10 +157,11 @@ namespace StableDiffusionGui.Forms
             {
                 if (!string.IsNullOrWhiteSpace(ImageViewer.CurrentImagePath) && File.Exists(ImageViewer.CurrentImagePath))
                 {
-                    reGenerateImageWithCurrentSettingsToolStripMenuItem.SetVisible(!Program.Busy);
-                    useAsInitImageToolStripMenuItem.SetVisible(!Program.Busy);
-                    postProcessImageToolStripMenuItem.SetVisible(!Program.Busy && TextToImage.CurrentTaskSettings.Implementation == Implementation.InvokeAi);
-                    copyImageToClipboardToolStripMenuItem.SetVisible(pictBoxImgViewer.Image != null);
+                    reGenerateImageWithCurrentSettingsToolStripMenuItem.Visible = !Program.Busy;
+                    useAsInitImageToolStripMenuItem.Visible = !Program.Busy;
+                    postProcessImageToolStripMenuItem.Visible = !Program.Busy && TextToImage.CurrentTaskSettings.Implementation == Implementation.InvokeAi;
+                    copyImageToClipboardToolStripMenuItem.Visible = pictBoxImgViewer.Image != null;
+                    fitWindowSizeToImageSizeToolStripMenuItem.Visible = MainUi.GetPreferredSize() != System.Drawing.Size.Empty;
                     menuStripOutputImg.Show(Cursor.Position);
                 }
             }

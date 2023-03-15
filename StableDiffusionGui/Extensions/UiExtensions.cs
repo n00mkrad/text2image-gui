@@ -103,17 +103,10 @@ namespace StableDiffusionGui.Extensions
         }
 
         /// <summary> Sets the visibility of a control while avoiding unnecessary setter calls.  </summary>
-        public static void SetVisible (this Control c, bool targetState)
+        public static void SetVisible(this Control c, bool targetState)
         {
             if (c.Visible != targetState)
                 c.Visible = targetState;
-        }
-
-        /// <summary> Sets the visibility of a ToolStripItem while avoiding unnecessary setter calls.  </summary>
-        public static void SetVisible(this ToolStripItem item, bool targetState)
-        {
-            if (item.Visible != targetState)
-                item.Visible = targetState;
         }
 
         /// <summary> WM_SETREDRAW message is sent to a window to allow changes to be redrawn or to prevent changes from being redrawn. </summary>
@@ -138,6 +131,17 @@ namespace StableDiffusionGui.Extensions
             window.DefWndProc(ref msgResumeUpdate);
             control.Invalidate();
             control.Refresh();
+        }
+
+        public static void RunWithUiStopped(this Action action, Form form, bool dontPauseInDebugMode = false)
+        {
+            if (!(dontPauseInDebugMode && Program.Debug))
+                form.StopRendering();
+
+            action.RunInTryCatch();
+
+            if (!(dontPauseInDebugMode && Program.Debug))
+                form.ResumeRendering();
         }
     }
 }

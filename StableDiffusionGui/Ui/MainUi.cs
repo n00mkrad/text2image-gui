@@ -89,7 +89,7 @@ namespace StableDiffusionGui.Ui
                 Logger.Log($"Debug mode enabled. {(System.Diagnostics.Debugger.IsAttached ? "Debugger is attached." : "")}");
             }
 
-            if(Program.UserArgs.Get(Constants.Args.Install) == true.ToString())
+            if (Program.UserArgs.Get(Constants.Args.Install) == true.ToString())
             {
                 bool onnx = Program.UserArgs.Get(Constants.Args.InstallOnnx) == true.ToString();
                 bool upscalers = Program.UserArgs.Get(Constants.Args.InstallUpscalers) == true.ToString();
@@ -255,24 +255,27 @@ namespace StableDiffusionGui.Ui
 
         public static void SetPromptFieldSize(PromptFieldSizeMode sizeMode = PromptFieldSizeMode.Toggle, bool negativePromptField = false)
         {
-            var panel = negativePromptField ? Program.MainForm.textboxPromptNeg.Parent : Program.MainForm.textboxPrompt.Parent;
-            var btn = negativePromptField ? Program.MainForm.btnExpandPromptNegField : Program.MainForm.btnExpandPromptField;
-            int smallHeight = negativePromptField ? 40 : 65;
-
-            if (sizeMode == PromptFieldSizeMode.Toggle)
-                sizeMode = panel.Height == smallHeight ? PromptFieldSizeMode.Expand : PromptFieldSizeMode.Collapse;
-
-            if (sizeMode == PromptFieldSizeMode.Expand)
+            ((Action)(() =>
             {
-                btn.BackgroundImage = Resources.upArrowIcon;
-                panel.Height = smallHeight * 4;
-            }
+                var panel = negativePromptField ? Program.MainForm.textboxPromptNeg.Parent : Program.MainForm.textboxPrompt.Parent;
+                var btn = negativePromptField ? Program.MainForm.btnExpandPromptNegField : Program.MainForm.btnExpandPromptField;
+                int smallHeight = negativePromptField ? 40 : 65;
 
-            if (sizeMode == PromptFieldSizeMode.Collapse)
-            {
-                btn.BackgroundImage = Resources.downArrowIcon;
-                panel.Height = smallHeight;
-            }
+                if (sizeMode == PromptFieldSizeMode.Toggle)
+                    sizeMode = panel.Height == smallHeight ? PromptFieldSizeMode.Expand : PromptFieldSizeMode.Collapse;
+
+                if (sizeMode == PromptFieldSizeMode.Expand)
+                {
+                    btn.BackgroundImage = Resources.upArrowIcon;
+                    panel.Height = smallHeight * 4;
+                }
+
+                if (sizeMode == PromptFieldSizeMode.Collapse)
+                {
+                    btn.BackgroundImage = Resources.downArrowIcon;
+                    panel.Height = smallHeight;
+                }
+            })).RunWithUiStopped(Program.MainForm);
         }
 
         public static async Task SetGpusInWindowTitle()
@@ -302,14 +305,14 @@ namespace StableDiffusionGui.Ui
                 Logger.Log($"You are running the latest version ({Program.ReleaseChannel} Channel).");
         }
 
-        public static void FitWindowSizeToImageSize()
+        public static Size GetPreferredSize()
         {
             Size outputImgSize = new Size();
 
             if (Program.MainForm.pictBoxImgViewer.Image == null)
             {
                 if (Program.MainForm.pictBoxInitImg.Image == null)
-                    return;
+                    return Size.Empty;
                 else
                     outputImgSize = Program.MainForm.pictBoxInitImg.Image.Size;
             }
@@ -326,15 +329,30 @@ namespace StableDiffusionGui.Ui
 
             Size targetSize = new Size(picInWidth + picOutWidth + formWidthWithoutImgViewer, picOutHeight.Clamp(512, 8192) + formHeightWithoutImgViewer);
             Size currScreenSize = Screen.FromControl(Program.MainForm).Bounds.Size;
-            Size maxSize = new Size((currScreenSize.Width * 1.5f).RoundToInt(), currScreenSize.Height);
 
             if (Program.MainForm.Size == targetSize)
-                return;
+                return Size.Empty;
 
-            if (Program.MainForm.WindowState == FormWindowState.Maximized)
-                Program.MainForm.WindowState = FormWindowState.Normal;
+            if (targetSize.Width > currScreenSize.Width || targetSize.Height > currScreenSize.Height)
+                return Size.Empty;
 
-            Program.MainForm.Size = new Size(targetSize.Width.Clamp(512, maxSize.Width), targetSize.Height.Clamp(512, maxSize.Height));
+            return targetSize;
+        }
+
+        public static void FitWindowSizeToImageSize()
+        {
+            ((Action)(() =>
+            {
+                Size targetSize = GetPreferredSize();
+
+                if (targetSize == Size.Empty || Program.MainForm.Size == targetSize)
+                    return;
+
+                if (Program.MainForm.WindowState == FormWindowState.Maximized)
+                    Program.MainForm.WindowState = FormWindowState.Normal;
+
+                Program.MainForm.Size = targetSize;
+            })).RunWithUiStopped(Program.MainForm);
         }
 
         public static void LoadAutocompleteData(AutocompleteMenuNS.AutocompleteMenu menu, TextBox textbox)

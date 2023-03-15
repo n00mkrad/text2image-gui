@@ -33,17 +33,18 @@ namespace StableDiffusionGui.Implementations
                 float[] scales = parameters.FromJson<float[]>("scales"); // List of CFG scale values to run
                 long seed = parameters.FromJson<long>("seed"); // Initial seed
                 string sampler = parameters.FromJson<string>("sampler"); // Sampler
-                Size res = parameters.FromJson<Size>("res"); // Image resolution
+                var res = parameters.FromJson<Size>("res"); // Image resolution
                 var seamless = parameters.FromJson<SeamlessMode>("seamless"); // Seamless generation mode
+                var symmetry = parameters.FromJson<SymmetryMode>("symmetry"); // Symmetry mode
                 string model = parameters.FromJson<string>("model"); // Model name
                 bool hiresFix = parameters.FromJson<bool>("hiresFix"); // Enable high-resolution fix
                 bool lockSeed = parameters.FromJson<bool>("lockSeed"); // Lock seed (disable auto-increment)
                 string vae = parameters.FromJson<string>("vae").NullToEmpty().Replace("None", ""); // VAE model name
                 float perlin = parameters.FromJson<float>("perlin"); // Perlin noise blend value
                 int threshold = parameters.FromJson<int>("threshold"); // Threshold value
-                InpaintMode inpaint = parameters.FromJson<InpaintMode>("inpainting"); // Inpainting mode
+                var inpaint = parameters.FromJson<InpaintMode>("inpainting"); // Inpainting mode
                 string clipSegMask = parameters.FromJson<string>("clipSegMask"); // ClipSeg text-based masking prompt
-                ImageMagick.Gravity resizeGravity = parameters.FromJson<ImageMagick.Gravity>("resizeGravity", (ImageMagick.Gravity)(-1)); // Inpainting mode
+                var resizeGravity = parameters.FromJson<ImageMagick.Gravity>("resizeGravity", (ImageMagick.Gravity)(-1)); // Inpainting mode
 
                 var allModels = Models.GetModelsAll();
                 var cachedModels = allModels.Where(m => m.Type == Enums.Models.Type.Normal).ToList();
@@ -64,6 +65,7 @@ namespace StableDiffusionGui.Implementations
                 args["upscale"] = Args.InvokeAi.GetUpscaleArgs();
                 args["facefix"] = Args.InvokeAi.GetFaceRestoreArgs();
                 args["seamless"] = Args.InvokeAi.GetSeamlessArg(seamless);
+                args["symmetry"] = Args.InvokeAi.GetSymmetryArg(symmetry);
                 args["hiresFix"] = hiresFix ? "--hires_fix" : "";
 
                 foreach (string prompt in prompts)

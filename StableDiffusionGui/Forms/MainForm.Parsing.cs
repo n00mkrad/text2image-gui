@@ -111,6 +111,7 @@ namespace StableDiffusionGui.Forms
                     { "initImgs", MainUi.CurrentInitImgPaths.ToJson() },
                     { "initStrengths", panelInitImgStrength.Visible ? MainUi.GetExtraValues(textboxExtraInitStrengths.Text, sliderInitStrength.ActualValueFloat).ToJson() : new List<float>() { 0.5f }.ToJson() },
                     { "seamless", (comboxSeamless.Visible ? ((SeamlessMode)comboxSeamless.SelectedIndex) : SeamlessMode.Disabled).ToJson() },
+                    { "symmetry", (comboxSymmetry.Visible ? ((SymmetryMode)comboxSymmetry.SelectedIndex) : SymmetryMode.Disabled).ToJson() },
                     { "inpainting", ((InpaintMode)comboxInpaintMode.SelectedIndex).ToJson() },
                     { "clipSegMask", textboxClipsegMask.Text.Trim().ToJson() },
                     { "model", Config.Get<string>(Config.Keys.Model).ToJson() },

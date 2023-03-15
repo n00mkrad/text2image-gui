@@ -584,5 +584,17 @@ namespace StableDiffusionGui
         {
             return myEnum.Equals(Enum.ToObject(typeof(TEnum), -1));
         }
+
+        public static void RunInTryCatch(this Action action)
+        {
+            try
+            {
+                action();
+            }
+            catch (Exception ex)
+            {
+                Logger.LogException(ex);
+            }
+        }
     }
 }
