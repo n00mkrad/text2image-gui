@@ -12,9 +12,13 @@ namespace StableDiffusionGui.Controls
     public class CustomTextbox : TextBox
     {
         [Category("Custom")]
+        public bool DisableUnfocusedInput { get; set; } = true;
+        [Category("Custom")]
+        public float MaxTextZoomFactor { get; set; } = 2.0f;
+        [Category("Custom")]
         public string Placeholder { get; set; } = "";
         [Category("Custom")]
-        public Color PlaceholderTextColor { get; set; } = System.Drawing.Color.Silver;
+        public Color PlaceholderTextColor { get; set; } = Color.Silver;
 
         [Browsable(false)]
         private bool _init;
@@ -22,11 +26,8 @@ namespace StableDiffusionGui.Controls
         private Color _originalTextColor;
         [Browsable(false)]
         private float _defaultPromptFontSize;
-
-        public string TextNoPlaceholder
-        {
-            get { return base.Text == Placeholder ? "" : base.Text; }
-        }
+        [Browsable(false)]
+        public string TextNoPlaceholder { get { return base.Text == Placeholder ? "" : base.Text; } }
 
         protected override void OnVisibleChanged(EventArgs e)
         {
@@ -43,12 +44,18 @@ namespace StableDiffusionGui.Controls
 
         protected override void OnGotFocus(EventArgs e)
         {
+            if (DisableUnfocusedInput)
+                ReadOnly = false;
+
             UpdatePlaceholderState();
             base.OnGotFocus(e);
         }
 
         protected override void OnLostFocus(EventArgs e)
         {
+            if (DisableUnfocusedInput)
+                ReadOnly = true;
+
             UpdatePlaceholderState();
             base.OnLostFocus(e);
         }
@@ -83,7 +90,8 @@ namespace StableDiffusionGui.Controls
             if (Focused && InputUtils.IsHoldingCtrl)
             {
                 int sizeChange = e.Delta > 0 ? 1 : -1;
-                Font = new Font(Font.Name, (Font.Size + sizeChange).Clamp(_defaultPromptFontSize, _defaultPromptFontSize * 2f), Font.Style, Font.Unit);
+                float newFontSize = (Font.Size + sizeChange).Clamp(_defaultPromptFontSize, _defaultPromptFontSize * MaxTextZoomFactor);
+                Font = new Font(Font.Name, newFontSize, Font.Style, Font.Unit);
             }
 
             base.OnMouseWheel(e);

@@ -10,7 +10,7 @@ namespace StableDiffusionGui.Forms
     public partial class ModelQuickSelectForm : Form
     {
         private Enums.Models.Type _modelType;
-        private Enums.StableDiffusion.Implementation _implementation;
+        private Implementation _implementation;
         private string ModelConfigKey { get { return _modelType == Enums.Models.Type.Normal ? Config.Keys.Model : Config.Keys.ModelVae; } }
 
         public ModelQuickSelectForm(Enums.Models.Type modelType)

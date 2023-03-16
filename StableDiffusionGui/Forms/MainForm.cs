@@ -127,6 +127,7 @@ namespace StableDiffusionGui.Forms
 
         public async void runBtn_Click(object sender, EventArgs e)
         {
+            panelSettings.Focus();
             await TryRun();
 
             if (checkboxLoopback.Checked)
