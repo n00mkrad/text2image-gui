@@ -116,18 +116,10 @@ namespace StableDiffusionGui.Main
             char[] delimiters = new char[] { ' ', '\r', '\n' };
             int words = longest.Split(delimiters, StringSplitOptions.RemoveEmptyEntries).Length;
 
-            int thresh = 55;
+            int thresh = 120;
 
             if (words > thresh)
                 UiUtils.ShowMessageBox($"{(prompts.Count > 1 ? "One of your prompts" : "Your prompt")} is very long (>{thresh} words).\n\nThe AI might ignore parts of your prompt. Shorten the prompt to avoid this.");
-
-            var imp = ConfigParser.CurrentImplementation;
-
-            if (imp == Implementation.OptimizedSd && prompts.Where(x => x.MatchesRegex(@"(?:(?!\[)(?:.|\n))*\[(?:(?!\])(?:.|\n))*\]")).Any())
-            {
-                UiUtils.ShowMessageBox($"{(prompts.Count > 1 ? "One of your prompts" : "Your prompt")} contains square brackets used for exclusion words.\n\n" +
-                    $"This is not supported with your current implementation ({Strings.Implementation.Get(imp.ToString(), true)}).");
-            }
         }
 
         public static void SoftCancelInvokeAi()
