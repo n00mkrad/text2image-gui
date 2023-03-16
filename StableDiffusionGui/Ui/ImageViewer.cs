@@ -236,13 +236,15 @@ namespace StableDiffusionGui.Ui
 
         public static Image GetCurrentImageComparison ()
         {
-            if (Program.MainForm.pictBoxInitImg.Image == null)
-                return null;
-
             if (Program.MainForm.pictBoxImgViewer.Image == null)
                 return null;
 
-            Image img = ImgUtils.Juxtapose(Program.MainForm.pictBoxInitImg.Image, Program.MainForm.pictBoxImgViewer.Image, Program.MainForm.pictBoxImgViewer.Image.Size);
+            Image scaledInitImg = IoUtils.GetImage(CurrentImageMetadata.InitImgName);
+
+            if (scaledInitImg == null)
+                return null;
+
+            Image img = ImgUtils.JuxtaposeSameSize(scaledInitImg, Program.MainForm.pictBoxImgViewer.Image);
             return img;
         }
     }

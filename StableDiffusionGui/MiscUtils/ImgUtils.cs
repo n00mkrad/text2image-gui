@@ -249,6 +249,40 @@ namespace StableDiffusionGui.MiscUtils
             return img;
         }
 
+        private static Brush CreateCheckerboardBrush(int tileSize = 8, Color c1 = default, Color c2 = default)
+        {
+            if (c1 == default)
+                c1 = Color.LightGray;
+
+            if (c2 == default)
+                c2 = Color.White;
+
+            int doubleSize = tileSize * 2;
+            Bitmap checkerboard = new Bitmap(doubleSize, doubleSize);
+            for (int y = 0; y < doubleSize; y++)
+                for (int x = 0; x < doubleSize; x++)
+                    checkerboard.SetPixel(x, y, ((x / tileSize + y / tileSize) % 2 == 0) ? c1 : c2);
+
+            return new TextureBrush(checkerboard, WrapMode.Tile);
+        }
+
+        public static Image JuxtaposeSameSize(Image img1, Image img2)
+        {
+            int width = img1.Width * 2;
+            int height = img1.Height;
+
+            Image img = new Bitmap(width, height);
+            using (Graphics g = Graphics.FromImage(img))
+            {
+                Brush checkerboardBrush = CreateCheckerboardBrush(8, Color.FromArgb(21, 21, 21), Color.FromArgb(29, 29, 29));
+                g.FillRectangle(checkerboardBrush, new Rectangle(0, 0, width, height));
+                g.DrawImage(img1, new Point(0, 0));
+                g.DrawImage(img2, new Point(img1.Width, 0));
+            }
+
+            return img;
+        }
+
         public static Image Juxtapose(Image img1, Image img2, Size size)
         {
             img1 = ResizeImage(img1, size);
