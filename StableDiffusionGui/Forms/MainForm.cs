@@ -80,9 +80,9 @@ namespace StableDiffusionGui.Forms
             upDownSeed.Text = "";
 
             TabOrderInit(new List<Control>() {
-                textboxPrompt, textboxPromptNeg,
+                textboxPrompt, textboxPromptNeg, comboxEmbeddingList,
                 sliderInitStrength, textboxSliderInitStrength,
-                comboxInpaintMode, textboxClipsegMask,
+                comboxInpaintMode, comboxResizeGravity, textboxClipsegMask,
                 upDownIterations,
                 sliderSteps, textboxSliderSteps,
                 sliderScale, textboxSliderScale,
@@ -90,6 +90,7 @@ namespace StableDiffusionGui.Forms
                 comboxResW, comboxResH, checkboxHiresFix,
                 comboxSampler,
                 comboxSeamless,
+                comboxSymmetry,
                 runBtn
             }, -1);
 

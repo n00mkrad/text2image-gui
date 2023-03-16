@@ -93,6 +93,7 @@ namespace StableDiffusionGui.Forms
             panelPromptNeg.SetVisible(ConfigParser.CurrentImplementation.GetInfo().SupportsNegativePrompt && !IsUsingInpaintingModel);
             panelSampler.SetVisible(ConfigParser.CurrentImplementation == Implementation.InvokeAi);
             panelSeamless.SetVisible(ConfigParser.CurrentImplementation == Implementation.InvokeAi);
+            panelSymmetry.SetVisible(ConfigParser.CurrentImplementation == Implementation.InvokeAi);
             panelRes.SetVisible(ShouldControlBeVisible(panelRes));
             panelScaleImg.SetVisible(ShouldControlBeVisible(panelScaleImg));
             bool adv = Config.Get<bool>(Config.Keys.AdvancedUi);
@@ -163,6 +164,7 @@ namespace StableDiffusionGui.Forms
                     postProcessImageToolStripMenuItem.Visible = !Program.Busy && TextToImage.CurrentTaskSettings.Implementation == Implementation.InvokeAi;
                     copyImageToClipboardToolStripMenuItem.Visible = pictBoxImgViewer.Image != null;
                     fitWindowSizeToImageSizeToolStripMenuItem.Visible = MainUi.GetPreferredSize() != System.Drawing.Size.Empty;
+                    copySidebySideComparisonImageToolStripMenuItem.Visible = pictBoxInitImg.Image != null && pictBoxImgViewer.Image != null;
                     menuStripOutputImg.Show(Cursor.Position);
                 }
             }
