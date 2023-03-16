@@ -35,16 +35,14 @@ namespace StableDiffusionGui.Forms
             Opacity = 1f;
 
             var font = Fonts.GetFontOnDemand("Cascadia Mono SemiBold", Path.Combine(Paths.GetDataPath(), "fonts", "CascadiaMono.ttf"), true);
-
-            if (font != null)
-                logBox.Font = new Font(font, logBox.Font.Size, logBox.Font.Style);
+            logBox.Font = logBox.Font.ChangeFontFamily(font);
         }
 
         private void logBox_MouseWheel(object sender, MouseEventArgs e)
         {
             if (!InputUtils.IsHoldingCtrl) return;
             int sizeChange = e.Delta > 0 ? 1 : -1;
-            logBox.Font = new Font(logBox.Font.FontFamily, (logBox.Font.Size + sizeChange).Clamp(_defaultFontSize, _defaultFontSize * 2f), logBox.Font.Style, logBox.Font.Unit);
+            logBox.Font = logBox.Font.ChangeSize((logBox.Font.Size + sizeChange).Clamp(_defaultFontSize, _defaultFontSize * 2f));
         }
 
         private void RealtimeLoggerForm_KeyDown(object sender, KeyEventArgs e)

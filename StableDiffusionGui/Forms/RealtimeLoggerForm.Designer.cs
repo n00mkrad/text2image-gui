@@ -34,7 +34,7 @@
             // 
             // logBox
             // 
-            this.logBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
+            this.logBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(12)))), ((int)(((byte)(12)))));
             this.logBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.logBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.logBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));

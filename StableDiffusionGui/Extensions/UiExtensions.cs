@@ -148,5 +148,18 @@ namespace StableDiffusionGui.Extensions
         {
             Logger.Log($"Currently{(c.InvokeRequired ? " NOT" : "")} on UI thread ({c.Name})", hidden);
         }
+
+        public static Font ChangeFontFamily(this Font f, FontFamily newFontFamily)
+        {
+            if (newFontFamily == null)
+                return f;
+
+            return new Font(newFontFamily, f.Size, f.Style, f.Unit);
+        }
+
+        public static Font ChangeSize(this Font f, float newSize)
+        {
+            return new Font(f.FontFamily, newSize, f.Style, f.Unit);
+        }
     }
 }
