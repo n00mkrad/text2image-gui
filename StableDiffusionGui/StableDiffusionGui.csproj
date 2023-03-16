@@ -347,6 +347,7 @@
     <Compile Include="Forms\DrawForm.Utils.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Ui\Fonts.cs" />
     <Compile Include="Ui\GetWebInfo.cs" />
     <Compile Include="Ui\ImagePopup.cs" />
     <Compile Include="Ui\Inpainting.cs" />

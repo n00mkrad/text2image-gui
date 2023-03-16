@@ -143,5 +143,10 @@ namespace StableDiffusionGui.Extensions
             if (!(dontPauseInDebugMode && Program.Debug))
                 form.ResumeRendering();
         }
+
+        public static void PrintThread (this Control c, bool hidden = true)
+        {
+            Logger.Log($"Currently{(c.InvokeRequired ? " NOT" : "")} on UI thread ({c.Name})", hidden);
+        }
     }
 }

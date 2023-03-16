@@ -1,7 +1,13 @@
-﻿using StableDiffusionGui.Main;
+﻿using StableDiffusionGui.Extensions;
+using StableDiffusionGui.Io;
+using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
+using StableDiffusionGui.Ui;
 using System;
 using System.Drawing;
+using System.Drawing.Text;
+using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace StableDiffusionGui.Forms
@@ -22,17 +28,23 @@ namespace StableDiffusionGui.Forms
             logBox.MouseWheel += logBox_MouseWheel;
         }
 
-        private void RealtimeLoggerForm_Shown(object sender, EventArgs e)
+        private async void RealtimeLoggerForm_Shown(object sender, EventArgs e)
         {
             Refresh();
             LogAppend($"This window displays all messages that are logged while it's open.{Environment.NewLine}");
+            Opacity = 1f;
+
+            var font = Fonts.GetFontOnDemand("Cascadia Mono SemiBold", Path.Combine(Paths.GetDataPath(), "fonts", "CascadiaMono.ttf"), true);
+
+            if (font != null)
+                logBox.Font = new Font(font, logBox.Font.Size, logBox.Font.Style);
         }
 
         private void logBox_MouseWheel(object sender, MouseEventArgs e)
         {
             if (!InputUtils.IsHoldingCtrl) return;
             int sizeChange = e.Delta > 0 ? 1 : -1;
-            logBox.Font = new Font(logBox.Font.Name, (logBox.Font.Size + sizeChange).Clamp(_defaultFontSize, _defaultFontSize * 2f), logBox.Font.Style, logBox.Font.Unit);
+            logBox.Font = new Font(logBox.Font.FontFamily, (logBox.Font.Size + sizeChange).Clamp(_defaultFontSize, _defaultFontSize * 2f), logBox.Font.Style, logBox.Font.Unit);
         }
 
         private void RealtimeLoggerForm_KeyDown(object sender, KeyEventArgs e)

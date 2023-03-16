@@ -1,6 +1,4 @@
-﻿
-using StableDiffusionGui.Data;
-using StableDiffusionGui.Extensions;
+﻿using StableDiffusionGui.Data;
 using StableDiffusionGui.Forms;
 using StableDiffusionGui.Io;
 using System;
@@ -8,13 +6,16 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace StableDiffusionGui.Main
 {
     internal class Logger
     {
+        public class Switches
+        {
+            public static bool LogFontLoader = false;
+        }
+
         public static RealtimeLoggerForm RealtimeLoggerForm;
         public static EasyDict<string, ConcurrentQueue<Entry>> CachedEntries = new EasyDict<string, ConcurrentQueue<Entry>>();
         public static EasyDict<string, ConcurrentQueue<string>> CachedLines = new EasyDict<string, ConcurrentQueue<string>>();
@@ -98,6 +99,12 @@ namespace StableDiffusionGui.Main
             Log(new Entry(msg, hidden, replaceLastLine, filename));
         }
 
+        public static void LogIf(object msg, bool condition, bool hidden = true, bool replaceLastLine = false, string filename = Constants.Lognames.General)
+        {
+            if (condition)
+                Log(new Entry(msg, hidden, replaceLastLine, filename));
+        }
+
         public static void LogHidden(object msg, string filename = Constants.Lognames.General)
         {
             Log(new Entry(msg, true, false, filename));
@@ -115,7 +122,7 @@ namespace StableDiffusionGui.Main
                 QueueLoop(); // Restarts loop in case it throws an exception
         }
 
-        private static void QueueLoop ()
+        private static void QueueLoop()
         {
             try
             {
@@ -157,7 +164,7 @@ namespace StableDiffusionGui.Main
 
             Console.WriteLine(entry.ToString(true, true, true));
 
-            if(RealtimeLoggerForm != null)
+            if (RealtimeLoggerForm != null)
                 RealtimeLoggerForm.LogAppend(entry.Message.Replace("\n", Environment.NewLine), entry.ReplaceLastLine);
 
             if (!entry.Hidden)
