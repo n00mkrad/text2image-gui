@@ -20,6 +20,7 @@ using System.Windows.Forms;
 using static StableDiffusionGui.Main.Enums.Misc;
 using static StableDiffusionGui.Main.Enums.Program;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
+using static StableDiffusionGui.Os.HwInfo;
 
 namespace StableDiffusionGui.Ui
 {
@@ -53,6 +54,7 @@ namespace StableDiffusionGui.Ui
         }
 
         public static List<TtiSettings> Queue = new List<TtiSettings>();
+        public static string GpuInfo = "";
 
         public static List<int> GetResolutions(int min, int max)
         {
@@ -281,20 +283,22 @@ namespace StableDiffusionGui.Ui
             })).RunWithUiStopped(Program.MainForm);
         }
 
-        public static async Task SetGpusInWindowTitle()
+        public static async Task GetCudaGpus()
         {
+            GpuInfo = "";
             var gpus = await GpuUtils.GetCudaGpus();
             List<string> gpuNames = gpus.Select(x => x.FullName).ToList();
             int maxGpusToListInTitle = 2;
 
             if (gpuNames.Count < 1)
-                Program.MainForm.Text = $"{Program.MainForm.Text} - No CUDA GPUs available.";
+                GpuInfo = $"No CUDA GPUs available.";
             else if (gpuNames.Count <= maxGpusToListInTitle)
-                Program.MainForm.Text = $"{Program.MainForm.Text} - CUDA GPU{(gpuNames.Count != 1 ? "s" : "")}: {string.Join(", ", gpuNames)}";
+                GpuInfo = $"CUDA GPU{(gpuNames.Count != 1 ? "s" : "")}: {string.Join(", ", gpuNames)}";
             else
-                Program.MainForm.Text = $"{Program.MainForm.Text} - CUDA GPUs: {string.Join(", ", gpuNames.Take(maxGpusToListInTitle))} (+{gpuNames.Count - maxGpusToListInTitle})";
+                GpuInfo = $"CUDA GPUs: {string.Join(", ", gpuNames.Take(maxGpusToListInTitle))} (+{gpuNames.Count - maxGpusToListInTitle})";
 
             Logger.Log($"Detected {gpus.Count.ToString().Replace("0", "no")} CUDA-capable GPU{(gpus.Count != 1 ? "s" : "")}.");
+            Program.MainForm.UpdateWindowTitle();
         }
 
         public static async Task PrintVersion()

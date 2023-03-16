@@ -101,6 +101,7 @@ namespace StableDiffusionGui.Forms
                 SetProgressImg(0);
 
             progressBarImg.Visible = imageGen;
+            UpdateWindowTitle();
         }
 
         public async Task TryRun()

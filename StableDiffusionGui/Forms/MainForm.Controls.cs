@@ -222,5 +222,11 @@ namespace StableDiffusionGui.Forms
                 collapseBtn.Text = $"{(show ? "Hide" : "Show")} {Strings.MainUiCategories.Get(collapseBtn.Name, true)}";
             })).RunWithUiStopped(this);
         }
+
+        public void UpdateWindowTitle ()
+        {
+            string busyText = Program.State == Program.BusyState.Standby ? "" : "Busy...";
+            Text = string.Join(" - ", new[] { $"Stable Diffusion GUI {Program.Version}", MainUi.GpuInfo, busyText }.Where(s => s.IsNotEmpty()));
+        }
     }
 }

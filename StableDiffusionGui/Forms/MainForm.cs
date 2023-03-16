@@ -75,7 +75,7 @@ namespace StableDiffusionGui.Forms
             comboxResH.SelectedIndexChanged += (s, e) => SetHiresFixVisible(); // Show/Hide HiRes Fix depending on chosen res
 
             MainUi.LoadAutocompleteData(promptAutocomplete, new[] { textboxPrompt, textboxPromptNeg });
-            Task.Run(() => MainUi.SetGpusInWindowTitle());
+            Task.Run(() => MainUi.GetCudaGpus());
             Task.Run(() => MainUi.PrintVersion());
             upDownSeed.Text = "";
 
