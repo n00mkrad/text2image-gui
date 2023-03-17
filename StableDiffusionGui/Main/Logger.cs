@@ -52,6 +52,9 @@ namespace StableDiffusionGui.Main
 
             public Entry(object message, bool hidden = false, bool replaceLastLine = false, string logName = "")
             {
+                if (message == null)
+                    return;
+
                 Message = message.ToString().TrimEnd();
                 Hidden = hidden;
                 ReplaceLastLine = replaceLastLine;
