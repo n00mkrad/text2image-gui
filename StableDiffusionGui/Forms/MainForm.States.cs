@@ -2,64 +2,89 @@
 using StableDiffusionGui.Extensions;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Ui;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using static StableDiffusionGui.Data.ImplementationInfo;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
 namespace StableDiffusionGui.Forms
 {
     public partial class MainForm
     {
-        public void SetVisibility(Control control)
+        public void SetVisibility(IEnumerable<Control> controls, Implementation currImplementation = (Implementation)(-1))
         {
-            control.SetVisible(ShouldControlBeVisible(control));
+            foreach (Control c in controls)
+                c.SetVisible(ShouldControlBeVisible(c, currImplementation));
         }
 
-        public bool ShouldControlBeVisible(Control control)
+        public void SetVisibility(Control control, Implementation currImplementation = (Implementation)(-1))
         {
+            control.SetVisible(ShouldControlBeVisible(control, currImplementation));
+        }
+
+        public bool ShouldControlBeVisible(Control control, Implementation currImplementation = (Implementation)(-1))
+        {
+            if (currImplementation.IsUnset())
+                currImplementation = ConfigParser.CurrentImplementation;
+
             if (control == panelRes)
-                return ResolutionAdjustAvailable();
+                return ResolutionAdjustAvailable(currImplementation);
 
             if (control == panelScaleImg)
-                return ImgScaleAvailable();
+                return currImplementation == Implementation.InstructPixToPix;
 
             if (control == panelInitImgStrength)
-                return InitImgStrengthAvailable();
+                return InitImgStrengthAvailable(currImplementation);
 
             if (control == panelInpainting)
-                return InpaintingAvailable();
+                return InpaintingAvailable(currImplementation);
 
             if (control == checkboxHiresFix)
-                return HiresFixAvailable();
+                return HiresFixAvailable(currImplementation);
+
+            if (control == panelPromptNeg)
+                return currImplementation.Supports(Feature.NegPrompts);
+
+            if (control == panelSampler)
+                return currImplementation.Supports(Feature.MultipleSamplers);
+
+            if (control == panelSeamless)
+                return currImplementation.Supports(Feature.SeamlessMode) && (!comboxInpaintMode.Visible || (InpaintMode)comboxInpaintMode.SelectedIndex == InpaintMode.Disabled);
+
+            if (control == panelSymmetry)
+                return currImplementation.Supports(Feature.SymmetricMode) && (!comboxInpaintMode.Visible || (InpaintMode)comboxInpaintMode.SelectedIndex == InpaintMode.Disabled);
+
+            if (control == panelEmbeddings)
+                return currImplementation.Supports(Feature.Embeddings);
+
+            if (control == textboxClipsegMask)
+                return (InpaintMode)comboxInpaintMode.SelectedIndex == InpaintMode.TextMask;
+
+            if (control == comboxResizeGravity)
+                return comboxInpaintMode.Visible && (InpaintMode)comboxInpaintMode.SelectedIndex == InpaintMode.Outpaint;
+
+            if (control == checkboxShowInitImg)
+                return AnyInits;
 
             return false;
         }
 
-        private static bool ResolutionAdjustAvailable()
+        private static bool ResolutionAdjustAvailable(Implementation imp)
         {
             bool available = true;
 
-            if (ConfigParser.CurrentImplementation == Implementation.InstructPixToPix)
+            if (imp == Implementation.InstructPixToPix)
                 return MainUi.CurrentInitImgPaths.Any(); // Only visible if image is loaded
 
             return available;
         }
 
-        private static bool ImgScaleAvailable()
-        {
-            bool available = true;
-
-            if (ConfigParser.CurrentImplementation != Implementation.InstructPixToPix)
-                available = false;
-
-            return available;
-        }
-
-        private bool InitImgStrengthAvailable()
+        private bool InitImgStrengthAvailable(Implementation imp)
         {
             bool available = false;
 
-            if (ConfigParser.CurrentImplementation == Implementation.InstructPixToPix)
+            if (imp == Implementation.InstructPixToPix)
                 return false;
 
             if ((InpaintMode)comboxInpaintMode.SelectedIndex != InpaintMode.Disabled)
@@ -73,12 +98,12 @@ namespace StableDiffusionGui.Forms
             return available;
         }
 
-        private static bool InpaintingAvailable()
+        private static bool InpaintingAvailable(Implementation imp)
         {
             bool available = false;
 
             bool img2img = MainUi.CurrentInitImgPaths.Any();
-            bool inpaintCompat = ConfigParser.CurrentImplementation.Supports(ImplementationInfo.Feature.NativeInpainting);
+            bool inpaintCompat = imp.Supports(ImplementationInfo.Feature.NativeInpainting);
 
             if (img2img && inpaintCompat)
                 available = true;
@@ -86,10 +111,11 @@ namespace StableDiffusionGui.Forms
             return available;
         }
 
-        private bool HiresFixAvailable ()
+        private bool HiresFixAvailable(Implementation imp)
         {
-            bool compatible = ConfigParser.CurrentImplementation == Implementation.InvokeAi;
-            return compatible && (comboxResW.GetInt() > 512 || comboxResH.GetInt() > 512) && !AnyInits;
+            bool compatible = imp.Supports(Feature.HiresFix);
+            bool biggerThan512 = comboxResW.GetInt() > 512 || comboxResH.GetInt() > 512;
+            return compatible && biggerThan512 && !AnyInits;
         }
     }
 }

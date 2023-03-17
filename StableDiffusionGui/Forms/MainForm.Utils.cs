@@ -86,13 +86,13 @@ namespace StableDiffusionGui.Forms
             runBtn.ForeColor = imageGen ? Color.IndianRed : Color.White;
             Control[] controlsToDisable = new Control[] { };
             Control[] controlsToHide = new Control[] { };
-            progressCircle.Visible = Program.State != Program.BusyState.Standby;
+            progressCircle.SetVisible(Program.State != Program.BusyState.Standby);
 
             foreach (Control c in controlsToDisable)
                 c.Enabled = !imageGen;
 
             foreach (Control c in controlsToHide)
-                c.Visible = !imageGen;
+                c.SetVisible(!imageGen);
 
             if (Program.State == Program.BusyState.Standby)
                 SetProgress(0);
@@ -100,7 +100,7 @@ namespace StableDiffusionGui.Forms
             if (!imageGen)
                 SetProgressImg(0);
 
-            progressBarImg.Visible = imageGen;
+            progressBarImg.SetVisible(imageGen);
             UpdateWindowTitle();
         }
 

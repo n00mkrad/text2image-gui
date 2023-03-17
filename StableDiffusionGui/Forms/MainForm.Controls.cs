@@ -95,16 +95,9 @@ namespace StableDiffusionGui.Forms
             Implementation imp = ConfigParser.CurrentImplementation;
 
             // Panel visibility
-            panelPromptNeg.SetVisible(imp.Supports(ImplementationInfo.Feature.NegPrompts) && !IsUsingInpaintingModel);
-            panelSampler.SetVisible(imp.Supports(ImplementationInfo.Feature.MultipleSamplers));
-            panelSeamless.SetVisible(imp.Supports(ImplementationInfo.Feature.SeamlessMode) && (!comboxInpaintMode.Visible || (InpaintMode)comboxInpaintMode.SelectedIndex == InpaintMode.Disabled));
-            panelSymmetry.SetVisible(imp.Supports(ImplementationInfo.Feature.SymmetricMode));
-            panelEmbeddings.SetVisible(imp.Supports(ImplementationInfo.Feature.Embeddings));
-            SetVisibility(panelRes);
-            SetVisibility(panelScaleImg);
-            SetVisibility(panelInpainting);
-            SetVisibility(panelInitImgStrength);
-            SetVisibility(checkboxHiresFix);
+            SetVisibility(new Control[] { panelPromptNeg, panelEmbeddings, panelInitImgStrength, panelInpainting, panelScaleImg, panelRes, panelSampler, panelSeamless, panelSymmetry, checkboxHiresFix, 
+                textboxClipsegMask, comboxResizeGravity, checkboxShowInitImg }, imp);
+
             bool adv = Config.Get<bool>(Config.Keys.AdvancedUi);
             upDownIterations.Maximum = !adv ? 10000 : 100000;
             sliderSteps.ActualMaximum = !adv ? 120 : 500;
@@ -118,15 +111,11 @@ namespace StableDiffusionGui.Forms
 
             TtiUtils.CleanInitImageList();
 
-            textboxClipsegMask.SetVisible((InpaintMode)comboxInpaintMode.SelectedIndex == InpaintMode.TextMask);
-            comboxResizeGravity.SetVisible(comboxInpaintMode.Visible && (InpaintMode)comboxInpaintMode.SelectedIndex == InpaintMode.Outpaint);
-
             btnInitImgBrowse.Text = AnyInits ? $"Clear Image{(MainUi.CurrentInitImgPaths.Count == 1 ? "" : "s")}" : "Load Image(s)";
 
             labelCurrentImage.Text = !AnyInits ? "No initialization image loaded." : (MainUi.CurrentInitImgPaths.Count == 1 ? $"Currently using {Path.GetFileName(MainUi.CurrentInitImgPaths[0])}" : $"Currently using {MainUi.CurrentInitImgPaths.Count} images.");
             toolTip.SetToolTip(labelCurrentImage, $"{labelCurrentImage.Text.Trunc(100)}\n\nShift + Hover to preview.");
 
-            Program.MainForm.checkboxShowInitImg.SetVisible(MainUi.CurrentInitImgPaths.Any());
             ImageViewer.UpdateInitImgViewer();
             _categoryPanels.Keys.ToList().ForEach(btn => btn.SetVisible(_categoryPanels[btn].Any(p => p.Visible))); // Hide collapse buttons if their category has 0 visible panels
 
