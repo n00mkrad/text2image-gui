@@ -1,4 +1,6 @@
-﻿using StableDiffusionGui.Io;
+﻿using StableDiffusionGui.Data;
+using StableDiffusionGui.Extensions;
+using StableDiffusionGui.Io;
 using StableDiffusionGui.Ui;
 using System.Linq;
 using System.Windows.Forms;
@@ -8,6 +10,11 @@ namespace StableDiffusionGui.Forms
 {
     public partial class MainForm
     {
+        public void SetVisibility(Control control)
+        {
+            control.SetVisible(ShouldControlBeVisible(control));
+        }
+
         public bool ShouldControlBeVisible(Control control)
         {
             if (control == panelRes)
@@ -21,6 +28,9 @@ namespace StableDiffusionGui.Forms
 
             if (control == panelInpainting)
                 return InpaintingAvailable();
+
+            if (control == checkboxHiresFix)
+                return HiresFixAvailable();
 
             return false;
         }
@@ -68,12 +78,18 @@ namespace StableDiffusionGui.Forms
             bool available = false;
 
             bool img2img = MainUi.CurrentInitImgPaths.Any();
-            bool inpaintCompat = ConfigParser.CurrentImplementation.GetInfo().SupportsNativeInpainting;
+            bool inpaintCompat = ConfigParser.CurrentImplementation.Supports(ImplementationInfo.Feature.NativeInpainting);
 
             if (img2img && inpaintCompat)
                 available = true;
 
             return available;
+        }
+
+        private bool HiresFixAvailable ()
+        {
+            bool compatible = ConfigParser.CurrentImplementation == Implementation.InvokeAi;
+            return compatible && (comboxResW.GetInt() > 512 || comboxResH.GetInt() > 512) && !AnyInits;
         }
     }
 }

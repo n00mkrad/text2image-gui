@@ -244,11 +244,11 @@ namespace StableDiffusionGui.Forms
             try
             {
                 Config.Set(Config.Keys.ImplementationName, CurrImplementation.ToString());
-                panelFullPrecision.SetVisible(CurrImplementation.GetInfo().HasPrecisionOpt);
-                panelUnloadModel.SetVisible(CurrImplementation.GetInfo().IsInteractive);
-                panelCudaDevice.SetVisible(CurrImplementation.GetInfo().SupportsDeviceSelection);
-                panelSdModel.SetVisible(CurrImplementation.GetInfo().SupportsCustomModels);
-                panelVae.SetVisible(CurrImplementation.GetInfo().SupportsCustomVaeModels);
+                panelFullPrecision.SetVisible(CurrImplementation.Supports(ImplementationInfo.Feature.HalfPrecisionToggle));
+                panelUnloadModel.SetVisible(CurrImplementation.Supports(ImplementationInfo.Feature.InteractiveCli));
+                panelCudaDevice.SetVisible(CurrImplementation.Supports(ImplementationInfo.Feature.DeviceSelection));
+                panelSdModel.SetVisible(CurrImplementation.Supports(ImplementationInfo.Feature.CustomModels));
+                panelVae.SetVisible(CurrImplementation.Supports(ImplementationInfo.Feature.CustomVae));
 
                 LoadModels();
 

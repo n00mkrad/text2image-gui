@@ -71,8 +71,8 @@ namespace StableDiffusionGui.Forms
             textboxPrompt.MaxLength = 0;
             textboxPromptNeg.MaxLength = 0;
             pictBoxImgViewer.MouseWheel += (s, e) => { ImageViewer.Move(e.Delta > 0); }; // Scroll on MouseWheel
-            comboxResW.SelectedIndexChanged += (s, e) => SetHiresFixVisible(); // Show/Hide HiRes Fix depending on chosen res
-            comboxResH.SelectedIndexChanged += (s, e) => SetHiresFixVisible(); // Show/Hide HiRes Fix depending on chosen res
+            comboxResW.SelectedIndexChanged += (s, e) => SetVisibility(checkboxHiresFix); // Show/Hide HiRes Fix depending on chosen res
+            comboxResH.SelectedIndexChanged += (s, e) => SetVisibility(checkboxHiresFix); // Show/Hide HiRes Fix depending on chosen res
 
             MainUi.LoadAutocompleteData(promptAutocomplete, new[] { textboxPrompt, textboxPromptNeg });
             Task.Run(() => MainUi.GetCudaGpus());

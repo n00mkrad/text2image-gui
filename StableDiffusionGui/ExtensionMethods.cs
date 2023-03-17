@@ -575,9 +575,14 @@ namespace StableDiffusionGui
             return string.IsNullOrWhiteSpace(s);
         }
 
-        public static Data.ImplementationInfo GetInfo(this Enums.StableDiffusion.Implementation imp)
+        public static ImplementationInfo GetInfo(this Enums.StableDiffusion.Implementation imp)
         {
-            return new Data.ImplementationInfo(imp);
+            return new ImplementationInfo(imp);
+        }
+
+        public static bool Supports(this Enums.StableDiffusion.Implementation imp, ImplementationInfo.Feature feature)
+        {
+            return new ImplementationInfo(imp).SupportedFeatures.Contains(feature);
         }
 
         public static bool IsUnset<TEnum> (this TEnum myEnum)

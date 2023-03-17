@@ -1,5 +1,6 @@
 ﻿using HTAlt.WinForms;
 using Microsoft.WindowsAPICodePack.Taskbar;
+using StableDiffusionGui.Data;
 using StableDiffusionGui.Extensions;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
@@ -24,6 +25,7 @@ namespace StableDiffusionGui.Forms
         private List<Control> _debugControls { get { return new List<Control> { panelDebugLoopback, panelDebugPerlinThresh, panelDebugSendStdin, panelDebugAppendArgs }; } }
 
         public bool IsUsingInpaintingModel { get { return Path.ChangeExtension(Config.Get<string>(Config.Keys.Model), null).EndsWith(Constants.SuffixesPrefixes.InpaintingMdlSuf); } }
+        public bool AnyInits { get { return MainUi.CurrentInitImgPaths.Any(); } }
 
         public void InitializeControls()
         {
@@ -90,35 +92,38 @@ namespace StableDiffusionGui.Forms
 
         private void RefreshUiState()
         {
-            panelPromptNeg.SetVisible(ConfigParser.CurrentImplementation.GetInfo().SupportsNegativePrompt && !IsUsingInpaintingModel);
-            panelSampler.SetVisible(ConfigParser.CurrentImplementation == Implementation.InvokeAi);
-            panelSeamless.SetVisible(ConfigParser.CurrentImplementation == Implementation.InvokeAi);
-            panelSymmetry.SetVisible(ConfigParser.CurrentImplementation == Implementation.InvokeAi);
-            panelRes.SetVisible(ShouldControlBeVisible(panelRes));
-            panelScaleImg.SetVisible(ShouldControlBeVisible(panelScaleImg));
+            Implementation imp = ConfigParser.CurrentImplementation;
+
+            // Panel visibility
+            panelPromptNeg.SetVisible(imp.Supports(ImplementationInfo.Feature.NegPrompts) && !IsUsingInpaintingModel);
+            panelSampler.SetVisible(imp.Supports(ImplementationInfo.Feature.MultipleSamplers));
+            panelSeamless.SetVisible(imp.Supports(ImplementationInfo.Feature.SeamlessMode) && (!comboxInpaintMode.Visible || (InpaintMode)comboxInpaintMode.SelectedIndex == InpaintMode.Disabled));
+            panelSymmetry.SetVisible(imp.Supports(ImplementationInfo.Feature.SymmetricMode));
+            panelEmbeddings.SetVisible(imp.Supports(ImplementationInfo.Feature.Embeddings));
+            SetVisibility(panelRes);
+            SetVisibility(panelScaleImg);
+            SetVisibility(panelInpainting);
+            SetVisibility(panelInitImgStrength);
+            SetVisibility(checkboxHiresFix);
             bool adv = Config.Get<bool>(Config.Keys.AdvancedUi);
             upDownIterations.Maximum = !adv ? 10000 : 100000;
             sliderSteps.ActualMaximum = !adv ? 120 : 500;
             sliderSteps.ChangeStep(!adv ? 5 : 1);
             sliderScale.ActualMaximum = !adv ? 25 : 50;
-            comboxResW.SetItems(MainUi.GetResolutions(320, adv ? 4096 : 2048).Select(x => x.ToString()), UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.Last);
-            comboxResH.SetItems(MainUi.GetResolutions(320, adv ? 4096 : 2048).Select(x => x.ToString()), UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.Last);
+            var validResolutions = MainUi.GetResolutions(320, adv ? 4096 : 2048).Select(i => i.ToString());
+            comboxResW.SetItems(validResolutions, UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.Last);
+            comboxResH.SetItems(validResolutions, UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.Last);
 
             #region Init Img & Embeddings Stuff
 
             TtiUtils.CleanInitImageList();
 
-            bool img2img = MainUi.CurrentInitImgPaths.Any();
-
-            panelInpainting.SetVisible(ShouldControlBeVisible(panelInpainting));
-            panelInitImgStrength.SetVisible(ShouldControlBeVisible(panelInitImgStrength));
             textboxClipsegMask.SetVisible((InpaintMode)comboxInpaintMode.SelectedIndex == InpaintMode.TextMask);
             comboxResizeGravity.SetVisible(comboxInpaintMode.Visible && (InpaintMode)comboxInpaintMode.SelectedIndex == InpaintMode.Outpaint);
-            panelSeamless.SetVisible(!comboxInpaintMode.Visible || (InpaintMode)comboxInpaintMode.SelectedIndex == InpaintMode.Disabled);
 
-            btnInitImgBrowse.Text = img2img ? $"Clear Image{(MainUi.CurrentInitImgPaths.Count == 1 ? "" : "s")}" : "Load Image(s)";
+            btnInitImgBrowse.Text = AnyInits ? $"Clear Image{(MainUi.CurrentInitImgPaths.Count == 1 ? "" : "s")}" : "Load Image(s)";
 
-            labelCurrentImage.Text = !img2img ? "No initialization image loaded." : (MainUi.CurrentInitImgPaths.Count == 1 ? $"Currently using {Path.GetFileName(MainUi.CurrentInitImgPaths[0])}" : $"Currently using {MainUi.CurrentInitImgPaths.Count} images.");
+            labelCurrentImage.Text = !AnyInits ? "No initialization image loaded." : (MainUi.CurrentInitImgPaths.Count == 1 ? $"Currently using {Path.GetFileName(MainUi.CurrentInitImgPaths[0])}" : $"Currently using {MainUi.CurrentInitImgPaths.Count} images.");
             toolTip.SetToolTip(labelCurrentImage, $"{labelCurrentImage.Text.Trunc(100)}\n\nShift + Hover to preview.");
 
             Program.MainForm.checkboxShowInitImg.SetVisible(MainUi.CurrentInitImgPaths.Any());
@@ -205,13 +210,6 @@ namespace StableDiffusionGui.Forms
                     Logger.Log($"Failed to set taskbar progress: {ex.Message}", true);
                 }
             }
-        }
-
-        public void SetHiresFixVisible()
-        {
-            bool txt2img = !MainUi.CurrentInitImgPaths.Any();
-            bool compatible = ConfigParser.CurrentImplementation == Implementation.InvokeAi;
-            checkboxHiresFix.SetVisible((comboxResW.GetInt() > 512 || comboxResH.GetInt() > 512) && txt2img && compatible);
         }
 
         public void CollapseToggle(Control collapseBtn, bool? overrideState = null)
