@@ -61,7 +61,7 @@ namespace StableDiffusionGui.Installation
             string gfpMdlPath = Path.Combine(Paths.GetDataPath(), "gfpgan", "gfpgan.pth");
             bool hasGfp = Directory.Exists(gfpPath) && File.Exists(gfpMdlPath);
 
-            string cfMdlPath = Path.Combine(Paths.GetDataPath(), "codeformer", "codeformer.pth");
+            string cfMdlPath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdRepo, "invoke", "models", "codeformer", "codeformer.pth");
             bool hasCf = File.Exists(cfMdlPath);
 
             Logger.Log($"HasSdUpscalers - Has ESRGAN: {hasEsrgan} - Has GFPGAN: {hasGfp} - Has Codeformer: {hasCf}", true);

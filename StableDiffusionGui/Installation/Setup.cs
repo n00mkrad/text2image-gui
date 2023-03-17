@@ -317,7 +317,7 @@ namespace StableDiffusionGui.Installation
 
                 while (!procGfpganDl.HasExited) await Task.Delay(1);
 
-                string codeformerPath = GetDataSubPath("codeformer");
+                string codeformerPath = Path.Combine(GetDataSubPath(Constants.Dirs.SdRepo), "invoke", "models", "codeformer");
                 Directory.CreateDirectory(codeformerPath);
                 if (print) Logger.Log("Downloading CodeFormer model file...", ReplaceUiLogLine);
                 string codeformerMdlPath = Path.Combine(codeformerPath, "codeformer.pth");
