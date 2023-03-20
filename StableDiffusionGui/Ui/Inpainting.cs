@@ -8,6 +8,7 @@ using StableDiffusionGui.MiscUtils;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using Paths = StableDiffusionGui.Io.Paths;
 
 namespace StableDiffusionGui.Ui
@@ -37,10 +38,8 @@ namespace StableDiffusionGui.Ui
         {
             List<string> initImgs = settings.Params["initImgs"].FromJson<List<string>>();
 
-            if (initImgs == null)
-            {
+            if (initImgs == null || !initImgs.Any())
                 return false;
-            }
 
             if (settings.Params["inpainting"].FromJson<Enums.StableDiffusion.InpaintMode>() == Enums.StableDiffusion.InpaintMode.ImageMask)
             {

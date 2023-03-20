@@ -297,6 +297,9 @@ namespace StableDiffusionGui
 
         public static string[] Split(this string str, string trimStr)
         {
+            if (str == null)
+                return new string[0];
+
             return str.Split(new string[] { trimStr }, StringSplitOptions.None);
         }
 

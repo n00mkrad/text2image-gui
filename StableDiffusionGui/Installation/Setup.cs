@@ -16,7 +16,7 @@ namespace StableDiffusionGui.Installation
     {
         private static readonly string _gitFile = "n00mkrad/stable-diffusion-cust.git";
         private static readonly string _gitBranch = "main";
-        public static readonly string GitCommit = "f787fd195fa7ee9b00ebe0684a3344b9aabacee1";
+        public static readonly string GitCommit = "6c95473b7c0113e2624540a73ec76fb9698bd236";
 
         private static readonly bool _allowModelDownload = false;
 
@@ -310,7 +310,7 @@ namespace StableDiffusionGui.Installation
                 string gfpGanMdlPath = Path.Combine(gfpganPath, "gfpgan.pth");
                 IoUtils.TryDeleteIfExists(gfpGanMdlPath);
                 Process procGfpganDl = OsUtils.NewProcess(true);
-                procGfpganDl.ErrorDataReceived += (sender, line) => { try { Logger.Log($"Downloading GFPGAN model ({line.Data.Trim().Split(' ')[0].GetInt()}%)...", false, ReplaceUiLogLine, Constants.Lognames.Installer); } catch { } };
+                procGfpganDl.ErrorDataReceived += (sender, line) => { try { Logger.Log($"Downloading GFPGAN model ({line.Data?.Trim().Split(' ')[0].GetInt()}%)...", false, ReplaceUiLogLine, Constants.Lognames.Installer); } catch { } };
                 procGfpganDl.StartInfo.Arguments = $"/C curl -k -L \"https://github.com/TencentARC/GFPGAN/releases/download/v1.3.0/GFPGANv1.4.pth\" -o {gfpGanMdlPath.Wrap()}";
                 procGfpganDl.Start();
                 procGfpganDl.BeginErrorReadLine();
@@ -323,7 +323,7 @@ namespace StableDiffusionGui.Installation
                 string codeformerMdlPath = Path.Combine(codeformerPath, "codeformer.pth");
                 IoUtils.TryDeleteIfExists(codeformerMdlPath);
                 Process procCodeformerDl = OsUtils.NewProcess(true);
-                procCodeformerDl.ErrorDataReceived += (sender, line) => { try { Logger.Log($"Downloading CodeFormer model ({line.Data.Trim().Split(' ')[0].GetInt()}%)...", false, ReplaceUiLogLine, Constants.Lognames.Installer); } catch { } };
+                procCodeformerDl.ErrorDataReceived += (sender, line) => { try { Logger.Log($"Downloading CodeFormer model ({line.Data?.Trim().Split(' ')[0].GetInt()}%)...", false, ReplaceUiLogLine, Constants.Lognames.Installer); } catch { } };
                 procCodeformerDl.StartInfo.Arguments = $"/C curl -k -L \"https://github.com/sczhou/CodeFormer/releases/download/v0.1.0/codeformer.pth\" -o {codeformerMdlPath.Wrap()}";
                 procCodeformerDl.Start();
                 procCodeformerDl.BeginErrorReadLine();
@@ -417,15 +417,16 @@ namespace StableDiffusionGui.Installation
 
                 if (File.Exists(easyInstallPth))
                 {
-                    var easyInstallLines = File.ReadAllLines(easyInstallPth);
-
-                    string basePath = String.Join($@"\{Constants.Dirs.SdRepo}", easyInstallLines.Where(l => l.Trim().EndsWith($@"\{Constants.Dirs.SdRepo}")).FirstOrDefault().Split($@"\{Constants.Dirs.SdRepo}").Reverse().Skip(1).Reverse());
-                    string newBasePath = Paths.GetDataPath().Lower().Replace("/", @"\");
-
-                    List<string> newLines = easyInstallLines.Select(l => l.Replace(basePath, newBasePath).Replace(@"\\", @"\")).ToList();
-
-                    File.WriteAllLines(easyInstallPth, newLines);
-                    Logger.Log($"Fixed easy-install.pth.", true);
+                    // TODO: Check if this is still needed?
+                    // var easyInstallLines = File.ReadAllLines(easyInstallPth);
+                    // 
+                    // string basePath = String.Join($@"\{Constants.Dirs.SdRepo}", easyInstallLines.Where(l => l.Trim().EndsWith($@"\{Constants.Dirs.SdRepo}")).FirstOrDefault().Split($@"\{Constants.Dirs.SdRepo}").Reverse().Skip(1).Reverse());
+                    // string newBasePath = Paths.GetDataPath().Lower().Replace("/", @"\");
+                    // 
+                    // List<string> newLines = easyInstallLines.Select(l => l.Replace(basePath, newBasePath).Replace(@"\\", @"\")).ToList();
+                    // 
+                    // File.WriteAllLines(easyInstallPth, newLines);
+                    // Logger.Log($"Fixed easy-install.pth.", true);
                 }
 
                 #endregion

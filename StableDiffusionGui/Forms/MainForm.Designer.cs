@@ -1479,7 +1479,7 @@ namespace StableDiffusionGui.Forms
             this.progressBarImg.Location = new System.Drawing.Point(680, 600);
             this.progressBarImg.Margin = new System.Windows.Forms.Padding(0);
             this.progressBarImg.Name = "progressBarImg";
-            this.progressBarImg.Size = new System.Drawing.Size(509, 5);
+            this.progressBarImg.Size = new System.Drawing.Size(512, 5);
             this.progressBarImg.TabIndex = 110;
             this.progressBarImg.TabStop = false;
             this.progressBarImg.Visible = false;
