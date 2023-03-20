@@ -2,13 +2,17 @@
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.Main.Utils;
+using StableDiffusionGui.MiscUtils;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Management.Automation.Language;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
 namespace StableDiffusionGui.Implementations
 {
@@ -149,14 +153,14 @@ namespace StableDiffusionGui.Implementations
             return $"{mdl.Name}{(vae == null ? "" : $"-{vae.FormatIndependentName}")}".Replace(" ", "");
         }
 
-        public static string GetModelsYamlHash(IoUtils.Hash hashType = IoUtils.Hash.CRC32, bool ignoreDefaultKey = true)
+        public static string GetModelsYamlHash(IoUtils.Hash hashType = IoUtils.Hash.CRC32, bool namesOnly = true)
         {
-            var lines = File.ReadAllLines(ModelsYamlPath);
+            var lines = File.ReadAllLines(ModelsYamlPath).Where(l => !l.Contains("default: "));
 
-            if (ignoreDefaultKey)
-                lines = lines.Where(l => !l.Contains("    default: ")).ToArray();
+            if (namesOnly)
+                lines = lines.Where(l => l.Length > 0 && l.Last() == ':');
 
-            string contentStr = string.Join(Environment.NewLine, lines);
+            string contentStr = string.Join("", lines);
             return IoUtils.GetHash(contentStr, hashType, false);
         }
 
@@ -222,6 +226,24 @@ namespace StableDiffusionGui.Implementations
                 newSyntax = true;
 
             return newSyntax;
+        }
+
+        public static bool ValidateCommand (EasyDict<string, string> args, Size res)
+        {
+            if(args.Values.Any(v => v == "--force_outpaint"))
+            {
+                Bitmap img = (Bitmap)IoUtils.GetImage(args["initImg"].Split('"')[1]);
+                bool transparency = ImgUtils.IsPartiallyTransparent(img);
+
+                if(!transparency && (img.Width <= res.Height || img.Height <= res.Height))
+                {
+                    Logger.Log($"Can't apply outpainting because the output {res.AsString()} resolution is not bigger than the input ({img.Size.AsString()}), and the input image has no transparent regions.\n" +
+                        $"Either increase the output resolution to be bigger than the input, or add a transparent border to your input image with an image editor.");
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }

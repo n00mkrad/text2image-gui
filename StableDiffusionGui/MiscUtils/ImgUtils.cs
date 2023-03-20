@@ -5,7 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 namespace StableDiffusionGui.MiscUtils
 {
@@ -296,6 +298,40 @@ namespace StableDiffusionGui.MiscUtils
             }
 
             return img;
+        }
+
+        public static bool IsPartiallyTransparent(Bitmap bitmap)
+        {
+            if (bitmap.PixelFormat == PixelFormat.Format32bppArgb || bitmap.PixelFormat == PixelFormat.Format32bppPArgb)
+            {
+                BitmapData data = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, bitmap.PixelFormat);
+                byte[] bytes = new byte[bitmap.Height * data.Stride];
+                Marshal.Copy(data.Scan0, bytes, 0, bytes.Length);
+                bitmap.UnlockBits(data);
+                var alphaBytes = new List<byte>();
+
+                for (int p = 3; p < bytes.Length; p += 4)
+                {
+                    alphaBytes.Add(bytes[p]);
+
+                    if (bytes[p] != 255)
+                        return true;
+                }
+
+                return false;
+            }
+
+            // Brute-forced method but it won't ever be used, unless you encounter types not handled above, like 16bppArgb1555 and 64bppArgb.
+            for (int i = 0; i < bitmap.Width; i++)
+            {
+                for (int j = 0; j < bitmap.Height; j++)
+                {
+                    if (bitmap.GetPixel(i, j).A != 255)
+                        return true;
+                }
+            }
+
+            return false;
         }
     }
 }

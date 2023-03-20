@@ -58,8 +58,8 @@ namespace StableDiffusionGui.Implementations
                 long startSeed = seed;
                 prompts = prompts.Select(p => FormatUtils.GetCombinedPrompt(p, negPrompt)).ToArray(); // Apply negative prompt
 
-                List<Dictionary<string, string>> argLists = new List<Dictionary<string, string>>(); // List of all args for each command
-                Dictionary<string, string> args = new Dictionary<string, string>(); // List of args for current command
+                List<EasyDict<string, string>> argLists = new List<EasyDict<string, string>>(); // List of all args for each command
+                EasyDict<string, string> args = new EasyDict<string, string>(); // List of args for current command
                 args["prompt"] = "";
                 args["default"] = Args.InvokeAi.GetDefaultArgsCommand();
                 args["upscale"] = Args.InvokeAi.GetUpscaleArgs();
@@ -97,7 +97,7 @@ namespace StableDiffusionGui.Implementations
 
                                 if (initImages == null) // No init image(s)
                                 {
-                                    argLists.Add(new Dictionary<string, string>(args));
+                                    argLists.Add(new EasyDict<string, string>(args));
                                 }
                                 else // With init image(s)
                                 {
@@ -114,7 +114,7 @@ namespace StableDiffusionGui.Implementations
                                             if (inpaint == InpaintMode.Outpaint)
                                                 args["inpaintMask"] = "--force_outpaint";
 
-                                            argLists.Add(new Dictionary<string, string>(args));
+                                            argLists.Add(new EasyDict<string, string>(args));
                                         }
                                     }
                                 }
@@ -129,8 +129,6 @@ namespace StableDiffusionGui.Implementations
                         seed = startSeed;
                 }
 
-                List<string> cmds = argLists.Select(argList => string.Join(" ", argList.Where(argEntry => argEntry.Value.IsNotEmpty()).Select(argEntry => argEntry.Value))).ToList();
-
                 Logger.Log($"Running Stable Diffusion - {iterations} Iterations, {steps.Length} Steps, Scales {(scales.Length < 4 ? string.Join(", ", scales.Select(x => x.ToStringDot())) : $"{scales.First()}->{scales.Last()}")}, {res.Width}x{res.Height}, Starting Seed: {startSeed}", false, Logger.LastUiLine.EndsWith("..."));
 
                 string modelsChecksumStartup = InvokeAiUtils.GetModelsYamlHash();
@@ -138,9 +136,10 @@ namespace StableDiffusionGui.Implementations
                 string newStartupSettings = $"{argsStartup} {modelsChecksumStartup} {Config.Get<int>(Config.Keys.CudaDeviceIdx)}"; // Check if startup settings match - If not, we need to restart the process
 
                 string initsStr = initImages != null ? $" and {initImages.Count} image{(initImages.Count != 1 ? "s" : "")} using {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
-                Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} * {iterations} image{(iterations != 1 ? "s" : "")} * {steps.Length} step value{(steps.Length != 1 ? "s" : "")} * {scales.Length} scale{(scales.Length != 1 ? "s" : "")}{initsStr} = {cmds.Count} images total.");
+                Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} * {iterations} image{(iterations != 1 ? "s" : "")} * {steps.Length} step value{(steps.Length != 1 ? "s" : "")} * {scales.Length} scale{(scales.Length != 1 ? "s" : "")}{initsStr} = {argLists.Count} images total.");
 
                 Logger.Clear(Constants.Lognames.Sd);
+                bool restartedInvoke = false; // Will be set to true if InvokeAI was not running before
 
                 if (!TtiProcess.IsAiProcessRunning || (TtiProcess.IsAiProcessRunning && TtiProcess.LastStartupSettings != newStartupSettings))
                 {
@@ -183,6 +182,7 @@ namespace StableDiffusionGui.Implementations
                     TtiProcess.CurrentProcess = py;
                     TtiProcess.ProcessExistWasIntentional = false;
 
+                    restartedInvoke = true;
                     py.Start();
                     OsUtils.AttachOrphanHitman(py);
                     TtiProcess.CurrentStdInWriter = new NmkdStreamWriter(py);
@@ -202,13 +202,23 @@ namespace StableDiffusionGui.Implementations
                     TextToImage.CurrentTask.Processes.Add(TtiProcess.CurrentProcess);
                 }
 
-                foreach (string command in cmds)
+                bool noCommandsSent = true;
+
+                foreach (var argList in argLists)
                 {
                     if (TextToImage.Canceled)
                         break;
 
+                    if (!InvokeAiUtils.ValidateCommand(argList, res))
+                        continue;
+
+                    string command = string.Join(" ", argList.Where(argEntry => argEntry.Value.IsNotEmpty()).Select(argEntry => argEntry.Value));
                     await TtiProcess.WriteStdIn(command);
+                    noCommandsSent = false;
                 }
+
+                if (noCommandsSent)
+                    TextToImage.Cancel("No valid commands.", false, restartedInvoke ? TextToImage.CancelMode.ForceKill : TextToImage.CancelMode.DoNotKill);
             }
             catch (Exception ex)
             {
@@ -309,7 +319,7 @@ namespace StableDiffusionGui.Implementations
             }
         }
 
-        public static async Task SwitchModel (string modelNameInYaml)
+        public static async Task SwitchModel(string modelNameInYaml)
         {
             //NmkdStopwatch timeoutSw = new NmkdStopwatch();
             await TtiProcess.WriteStdIn($"!switch {modelNameInYaml}");
@@ -368,7 +378,7 @@ namespace StableDiffusionGui.Implementations
             // }
         }
 
-        public static async Task Cancel ()
+        public static async Task Cancel()
         {
             List<string> lastLogLines = Logger.GetLastLines(Constants.Lognames.Sd, 15);
 

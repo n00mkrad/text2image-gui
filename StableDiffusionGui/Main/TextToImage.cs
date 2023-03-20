@@ -52,28 +52,8 @@ namespace StableDiffusionGui.Main
 
             foreach (TtiSettings s in batches)
             {
-                if (s == null)
+                if (!ValidateSettings(s))
                     continue;
-
-                if (s.Params.ContainsKey("seed"))
-                    PreviousSeed = s.Params["seed"].FromJson<long>();
-
-                CurrentTaskSettings = s;
-                s.Prompts = s.Prompts.Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
-
-                if (!s.Prompts.Any())
-                {
-                    Logger.Log($"No valid prompts to run!");
-                    continue;
-                }
-
-                var invalidInitImgs = s.Params.FromJson<string[]>("initImgs", new string[0]).Where(i => !File.Exists(i)).ToList();
-
-                if (invalidInitImgs.Any())
-                {
-                    Logger.Log($"Missing initialization images:\n{string.Join("\n", invalidInitImgs.Select(i => Path.GetFileName(i)))}");
-                    continue;
-                }
 
                 TtiUtils.ShowPromptWarnings(s.Prompts.ToList());
 
@@ -103,13 +83,40 @@ namespace StableDiffusionGui.Main
                 }
 
                 tasks.Add(ImageExport.ExportLoop(tempOutDir, CurrentTask.ImgCount, s.GetTargetImgCount(), true));
-
                 await Task.WhenAll(tasks);
 
                 MainUi.Queue = MainUi.Queue.Except(new List<TtiSettings> { s }).ToList(); // Remove from queue
             }
 
             Done();
+        }
+
+        private static bool ValidateSettings (TtiSettings s)
+        {
+            if (s == null)
+                return false;
+
+            if (s.Params.ContainsKey("seed"))
+                PreviousSeed = s.Params["seed"].FromJson<long>();
+
+            CurrentTaskSettings = s;
+            s.Prompts = s.Prompts.Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
+
+            if (!s.Prompts.Any())
+            {
+                Logger.Log($"No valid prompts to run!");
+                return false;
+            }
+
+            var invalidInitImgs = s.Params.FromJson<string[]>("initImgs", new string[0]).Where(i => !File.Exists(i)).ToList();
+
+            if (invalidInitImgs.Any())
+            {
+                Logger.Log($"Missing initialization images:\n{string.Join("\n", invalidInitImgs.Select(i => Path.GetFileName(i)))}");
+                return false;
+            }
+
+            return true;
         }
 
         public enum NotifyMode { None, Ping, Notification, Both }
