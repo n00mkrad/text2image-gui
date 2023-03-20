@@ -96,6 +96,7 @@ namespace StableDiffusionGui.Forms
             this.comboxResizeGravity = new System.Windows.Forms.ComboBox();
             this.comboxSymmetry = new System.Windows.Forms.ComboBox();
             this.btnEmbeddingAppend = new HTAlt.WinForms.HTButton();
+            this.btnResetRes = new HTAlt.WinForms.HTButton();
             this.btnCollapseDebug = new HTAlt.WinForms.HTButton();
             this.btnCollapseSymmetry = new HTAlt.WinForms.HTButton();
             this.btnCollapseRendering = new HTAlt.WinForms.HTButton();
@@ -145,6 +146,7 @@ namespace StableDiffusionGui.Forms
             this.panelSampler = new System.Windows.Forms.Panel();
             this.label7 = new System.Windows.Forms.Label();
             this.panelRes = new System.Windows.Forms.Panel();
+            this.labelResChange = new System.Windows.Forms.Label();
             this.labelAspectRatio = new System.Windows.Forms.Label();
             this.comboxResH = new System.Windows.Forms.ComboBox();
             this.comboxResW = new System.Windows.Forms.ComboBox();
@@ -1363,6 +1365,28 @@ namespace StableDiffusionGui.Forms
             this.btnEmbeddingAppend.Visible = false;
             this.btnEmbeddingAppend.Click += new System.EventHandler(this.btnEmbeddingAppend_Click);
             // 
+            // btnResetRes
+            // 
+            this.btnResetRes.AutoColor = true;
+            this.btnResetRes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnResetRes.ButtonImage = null;
+            this.btnResetRes.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
+            this.btnResetRes.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
+            this.btnResetRes.DrawImage = false;
+            this.btnResetRes.ForeColor = System.Drawing.Color.White;
+            this.btnResetRes.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
+            this.btnResetRes.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
+            this.btnResetRes.Location = new System.Drawing.Point(511, 6);
+            this.btnResetRes.Name = "btnResetRes";
+            this.btnResetRes.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+            this.btnResetRes.Size = new System.Drawing.Size(50, 23);
+            this.btnResetRes.TabIndex = 114;
+            this.btnResetRes.TabStop = false;
+            this.btnResetRes.Text = "Reset";
+            this.toolTip.SetToolTip(this.btnResetRes, "Reset to input image\'s resolution");
+            this.btnResetRes.Visible = false;
+            this.btnResetRes.Click += new System.EventHandler(this.btnResetRes_Click);
+            // 
             // btnCollapseDebug
             // 
             this.btnCollapseDebug.AutoColor = true;
@@ -1920,6 +1944,8 @@ namespace StableDiffusionGui.Forms
             // 
             // panelRes
             // 
+            this.panelRes.Controls.Add(this.btnResetRes);
+            this.panelRes.Controls.Add(this.labelResChange);
             this.panelRes.Controls.Add(this.labelAspectRatio);
             this.panelRes.Controls.Add(this.checkboxHiresFix);
             this.panelRes.Controls.Add(this.comboxResH);
@@ -1931,6 +1957,19 @@ namespace StableDiffusionGui.Forms
             this.panelRes.Name = "panelRes";
             this.panelRes.Size = new System.Drawing.Size(648, 35);
             this.panelRes.TabIndex = 5;
+            // 
+            // labelResChange
+            // 
+            this.labelResChange.AutoEllipsis = true;
+            this.labelResChange.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelResChange.ForeColor = System.Drawing.Color.White;
+            this.labelResChange.Location = new System.Drawing.Point(439, 6);
+            this.labelResChange.Name = "labelResChange";
+            this.labelResChange.Size = new System.Drawing.Size(75, 23);
+            this.labelResChange.TabIndex = 111;
+            this.labelResChange.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.labelResChange.UseCompatibleTextRendering = true;
+            this.labelResChange.Visible = false;
             // 
             // labelAspectRatio
             // 
@@ -1955,7 +1994,6 @@ namespace StableDiffusionGui.Forms
             this.comboxResH.Name = "comboxResH";
             this.comboxResH.Size = new System.Drawing.Size(85, 21);
             this.comboxResH.TabIndex = 107;
-            this.comboxResH.SelectedIndexChanged += new System.EventHandler(this.comboxResH_SelectedIndexChanged);
             // 
             // comboxResW
             // 
@@ -1968,7 +2006,6 @@ namespace StableDiffusionGui.Forms
             this.comboxResW.Name = "comboxResW";
             this.comboxResW.Size = new System.Drawing.Size(85, 21);
             this.comboxResW.TabIndex = 106;
-            this.comboxResW.SelectedIndexChanged += new System.EventHandler(this.comboxResW_SelectedIndexChanged);
             // 
             // label6
             // 
@@ -2801,6 +2838,8 @@ namespace StableDiffusionGui.Forms
         public System.Windows.Forms.ComboBox comboxEmbeddingList;
         public HTAlt.WinForms.HTButton btnEmbeddingAppend;
         public HTAlt.WinForms.HTButton btnEmbeddingCopy;
+        private System.Windows.Forms.Label labelResChange;
+        public HTAlt.WinForms.HTButton btnResetRes;
     }
 }
 

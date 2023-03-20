@@ -29,6 +29,7 @@ namespace StableDiffusionGui.Forms
 
         public void InitializeControls()
         {
+            // Fill data
             comboxSampler.FillFromEnum<Sampler>(Strings.Samplers, 0);
             comboxSeamless.FillFromEnum<SeamlessMode>(Strings.SeamlessMode, 0);
             comboxSymmetry.FillFromEnum<SymmetryMode>(Strings.SymmetryMode, 0);
@@ -36,16 +37,23 @@ namespace StableDiffusionGui.Forms
             comboxResizeGravity.FillFromEnum<ImageMagick.Gravity>(Strings.ImageGravity, 4, new List<ImageMagick.Gravity> { ImageMagick.Gravity.Undefined });
             comboxEmbeddingList.SetItems(new[] { "None" }.Concat(Models.GetEmbeddings().Select(m => m.FormatIndependentName)), UiExtensions.SelectMode.First);
 
+            // Set categories
             _categoryPanels.Add(btnCollapseDebug, new List<Control> { panelDebugAppendArgs, panelDebugSendStdin, panelDebugPerlinThresh, panelDebugLoopback });
             _categoryPanels.Add(btnCollapseRendering, new List<Control> { panelRes, panelSampler });
             _categoryPanels.Add(btnCollapseSymmetry, new List<Control> { panelSeamless, panelSymmetry });
             _categoryPanels.Add(btnCollapseGeneration, new List<Control> { panelInpainting, panelIterations, panelSteps, panelScale, panelScaleImg, panelSeed });
 
+            // Expand default categories
             _expandedCategories = new List<Control> { btnCollapseRendering, btnCollapseGeneration };
             _categoryPanels.Keys.ToList().ForEach(c => c.Click += (s, e) => CollapseToggle((Control)s));
             _categoryPanels.Keys.ToList().ForEach(c => CollapseToggle(c, _expandedCategories.Contains(c)));
 
             _debugControls.ForEach(c => c.SetVisible(Program.Debug)); // Show debug controls if debug mode is enabled
+
+            // Events
+            comboxResW.SelectedIndexChanged += (s, e) => ResolutionChanged(); // Resolution change
+            comboxResH.SelectedIndexChanged += (s, e) => ResolutionChanged(); // Resolution change
+
         }
 
         public void LoadControls()
@@ -96,7 +104,7 @@ namespace StableDiffusionGui.Forms
 
             // Panel visibility
             SetVisibility(new Control[] { panelPromptNeg, panelEmbeddings, panelInitImgStrength, panelInpainting, panelScaleImg, panelRes, panelSampler, panelSeamless, panelSymmetry, checkboxHiresFix, 
-                textboxClipsegMask, comboxResizeGravity, checkboxShowInitImg }, imp);
+                textboxClipsegMask, comboxResizeGravity, labelResChange, btnResetRes, checkboxShowInitImg }, imp);
 
             bool adv = Config.Get<bool>(Config.Keys.AdvancedUi);
             upDownIterations.Maximum = !adv ? 10000 : 100000;
@@ -117,9 +125,43 @@ namespace StableDiffusionGui.Forms
             toolTip.SetToolTip(labelCurrentImage, $"{labelCurrentImage.Text.Trunc(100)}\n\nShift + Hover to preview.");
 
             ImageViewer.UpdateInitImgViewer();
+            ResolutionChanged();
             _categoryPanels.Keys.ToList().ForEach(btn => btn.SetVisible(_categoryPanels[btn].Any(p => p.Visible))); // Hide collapse buttons if their category has 0 visible panels
 
             #endregion
+        }
+
+        private void ResolutionChanged()
+        {
+            SetVisibility(new Control[] { checkboxHiresFix, labelResChange });
+
+            int w = comboxResW.GetInt();
+            int h = comboxResH.GetInt();
+
+            if (labelResChange.Visible && pictBoxInitImg.Image != null)
+            {
+                int diffW = w - pictBoxInitImg.Image.Width;
+                int diffH = h - pictBoxInitImg.Image.Height;
+                labelResChange.Text = diffW != 0 || diffH != 0 ? $"+{diffW}, +{diffH}" : "";
+                SetVisibility(btnResetRes);
+            }
+            else
+            {
+                labelResChange.SetVisible(false);
+                btnResetRes.SetVisible(false);
+            }
+
+            if (labelAspectRatio.Visible)
+            {
+                int gcd = GreatestCommonDivisor(w, h);
+                string ratioText = $"{w / gcd}:{h / gcd}";
+                labelAspectRatio.Text = ratioText.Length <= 5 ? $"Ratio {ratioText.Replace("8:5", "8:5 (16:10)").Replace("7:3", "7:3 (21:9)")}" : "";
+            }
+        }
+
+        private int GreatestCommonDivisor(int a, int b)
+        {
+            return b == 0 ? a : GreatestCommonDivisor(b, a % b);
         }
 
         public void UpdateInpaintUi()

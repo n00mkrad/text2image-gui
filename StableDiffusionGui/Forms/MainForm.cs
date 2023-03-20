@@ -71,8 +71,6 @@ namespace StableDiffusionGui.Forms
             textboxPrompt.MaxLength = 0;
             textboxPromptNeg.MaxLength = 0;
             pictBoxImgViewer.MouseWheel += (s, e) => { ImageViewer.Move(e.Delta > 0); }; // Scroll on MouseWheel
-            comboxResW.SelectedIndexChanged += (s, e) => SetVisibility(checkboxHiresFix); // Show/Hide HiRes Fix depending on chosen res
-            comboxResH.SelectedIndexChanged += (s, e) => SetVisibility(checkboxHiresFix); // Show/Hide HiRes Fix depending on chosen res
 
             MainUi.LoadAutocompleteData(promptAutocomplete, new[] { textboxPrompt, textboxPromptNeg });
             Task.Run(() => MainUi.GetCudaGpus());
@@ -481,32 +479,6 @@ namespace StableDiffusionGui.Forms
             }
         }
 
-        private void comboxResW_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            UpdateAspectRatio();
-        }
-
-        private void comboxResH_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            UpdateAspectRatio();
-        }
-
-        private void UpdateAspectRatio()
-        {
-            int w = comboxResW.GetInt();
-            int h = comboxResH.GetInt();
-            int gcd = GCD(w, h);
-            int reducedWidth = w / gcd;
-            int reducedHeight = h / gcd;
-            string ratioText = $"{reducedWidth}:{reducedHeight}";
-            labelAspectRatio.Text = ratioText.Length <= 5 ? $"Ratio {ratioText.Replace("8:5", "8:5 (16:10)").Replace("7:3", "7:3 (21:9)")}" : "";
-        }
-
-        private int GCD(int a, int b)
-        {
-            return b == 0 ? a : GCD(b, a % b);
-        }
-
         private void copySidebySideComparisonImageToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OsUtils.SetClipboard(ImageViewer.GetCurrentImageComparison());
@@ -544,5 +516,10 @@ namespace StableDiffusionGui.Forms
         }
 
         #endregion
+
+        private void btnResetRes_Click(object sender, EventArgs e)
+        {
+            MainUi.SetResolutionForInitImage(MainUi.CurrentInitImgPaths.FirstOrDefault());
+        }
     }
 }

@@ -20,7 +20,6 @@ using System.Windows.Forms;
 using static StableDiffusionGui.Main.Enums.Misc;
 using static StableDiffusionGui.Main.Enums.Program;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
-using static StableDiffusionGui.Os.HwInfo;
 
 namespace StableDiffusionGui.Ui
 {
@@ -412,7 +411,7 @@ namespace StableDiffusionGui.Ui
             return menu;
         }
 
-        private static void SetResolutionForInitImage(string initImgPath)
+        public static void SetResolutionForInitImage(string initImgPath)
         {
             Size newRes = GetResolutionForInitImage(IoUtils.GetImage(initImgPath).Size);
             Program.MainForm.comboxResW.Text = newRes.Width.ToString();
