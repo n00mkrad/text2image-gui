@@ -12,51 +12,51 @@ namespace StableDiffusionGui.Forms
 {
     public partial class MainForm
     {
-        public void SetVisibility(IEnumerable<Control> controls, Implementation currImplementation = (Implementation)(-1))
+        public void SetVisibility(IEnumerable<Control> controls, Implementation implementation = (Implementation)(-1))
         {
             foreach (Control c in controls)
-                c.SetVisible(ShouldControlBeVisible(c, currImplementation));
+                c.SetVisible(ShouldControlBeVisible(c, implementation));
         }
 
-        public void SetVisibility(Control control, Implementation currImplementation = (Implementation)(-1))
+        public void SetVisibility(Control control, Implementation implementation = (Implementation)(-1))
         {
-            control.SetVisible(ShouldControlBeVisible(control, currImplementation));
+            control.SetVisible(ShouldControlBeVisible(control, implementation));
         }
 
-        public bool ShouldControlBeVisible(Control control, Implementation currImplementation = (Implementation)(-1))
+        public bool ShouldControlBeVisible(Control control, Implementation implementation = (Implementation)(-1))
         {
-            if (currImplementation.IsUnset())
-                currImplementation = ConfigParser.CurrentImplementation;
+            if (implementation.IsUnset())
+                implementation = ConfigParser.CurrentImplementation;
 
             if (control == panelRes)
-                return ResolutionAdjustAvailable(currImplementation);
+                return ResolutionAdjustAvailable(implementation);
 
             if (control == panelScaleImg)
-                return currImplementation == Implementation.InstructPixToPix;
+                return implementation == Implementation.InstructPixToPix;
 
             if (control == panelInitImgStrength)
-                return InitImgStrengthAvailable(currImplementation);
+                return InitImgStrengthAvailable(implementation);
 
             if (control == panelInpainting)
-                return InpaintingAvailable(currImplementation);
+                return InpaintingAvailable(implementation);
 
             if (control == checkboxHiresFix)
-                return HiresFixAvailable(currImplementation);
+                return HiresFixAvailable(implementation);
 
             if (control == panelPromptNeg)
-                return currImplementation.Supports(Feature.NegPrompts);
+                return implementation.Supports(Feature.NegPrompts);
 
             if (control == panelSampler)
-                return currImplementation.Supports(Feature.MultipleSamplers);
+                return implementation.Supports(Feature.MultipleSamplers);
 
             if (control == panelSeamless)
-                return currImplementation.Supports(Feature.SeamlessMode) && (!comboxInpaintMode.Visible || (InpaintMode)comboxInpaintMode.SelectedIndex == InpaintMode.Disabled);
+                return implementation.Supports(Feature.SeamlessMode) && (!comboxInpaintMode.Visible || (InpaintMode)comboxInpaintMode.SelectedIndex == InpaintMode.Disabled);
 
             if (control == panelSymmetry)
-                return currImplementation.Supports(Feature.SymmetricMode) && (!comboxInpaintMode.Visible || (InpaintMode)comboxInpaintMode.SelectedIndex == InpaintMode.Disabled);
+                return implementation.Supports(Feature.SymmetricMode) && (!comboxInpaintMode.Visible || (InpaintMode)comboxInpaintMode.SelectedIndex == InpaintMode.Disabled);
 
             if (control == panelEmbeddings)
-                return currImplementation.Supports(Feature.Embeddings);
+                return implementation.Supports(Feature.Embeddings);
 
             if (control == textboxClipsegMask)
                 return (InpaintMode)comboxInpaintMode.SelectedIndex == InpaintMode.TextMask;
@@ -69,6 +69,9 @@ namespace StableDiffusionGui.Forms
 
             if (control == checkboxShowInitImg)
                 return AnyInits;
+
+            if(control == panelModel)
+                return implementation.Supports(Feature.CustomModels);
 
             return false;
         }
@@ -106,7 +109,7 @@ namespace StableDiffusionGui.Forms
             bool available = false;
 
             bool img2img = MainUi.CurrentInitImgPaths.Any();
-            bool inpaintCompat = imp.Supports(ImplementationInfo.Feature.NativeInpainting);
+            bool inpaintCompat = imp.Supports(Feature.NativeInpainting);
 
             if (img2img && inpaintCompat)
                 available = true;

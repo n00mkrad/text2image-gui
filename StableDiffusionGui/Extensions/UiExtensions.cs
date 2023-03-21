@@ -74,6 +74,18 @@ namespace StableDiffusionGui.Extensions
             }
         }
 
+        public static void SetItems(this ComboBox combox, IEnumerable<object> items, int selectIndex = -1)
+        {
+            if (combox.AreItemsEqualToList(items.ToArray()))
+                return;
+
+            combox.Items.Clear();
+            combox.Items.AddRange(items.ToArray());
+
+            if (selectIndex >= 0 && combox.Items.Count > 0)
+                combox.SelectedIndex = selectIndex;
+        }
+
         private static bool AreItemsEqualToList(this ComboBox combox, object[] newItems)
         {
             if (combox.Items.Count != newItems.Count())

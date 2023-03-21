@@ -107,6 +107,7 @@ namespace StableDiffusionGui.Ui
             { "btnCollapseRendering", "Rendering Settings" },
             { "btnCollapseSymmetry", "Symmetry Settings" },
             { "btnCollapseGeneration", "Generation Settings" },
+            { "btnCollapseImplementation", "Implementation Settings" },
         };
     }
 }

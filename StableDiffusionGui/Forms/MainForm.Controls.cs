@@ -36,21 +36,29 @@ namespace StableDiffusionGui.Forms
             comboxInpaintMode.FillFromEnum<InpaintMode>(Strings.InpaintMode, 0);
             comboxResizeGravity.FillFromEnum<ImageMagick.Gravity>(Strings.ImageGravity, 4, new List<ImageMagick.Gravity> { ImageMagick.Gravity.Undefined });
             comboxEmbeddingList.SetItems(new[] { "None" }.Concat(Models.GetEmbeddings().Select(m => m.FormatIndependentName)), UiExtensions.SelectMode.First);
+            comboxBackend.FillFromEnum<Implementation>(Strings.Implementation, -1);
+            comboxBackend.Text = Strings.Implementation.Get(Config.Get<string>(Config.Keys.ImplementationName));
+            UpdateModel();
 
             // Set categories
+            _categoryPanels.Add(btnCollapseImplementation, new List<Control> { panelBackend, panelModel });
             _categoryPanels.Add(btnCollapseDebug, new List<Control> { panelDebugAppendArgs, panelDebugSendStdin, panelDebugPerlinThresh, panelDebugLoopback });
             _categoryPanels.Add(btnCollapseRendering, new List<Control> { panelRes, panelSampler });
             _categoryPanels.Add(btnCollapseSymmetry, new List<Control> { panelSeamless, panelSymmetry });
             _categoryPanels.Add(btnCollapseGeneration, new List<Control> { panelInpainting, panelIterations, panelSteps, panelScale, panelScaleImg, panelSeed });
 
             // Expand default categories
-            _expandedCategories = new List<Control> { btnCollapseRendering, btnCollapseGeneration };
+            _expandedCategories = new List<Control> { btnCollapseImplementation, btnCollapseRendering, btnCollapseGeneration };
             _categoryPanels.Keys.ToList().ForEach(c => c.Click += (s, e) => CollapseToggle((Control)s));
             _categoryPanels.Keys.ToList().ForEach(c => CollapseToggle(c, _expandedCategories.Contains(c)));
 
             _debugControls.ForEach(c => c.SetVisible(Program.Debug)); // Show debug controls if debug mode is enabled
 
             // Events
+            comboxBackend.SelectedIndexChanged += (s, e) => { Config.Set(Config.Keys.ImplementationName, Strings.Implementation.GetReverse(comboxBackend.Text)); TryRefreshUiState(); }; // Implementation change
+            comboxModel.SelectedIndexChanged += (s, e) => ConfigParser.SaveGuiElement(comboxModel, Config.Keys.Model);
+            comboxModel.DropDown += (s, e) => ReloadModelsCombox();
+            comboxModel.DropDownClosed += (s, e) => panelSettings.Focus();
             comboxResW.SelectedIndexChanged += (s, e) => ResolutionChanged(); // Resolution change
             comboxResH.SelectedIndexChanged += (s, e) => ResolutionChanged(); // Resolution change
 
@@ -103,8 +111,8 @@ namespace StableDiffusionGui.Forms
             Implementation imp = ConfigParser.CurrentImplementation;
 
             // Panel visibility
-            SetVisibility(new Control[] { panelPromptNeg, panelEmbeddings, panelInitImgStrength, panelInpainting, panelScaleImg, panelRes, panelSampler, panelSeamless, panelSymmetry, checkboxHiresFix, 
-                textboxClipsegMask, panelResizeGravity, labelResChange, btnResetRes, checkboxShowInitImg }, imp);
+            SetVisibility(new Control[] { panelPromptNeg, panelEmbeddings, panelInitImgStrength, panelInpainting, panelScaleImg, panelRes, panelSampler, panelSeamless, panelSymmetry, checkboxHiresFix,
+                textboxClipsegMask, panelResizeGravity, labelResChange, btnResetRes, checkboxShowInitImg, panelModel }, imp);
 
             bool adv = Config.Get<bool>(Config.Keys.AdvancedUi);
             upDownIterations.Maximum = !adv ? 10000 : 100000;
@@ -112,8 +120,8 @@ namespace StableDiffusionGui.Forms
             sliderSteps.ChangeStep(!adv ? 5 : 1);
             sliderScale.ActualMaximum = !adv ? 25 : 50;
             var validResolutions = MainUi.GetResolutions(320, adv ? 4096 : 2048).Select(i => i.ToString());
-            comboxResW.SetItems(validResolutions, UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.Last);
-            comboxResH.SetItems(validResolutions, UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.Last);
+            comboxResW.SetItems(validResolutions, UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.First);
+            comboxResH.SetItems(validResolutions, UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.First);
 
             #region Init Img & Embeddings Stuff
 
@@ -121,11 +129,12 @@ namespace StableDiffusionGui.Forms
 
             btnInitImgBrowse.Text = AnyInits ? $"Clear Image{(MainUi.CurrentInitImgPaths.Count == 1 ? "" : "s")}" : "Load Image(s)";
 
-            labelCurrentImage.Text = !AnyInits ? "No initialization image loaded." : (MainUi.CurrentInitImgPaths.Count == 1 ? $"{IoUtils.GetImage(MainUi.CurrentInitImgPaths[0]).Size.AsString()} Image: {Path.GetFileName(MainUi.CurrentInitImgPaths[0])}" : $"{MainUi.CurrentInitImgPaths.Count} Images");
+            labelCurrentImage.Text = !AnyInits ? "No image(s) loaded." : (MainUi.CurrentInitImgPaths.Count == 1 ? $"{IoUtils.GetImage(MainUi.CurrentInitImgPaths[0]).Size.AsString()} Image: {Path.GetFileName(MainUi.CurrentInitImgPaths[0])}" : $"{MainUi.CurrentInitImgPaths.Count} Images");
             toolTip.SetToolTip(labelCurrentImage, $"{labelCurrentImage.Text.Trunc(100)}\n\nShift + Hover to preview.");
 
             ImageViewer.UpdateInitImgViewer();
             ResolutionChanged();
+            UpdateModel();
             _categoryPanels.Keys.ToList().ForEach(btn => btn.SetVisible(_categoryPanels[btn].Any(p => p.Visible))); // Hide collapse buttons if their category has 0 visible panels
 
             #endregion
@@ -250,14 +259,51 @@ namespace StableDiffusionGui.Forms
                 List<Control> controls = _categoryPanels[collapseBtn];
                 bool show = overrideState != null ? (bool)overrideState : controls.Any(c => c.Height == 0);
                 controls.ForEach(c => c.Height = show ? 35 : 0);
-                collapseBtn.Text = $"{(show ? "Hide" : "Show")} {Strings.MainUiCategories.Get(collapseBtn.Name, true)}";
+                string catName = Strings.MainUiCategories.Get(collapseBtn.Name, true);
+                collapseBtn.Text = show ? $"Hide {catName}" : $"{catName}...";
             })).RunWithUiStopped(this);
         }
 
-        public void UpdateWindowTitle ()
+        public void UpdateWindowTitle()
         {
             string busyText = Program.State == Program.BusyState.Standby ? "" : "Busy...";
             Text = string.Join(" - ", new[] { $"Stable Diffusion GUI {Program.Version}", MainUi.GpuInfo, busyText }.Where(s => s.IsNotEmpty()));
+        }
+
+        public void UpdateModel(bool reloadList = false, Implementation imp = (Implementation)(-1))
+        {
+            this.PrintThread(); // TODO: Remove me later
+
+            if (!comboxModel.Visible)
+                return;
+
+            if (imp == (Implementation)(-1))
+                imp = ConfigParser.CurrentImplementation;
+
+            if (imp == (Implementation)(-1))
+                return;
+
+            string currentModel = Config.Get<string>(Config.Keys.Model);
+
+            if (reloadList)
+            {
+                ReloadModelsCombox(imp);
+            }
+            else if (!comboxModel.Items.Cast<string>().Any(m => m == currentModel))
+            {
+                comboxModel.SetItems(new string[] { currentModel }, 0);
+            }
+
+            comboxModel.Text = currentModel;
+        }
+
+        private void ReloadModelsCombox (Implementation imp = (Implementation)(-1))
+        {
+            if (imp == (Implementation)(-1))
+                imp = ConfigParser.CurrentImplementation;
+
+            IEnumerable<Model> models = Models.GetModelsAll().Where(m => imp.GetInfo().SupportedModelFormats.Contains(m.Format));
+            comboxModel.SetItems(models.Select(m => m.Name), UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.None);
         }
     }
 }
