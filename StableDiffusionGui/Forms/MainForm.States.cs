@@ -61,7 +61,7 @@ namespace StableDiffusionGui.Forms
             if (control == textboxClipsegMask)
                 return (InpaintMode)comboxInpaintMode.SelectedIndex == InpaintMode.TextMask;
 
-            if (control == comboxResizeGravity || control == labelResChange)
+            if (control == panelResizeGravity || control == labelResChange)
                 return comboxInpaintMode.Visible && (InpaintMode)comboxInpaintMode.SelectedIndex == InpaintMode.Outpaint;
 
             if (control == btnResetRes)

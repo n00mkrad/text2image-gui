@@ -104,7 +104,7 @@ namespace StableDiffusionGui.Forms
 
             // Panel visibility
             SetVisibility(new Control[] { panelPromptNeg, panelEmbeddings, panelInitImgStrength, panelInpainting, panelScaleImg, panelRes, panelSampler, panelSeamless, panelSymmetry, checkboxHiresFix, 
-                textboxClipsegMask, comboxResizeGravity, labelResChange, btnResetRes, checkboxShowInitImg }, imp);
+                textboxClipsegMask, panelResizeGravity, labelResChange, btnResetRes, checkboxShowInitImg }, imp);
 
             bool adv = Config.Get<bool>(Config.Keys.AdvancedUi);
             upDownIterations.Maximum = !adv ? 10000 : 100000;
@@ -121,7 +121,7 @@ namespace StableDiffusionGui.Forms
 
             btnInitImgBrowse.Text = AnyInits ? $"Clear Image{(MainUi.CurrentInitImgPaths.Count == 1 ? "" : "s")}" : "Load Image(s)";
 
-            labelCurrentImage.Text = !AnyInits ? "No initialization image loaded." : (MainUi.CurrentInitImgPaths.Count == 1 ? $"Currently using {Path.GetFileName(MainUi.CurrentInitImgPaths[0])}" : $"Currently using {MainUi.CurrentInitImgPaths.Count} images.");
+            labelCurrentImage.Text = !AnyInits ? "No initialization image loaded." : (MainUi.CurrentInitImgPaths.Count == 1 ? $"{IoUtils.GetImage(MainUi.CurrentInitImgPaths[0]).Size.AsString()} Image: {Path.GetFileName(MainUi.CurrentInitImgPaths[0])}" : $"{MainUi.CurrentInitImgPaths.Count} Images");
             toolTip.SetToolTip(labelCurrentImage, $"{labelCurrentImage.Text.Trunc(100)}\n\nShift + Hover to preview.");
 
             ImageViewer.UpdateInitImgViewer();

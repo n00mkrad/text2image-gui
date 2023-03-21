@@ -168,6 +168,8 @@ namespace StableDiffusionGui.Forms
             this.panelIterations = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.panelInpainting = new System.Windows.Forms.Panel();
+            this.panelResizeGravity = new System.Windows.Forms.Panel();
+            this.label21 = new System.Windows.Forms.Label();
             this.comboxInpaintMode = new System.Windows.Forms.ComboBox();
             this.label10 = new System.Windows.Forms.Label();
             this.panelInitImgStrength = new System.Windows.Forms.Panel();
@@ -218,6 +220,7 @@ namespace StableDiffusionGui.Forms
             this.tableLayoutPanel6.SuspendLayout();
             this.panelIterations.SuspendLayout();
             this.panelInpainting.SuspendLayout();
+            this.panelResizeGravity.SuspendLayout();
             this.panelInitImgStrength.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
             this.panelAiInputs.SuspendLayout();
@@ -617,7 +620,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderScale.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScale.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScale.Location = new System.Drawing.Point(305, 7);
+            this.textboxSliderScale.Location = new System.Drawing.Point(305, 9);
             this.textboxSliderScale.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScale.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScale.Name = "textboxSliderScale";
@@ -764,7 +767,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderInitStrength.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderInitStrength.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderInitStrength.Location = new System.Drawing.Point(305, 7);
+            this.textboxSliderInitStrength.Location = new System.Drawing.Point(305, 9);
             this.textboxSliderInitStrength.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderInitStrength.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderInitStrength.Name = "textboxSliderInitStrength";
@@ -1284,7 +1287,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderScaleImg.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScaleImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScaleImg.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScaleImg.Location = new System.Drawing.Point(305, 7);
+            this.textboxSliderScaleImg.Location = new System.Drawing.Point(305, 9);
             this.textboxSliderScaleImg.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScaleImg.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScaleImg.Name = "textboxSliderScaleImg";
@@ -1320,12 +1323,14 @@ namespace StableDiffusionGui.Forms
             this.comboxResizeGravity.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.comboxResizeGravity.ForeColor = System.Drawing.Color.White;
             this.comboxResizeGravity.FormattingEnabled = true;
-            this.comboxResizeGravity.Location = new System.Drawing.Point(439, 7);
+            this.comboxResizeGravity.Location = new System.Drawing.Point(110, 0);
+            this.comboxResizeGravity.Margin = new System.Windows.Forms.Padding(0);
             this.comboxResizeGravity.Name = "comboxResizeGravity";
-            this.comboxResizeGravity.Size = new System.Drawing.Size(206, 21);
+            this.comboxResizeGravity.Size = new System.Drawing.Size(96, 21);
             this.comboxResizeGravity.TabIndex = 106;
-            this.toolTip.SetToolTip(this.comboxResizeGravity, "Change from which point the image will be expanded.");
-            this.comboxResizeGravity.Visible = false;
+            this.toolTip.SetToolTip(this.comboxResizeGravity, "Change from which point the image will be expanded.\r\n\r\nThis does not apply if you" +
+        " don\'t adjust the resolution because your input image already has transparent re" +
+        "gions.");
             // 
             // comboxSymmetry
             // 
@@ -1376,7 +1381,7 @@ namespace StableDiffusionGui.Forms
             this.btnResetRes.ForeColor = System.Drawing.Color.White;
             this.btnResetRes.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
             this.btnResetRes.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
-            this.btnResetRes.Location = new System.Drawing.Point(511, 6);
+            this.btnResetRes.Location = new System.Drawing.Point(439, 7);
             this.btnResetRes.Name = "btnResetRes";
             this.btnResetRes.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
             this.btnResetRes.Size = new System.Drawing.Size(50, 23);
@@ -1963,7 +1968,7 @@ namespace StableDiffusionGui.Forms
             this.labelResChange.AutoEllipsis = true;
             this.labelResChange.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelResChange.ForeColor = System.Drawing.Color.White;
-            this.labelResChange.Location = new System.Drawing.Point(439, 6);
+            this.labelResChange.Location = new System.Drawing.Point(495, 6);
             this.labelResChange.Name = "labelResChange";
             this.labelResChange.Size = new System.Drawing.Size(75, 23);
             this.labelResChange.TabIndex = 111;
@@ -2187,7 +2192,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderSteps.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderSteps.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderSteps.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderSteps.Location = new System.Drawing.Point(305, 7);
+            this.textboxSliderSteps.Location = new System.Drawing.Point(305, 9);
             this.textboxSliderSteps.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderSteps.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderSteps.Name = "textboxSliderSteps";
@@ -2262,7 +2267,7 @@ namespace StableDiffusionGui.Forms
             // 
             // panelInpainting
             // 
-            this.panelInpainting.Controls.Add(this.comboxResizeGravity);
+            this.panelInpainting.Controls.Add(this.panelResizeGravity);
             this.panelInpainting.Controls.Add(this.textboxClipsegMask);
             this.panelInpainting.Controls.Add(this.comboxInpaintMode);
             this.panelInpainting.Controls.Add(this.btnEditMask);
@@ -2274,6 +2279,28 @@ namespace StableDiffusionGui.Forms
             this.panelInpainting.Size = new System.Drawing.Size(648, 35);
             this.panelInpainting.TabIndex = 12;
             this.panelInpainting.Visible = false;
+            // 
+            // panelResizeGravity
+            // 
+            this.panelResizeGravity.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelResizeGravity.Controls.Add(this.label21);
+            this.panelResizeGravity.Controls.Add(this.comboxResizeGravity);
+            this.panelResizeGravity.Location = new System.Drawing.Point(439, 7);
+            this.panelResizeGravity.Name = "panelResizeGravity";
+            this.panelResizeGravity.Size = new System.Drawing.Size(206, 21);
+            this.panelResizeGravity.TabIndex = 112;
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label21.ForeColor = System.Drawing.Color.White;
+            this.label21.Location = new System.Drawing.Point(0, 4);
+            this.label21.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(107, 13);
+            this.label21.TabIndex = 107;
+            this.label21.Text = "Extend Image From...";
             // 
             // comboxInpaintMode
             // 
@@ -2658,6 +2685,8 @@ namespace StableDiffusionGui.Forms
             this.panelIterations.PerformLayout();
             this.panelInpainting.ResumeLayout(false);
             this.panelInpainting.PerformLayout();
+            this.panelResizeGravity.ResumeLayout(false);
+            this.panelResizeGravity.PerformLayout();
             this.panelInitImgStrength.ResumeLayout(false);
             this.panelInitImgStrength.PerformLayout();
             this.tableLayoutPanel4.ResumeLayout(false);
@@ -2840,6 +2869,8 @@ namespace StableDiffusionGui.Forms
         public HTAlt.WinForms.HTButton btnEmbeddingCopy;
         private System.Windows.Forms.Label labelResChange;
         public HTAlt.WinForms.HTButton btnResetRes;
+        private System.Windows.Forms.Panel panelResizeGravity;
+        private System.Windows.Forms.Label label21;
     }
 }
 
