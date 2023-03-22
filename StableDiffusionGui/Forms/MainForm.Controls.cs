@@ -181,16 +181,25 @@ namespace StableDiffusionGui.Forms
 
         public void OpenLogsMenu()
         {
-            var first = menuStripLogs.Items.Cast<ToolStripMenuItem>().First();
+            var existing = menuStripLogs.Items.Cast<ToolStripMenuItem>().ToArray();
             menuStripLogs.Items.Clear();
-            menuStripLogs.Items.Add(first);
+            menuStripLogs.Items.AddRange(existing);
             var openLogs = menuStripLogs.Items.Add($"Open Logs Folder");
             openLogs.Click += (s, ea) => { Process.Start("explorer", Paths.GetLogPath().Wrap()); };
 
             foreach (var log in Logger.CachedEntries)
             {
-                ToolStripItem newItem = menuStripLogs.Items.Add($"Copy {log.Key}");
-                newItem.Click += (s, ea) => { OsUtils.SetClipboard(Logger.EntriesToString(Logger.CachedEntries[log.Key], true, true)); };
+                ToolStripMenuItem logItem = new ToolStripMenuItem($"{log.Key}...");
+
+                ToolStripItem openItem = new ToolStripMenuItem($"Open Log File");
+                openItem.Click += (s, ea) => { Process.Start(Path.Combine(Paths.GetLogPath(), log.Key)); };
+                logItem.DropDownItems.Add(openItem);
+
+                ToolStripItem copyItem = new ToolStripMenuItem($"Copy Text to Clipboard");
+                copyItem.Click += (s, ea) => { OsUtils.SetClipboard(Logger.EntriesToString(Logger.CachedEntries[log.Key], true, true)); };
+                logItem.DropDownItems.Add(copyItem);
+
+                menuStripLogs.Items.Add(logItem);
             }
 
             menuStripLogs.Show(Cursor.Position);
