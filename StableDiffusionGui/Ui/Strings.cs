@@ -103,11 +103,12 @@ namespace StableDiffusionGui.Ui
 
         public static Dictionary<string, string> MainUiCategories = new Dictionary<string, string>()
         {
-            { "btnCollapseDebug", "Debug Settings" },
-            { "btnCollapseRendering", "Rendering Settings" },
-            { "btnCollapseSymmetry", "Symmetry Settings" },
-            { "btnCollapseGeneration", "Generation Settings" },
+            { "btnCollapsePrompt", "Prompt Settings" },
             { "btnCollapseImplementation", "Implementation Settings" },
+            { "btnCollapseRendering", "Rendering Settings" },
+            { "btnCollapseGeneration", "Generation Settings" },
+            { "btnCollapseSymmetry", "Symmetry Settings" },
+            { "btnCollapseDebug", "Debug Settings" },
         };
     }
 }

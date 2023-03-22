@@ -261,7 +261,10 @@ namespace StableDiffusionGui.Ui
             {
                 var panel = negativePromptField ? Program.MainForm.textboxPromptNeg.Parent : Program.MainForm.textboxPrompt.Parent;
                 var btn = negativePromptField ? Program.MainForm.btnExpandPromptNegField : Program.MainForm.btnExpandPromptField;
-                int smallHeight = negativePromptField ? 40 : 65;
+                int smallHeight = negativePromptField ? 45 : 70;
+
+                if (panel.Height == 0)
+                    return;
 
                 if (sizeMode == PromptFieldSizeMode.Toggle)
                     sizeMode = panel.Height == smallHeight ? PromptFieldSizeMode.Expand : PromptFieldSizeMode.Collapse;

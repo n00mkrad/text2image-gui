@@ -19,13 +19,14 @@ namespace StableDiffusionGui.Forms
 {
     public partial class MainForm
     {
-        private Dictionary<Control, List<Control>> _categoryPanels = new Dictionary<Control, List<Control>>(); // Key: Collapse Button - Value: Child Panels
+        private Dictionary<Control, List<Panel>> _categoryPanels = new Dictionary<Control, List<Panel>>(); // Key: Collapse Button - Value: Child Panels
         private List<Control> _expandedCategories = new List<Control>();
 
         private List<Control> _debugControls { get { return new List<Control> { panelDebugLoopback, panelDebugPerlinThresh, panelDebugSendStdin, panelDebugAppendArgs }; } }
 
         public bool IsUsingInpaintingModel { get { return Path.ChangeExtension(Config.Get<string>(Config.Keys.Model), null).EndsWith(Constants.SuffixesPrefixes.InpaintingMdlSuf); } }
         public bool AnyInits { get { return MainUi.CurrentInitImgPaths.Any(); } }
+        private Dictionary<Panel, int> _panelHeights = new Dictionary<Panel, int>();
 
         public void InitializeControls()
         {
@@ -41,14 +42,18 @@ namespace StableDiffusionGui.Forms
             UpdateModel();
 
             // Set categories
-            _categoryPanels.Add(btnCollapseImplementation, new List<Control> { panelBackend, panelModel });
-            _categoryPanels.Add(btnCollapseDebug, new List<Control> { panelDebugAppendArgs, panelDebugSendStdin, panelDebugPerlinThresh, panelDebugLoopback });
-            _categoryPanels.Add(btnCollapseRendering, new List<Control> { panelRes, panelSampler });
-            _categoryPanels.Add(btnCollapseSymmetry, new List<Control> { panelSeamless, panelSymmetry });
-            _categoryPanels.Add(btnCollapseGeneration, new List<Control> { panelInpainting, panelIterations, panelSteps, panelScale, panelScaleImg, panelSeed });
+            _categoryPanels.Add(btnCollapseImplementation, new List<Panel> { panelBackend, panelModel });
+            _categoryPanels.Add(btnCollapsePrompt, new List<Panel> { panelPrompt, panelPromptNeg, panelEmbeddings, panelAiInputs, panelInitImgStrength });
+            _categoryPanels.Add(btnCollapseDebug, new List<Panel> { panelDebugAppendArgs, panelDebugSendStdin, panelDebugPerlinThresh, panelDebugLoopback });
+            _categoryPanels.Add(btnCollapseRendering, new List<Panel> { panelRes, panelSampler });
+            _categoryPanels.Add(btnCollapseSymmetry, new List<Panel> { panelSeamless, panelSymmetry });
+            _categoryPanels.Add(btnCollapseGeneration, new List<Panel> { panelInpainting, panelIterations, panelSteps, panelScale, panelScaleImg, panelSeed });
+
+            // Store original heights
+            // _categoryPanels.ToList().ForEach(pair => pair.Value.Cast<Panel>().ToList().ForEach(p => _panelHeights[p] = p.Height));
 
             // Expand default categories
-            _expandedCategories = new List<Control> { btnCollapseImplementation, btnCollapseRendering, btnCollapseGeneration };
+            _expandedCategories = new List<Control> { btnCollapseImplementation, btnCollapsePrompt, btnCollapseRendering, btnCollapseGeneration };
             _categoryPanels.Keys.ToList().ForEach(c => c.Click += (s, e) => CollapseToggle((Control)s));
             _categoryPanels.Keys.ToList().ForEach(c => CollapseToggle(c, _expandedCategories.Contains(c)));
 
@@ -265,9 +270,12 @@ namespace StableDiffusionGui.Forms
         {
             ((Action)(() =>
             {
-                List<Control> controls = _categoryPanels[collapseBtn];
-                bool show = overrideState != null ? (bool)overrideState : controls.Any(c => c.Height == 0);
-                controls.ForEach(c => c.Height = show ? 35 : 0);
+                List<Panel> panels = _categoryPanels[collapseBtn];
+                bool show = overrideState != null ? (bool)overrideState : panels.Any(c => c.Height == 0);
+
+                panels.Where(p => p.Height > 0).ToList().ForEach(p => _panelHeights[p] = p.Height);
+
+                panels.ForEach(p => p.Height = show ? _panelHeights[p] : 0);
                 string catName = Strings.MainUiCategories.Get(collapseBtn.Name, true);
                 collapseBtn.Text = show ? $"Hide {catName}" : $"{catName}...";
             })).RunWithUiStopped(this);
