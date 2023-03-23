@@ -58,6 +58,10 @@ namespace StableDiffusionGui.Ui
         public static List<int> GetResolutions(int min, int max)
         {
             int step = ConfigParser.CurrentImplementation == Implementation.InstructPixToPix ? 8 : 64;
+
+            if (Program.Debug && ConfigParser.CurrentImplementation == Implementation.InvokeAi)
+                step = 8;
+
             return Enumerable.Range(min, (max - min) + 1).Where(x => x % step == 0).ToList();
         }
 
