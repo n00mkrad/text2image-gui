@@ -59,8 +59,8 @@ namespace StableDiffusionGui.Main
 
                     if (currSettings.Implementation == Enums.StableDiffusion.Implementation.InvokeAi)
                     {
-                        string log = Logger.GetSessionLog(Constants.Lognames.Sd);
-                        images = images.Where(img => log.Contains(img.Name)).ToList(); // Only take image if it was written into SD log. Avoids copying too early (post-proc etc)
+                        var lastLines = TtiProcessOutputHandler.LastMessages.Take(3);
+                        images = images.Where(img => lastLines.Any(l => l.Contains(img.Name))).ToList(); // Only take image if it was written into SD log. Avoids copying too early (post-proc etc)
                     }
 
                     Dictionary<string, string> imageDirMap = new Dictionary<string, string>();

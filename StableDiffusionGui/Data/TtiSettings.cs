@@ -33,7 +33,6 @@ namespace StableDiffusionGui.Data
                         {
                             foreach (int stepCount in Params.Get("steps").FromJson<List<int>>())
                             {
-
                                 List<string> initImages = Params.Get("initImgs").FromJson<List<string>>();
 
                                 if (initImages == null || initImages.Count < 1) // No init image(s)
@@ -54,6 +53,9 @@ namespace StableDiffusionGui.Data
                         }
                     }
                 }
+
+                if (Config.Get<bool>(Config.Keys.SaveUnprocessedImages))
+                    count *= 2;
 
                 return count;
             }

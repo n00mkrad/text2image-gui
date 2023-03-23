@@ -7,8 +7,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using static StableDiffusionGui.Main.TextToImage;
 
 namespace StableDiffusionGui.Main
 {
@@ -17,9 +17,13 @@ namespace StableDiffusionGui.Main
         private static bool _hasErrored = false;
         private static bool _invokeAiLastModelCached = false;
 
+        private const int _maxLastMessages = 50;
+        public static List<string> LastMessages = new List<string>();
+
         public static void Reset()
         {
             _hasErrored = false;
+            LastMessages.Clear();
         }
 
         public static void LogOutput(string line, bool stdErr = false)
@@ -27,13 +31,18 @@ namespace StableDiffusionGui.Main
             if (string.IsNullOrWhiteSpace(line))
                 return;
 
+            Logger.Log(line, true, false, Constants.Lognames.Sd);
+            LastMessages.Insert(0, line);
+
+            if (LastMessages.Count > _maxLastMessages)
+                LastMessages = LastMessages.Take(_maxLastMessages).ToList();
+
             //var noLogWildcards = new string[] { "step */*" };
             //
             //if (noLogWildcards.Where(w => !line.MatchesWildcard(w)).Any())
-            Logger.Log(line, true, false, Constants.Lognames.Sd);
 
             bool ellipsis = Program.MainForm.LogText.EndsWith("...");
-                        string l = Program.MainForm.LogText;
+            string l = Program.MainForm.LogText;
             string errMsg = "";
 
             if (TextToImage.CurrentTaskSettings != null && TextToImage.CurrentTaskSettings.Implementation == Enums.StableDiffusion.Implementation.InvokeAi)
@@ -68,9 +77,10 @@ namespace StableDiffusionGui.Main
                     catch { }
                 }
 
-                if (!TextToImage.Canceled && line.Contains("image(s) generated in "))
+                if (!TextToImage.Canceled && line.Trim().Length >= 20 && new Regex(@"\[\d+(\.\d+)?\] [A-Z]:\/").Matches(line.Trim().Substring(0, 20)).Count == 1)
                 {
-                    var split = line.Split("image(s) generated in ");
+                    string generatedLine = LastMessages.Take(10).Where(ll => ll.Contains("image(s) generated in")).First();
+                    var split = generatedLine.Split("image(s) generated in ");
                     TextToImage.CurrentTask.ImgCount += split[0].GetInt();
                     Program.MainForm.SetProgress((int)Math.Round(((float)TextToImage.CurrentTask.ImgCount / TextToImage.CurrentTask.TargetImgCount) * 100f));
 
@@ -100,7 +110,7 @@ namespace StableDiffusionGui.Main
                     Logger.Log($"Model {(_invokeAiLastModelCached ? " retrieved from RAM cache" : "loaded")}.\nCompatible Embeddings: {line.Substring(line.Split("triggers: ")[0].Length + 10)}", false, ellipsis);
                 }
 
-                if(line.Trim().StartsWith(">> Preparing tokens for textual inversion"))
+                if (line.Trim().StartsWith(">> Preparing tokens for textual inversion"))
                 {
                     Logger.Log("Loading textual inversion...", false, ellipsis);
                 }
@@ -109,6 +119,11 @@ namespace StableDiffusionGui.Main
                 {
                     string emb = line.Split(": ").Last();
                     Logger.Log($"Warning: No compatible embedding with trigger '{emb}' found!", false, ellipsis);
+                }
+
+                if (line.Trim().StartsWith(">> Converting legacy checkpoint"))
+                {
+                    Logger.Log($"Warning: Model is not in Diffusers format, this makes loading slower due to conversion. For a speedup, convert it to a Diffusers model.", false, ellipsis);
                 }
 
                 if (!_hasErrored && line.Contains("An error occurred while processing your prompt"))

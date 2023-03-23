@@ -132,22 +132,6 @@ namespace StableDiffusionGui.Implementations
             }
         }
 
-        private static bool IsModelDefault(Model mdl, Model vae, Model selectedMdl, Model selectedVae)
-        {
-            if (mdl == null || selectedMdl == null)
-                return false;
-
-            bool mdlMatch = mdl.FullName == selectedMdl.FullName;
-            bool vaeMatch;
-
-            if (selectedVae == null)
-                vaeMatch = vae == null;
-            else
-                vaeMatch = vae != null && selectedVae.FormatIndependentName == vae.FormatIndependentName;
-
-            return mdlMatch && vaeMatch;
-        }
-
         public static string GetMdlNameForYaml(Model mdl, Model vae)
         {
             return $"{mdl.Name}{(vae == null ? "" : $"-{vae.FormatIndependentName}")}".Replace(" ", "");
@@ -160,7 +144,8 @@ namespace StableDiffusionGui.Implementations
             if (namesOnly)
                 lines = lines.Where(l => l.Length > 0 && l.Last() == ':');
 
-            string contentStr = string.Join("", lines);
+            string contentStr = string.Join("", lines.OrderBy(l => l));
+            // File.WriteAllText(Path.Combine(Paths.GetDataPath(), $"modelsStr-{FormatUtils.GetUnixTimestamp()}.txt"), contentStr);
             return IoUtils.GetHash(contentStr, hashType, false);
         }
 
