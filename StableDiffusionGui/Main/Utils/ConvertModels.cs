@@ -46,7 +46,6 @@ namespace StableDiffusionGui.Main.Utils
                 }
 
                 _ckptConfigPath = TtiUtils.GetCkptConfig(model, false);
-                PatchConversionScripts();
 
                 // Pytorch -> Diffusers
                 if (formatIn == Format.Pytorch && formatOut == Format.Diffusers)
@@ -259,27 +258,6 @@ namespace StableDiffusionGui.Main.Utils
                 }
 
                 return path;
-            }
-        }
-
-        private static void PatchConversionScripts()
-        {
-            return; // TODO: Check if we can remove this
-
-            string marker = "# PATCHED BY NMKD SD GUI";
-            string diffusersPath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdVenv, "Lib", "site-packages", "diffusers");
-            string convertScriptPath = Path.Combine(diffusersPath, "pipelines", "stable_diffusion", "convert_from_ckpt.py");
-            string text = File.ReadAllText(convertScriptPath);
-
-            if (text.SplitIntoLines()[0].Trim() != marker)
-            {
-                text = text.Replace(".parms.", ".params.");
-                text = text.Replace("model_type == \"FrozenCLIPEmbedder\"", "model_type.endswith(\"FrozenCLIPEmbedder\")");
-                text = text.Replace("safety_checker = StableDiffusionSafetyChecker.from_pretrained(\"CompVis/stable-diffusion-safety-checker\")", "safety_checker = None");
-                text = text.Replace("feature_extractor = AutoFeatureExtractor.from_pretrained(\"CompVis/stable-diffusion-safety-checker\")", "feature_extractor = None");
-                text = text.Replace("feature_extractor=feature_extractor,", "feature_extractor=feature_extractor, requires_safety_checker=False,");
-                File.WriteAllText(convertScriptPath, $"{marker}{Environment.NewLine}{text}");
-                Logger.Log($"Patched {Path.GetFileName(convertScriptPath)}", true);
             }
         }
     }
