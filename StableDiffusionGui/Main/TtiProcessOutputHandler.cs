@@ -33,7 +33,7 @@ namespace StableDiffusionGui.Main
             LastMessages.Insert(0, line);
 
             if (LastMessages.Count > _maxLastMessages)
-                LastMessages = LastMessages.Take(_maxLastMessages).ToList();
+                LastMessages.RemoveRange(_maxLastMessages, LastMessages.Count - _maxLastMessages);
 
             //var noLogWildcards = new string[] { "step */*" };
             //
