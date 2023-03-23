@@ -186,7 +186,7 @@ namespace StableDiffusionGui.Forms
 
         public void OpenLogsMenu()
         {
-            var existing = menuStripLogs.Items.Cast<ToolStripMenuItem>().ToArray();
+            var existing = menuStripLogs.Items.Cast<ToolStripMenuItem>().Take(1).ToArray();
             menuStripLogs.Items.Clear();
             menuStripLogs.Items.AddRange(existing);
             var openLogs = menuStripLogs.Items.Add($"Open Logs Folder");
