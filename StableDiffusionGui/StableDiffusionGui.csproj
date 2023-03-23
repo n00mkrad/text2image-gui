@@ -304,6 +304,7 @@
     <Compile Include="Io\IoUtils.cs" />
     <Compile Include="Io\Models.cs" />
     <Compile Include="Io\NmkdStreamWriter.cs" />
+    <Compile Include="Io\PatchUtils.cs" />
     <Compile Include="Io\Paths.cs" />
     <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>

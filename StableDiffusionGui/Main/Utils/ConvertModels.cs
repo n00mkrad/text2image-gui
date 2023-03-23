@@ -141,7 +141,7 @@ namespace StableDiffusionGui.Main.Utils
         private static async Task ConvPytorchDiffusers(string inPath, string outPath, bool deleteInput = false)
         {
             await RunPython($"python repo/scripts/diff/convert_original_stable_diffusion_to_diffusers.py --checkpoint_path {inPath.Wrap(true)} --dump_path {outPath.Wrap(true)} " +
-                        $"--original_config_file {_ckptConfigPath.Wrap(true)}");
+                        $"--original_config_file {_ckptConfigPath.Wrap(true)} --fp16");
 
             if (deleteInput)
                 IoUtils.TryDeleteIfExists(inPath);
@@ -264,6 +264,8 @@ namespace StableDiffusionGui.Main.Utils
 
         private static void PatchConversionScripts()
         {
+            return; // TODO: Check if we can remove this
+
             string marker = "# PATCHED BY NMKD SD GUI";
             string diffusersPath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdVenv, "Lib", "site-packages", "diffusers");
             string convertScriptPath = Path.Combine(diffusersPath, "pipelines", "stable_diffusion", "convert_from_ckpt.py");

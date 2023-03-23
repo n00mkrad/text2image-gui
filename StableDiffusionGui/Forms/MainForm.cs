@@ -67,6 +67,7 @@ namespace StableDiffusionGui.Forms
             InitializeControls();
             PromptHistory.Load();
             Setup.PatchFiles();
+            PatchUtils.PatchAllPkgs();
 
             textboxPrompt.MaxLength = 0;
             textboxPromptNeg.MaxLength = 0;

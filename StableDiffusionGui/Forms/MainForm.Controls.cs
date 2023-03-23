@@ -289,8 +289,6 @@ namespace StableDiffusionGui.Forms
 
         public void UpdateModel(bool reloadList = false, Implementation imp = (Implementation)(-1))
         {
-            this.PrintThread(); // TODO: Remove me later
-
             if (!comboxModel.Visible)
                 return;
 

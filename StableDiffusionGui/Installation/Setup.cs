@@ -120,6 +120,7 @@ namespace StableDiffusionGui.Installation
             Logger.Log("Cleaning up...", false, Logger.LastUiLine.EndsWith("..."));
             IoUtils.TryDeleteIfExists(Path.Combine(Environment.ExpandEnvironmentVariables("%LOCALAPPDATA%"), "pip", "cache"));
             RepoCleanup();
+            PatchUtils.PatchAllPkgs();
             Logger.Log("Done.");
         }
 
@@ -129,9 +130,7 @@ namespace StableDiffusionGui.Installation
                 return;
 
             log = log.Trim();
-
             Logger.Log($"{log.Remove("PRINTME ")}", !log.Contains("PRINTME "), false, Constants.Lognames.Installer);
-
 
             if (!conda)
             {
