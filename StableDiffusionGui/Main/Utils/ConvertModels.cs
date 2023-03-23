@@ -62,7 +62,9 @@ namespace StableDiffusionGui.Main.Utils
                 // Pytorch -> Safetensors
                 else if (formatIn == Format.Pytorch && formatOut == Format.Safetensors)
                 {
-                    await ConvPytorchSafetensors(model.FullName, outPath);
+                    string tempPath = Path.Combine(Paths.GetSessionDataPath(), $"conv-temp-{FormatUtils.GetUnixTimestamp()}");
+                    await ConvPytorchDiffusers(model.FullName, tempPath);
+                    await ConvDiffusersSafetensors(tempPath, outPath);
                 }
                 // Diffusers -> Pytorch
                 else if (formatIn == Format.Diffusers && formatOut == Format.Pytorch)
@@ -77,9 +79,7 @@ namespace StableDiffusionGui.Main.Utils
                 // Diffusers -> Safetensors
                 else if (formatIn == Format.Diffusers && formatOut == Format.Safetensors)
                 {
-                    string tempPath = Path.Combine(Paths.GetSessionDataPath(), $"conv-temp-{FormatUtils.GetUnixTimestamp()}");
-                    await ConvDiffusersPytorch(model.FullName, tempPath);
-                    await ConvPytorchSafetensors(tempPath, outPath, true);
+                    await ConvDiffusersSafetensors(model.FullName, outPath, true);
                 }
                 // Safetensors -> Pytorch
                 else if (formatIn == Format.Safetensors && formatOut == Format.Pytorch)
@@ -140,7 +140,7 @@ namespace StableDiffusionGui.Main.Utils
         private static async Task ConvPytorchDiffusers(string inPath, string outPath, bool deleteInput = false)
         {
             await RunPython($"python repo/scripts/diff/convert_original_stable_diffusion_to_diffusers.py --checkpoint_path {inPath.Wrap(true)} --dump_path {outPath.Wrap(true)} " +
-                        $"--original_config_file {_ckptConfigPath.Wrap(true)} --fp16");
+                        $"--original_config_file {_ckptConfigPath.Wrap(true)} --to_safetensors --fp16");
 
             if (deleteInput)
                 IoUtils.TryDeleteIfExists(inPath);
@@ -154,9 +154,9 @@ namespace StableDiffusionGui.Main.Utils
                 IoUtils.TryDeleteIfExists(inPath);
         }
 
-        private static async Task ConvPytorchSafetensors(string inPath, string outPath, bool deleteInput = false)
+        private static async Task ConvDiffusersSafetensors(string inPath, string outPath, bool deleteInput = false)
         {
-            await RunPython($"python repo/scripts/ckpt_to_st.py -i {inPath.Wrap(true)} -o {outPath.Wrap(true)}");
+            await RunPython($"python repo/scripts/diff/convert_diffusers_to_original_stable_diffusion.py --model_path {inPath.Wrap(true)} --checkpoint_path {outPath.Wrap(true)} --half --use_safetensors");
 
             if (deleteInput)
                 IoUtils.TryDeleteIfExists(inPath);
@@ -164,7 +164,7 @@ namespace StableDiffusionGui.Main.Utils
 
         private static async Task ConvDiffusersPytorch(string inPath, string outPath, bool deleteInput = false)
         {
-            await RunPython($"python repo/scripts/diff/convert_diffusers_to_original_stable_diffusion.py --model_path {inPath.Wrap(true)} --checkpoint_path {outPath.Wrap(true)}");
+            await RunPython($"python repo/scripts/diff/convert_diffusers_to_original_stable_diffusion.py --model_path {inPath.Wrap(true)} --checkpoint_path {outPath.Wrap(true)} --half");
 
             if (deleteInput)
                 IoUtils.TryDeleteIfExists(inPath);
@@ -173,7 +173,7 @@ namespace StableDiffusionGui.Main.Utils
         private static async Task ConvSafetensorsDiffusers(string inPath, string outPath, bool deleteInput = false)
         {
             await RunPython($"python repo/scripts/diff/convert_original_stable_diffusion_to_diffusers.py --from_safetensors --checkpoint_path {inPath.Wrap(true)} --dump_path {outPath.Wrap(true)} " +
-                        $"--original_config_file {_ckptConfigPath.Wrap(true)}");
+                        $"--original_config_file {_ckptConfigPath.Wrap(true)} --to_safetensors --fp16");
 
             if (deleteInput)
                 IoUtils.TryDeleteIfExists(inPath);
