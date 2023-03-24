@@ -6,4 +6,11 @@
 	"hashBasefiles": "23516d04261f61d383cd6931d8456d3fe6daee2a",
 	"hashRepo": "55f68a9e70ecea51a6520b91995c5e96c1541db8",
 },
+{
+	"version": "1.10.0t2",
+	"channel": "dev",
+	"date": "2023-03-24",
+	"hashBasefiles": "23516d04261f61d383cd6931d8456d3fe6daee2a",
+	"hashRepo": "55f68a9e70ecea51a6520b91995c5e96c1541db8",
+},
 ]
