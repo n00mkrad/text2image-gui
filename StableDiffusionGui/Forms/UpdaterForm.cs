@@ -31,21 +31,27 @@ namespace StableDiffusionGui.Forms
             await Task.Delay(1);
             Opacity = 1;
             await Task.Delay(1);
-            LoadAvailableVersions();
+            await LoadAvailableVersions();
         }
 
         private async Task LoadAvailableVersions()
         {
+            btnInstall.Enabled = false;
+
             List<MdlRelease> releases = await GetWebInfo.LoadReleases();
+            releases = releases.OrderByDescending(r => r.ReleaseDate).ThenByDescending(r => r.ToString()).ToList();
             comboxVersion.Items.Clear();
 
             foreach (MdlRelease r in releases)
                 comboxVersion.Items.Add(r);
 
-            comboxVersion.Items.Cast<MdlRelease>().Where(r => r.Version == Program.Version).ToList().ForEach(r => comboxVersion.Text = r.ToString());
+            if (comboxVersion.Items.Cast<MdlRelease>().Any(r => r.Version == Program.Version)) // Set to installed version, if installed is in list
+                comboxVersion.Text = releases.Where(r => r.Version == Program.Version).First().ToString();
 
             if (comboxVersion.Text.IsEmpty() && comboxVersion.Items.Count > 0)
                 comboxVersion.SelectedIndex = 0;
+
+            btnInstall.Enabled = comboxVersion.Items.Count > 0;
         }
 
         private async void btnInstall_Click(object sender, EventArgs e)
