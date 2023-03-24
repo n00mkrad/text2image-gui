@@ -75,18 +75,26 @@ namespace StableDiffusionGui.Main
                     catch { }
                 }
 
-                if (!TextToImage.Canceled && line.Trim().Length >= 20 && new Regex(@"\[\d+(\.\d+)?\] [A-Z]:\/").Matches(line.Trim().Substring(0, 20)).Count == 1)
+                if (!TextToImage.Canceled && line.StartsWith("["))
                 {
-                    string generatedLine = LastMessages.Take(10).Where(ll => ll.Contains("image(s) generated in")).First();
-                    var split = generatedLine.Split("image(s) generated in ");
-                    TextToImage.CurrentTask.ImgCount += split[0].GetInt();
-                    Program.MainForm.SetProgress((int)Math.Round(((float)TextToImage.CurrentTask.ImgCount / TextToImage.CurrentTask.TargetImgCount) * 100f));
+                    string outPath = Path.Combine(Paths.GetSessionDataPath(), "out").Replace('\\', '/');
 
-                    int lastMsPerImg = $"{split[1].Remove(".").Remove("s")}0".GetInt();
-                    int remainingMs = (TextToImage.CurrentTask.TargetImgCount - TextToImage.CurrentTask.ImgCount) * lastMsPerImg;
+                    if (line.Contains(outPath) && new Regex(@"\[\d+(\.\d+)?\] [A-Z]:\/").Matches(line.Trim()).Count >= 1)
+                    {
+                        string generatedLine = LastMessages.Take(10).Where(ll => ll.Contains("image(s) generated in")).First();
+                        var split = generatedLine.Split("image(s) generated in ");
+                        TextToImage.CurrentTask.ImgCount += split[0].GetInt();
+                        Program.MainForm.SetProgress((int)Math.Round(((float)TextToImage.CurrentTask.ImgCount / TextToImage.CurrentTask.TargetImgCount) * 100f));
 
-                    Logger.Log($"Generated {split[0].GetInt()} image in {split[1]} ({TextToImage.CurrentTask.ImgCount}/{TextToImage.CurrentTask.TargetImgCount})" +
-                        $"{(TextToImage.CurrentTask.ImgCount > 1 && remainingMs > 1000 ? $" - ETA: {FormatUtils.Time(remainingMs, false)}" : "")}", false, replace || Logger.LastUiLine.MatchesWildcard("*Generated*image*in*"));
+                        int lastMsPerImg = $"{split[1].Remove(".").Remove("s")}0".GetInt();
+                        int remainingMs = (TextToImage.CurrentTask.TargetImgCount - TextToImage.CurrentTask.ImgCount) * lastMsPerImg;
+
+                        Logger.Log($"Generated {split[0].GetInt()} image in {split[1]} ({TextToImage.CurrentTask.ImgCount}/{TextToImage.CurrentTask.TargetImgCount})" +
+                            $"{(TextToImage.CurrentTask.ImgCount > 1 && remainingMs > 1000 ? $" - ETA: {FormatUtils.Time(remainingMs, false)}" : "")}", false, replace || Logger.LastUiLine.MatchesWildcard("*Generated*image*in*"));
+
+                        string path = outPath + line.Split(outPath)[1].Split(':')[0];
+                        ImageExport.Export(path);
+                    }
                 }
 
                 if (line.Contains(".png: !fix "))

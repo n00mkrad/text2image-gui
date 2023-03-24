@@ -187,5 +187,13 @@ namespace StableDiffusionGui.Extensions
 
             return false;
         }
+
+        public static Image GetImageThreadSafe (this PictureBox pictureBox)
+        {
+            if (pictureBox.InvokeRequired)
+                return (Image)pictureBox.Invoke(new Func<Image>(() => pictureBox.GetImageThreadSafe()));
+            else
+                return (Image)pictureBox.Image.Clone();
+        }
     }
 }

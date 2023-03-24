@@ -1,4 +1,5 @@
 ﻿using StableDiffusionGui.Data;
+using StableDiffusionGui.Extensions;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
@@ -99,7 +100,7 @@ namespace StableDiffusionGui.Ui
             if (meta.ScaleImg >= 0)
                 infos.Add($"Img Scale {meta.ScaleImg.ToStringDot()}");
 
-            Size res = Program.MainForm.pictBoxImgViewer.Image.Size;
+            Size res = Program.MainForm.pictBoxImgViewer.GetImageThreadSafe().Size;
 
             if (meta.GeneratedResolution.IsEmpty)
                 infos.Add($"{res.Width}x{res.Height}");

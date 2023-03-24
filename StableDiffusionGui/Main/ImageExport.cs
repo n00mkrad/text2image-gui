@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using ZetaLongPaths;
 using static StableDiffusionGui.Main.Enums.Export;
 
 namespace StableDiffusionGui.Main
@@ -18,22 +19,50 @@ namespace StableDiffusionGui.Main
         private static readonly int _loopWaitBeforeStartMs = 1000;
         private static readonly int _loopWaitTimeMs = 200;
 
-        public static async Task ExportLoop(string imagesDir, int startingImgCount, int targetImgCount, bool show)
+        private static List<string> _outImgs = new List<string>();
+        private static bool inclPrompt = false;
+        private static bool inclSeed = false;
+        private static bool inclScale = false;
+        private static bool inclSampler = false;
+        private static bool inclModel = false;
+        private static bool sessionDir = false;
+        private static TtiTaskInfo currTask = null;
+        private static TtiSettings currSettings = null;
+
+        public static void Reset ()
         {
-            TtiTaskInfo currTask = TextToImage.CurrentTask;
-            TtiSettings currSettings = TextToImage.CurrentTaskSettings;
+            _outImgs.Clear();
+            inclPrompt = false;
+            inclSeed = false;
+            inclScale = false;
+            inclSampler = false;
+            inclModel = false;
+            sessionDir = false;
+            currTask = null;
+            currSettings = null;
+        }
+
+        public static void Init ()
+        {
+            currTask = TextToImage.CurrentTask;
+            currSettings = TextToImage.CurrentTaskSettings;
+            inclPrompt = !currTask.SubfoldersPerPrompt && Config.Get<bool>(Config.Keys.PromptInFilename);
+            inclSeed = Config.Get<bool>(Config.Keys.SeedInFilename);
+            inclScale = Config.Get<bool>(Config.Keys.ScaleInFilename);
+            inclSampler = Config.Get<bool>(Config.Keys.SamplerInFilename);
+            inclModel = Config.Get<bool>(Config.Keys.ModelInFilename);
+            sessionDir = Config.Get<bool>(Config.Keys.FolderPerSession);
+            currTask = TextToImage.CurrentTask;
+            currSettings = TextToImage.CurrentTaskSettings;
+        }
+
+        public static async Task ExportLoop(string imagesDir, int startingImgCount, int targetImgCount)
+        {
+            Init();
 
             Logger.Log("ExportLoop START", true);
-            List<string> outImgs = new List<string>();
 
             await Task.Delay(_loopWaitBeforeStartMs);
-
-            bool inclPrompt = !currTask.SubfoldersPerPrompt && Config.Get<bool>(Config.Keys.PromptInFilename);
-            bool inclSeed = Config.Get<bool>(Config.Keys.SeedInFilename);
-            bool inclScale = Config.Get<bool>(Config.Keys.ScaleInFilename);
-            bool inclSampler = Config.Get<bool>(Config.Keys.SamplerInFilename);
-            bool inclModel = Config.Get<bool>(Config.Keys.ModelInFilename);
-            bool sessionDir = Config.Get<bool>(Config.Keys.FolderPerSession);
 
             while (!TextToImage.Canceled)
             {
@@ -63,47 +92,7 @@ namespace StableDiffusionGui.Main
                         images = images.Where(img => lastLines.Any(l => l.Contains(img.Name))).ToList(); // Only take image if it was written into SD log. Avoids copying too early (post-proc etc)
                     }
 
-                    Dictionary<string, string> imageDirMap = new Dictionary<string, string>();
-
-                    if (currTask.SubfoldersPerPrompt)
-                    {
-                        foreach (var img in images)
-                        {
-                            var imgTimeSinceLastWrite = DateTime.Now - img.LastWriteTime;
-                            string prompt = IoUtils.GetImageMetadata(img.FullName).CombinedPrompt;
-                            int pathBudget = _maxPathLength - img.Directory.FullName.Length - 65;
-                            prompt = currTask.IgnoreWildcardsForFilenames && currSettings.ProcessedAndRawPrompts.ContainsKey(prompt) ? currSettings.ProcessedAndRawPrompts[prompt] : prompt;
-                            string dirName = string.IsNullOrWhiteSpace(prompt) ? $"unknown_prompt_{FormatUtils.GetUnixTimestamp()}" : FormatUtils.SanitizePromptFilename(FormatUtils.GetPromptWithoutModifiers(prompt), pathBudget);
-                            string subDirPath = sessionDir ? Path.Combine(currTask.OutDir, Paths.SessionTimestamp, dirName) : Path.Combine(currTask.OutDir, dirName);
-                            imageDirMap[img.FullName] = Directory.CreateDirectory(subDirPath).FullName;
-                        }
-                    }
-
-                    List<string> renamedImgPaths = new List<string>();
-
-                    for (int i = 0; i < images.Count; i++)
-                    {
-                        try
-                        {
-                            var img = images[i];
-                            string number = currTask.ImgCount.ToString().PadLeft(currTask.TargetImgCount.ToString().Length, '0');
-                            string parentDir = currTask.SubfoldersPerPrompt ? imageDirMap[img.FullName] : currTask.OutDir;
-                            string renamedPath = GetExportFilename(img.FullName, parentDir, number, "png", _maxPathLength, inclPrompt, inclSeed, inclScale, inclSampler, inclModel);
-                            OverlayMaskIfExists(img.FullName);
-                            Logger.Log($"ImageExport: Trying to move {img.Name} => {renamedPath}", true);
-                            img.MoveTo(renamedPath);
-                            renamedImgPaths.Add(renamedPath);
-                        }
-                        catch (Exception ex)
-                        {
-                            Logger.Log($"Failed to move image - Will retry in next loop iteration. ({ex.Message})", true);
-                        }
-                    }
-
-                    outImgs.AddRange(renamedImgPaths);
-
-                    if (outImgs.Count > 0 && show)
-                        ImageViewer.SetImages(outImgs.Where(x => File.Exists(x)).ToList(), ImageViewer.ImgShowMode.ShowLast);
+                    Export(images);
 
                     await Task.Delay(_loopWaitTimeMs);
                 }
@@ -116,6 +105,91 @@ namespace StableDiffusionGui.Main
             }
 
             Logger.Log("ExportLoop END", true);
+            Reset();
+        }
+
+        public static async Task WaitLoop(int startingImgCount, int targetImgCount)
+        {
+            Init();
+
+            Logger.Log("ExportLoop START", true);
+
+            await Task.Delay(_loopWaitBeforeStartMs);
+
+            while (!TextToImage.Canceled)
+            {
+                try
+                {
+                    bool running = (currTask.ImgCount - startingImgCount) < targetImgCount;
+
+                    if (!running && !TtiUtils.ImportBusy)
+                    {
+                        Logger.Log($"ExportLoop: Breaking. Process running: {running}", true);
+                        break;
+                    }
+
+                    await Task.Delay(_loopWaitTimeMs);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Log($"Image export error:\n{ex.Message}");
+                    Logger.Log($"{ex.StackTrace}", true);
+                    break;
+                }
+            }
+
+            Logger.Log("ExportLoop END", true);
+            Reset();
+        }
+
+        public static void Export (string path)
+        {
+            Export(new[] { new ZlpFileInfo(path) }.ToList());
+        }
+
+        public static void Export(List<ZlpFileInfo> images)
+        {
+            Dictionary<string, string> imageDirMap = new Dictionary<string, string>();
+
+            if (currTask.SubfoldersPerPrompt)
+            {
+                foreach (var img in images)
+                {
+                    var imgTimeSinceLastWrite = DateTime.Now - img.LastWriteTime;
+                    string prompt = IoUtils.GetImageMetadata(img.FullName).CombinedPrompt;
+                    int pathBudget = _maxPathLength - img.Directory.FullName.Length - 65;
+                    prompt = currTask.IgnoreWildcardsForFilenames && currSettings.ProcessedAndRawPrompts.ContainsKey(prompt) ? currSettings.ProcessedAndRawPrompts[prompt] : prompt;
+                    string dirName = string.IsNullOrWhiteSpace(prompt) ? $"unknown_prompt_{FormatUtils.GetUnixTimestamp()}" : FormatUtils.SanitizePromptFilename(FormatUtils.GetPromptWithoutModifiers(prompt), pathBudget);
+                    string subDirPath = sessionDir ? Path.Combine(currTask.OutDir, Paths.SessionTimestamp, dirName) : Path.Combine(currTask.OutDir, dirName);
+                    imageDirMap[img.FullName] = Directory.CreateDirectory(subDirPath).FullName;
+                }
+            }
+
+            List<string> renamedImgPaths = new List<string>();
+
+            for (int i = 0; i < images.Count; i++)
+            {
+                try
+                {
+                    var img = images[i];
+                    string number = currTask.ImgCount.ToString().PadLeft(currTask.TargetImgCount.ToString().Length, '0');
+                    string parentDir = currTask.SubfoldersPerPrompt ? imageDirMap[img.FullName] : currTask.OutDir;
+                    string renamedPath = GetExportFilename(img.FullName, parentDir, number, "png", _maxPathLength, inclPrompt, inclSeed, inclScale, inclSampler, inclModel);
+                    OverlayMaskIfExists(img.FullName);
+                    Logger.Log($"ImageExport: Trying to move {img.Name} => {renamedPath}", true);
+                    img.MoveTo(renamedPath);
+                    renamedImgPaths.Add(renamedPath);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Log($"Failed to move image ({ex.Message})", true);
+                }
+            }
+
+            _outImgs.AddRange(renamedImgPaths);
+
+            if (_outImgs.Count > 0)
+                ImageViewer.SetImages(_outImgs.Where(x => File.Exists(x)).ToList(), ImageViewer.ImgShowMode.ShowLast);
         }
 
         public static string GetExportFilename(string filePath, string parentDir, string suffix, string ext, int pathLimit, bool inclPrompt, bool inclSeed, bool inclScale, bool inclSampler, bool inclModel)
@@ -126,10 +200,7 @@ namespace StableDiffusionGui.Main
                 string timestamp = GetExportTimestamp(Config.Get<FilenameTimestamp>(Config.Keys.FilenameTimestampMode, FilenameTimestamp.None));
                 int pathBudget = pathLimit - (parentDir.Length + 1) - (timestamp.Length + 1) - (suffix.Length + 1) - 4; // Remove 4 for extension
                 var meta = IoUtils.GetImageMetadata(filePath);
-
-                var filenameChunks = new List<string>();
-                filenameChunks.Add(timestamp);
-                filenameChunks.Add(suffix);
+                var filenameChunks = new List<string> { timestamp, suffix };
 
                 string seed = meta.Seed.ToString();
 

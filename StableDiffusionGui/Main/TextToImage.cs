@@ -82,16 +82,19 @@ namespace StableDiffusionGui.Main
                     case Implementation.InstructPixToPix: tasks.Add(InstructPixToPix.Run(s.Prompts, s.NegativePrompt, s.Iterations, s.Params, tempOutDir)); break;
                 }
 
-                tasks.Add(ImageExport.ExportLoop(tempOutDir, CurrentTask.ImgCount, s.GetTargetImgCount(), true));
-                await Task.WhenAll(tasks);
+                if (s.Implementation != Implementation.InvokeAi)
+                    tasks.Add(ImageExport.ExportLoop(tempOutDir, CurrentTask.ImgCount, s.GetTargetImgCount()));
+                else
+                    tasks.Add(ImageExport.WaitLoop(CurrentTask.ImgCount, s.GetTargetImgCount()));
 
+                await Task.WhenAll(tasks);
                 MainUi.Queue = MainUi.Queue.Except(new List<TtiSettings> { s }).ToList(); // Remove from queue
             }
 
             Done();
         }
 
-        private static bool ValidateSettings (TtiSettings s)
+        private static bool ValidateSettings(TtiSettings s)
         {
             if (s == null)
                 return false;
