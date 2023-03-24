@@ -137,16 +137,12 @@ namespace StableDiffusionGui.Implementations
             return $"{mdl.Name}{(vae == null ? "" : $"-{vae.FormatIndependentName}")}".Replace(" ", "");
         }
 
-        public static string GetModelsYamlHash(IoUtils.Hash hashType = IoUtils.Hash.CRC32, bool namesOnly = true)
+        public static string GetModelsHash(IoUtils.Hash hashType = IoUtils.Hash.CRC32)
         {
-            var lines = File.ReadAllLines(ModelsYamlPath).Where(l => !l.Contains("default: "));
-
-            if (namesOnly)
-                lines = lines.Where(l => l.Length > 0 && l.Last() == ':');
-
-            string contentStr = string.Join("", lines.OrderBy(l => l));
-            // File.WriteAllText(Path.Combine(Paths.GetDataPath(), $"modelsStr-{FormatUtils.GetUnixTimestamp()}.txt"), contentStr);
-            return IoUtils.GetHash(contentStr, hashType, false);
+            var models = Models.GetModelsAll().Where(m => Implementation.InvokeAi.GetInfo().SupportedModelFormats.Contains(m.Format));
+            models = models.Where(m => m.Type == Enums.Models.Type.Normal || m.Type == Enums.Models.Type.Vae);
+            string modelsStr = string.Join("", models.Select(m => m.Name).OrderBy(n => n));
+            return IoUtils.GetHash(modelsStr, hashType, false);
         }
 
         public static string ConvertAttentionSyntax(string prompt)

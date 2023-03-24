@@ -131,7 +131,7 @@ namespace StableDiffusionGui.Implementations
 
                 Logger.Log($"Running Stable Diffusion - {iterations} Iterations, {steps.Length} Steps, Scales {(scales.Length < 4 ? string.Join(", ", scales.Select(x => x.ToStringDot())) : $"{scales.First()}->{scales.Last()}")}, {res.Width}x{res.Height}, Starting Seed: {startSeed}", false, Logger.LastUiLine.EndsWith("..."));
 
-                string modelsChecksumStartup = InvokeAiUtils.GetModelsYamlHash();
+                string modelsChecksumStartup = InvokeAiUtils.GetModelsHash();
                 string argsStartup = Args.InvokeAi.GetArgsStartup();
                 string newStartupSettings = $"{argsStartup} {modelsChecksumStartup} {Config.Get<int>(Config.Keys.CudaDeviceIdx)}"; // Check if startup settings match - If not, we need to restart the process
 
