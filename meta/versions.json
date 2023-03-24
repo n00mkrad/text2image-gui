@@ -1,5 +1,11 @@
 [
 {
+	"version": "1.10.0t1",
+	"channel": "dev",
+	"date": "2023-03-24",
+	"hashBasefiles": "23516d04261f61d383cd6931d8456d3fe6daee2a"
+},
+{
 	"version": "1.9.1test2",
 	"channel": "dev",
 	"date": "2023-03-07",
