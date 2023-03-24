@@ -18,11 +18,8 @@ namespace StableDiffusionGui.Forms
 
         public void LogAppend(string s, bool replaceLastLine = false)
         {
-            if (logBox.InvokeRequired)
-            {
-                Invoke(new Action<string, bool>(LogAppend), s, replaceLastLine);
+            if (logBox.RequiresInvoke(new Action<string, bool>(LogAppend), s, replaceLastLine))
                 return;
-            }
             
             if (!CanBeUsed)
                 return;

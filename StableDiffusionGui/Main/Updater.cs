@@ -37,14 +37,11 @@ namespace StableDiffusionGui.Main
                 string gitPath = Path.Combine(tempDir, ".git");
                 IoUtils.SetAttributes(gitPath);
                 IoUtils.TryDeleteIfExists(gitPath);
-
                 Logger.Log("Moving files...", false, Logger.LastUiLine.EndsWith("..."));
-                bool moveFilesSuccess = await Task.Run(() => Move(tempDir, copyImages, copyModels, copyConfig));
+                bool moveFilesSuccess = await Task.Run(() => Move(tempDir, copyImages, copyModels, copyConfig, release.HashRepo == Setup.GitCommit));
                 Logger.Log($"Move success: {moveFilesSuccess}", true);
                 Logger.Log("Preparing to start new version and delete old files...", false, Logger.LastUiLine.EndsWith("..."));
-                bool onnx = InstallationStatus.HasOnnx();
-                bool up = InstallationStatus.HasSdUpscalers();
-                string launchCmd = $"{Paths.GetExe().Wrap()} -{Constants.Args.Install}={true} -{Constants.Args.InstallOnnx}={onnx} -{Constants.Args.InstallUpscalers}={up}";
+                string launchCmd = GetLaunchCmd(release);
                 Process p = OsUtils.NewProcess(true);
                 p.StartInfo.Arguments = $"/C cd /D C:/ && timeout 2 && rmdir /s/q {Paths.GetExeDir().Wrap().TrimEnd('\\')} && move {tempDir.TrimEnd('\\').Wrap()} {Paths.GetExeDir().TrimEnd('\\').Wrap()} && {launchCmd}";
                 p.Start();
@@ -59,7 +56,17 @@ namespace StableDiffusionGui.Main
             }
         }
 
-        private static bool Move(string newInstallPath, bool images, bool models, bool config)
+        private static string GetLaunchCmd (MdlRelease release)
+        {
+            if(release.HashRepo == Setup.GitCommit) // Do not re-install dependencies
+                return Paths.GetExe().Wrap();
+
+            bool onnx = InstallationStatus.HasOnnx();
+            bool up = InstallationStatus.HasSdUpscalers();
+            return $"{Paths.GetExe().Wrap()} -{Constants.Args.Install}={true} -{Constants.Args.InstallOnnx}={onnx} -{Constants.Args.InstallUpscalers}={up}";
+        }
+
+        private static bool Move(string newInstallPath, bool images, bool models, bool config, bool repoAndVenv)
         {
             string targetDataDir = Directory.CreateDirectory(Path.Combine(newInstallPath, Constants.Dirs.Data)).FullName;
 
@@ -139,6 +146,12 @@ namespace StableDiffusionGui.Main
                     Logger.Log(ex.StackTrace, true, false, Constants.Lognames.Installer);
                     return false;
                 }
+            }
+
+            if (repoAndVenv)
+            {
+                Directory.Move(Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdRepo), Path.Combine(targetDataDir, Constants.Dirs.SdRepo));
+                Directory.Move(Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdVenv), Path.Combine(targetDataDir, Constants.Dirs.SdVenv));
             }
 
             if (config)

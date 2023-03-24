@@ -71,8 +71,8 @@
             this.checkedListBoxStatus.ForeColor = System.Drawing.Color.White;
             this.checkedListBoxStatus.FormattingEnabled = true;
             this.checkedListBoxStatus.Items.AddRange(new object[] {
-            "Base Binaries (Included)",
-            "Python Environment (Included)",
+            "Base Binaries",
+            "Python Environment",
             "Stable Diffusion Code",
             "Upscalers"});
             this.checkedListBoxStatus.Location = new System.Drawing.Point(12, 75);
@@ -118,7 +118,7 @@
             this.groupBox1.Size = new System.Drawing.Size(440, 48);
             this.groupBox1.TabIndex = 85;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Debug Tools";
+            this.groupBox1.Text = "Tools";
             // 
             // btnInstallUpscalers
             // 

@@ -1,10 +1,5 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StableDiffusionGui.Data
 {
@@ -14,6 +9,7 @@ namespace StableDiffusionGui.Data
         public string Channel { get; set; } = "";
         public DateTime ReleaseDate { get; set; }
         public string HashBasefiles { get; set; } = "";
+        public string HashRepo { get; set; } = "";
 
         public MdlRelease () { }
 
@@ -23,6 +19,7 @@ namespace StableDiffusionGui.Data
             Channel = properties.Get("channel", "none");
             ReleaseDate = DateTime.ParseExact(properties.Get("date", "2000-01-01"), "yyyy-MM-dd", CultureInfo.InvariantCulture);
             HashBasefiles = properties.Get("hashBasefiles", "");
+            HashRepo = properties.Get("hashRepo", "");
         }
 
         public override string ToString()

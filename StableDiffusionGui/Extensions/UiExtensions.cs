@@ -174,14 +174,14 @@ namespace StableDiffusionGui.Extensions
             return new Font(f.FontFamily, newSize, f.Style, f.Unit);
         }
 
-        public static bool RequiresInvoke (this Control c, Delegate method)
+        public static bool RequiresInvoke (this Control c, Delegate method, params object[] args)
         {
             if (c.InvokeRequired)
             {
                 if (c.Disposing || c.IsDisposed)
                     return true;
 
-                c.Invoke(method);
+                c.Invoke(method, args);
                 return true;
             }
 

@@ -48,7 +48,10 @@ namespace StableDiffusionGui.Forms
             }
 
             if (_autoInstall)
+            {
+                Task.Run(() => MainUi.GetCudaGpus());
                 Close();
+            }
             
             BringToFront();
             UpdateStatus();
@@ -123,7 +126,6 @@ namespace StableDiffusionGui.Forms
             await Setup.InstallRepo(installOnnxDml, commit, false);
             Setup.RepoCleanup();
             UpdateStatus();
-            Task.Run(() => MainUi.GetCudaGpus());
             Program.SetState(Program.BusyState.Standby);
             Enabled = true;
         }
@@ -151,6 +153,7 @@ namespace StableDiffusionGui.Forms
         private void InstallerForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             Program.MainForm.TryRefreshUiState();
+            Program.MainForm.BringToFront();
         }
     }
 }

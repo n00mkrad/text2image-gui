@@ -26,7 +26,7 @@ namespace StableDiffusionGui.Forms
         private async void UpdaterForm_Shown(object sender, EventArgs e)
         {
             Refresh();
-            labelCurrVersion.Text = $"Version {Program.Version} (Repo Commit {Setup.GitCommit.Trunc(8)})";
+            labelCurrVersion.Text = $"Version {Program.Version} (Repo Commit {Setup.GitCommit.Trunc(8, false)})";
             TabOrderInit(new List<Control>() { comboxVersion, btnInstall }, -1);
             await Task.Delay(1);
             Opacity = 1;
