@@ -4,7 +4,6 @@ using StableDiffusionGui.Data;
 using StableDiffusionGui.Extensions;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
-using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
 using System;
@@ -246,6 +245,9 @@ namespace StableDiffusionGui.Forms
 
         public void SetProgress(int percent, bool taskbarProgress, HTProgressBar bar)
         {
+            if (this.RequiresInvoke(new Action<int, bool, HTProgressBar>(SetProgress), percent, taskbarProgress, bar))
+                return;
+
             if (bar == null)
                 bar = progressBar;
 

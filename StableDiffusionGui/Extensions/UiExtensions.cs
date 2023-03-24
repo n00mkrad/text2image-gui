@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace StableDiffusionGui.Extensions
@@ -188,12 +189,28 @@ namespace StableDiffusionGui.Extensions
             return false;
         }
 
-        public static Image GetImageThreadSafe (this PictureBox pictureBox)
+        public static Image GetImageSafe (this PictureBox pictureBox)
         {
             if (pictureBox.InvokeRequired)
-                return (Image)pictureBox.Invoke(new Func<Image>(() => pictureBox.GetImageThreadSafe()));
+                return (Image)pictureBox.Invoke(new Func<Image>(() => pictureBox.GetImageSafe()));
             else
                 return (Image)pictureBox.Image.Clone();
+        }
+
+        public static void SetTextSafe(this Control control, string text)
+        {
+            if (control.RequiresInvoke(new Action<string>(control.SetTextSafe), text))
+                return;
+
+            control.Text = text;
+        }
+
+        public static void SetTooltipSafe(this ToolTip tooltip, Control control, string text)
+        {
+            if (control.RequiresInvoke(new Action<Control, string>(tooltip.SetTooltipSafe), control, text))
+                return;
+
+            tooltip.SetToolTip(control, text);
         }
     }
 }

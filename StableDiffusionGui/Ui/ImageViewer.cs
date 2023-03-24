@@ -79,7 +79,7 @@ namespace StableDiffusionGui.Ui
                 return;
             }
 
-            Program.MainForm.pictBoxImgViewer.Text = "";
+            Program.MainForm.pictBoxImgViewer.SetTextSafe("");
             Program.MainForm.pictBoxImgViewer.Image = IoUtils.GetImage(_currentImages[_currIndex]);
 
             ImagePopup.UpdateSlideshow(Program.MainForm.pictBoxImgViewer.Image);
@@ -100,7 +100,7 @@ namespace StableDiffusionGui.Ui
             if (meta.ScaleImg >= 0)
                 infos.Add($"Img Scale {meta.ScaleImg.ToStringDot()}");
 
-            Size res = Program.MainForm.pictBoxImgViewer.GetImageThreadSafe().Size;
+            Size res = Program.MainForm.pictBoxImgViewer.GetImageSafe().Size;
 
             if (meta.GeneratedResolution.IsEmpty)
                 infos.Add($"{res.Width}x{res.Height}");
@@ -113,21 +113,21 @@ namespace StableDiffusionGui.Ui
             if (!string.IsNullOrWhiteSpace(meta.Sampler))
                 infos.Add(Strings.Samplers.Get(meta.Sampler, true, true));
 
-            Program.MainForm.labelImgInfo.Text = $"Image {_currIndex + 1}/{_currentImages.Length} {(infos.Count > 0 ? $" - {string.Join(" - ", infos)}" : "")}";
-            Program.MainForm.labelImgPrompt.Text = !string.IsNullOrWhiteSpace(meta.Prompt) ? meta.Prompt : _strNoPrompt;
-            Program.MainForm.labelImgPromptNeg.Text = !string.IsNullOrWhiteSpace(meta.NegativePrompt) ? meta.NegativePrompt : _strNoPromptNeg;
-            Program.MainForm.toolTip.SetToolTip(Program.MainForm.labelImgPrompt, $"{Program.MainForm.labelImgPrompt.Text}\n\nClick to copy.");
-            Program.MainForm.toolTip.SetToolTip(Program.MainForm.labelImgPromptNeg, $"{Program.MainForm.labelImgPromptNeg.Text}\n\nClick to copy.");
+            Program.MainForm.labelImgInfo.SetTextSafe($"Image {_currIndex + 1}/{_currentImages.Length} {(infos.Count > 0 ? $" - {string.Join(" - ", infos)}" : "")}");
+            Program.MainForm.labelImgPrompt.SetTextSafe(!string.IsNullOrWhiteSpace(meta.Prompt) ? meta.Prompt : _strNoPrompt);
+            Program.MainForm.labelImgPromptNeg.SetTextSafe(!string.IsNullOrWhiteSpace(meta.NegativePrompt) ? meta.NegativePrompt : _strNoPromptNeg);
+            Program.MainForm.toolTip.SetTooltipSafe(Program.MainForm.labelImgPrompt, $"{Program.MainForm.labelImgPrompt.Text}\n\nClick to copy.");
+            Program.MainForm.toolTip.SetTooltipSafe(Program.MainForm.labelImgPromptNeg, $"{Program.MainForm.labelImgPromptNeg.Text}\n\nClick to copy.");
             UpdatePromptLabelColors();
         }
 
         public static void Clear()
         {
-            Program.MainForm.pictBoxImgViewer.Text = "";
+            Program.MainForm.pictBoxImgViewer.SetTextSafe("");
             Program.MainForm.pictBoxImgViewer.Image = null;
-            Program.MainForm.labelImgInfo.Text = "No images to show.";
-            Program.MainForm.labelImgPrompt.Text = _strNoPrompt;
-            Program.MainForm.labelImgPromptNeg.Text = _strNoPromptNeg;
+            Program.MainForm.labelImgInfo.SetTextSafe("No images to show.");
+            Program.MainForm.labelImgPrompt.SetTextSafe(_strNoPrompt);
+            Program.MainForm.labelImgPromptNeg.SetTextSafe(_strNoPromptNeg);
             UpdatePromptLabelColors();
         }
 

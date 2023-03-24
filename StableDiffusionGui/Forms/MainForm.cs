@@ -38,7 +38,7 @@ namespace StableDiffusionGui.Forms
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            CheckForIllegalCrossThreadCalls = false;
+            CheckForIllegalCrossThreadCalls = Program.Debug;
             AllowEscClose = false;
             Task.Run(() => Logger.QueueLoopOuter());
             MinimumSize = Size;

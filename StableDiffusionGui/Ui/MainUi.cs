@@ -328,11 +328,11 @@ namespace StableDiffusionGui.Ui
                 if (Program.MainForm.pictBoxInitImg.Image == null)
                     return Size.Empty;
                 else
-                    outputImgSize = Program.MainForm.pictBoxInitImg.GetImageThreadSafe().Size;
+                    outputImgSize = Program.MainForm.pictBoxInitImg.GetImageSafe().Size;
             }
             else
             {
-                outputImgSize = Program.MainForm.pictBoxImgViewer.GetImageThreadSafe().Size;
+                outputImgSize = Program.MainForm.pictBoxImgViewer.GetImageSafe().Size;
             }
 
             int picInWidth = Program.MainForm.tableLayoutPanelImgViewers.ColumnStyles[0].Width > 1 ? outputImgSize.Width : 0;

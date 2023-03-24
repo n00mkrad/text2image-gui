@@ -102,6 +102,9 @@ namespace StableDiffusionGui.Forms
 
         private async Task LoadGpus()
         {
+            if (this.RequiresInvoke(new Func<Task>(LoadImplementations)))
+                return;
+
             comboxCudaDevice.Items.Clear();
             comboxCudaDevice.Items.Add("Loading CUDA devices...");
             comboxCudaDevice.SelectedIndex = 0;
@@ -120,6 +123,9 @@ namespace StableDiffusionGui.Forms
 
         private async Task LoadImplementations()
         {
+            if(this.RequiresInvoke(new Func<Task>(LoadImplementations)))
+                return;
+
             comboxImplementation.Items.Clear();
             comboxImplementation.Items.Add("Loading available implementations...");
             comboxImplementation.SelectedIndex = 0;
