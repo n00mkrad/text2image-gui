@@ -8,8 +8,6 @@ using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -40,6 +38,12 @@ namespace StableDiffusionGui.Forms
         {
             new ModelFoldersForm().ShowDialogForm();
             LoadModels();
+        }
+
+        private void UpdateVisibility ()
+        {
+            panelDiffSafetensors.SetVisible(_currentOutFormat == Enums.Models.Format.Diffusers);
+            panelFp16.SetVisible(!(_currentOutFormat == Enums.Models.Format.DiffusersOnnx && GpuUtils.CachedGpus.Count <= 0)); // ONNX FP16 conversion currently requires CUDA
         }
 
         private void LoadModels()
@@ -74,7 +78,9 @@ namespace StableDiffusionGui.Forms
             btnRun.Text = "Converting...";
 
             var model = Models.GetModelsAll().Where(m => m.Name == comboxModel.Text).FirstOrDefault();
-            Model outModel = await ConvertModels.Convert(_currentInFormat, _currentOutFormat, model, true);
+            bool fp16 = checkboxFp16.Visible && checkboxFp16.Checked;
+            bool safeDiffusers = checkboxDiffSafetensors.Visible && checkboxDiffSafetensors.Checked;
+            Model outModel = await ConvertModels.Convert(_currentInFormat, _currentOutFormat, model, fp16, safeDiffusers);
 
             Program.SetState(Program.BusyState.Standby);
             LoadModels();
@@ -97,11 +103,13 @@ namespace StableDiffusionGui.Forms
             _currentInFormat = ParseUtils.GetEnum<Enums.Models.Format>(comboxInFormat.Text, true, Strings.ModelFormats);
             comboxOutFormat.FillFromEnum<Enums.Models.Format>(Strings.ModelFormats, 0, new[] { _currentInFormat }.ToList());
             LoadModels();
+            UpdateVisibility();
         }
 
         private void comboxOutFormat_SelectedIndexChanged(object sender, EventArgs e)
         {
             _currentOutFormat = ParseUtils.GetEnum<Enums.Models.Format>(comboxOutFormat.Text, true, Strings.ModelFormats);
+            UpdateVisibility();
         }
 
         private async void ConvertModelForm_Shown(object sender, EventArgs e)

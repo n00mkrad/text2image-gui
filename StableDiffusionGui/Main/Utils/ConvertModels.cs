@@ -19,7 +19,7 @@ namespace StableDiffusionGui.Main.Utils
 
         /// <summary> Converts model weights </summary>
         /// <returns> A model class of the newly created model, or null if it failed </returns>
-        public static async Task<Model> Convert(Format formatIn, Format formatOut, Model model, bool fp16, bool quiet = false)
+        public static async Task<Model> Convert(Format formatIn, Format formatOut, Model model, bool fp16, bool safeDiffusers, bool quiet = false)
         {
             try
             {
@@ -50,55 +50,55 @@ namespace StableDiffusionGui.Main.Utils
                 // Pytorch -> Diffusers
                 if (formatIn == Format.Pytorch && formatOut == Format.Diffusers)
                 {
-                    await ConvPytorchDiffusers(model.FullName, outPath);
+                    await ConvPytorchDiffusers(model.FullName, outPath, false, safeDiffusers, fp16);
                 }
                 // Pytorch -> Diffusers -> Diffusers ONNX
                 else if (formatIn == Format.Pytorch && formatOut == Format.DiffusersOnnx)
                 {
                     string tempPath = Path.Combine(Paths.GetSessionDataPath(), $"conv-temp-{FormatUtils.GetUnixTimestamp()}");
                     await ConvPytorchDiffusers(model.FullName, tempPath); // We need to convert to diffusers first...
-                    await ConvDiffusersOnnx(tempPath, outPath, true); // ...then we can convert to ONNX
+                    await ConvDiffusersOnnx(tempPath, outPath, true, fp16); // ...then we can convert to ONNX
                 }
                 // Pytorch -> Safetensors
                 else if (formatIn == Format.Pytorch && formatOut == Format.Safetensors)
                 {
                     string tempPath = Path.Combine(Paths.GetSessionDataPath(), $"conv-temp-{FormatUtils.GetUnixTimestamp()}");
                     await ConvPytorchDiffusers(model.FullName, tempPath);
-                    await ConvDiffusersSafetensors(tempPath, outPath);
+                    await ConvDiffusersSafetensors(tempPath, outPath, true, fp16);
                 }
                 // Diffusers -> Pytorch
                 else if (formatIn == Format.Diffusers && formatOut == Format.Pytorch)
                 {
-                    await ConvDiffusersPytorch(model.FullName, outPath);
+                    await ConvDiffusersPytorch(model.FullName, outPath, false, fp16);
                 }
                 // Diffusers -> Diffusers ONNX
                 else if (formatIn == Format.Diffusers && formatOut == Format.DiffusersOnnx)
                 {
-                    await ConvDiffusersOnnx(model.FullName, outPath);
+                    await ConvDiffusersOnnx(model.FullName, outPath, false, fp16);
                 }
                 // Diffusers -> Safetensors
                 else if (formatIn == Format.Diffusers && formatOut == Format.Safetensors)
                 {
-                    await ConvDiffusersSafetensors(model.FullName, outPath, true);
+                    await ConvDiffusersSafetensors(model.FullName, outPath, false, fp16);
                 }
                 // Safetensors -> Pytorch
                 else if (formatIn == Format.Safetensors && formatOut == Format.Pytorch)
                 {
                     string tempPath = Path.Combine(Paths.GetSessionDataPath(), $"conv-temp-{FormatUtils.GetUnixTimestamp()}");
                     await ConvSafetensorsDiffusers(model.FullName, tempPath);
-                    await ConvDiffusersPytorch(tempPath, outPath);
+                    await ConvDiffusersPytorch(tempPath, outPath, true, fp16);
                 }
                 // Safetensors -> Diffusers
                 else if (formatIn == Format.Safetensors && formatOut == Format.Diffusers)
                 {
-                    await ConvSafetensorsDiffusers(model.FullName, outPath);
+                    await ConvSafetensorsDiffusers(model.FullName, outPath, false, fp16);
                 }
                 // Safetensors -> Diffusers ONNX
                 else if (formatIn == Format.Safetensors && formatOut == Format.DiffusersOnnx)
                 {
                     string tempPath = GetTempPath();
-                    await ConvSafetensorsDiffusers(model.FullName, tempPath, true);
-                    await ConvDiffusersOnnx(tempPath, outPath, true);
+                    await ConvSafetensorsDiffusers(model.FullName, tempPath, false);
+                    await ConvDiffusersOnnx(tempPath, outPath, true, fp16);
                 }
                 else
                 {
@@ -137,43 +137,43 @@ namespace StableDiffusionGui.Main.Utils
             return Path.Combine(Paths.GetSessionDataPath(), $"conv-temp-{FormatUtils.GetUnixTimestamp()}");
         }
 
-        private static async Task ConvPytorchDiffusers(string inPath, string outPath, bool deleteInput = false)
+        private static async Task ConvPytorchDiffusers(string inPath, string outPath, bool deleteInput = false, bool safetensors = true, bool fp16 = true)
         {
             await RunPython($"python repo/scripts/diff/convert_original_stable_diffusion_to_diffusers.py --checkpoint_path {inPath.Wrap(true)} --dump_path {outPath.Wrap(true)} " +
-                        $"--original_config_file {_ckptConfigPath.Wrap(true)} --to_safetensors --fp16");
+                        $"--original_config_file {_ckptConfigPath.Wrap(true)} {(safetensors ? "--to_safetensors" : "")} {(fp16 ? "--fp16" : "")}");
 
             if (deleteInput)
                 IoUtils.TryDeleteIfExists(inPath);
         }
 
-        private static async Task ConvDiffusersOnnx(string inPath, string outPath, bool deleteInput = false)
+        private static async Task ConvDiffusersOnnx(string inPath, string outPath, bool deleteInput = false, bool fp16 = true)
         {
-            await RunPython($"python repo/scripts/diff/convert_stable_diffusion_checkpoint_to_onnx.py --model_path {inPath.Wrap(true)} --output_path {outPath.Wrap(true)} ");
+            await RunPython($"python repo/scripts/diff/convert_stable_diffusion_checkpoint_to_onnx.py --model_path {inPath.Wrap(true)} --output_path {outPath.Wrap(true)} {(fp16 ? "--fp16" : "")}");
 
             if (deleteInput)
                 IoUtils.TryDeleteIfExists(inPath);
         }
 
-        private static async Task ConvDiffusersSafetensors(string inPath, string outPath, bool deleteInput = false)
+        private static async Task ConvDiffusersSafetensors(string inPath, string outPath, bool deleteInput = false, bool fp16 = true)
         {
-            await RunPython($"python repo/scripts/diff/convert_diffusers_to_original_stable_diffusion.py --model_path {inPath.Wrap(true)} --checkpoint_path {outPath.Wrap(true)} --half --use_safetensors");
+            await RunPython($"python repo/scripts/diff/convert_diffusers_to_original_stable_diffusion.py --model_path {inPath.Wrap(true)} --checkpoint_path {outPath.Wrap(true)} {(fp16 ? "--half" : "")} --use_safetensors");
 
             if (deleteInput)
                 IoUtils.TryDeleteIfExists(inPath);
         }
 
-        private static async Task ConvDiffusersPytorch(string inPath, string outPath, bool deleteInput = false)
+        private static async Task ConvDiffusersPytorch(string inPath, string outPath, bool deleteInput = false, bool fp16 = true)
         {
-            await RunPython($"python repo/scripts/diff/convert_diffusers_to_original_stable_diffusion.py --model_path {inPath.Wrap(true)} --checkpoint_path {outPath.Wrap(true)} --half");
+            await RunPython($"python repo/scripts/diff/convert_diffusers_to_original_stable_diffusion.py --model_path {inPath.Wrap(true)} --checkpoint_path {outPath.Wrap(true)} {(fp16 ? "--half" : "")}");
 
             if (deleteInput)
                 IoUtils.TryDeleteIfExists(inPath);
         }
 
-        private static async Task ConvSafetensorsDiffusers(string inPath, string outPath, bool deleteInput = false)
+        private static async Task ConvSafetensorsDiffusers(string inPath, string outPath, bool deleteInput = false, bool fp16 = true)
         {
             await RunPython($"python repo/scripts/diff/convert_original_stable_diffusion_to_diffusers.py --from_safetensors --checkpoint_path {inPath.Wrap(true)} --dump_path {outPath.Wrap(true)} " +
-                        $"--original_config_file {_ckptConfigPath.Wrap(true)} --to_safetensors --fp16");
+                        $"--original_config_file {_ckptConfigPath.Wrap(true)} --to_safetensors {(fp16 ? "--fp16" : "")}");
 
             if (deleteInput)
                 IoUtils.TryDeleteIfExists(inPath);

@@ -38,6 +38,18 @@
             this.checkboxDeleteInput = new System.Windows.Forms.CheckBox();
             this.panel5 = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
+            this.panelFp16 = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+            this.panel8 = new System.Windows.Forms.Panel();
+            this.checkboxFp16 = new System.Windows.Forms.CheckBox();
+            this.panel9 = new System.Windows.Forms.Panel();
+            this.label4 = new System.Windows.Forms.Label();
+            this.panelDiffSafetensors = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
+            this.panel10 = new System.Windows.Forms.Panel();
+            this.checkboxDiffSafetensors = new System.Windows.Forms.CheckBox();
+            this.panel11 = new System.Windows.Forms.Panel();
+            this.label5 = new System.Windows.Forms.Label();
             this.panelOutFormat = new System.Windows.Forms.Panel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.panel2 = new System.Windows.Forms.Panel();
@@ -65,6 +77,14 @@
             this.tableLayoutPanel2.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel5.SuspendLayout();
+            this.panelFp16.SuspendLayout();
+            this.tableLayoutPanel4.SuspendLayout();
+            this.panel8.SuspendLayout();
+            this.panel9.SuspendLayout();
+            this.panelDiffSafetensors.SuspendLayout();
+            this.tableLayoutPanel5.SuspendLayout();
+            this.panel10.SuspendLayout();
+            this.panel11.SuspendLayout();
             this.panelOutFormat.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -98,20 +118,22 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.parentPanel.AutoScroll = true;
             this.parentPanel.Controls.Add(this.panelDelInput);
+            this.parentPanel.Controls.Add(this.panelFp16);
+            this.parentPanel.Controls.Add(this.panelDiffSafetensors);
             this.parentPanel.Controls.Add(this.panelOutFormat);
             this.parentPanel.Controls.Add(this.panelModel);
             this.parentPanel.Controls.Add(this.panelInFormat);
             this.parentPanel.Controls.Add(this.btnRun);
             this.parentPanel.Location = new System.Drawing.Point(12, 62);
             this.parentPanel.Name = "parentPanel";
-            this.parentPanel.Size = new System.Drawing.Size(560, 187);
+            this.parentPanel.Size = new System.Drawing.Size(560, 257);
             this.parentPanel.TabIndex = 15;
             // 
             // panelDelInput
             // 
             this.panelDelInput.Controls.Add(this.tableLayoutPanel2);
             this.panelDelInput.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelDelInput.Location = new System.Drawing.Point(0, 105);
+            this.panelDelInput.Location = new System.Drawing.Point(0, 175);
             this.panelDelInput.Name = "panelDelInput";
             this.panelDelInput.Size = new System.Drawing.Size(560, 35);
             this.panelDelInput.TabIndex = 102;
@@ -172,6 +194,142 @@
             this.label2.Size = new System.Drawing.Size(148, 13);
             this.label2.TabIndex = 85;
             this.label2.Text = "Delete Input File If Successful";
+            // 
+            // panelFp16
+            // 
+            this.panelFp16.Controls.Add(this.tableLayoutPanel4);
+            this.panelFp16.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelFp16.Location = new System.Drawing.Point(0, 140);
+            this.panelFp16.Name = "panelFp16";
+            this.panelFp16.Size = new System.Drawing.Size(560, 35);
+            this.panelFp16.TabIndex = 104;
+            // 
+            // tableLayoutPanel4
+            // 
+            this.tableLayoutPanel4.ColumnCount = 2;
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel4.Controls.Add(this.panel8, 0, 0);
+            this.tableLayoutPanel4.Controls.Add(this.panel9, 0, 0);
+            this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel4.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel4.Name = "tableLayoutPanel4";
+            this.tableLayoutPanel4.RowCount = 1;
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(560, 35);
+            this.tableLayoutPanel4.TabIndex = 1;
+            // 
+            // panel8
+            // 
+            this.panel8.Controls.Add(this.checkboxFp16);
+            this.panel8.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel8.Location = new System.Drawing.Point(280, 0);
+            this.panel8.Margin = new System.Windows.Forms.Padding(0);
+            this.panel8.Name = "panel8";
+            this.panel8.Size = new System.Drawing.Size(280, 35);
+            this.panel8.TabIndex = 88;
+            // 
+            // checkboxFp16
+            // 
+            this.checkboxFp16.AutoSize = true;
+            this.checkboxFp16.Checked = true;
+            this.checkboxFp16.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkboxFp16.ForeColor = System.Drawing.Color.White;
+            this.checkboxFp16.Location = new System.Drawing.Point(8, 10);
+            this.checkboxFp16.Name = "checkboxFp16";
+            this.checkboxFp16.Size = new System.Drawing.Size(15, 14);
+            this.checkboxFp16.TabIndex = 112;
+            this.checkboxFp16.UseVisualStyleBackColor = true;
+            // 
+            // panel9
+            // 
+            this.panel9.Controls.Add(this.label4);
+            this.panel9.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel9.Location = new System.Drawing.Point(0, 0);
+            this.panel9.Margin = new System.Windows.Forms.Padding(0);
+            this.panel9.Name = "panel9";
+            this.panel9.Size = new System.Drawing.Size(280, 35);
+            this.panel9.TabIndex = 87;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.ForeColor = System.Drawing.Color.White;
+            this.label4.Location = new System.Drawing.Point(5, 11);
+            this.label4.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(158, 13);
+            this.label4.TabIndex = 85;
+            this.label4.Text = "Save As FP16 Model (Half Size)";
+            // 
+            // panelDiffSafetensors
+            // 
+            this.panelDiffSafetensors.Controls.Add(this.tableLayoutPanel5);
+            this.panelDiffSafetensors.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelDiffSafetensors.Location = new System.Drawing.Point(0, 105);
+            this.panelDiffSafetensors.Name = "panelDiffSafetensors";
+            this.panelDiffSafetensors.Size = new System.Drawing.Size(560, 35);
+            this.panelDiffSafetensors.TabIndex = 105;
+            // 
+            // tableLayoutPanel5
+            // 
+            this.tableLayoutPanel5.ColumnCount = 2;
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel5.Controls.Add(this.panel10, 0, 0);
+            this.tableLayoutPanel5.Controls.Add(this.panel11, 0, 0);
+            this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel5.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel5.Name = "tableLayoutPanel5";
+            this.tableLayoutPanel5.RowCount = 1;
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(560, 35);
+            this.tableLayoutPanel5.TabIndex = 1;
+            // 
+            // panel10
+            // 
+            this.panel10.Controls.Add(this.checkboxDiffSafetensors);
+            this.panel10.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel10.Location = new System.Drawing.Point(280, 0);
+            this.panel10.Margin = new System.Windows.Forms.Padding(0);
+            this.panel10.Name = "panel10";
+            this.panel10.Size = new System.Drawing.Size(280, 35);
+            this.panel10.TabIndex = 88;
+            // 
+            // checkboxDiffSafetensors
+            // 
+            this.checkboxDiffSafetensors.AutoSize = true;
+            this.checkboxDiffSafetensors.Checked = true;
+            this.checkboxDiffSafetensors.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkboxDiffSafetensors.ForeColor = System.Drawing.Color.White;
+            this.checkboxDiffSafetensors.Location = new System.Drawing.Point(8, 10);
+            this.checkboxDiffSafetensors.Name = "checkboxDiffSafetensors";
+            this.checkboxDiffSafetensors.Size = new System.Drawing.Size(15, 14);
+            this.checkboxDiffSafetensors.TabIndex = 112;
+            this.checkboxDiffSafetensors.UseVisualStyleBackColor = true;
+            // 
+            // panel11
+            // 
+            this.panel11.Controls.Add(this.label5);
+            this.panel11.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel11.Location = new System.Drawing.Point(0, 0);
+            this.panel11.Margin = new System.Windows.Forms.Padding(0);
+            this.panel11.Name = "panel11";
+            this.panel11.Size = new System.Drawing.Size(280, 35);
+            this.panel11.TabIndex = 87;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.ForeColor = System.Drawing.Color.White;
+            this.label5.Location = new System.Drawing.Point(5, 11);
+            this.label5.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(255, 13);
+            this.label5.TabIndex = 85;
+            this.label5.Text = "Use Safetensors Format Within Model Folder (Faster)";
             // 
             // panelOutFormat
             // 
@@ -384,11 +542,12 @@
             // 
             // btnRun
             // 
+            this.btnRun.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnRun.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
             this.btnRun.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnRun.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.25F);
             this.btnRun.ForeColor = System.Drawing.Color.White;
-            this.btnRun.Location = new System.Drawing.Point(0, 147);
+            this.btnRun.Location = new System.Drawing.Point(0, 217);
             this.btnRun.Name = "btnRun";
             this.btnRun.Size = new System.Drawing.Size(120, 40);
             this.btnRun.TabIndex = 101;
@@ -445,7 +604,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.ClientSize = new System.Drawing.Size(584, 261);
+            this.ClientSize = new System.Drawing.Size(584, 331);
             this.Controls.Add(this.btnReloadModels);
             this.Controls.Add(this.btnOpenModelFolder);
             this.Controls.Add(this.parentPanel);
@@ -469,6 +628,18 @@
             this.panel4.PerformLayout();
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
+            this.panelFp16.ResumeLayout(false);
+            this.tableLayoutPanel4.ResumeLayout(false);
+            this.panel8.ResumeLayout(false);
+            this.panel8.PerformLayout();
+            this.panel9.ResumeLayout(false);
+            this.panel9.PerformLayout();
+            this.panelDiffSafetensors.ResumeLayout(false);
+            this.tableLayoutPanel5.ResumeLayout(false);
+            this.panel10.ResumeLayout(false);
+            this.panel10.PerformLayout();
+            this.panel11.ResumeLayout(false);
+            this.panel11.PerformLayout();
             this.panelOutFormat.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
@@ -521,5 +692,17 @@
         private System.Windows.Forms.Panel panel7;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnRun;
+        private System.Windows.Forms.Panel panelFp16;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
+        private System.Windows.Forms.Panel panel8;
+        private System.Windows.Forms.CheckBox checkboxFp16;
+        private System.Windows.Forms.Panel panel9;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Panel panelDiffSafetensors;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
+        private System.Windows.Forms.Panel panel10;
+        private System.Windows.Forms.CheckBox checkboxDiffSafetensors;
+        private System.Windows.Forms.Panel panel11;
+        private System.Windows.Forms.Label label5;
     }
 }
