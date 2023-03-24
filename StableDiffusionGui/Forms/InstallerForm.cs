@@ -3,13 +3,14 @@ using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Ui;
 using System;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace StableDiffusionGui.Forms
 {
     public partial class InstallerForm : CustomForm
     {
-        private bool _overrideInstall = false;
+        private bool _autoInstall = false;
         private bool _overrideInstallOnnx = false;
         private bool _overrideInstallUpscalers = false;
 
@@ -20,7 +21,7 @@ namespace StableDiffusionGui.Forms
 
         public InstallerForm(bool overrideInstallOnnx, bool overrideInstallUpscalers)
         {
-            _overrideInstall = true;
+            _autoInstall = true;
             _overrideInstallOnnx = overrideInstallOnnx;
             _overrideInstallUpscalers = overrideInstallUpscalers;
             InitializeComponent();
@@ -41,12 +42,12 @@ namespace StableDiffusionGui.Forms
             }
             else
             {
-                bool installOnnxDml = _overrideInstall ? _overrideInstallOnnx : AskInstallOnnxDml();
-                bool installUpscalers = _overrideInstall ? _overrideInstallUpscalers : AskInstallUpscalers();
+                bool installOnnxDml = _autoInstall ? _overrideInstallOnnx : AskInstallOnnxDml();
+                bool installUpscalers = _autoInstall ? _overrideInstallUpscalers : AskInstallUpscalers();
                 await Setup.Install(false, installOnnxDml, installUpscalers);
             }
 
-            if (_overrideInstall)
+            if (_autoInstall)
                 Close();
             
             BringToFront();
@@ -60,7 +61,7 @@ namespace StableDiffusionGui.Forms
             UpdateStatus();
             Enabled = true;
 
-            if (_overrideInstall)
+            if (_autoInstall)
                 installBtn_Click(null, null);
         }
 
@@ -122,6 +123,7 @@ namespace StableDiffusionGui.Forms
             await Setup.InstallRepo(installOnnxDml, commit, false);
             Setup.RepoCleanup();
             UpdateStatus();
+            Task.Run(() => MainUi.GetCudaGpus());
             Program.SetState(Program.BusyState.Standby);
             Enabled = true;
         }

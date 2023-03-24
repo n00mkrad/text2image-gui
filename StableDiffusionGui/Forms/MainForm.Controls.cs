@@ -283,6 +283,9 @@ namespace StableDiffusionGui.Forms
 
         public void UpdateWindowTitle()
         {
+            if (this.RequiresInvoke(new Action(UpdateWindowTitle)))
+                return;
+
             string busyText = Program.State == Program.BusyState.Standby ? "" : "Busy...";
             Text = string.Join(" - ", new[] { $"Stable Diffusion GUI {Program.Version}", MainUi.GpuInfo, busyText }.Where(s => s.IsNotEmpty()));
         }
