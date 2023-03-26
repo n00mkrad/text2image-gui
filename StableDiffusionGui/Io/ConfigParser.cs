@@ -12,6 +12,7 @@ namespace StableDiffusionGui.Io
         public enum StringMode { Any, Int, Float }
 
         public static Enums.StableDiffusion.Implementation CurrentImplementation { get { return ParseUtils.GetEnum<Enums.StableDiffusion.Implementation>(Config.Get<string>(Config.Keys.ImplementationName)); } }
+        public static bool UpscaleAndSaveOriginals { get { return Config.Get<bool>(Config.Keys.SaveUnprocessedImages) && (Config.Get<bool>(Config.Keys.UpscaleEnable) || Config.Get<bool>(Config.Keys.FaceRestoreEnable)); } }
 
         public static void SaveGuiElement(TextBox textbox, string key, StringMode stringMode = StringMode.Any)
         {

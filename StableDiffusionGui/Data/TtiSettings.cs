@@ -54,7 +54,7 @@ namespace StableDiffusionGui.Data
                     }
                 }
 
-                if (Config.Get<bool>(Config.Keys.SaveUnprocessedImages))
+                if (ConfigParser.UpscaleAndSaveOriginals)
                     count *= 2;
 
                 return count;
