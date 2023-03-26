@@ -16,11 +16,9 @@ namespace StableDiffusionGui.Installation
     {
         private static readonly string _gitFile = "n00mkrad/stable-diffusion-cust.git";
         private static readonly string _gitBranch = "main";
-        public static readonly string GitCommit = "55f68a9e70ecea51a6520b91995c5e96c1541db8";
+        public static readonly string GitCommit = "2d32f6797129d6b723cfd955fd6aaebd26fe1a4f";
 
         private static readonly bool _allowModelDownload = false;
-
-        private static bool ReplaceUiLogLine { get { return Logger.LastUiLine.EndsWith("..."); } }
 
         public static async Task Install(bool force = false, bool installOnnxDml = false, bool installUpscalers = true)
         {
@@ -183,7 +181,7 @@ namespace StableDiffusionGui.Installation
             Logger.Log("Downloading model file...");
 
             Process p = OsUtils.NewProcess(true);
-            p.ErrorDataReceived += (sender, line) => { try { Logger.Log($"Downloading... ({line.Data.Trim().Split(' ')[0]}%)", false, Logger.LastUiLine.EndsWith("%)"), Constants.Lognames.Installer); } catch { } };
+            p.ErrorDataReceived += (sender, line) => { try { Logger.Log($"Downloading... ({line.Data?.Trim().Split(' ')[0]}%)", false, Logger.LastUiLine.EndsWith("%)"), Constants.Lognames.Installer); } catch { } };
             p.StartInfo.Arguments = $"/C curl -k \"https://dl.nmkd-hz.de/tti/sd/models/sd-v1-5-fp16.ckpt\" -o {mdlPath.Wrap()}";
             p.Start();
             p.BeginErrorReadLine();
@@ -294,49 +292,43 @@ namespace StableDiffusionGui.Installation
 
         #region Upscaling Models
 
-        public static async Task InstallUpscalers(bool print = true)
+        public static async Task InstallUpscalers(bool forceReinstall = true)
         {
             try
             {
-                if (print) Logger.Log("Installing GFPGAN...", ReplaceUiLogLine);
+                Logger.ClearLogBox();
+                Logger.Log($"Installing enhancement models...");
 
-                string gfpganPath = GetDataSubPath("gfpgan");
-                IoUtils.SetAttributes(gfpganPath, ZetaLongPaths.Native.FileAttributes.Normal);
+                if (forceReinstall)
+                {
+                    var dirs = new[] { "realesrgan", "gfpgan", "codeformer" }.ToList();
+                    dirs.ForEach(dir => IoUtils.DeleteIfExists(Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdRepo, "invoke", "models", dir)));
+                }
 
-                await Clone("https://github.com/TencentARC/GFPGAN.git", gfpganPath, "2eac2033893ca7f427f4035d80fe95b92649ac56", "master");
+                Process p = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
+                p.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand(true, Paths.GetDataPath())} && " +
+                    $"python {Constants.Dirs.SdRepo}/invoke/scripts/nmkd_install_upscalers.py";
+                p.ErrorDataReceived += (sender, line) =>
+                {
+                    if (line.Data != null && line.Data.Contains("%|") && line.Data.Trim().EndsWith("B/s]"))
+                        Logger.Log($"Downloading {line.Data.Trim().Split("%|")[0].Replace("  ", " ")}%", false, Logger.LastUiLine.EndsWith("%"), Constants.Lognames.Installer);
+                };
+                Logger.Log($"cmd {p.StartInfo.Arguments}", true);
+                p.Start();
+                p.BeginOutputReadLine();
+                p.BeginErrorReadLine();
 
-                if (print) Logger.Log("Downloading GFPGAN model file...", ReplaceUiLogLine);
-                string gfpGanMdlPath = Path.Combine(gfpganPath, "gfpgan.pth");
-                IoUtils.TryDeleteIfExists(gfpGanMdlPath);
-                Process procGfpganDl = OsUtils.NewProcess(true);
-                procGfpganDl.ErrorDataReceived += (sender, line) => { try { Logger.Log($"Downloading GFPGAN model ({line.Data?.Trim().Split(' ')[0].GetInt()}%)...", false, ReplaceUiLogLine, Constants.Lognames.Installer); } catch { } };
-                procGfpganDl.StartInfo.Arguments = $"/C curl -k -L \"https://github.com/TencentARC/GFPGAN/releases/download/v1.3.0/GFPGANv1.4.pth\" -o {gfpGanMdlPath.Wrap()}";
-                procGfpganDl.Start();
-                procGfpganDl.BeginErrorReadLine();
+                while (!p.HasExited) await Task.Delay(1);
 
-                while (!procGfpganDl.HasExited) await Task.Delay(1);
-
-                string codeformerPath = Path.Combine(GetDataSubPath(Constants.Dirs.SdRepo), "invoke", "models", "codeformer");
-                Directory.CreateDirectory(codeformerPath);
-                if (print) Logger.Log("Downloading CodeFormer model file...", ReplaceUiLogLine);
-                string codeformerMdlPath = Path.Combine(codeformerPath, "codeformer.pth");
-                IoUtils.TryDeleteIfExists(codeformerMdlPath);
-                Process procCodeformerDl = OsUtils.NewProcess(true);
-                procCodeformerDl.ErrorDataReceived += (sender, line) => { try { Logger.Log($"Downloading CodeFormer model ({line.Data?.Trim().Split(' ')[0].GetInt()}%)...", false, ReplaceUiLogLine, Constants.Lognames.Installer); } catch { } };
-                procCodeformerDl.StartInfo.Arguments = $"/C curl -k -L \"https://github.com/sczhou/CodeFormer/releases/download/v0.1.0/codeformer.pth\" -o {codeformerMdlPath.Wrap()}";
-                procCodeformerDl.Start();
-                procCodeformerDl.BeginErrorReadLine();
-
-                while (!procCodeformerDl.HasExited) await Task.Delay(1);
-
-                await Task.Delay(100);
-
-                Logger.Log($"Downloaded and installed RealESRGAN, CodeFormer, and GFPGAN.", false, ReplaceUiLogLine);
+                if (InstallationStatus.HasSdUpscalers(Constants.Lognames.Installer))
+                    Logger.Log($"All enhancement models downloaded.", false, true);
+                else
+                    Logger.Log($"Some model files could not be downloaded. Check the '{Constants.Lognames.Installer}' log for details.", false, true);
             }
             catch (Exception ex)
             {
-                Logger.Log($"Failed to install upscalers: {ex.Message}");
-                Logger.Log($"{ex.StackTrace}", true);
+                Logger.Log($"Error downloading enhancement models: {ex.Message}");
+                Logger.Log(ex.StackTrace, true);
             }
         }
 

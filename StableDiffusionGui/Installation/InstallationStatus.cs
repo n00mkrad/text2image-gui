@@ -52,21 +52,37 @@ namespace StableDiffusionGui.Installation
             return Models.GetModels().Count() > 0;
         }
 
-        public static bool HasSdUpscalers()
+        public static bool HasSdUpscalers(string logFile = Constants.Lognames.General)
         {
             string envPath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdVenv);
             bool hasEsrgan = Directory.Exists(Path.Combine(envPath, "Lib", "site-packages", "basicsr"));
 
-            string gfpPath = Path.Combine(Paths.GetDataPath(), "gfpgan");
-            string gfpMdlPath = Path.Combine(Paths.GetDataPath(), "gfpgan", "gfpgan.pth");
-            bool hasGfp = Directory.Exists(gfpPath) && File.Exists(gfpMdlPath);
+            if (!hasEsrgan)
+            {
+                Logger.Log("Upscalers install incomplete: ESRGAN missing.", true, false, logFile);
+                return false;
+            }
 
-            string cfMdlPath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdRepo, "invoke", "models", "codeformer", "codeformer.pth");
-            bool hasCf = File.Exists(cfMdlPath);
+            List<string> requiredFilesPaths = new List<string>
+            {
+                @"gfpgan/GFPGANv1.4.pth",
+                @"gfpgan/weights/detection_Resnet50_Final.pth",
+                @"gfpgan/weights/parsing_parsenet.pth",
+                @"codeformer/codeformer.pth",
+                @"realesrgan/realesr-general-wdn-x4v3.pth",
+                @"realesrgan/realesr-general-x4v3.pth",
+            };
 
-            Logger.Log($"HasSdUpscalers - Has ESRGAN: {hasEsrgan} - Has GFPGAN: {hasGfp} - Has Codeformer: {hasCf}", true);
+            requiredFilesPaths = requiredFilesPaths.Select(f => Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdRepo, "invoke", "models", f)).ToList();
+            bool hasAllModels = requiredFilesPaths.All(f => File.Exists(f));
 
-            return hasEsrgan && hasGfp && hasCf;
+            if (!hasAllModels)
+            {
+                Logger.Log($"Upscalers install incomplete: Model files missing: {string.Join($", ", requiredFilesPaths.Where(f => !File.Exists(f)))}", true, false, logFile);
+                return false;
+            }
+
+            return true;
         }
 
         public static bool HasOnnx(bool fast = true)

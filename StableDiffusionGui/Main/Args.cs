@@ -19,22 +19,19 @@ namespace StableDiffusionGui.Main
                 if (Config.Get<bool>(Config.Keys.FullPrecision))
                     args.Add("--precision float32");
 
-                bool lowVram = GpuUtils.CachedGpus.Count > 0 && GpuUtils.CachedGpus.First().VramGb < 7.0f;
+                bool lowVram = GpuUtils.CachedGpus.Count > 0 && GpuUtils.CachedGpus.First().VramGb < 5.0f;
 
                 if (lowVram)
                 {
                     args.Add("--sequential_guidance");
                     args.Add("--free_gpu_mem");
-
-                    if (Config.Get<bool>(Config.Keys.MedVramDisablePostProcessing, false))
-                    {
-                        args.Add("--no_upscale");
-                        args.Add("--no_restore");
-                    }
                 }
 
-                if (!args.Contains("--no_restore"))
-                    args.Add("--gfpgan_model_path ../../gfpgan/gfpgan.pth"); // Only specify GFPGAN path if face restoration is enabled
+                if (!InstallationStatus.HasSdUpscalers() || (lowVram && Config.Get(Config.Keys.MedVramDisablePostProcessing, false)))
+                {
+                    args.Add("--no_upscale");
+                    args.Add("--no_restore");
+                }
 
                 int maxCachedModels = 0;
 
@@ -66,7 +63,7 @@ namespace StableDiffusionGui.Main
                 {
                     "-n 1", // Always generate 1 image per command
                     "--fnformat {prefix}.png" // Only use prefix as output name since we rename it anyway
-                }; 
+                };
 
                 if (Config.Get<bool>(Config.Keys.SaveUnprocessedImages))
                     args.Add("-save_orig");

@@ -43,7 +43,8 @@ namespace StableDiffusionGui.Forms
                 if (dialogResult == DialogResult.Yes)
                     new InstallerForm().ShowDialogForm();
 
-                Close();
+                if (!InstallationStatus.HasSdUpscalers())
+                    Close();
             }
         }
 
