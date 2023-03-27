@@ -323,7 +323,7 @@ namespace StableDiffusionGui.Forms
             if (imp == (Implementation)(-1))
                 imp = ConfigParser.CurrentImplementation;
 
-            IEnumerable<Model> models = Models.GetModelsAll().Where(m => imp.GetInfo().SupportedModelFormats.Contains(m.Format));
+            IEnumerable<Model> models = Models.GetModelsAll().Where(m => m.Type == Enums.Models.Type.Normal && imp.GetInfo().SupportedModelFormats.Contains(m.Format));
             comboxModel.SetItems(models.Select(m => m.Name), UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.None);
         }
     }
