@@ -102,7 +102,7 @@ namespace StableDiffusionGui.Forms
 
         private async Task LoadGpus()
         {
-            if (this.RequiresInvoke(new Func<Task>(LoadImplementations)))
+            if (this.RequiresInvoke(new Func<Task>(LoadGpus)))
                 return;
 
             comboxCudaDevice.Items.Clear();
