@@ -16,14 +16,14 @@ namespace StableDiffusionGui.Ui
 
             MessageForm form = new MessageForm(text, $"{type}");
             form.MsgFontSize = fontSize;
-            form.ShowDialogForm(Program.MainForm);
+            form.ShowDialogForm();
             return DialogResult.OK;
         }
 
         public static DialogResult ShowMessageBox(string text, string title, MessageBoxButtons btns = MessageBoxButtons.OK)
         {
             MessageForm form = new MessageForm(text, title, btns);
-            return form.ShowDialogForm(Program.MainForm);
+            return form.ShowDialogForm();
         }
     }
 }

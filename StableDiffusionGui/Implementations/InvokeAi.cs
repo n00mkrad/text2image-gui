@@ -1,4 +1,5 @@
 ﻿using StableDiffusionGui.Data;
+using StableDiffusionGui.Extensions;
 using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
@@ -400,7 +401,7 @@ namespace StableDiffusionGui.Implementations
 
         private static async Task WaitForCancel()
         {
-            Program.MainForm.runBtn.Enabled = false;
+            Program.MainForm.runBtn.SetEnabled(false);
             DateTime cancelTime = DateTime.Now;
             TtiUtils.SoftCancelInvokeAi();
             await Task.Delay(100);
@@ -435,7 +436,7 @@ namespace StableDiffusionGui.Implementations
                 await Task.Delay(100);
             }
 
-            Program.MainForm.runBtn.Enabled = true;
+            Program.MainForm.runBtn.SetEnabled(true);
         }
     }
 }

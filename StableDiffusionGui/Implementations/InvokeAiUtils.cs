@@ -102,7 +102,7 @@ namespace StableDiffusionGui.Implementations
 
                     foreach (Model mdlVae in cachedModelsVae)
                     {
-                        var vae = mdlVae == null ? null : mdlVae.Format == Enums.Models.Format.Diffusers ? mdlVae : await ConvertVae(mdlVae, !quiet);
+                        var vae = mdlVae == null ? null : mdlVae; //mdlVae.Format == Enums.Models.Format.Diffusers ? mdlVae : await ConvertVae(mdlVae, !quiet);
                         var properties = new List<string>();
 
                         if (config.IsNotEmpty())
@@ -112,8 +112,8 @@ namespace StableDiffusionGui.Implementations
 
                         properties.Add(weightsPath);
 
-                        if (vae != null && vae.FullName.IsNotEmpty())
-                            properties.Add($"vae: {vae.FullName.Replace(dataPath, "../..").Wrap(true)}");
+                        // if (vae != null && vae.FullName.IsNotEmpty())
+                        //     properties.Add($"vae: {vae.FullName.Replace(dataPath, "../..").Wrap(true)}");
 
                         properties.Add($"width: {res}");
                         properties.Add($"height: {res}");

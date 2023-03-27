@@ -82,6 +82,8 @@ namespace StableDiffusionGui.Main
                     case Implementation.InstructPixToPix: tasks.Add(InstructPixToPix.Run(s.Prompts, s.NegativePrompt, s.Iterations, s.Params, tempOutDir)); break;
                 }
 
+                ImageExport.Init();
+
                 if (s.Implementation != Implementation.InvokeAi)
                     tasks.Add(ImageExport.ExportLoop(tempOutDir, CurrentTask.ImgCount, s.GetTargetImgCount()));
                 else

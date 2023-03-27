@@ -113,6 +113,7 @@ namespace StableDiffusionGui.Forms
         private void RefreshUiState()
         {
             Implementation imp = ConfigParser.CurrentImplementation;
+            comboxBackend.Text = Strings.Implementation.Get(imp.ToString());
 
             // Panel visibility
             SetVisibility(new Control[] { panelPromptNeg, panelEmbeddings, panelInitImgStrength, panelInpainting, panelScaleImg, panelRes, panelSampler, panelSeamless, panelSymmetry, checkboxHiresFix,

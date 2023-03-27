@@ -101,9 +101,9 @@ namespace StableDiffusionGui.Extensions
             return true;
         }
 
-        public static DialogResult ShowDialogForm(this Form form, IWin32Window owner = null)
+        public static DialogResult ShowDialogForm(this Form form)
         {
-            return form.ShowDialog(owner);
+            return form.ShowDialogSafe();
         }
 
         public static List<Control> GetControls(this Control control)
@@ -189,6 +189,33 @@ namespace StableDiffusionGui.Extensions
             return false;
         }
 
+        public static TResult InvokeIfNeeded<TResult>(this Control c, Func<TResult> method)
+        {
+            if (c.InvokeRequired)
+            {
+                if (c.Disposing || c.IsDisposed)
+                    return default(TResult);
+
+                return (TResult)c.Invoke(method);
+            }
+
+            return method();
+        }
+
+        public static void InvokeIfNeeded(this Control c, Action method)
+        {
+            if (c.InvokeRequired)
+            {
+                if (c.Disposing || c.IsDisposed)
+                    return;
+
+                c.Invoke(method);
+                return;
+            }
+
+            method();
+        }
+
         public static Image GetImageSafe (this PictureBox pictureBox)
         {
             if (pictureBox.InvokeRequired)
@@ -199,18 +226,26 @@ namespace StableDiffusionGui.Extensions
 
         public static void SetTextSafe(this Control control, string text)
         {
-            if (control.RequiresInvoke(new Action<string>(control.SetTextSafe), text))
-                return;
-
-            control.Text = text;
+            control.InvokeIfNeeded(() => control.Text = text);
         }
 
         public static void SetTooltipSafe(this ToolTip tooltip, Control control, string text)
         {
-            if (control.RequiresInvoke(new Action<Control, string>(tooltip.SetTooltipSafe), control, text))
-                return;
+            control.InvokeIfNeeded(() => tooltip.SetToolTip(control, text));
+        }
 
-            tooltip.SetToolTip(control, text);
+        public static void SetEnabled(this Control control, bool targetState)
+        {
+            control.InvokeIfNeeded(() =>
+            {
+                if (control.Enabled != targetState)
+                    control.Enabled = targetState;
+            });
+        }
+
+        public static DialogResult ShowDialogSafe(this Form form, IWin32Window owner = null)
+        {
+            return form.InvokeIfNeeded(() => form.ShowDialog(owner));
         }
     }
 }

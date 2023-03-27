@@ -58,8 +58,6 @@ namespace StableDiffusionGui.Main
 
         public static async Task ExportLoop(string imagesDir, int startingImgCount, int targetImgCount)
         {
-            Init();
-
             Logger.Log("ExportLoop START", true);
 
             await Task.Delay(_loopWaitBeforeStartMs);
@@ -110,8 +108,6 @@ namespace StableDiffusionGui.Main
 
         public static async Task WaitLoop(int startingImgCount, int targetImgCount)
         {
-            Init();
-
             Logger.Log("ExportLoop START", true);
 
             await Task.Delay(_loopWaitBeforeStartMs);
