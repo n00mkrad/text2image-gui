@@ -43,10 +43,10 @@ namespace StableDiffusionGui.Forms
             // Set categories
             _categoryPanels.Add(btnCollapseImplementation, new List<Panel> { panelBackend, panelModel });
             _categoryPanels.Add(btnCollapsePrompt, new List<Panel> { panelPrompt, panelPromptNeg, panelEmbeddings, panelAiInputs, panelInitImgStrength });
-            _categoryPanels.Add(btnCollapseDebug, new List<Panel> { panelDebugAppendArgs, panelDebugSendStdin, panelDebugPerlinThresh, panelDebugLoopback });
+            _categoryPanels.Add(btnCollapseGeneration, new List<Panel> { panelInpainting, panelIterations, panelSteps, panelScale, panelScaleImg, panelSeed });
             _categoryPanels.Add(btnCollapseRendering, new List<Panel> { panelRes, panelSampler });
             _categoryPanels.Add(btnCollapseSymmetry, new List<Panel> { panelSeamless, panelSymmetry });
-            _categoryPanels.Add(btnCollapseGeneration, new List<Panel> { panelInpainting, panelIterations, panelSteps, panelScale, panelScaleImg, panelSeed });
+            _categoryPanels.Add(btnCollapseDebug, new List<Panel> { panelDebugAppendArgs, panelDebugSendStdin, panelDebugPerlinThresh, panelDebugLoopback });
 
             // Store original heights
             // _categoryPanels.ToList().ForEach(pair => pair.Value.Cast<Panel>().ToList().ForEach(p => _panelHeights[p] = p.Height));
@@ -275,9 +275,7 @@ namespace StableDiffusionGui.Forms
             {
                 List<Panel> panels = _categoryPanels[collapseBtn];
                 bool show = overrideState != null ? (bool)overrideState : panels.Any(c => c.Height == 0);
-
                 panels.Where(p => p.Height > 0).ToList().ForEach(p => _panelHeights[p] = p.Height);
-
                 panels.ForEach(p => p.Height = show ? _panelHeights[p] : 0);
                 string catName = Strings.MainUiCategories.Get(collapseBtn.Name, true);
                 collapseBtn.Text = show ? $"Hide {catName}" : $"{catName}...";
