@@ -3,6 +3,7 @@ using StableDiffusionGui.MiscUtils;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 
 namespace StableDiffusionGui.Data
@@ -39,8 +40,11 @@ namespace StableDiffusionGui.Data
 
         public ImageMetadata(string path)
         {
-            if (string.IsNullOrWhiteSpace(path))
+            if (string.IsNullOrWhiteSpace(path) || !File.Exists(path))
+            {
+                Logger.Log($"Can't read metadata from invalid path (empty string or missing file): {path}", true);
                 return;
+            }
 
             Path = path;
 
