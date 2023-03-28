@@ -1,4 +1,5 @@
-﻿using HTAlt.WinForms;
+﻿using Dasync.Collections;
+using HTAlt.WinForms;
 using Microsoft.WindowsAPICodePack.Taskbar;
 using StableDiffusionGui.Data;
 using StableDiffusionGui.Extensions;
@@ -48,11 +49,8 @@ namespace StableDiffusionGui.Forms
             _categoryPanels.Add(btnCollapseSymmetry, new List<Panel> { panelSeamless, panelSymmetry });
             _categoryPanels.Add(btnCollapseDebug, new List<Panel> { panelDebugAppendArgs, panelDebugSendStdin, panelDebugPerlinThresh, panelDebugLoopback });
 
-            // Store original heights
-            // _categoryPanels.ToList().ForEach(pair => pair.Value.Cast<Panel>().ToList().ForEach(p => _panelHeights[p] = p.Height));
-
             // Expand default categories
-            _expandedCategories = new List<Control> { btnCollapseImplementation, btnCollapsePrompt, btnCollapseRendering, btnCollapseGeneration };
+            _expandedCategories = new List<Control> { btnCollapsePrompt, btnCollapseRendering, btnCollapseGeneration };
             _categoryPanels.Keys.ToList().ForEach(c => c.Click += (s, e) => CollapseToggle((Control)s));
             _categoryPanels.Keys.ToList().ForEach(c => CollapseToggle(c, _expandedCategories.Contains(c)));
 
@@ -140,7 +138,7 @@ namespace StableDiffusionGui.Forms
             ImageViewer.UpdateInitImgViewer();
             ResolutionChanged();
             UpdateModel();
-            _categoryPanels.Keys.ToList().ForEach(btn => btn.SetVisible(_categoryPanels[btn].Any(p => p.Visible))); // Hide collapse buttons if their category has 0 visible panels
+            _categoryPanels.Keys.ToList().ForEach(btn => btn.Parent.SetVisible(_categoryPanels[btn].Any(p => p.Visible))); // Hide collapse buttons if their category has 0 visible panels
 
             #endregion
         }
