@@ -265,6 +265,7 @@ namespace StableDiffusionGui.Io
             public const string LogStdin = "logStdin";
             public const string OfflineMode = "offlineMode";
             public const string SymmetryTimepoint = "symmetryTimepoint";
+            public const string ClipSkip = "clipSkip";
         }
     }
 }

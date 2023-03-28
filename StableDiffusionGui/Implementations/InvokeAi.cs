@@ -1,5 +1,6 @@
 ﻿using StableDiffusionGui.Data;
 using StableDiffusionGui.Extensions;
+using StableDiffusionGui.Forms;
 using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
@@ -13,6 +14,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
@@ -134,7 +136,7 @@ namespace StableDiffusionGui.Implementations
 
                 string modelsChecksumStartup = InvokeAiUtils.GetModelsHash();
                 string argsStartup = Args.InvokeAi.GetArgsStartup();
-                string newStartupSettings = $"{argsStartup} {modelsChecksumStartup} {Config.Get<int>(Config.Keys.CudaDeviceIdx)}"; // Check if startup settings match - If not, we need to restart the process
+                string newStartupSettings = $"{argsStartup} {modelsChecksumStartup} {Config.Get<int>(Config.Keys.CudaDeviceIdx)} {Config.Get<int>(Config.Keys.ClipSkip)}"; // Check if startup settings match - If not, we need to restart the process
 
                 Logger.Log(GetImageCountLogString(initImages, initStrengths, prompts, iterations, steps, scales, argLists));
 
@@ -144,6 +146,7 @@ namespace StableDiffusionGui.Implementations
                 if (!TtiProcess.IsAiProcessRunning || (TtiProcess.IsAiProcessRunning && TtiProcess.LastStartupSettings != newStartupSettings))
                 {
                     await InvokeAiUtils.WriteModelsYamlAll(modelFile, vaeFile, cachedModels, cachedModelsVae);
+                    Models.SetClipSkip(modelFile, Config.Get<int>(Config.Keys.ClipSkip));
                     if (TextToImage.Canceled) return;
 
                     Logger.Log($"(Re)starting InvokeAI. Process running: {TtiProcess.IsAiProcessRunning} - Prev startup string: '{TtiProcess.LastStartupSettings}' - New startup string: '{newStartupSettings}'", true);
@@ -198,7 +201,7 @@ namespace StableDiffusionGui.Implementations
                 else
                 {
                     TtiProcessOutputHandler.Reset();
-                    await SwitchModel(InvokeAiUtils.GetMdlNameForYaml(modelFile, vaeFile));
+                    await SwitchModel(modelFile, vaeFile);
                     TextToImage.CurrentTask.Processes.Add(TtiProcess.CurrentProcess);
                 }
 
@@ -330,10 +333,11 @@ namespace StableDiffusionGui.Implementations
             }
         }
 
-        public static async Task SwitchModel(string modelNameInYaml)
+        public static async Task SwitchModel(Model mdl, Model vae = null)
         {
             //NmkdStopwatch timeoutSw = new NmkdStopwatch();
-            await TtiProcess.WriteStdIn($"!switch {modelNameInYaml}");
+            Models.SetClipSkip(mdl, Config.Get<int>(Config.Keys.ClipSkip));
+            await TtiProcess.WriteStdIn($"!switch {InvokeAiUtils.GetMdlNameForYaml(mdl, vae)}");
 
             // Logger.Log("SwitchModel waiting...", true);
             // 

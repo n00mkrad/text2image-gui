@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Windows.Documents;
 using ZetaLongPaths;
 using static StableDiffusionGui.Main.Enums.Models;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
@@ -204,6 +203,58 @@ namespace StableDiffusionGui.Io
             }
 
             return (Enums.Models.Type)(-1);
+        }
+
+        public static void SetClipSkip(Model model, int layersToSkip = 1)
+        {
+            if(model.Format != Format.Diffusers)
+            {
+                Logger.Log($"Warning: Cannot apply CLIP Skip to this model because it is not a Diffusers model.");
+                return;
+            }
+
+            if (!Directory.Exists(model.FullName))
+            {
+                Logger.Log($"Clip Skip Patcher: Not a model directory: {model.FullName}", true);
+                return;
+            }
+
+            string jsonPath = Path.Combine(model.FullName, "text_encoder", "config.json");
+            string srcJsonPath = jsonPath + ".original";
+
+            if (!File.Exists(jsonPath))
+            {
+                Logger.Log($"Clip Skip Patcher: Can't find config json ({jsonPath})", true);
+                return;
+            }
+
+            try
+            {
+                if (!File.Exists(srcJsonPath))
+                    File.Move(jsonPath, srcJsonPath);
+
+                var lines = File.ReadAllLines(srcJsonPath);
+
+                for (int i = 0; i < lines.Length; i++)
+                {
+                    string line = lines[i];
+
+                    if (line.Trim().StartsWith("\"num_hidden_layers\": "))
+                    {
+                        int layers = line.Split(':').Last().GetInt(false);
+                        int newLayers = (layers - layersToSkip).Clamp(1, int.MaxValue);
+                        string newText = $"{line.Split("\"num_hidden_layers\": ")[0]}\"num_hidden_layers\": {newLayers},";
+                        lines[i] = newText;
+                        Logger.Log($"Clip Skip Patcher: Using {newLayers} out of {layers} layers (Skipping {layersToSkip})", true);
+                    }
+                }
+
+                File.WriteAllLines(jsonPath, lines);
+            }
+            catch(Exception ex)
+            {
+                Logger.LogException(ex);
+            }
         }
     }
 }
