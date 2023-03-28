@@ -207,7 +207,7 @@ namespace StableDiffusionGui.Io
 
         public static void SetClipSkip(Model model, int layersToSkip = 1)
         {
-            if(model.Format != Format.Diffusers)
+            if(layersToSkip > 0 && model.Format != Format.Diffusers)
             {
                 Logger.Log($"Warning: Cannot apply CLIP Skip to this model because it is not a Diffusers model.");
                 return;

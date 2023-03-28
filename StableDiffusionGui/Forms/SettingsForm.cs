@@ -49,6 +49,7 @@ namespace StableDiffusionGui.Forms
                 checkboxUnloadModel,
                 comboxSdModel, btnRefreshModelsDropdown, btnOpenModelsFolder,
                 comboxSdModelVae, btnRefreshModelsDropdownVae, btnOpenModelsFolderVae,
+                comboxClipSkip,
                 comboxCudaDevice,
                 textboxOutPath, btnOutPathBrowse,
                 checkboxFolderPerPrompt, checkboxOutputIgnoreWildcards, checkboxFolderPerSession,
@@ -159,6 +160,7 @@ namespace StableDiffusionGui.Forms
             //ConfigParser.LoadGuiElement(comboxSdModel, Config.Keys.Model);
             ConfigParser.LoadGuiElement(comboxSdModelVae, Config.Keys.ModelVae);
             // ConfigParser.LoadComboxIndex(comboxCudaDevice);
+            ConfigParser.LoadComboxIndex(comboxClipSkip, Config.Keys.ClipSkip);
             ConfigParser.LoadComboxIndex(comboxNotify, Config.Keys.NotifyModeIdx);
             ConfigParser.LoadGuiElement(checkboxSaveUnprocessedImages, Config.Keys.SaveUnprocessedImages);
             ConfigParser.LoadGuiElement(checkboxUnloadModel, Config.Keys.UnloadModel);
@@ -189,6 +191,7 @@ namespace StableDiffusionGui.Forms
             if (!string.IsNullOrWhiteSpace(comboxSdModel.Text)) ConfigParser.SaveGuiElement(comboxSdModel, Config.Keys.Model);
             if (!string.IsNullOrWhiteSpace(comboxSdModelVae.Text)) ConfigParser.SaveGuiElement(comboxSdModelVae, Config.Keys.ModelVae);
             if (!comboxCudaDevice.Text.StartsWith("Loading")) ConfigParser.SaveComboxIndex(comboxCudaDevice, Config.Keys.CudaDeviceIdx);
+            ConfigParser.SaveComboxIndex(comboxClipSkip, Config.Keys.ClipSkip);
             ConfigParser.SaveComboxIndex(comboxNotify, Config.Keys.NotifyModeIdx);
             ConfigParser.SaveGuiElement(checkboxSaveUnprocessedImages, Config.Keys.SaveUnprocessedImages);
             ConfigParser.SaveGuiElement(checkboxUnloadModel, Config.Keys.UnloadModel);
@@ -253,6 +256,7 @@ namespace StableDiffusionGui.Forms
                 panelCudaDevice.SetVisible(CurrImplementation.Supports(ImplementationInfo.Feature.DeviceSelection));
                 panelSdModel.SetVisible(CurrImplementation.Supports(ImplementationInfo.Feature.CustomModels));
                 panelVae.SetVisible(CurrImplementation.Supports(ImplementationInfo.Feature.CustomVae));
+                panelAdvancedOptsInvoke.SetVisible(CurrImplementation == Implementation.InvokeAi);
 
                 LoadModels();
 
