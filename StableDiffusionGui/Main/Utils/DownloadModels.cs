@@ -1,5 +1,4 @@
 ﻿using StableDiffusionGui.Io;
-using StableDiffusionGui.Os;
 using System.Diagnostics;
 using System.IO;
 
@@ -22,8 +21,8 @@ namespace StableDiffusionGui.Main.Utils
             }
 
             Logger.Log($"Downloading model to {savePath.Wrap()}.");
-            string args = $"/C title Downloading {modelId} && cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand(true, Paths.GetDataPath())} && " +
-                $"python {Constants.Dirs.SdRepo}\\scripts\\download_model.py -r {modelId.Wrap()} -c {cachePath.Wrap()} -s {savePath.Wrap()} && timeout 60";
+            string args = $"/C title Downloading {modelId} - Do not close this window! && cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand(true, Paths.GetDataPath())} && " +
+                $"python {Constants.Dirs.SdRepo}\\scripts\\download_model.py -r {modelId.Wrap()} -c {cachePath.Wrap()} -s {savePath.Wrap()} && timeout 3";
             Logger.Log($"cmd {args}", true);
             Process.Start("cmd", args);
         }
