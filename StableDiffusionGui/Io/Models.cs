@@ -237,7 +237,7 @@ namespace StableDiffusionGui.Io
             try
             {
                 if (!File.Exists(srcJsonPath))
-                    File.Move(jsonPath, srcJsonPath);
+                    File.Copy(jsonPath, srcJsonPath);
 
                 var lines = File.ReadAllLines(srcJsonPath);
 
