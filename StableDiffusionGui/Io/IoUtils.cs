@@ -823,5 +823,43 @@ namespace StableDiffusionGui.Io
             //     B       KiB     MiB     GiB
             return bytes / 1024f / 1024f / 1024f;
         }
+
+        public static void CopyDir(string sourceDir, string targetDir)
+        {
+            if (!Directory.Exists(sourceDir))
+                return;
+
+            DirectoryInfo source = new DirectoryInfo(sourceDir);
+            DirectoryInfo target = Directory.CreateDirectory(targetDir);
+
+            foreach (DirectoryInfo dir in source.GetDirectories())
+                CopyDir(dir.FullName, target.CreateSubdirectory(dir.Name).FullName);
+
+            foreach (FileInfo file in source.GetFiles())
+            {
+                string copyPath = Path.Combine(target.FullName, file.Name);
+                file.CopyTo(copyPath, true);
+            }
+        }
+
+        public static void MoveDir(string sourceDir, string targetDir)
+        {
+            if (!Directory.Exists(sourceDir))
+                return;
+
+            DirectoryInfo source = new DirectoryInfo(sourceDir);
+            DirectoryInfo target = Directory.CreateDirectory(targetDir);
+
+            foreach (DirectoryInfo dir in source.GetDirectories())
+                MoveDir(dir.FullName, target.CreateSubdirectory(dir.Name).FullName);
+
+            foreach (FileInfo file in source.GetFiles())
+            {
+                string movePath = Path.Combine(target.FullName, file.Name);
+
+                if (TryDeleteIfExists(movePath))
+                    file.MoveTo(movePath);
+            }
+        }
     }
 }

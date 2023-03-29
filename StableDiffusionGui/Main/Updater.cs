@@ -58,8 +58,8 @@ namespace StableDiffusionGui.Main
 
         private static string GetLaunchCmd (MdlRelease release)
         {
-            if(release.HashRepo == Setup.GitCommit) // Do not re-install dependencies
-                return $"{Paths.GetExe().Wrap()} -info=commit_matches";
+            if(release.HashRepo == Setup.GitCommit && InstallationStatus.IsInstalledBasic) // Do not re-install dependencies if they are installed and up-to-date
+                return $"{Paths.GetExe().Wrap()} -info=no_reinstall_necessary";
 
             bool onnx = InstallationStatus.HasOnnx();
             bool up = InstallationStatus.HasSdUpscalers();
@@ -150,8 +150,8 @@ namespace StableDiffusionGui.Main
 
             if (repoAndVenv)
             {
-                Directory.Move(Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdRepo), Path.Combine(targetDataDir, Constants.Dirs.SdRepo));
-                Directory.Move(Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdVenv), Path.Combine(targetDataDir, Constants.Dirs.SdVenv));
+                IoUtils.MoveDir(Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdRepo), Path.Combine(targetDataDir, Constants.Dirs.SdRepo));
+                IoUtils.MoveDir(Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdVenv), Path.Combine(targetDataDir, Constants.Dirs.SdVenv));
             }
 
             if (config)
@@ -179,7 +179,8 @@ namespace StableDiffusionGui.Main
             if (!source.Contains(Paths.GetExeDir()))
                 return;
 
-            Directory.Move(source, target);
+            Logger.Log($"Directory Move: {source} => {target}", true, false, Constants.Lognames.Installer);
+            IoUtils.MoveDir(source, target);
         }
 
         private static void MoveFileIfInsideInstallFolder(string source, string target)
@@ -189,6 +190,7 @@ namespace StableDiffusionGui.Main
             if (!source.Contains(Paths.GetExeDir()))
                 return;
 
+            Logger.Log($"File Move: {source} => {target}", true, false, Constants.Lognames.Installer);
             File.Move(source, target);
         }
 
