@@ -113,7 +113,7 @@ namespace StableDiffusionGui.Forms
         private void LoadModels()
         {
             comboxBaseModel.Items.Clear();
-            Models.GetModels().ForEach(x => comboxBaseModel.Items.Add(x.Name));
+            Models.GetModels().Where(m => m.Type == Enums.Models.Type.Normal && m.Format == Enums.Models.Format.Pytorch).ToList().ForEach(x => comboxBaseModel.Items.Add(x.Name));
 
             if (comboxBaseModel.SelectedIndex < 0 && comboxBaseModel.Items.Count > 0)
                 comboxBaseModel.SelectedIndex = 0;
@@ -133,6 +133,14 @@ namespace StableDiffusionGui.Forms
                 return;
             }
 
+            Model baseModel = Models.GetModel(comboxBaseModel.Text);
+
+            if (baseModel == null)
+            {
+                UiUtils.ShowMessageBox("Invalid model selection.");
+                return;
+            }
+
             if (!Directory.Exists(textboxTrainImgsDir.Text.Trim()))
             {
                 UiUtils.ShowMessageBox("Invalid training directory.");
@@ -142,14 +150,6 @@ namespace StableDiffusionGui.Forms
             if (string.IsNullOrWhiteSpace(textboxClassName.Text.Trim()))
             {
                 UiUtils.ShowMessageBox("Please enter a class name.");
-                return;
-            }
-
-            Model baseModel = Models.GetModel(comboxBaseModel.Text);
-
-            if (baseModel == null)
-            {
-                UiUtils.ShowMessageBox("Invalid model selection.");
                 return;
             }
 
