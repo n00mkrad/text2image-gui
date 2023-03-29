@@ -59,7 +59,7 @@ namespace StableDiffusionGui.Main
         private static string GetLaunchCmd (MdlRelease release)
         {
             if(release.HashRepo == Setup.GitCommit) // Do not re-install dependencies
-                return Paths.GetExe().Wrap();
+                return $"{Paths.GetExe().Wrap()} -info=commit_matches";
 
             bool onnx = InstallationStatus.HasOnnx();
             bool up = InstallationStatus.HasSdUpscalers();
