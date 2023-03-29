@@ -53,7 +53,7 @@ namespace StableDiffusionGui.Implementations
                 var cachedModels = allModels.Where(m => m.Type == Enums.Models.Type.Normal).ToList();
                 var cachedModelsVae = allModels.Where(m => m.Type == Enums.Models.Type.Vae).ToList();
                 Model modelFile = TtiUtils.CheckIfCurrentSdModelExists();
-                Model vaeFile = Models.GetModel(cachedModelsVae, vae, false, Enums.Models.Type.Vae);
+                Model vaeFile = Models.GetModel(cachedModelsVae, vae);
                 if (TextToImage.Canceled) return;
 
                 OrderedDictionary initImages = initImgs != null && initImgs.Length > 0 ? await TtiUtils.CreateResizedInitImagesIfNeeded(initImgs.ToList(), res, resizeGravity) : null;
@@ -250,7 +250,7 @@ namespace StableDiffusionGui.Implementations
             var cachedModels = Models.GetModels(Enums.Models.Type.Normal);
             var cachedModelsVae = Models.GetModels(Enums.Models.Type.Vae);
             Model modelFile = TtiUtils.CheckIfCurrentSdModelExists();
-            Model vaeFile = Models.GetModel(cachedModelsVae, Path.GetFileName(vaePath), false, Enums.Models.Type.Vae);
+            Model vaeFile = Models.GetModel(cachedModelsVae, Path.GetFileName(vaePath));
 
             if (modelFile == null)
                 return;

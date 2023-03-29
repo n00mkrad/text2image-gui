@@ -78,7 +78,7 @@ namespace StableDiffusionGui.Forms
             if (comboxModel.Text == "None")
                 return true;
 
-            return Models.GetModel(comboxModel.Text.Trim(), false, _modelType, _implementation) != null;
+            return Models.GetModel(comboxModel.Text.Trim(), _modelType, _implementation) != null;
         }
     }
 }

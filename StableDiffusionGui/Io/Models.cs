@@ -101,12 +101,18 @@ namespace StableDiffusionGui.Io
             return distinctOrderedList;
         }
 
-        public static Model GetModel(string filename, bool anyExtension = false, Enums.Models.Type type = Enums.Models.Type.Normal, Implementation imp = Implementation.InvokeAi)
+        public static Model GetModel(List<Model> cachedModels, string filename, Enums.Models.Type type = Enums.Models.Type.Normal, Implementation imp = Implementation.InvokeAi)
+        {
+            Format[] supportedFormats = imp.GetInfo().SupportedModelFormats;
+            return cachedModels.Where(m => m.Name == filename && m.Type == type && supportedFormats.Contains(m.Format)).FirstOrDefault();
+        }
+
+        public static Model GetModel(string filename, Enums.Models.Type type = Enums.Models.Type.Normal, Implementation imp = Implementation.InvokeAi)
         {
             return GetModels(type, imp).Where(x => x.Name == filename).FirstOrDefault();
         }
 
-        public static Model GetModel(List<Model> cachedModels, string filename, bool anyExtension = false, Enums.Models.Type type = Enums.Models.Type.Normal, Implementation imp = Implementation.InvokeAi)
+        public static Model GetModel(List<Model> cachedModels, string filename)
         {
             return cachedModels.Where(x => x.Name == filename).FirstOrDefault();
         }
@@ -244,7 +250,7 @@ namespace StableDiffusionGui.Io
                         int layers = line.Split(':').Last().GetInt(false);
                         int newLayers = (layers - layersToSkip).Clamp(1, int.MaxValue);
 
-                        if (layers == newLayers) // Already set to the right value, avoid unnecessary I/O
+                        if (layers == newLayers) // Already set to the right value, return to avoid unnecessary I/O
                             return;
 
                         string newText = $"{line.Split("\"num_hidden_layers\": ")[0]}\"num_hidden_layers\": {newLayers},";
@@ -259,6 +265,14 @@ namespace StableDiffusionGui.Io
             {
                 Logger.LogException(ex);
             }
+        }
+
+        public static bool HasAnyInpaintingModels (IEnumerable<Model> models = null)
+        {
+            if (models == null)
+                models = GetModelsAll();
+
+            return models.Any(m => m.FormatIndependentName.Lower().EndsWith("inpainting"));
         }
     }
 }

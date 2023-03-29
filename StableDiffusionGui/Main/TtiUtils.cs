@@ -152,7 +152,7 @@ namespace StableDiffusionGui.Main
             }
             else
             {
-                var model = cachedModels == null ? Models.GetModel(name, false, Enums.Models.Type.Normal, imp) : Models.GetModel(cachedModels, name, false, Enums.Models.Type.Normal, imp);
+                var model = cachedModels == null ? Models.GetModel(name, Enums.Models.Type.Normal, imp) : Models.GetModel(cachedModels, name, Enums.Models.Type.Normal, imp);
 
                 if (model == null)
                 {
@@ -174,7 +174,7 @@ namespace StableDiffusionGui.Main
             if (string.IsNullOrWhiteSpace(name))
                 return false;
 
-            var model = cachedModels == null ? Models.GetModel(name, false, Enums.Models.Type.Normal, imp) : Models.GetModel(cachedModels, name, false, Enums.Models.Type.Normal, imp);
+            var model = cachedModels == null ? Models.GetModel(name, Enums.Models.Type.Normal, imp) : Models.GetModel(cachedModels, name, Enums.Models.Type.Normal, imp);
 
             return model != null;
         }
