@@ -245,7 +245,7 @@ namespace StableDiffusionGui.Io
             public const string UnloadModel = "unloadModel";
             public const string PrunePrecisionIdx = "prunePrecisionIdx";
             public const string PruneDeleteInput = "pruneDeleteInput";
-            public const string CustomModelDirsPfx = "customModelDirs";
+            public const string CustomModelDirs = "customModelDirs";
             public const string MotdShownVersion = "motdShownVersion";
             public const string HideMotd = "hideMotd";
             public const string SafeModels = "safeModels";

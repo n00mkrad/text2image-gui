@@ -23,7 +23,7 @@ namespace StableDiffusionGui.Io
 
             foreach (Enums.Models.Type type in Enum.GetValues(typeof(Enums.Models.Type)).Cast<Enums.Models.Type>())
             {
-                List<string> customModelDirsList = Config.Get<List<string>>($"{Config.Keys.CustomModelDirsPfx}{type}");
+                List<string> customModelDirsList = Config.Get<List<string>>(Config.Keys.CustomModelDirs);
 
                 if (customModelDirsList != null)
                     mdlFolders.AddRange(customModelDirsList, out mdlFolders);
