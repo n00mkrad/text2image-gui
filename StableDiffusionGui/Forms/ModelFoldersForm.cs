@@ -47,7 +47,7 @@ namespace StableDiffusionGui.Forms
 
         private void SaveDirs()
         {
-            Config.Set(Config.Keys.CustomModelDirsPfx, Folders.Where(x => x != Paths.GetModelsPath()).Select(s => s.Replace(@"\", "/")).ToList());
+            Config.Set(Config.Keys.CustomModelDirsPfx, Folders.Where(dir => dir != Paths.GetModelsPath() && Directory.Exists(dir)).Select(s => s.Replace(@"\", "/")).ToList());
         }
 
         private void FillList()
