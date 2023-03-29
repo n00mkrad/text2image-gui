@@ -30,7 +30,8 @@ namespace StableDiffusionGui.Forms
             }
             else
             {
-                CommonOpenFileDialog dialog = new CommonOpenFileDialog { InitialDirectory = MainUi.CurrentInitImgPaths?[0].GetParentDirOfFile(), IsFolderPicker = false, Multiselect = true };
+                string initDir = MainUi.CurrentInitImgPaths.Any() ? MainUi.CurrentInitImgPaths[0].GetParentDirOfFile() : Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+                CommonOpenFileDialog dialog = new CommonOpenFileDialog { RestoreDirectory = false, InitialDirectory = initDir, IsFolderPicker = false, Multiselect = true };
 
                 if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
                 {
