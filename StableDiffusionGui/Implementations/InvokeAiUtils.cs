@@ -218,7 +218,7 @@ namespace StableDiffusionGui.Implementations
 
                 if(!transparency && (img.Width <= res.Height || img.Height <= res.Height))
                 {
-                    Logger.Log($"Can't apply outpainting because the output {res.AsString()} resolution is not bigger than the input ({img.Size.AsString()}), and the input image has no transparent regions.\n" +
+                    Logger.Log($"Can't apply outpainting because the output resolution ({res.AsString()}) is not bigger than the input ({img.Size.AsString()}), and the input image has no transparent regions.\n" +
                         $"Either increase the output resolution to be bigger than the input, or add a transparent border to your input image with an image editor.");
                     return false;
                 }

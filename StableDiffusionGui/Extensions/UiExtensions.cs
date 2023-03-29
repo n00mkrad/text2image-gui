@@ -146,12 +146,23 @@ namespace StableDiffusionGui.Extensions
             control.Refresh();
         }
 
-        public static void RunWithUiStopped(this Action action, Form form, bool dontPauseInDebugMode = false)
+        public static void RunWithUiStopped(this Action action, Form form, string errorPrefix = "", bool dontPauseInDebugMode = false)
         {
             if (!(dontPauseInDebugMode && Program.Debug))
                 form.StopRendering();
 
-            action.RunInTryCatch();
+            action.RunInTryCatch(errorPrefix);
+
+            if (!(dontPauseInDebugMode && Program.Debug))
+                form.ResumeRendering();
+        }
+
+        public static void RunWithUiStoppedShowErrors(this Action action, Form form, string errorPrefix = "", bool dontPauseInDebugMode = false)
+        {
+            if (!(dontPauseInDebugMode && Program.Debug))
+                form.StopRendering();
+
+            action.RunInTryCatch(errorPrefix, errorPrefix);
 
             if (!(dontPauseInDebugMode && Program.Debug))
                 form.ResumeRendering();

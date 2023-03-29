@@ -593,7 +593,7 @@ namespace StableDiffusionGui
             return myEnum.Equals(Enum.ToObject(typeof(TEnum), -1));
         }
 
-        public static void RunInTryCatch(this Action action, string logPrefix = "")
+        public static void RunInTryCatch(this Action action, string errorPrefix = "", string guiErrorPrefix = "")
         {
             try
             {
@@ -601,7 +601,10 @@ namespace StableDiffusionGui
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex, true, logPrefix.IsNotEmpty() ? $"{logPrefix} " : "");
+                if (guiErrorPrefix.IsNotEmpty())
+                    Logger.Log($"{guiErrorPrefix}: {ex.Message}");
+
+                Logger.LogException(ex, true, errorPrefix.IsNotEmpty() ? $"{errorPrefix} " : "");
             }
         }
     }

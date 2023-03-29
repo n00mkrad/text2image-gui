@@ -1,5 +1,6 @@
 ﻿using StableDiffusionGui.Controls;
 using StableDiffusionGui.Data;
+using StableDiffusionGui.Extensions;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
@@ -48,27 +49,23 @@ namespace StableDiffusionGui.Forms
             textboxPromptNeg.Text = s.NegativePrompt;
             upDownIterations.Value = s.Iterations;
 
-            try
+            ((Action)(() =>
             {
                 SetSliderValues(s.Params.FromJson<List<float>>("steps"), true, sliderSteps, textboxExtraSteps);
                 SetSliderValues(s.Params.FromJson<List<float>>("scales"), false, sliderScale, textboxExtraScales);
                 SetSliderValues(s.Params.FromJson<List<float>>("scalesImg"), false, sliderScaleImg, textboxExtraScalesImg);
-                comboxResW.Text = s.Params.Get("res").FromJson<Size>().Width.ToString();
-                comboxResH.Text = s.Params.Get("res").FromJson<Size>().Height.ToString();
+                MainUi.CurrentInitImgPaths = s.Params.Get("initImgs").FromJson<List<string>>();
+                Size res = s.Params.Get("res").FromJson<Size>();
+                comboxResW.Text = res.Width.ToString();
+                comboxResH.Text = res.Height.ToString();
                 upDownSeed.Value = s.Params.Get("seed").FromJson<long>();
                 comboxSampler.SetIfTextMatches(s.Params.Get("sampler").FromJson<string>(), true, Strings.Samplers);
-                MainUi.CurrentInitImgPaths = s.Params.Get("initImgs").FromJson<List<string>>();
                 SetSliderValues(s.Params.FromJson<List<float>>("initStrengths"), false, sliderInitStrength, textboxExtraInitStrengths);
                 comboxSeamless.SetIfTextMatches(s.Params.Get("seamless").FromJson<string>(), true, Strings.SeamlessMode);
                 comboxInpaintMode.SelectedIndex = (int)s.Params.Get("inpainting").FromJson<InpaintMode>();
                 checkboxHiresFix.Checked = s.Params.Get("hiresFix").FromJson<bool>();
                 checkboxLockSeed.Checked = s.Params.Get("lockSeed").FromJson<bool>();
-            }
-            catch (Exception ex)
-            {
-                Logger.Log($"Failed to load generation settings. This can happen when you try to load prompts from an older version. ({ex.Message})");
-                Logger.Log(ex.StackTrace, true);
-            }
+            })).RunWithUiStoppedShowErrors(this, "Error loading image generation settings:");
 
             TryRefreshUiState();
         }
