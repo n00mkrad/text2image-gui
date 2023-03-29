@@ -207,6 +207,7 @@ namespace StableDiffusionGui.Forms
             this.menuStripInstall = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.manageInstallationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.installUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.downloadHuggingfaceModelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStripOutputImg.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.upDownSeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
@@ -642,7 +643,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderScale.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScale.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScale.Location = new System.Drawing.Point(308, 2);
+            this.textboxSliderScale.Location = new System.Drawing.Point(308, 4);
             this.textboxSliderScale.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScale.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScale.Name = "textboxSliderScale";
@@ -789,7 +790,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderInitStrength.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderInitStrength.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderInitStrength.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderInitStrength.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderInitStrength.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderInitStrength.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderInitStrength.Name = "textboxSliderInitStrength";
@@ -1309,7 +1310,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderScaleImg.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScaleImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScaleImg.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScaleImg.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderScaleImg.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderScaleImg.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScaleImg.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScaleImg.Name = "textboxSliderScaleImg";
@@ -1611,10 +1612,11 @@ namespace StableDiffusionGui.Forms
             this.openCmdInPythonEnvironmentToolStripMenuItem,
             this.openModelMergeToolToolStripMenuItem,
             this.openModelPruningTrimmingToolToolStripMenuItem,
-            this.convertModelsToolStripMenuItem});
+            this.convertModelsToolStripMenuItem,
+            this.downloadHuggingfaceModelToolStripMenuItem});
             this.menuStripDevTools.Name = "menuStripDevTools";
             this.menuStripDevTools.ShowImageMargin = false;
-            this.menuStripDevTools.Size = new System.Drawing.Size(234, 114);
+            this.menuStripDevTools.Size = new System.Drawing.Size(234, 158);
             // 
             // openCliToolStripMenuItem
             // 
@@ -1784,7 +1786,7 @@ namespace StableDiffusionGui.Forms
             this.textboxThresh.Location = new System.Drawing.Point(470, 0);
             this.textboxThresh.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxThresh.Name = "textboxThresh";
-            this.textboxThresh.Size = new System.Drawing.Size(100, 21);
+            this.textboxThresh.Size = new System.Drawing.Size(100, 20);
             this.textboxThresh.TabIndex = 108;
             this.textboxThresh.Text = "0";
             // 
@@ -1833,7 +1835,7 @@ namespace StableDiffusionGui.Forms
             this.textboxPerlin.Location = new System.Drawing.Point(299, 0);
             this.textboxPerlin.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxPerlin.Name = "textboxPerlin";
-            this.textboxPerlin.Size = new System.Drawing.Size(100, 21);
+            this.textboxPerlin.Size = new System.Drawing.Size(100, 20);
             this.textboxPerlin.TabIndex = 4;
             this.textboxPerlin.Text = "0.0";
             // 
@@ -2250,7 +2252,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderSteps.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderSteps.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderSteps.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderSteps.Location = new System.Drawing.Point(308, 2);
+            this.textboxSliderSteps.Location = new System.Drawing.Point(308, 4);
             this.textboxSliderSteps.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderSteps.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderSteps.Name = "textboxSliderSteps";
@@ -2790,6 +2792,13 @@ namespace StableDiffusionGui.Forms
             this.installUpdatesToolStripMenuItem.Text = "Install Updates";
             this.installUpdatesToolStripMenuItem.Click += new System.EventHandler(this.installUpdatesToolStripMenuItem_Click);
             // 
+            // downloadHuggingfaceModelToolStripMenuItem
+            // 
+            this.downloadHuggingfaceModelToolStripMenuItem.Name = "downloadHuggingfaceModelToolStripMenuItem";
+            this.downloadHuggingfaceModelToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
+            this.downloadHuggingfaceModelToolStripMenuItem.Text = "Download Huggingface Model";
+            this.downloadHuggingfaceModelToolStripMenuItem.Click += new System.EventHandler(this.downloadHuggingfaceModelToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AllowDrop = true;
@@ -3088,6 +3097,7 @@ namespace StableDiffusionGui.Forms
         public System.Windows.Forms.Panel panelCollapseGeneration;
         public System.Windows.Forms.Panel panelCollapsePrompt;
         public System.Windows.Forms.Panel panelCollapseImplementation;
+        private System.Windows.Forms.ToolStripMenuItem downloadHuggingfaceModelToolStripMenuItem;
     }
 }
 

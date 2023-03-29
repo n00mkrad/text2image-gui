@@ -331,6 +331,7 @@
     <Compile Include="Main\TtiProcessOutputHandler.cs" />
     <Compile Include="Main\Updater.cs" />
     <Compile Include="Main\Utils\ConvertModels.cs" />
+    <Compile Include="Main\Utils\DownloadModels.cs" />
     <Compile Include="MiscUtils\GaussianBlur.cs" />
     <Compile Include="MiscUtils\ImgMaths.cs" />
     <Compile Include="MiscUtils\ImgUtils.cs" />

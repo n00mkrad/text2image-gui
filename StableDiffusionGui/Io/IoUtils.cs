@@ -596,32 +596,6 @@ namespace StableDiffusionGui.Io
             }
         }
 
-        public static long GetDiskSpace(string path, bool mbytes = true)
-        {
-            try
-            {
-                string driveLetter = path.Substring(0, 2);      // Make 'C:/some/random/path' => 'C:' etc
-                DriveInfo[] allDrives = DriveInfo.GetDrives();
-
-                foreach (DriveInfo d in allDrives)
-                {
-                    if (d.IsReady && d.Name.StartsWith(driveLetter))
-                    {
-                        if (mbytes)
-                            return (long)(d.AvailableFreeSpace / 1024f / 1000f);
-                        else
-                            return d.AvailableFreeSpace;
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                Logger.Log("Error trying to get disk space: " + e.Message, true);
-            }
-
-            return 0;
-        }
-
         public static string[] GetUniqueExtensions(string path, bool recursive = false)
         {
             ZlpFileInfo[] fileInfos = GetFileInfosSorted(path, recursive);
@@ -821,6 +795,33 @@ namespace StableDiffusionGui.Io
             }
 
             return filePath;
+        }
+
+        /// <summary> Gets available disk space from <paramref name="path"/>. Anything after the drive letter is ignored. </summary>
+        /// <returns> Free disk space in bytes, or <paramref name="fallbackValue"/> if an exception occurs </returns>
+        public static long GetFreeDiskSpace(string path, long fallbackValue = -1)
+        {
+            try
+            {
+                string driveLetter = Path.GetPathRoot(path);
+                return new DriveInfo(driveLetter).AvailableFreeSpace;
+            }
+            catch (Exception ex)
+            {
+                Logger.LogException(ex);
+                return fallbackValue;
+            }
+        }
+
+        public static float GetFreeDiskSpaceGb(string path, float fallbackValue = -1.0f)
+        {
+            long bytes = GetFreeDiskSpace(path, -1);
+
+            if (bytes == -1)
+                return fallbackValue;
+
+            //     B       KiB     MiB     GiB
+            return bytes / 1024f / 1024f / 1024f;
         }
     }
 }

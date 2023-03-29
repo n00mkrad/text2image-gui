@@ -4,6 +4,7 @@ using StableDiffusionGui.Implementations;
 using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
+using StableDiffusionGui.Main.Utils;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
@@ -521,6 +522,13 @@ namespace StableDiffusionGui.Forms
         private void btnResetRes_Click(object sender, EventArgs e)
         {
             MainUi.SetResolutionForInitImage(MainUi.CurrentInitImgPaths.FirstOrDefault());
+        }
+
+        private void downloadHuggingfaceModelToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var form = new PromptForm("Enter Model ID", "Enter a model repository ID (for example \"runwayml/stable-diffusion-v1-5\").", "");
+            form.ShowDialog();
+            DownloadModels.DownloadModel(form.EnteredText.Trim());
         }
     }
 }
