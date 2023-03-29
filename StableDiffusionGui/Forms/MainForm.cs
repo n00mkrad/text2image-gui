@@ -526,9 +526,7 @@ namespace StableDiffusionGui.Forms
 
         private void downloadHuggingfaceModelToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var form = new PromptForm("Enter Model ID", "Enter a model repository ID (for example \"runwayml/stable-diffusion-v1-5\").", "");
-            form.ShowDialog();
-            DownloadModels.DownloadModel(form.EnteredText.Trim());
+            ModelDownloadPrompt();
         }
     }
 }

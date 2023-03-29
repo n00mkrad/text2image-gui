@@ -3,6 +3,7 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 using StableDiffusionGui.Extensions;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
+using StableDiffusionGui.Main.Utils;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Ui;
 using System;
@@ -199,6 +200,15 @@ namespace StableDiffusionGui.Forms
             img = ImgUtils.ScaleAndPad(ImgUtils.GetMagickImage(img), scaleSize, targetSize).ToBitmap();
 
             Inpainting.EditCurrentMask(img, IsUsingInpaintingModel);
+        }
+
+        public void ModelDownloadPrompt(string text = "")
+        {
+            var form = new PromptForm("Enter Model ID", "Enter a model repository ID\n(Example: \"runwayml/stable-diffusion-v1-5\").", text);
+            form.ShowDialog();
+
+            if (form.DialogResult == DialogResult.OK)
+                DownloadModels.DownloadModel(form.EnteredText.Trim());
         }
     }
 }

@@ -5,6 +5,7 @@ using StableDiffusionGui.Implementations;
 using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
+using StableDiffusionGui.Main.Utils;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Properties;
@@ -199,20 +200,32 @@ namespace StableDiffusionGui.Ui
 
         public static void HandlePaste()
         {
-            try
+            if (!Clipboard.ContainsImage())
             {
-                Image clipboardImg = Clipboard.GetImage();
-
-                if (clipboardImg == null)
-                    return;
-
-                string savePath = Paths.GetClipboardPath(".png");
-                clipboardImg.Save(savePath);
-                HandleDroppedFiles(new string[] { savePath });
+                ((Action)(() =>
+                {
+                    string text = Clipboard.GetText();
+                    if (text.Trim().Contains("//huggingface.co/"))
+                    {
+                        var split = text.Split("huggingface.co/").Last().Split('/'); // Remove domain name, then split by slashes
+                        string repo = $"{split[0]}/{split[1]}"; // Take username and repo name, ignore anything after that (e.g. "/tree/main" would be ignored)
+                        Program.MainForm.ModelDownloadPrompt(repo);
+                    }
+                })).RunInTryCatch("HandlePaste Text Error:");
             }
-            catch (Exception ex)
+            else
             {
-                Logger.Log($"Failed to paste image from clipboard: {ex.Message}\n{ex.StackTrace}", true);
+                ((Action)(() =>
+                {
+                    Image clipboardImg = Clipboard.GetImage();
+
+                    if (clipboardImg == null)
+                        return;
+
+                    string savePath = Paths.GetClipboardPath(".png");
+                    clipboardImg.Save(savePath);
+                    HandleDroppedFiles(new string[] { savePath });
+                })).RunInTryCatch("HandlePaste Image Error:");
             }
         }
 
