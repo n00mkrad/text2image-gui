@@ -91,6 +91,7 @@ namespace StableDiffusionGui.Installation
             File.WriteAllText(batPath, $"@echo off\n" +
                 $"cd /D {Paths.GetDataPath().Wrap()}\n" +
                 $"SET PATH={OsUtils.GetPathVar(new string[] { $@".\{Constants.Dirs.SdVenv}\Scripts", $@".\{Constants.Dirs.Python}\Scripts", $@".\{Constants.Dirs.Python}", $@".\{Constants.Dirs.Git}\cmd" })}\n" +
+                $"SET HOME={Path.Combine(Paths.GetDataPath(), Constants.Dirs.Git, "home")}\n" +
                 $"python -m virtualenv {Constants.Dirs.SdVenv}\n" +
                 $"{Constants.Dirs.SdRepo}\\install-venv-deps.bat {(installOnnx ? $"&& {Constants.Dirs.SdRepo}\\install-venv-deps-onnx.bat" : "")}\n" +
                 $"");
