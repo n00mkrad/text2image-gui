@@ -1,4 +1,5 @@
-﻿using StableDiffusionGui.Installation;
+﻿using StableDiffusionGui.Data;
+using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Os;
 using System;
@@ -12,7 +13,7 @@ namespace StableDiffusionGui.Main
     {
         public class InvokeAi
         {
-            public static string GetArgsStartup()
+            public static string GetArgsStartup(List<Model> cachedModels)
             {
                 List<string> args = new List<string>();
 
@@ -46,9 +47,12 @@ namespace StableDiffusionGui.Main
                 if (Config.Get<bool>(Config.Keys.OfflineMode, false))
                     args.Add($"--no-internet");
 
+                if (Models.HasAnyInpaintingModels(cachedModels, Enums.StableDiffusion.Implementation.InvokeAi))
+                    args.Add($"--no-patchmatch"); // Disable patchmatch (used for legacy inpainting) if there are any native inpainting models available
+
                 args.Add($"--embedding_path {Path.Combine(Paths.GetDataPath(), Constants.Dirs.Models.Root, Constants.Dirs.Models.Embeddings)}"); // Embeddings folder path
                 args.Add("--no-nsfw_checker"); // Disable NSFW checker (might become optional in the future)
-                // args.Add($"--no-patchmatch"); // Disable patchmatch (might become optional if outpainting is implemented)
+
                 args.Add("--no-xformers"); // Disable xformers until Pytorch >1.11 slowdown is investigated and xformers works
                 args.Add("--png_compression 1"); // Higher compression levels are barely worth it
 

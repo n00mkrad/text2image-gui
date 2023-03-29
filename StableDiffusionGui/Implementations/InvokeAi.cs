@@ -135,7 +135,7 @@ namespace StableDiffusionGui.Implementations
                 Logger.Log($"Running Stable Diffusion - {iterations} Iterations, {steps.Length} Steps, Scales {(scales.Length < 4 ? string.Join(", ", scales.Select(x => x.ToStringDot())) : $"{scales.First()}->{scales.Last()}")}, {res.Width}x{res.Height}, Starting Seed: {startSeed}", false, Logger.LastUiLine.EndsWith("..."));
 
                 string modelsChecksumStartup = InvokeAiUtils.GetModelsHash();
-                string argsStartup = Args.InvokeAi.GetArgsStartup();
+                string argsStartup = Args.InvokeAi.GetArgsStartup(cachedModels);
                 string newStartupSettings = $"{argsStartup} {modelsChecksumStartup} {Config.Get<int>(Config.Keys.CudaDeviceIdx)} {Config.Get<int>(Config.Keys.ClipSkip)}"; // Check if startup settings match - If not, we need to restart the process
 
                 Logger.Log(GetImageCountLogString(initImages, initStrengths, prompts, iterations, steps, scales, argLists));
@@ -247,8 +247,9 @@ namespace StableDiffusionGui.Implementations
                 return;
 
             TextToImage.Canceled = false;
-            var cachedModels = Models.GetModels(Enums.Models.Type.Normal);
-            var cachedModelsVae = Models.GetModels(Enums.Models.Type.Vae);
+            var allModels = Models.GetModelsAll();
+            var cachedModels = allModels.Where(m => m.Type == Enums.Models.Type.Normal).ToList();
+            var cachedModelsVae = allModels.Where(m => m.Type == Enums.Models.Type.Vae).ToList();
             Model modelFile = TtiUtils.CheckIfCurrentSdModelExists();
             Model vaeFile = Models.GetModel(cachedModelsVae, Path.GetFileName(vaePath));
 
@@ -264,7 +265,7 @@ namespace StableDiffusionGui.Implementations
                 $"title Stable Diffusion CLI (InvokeAI)\n" +
                 $"cd /D {Paths.GetDataPath().Wrap()}\n" +
                 $"{TtiUtils.GetEnvVarsSdCommand()}\n" +
-                $"python {Constants.Dirs.SdRepo}/invoke/scripts/invoke.py --model {InvokeAiUtils.GetMdlNameForYaml(modelFile, vaeFile)} -o {outPath.Wrap(true)} {Args.InvokeAi.GetArgsStartup()}";
+                $"python {Constants.Dirs.SdRepo}/invoke/scripts/invoke.py --model {InvokeAiUtils.GetMdlNameForYaml(modelFile, vaeFile)} -o {outPath.Wrap(true)} {Args.InvokeAi.GetArgsStartup(cachedModels)}";
 
             File.WriteAllText(batPath, batText);
             Process cli = Process.Start(batPath);

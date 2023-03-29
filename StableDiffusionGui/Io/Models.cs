@@ -267,10 +267,16 @@ namespace StableDiffusionGui.Io
             }
         }
 
-        public static bool HasAnyInpaintingModels (IEnumerable<Model> models = null)
+        public static bool HasAnyInpaintingModels (IEnumerable<Model> models = null, Implementation imp = (Implementation)(-1))
         {
             if (models == null)
                 models = GetModelsAll();
+
+            if(imp != (Implementation)(-1))
+            {
+                Format[] supportedFormats = imp.GetInfo().SupportedModelFormats;
+                models = models.Where(m => supportedFormats.Contains(m.Format));
+            }
 
             return models.Any(m => m.FormatIndependentName.Lower().EndsWith("inpainting"));
         }
