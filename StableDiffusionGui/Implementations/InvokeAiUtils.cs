@@ -211,7 +211,7 @@ namespace StableDiffusionGui.Implementations
 
         public static bool ValidateCommand (EasyDict<string, string> args, Size res)
         {
-            if(args.Values.Any(v => v == "--force_outpaint"))
+            if(args.Values.Contains("--force_outpaint"))
             {
                 Bitmap img = (Bitmap)IoUtils.GetImage(args["initImg"].Split('"')[1]);
                 bool transparency = ImgUtils.IsPartiallyTransparent(img);
