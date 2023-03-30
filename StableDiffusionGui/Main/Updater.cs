@@ -63,7 +63,8 @@ namespace StableDiffusionGui.Main
 
             bool onnx = InstallationStatus.HasOnnx();
             bool up = InstallationStatus.HasSdUpscalers();
-            return $"{Paths.GetExe().Wrap()} -{Constants.Args.Install}={true} -{Constants.Args.InstallOnnx}={onnx} -{Constants.Args.InstallUpscalers}={up}";
+            string info = $"targetHash_{release.HashRepo}_oldHash_{Setup.GitCommit}_installedBasic_{InstallationStatus.IsInstalledBasic}";
+            return $"{Paths.GetExe().Wrap()} -{Constants.Args.Install}={true} -{Constants.Args.InstallOnnx}={onnx} -{Constants.Args.InstallUpscalers}={up} -info={info}";
         }
 
         private static bool Move(string newInstallPath, bool images, bool models, bool config, bool repoAndVenv)
