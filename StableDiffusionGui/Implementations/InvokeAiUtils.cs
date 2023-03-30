@@ -122,6 +122,7 @@ namespace StableDiffusionGui.Implementations
                     } 
                 }
 
+                Directory.CreateDirectory(Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdRepo, "invoke", "configs"));
                 File.WriteAllText(ModelsYamlPath, text);
             }
             catch (Exception ex)

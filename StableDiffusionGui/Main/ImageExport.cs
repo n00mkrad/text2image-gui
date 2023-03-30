@@ -238,7 +238,7 @@ namespace StableDiffusionGui.Main
                 }
 
                 string finalPath = Path.Combine(parentDir, $"{string.Join("-", filenameChunks.Where(s => !string.IsNullOrWhiteSpace(s)))}{ext}");
-                return IoUtils.GetAvailableFilePath(finalPath).Replace(@"\\", "/").Replace(@"\", "/");
+                return IoUtils.GetAvailablePath(finalPath).Replace(@"\\", "/").Replace(@"\", "/");
             }
             catch (Exception ex)
             {

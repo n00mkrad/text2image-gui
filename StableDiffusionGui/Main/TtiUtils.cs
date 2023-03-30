@@ -269,7 +269,7 @@ namespace StableDiffusionGui.Main
             try
             {
                 string key = new FileInfo(processedImgPath).Name.Split('.')[0];
-                movePath = IoUtils.GetAvailableFilePath(InvokeAi.PostProcessMovePaths[key]);
+                movePath = IoUtils.GetAvailablePath(InvokeAi.PostProcessMovePaths[key]);
             }
             catch (Exception ex)
             {

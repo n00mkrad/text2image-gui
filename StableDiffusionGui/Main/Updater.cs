@@ -18,7 +18,7 @@ namespace StableDiffusionGui.Main
         public static async Task Install(MdlRelease release, bool copyImages, bool copyModels, bool copyConfig)
         {
             Logger.ClearLogBox();
-            string tempDir = IoUtils.GetAvailableFilePath(Paths.GetExeDir().TrimEnd('\\') + "-upd");
+            string tempDir = IoUtils.GetAvailablePath(Paths.GetExeDir().TrimEnd('\\') + "-upd");
 
             if (!InstallationStatus.HasBins())
             {

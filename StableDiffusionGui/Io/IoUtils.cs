@@ -751,18 +751,21 @@ namespace StableDiffusionGui.Io
                 TextToImage.Cancel("File with invalid path detected.", false);
         }
 
-        public static string GetAvailableFilePath(string filePath, int maxRetries = 1000000)
+        public static string GetAvailablePath(string path, int maxRetries = 1000000)
         {
-            if (File.Exists(filePath))
+            bool isFile = File.Exists(path);
+            bool isDirectory = Directory.Exists(path);
+
+            if (isFile || isDirectory)
             {
-                string dir = Path.GetDirectoryName(filePath);
-                string name = Path.GetFileNameWithoutExtension(filePath);
-                string ext = Path.GetExtension(filePath);
+                string dir = Path.GetDirectoryName(path);
+                string name = isFile ? Path.GetFileNameWithoutExtension(path) : path;
+                string ext = isFile ? Path.GetExtension(path) : "";
                 int counter = 2;
 
-                while (File.Exists(filePath))
+                while (File.Exists(path) || Directory.Exists(path))
                 {
-                    filePath = Path.Combine(dir, $"{name}({counter}){ext}");
+                    path = Path.Combine(dir, $"{name}({counter}){ext}");
                     counter++;
 
                     if (counter > (maxRetries + 2))
@@ -770,31 +773,7 @@ namespace StableDiffusionGui.Io
                 }
             }
 
-            return filePath;
-        }
-
-        public static async Task<string> GetAvailableFilePathAsync(string filePath, int waitMs = 50, int maxRetries = 1000000)
-        {
-            if (File.Exists(filePath))
-            {
-                string dir = Path.GetDirectoryName(filePath);
-                string name = Path.GetFileNameWithoutExtension(filePath);
-                string ext = Path.GetExtension(filePath);
-                int counter = 2;
-
-                while (File.Exists(filePath))
-                {
-                    filePath = Path.Combine(dir, $"{name}({counter}){ext}");
-                    counter++;
-
-                    if (counter > (maxRetries + 2))
-                        break;
-
-                    await Task.Delay(waitMs);
-                }
-            }
-
-            return filePath;
+            return path;
         }
 
         /// <summary> Gets available disk space from <paramref name="path"/>. Anything after the drive letter is ignored. </summary>

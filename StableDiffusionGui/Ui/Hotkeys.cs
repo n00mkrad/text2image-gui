@@ -116,6 +116,12 @@ namespace StableDiffusionGui.Ui
                 return;
             }
 
+            if (keys == Keys.F4)
+            {
+                InvokePatcher.Test();
+                return;
+            }
+
             if (keys == Keys.F12) // Hotkey: Open settings
             {
                 new SettingsForm().ShowDialogForm();

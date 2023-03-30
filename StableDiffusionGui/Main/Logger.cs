@@ -135,8 +135,6 @@ namespace StableDiffusionGui.Main
             catch (ObjectDisposedException ex)
             {
                 Console.WriteLine($"Logger Loop ObjectDisposedException: {ex.Message}\n{ex.StackTrace}");
-                if (System.Diagnostics.Debugger.IsAttached) System.Diagnostics.Debugger.Break();
-                QueueLoopOuter();
             }
             catch (Exception ex)
             {
