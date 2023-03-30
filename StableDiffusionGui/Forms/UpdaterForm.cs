@@ -45,9 +45,6 @@ namespace StableDiffusionGui.Forms
             foreach (MdlRelease r in releases)
                 comboxVersion.Items.Add(r);
 
-            if (comboxVersion.Items.Cast<MdlRelease>().Any(r => r.Version == Program.Version)) // Set to installed version, if installed is in list
-                comboxVersion.Text = releases.Where(r => r.Version == Program.Version).First().ToString();
-
             if (comboxVersion.Text.IsEmpty() && comboxVersion.Items.Count > 0)
                 comboxVersion.SelectedIndex = 0;
 
