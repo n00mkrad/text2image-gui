@@ -44,12 +44,11 @@ namespace StableDiffusionGui
             Config.Init();
             Paths.Init();
 
-            AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnApplicationExit);
             Application.ThreadException += new ThreadExceptionEventHandler(Application_ThreadException);
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
 
-            Cleanup();
+            IoUtils.Cleanup();
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -87,52 +86,6 @@ namespace StableDiffusionGui
             Logger.Log($"SetState({state})", true);
             State = state;
             MainForm?.UpdateBusyState();
-        }
-
-        public static void Cleanup()
-        {
-            int keepLogsDays = 5;
-            int keepSessionDataDays = 2;
-
-            try
-            {
-                foreach (DirectoryInfo dir in new DirectoryInfo(Paths.GetLogPath(true)).GetDirectories())
-                {
-                    string[] split = dir.Name.Split('-');
-                    int daysOld = (DateTime.Now - new DateTime(split[0].GetInt(), split[1].GetInt(), split[2].GetInt())).Days;
-                    int fileCount = dir.GetFiles("*", SearchOption.AllDirectories).Length;
-
-                    if (daysOld > keepLogsDays || fileCount < 1) // Delete old logs
-                    {
-                        Logger.Log($"Cleanup: Log folder {dir.Name} is {daysOld} days old and has {fileCount} files - Will Delete", true);
-                        IoUtils.TryDeleteIfExists(dir.FullName);
-                    }
-                }
-
-                IoUtils.DeleteContentsOfDir(Paths.GetSessionDataPath()); // Clear this session's temp files...
-
-                foreach (DirectoryInfo dir in new DirectoryInfo(Paths.GetSessionsPath()).GetDirectories())
-                {
-                    string[] split = dir.Name.Split('-');
-                    int daysOld = (DateTime.Now - new DateTime(split[0].GetInt(), split[1].GetInt(), split[2].GetInt())).Days;
-                    int fileCount = dir.GetFiles("*", SearchOption.AllDirectories).Length;
-
-                    if (daysOld > keepSessionDataDays || fileCount < 1) // Delete old temp files
-                    {
-                        Logger.Log($"Cleanup: Session folder {dir.Name} is {daysOld} days old and has {fileCount} files - Will Delete", true);
-                        IoUtils.TryDeleteIfExists(dir.FullName);
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                Logger.Log($"Cleanup Error: {e.Message}\n{e.StackTrace}");
-            }
-        }
-
-        private static void OnApplicationExit(object sender, EventArgs e)
-        {
-            // ...
         }
 
         static void Application_ThreadException(object sender, ThreadExceptionEventArgs e)

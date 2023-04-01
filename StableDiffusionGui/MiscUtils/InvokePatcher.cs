@@ -1,13 +1,9 @@
 ﻿using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using ZetaLongPaths;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace StableDiffusionGui.MiscUtils
 {
@@ -16,6 +12,7 @@ namespace StableDiffusionGui.MiscUtils
         public static void Test()
         {
             string path = Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdRepo, "invoke");
+            PatchTiMgr(path);
             PatchCli(path);
             MiscPatches(path);
             // TODO: Patch pyproject.toml?
@@ -91,8 +88,11 @@ namespace StableDiffusionGui.MiscUtils
 
         private static void PatchCli (string rootPath)
         {
-            string cliPath = Path.Combine(rootPath, "invokeai", "frontend", "CLI", "CLI.py");
+            string cliPath = IoUtils.GetFileInfosSorted(rootPath, true, "CLI.py").First().FullName;
             var lines = IoUtils.ReadLines(cliPath);
+
+            if (lines.Any(l => l.Contains("nmkd patched")))
+                return;
 
             bool indent = false;
 
@@ -102,7 +102,7 @@ namespace StableDiffusionGui.MiscUtils
 
                 if (l == "    while not done:")
                 {
-                    lines[i] = "    while not done:\n        try:";
+                    lines[i] = "    while not done:\n        try: # nmkd patched";
                     indent = true;
                     continue;
                 }
@@ -119,6 +119,46 @@ namespace StableDiffusionGui.MiscUtils
 
                 if (l.StartsWith("def do_command"))
                     break;
+            }
+
+            File.WriteAllLines(cliPath, lines);
+        }
+
+        private static void PatchTiMgr(string rootPath)
+        {
+            string cliPath = IoUtils.GetFileInfosSorted(rootPath, true, "textual_inversion_manager.py").First().FullName;
+
+            var lines = IoUtils.ReadLines(cliPath);
+
+            if (lines.Any(l => l.Contains("nmkd patched")))
+                return;
+
+            bool v4Passed = false;
+            bool indent = false;
+            string currentIndent = "";
+
+
+            for (int i = 0; i < lines.Length; i++)
+            {
+                string l = lines[i];
+
+                if (l.Trim() == "print(f'   | Loading v4 embedding file: {short_path}')")
+                {
+                    currentIndent = new string(l.TakeWhile(c => c == ' ').ToArray());
+                    lines[i] = $"{l} # nmkd patched\n{currentIndent}try:";
+                    indent = true;
+                    v4Passed = true;
+                    continue;
+                }
+
+                if (v4Passed && l.Trim() == "return embeddings")
+                {
+                    lines[i] = $"    {currentIndent}return embeddings\n{currentIndent}except:\n{currentIndent}    print(f\"   ** Invalid embeddings file: {{short_path}}\")\n{currentIndent}    return list()";
+                    break;
+                }
+
+                if (indent)
+                    lines[i] = "    " + l;
             }
 
             File.WriteAllLines(cliPath, lines);
