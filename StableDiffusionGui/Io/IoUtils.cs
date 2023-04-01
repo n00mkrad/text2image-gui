@@ -841,10 +841,10 @@ namespace StableDiffusionGui.Io
             }
         }
 
-        public static void Cleanup()
+        public static void Cleanup(bool deleteAllLogs = false, bool deleteAllSessionData = false)
         {
-            int keepLogsDays = 5;
-            int keepSessionDataDays = 2;
+            int keepLogsDays = deleteAllLogs ? -1 : 7;
+            int keepSessionDataDays = deleteAllSessionData ? -1 : 1;
 
             try
             {
@@ -856,8 +856,8 @@ namespace StableDiffusionGui.Io
 
                     if (daysOld > keepLogsDays || fileCount < 1) // Delete old logs
                     {
-                        Logger.Log($"Cleanup: Log folder {dir.Name} is {daysOld} days old and has {fileCount} files - Will Delete", true);
-                        TryDeleteIfExists(dir.FullName);
+                        bool success = TryDeleteIfExists(dir.FullName);
+                        Logger.Log($"Cleanup: {(success ? "Deleted" : "Failed to delete")} log folder {dir.Name} ({daysOld} days old with {fileCount} files)", true);
                     }
                 }
 
@@ -871,8 +871,19 @@ namespace StableDiffusionGui.Io
 
                     if (daysOld > keepSessionDataDays || fileCount < 1) // Delete old temp files
                     {
-                        Logger.Log($"Cleanup: Session folder {dir.Name} is {daysOld} days old and has {fileCount} files - Will Delete", true);
-                        TryDeleteIfExists(dir.FullName);
+                        bool success = TryDeleteIfExists(dir.FullName);
+                        Logger.Log($"Cleanup: {(success ? "Deleted" : "Failed to delete")} session folder {dir.Name} ({daysOld} days old with {fileCount} files)", true);
+                    }
+                }
+
+                string cachePath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.Cache.Root);
+
+                foreach (DirectoryInfo dir in new DirectoryInfo(cachePath).GetDirectories())
+                {
+                    if (dir.Name.EndsWith(".tmp"))
+                    {
+                        bool success = TryDeleteIfExists(dir.FullName);
+                        Logger.Log($"Cleanup: {(success ? "Deleted" : "Failed to delete")} '{dir.FullName}'", true);
                     }
                 }
             }
