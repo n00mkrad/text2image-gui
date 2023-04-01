@@ -116,7 +116,7 @@ namespace StableDiffusionGui.Ui
                 return;
             }
 
-            if (keys == Keys.F4)
+            if (keys == Keys.F4 && Program.Debug)
             {
                 InvokePatcher.Test();
                 return;
