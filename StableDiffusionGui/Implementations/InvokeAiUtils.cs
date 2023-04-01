@@ -67,28 +67,6 @@ namespace StableDiffusionGui.Implementations
 
                 cachedModelsVae = cachedModelsVae.DistinctBy(m => m.FormatIndependentName).ToList();
 
-                if (!Config.Get<bool>(Config.Keys.DisablePickleScanner))
-                {
-                    if (!quiet)
-                        Logger.Log($"Preparing model files...");
-
-                    var pickleScanResults = await TtiUtils.VerifyModelsWithPseudoHash(cachedModels.Concat(cachedModelsVae));
-                    var cachedModelsUnsafe = cachedModels.Concat(cachedModelsVae).Where(model => !pickleScanResults.GetNoNull(IoUtils.GetPseudoHash(model.FullName), false)).ToList();
-
-                    cachedModels = cachedModels.Except(cachedModelsUnsafe).ToList();
-                    cachedModelsVae = cachedModelsVae.Except(cachedModelsUnsafe).ToList();
-
-                    if (cachedModelsUnsafe.Any())
-                    {
-                        if (!quiet)
-                            Logger.Log($"Warning: The following model files were disabled because they are either corrupted, incompatible, or malicious:\n" +
-                            $"{string.Join("\n", cachedModelsUnsafe.Select(model => model.Name))}");
-
-                        if (cachedModelsUnsafe.Select(m => m.FullName).Contains(selectedMdl.FullName))
-                            TextToImage.Cancel("Selected model can not be loaded because it is either corruped or contains malware.", true);
-                    }
-                }
-
                 string text = "";
 
                 cachedModelsVae.Insert(0, null); // Insert null entry, for looping (this is the VAE-less model entry)

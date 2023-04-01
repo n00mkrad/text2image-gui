@@ -297,34 +297,6 @@ namespace StableDiffusionGui.Main
             Program.SetState(Program.BusyState.Standby);
         }
 
-        public static async Task<EasyDict<string, bool>> VerifyModelsWithPseudoHash(IEnumerable<Model> models)
-        {
-            var safeModels = Config.Get<string>(Config.Keys.SafeModels).FromJson<EasyDict<string, bool>>();
-
-            if (safeModels == null)
-                safeModels = new EasyDict<string, bool>();
-
-            foreach (Model m in models)
-            {
-                string pseudoHash = IoUtils.GetPseudoHash(m.FullName);
-
-                if (m.Format == Enums.Models.Format.Pytorch)
-                {
-                    bool safe = safeModels.ContainsKey(pseudoHash) ? safeModels[pseudoHash] : await OsUtils.ScanPickle(m.FullName);
-
-                    if (safe) // Only save safe models to force re-checking of unsafe models
-                        safeModels[pseudoHash] = safe;
-                }
-                else
-                {
-                    safeModels[pseudoHash] = true;
-                }
-            }
-
-            Config.Set(Config.Keys.SafeModels, safeModels.ToJson());
-            return safeModels;
-        }
-
         /// <summary> Finds the model config file for a given ckpt, either for use with models.yaml (<paramref name="modelsYamlFormat"/> == true) or as full path. </summary>
         public static string GetCkptConfig(Model mdl, bool modelsYamlFormat)
         {
