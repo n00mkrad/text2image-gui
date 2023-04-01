@@ -65,6 +65,10 @@ namespace StableDiffusionGui.Forms
                 comboxInpaintMode.SelectedIndex = (int)s.Params.Get("inpainting").FromJson<InpaintMode>();
                 checkboxHiresFix.Checked = s.Params.Get("hiresFix").FromJson<bool>();
                 checkboxLockSeed.Checked = s.Params.Get("lockSeed").FromJson<bool>();
+
+                if(s.Params.Get("resizeGravity").IsNotEmpty())
+                    comboxResizeGravity.SetIfTextMatches(s.Params.Get("resizeGravity").FromJson<string>(), true, Strings.ImageGravity);
+
             })).RunWithUiStoppedShowErrors(this, "Error loading image generation settings:");
 
             TryRefreshUiState();
@@ -119,6 +123,7 @@ namespace StableDiffusionGui.Forms
                     { "threshold", textboxThresh.GetInt().ToJson() },
                     { "appendArgs", textboxDebugAppendArgs.Text.ToJson() },
                     { "resizeGravity", comboxResizeGravity.Visible ? ParseUtils.GetEnum<ImageMagick.Gravity>(comboxResizeGravity.Text, true, Strings.ImageGravity).ToJson() : "" },
+                    { "modelArch", comboxModelArch.Visible ? ParseUtils.GetEnum<Enums.Models.SdArch>(comboxModelArch.Text, true, Strings.SdModelArch).ToJson() : "" },
                 },
             };
 

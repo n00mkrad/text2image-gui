@@ -19,6 +19,8 @@ namespace StableDiffusionGui.Main
             public enum Precision { Fp16, Fp32 }
             public enum Format { Pytorch, Diffusers, DiffusersOnnx, Safetensors }
             public enum Type { Normal, Vae, Embedding, Lora }
+            public enum SdArch { Automatic, V1, V2, V2V }
+
         }
 
         public class StableDiffusion

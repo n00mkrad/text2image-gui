@@ -326,10 +326,29 @@ namespace StableDiffusionGui.Main
         }
 
         /// <summary> Finds the model config file for a given ckpt, either for use with models.yaml (<paramref name="modelsYamlFormat"/> == true) or as full path. </summary>
-        public static string GetCkptConfig(Model model, bool modelsYamlFormat)
+        public static string GetCkptConfig(Model mdl, bool modelsYamlFormat)
         {
-            bool inpaint = model.FormatIndependentName.EndsWith("inpainting");
-            var custConfigs = new List<string> { $"{model.FullName}.yaml", $"{model.FullName}.yml" }.Where(path => File.Exists(path));
+            if (mdl.Format == Enums.Models.Format.Diffusers || mdl.Format == Enums.Models.Format.DiffusersOnnx)
+                return "";
+
+            bool inpaint = mdl.FormatIndependentName.EndsWith("inpainting");
+
+            if(mdl.LoadArchitecture != Enums.Models.SdArch.Automatic)
+            {
+                string file = inpaint ? "v1-inpainting-inference" : "v1-inference";
+
+                if (mdl.LoadArchitecture == Enums.Models.SdArch.V2)
+                    file = "v2-inference";
+                else if (mdl.LoadArchitecture == Enums.Models.SdArch.V2V)
+                    file = "v2-inference-v";
+
+                if (modelsYamlFormat)
+                    return $"configs/stable-diffusion/{file}.yaml"; // Return relative path for models.yaml
+                else
+                    return Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdRepo, "invoke", "invokeai", "configs", "stable-diffusion", $"{file}.yaml"); // Return full path
+            }
+
+            var custConfigs = new List<string> { $"{Path.ChangeExtension(mdl.FullName, null)}.yaml", $"{mdl.FullName}.yaml", $"{Path.ChangeExtension(mdl.FullName, null)}.yml", $"{mdl.FullName}.yml" }.Where(path => File.Exists(path));
 
             if (custConfigs.Any())
             {
@@ -338,15 +357,8 @@ namespace StableDiffusionGui.Main
                 else
                     return custConfigs.First(); // Return path
             }
-            else
-            {
-                string file = inpaint ? "v1-inpainting-inference.yaml" : "v1-inference.yaml";
 
-                if (modelsYamlFormat)
-                    return $"configs/stable-diffusion/{file}"; // Return relative path for models.yaml
-                else
-                    return Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdRepo, "invoke", "invokeai", "configs", "stable-diffusion", file); // Return full path
-            }
+            return "";
         }
     }
 }

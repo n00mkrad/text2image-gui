@@ -40,6 +40,7 @@ namespace StableDiffusionGui.Forms
             comboxBackend.FillFromEnum<Implementation>(Strings.Implementation, -1);
             comboxBackend.Text = Strings.Implementation.Get(Config.Get<string>(Config.Keys.ImplementationName));
             UpdateModel();
+            comboxModelArch.FillFromEnum<Enums.Models.SdArch>(Strings.SdModelArch, 0);
 
             // Set categories
             _categoryPanels.Add(btnCollapseImplementation, new List<Panel> { panelBackend, panelModel });
@@ -63,7 +64,6 @@ namespace StableDiffusionGui.Forms
             comboxModel.DropDownClosed += (s, e) => panelSettings.Focus();
             comboxResW.SelectedIndexChanged += (s, e) => ResolutionChanged(); // Resolution change
             comboxResH.SelectedIndexChanged += (s, e) => ResolutionChanged(); // Resolution change
-
         }
 
         public void LoadControls()

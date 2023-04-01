@@ -119,6 +119,7 @@ namespace StableDiffusionGui.Forms
             this.openModelMergeToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openModelPruningTrimmingToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.convertModelsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.downloadHuggingfaceModelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStripPostProcess = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.upscaleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.faceRestorationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -191,6 +192,7 @@ namespace StableDiffusionGui.Forms
             this.panelCollapsePrompt = new System.Windows.Forms.Panel();
             this.btnCollapsePrompt = new HTAlt.WinForms.HTButton();
             this.panelModel = new System.Windows.Forms.Panel();
+            this.comboxModelArch = new System.Windows.Forms.ComboBox();
             this.comboxModel = new System.Windows.Forms.ComboBox();
             this.label23 = new System.Windows.Forms.Label();
             this.panelBackend = new System.Windows.Forms.Panel();
@@ -207,7 +209,6 @@ namespace StableDiffusionGui.Forms
             this.menuStripInstall = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.manageInstallationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.installUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.downloadHuggingfaceModelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStripOutputImg.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.upDownSeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
@@ -643,7 +644,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderScale.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScale.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScale.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderScale.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderScale.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScale.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScale.Name = "textboxSliderScale";
@@ -790,7 +791,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderInitStrength.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderInitStrength.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderInitStrength.Location = new System.Drawing.Point(308, 2);
+            this.textboxSliderInitStrength.Location = new System.Drawing.Point(308, 4);
             this.textboxSliderInitStrength.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderInitStrength.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderInitStrength.Name = "textboxSliderInitStrength";
@@ -1310,7 +1311,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderScaleImg.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScaleImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScaleImg.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScaleImg.Location = new System.Drawing.Point(308, 2);
+            this.textboxSliderScaleImg.Location = new System.Drawing.Point(308, 4);
             this.textboxSliderScaleImg.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScaleImg.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScaleImg.Name = "textboxSliderScaleImg";
@@ -1616,7 +1617,7 @@ namespace StableDiffusionGui.Forms
             this.downloadHuggingfaceModelToolStripMenuItem});
             this.menuStripDevTools.Name = "menuStripDevTools";
             this.menuStripDevTools.ShowImageMargin = false;
-            this.menuStripDevTools.Size = new System.Drawing.Size(234, 158);
+            this.menuStripDevTools.Size = new System.Drawing.Size(234, 136);
             // 
             // openCliToolStripMenuItem
             // 
@@ -1653,6 +1654,13 @@ namespace StableDiffusionGui.Forms
             this.convertModelsToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
             this.convertModelsToolStripMenuItem.Text = "Convert Models";
             this.convertModelsToolStripMenuItem.Click += new System.EventHandler(this.convertModelsToolStripMenuItem_Click);
+            // 
+            // downloadHuggingfaceModelToolStripMenuItem
+            // 
+            this.downloadHuggingfaceModelToolStripMenuItem.Name = "downloadHuggingfaceModelToolStripMenuItem";
+            this.downloadHuggingfaceModelToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
+            this.downloadHuggingfaceModelToolStripMenuItem.Text = "Download Huggingface Model";
+            this.downloadHuggingfaceModelToolStripMenuItem.Click += new System.EventHandler(this.downloadHuggingfaceModelToolStripMenuItem_Click);
             // 
             // menuStripPostProcess
             // 
@@ -2252,7 +2260,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderSteps.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderSteps.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderSteps.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderSteps.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderSteps.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderSteps.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderSteps.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderSteps.Name = "textboxSliderSteps";
@@ -2586,6 +2594,7 @@ namespace StableDiffusionGui.Forms
             // 
             // panelModel
             // 
+            this.panelModel.Controls.Add(this.comboxModelArch);
             this.panelModel.Controls.Add(this.comboxModel);
             this.panelModel.Controls.Add(this.label23);
             this.panelModel.Dock = System.Windows.Forms.DockStyle.Top;
@@ -2594,16 +2603,27 @@ namespace StableDiffusionGui.Forms
             this.panelModel.Size = new System.Drawing.Size(651, 35);
             this.panelModel.TabIndex = 115;
             // 
+            // comboxModelArch
+            // 
+            this.comboxModelArch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboxModelArch.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.comboxModelArch.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboxModelArch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboxModelArch.ForeColor = System.Drawing.Color.White;
+            this.comboxModelArch.Location = new System.Drawing.Point(528, 0);
+            this.comboxModelArch.Name = "comboxModelArch";
+            this.comboxModelArch.Size = new System.Drawing.Size(120, 21);
+            this.comboxModelArch.TabIndex = 111;
+            // 
             // comboxModel
             // 
-            this.comboxModel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.comboxModel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.comboxModel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboxModel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.comboxModel.ForeColor = System.Drawing.Color.White;
             this.comboxModel.Location = new System.Drawing.Point(233, 0);
             this.comboxModel.Name = "comboxModel";
-            this.comboxModel.Size = new System.Drawing.Size(415, 21);
+            this.comboxModel.Size = new System.Drawing.Size(289, 21);
             this.comboxModel.TabIndex = 110;
             // 
             // label23
@@ -2791,13 +2811,6 @@ namespace StableDiffusionGui.Forms
             this.installUpdatesToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
             this.installUpdatesToolStripMenuItem.Text = "Install Updates";
             this.installUpdatesToolStripMenuItem.Click += new System.EventHandler(this.installUpdatesToolStripMenuItem_Click);
-            // 
-            // downloadHuggingfaceModelToolStripMenuItem
-            // 
-            this.downloadHuggingfaceModelToolStripMenuItem.Name = "downloadHuggingfaceModelToolStripMenuItem";
-            this.downloadHuggingfaceModelToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
-            this.downloadHuggingfaceModelToolStripMenuItem.Text = "Download Huggingface Model";
-            this.downloadHuggingfaceModelToolStripMenuItem.Click += new System.EventHandler(this.downloadHuggingfaceModelToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -3098,6 +3111,7 @@ namespace StableDiffusionGui.Forms
         public System.Windows.Forms.Panel panelCollapsePrompt;
         public System.Windows.Forms.Panel panelCollapseImplementation;
         private System.Windows.Forms.ToolStripMenuItem downloadHuggingfaceModelToolStripMenuItem;
+        public System.Windows.Forms.ComboBox comboxModelArch;
     }
 }
 

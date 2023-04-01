@@ -110,5 +110,12 @@ namespace StableDiffusionGui.Ui
             { "btnCollapseSymmetry", "Symmetry Settings" },
             { "btnCollapseDebug", "Debug Settings" },
         };
+
+        public static Dictionary<string, string> SdModelArch = new Dictionary<string, string>()
+        {
+            { Enums.Models.SdArch.V1.ToString(), "SD 1.x" },
+            { Enums.Models.SdArch.V2.ToString(), "SD 2.x (512 px)" },
+            { Enums.Models.SdArch.V2V.ToString(), "SD 2.x (768 px)" },
+        };
     }
 }

@@ -48,6 +48,7 @@ namespace StableDiffusionGui.Implementations
                 var inpaint = parameters.FromJson<InpaintMode>("inpainting"); // Inpainting mode
                 string clipSegMask = parameters.FromJson<string>("clipSegMask"); // ClipSeg text-based masking prompt
                 var resizeGravity = parameters.FromJson<ImageMagick.Gravity>("resizeGravity", (ImageMagick.Gravity)(-1)); // Inpainting mode
+                var modelArch = parameters.FromJson<Enums.Models.SdArch>("modelArch", Enums.Models.SdArch.Automatic); // SD Ckpt Architecture
 
                 var allModels = Models.GetModelsAll();
                 var cachedModels = allModels.Where(m => m.Type == Enums.Models.Type.Normal).ToList();
@@ -55,6 +56,8 @@ namespace StableDiffusionGui.Implementations
                 Model modelFile = TtiUtils.CheckIfCurrentSdModelExists();
                 Model vaeFile = Models.GetModel(cachedModelsVae, vae);
                 if (TextToImage.Canceled) return;
+
+                cachedModels[cachedModels.IndexOf(cachedModels.Where(m => m.FullName == modelFile.FullName).First())].SetArch(modelArch);
 
                 OrderedDictionary initImages = initImgs != null && initImgs.Length > 0 ? await TtiUtils.CreateResizedInitImagesIfNeeded(initImgs.ToList(), res, resizeGravity) : null;
 
@@ -134,7 +137,7 @@ namespace StableDiffusionGui.Implementations
 
                 Logger.Log($"Running Stable Diffusion - {iterations} Iterations, {steps.Length} Steps, Scales {(scales.Length < 4 ? string.Join(", ", scales.Select(x => x.ToStringDot())) : $"{scales.First()}->{scales.Last()}")}, {res.Width}x{res.Height}, Starting Seed: {startSeed}", false, Logger.LastUiLine.EndsWith("..."));
 
-                string modelsChecksumStartup = InvokeAiUtils.GetModelsHash();
+                string modelsChecksumStartup = InvokeAiUtils.GetModelsHash(cachedModels);
                 string argsStartup = Args.InvokeAi.GetArgsStartup(cachedModels);
                 string newStartupSettings = $"{argsStartup} {modelsChecksumStartup} {Config.Get<int>(Config.Keys.CudaDeviceIdx)} {Config.Get<int>(Config.Keys.ClipSkip)}"; // Check if startup settings match - If not, we need to restart the process
 
@@ -145,7 +148,7 @@ namespace StableDiffusionGui.Implementations
 
                 if (!TtiProcess.IsAiProcessRunning || (TtiProcess.IsAiProcessRunning && TtiProcess.LastStartupSettings != newStartupSettings))
                 {
-                    await InvokeAiUtils.WriteModelsYamlAll(modelFile, vaeFile, cachedModels, cachedModelsVae);
+                    await InvokeAiUtils.WriteModelsYamlAll(modelFile, vaeFile, cachedModels, cachedModelsVae, modelArch);
                     Models.SetClipSkip(modelFile, Config.Get<int>(Config.Keys.ClipSkip));
                     if (TextToImage.Canceled) return;
 
@@ -256,7 +259,7 @@ namespace StableDiffusionGui.Implementations
             if (modelFile == null)
                 return;
 
-            await InvokeAiUtils.WriteModelsYamlAll(modelFile, vaeFile, cachedModels, cachedModelsVae, true);
+            await InvokeAiUtils.WriteModelsYamlAll(modelFile, vaeFile, cachedModels, cachedModelsVae, Enums.Models.SdArch.Automatic, true);
             if (TextToImage.Canceled) return;
 
             string batPath = Path.Combine(Paths.GetSessionDataPath(), "invoke.bat");

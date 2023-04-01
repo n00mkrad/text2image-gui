@@ -44,7 +44,7 @@ namespace StableDiffusionGui.Implementations
             return convertedVae;
         }
 
-        private static Enums.Models.Format DetectModelFormatCached (string path)
+        private static Enums.Models.Format DetectModelFormatCached(string path)
         {
             if (!_modelFormatCache.ContainsKey(path))
                 _modelFormatCache[path] = Models.DetectModelFormat(path);
@@ -53,7 +53,7 @@ namespace StableDiffusionGui.Implementations
         }
 
         /// <summary> Writes all models into models.yml for InvokeAI to use </summary>
-        public static async Task WriteModelsYamlAll(Model selectedMdl, Model selectedVae, List<Model> cachedModels = null, List<Model> cachedModelsVae = null, bool quiet = false)
+        public static async Task WriteModelsYamlAll(Model selectedMdl, Model selectedVae, List<Model> cachedModels = null, List<Model> cachedModelsVae = null, Enums.Models.SdArch ckptArch = Enums.Models.SdArch.Automatic, bool quiet = false)
         {
             try
             {
@@ -91,35 +91,39 @@ namespace StableDiffusionGui.Implementations
 
                 string text = "";
 
-                cachedModelsVae.Insert(0, null); // Insert null entry, for looping
+                cachedModelsVae.Insert(0, null); // Insert null entry, for looping (this is the VAE-less model entry)
                 string dataPath = Paths.GetDataPath();
 
                 foreach (Model mdl in cachedModels)
                 {
-                    string config = mdl.Format != Enums.Models.Format.Diffusers ? TtiUtils.GetCkptConfig(mdl, true) : "";
                     string weightsPath = $"{(mdl.Format == Enums.Models.Format.Diffusers ? "path" : "weights")}: {mdl.FullName.Replace(dataPath, "../..").Wrap(true)}"; // Weights path, use relative path if possible
-                    string res = mdl.Name.Contains("768") ? "768" : "512";
+
+                    List<string> ckptArgs = null;
+
+                    if (mdl.Format != Enums.Models.Format.Diffusers)
+                    {
+                        string config = TtiUtils.GetCkptConfig(mdl, true);
+                        ckptArgs = new List<string>() { $"width: {mdl.BaseResolution}", $"height: {mdl.BaseResolution}" };
+
+                        if (config.IsNotEmpty())
+                            ckptArgs.Add($"config: {config}");
+                    }
 
                     foreach (Model mdlVae in cachedModelsVae)
                     {
                         var vae = mdlVae == null ? null : mdlVae; //mdlVae.Format == Enums.Models.Format.Diffusers ? mdlVae : await ConvertVae(mdlVae, !quiet);
-                        var properties = new List<string>();
+                        var properties = new List<string> { weightsPath };
 
-                        if (config.IsNotEmpty())
-                            properties.Add($"config: {config}"); // Neeed to specify config path for ckpt models
-                        else if (mdl.Format == Enums.Models.Format.Diffusers)
+                        if (mdl.Format == Enums.Models.Format.Diffusers)
                             properties.Add($"format: diffusers"); // Need to specify format for diffusers models
-
-                        properties.Add(weightsPath);
+                        else if (ckptArgs != null)
+                            properties.AddRange(ckptArgs);
 
                         // if (vae != null && vae.FullName.IsNotEmpty())
                         //     properties.Add($"vae: {vae.FullName.Replace(dataPath, "../..").Wrap(true)}");
 
-                        properties.Add($"width: {res}");
-                        properties.Add($"height: {res}");
-
                         text += $"{GetMdlNameForYaml(mdl, vae)}:\n    {string.Join("\n    ", properties)}\n\n";
-                    } 
+                    }
                 }
 
                 Directory.CreateDirectory(Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdRepo, "invoke", "configs"));
@@ -138,11 +142,14 @@ namespace StableDiffusionGui.Implementations
             return $"{mdl.Name}{(vae == null ? "" : $"-{vae.FormatIndependentName}")}".Replace(" ", "");
         }
 
-        public static string GetModelsHash(IoUtils.Hash hashType = IoUtils.Hash.CRC32)
+        public static string GetModelsHash(List<Model> cachedModels = null, IoUtils.Hash hashType = IoUtils.Hash.CRC32)
         {
-            var models = Models.GetModelsAll().Where(m => Implementation.InvokeAi.GetInfo().SupportedModelFormats.Contains(m.Format));
+            if (cachedModels == null)
+                cachedModels = Models.GetModelsAll();
+
+            var models = cachedModels.Where(m => Implementation.InvokeAi.GetInfo().SupportedModelFormats.Contains(m.Format));
             models = models.Where(m => m.Type == Enums.Models.Type.Normal || m.Type == Enums.Models.Type.Vae);
-            string modelsStr = string.Join("", models.Select(m => m.Name).OrderBy(n => n));
+            string modelsStr = string.Join("\n", models.Select(m => $"{m.FullName}{m.LoadArchitecture}{m.BaseResolution}").OrderBy(n => n));
             return IoUtils.GetHash(modelsStr, hashType, false);
         }
 
@@ -210,14 +217,14 @@ namespace StableDiffusionGui.Implementations
             return newSyntax;
         }
 
-        public static bool ValidateCommand (EasyDict<string, string> args, Size res)
+        public static bool ValidateCommand(EasyDict<string, string> args, Size res)
         {
-            if(args.Values.Contains("--force_outpaint"))
+            if (args.Values.Contains("--force_outpaint"))
             {
                 Bitmap img = (Bitmap)IoUtils.GetImage(args["initImg"].Split('"')[1]);
                 bool transparency = ImgUtils.IsPartiallyTransparent(img);
 
-                if(!transparency && (img.Width <= res.Height || img.Height <= res.Height))
+                if (!transparency && (img.Width <= res.Height || img.Height <= res.Height))
                 {
                     Logger.Log($"Can't apply outpainting because the output resolution ({res.AsString()}) is not bigger than the input ({img.Size.AsString()}), and the input image has no transparent regions.\n" +
                         $"Either increase the output resolution to be bigger than the input, or add a transparent border to your input image with an image editor.");

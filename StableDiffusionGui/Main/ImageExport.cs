@@ -29,19 +29,6 @@ namespace StableDiffusionGui.Main
         private static TtiTaskInfo currTask = null;
         private static TtiSettings currSettings = null;
 
-        public static void Reset ()
-        {
-            _outImgs.Clear();
-            inclPrompt = false;
-            inclSeed = false;
-            inclScale = false;
-            inclSampler = false;
-            inclModel = false;
-            sessionDir = false;
-            currTask = null;
-            currSettings = null;
-        }
-
         public static void Init ()
         {
             currTask = TextToImage.CurrentTask;
@@ -103,7 +90,6 @@ namespace StableDiffusionGui.Main
             }
 
             Logger.Log("ExportLoop END", true);
-            Reset();
         }
 
         public static async Task WaitLoop(int startingImgCount, int targetImgCount)
@@ -135,7 +121,6 @@ namespace StableDiffusionGui.Main
             }
 
             Logger.Log("ExportLoop END", true);
-            Reset();
         }
 
         public static void Export (string path)
