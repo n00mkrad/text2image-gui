@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 using StableDiffusionGui.Main;
 using ZetaLongPaths;
 using StableDiffusionGui.Data;
+using Newtonsoft.Json.Converters;
 
 namespace StableDiffusionGui
 {
@@ -497,7 +498,10 @@ namespace StableDiffusionGui
                 if (string.IsNullOrWhiteSpace(s))
                     return default(T);
 
-                return JsonConvert.DeserializeObject<T>(s);
+                var settings = new JsonSerializerSettings();
+                settings.Converters.Add(new Serialization.JsonUtils.TolerantEnumConverter());
+
+                return JsonConvert.DeserializeObject<T>(s, settings);
             }
             catch (Exception ex)
             {
@@ -513,6 +517,9 @@ namespace StableDiffusionGui
 
             if (ignoreErrors)
                 settings.Error = (s, e) => { e.ErrorContext.Handled = true; };
+
+            // Serialize enums as strings.
+            settings.Converters.Add(new StringEnumConverter());
 
             return JsonConvert.SerializeObject(o, indent ? Formatting.Indented : Formatting.None, settings);
         }

@@ -70,7 +70,7 @@ namespace StableDiffusionGui.MiscUtils
                     t = Replace(t, "x % 64", "x % 8");
                 }
 
-                if (f.Name == "cly.py")
+                if (f.Name == "CLI.py")
                     t = Replace(t, "print(f'** An error occurred while attempting to initialize the model: \"{str(e)}\"')", "print(f'** An error occurred while attempting to initialize the model: \"{str(e)}\"'); return");
 
                 if (f.Name == "util.py")

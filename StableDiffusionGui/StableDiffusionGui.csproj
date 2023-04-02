@@ -300,6 +300,7 @@
     <Compile Include="Installation\InstallationStatus.cs" />
     <Compile Include="Installation\Setup.cs" />
     <Compile Include="Io\Config.cs" />
+    <Compile Include="Io\ConfigInstance.cs" />
     <Compile Include="Io\ConfigParser.cs" />
     <Compile Include="Io\IoUtils.cs" />
     <Compile Include="Io\Models.cs" />
@@ -350,6 +351,7 @@
     <Compile Include="Forms\DrawForm.Utils.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Serialization\JsonUtils.cs" />
     <Compile Include="Ui\Fonts.cs" />
     <Compile Include="Ui\GetWebInfo.cs" />
     <Compile Include="Ui\ImagePopup.cs" />

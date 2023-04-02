@@ -97,6 +97,7 @@ namespace StableDiffusionGui.Forms
             this.comboxSymmetry = new System.Windows.Forms.ComboBox();
             this.btnEmbeddingAppend = new HTAlt.WinForms.HTButton();
             this.btnResetRes = new HTAlt.WinForms.HTButton();
+            this.comboxModelArch = new System.Windows.Forms.ComboBox();
             this.btnCollapseDebug = new HTAlt.WinForms.HTButton();
             this.btnCollapseSymmetry = new HTAlt.WinForms.HTButton();
             this.btnCollapseRendering = new HTAlt.WinForms.HTButton();
@@ -192,7 +193,6 @@ namespace StableDiffusionGui.Forms
             this.panelCollapsePrompt = new System.Windows.Forms.Panel();
             this.btnCollapsePrompt = new HTAlt.WinForms.HTButton();
             this.panelModel = new System.Windows.Forms.Panel();
-            this.comboxModelArch = new System.Windows.Forms.ComboBox();
             this.comboxModel = new System.Windows.Forms.ComboBox();
             this.label23 = new System.Windows.Forms.Label();
             this.panelBackend = new System.Windows.Forms.Panel();
@@ -1416,6 +1416,20 @@ namespace StableDiffusionGui.Forms
             this.btnResetRes.Visible = false;
             this.btnResetRes.Click += new System.EventHandler(this.btnResetRes_Click);
             // 
+            // comboxModelArch
+            // 
+            this.comboxModelArch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboxModelArch.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.comboxModelArch.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboxModelArch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboxModelArch.ForeColor = System.Drawing.Color.White;
+            this.comboxModelArch.Location = new System.Drawing.Point(528, 0);
+            this.comboxModelArch.Name = "comboxModelArch";
+            this.comboxModelArch.Size = new System.Drawing.Size(120, 21);
+            this.comboxModelArch.TabIndex = 111;
+            this.toolTip.SetToolTip(this.comboxModelArch, "Select how the model should be loaded. This is not necessary for Diffusers models" +
+        ".");
+            // 
             // btnCollapseDebug
             // 
             this.btnCollapseDebug.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -2603,18 +2617,6 @@ namespace StableDiffusionGui.Forms
             this.panelModel.Size = new System.Drawing.Size(651, 35);
             this.panelModel.TabIndex = 115;
             // 
-            // comboxModelArch
-            // 
-            this.comboxModelArch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.comboxModelArch.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.comboxModelArch.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboxModelArch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.comboxModelArch.ForeColor = System.Drawing.Color.White;
-            this.comboxModelArch.Location = new System.Drawing.Point(528, 0);
-            this.comboxModelArch.Name = "comboxModelArch";
-            this.comboxModelArch.Size = new System.Drawing.Size(120, 21);
-            this.comboxModelArch.TabIndex = 111;
-            // 
             // comboxModel
             // 
             this.comboxModel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
@@ -2634,9 +2636,9 @@ namespace StableDiffusionGui.Forms
             this.label23.Location = new System.Drawing.Point(0, 4);
             this.label23.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(36, 13);
+            this.label23.Size = new System.Drawing.Size(107, 13);
             this.label23.TabIndex = 105;
-            this.label23.Text = "Model";
+            this.label23.Text = "Model Name/Version";
             // 
             // panelBackend
             // 

@@ -303,7 +303,7 @@ namespace StableDiffusionGui.Main
             if (mdl.Format == Enums.Models.Format.Diffusers || mdl.Format == Enums.Models.Format.DiffusersOnnx)
                 return "";
 
-            if(mdl.LoadArchitecture != Enums.Models.SdArch.Automatic)
+            if(mdl.LoadArchitecture == Enums.Models.SdArch.Automatic)
             {
                 var custConfigs = new List<string> { $"{Path.ChangeExtension(mdl.FullName, null)}.yaml", $"{mdl.FullName}.yaml", $"{Path.ChangeExtension(mdl.FullName, null)}.yml", $"{mdl.FullName}.yml" }.Where(path => File.Exists(path));
 

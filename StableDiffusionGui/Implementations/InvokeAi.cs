@@ -321,7 +321,7 @@ namespace StableDiffusionGui.Implementations
                 if (actions.Contains(FixAction.FaceRestoration))
                     args.Add(Args.InvokeAi.GetFaceRestoreArgs(true));
 
-                bool success = await TtiProcess.WriteStdIn(string.Join(" ", args), true);
+                bool success = await TtiProcess.WriteStdIn(string.Join(" ", args), 0, true);
 
                 if (!success)
                     throw new Exception("Can't interact with process. Possibly it is not running?");
@@ -341,7 +341,7 @@ namespace StableDiffusionGui.Implementations
         {
             //NmkdStopwatch timeoutSw = new NmkdStopwatch();
             Models.SetClipSkip(mdl, Config.Get<int>(Config.Keys.ClipSkip));
-            await TtiProcess.WriteStdIn($"!switch {InvokeAiUtils.GetMdlNameForYaml(mdl, vae)}");
+            await TtiProcess.WriteStdIn($"!switch {InvokeAiUtils.GetMdlNameForYaml(mdl, vae)}", 1000);
 
             // Logger.Log("SwitchModel waiting...", true);
             // 

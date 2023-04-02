@@ -15,8 +15,7 @@ namespace StableDiffusionGui.Main
         private static bool _hasErrored = false;
         private static bool _invokeAiLastModelCached = false;
 
-        private const int _maxLastMessages = 50;
-        public static List<string> LastMessages = new List<string>();
+        public static List<string> LastMessages = new List<string>(); // TODO: Clear this every run?
 
         public static void Reset()
         {
@@ -31,9 +30,6 @@ namespace StableDiffusionGui.Main
 
             Logger.Log(line, true, false, Constants.Lognames.Sd);
             LastMessages.Insert(0, line);
-
-            if (LastMessages.Count > _maxLastMessages)
-                LastMessages.RemoveRange(_maxLastMessages, LastMessages.Count - _maxLastMessages);
 
             //var noLogWildcards = new string[] { "step */*" };
             //

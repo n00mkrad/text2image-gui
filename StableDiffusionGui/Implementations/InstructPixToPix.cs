@@ -154,7 +154,7 @@ namespace StableDiffusionGui.Implementations
                 }
 
                 foreach (var argList in argLists)
-                    await TtiProcess.WriteStdIn($"generate {argList.ToJson()}", true);
+                    await TtiProcess.WriteStdIn($"generate {argList.ToJson()}", 200, true);
             }
             catch (Exception ex)
             {
@@ -167,7 +167,7 @@ namespace StableDiffusionGui.Implementations
         {
             Program.MainForm.runBtn.Enabled = false;
 
-            await TtiProcess.WriteStdIn($"stop", true);
+            await TtiProcess.WriteStdIn($"stop", 0, true);
 
             await Task.Delay(100);
 

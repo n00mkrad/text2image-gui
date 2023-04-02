@@ -90,6 +90,9 @@ namespace StableDiffusionGui.Forms
             ConfigParser.SaveComboxIndex(comboxSampler, Config.Keys.Sampler);
             ConfigParser.SaveGuiElement(sliderInitStrength, Config.Keys.InitStrength);
             ConfigParser.SaveGuiElement(checkboxHiresFix, Config.Keys.HiresFix);
+
+            Config.Instance.ModelArchs[((Model)comboxModel.SelectedItem).FullName] = ParseUtils.GetEnum<Enums.Models.SdArch>(comboxModelArch.Text, true, Strings.SdModelArch);
+            Config.Save();
         }
 
         public void TryRefreshUiState(bool skipIfHidden = true)
@@ -146,12 +149,24 @@ namespace StableDiffusionGui.Forms
             #endregion
         }
 
+        private string _prevSelectedModel = "";
+
         private void ModelChanged()
         {
-            // Logger.Log($"ModelChanged @ {FormatUtils.GetUnixTimestamp()}");
+            Model mdl = (Model)comboxModel.SelectedItem;
+
+            if (mdl == null || mdl.FullName == _prevSelectedModel)
+                return;
+
+            _prevSelectedModel = mdl.FullName;
             var formats = new List<Enums.Models.Format> { Enums.Models.Format.Pytorch, Enums.Models.Format.Safetensors };
-            List<Enums.Models.SdArch> exclusionList = formats.Contains(((Model)comboxModel.SelectedItem).Format) ? new List<Enums.Models.SdArch>() : Enum.GetValues(typeof(Enums.Models.SdArch)).Cast<Enums.Models.SdArch>().Skip(1).ToList();
+            
+            List<Enums.Models.SdArch> exclusionList = formats.Contains(mdl.Format) ? new List<Enums.Models.SdArch>() : Enum.GetValues(typeof(Enums.Models.SdArch)).Cast<Enums.Models.SdArch>().Skip(1).ToList();
             comboxModelArch.FillFromEnum<Enums.Models.SdArch>(Strings.SdModelArch, 0, exclusionList);
+
+            if (Config.Instance.ModelArchs.ContainsKey(mdl.FullName))
+                comboxModelArch.SetIfTextMatches(Config.Instance.ModelArchs[mdl.FullName].ToString(), false, Strings.SdModelArch);
+
             ConfigParser.SaveGuiElement(comboxModel, Config.Keys.Model);
         }
 
@@ -313,17 +328,11 @@ namespace StableDiffusionGui.Forms
                 return;
 
             string currentModel = Config.Get<string>(Config.Keys.Model);
-
-            if (reloadList)
-            {
-                ReloadModelsCombox(imp);
-            }
-            else if (!comboxModel.Items.Cast<object>().Any(m => m.ToString() == currentModel))
-            {
-                comboxModel.SetItems(new string[] { currentModel }, 0);
-            }
-
+            ReloadModelsCombox(imp);
             comboxModel.Text = currentModel;
+
+            if (comboxModel.SelectedIndex < 0 && comboxModel.Items.Count > 0)
+                comboxModel.SelectedIndex = 0;
         }
 
         private void ReloadModelsCombox (Implementation imp = (Implementation)(-1))

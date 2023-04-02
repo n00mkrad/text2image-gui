@@ -171,7 +171,7 @@ namespace StableDiffusionGui.Implementations
                 }
 
                 foreach (var argList in argLists)
-                    await TtiProcess.WriteStdIn($"generate {argList.ToJson()}", true);
+                    await TtiProcess.WriteStdIn($"generate {argList.ToJson()}", 200, true);
             }
             catch (Exception ex)
             {

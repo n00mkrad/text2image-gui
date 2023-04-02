@@ -18,6 +18,7 @@
             public const string Merge = "merge";
             public const string Convert = "convert";
             public const string Dreambooth = "dreambooth";
+            public const string Serialization = "serialization";
         }
 
         public class Dirs

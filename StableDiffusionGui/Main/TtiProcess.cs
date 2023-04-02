@@ -26,7 +26,7 @@ namespace StableDiffusionGui.Main
 
         /// <summary> Writes text to a CLI using stdin </summary>
         /// <returns> True if successful, False if not </returns>
-        public static async Task<bool> WriteStdIn(string text, bool ignoreCanceled = false, bool newLine = true)
+        public static async Task<bool> WriteStdIn(string text, int blockTimeMs = 0, bool ignoreCanceled = false, bool newLine = true)
         {
             try
             {
@@ -43,6 +43,9 @@ namespace StableDiffusionGui.Main
                     await CurrentStdInWriter.Writer.WriteLineAsync(text);
                 else
                     await CurrentStdInWriter.Writer.WriteAsync(text);
+
+                if (blockTimeMs > 0)
+                    await Task.Delay(blockTimeMs);
 
                 return true;
             }

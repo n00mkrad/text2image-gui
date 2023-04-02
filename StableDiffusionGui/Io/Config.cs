@@ -18,10 +18,13 @@ namespace StableDiffusionGui.Io
         public static string ConfigPath = "";
         private static EasyDict<string, string> _cachedConfig = new EasyDict<string, string>();
 
+        public static ConfigInstance Instance = null;
+
         public static void Init()
         {
             ConfigPath = Path.Combine(Paths.GetDataPath(), Constants.Files.Config);
             IoUtils.CreateFileIfNotExists(ConfigPath);
+            Load();
             Reload();
             Ready = true;
             DumpKeys();
@@ -60,6 +63,7 @@ namespace StableDiffusionGui.Io
 
         private static void WriteConfig()
         {
+            Save();
             SortedDictionary<string, string> cachedValuesSorted = new SortedDictionary<string, string>(_cachedConfig);
             File.WriteAllText(ConfigPath, cachedValuesSorted.ToJson(true));
         }
@@ -82,6 +86,35 @@ namespace StableDiffusionGui.Io
             catch (Exception e)
             {
                 Logger.Log($"Failed to reload config! {e.Message}", true);
+            }
+        }
+
+        public static void Load ()
+        {
+            try
+            {
+                string path = Path.Combine(Paths.GetDataPath(), "conf.json");
+                Instance = File.ReadAllText(path).FromJson<ConfigInstance>();
+                Console.WriteLine("Loaded config successfully.");
+            }
+            catch(Exception ex)
+            {
+                Instance = new ConfigInstance();
+                Console.WriteLine($"Error loading config: {ex.Message}");
+            }
+        }
+
+        public static void Save ()
+        {
+            try
+            {
+                string path = Path.Combine(Paths.GetDataPath(), "conf.json");
+                File.WriteAllText(path, Instance.ToJson(true, true));
+                Console.WriteLine("Saved config successfully.");
+            }
+            catch (Exception e)
+            {
+                // Logger...
             }
         }
 
