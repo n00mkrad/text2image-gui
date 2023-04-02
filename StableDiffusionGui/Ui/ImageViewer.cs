@@ -24,6 +24,8 @@ namespace StableDiffusionGui.Ui
         private static string[] _currentImages = new string[0];
         private static int _currIndex = -1;
 
+        private static bool _shownBlackImgWarning = false;
+
         public static DateTime TimeOfLastImageViewerInteraction;
 
         private const string _strNoPrompt = "No prompt to display.";
@@ -61,13 +63,13 @@ namespace StableDiffusionGui.Ui
                     _currIndex = _currentImages.Length - 1;
             }
 
+            _shownBlackImgWarning = false;
             Show();
         }
 
         public static void AppendImage(string imagePath, ImgShowMode showMode, bool ignoreTimeout = false)
         {
-            List<string> newImgList = new List<string>(_currentImages);
-            newImgList.Add(imagePath);
+            List<string> newImgList = new List<string>(_currentImages) { imagePath };
             SetImages(newImgList, showMode, ignoreTimeout);
         }
 
@@ -80,7 +82,18 @@ namespace StableDiffusionGui.Ui
             }
 
             Program.MainForm.pictBoxImgViewer.SetTextSafe("");
-            Program.MainForm.pictBoxImgViewer.Image = IoUtils.GetImage(_currentImages[_currIndex]);
+            Image img = IoUtils.GetImage(_currentImages[_currIndex]);
+            Program.MainForm.pictBoxImgViewer.Image = img;
+
+            if (!_shownBlackImgWarning && ImgUtils.IsAllBlack((Bitmap)img))
+            {
+                if(!Config.Instance.FullPrecision)
+                    Logger.Log($"Warning: Your image appears to be completely black. Try enabling Full Precision in the Settings.");
+                else
+                    Logger.Log($"Warning: Your image appears to be completely black. This could be an issue with the model or your settings.");
+
+                _shownBlackImgWarning = true;
+            }
 
             ImagePopup.UpdateSlideshow(Program.MainForm.pictBoxImgViewer.Image);
 

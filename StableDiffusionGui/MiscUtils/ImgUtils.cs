@@ -207,17 +207,17 @@ namespace StableDiffusionGui.MiscUtils
         /// Returns a valid resolution for an input resolution. If <paramref name="validResolutionsOnly"/>, it will only use numbers from
         /// <paramref name="validWidths"/> and <paramref name="validHeights"/>, otherwise it only resizes if the size is smaller/bigger than the min/max canvas size.
         /// </summary>
-        public static Size GetValidSize (Size imageSize, List<int> validWidths, List<int> validHeights, bool validResolutionsOnly = true)
+        public static Size GetValidSize(Size imageSize, List<int> validWidths, List<int> validHeights, bool validResolutionsOnly = true)
         {
             if (validWidths.Contains(imageSize.Width) && validHeights.Contains(imageSize.Height))
                 return imageSize;
 
             Size smallestFrame = new Size(validWidths.Min(), validHeights.Min());
             Size biggestFrame = new Size(validWidths.Max(), validHeights.Max());
-            
+
             if (ImgMaths.IsSmallerThanFrame(imageSize.Width, imageSize.Height, smallestFrame.Width, smallestFrame.Height))
                 imageSize = ImgMaths.FitIntoFrame(imageSize, smallestFrame);
-            else if(ImgMaths.IsBiggerThanFrame(imageSize.Width, imageSize.Height, biggestFrame.Width, biggestFrame.Height))
+            else if (ImgMaths.IsBiggerThanFrame(imageSize.Width, imageSize.Height, biggestFrame.Width, biggestFrame.Height))
                 imageSize = ImgMaths.FitIntoFrame(imageSize, biggestFrame);
 
             if (validResolutionsOnly)
@@ -236,7 +236,7 @@ namespace StableDiffusionGui.MiscUtils
         /// Scale and Pad a MagickImage - Scale to dimensions <paramref name="scaleDimensions"/>, then pad it out to <paramref name="canvasSize"/>
         /// </summary>
         /// <returns> Scaled and padded image </returns>
-        public static MagickImage ScaleAndPad (MagickImage img, Size scaleDimensions, Size canvasSize, MagickColor color = null)
+        public static MagickImage ScaleAndPad(MagickImage img, Size scaleDimensions, Size canvasSize, MagickColor color = null)
         {
             color = color ?? MagickColors.Black;
             img.Scale(new MagickGeometry(scaleDimensions.Width, scaleDimensions.Height) { IgnoreAspectRatio = true });
@@ -336,18 +336,20 @@ namespace StableDiffusionGui.MiscUtils
 
         public static bool IsAllBlack(Bitmap bitmap)
         {
-            if (bitmap.PixelFormat == PixelFormat.Format32bppArgb || bitmap.PixelFormat == PixelFormat.Format32bppPArgb)
-            {
-                BitmapData data = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, bitmap.PixelFormat);
-                byte[] bytes = new byte[bitmap.Height * data.Stride];
-                Marshal.Copy(data.Scan0, bytes, 0, bytes.Length);
-                bitmap.UnlockBits(data);
+            BitmapData data = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, bitmap.PixelFormat);
+            byte[] bytes = new byte[bitmap.Height * data.Stride];
+            Marshal.Copy(data.Scan0, bytes, 0, bytes.Length);
+            bitmap.UnlockBits(data);
 
-                for (int p = 0; p < bytes.Length; p += 4)
-                {
-                    if (bytes[p] == 0 && bytes[p + 1] == 0 && bytes[p + 2] != 0) // Condition is true if any pixels is not 0/0/0 and thus not fully black
-                        return false;
-                }
+            int channels = 3;
+
+            if (bitmap.PixelFormat == PixelFormat.Format32bppArgb || bitmap.PixelFormat == PixelFormat.Format32bppPArgb)
+                channels = 4;
+
+            for (int p = 0; p < bytes.Length; p += channels)
+            {
+                if (!(bytes[p] == 0 && bytes[p + 1] == 0 && bytes[p + 2] == 0)) // Condition is true if any pixels is not 0/0/0 and thus not fully black
+                    return false;
             }
 
             return true;
