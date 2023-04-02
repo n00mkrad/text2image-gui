@@ -303,34 +303,32 @@ namespace StableDiffusionGui.Main
             if (mdl.Format == Enums.Models.Format.Diffusers || mdl.Format == Enums.Models.Format.DiffusersOnnx)
                 return "";
 
-            bool inpaint = mdl.FormatIndependentName.EndsWith("inpainting");
-
             if(mdl.LoadArchitecture != Enums.Models.SdArch.Automatic)
             {
-                string file = inpaint ? "v1-inpainting-inference" : "v1-inference";
+                var custConfigs = new List<string> { $"{Path.ChangeExtension(mdl.FullName, null)}.yaml", $"{mdl.FullName}.yaml", $"{Path.ChangeExtension(mdl.FullName, null)}.yml", $"{mdl.FullName}.yml" }.Where(path => File.Exists(path));
 
-                if (mdl.LoadArchitecture == Enums.Models.SdArch.V2)
-                    file = "v2-inference";
-                else if (mdl.LoadArchitecture == Enums.Models.SdArch.V2V)
-                    file = "v2-inference-v";
-
-                if (modelsYamlFormat)
-                    return $"configs/stable-diffusion/{file}.yaml"; // Return relative path for models.yaml
-                else
-                    return Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdRepo, "invoke", "invokeai", "configs", "stable-diffusion", $"{file}.yaml"); // Return full path
+                if (custConfigs.Any())
+                {
+                    if (modelsYamlFormat)
+                        return $"{custConfigs.First().Wrap(true)} # custom"; // Return formatted path for models.yaml
+                    else
+                        return custConfigs.First(); // Return path
+                }
             }
 
-            var custConfigs = new List<string> { $"{Path.ChangeExtension(mdl.FullName, null)}.yaml", $"{mdl.FullName}.yaml", $"{Path.ChangeExtension(mdl.FullName, null)}.yml", $"{mdl.FullName}.yml" }.Where(path => File.Exists(path));
+            bool inpaint = mdl.FormatIndependentName.EndsWith("inpainting");
 
-            if (custConfigs.Any())
-            {
-                if (modelsYamlFormat)
-                    return $"{custConfigs.First().Wrap(true)} # custom"; // Return formatted path for models.yaml
-                else
-                    return custConfigs.First(); // Return path
-            }
+            string file = inpaint ? "v1-inpainting-inference" : "v1-inference";
 
-            return "";
+            if (mdl.LoadArchitecture == Enums.Models.SdArch.V2)
+                file = "v2-inference";
+            else if (mdl.LoadArchitecture == Enums.Models.SdArch.V2V)
+                file = "v2-inference-v";
+
+            if (modelsYamlFormat)
+                return $"configs/stable-diffusion/{file}.yaml"; // Return relative path for models.yaml
+            else
+                return Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdRepo, "invoke", "invokeai", "configs", "stable-diffusion", $"{file}.yaml"); // Return full path
         }
     }
 }

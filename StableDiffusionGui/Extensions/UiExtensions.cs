@@ -41,7 +41,7 @@ namespace StableDiffusionGui.Extensions
 
             if (select == SelectMode.Retain)
             {
-                if (combox.Items.Cast<string>().Contains(prevText))
+                if (combox.Items.Cast<object>().Select(o => o.ToString()).Contains(prevText))
                 {
                     combox.Text = prevText;
                 }

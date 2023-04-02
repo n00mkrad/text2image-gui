@@ -66,7 +66,7 @@ namespace StableDiffusionGui.Data
 
         public override string ToString()
         {
-            return $"{Name} {(Format != (Enums.Models.Format)(-1) ? $"({Format} {Type})" : "")}";
+            return Name; // $"{Name} {(Format != (Enums.Models.Format)(-1) ? $"({Format} {Type})" : "")}";
         }
     }
 }

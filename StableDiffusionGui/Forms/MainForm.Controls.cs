@@ -5,6 +5,7 @@ using StableDiffusionGui.Data;
 using StableDiffusionGui.Extensions;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
+using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
 using System;
@@ -39,6 +40,7 @@ namespace StableDiffusionGui.Forms
             comboxEmbeddingList.SetItems(new[] { "None" }.Concat(Models.GetEmbeddings().Select(m => m.FormatIndependentName)), UiExtensions.SelectMode.First);
             comboxBackend.FillFromEnum<Implementation>(Strings.Implementation, -1);
             comboxBackend.Text = Strings.Implementation.Get(Config.Get<string>(Config.Keys.ImplementationName));
+            ReloadModelsCombox();
             UpdateModel();
             comboxModelArch.FillFromEnum<Enums.Models.SdArch>(Strings.SdModelArch, 0);
 
@@ -59,7 +61,7 @@ namespace StableDiffusionGui.Forms
 
             // Events
             comboxBackend.SelectedIndexChanged += (s, e) => { Config.Set(Config.Keys.ImplementationName, Strings.Implementation.GetReverse(comboxBackend.Text)); TryRefreshUiState(); }; // Implementation change
-            comboxModel.SelectedIndexChanged += (s, e) => ConfigParser.SaveGuiElement(comboxModel, Config.Keys.Model);
+            comboxModel.SelectedIndexChanged += (s, e) => ModelChanged();
             comboxModel.DropDown += (s, e) => ReloadModelsCombox();
             comboxModel.DropDownClosed += (s, e) => panelSettings.Focus();
             comboxResW.SelectedIndexChanged += (s, e) => ResolutionChanged(); // Resolution change
@@ -138,9 +140,19 @@ namespace StableDiffusionGui.Forms
             ImageViewer.UpdateInitImgViewer();
             ResolutionChanged();
             UpdateModel();
+            ModelChanged();
             _categoryPanels.Keys.ToList().ForEach(btn => btn.Parent.SetVisible(_categoryPanels[btn].Any(p => p.Visible))); // Hide collapse buttons if their category has 0 visible panels
 
             #endregion
+        }
+
+        private void ModelChanged()
+        {
+            // Logger.Log($"ModelChanged @ {FormatUtils.GetUnixTimestamp()}");
+            var formats = new List<Enums.Models.Format> { Enums.Models.Format.Pytorch, Enums.Models.Format.Safetensors };
+            List<Enums.Models.SdArch> exclusionList = formats.Contains(((Model)comboxModel.SelectedItem).Format) ? new List<Enums.Models.SdArch>() : Enum.GetValues(typeof(Enums.Models.SdArch)).Cast<Enums.Models.SdArch>().Skip(1).ToList();
+            comboxModelArch.FillFromEnum<Enums.Models.SdArch>(Strings.SdModelArch, 0, exclusionList);
+            ConfigParser.SaveGuiElement(comboxModel, Config.Keys.Model);
         }
 
         private void ResolutionChanged()
@@ -306,7 +318,7 @@ namespace StableDiffusionGui.Forms
             {
                 ReloadModelsCombox(imp);
             }
-            else if (!comboxModel.Items.Cast<string>().Any(m => m == currentModel))
+            else if (!comboxModel.Items.Cast<object>().Any(m => m.ToString() == currentModel))
             {
                 comboxModel.SetItems(new string[] { currentModel }, 0);
             }
@@ -320,7 +332,7 @@ namespace StableDiffusionGui.Forms
                 imp = ConfigParser.CurrentImplementation;
 
             IEnumerable<Model> models = Models.GetModelsAll().Where(m => m.Type == Enums.Models.Type.Normal && imp.GetInfo().SupportedModelFormats.Contains(m.Format));
-            comboxModel.SetItems(models.Select(m => m.Name), UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.None);
+            comboxModel.SetItems(models, UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.None);
         }
     }
 }

@@ -70,6 +70,9 @@ namespace StableDiffusionGui.MiscUtils
                     t = Replace(t, "x % 64", "x % 8");
                 }
 
+                if (f.Name == "cly.py")
+                    t = Replace(t, "print(f'** An error occurred while attempting to initialize the model: \"{str(e)}\"')", "print(f'** An error occurred while attempting to initialize the model: \"{str(e)}\"'); return");
+
                 if (f.Name == "util.py")
                     t = Replace(t, "x % 64", "x % 8");
 
@@ -185,97 +188,6 @@ namespace StableDiffusionGui.MiscUtils
 
             if (newText != text)
                 File.WriteAllText(path, newText);
-        }
-
-        public static void AddFlushParameters(string rootPath)
-        {
-            var pyFiles = IoUtils.GetFileInfosSorted(rootPath, true, "*.py");
-            pyFiles.ToList().ForEach(f => AddFlushParameter(f.FullName));
-        }
-
-        public static void AddFlushParameterMultiLine(string filePath)
-        {
-            string pythonFileContent = File.ReadAllText(filePath);
-            string pattern = @"( *)(print\()((?:.|\n)*?)(\))";
-
-            string modifiedFileContent = Regex.Replace(pythonFileContent, pattern, match =>
-            {
-                string indentation = match.Groups[1].Value;
-                string printStatement = match.Groups[2].Value;
-                string content = match.Groups[3].Value;
-                string closingParenthesis = match.Groups[4].Value;
-
-                if (!content.Trim().EndsWith(","))
-                {
-                    content = content.TrimEnd() + ",";
-                }
-
-                return $"{indentation}{printStatement}{content} flush=True{closingParenthesis}";
-            });
-
-            modifiedFileContent = modifiedFileContent.Replace("print(, flush=True)", "print()");
-            File.WriteAllText(filePath, modifiedFileContent);
-        }
-
-        public static void AddFlushParameter(string inputFilePath)
-        {
-            string[] lines = File.ReadAllLines(inputFilePath);
-            using (StreamWriter outputFile = new StreamWriter(inputFilePath))
-            {
-                bool inPrint = false;
-                bool hasParameters = false;
-                bool inMultilineString = false;
-                for (int i = 0; i < lines.Length; i++)
-                {
-                    string line = lines[i];
-                    if (line.Contains("print("))
-                    {
-                        inPrint = true;
-                        if (line.Contains(")"))
-                        {
-                            line = Regex.Replace(line, @"\)$", ", flush=True)");
-                            inPrint = false;
-                        }
-                        else
-                        {
-                            hasParameters = line.Contains(",");
-                            inMultilineString = line.Contains("\"\"\"") || line.Contains("'''");
-                        }
-                    }
-                    else if (inPrint && !inMultilineString && line.Contains(")"))
-                    {
-                        inPrint = false;
-                        if (hasParameters)
-                        {
-                            line = Regex.Replace(line, @"\)$", ", flush=True)");
-                        }
-                        else
-                        {
-                            line = Regex.Replace(line, @"\)$", "flush=True)");
-                        }
-                    }
-                    else if (inPrint && inMultilineString)
-                    {
-                        if (line.Contains("\"\"\"") || line.Contains("'''"))
-                        {
-                            inMultilineString = false;
-                        }
-                        if (line.Contains(")"))
-                        {
-                            inPrint = false;
-                            if (hasParameters)
-                            {
-                                line = Regex.Replace(line, @"\)$", ", flush=True)");
-                            }
-                            else
-                            {
-                                line = Regex.Replace(line, @"\)$", "flush=True)");
-                            }
-                        }
-                    }
-                    outputFile.WriteLine(line);
-                }
-            }
         }
     }
 }
