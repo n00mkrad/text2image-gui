@@ -33,12 +33,12 @@ namespace StableDiffusionGui.Main
         {
             currTask = TextToImage.CurrentTask;
             currSettings = TextToImage.CurrentTaskSettings;
-            inclPrompt = !currTask.SubfoldersPerPrompt && Config.Get<bool>(Config.Keys.PromptInFilename);
-            inclSeed = Config.Get<bool>(Config.Keys.SeedInFilename);
-            inclScale = Config.Get<bool>(Config.Keys.ScaleInFilename);
-            inclSampler = Config.Get<bool>(Config.Keys.SamplerInFilename);
-            inclModel = Config.Get<bool>(Config.Keys.ModelInFilename);
-            sessionDir = Config.Get<bool>(Config.Keys.FolderPerSession);
+            inclPrompt = !currTask.SubfoldersPerPrompt && Config.Instance.PromptInFilename;
+            inclSeed = Config.Instance.SeedInFilename;
+            inclScale = Config.Instance.ScaleInFilename;
+            inclSampler = Config.Instance.SamplerInFilename;
+            inclModel = Config.Instance.ModelInFilename;
+            sessionDir = Config.Instance.FolderPerSession;
             currTask = TextToImage.CurrentTask;
             currSettings = TextToImage.CurrentTaskSettings;
         }
@@ -178,7 +178,7 @@ namespace StableDiffusionGui.Main
             try
             {
                 ext = ext.StartsWith(".") ? ext : $".{ext}"; // Ensure extension always starts with a dot
-                string timestamp = GetExportTimestamp(Config.Get<FilenameTimestamp>(Config.Keys.FilenameTimestampMode, FilenameTimestamp.None));
+                string timestamp = GetExportTimestamp(Config.Instance.FilenameTimestampMode);
                 int pathBudget = pathLimit - (parentDir.Length + 1) - (timestamp.Length + 1) - (suffix.Length + 1) - 4; // Remove 4 for extension
                 var meta = IoUtils.GetImageMetadata(filePath);
                 var filenameChunks = new List<string> { timestamp, suffix };

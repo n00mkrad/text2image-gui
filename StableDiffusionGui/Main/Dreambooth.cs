@@ -38,7 +38,7 @@ namespace StableDiffusionGui.Main
                 bool showCmd = _useVisibleCmdWindow || OsUtils.ShowHiddenCmd();
 
                 string name = trainImgDir.Name.Trunc(25, false);
-                int cudaId = (Config.Get<int>(Config.Keys.CudaDeviceIdx) - 2).Clamp(0, 64);
+                int cudaId = (Config.Instance.CudaDeviceIdx - 2).Clamp(0, 64);
                 string timestamp = FormatUtils.GetUnixTimestamp();
                 string logDir = Path.Combine(Paths.GetSessionDataPath(), "db", timestamp);
                 IoUtils.TryDeleteIfExists(logDir);

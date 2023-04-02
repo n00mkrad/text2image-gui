@@ -11,7 +11,6 @@ namespace StableDiffusionGui.Forms
     {
         private Enums.Models.Type _modelType;
         private Implementation _implementation;
-        private string ModelConfigKey { get { return _modelType == Enums.Models.Type.Normal ? Config.Keys.Model : Config.Keys.ModelVae; } }
 
         public ModelQuickSelectForm(Enums.Models.Type modelType)
         {
@@ -27,7 +26,7 @@ namespace StableDiffusionGui.Forms
         private void ModelQuickSelectForm_Shown(object sender, EventArgs e)
         {
             Refresh();
-            _implementation = ParseUtils.GetEnum<Implementation>(Config.Get<string>(Config.Keys.ImplementationName));
+            _implementation = Config.Instance.Implementation;
             LoadModels(true);
 
             if (comboxModel.Items.Count > 0)
@@ -53,7 +52,7 @@ namespace StableDiffusionGui.Forms
             Models.GetModels(_modelType, _implementation).ForEach(x => comboxModel.Items.Add(x.Name));
 
             if (loadCombox)
-                ConfigParser.LoadGuiElement(comboxModel, ModelConfigKey);
+                ConfigParser.LoadGuiElement(comboxModel, ref _modelType == Enums.Models.Type.Normal ? ref Config.Instance.Model : ref Config.Instance.ModelVae);
         }
 
         private void ModelQuickSelectForm_KeyDown(object sender, KeyEventArgs e)
@@ -61,7 +60,7 @@ namespace StableDiffusionGui.Forms
             if (e.KeyCode == Keys.Return)
             {
                 if (IsModelValid())
-                    ConfigParser.SaveGuiElement(comboxModel, ModelConfigKey);
+                    ConfigParser.SaveGuiElement(comboxModel, ref _modelType == Enums.Models.Type.Normal ? ref Config.Instance.Model : ref Config.Instance.ModelVae);
 
                 Program.MainForm.TryRefreshUiState();
                 Close();

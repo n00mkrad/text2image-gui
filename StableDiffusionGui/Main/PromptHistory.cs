@@ -15,7 +15,7 @@ namespace StableDiffusionGui.Main
 
         public static void Add(TtiSettings batch)
         {
-            if (!Config.Get<bool>(Config.Keys.EnablePromptHistory))
+            if (!Config.Instance.EnablePromptHistory)
                 return;
 
             foreach (string prompt in batch.Prompts.Distinct())

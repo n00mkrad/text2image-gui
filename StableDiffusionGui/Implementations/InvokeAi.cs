@@ -131,7 +131,7 @@ namespace StableDiffusionGui.Implementations
                             seed++;
                     }
 
-                    if (Config.Get<bool>(Config.Keys.MultiPromptsSameSeed))
+                    if (Config.Instance.MultiPromptsSameSeed)
                         seed = startSeed;
                 }
 
@@ -139,7 +139,7 @@ namespace StableDiffusionGui.Implementations
 
                 string modelsChecksumStartup = InvokeAiUtils.GetModelsHash(cachedModels);
                 string argsStartup = Args.InvokeAi.GetArgsStartup(cachedModels);
-                string newStartupSettings = $"{argsStartup} {modelsChecksumStartup} {Config.Get<int>(Config.Keys.CudaDeviceIdx)} {Config.Get<int>(Config.Keys.ClipSkip)}"; // Check if startup settings match - If not, we need to restart the process
+                string newStartupSettings = $"{argsStartup} {modelsChecksumStartup} {Config.Instance.CudaDeviceIdx} {Config.Instance.ClipSkip}"; // Check if startup settings match - If not, we need to restart the process
 
                 Logger.Log(GetImageCountLogString(initImages, initStrengths, prompts, iterations, steps, scales, argLists));
 
@@ -149,7 +149,7 @@ namespace StableDiffusionGui.Implementations
                 if (!TtiProcess.IsAiProcessRunning || (TtiProcess.IsAiProcessRunning && TtiProcess.LastStartupSettings != newStartupSettings))
                 {
                     await InvokeAiUtils.WriteModelsYamlAll(modelFile, vaeFile, cachedModels, cachedModelsVae, modelArch);
-                    Models.SetClipSkip(modelFile, Config.Get<int>(Config.Keys.ClipSkip));
+                    Models.SetClipSkip(modelFile, Config.Instance.ClipSkip);
                     if (TextToImage.Canceled) return;
 
                     Logger.Log($"(Re)starting InvokeAI. Process running: {TtiProcess.IsAiProcessRunning} - Prev startup string: '{TtiProcess.LastStartupSettings}' - New startup string: '{newStartupSettings}'", true);
@@ -340,7 +340,7 @@ namespace StableDiffusionGui.Implementations
         public static async Task SwitchModel(Model mdl, Model vae = null)
         {
             //NmkdStopwatch timeoutSw = new NmkdStopwatch();
-            Models.SetClipSkip(mdl, Config.Get<int>(Config.Keys.ClipSkip));
+            Models.SetClipSkip(mdl, Config.Instance.ClipSkip);
             await TtiProcess.WriteStdIn($"!switch {InvokeAiUtils.GetMdlNameForYaml(mdl, vae)}", 1000);
 
             // Logger.Log("SwitchModel waiting...", true);

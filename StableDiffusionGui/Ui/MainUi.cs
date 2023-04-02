@@ -41,7 +41,7 @@ namespace StableDiffusionGui.Ui
                 {
                     Logger.Log(value.Count() == 1 ? $"Now using initialization image {Path.GetFileName(value[0]).Wrap()}." : $"Now using {value.Count()} initialization images.");
 
-                    if (Config.Get<bool>(Config.Keys.AutoSetResForInitImg))
+                    if (Config.Instance.AutoSetResForInitImg)
                         SetResolutionForInitImage(value[0]);
                 }
 
@@ -58,9 +58,9 @@ namespace StableDiffusionGui.Ui
 
         public static List<int> GetResolutions(int min, int max)
         {
-            int step = ConfigParser.CurrentImplementation == Implementation.InstructPixToPix ? 8 : 64;
+            int step = Config.Instance.Implementation == Implementation.InstructPixToPix ? 8 : 64;
 
-            if (Program.Debug && ConfigParser.CurrentImplementation == Implementation.InvokeAi)
+            if (Program.Debug && Config.Instance.Implementation == Implementation.InvokeAi)
                 step = 8;
 
             return Enumerable.Range(min, (max - min) + 1).Where(x => x % step == 0).ToList();
@@ -112,7 +112,7 @@ namespace StableDiffusionGui.Ui
                 }
             }
 
-            if (ConfigParser.CurrentImplementation.Supports(ImplementationInfo.Feature.CustomModels) && Models.GetModelsAll().Count <= 0)
+            if (Config.Instance.Implementation.Supports(ImplementationInfo.Feature.CustomModels) && Models.GetModelsAll().Count <= 0)
                 UiUtils.ShowMessageBox($"No model files have been found. You will not be able to generate images until you either place a model in Data/models, or set an external folder in the settings.",
                     UiUtils.MessageType.Warning, Nmkoder.Forms.MessageForm.FontSize.Normal);
         }

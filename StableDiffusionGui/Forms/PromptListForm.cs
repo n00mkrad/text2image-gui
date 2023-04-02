@@ -41,7 +41,7 @@ namespace StableDiffusionGui.Forms
             }
 
             titleLabel.Text = Text;
-            ConfigParser.LoadGuiElement(checkboxEnableHistory, Config.Keys.EnablePromptHistory);
+            ConfigParser.LoadGuiElement(checkboxEnableHistory, ref Config.Instance.EnablePromptHistory);
         }
 
         private void PromptListForm_Shown(object sender, EventArgs e)
@@ -172,7 +172,7 @@ namespace StableDiffusionGui.Forms
 
         private void PromptListForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            ConfigParser.SaveGuiElement(checkboxEnableHistory, Config.Keys.EnablePromptHistory);
+            ConfigParser.SaveGuiElement(checkboxEnableHistory, ref Config.Instance.EnablePromptHistory);
         }
 
         string _previousFilterText = "";

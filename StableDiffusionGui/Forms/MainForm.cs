@@ -100,7 +100,7 @@ namespace StableDiffusionGui.Forms
             Opacity = 1.0;
             MainUi.DoStartupChecks();
 
-            if (!Program.Debug && !(Config.Get<bool>(Config.Keys.HideMotd) && Config.Get<string>(Config.Keys.MotdShownVersion) == Program.Version))
+            if (!Program.Debug && !(Config.Instance.HideMotd && Config.Instance.MotdShownVersion == Program.Version))
                 new WelcomeForm().ShowDialogForm();
         }
 
@@ -150,7 +150,7 @@ namespace StableDiffusionGui.Forms
 
         private void btnOpenOutFolder_Click(object sender, EventArgs e)
         {
-            string dir = Directory.CreateDirectory(Config.Get<string>(Config.Keys.OutPath)).FullName;
+            string dir = Directory.CreateDirectory(Config.Instance.OutPath).FullName;
             Process.Start("explorer", dir.Replace("/", @"\").Wrap());
         }
 
@@ -353,7 +353,7 @@ namespace StableDiffusionGui.Forms
             if (Program.Busy || !MainUi.IsInstalledWithWarning())
                 return;
 
-            InvokeAi.RunCli(Config.Get<string>(Config.Keys.OutPath), Config.Get<string>(Config.Keys.ModelVae));
+            InvokeAi.RunCli(Config.Instance.OutPath, Config.Instance.ModelVae);
         }
 
         private void openModelMergeToolToolStripMenuItem_Click(object sender, EventArgs e)

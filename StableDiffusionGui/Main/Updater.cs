@@ -110,7 +110,7 @@ namespace StableDiffusionGui.Main
                 try
                 {
                     string defaultImgsPath = Path.Combine(Paths.GetExeDir(), Constants.Dirs.Images);
-                    string currentImgsPath = Config.Get<string>(Config.Keys.OutPath);
+                    string currentImgsPath = Config.Instance.OutPath;
 
                     string targetImgsPath = Path.Combine(newInstallPath, Constants.Dirs.Images);
 

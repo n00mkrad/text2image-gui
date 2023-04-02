@@ -499,7 +499,10 @@ namespace StableDiffusionGui
                     return default(T);
 
                 var settings = new JsonSerializerSettings();
-                settings.Converters.Add(new Serialization.JsonUtils.TolerantEnumConverter());
+                settings.Converters.Add(new Serialization.JsonUtils.TolerantEnumConverter()); // Fallback to first enum entry instead of throwing an error
+                settings.Converters.Add(new Serialization.JsonUtils.NullToEmptyStringConverter()); // Deserialize null as empty string instead of null
+                settings.NullValueHandling = NullValueHandling.Ignore;
+                settings.DefaultValueHandling = DefaultValueHandling.Populate;
 
                 return JsonConvert.DeserializeObject<T>(s, settings);
             }

@@ -181,7 +181,7 @@ namespace StableDiffusionGui.MiscUtils
             if (lines.Count() <= 0)
                 return new List<string>();
 
-            if(!Config.Get<bool>(Config.Keys.WildcardAllowEmptyEntries, true, true))
+            if(!Config.Instance.WildcardAllowEmptyEntries)
                 lines = lines.Where(line => !string.IsNullOrWhiteSpace(line)); // Filter out empty entries optionally
 
             if (sortMode == Order.Alphabetical)

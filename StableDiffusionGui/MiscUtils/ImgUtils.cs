@@ -333,5 +333,24 @@ namespace StableDiffusionGui.MiscUtils
 
             return false;
         }
+
+        public static bool IsAllBlack(Bitmap bitmap)
+        {
+            if (bitmap.PixelFormat == PixelFormat.Format32bppArgb || bitmap.PixelFormat == PixelFormat.Format32bppPArgb)
+            {
+                BitmapData data = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, bitmap.PixelFormat);
+                byte[] bytes = new byte[bitmap.Height * data.Stride];
+                Marshal.Copy(data.Scan0, bytes, 0, bytes.Length);
+                bitmap.UnlockBits(data);
+
+                for (int p = 0; p < bytes.Length; p += 4)
+                {
+                    if (bytes[p] == 0 && bytes[p + 1] == 0 && bytes[p + 2] != 0) // Condition is true if any pixels is not 0/0/0 and thus not fully black
+                        return false;
+                }
+            }
+
+            return true;
+        }
     }
 }

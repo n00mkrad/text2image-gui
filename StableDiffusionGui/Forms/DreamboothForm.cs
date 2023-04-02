@@ -64,7 +64,7 @@ namespace StableDiffusionGui.Forms
                     valid = false;
                 }
 
-                int cudaDeviceOpt = Config.Get<int>(Config.Keys.CudaDeviceIdx);
+                int cudaDeviceOpt = Config.Instance.CudaDeviceIdx;
 
                 if (valid && cudaDeviceOpt == (int)Enums.Cuda.Device.Cpu)
                 {

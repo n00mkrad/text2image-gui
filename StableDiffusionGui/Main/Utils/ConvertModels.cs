@@ -109,7 +109,7 @@ namespace StableDiffusionGui.Main.Utils
                 {
                     Logger.Log($"Done. Saved converted model to:\n{outPath.Replace(Paths.GetDataPath(), "Data")}");
 
-                    if (Config.Get<bool>(Config.Keys.ConvertModelsDeleteInput))
+                    if (Config.Instance.ConvertModelsDeleteInput)
                     {
                         bool deleteSuccess = IoUtils.TryDeleteIfExists(model.FullName);
                         Logger.Log($"{(deleteSuccess ? "Deleted" : "Failed to delete")} input file '{model.Name}'.");

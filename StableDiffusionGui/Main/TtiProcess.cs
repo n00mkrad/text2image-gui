@@ -36,7 +36,7 @@ namespace StableDiffusionGui.Main
                 if (CurrentStdInWriter == null || !CurrentStdInWriter.IsRunning)
                     return false;
 
-                if (Config.Get(Config.Keys.LogStdin, false))
+                if (Config.Instance.LogStdin)
                     Logger.Log($"=> {text}", true);
 
                 if (newLine)

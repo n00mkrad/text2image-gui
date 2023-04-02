@@ -17,7 +17,7 @@ namespace StableDiffusionGui.Main
             {
                 List<string> args = new List<string>();
 
-                if (Config.Get<bool>(Config.Keys.FullPrecision))
+                if (Config.Instance.FullPrecision)
                     args.Add("--precision float32");
 
                 bool lowVram = GpuUtils.CachedGpus.Count > 0 && GpuUtils.CachedGpus.First().VramGb < 5.0f;
@@ -28,7 +28,7 @@ namespace StableDiffusionGui.Main
                     args.Add("--free_gpu_mem");
                 }
 
-                if (!InstallationStatus.HasSdUpscalers() || (lowVram && Config.Get(Config.Keys.MedVramDisablePostProcessing, false)))
+                if (!InstallationStatus.HasSdUpscalers() || (lowVram && Config.Instance.MedVramDisablePostProcessing))
                 {
                     args.Add("--no_upscale");
                     args.Add("--no_restore");
@@ -36,7 +36,7 @@ namespace StableDiffusionGui.Main
 
                 int maxCachedModels = 0;
 
-                if (Config.Get<bool>(Config.Keys.InvokeAllowModelCaching)) // Disable caching if <6GB free, no matter the total RAM
+                if (Config.Instance.InvokeAllowModelCaching) // Disable caching if <6GB free, no matter the total RAM
                 {
                     maxCachedModels = ((int)Math.Floor((HwInfo.GetTotalRamGb - 11f) / 4f)).Clamp(0, 16); // >16GB => 1 - >20GB => 2 - >24GB => 3 - >28GB => 4 - ...
                     Logger.Log($"InvokeAI Caching: Store up to {maxCachedModels} models in RAM", true);
@@ -44,7 +44,7 @@ namespace StableDiffusionGui.Main
 
                 args.Add($"--max_loaded_models {maxCachedModels + 1}"); // Add 1 to model count because the arg counts the VRAM loaded model as well
 
-                if (Config.Get<bool>(Config.Keys.OfflineMode, false))
+                if (Config.Instance.OfflineMode)
                     args.Add($"--no-internet");
 
                 if (Models.HasAnyInpaintingModels(cachedModels, Enums.StableDiffusion.Implementation.InvokeAi))
@@ -68,10 +68,10 @@ namespace StableDiffusionGui.Main
                     "--fnformat {prefix}.png" // Only use prefix as output name since we rename it anyway
                 };
 
-                if (Config.Get<bool>(Config.Keys.SaveUnprocessedImages))
+                if (Config.Instance.SaveUnprocessedImages)
                     args.Add("-save_orig");
 
-                if (Config.Get<bool>(Config.Keys.EnableTokenizationLogging))
+                if (Config.Instance.EnableTokenizationLogging)
                     args.Add("-t");
 
                 return string.Join(" ", args);
@@ -91,7 +91,7 @@ namespace StableDiffusionGui.Main
 
             public static string GetSymmetryArg(Enums.StableDiffusion.SymmetryMode mode)
             {
-                string t = Config.Get<float>(Config.Keys.SymmetryTimepoint, 0.9f).ToStringDot("0.0");
+                string t = Config.Instance.SymmetryTimepoint.ToStringDot("0.0");
 
                 switch (mode)
                 {
@@ -105,18 +105,18 @@ namespace StableDiffusionGui.Main
 
             public static string GetFaceRestoreArgs(bool force = false)
             {
-                if (!force && !Config.Get<bool>(Config.Keys.FaceRestoreEnable))
+                if (!force && !Config.Instance.FaceRestoreEnable)
                     return "";
 
                 if (!InstallationStatus.HasSdUpscalers())
                     return "";
 
-                var faceRestoreOpt = (Enums.Utils.FaceTool)Config.Get<int>(Config.Keys.FaceRestoreIdx);
+                var faceRestoreOpt = (Enums.Utils.FaceTool)Config.Instance.FaceRestoreIdx;
                 string tool = "";
-                string strength = Config.Get<float>(Config.Keys.FaceRestoreStrength).ToStringDot("0.###");
+                string strength = Config.Instance.FaceRestoreStrength.ToStringDot("0.###");
 
                 if (faceRestoreOpt == Enums.Utils.FaceTool.CodeFormer)
-                    tool = $"codeformer -cf {Config.Get<float>(Config.Keys.CodeformerFidelity).ToStringDot()}";
+                    tool = $"codeformer -cf {Config.Instance.CodeformerFidelity.ToStringDot()}";
 
                 if (faceRestoreOpt == Enums.Utils.FaceTool.Gfpgan)
                     tool = "gfpgan";
@@ -126,17 +126,17 @@ namespace StableDiffusionGui.Main
 
             public static string GetUpscaleArgs(bool force = false)
             {
-                if (!force && !Config.Get<bool>(Config.Keys.UpscaleEnable))
+                if (!force && !Config.Instance.UpscaleEnable)
                     return "";
 
-                var upscaleSetting = (Forms.PostProcSettingsForm.UpscaleOption)Config.Get<int>(Config.Keys.UpscaleIdx);
+                var upscaleSetting = (Forms.PostProcSettingsForm.UpscaleOption)Config.Instance.UpscaleIdx;
                 int factor = 2;
 
                 if (upscaleSetting == Forms.PostProcSettingsForm.UpscaleOption.X2) factor = 2;
                 if (upscaleSetting == Forms.PostProcSettingsForm.UpscaleOption.X3) factor = 3;
                 if (upscaleSetting == Forms.PostProcSettingsForm.UpscaleOption.X4) factor = 4;
 
-                return $"-U {factor} {Config.Get<float>(Config.Keys.UpscaleStrength).ToStringDot("0.###")}";
+                return $"-U {factor} {Config.Instance.UpscaleStrength.ToStringDot("0.###")}";
             }
         }
 
@@ -146,7 +146,7 @@ namespace StableDiffusionGui.Main
             {
                 List<string> args = new List<string>();
 
-                args.Add($"--precision {(Config.Get<bool>(Config.Keys.FullPrecision) ? "full" : "autocast")}"); // Precision
+                args.Add($"--precision {(Config.Instance.FullPrecision ? "full" : "autocast")}"); // Precision
 
                 return string.Join(" ", args);
             }

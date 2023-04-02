@@ -55,24 +55,24 @@ namespace StableDiffusionGui.Forms
 
         void LoadSettings()
         {
-            ConfigParser.LoadGuiElement(checkboxUpscaleEnable, Config.Keys.UpscaleEnable);
-            ConfigParser.LoadComboxIndex(comboxUpscale, Config.Keys.UpscaleIdx);
-            ConfigParser.LoadGuiElement(sliderUpscaleStrength, Config.Keys.UpscaleStrength);
-            ConfigParser.LoadGuiElement(checkboxFaceRestorationEnable, Config.Keys.FaceRestoreEnable);
-            ConfigParser.LoadComboxIndex(comboxFaceRestoration, Config.Keys.FaceRestoreIdx);
-            ConfigParser.LoadGuiElement(sliderFaceRestoreStrength, Config.Keys.FaceRestoreStrength);
-            ConfigParser.LoadGuiElement(sliderCodeformerFidelity, Config.Keys.CodeformerFidelity);
+            ConfigParser.LoadGuiElement(checkboxUpscaleEnable, ref Config.Instance.UpscaleEnable);
+            ConfigParser.LoadComboxIndex(comboxUpscale, ref Config.Instance.UpscaleIdx);
+            ConfigParser.LoadGuiElement(sliderUpscaleStrength, ref Config.Instance.UpscaleStrength);
+            ConfigParser.LoadGuiElement(checkboxFaceRestorationEnable, ref Config.Instance.FaceRestoreEnable);
+            ConfigParser.LoadComboxIndex(comboxFaceRestoration, ref Config.Instance.FaceRestoreIdx);
+            ConfigParser.LoadGuiElement(sliderFaceRestoreStrength, ref Config.Instance.FaceRestoreStrength);
+            ConfigParser.LoadGuiElement(sliderCodeformerFidelity, ref Config.Instance.CodeformerFidelity);
         }
 
         void SaveSettings()
         {
-            ConfigParser.SaveGuiElement(checkboxUpscaleEnable, Config.Keys.UpscaleEnable);
-            ConfigParser.SaveComboxIndex(comboxUpscale, Config.Keys.UpscaleIdx);
-            ConfigParser.SaveGuiElement(sliderUpscaleStrength, Config.Keys.UpscaleStrength);
-            ConfigParser.SaveGuiElement(checkboxFaceRestorationEnable, Config.Keys.FaceRestoreEnable);
-            ConfigParser.SaveComboxIndex(comboxFaceRestoration, Config.Keys.FaceRestoreIdx);
-            ConfigParser.SaveGuiElement(sliderFaceRestoreStrength, Config.Keys.FaceRestoreStrength);
-            ConfigParser.SaveGuiElement(sliderCodeformerFidelity, Config.Keys.CodeformerFidelity);
+            ConfigParser.SaveGuiElement(checkboxUpscaleEnable, ref Config.Instance.UpscaleEnable);
+            ConfigParser.SaveComboxIndex(comboxUpscale, ref Config.Instance.UpscaleIdx);
+            ConfigParser.SaveGuiElement(sliderUpscaleStrength, ref Config.Instance.UpscaleStrength);
+            ConfigParser.SaveGuiElement(checkboxFaceRestorationEnable, ref Config.Instance.FaceRestoreEnable);
+            ConfigParser.SaveComboxIndex(comboxFaceRestoration, ref Config.Instance.FaceRestoreIdx);
+            ConfigParser.SaveGuiElement(sliderFaceRestoreStrength, ref Config.Instance.FaceRestoreStrength);
+            ConfigParser.SaveGuiElement(sliderCodeformerFidelity, ref Config.Instance.CodeformerFidelity);
         }
 
         private void checkboxUpscaleEnable_CheckedChanged(object sender, EventArgs e)

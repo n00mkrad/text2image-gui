@@ -26,7 +26,7 @@ namespace StableDiffusionGui.Forms
         public bool ShouldControlBeVisible(Control control, Implementation implementation = (Implementation)(-1))
         {
             if (implementation.IsUnset())
-                implementation = ConfigParser.CurrentImplementation;
+                implementation = Config.Instance.Implementation;
 
             if (control == panelRes)
                 return ResolutionAdjustAvailable(implementation);

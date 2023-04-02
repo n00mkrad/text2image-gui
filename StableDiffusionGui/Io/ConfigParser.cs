@@ -10,93 +10,122 @@ namespace StableDiffusionGui.Io
     {
         public enum StringMode { Any, Int, Float }
 
-        public static Enums.StableDiffusion.Implementation CurrentImplementation { get { return ParseUtils.GetEnum<Enums.StableDiffusion.Implementation>(Config.Get<string>(Config.Keys.ImplementationName)); } }
-        public static bool UpscaleAndSaveOriginals { get { return Config.Get<bool>(Config.Keys.SaveUnprocessedImages) && (Config.Get<bool>(Config.Keys.UpscaleEnable) || Config.Get<bool>(Config.Keys.FaceRestoreEnable)); } }
+        public static bool UpscaleAndSaveOriginals { get { return Config.Instance.SaveUnprocessedImages && (Config.Instance.UpscaleEnable || Config.Instance.FaceRestoreEnable); } }
 
-        public static void SaveGuiElement(TextBox textbox, string key, StringMode stringMode = StringMode.Any)
+        public static void SaveGuiElement(TextBox textbox, ref string variable)
         {
-            switch (stringMode)
-            {
-                case StringMode.Any: Config.Set(key, textbox.Text); break;
-                case StringMode.Int: Config.Set(key, textbox.Text.GetInt()); break;
-                case StringMode.Float: Config.Set(key, textbox.Text.GetFloat()); break;
-            }
+            variable = textbox.Text;
         }
 
-        public static void SaveGuiElement(ComboBox comboBox, string key, StringMode stringMode = StringMode.Any)
+        public static void SaveGuiElement(ComboBox comboBox, ref string variable)
         {
-            switch (stringMode)
-            {
-                case StringMode.Any: Config.Set(key, comboBox.Text); break;
-                case StringMode.Int: Config.Set(key, comboBox.Text.GetInt()); break;
-                case StringMode.Float: Config.Set(key, comboBox.Text.GetFloat()); break;
-            }
+            variable = comboBox.Text;
         }
 
-        public static void SaveGuiElement(CheckBox checkbox, string key)
+        public static void SaveGuiElement(ComboBox comboBox, ref int variable)
         {
-            Config.Set(key, checkbox.Checked);
+            variable = comboBox.Text.GetInt();
         }
 
-        public static void SaveGuiElement(NumericUpDown upDown, string key, StringMode stringMode = StringMode.Any)
+        public static void SaveGuiElement(CheckBox checkbox, ref bool variable)
         {
-            switch (stringMode)
-            {
-                case StringMode.Any: Config.Set(key, ((float)upDown.Value)); break;
-                case StringMode.Int: Config.Set(key, ((int)upDown.Value)); break;
-                case StringMode.Float: Config.Set(key, ((float)upDown.Value)); break;
-            }
+            variable = checkbox.Checked;
         }
 
-        public static void SaveGuiElement(HTAlt.WinForms.HTSlider slider, string key)
+        public static void SaveGuiElement(NumericUpDown upDown, ref int variable)
+        {
+            variable = (int)upDown.Value;
+        }
+
+        public static void SaveGuiElement(NumericUpDown upDown, ref float variable)
+        {
+            variable = (float)upDown.Value;
+        }
+
+        public static void SaveGuiElement(HTAlt.WinForms.HTSlider slider, ref float variable)
         {
             float value = slider is CustomSlider ? ((CustomSlider)slider).ActualValueFloat : slider.Value;
-            Config.Set(key, value);
+            variable = value;
         }
 
-        public static void SaveComboxIndex(ComboBox comboBox, string key)
+        public static void SaveGuiElement(HTAlt.WinForms.HTSlider slider, ref int variable)
         {
-            Config.Set(key, comboBox.SelectedIndex);
+            float value = slider is CustomSlider ? ((CustomSlider)slider).ActualValueFloat : slider.Value;
+            variable = value.RoundToInt();
         }
 
-        public static void LoadGuiElement(ComboBox comboBox, string key, string suffix = "")
+        public static void SaveComboxIndex(ComboBox comboBox, ref int variable)
         {
-            comboBox.Text = Config.Get<string>(key) + suffix;
+            variable = comboBox.SelectedIndex;
         }
 
-        public static void LoadGuiElement(TextBox textbox, string key, string suffix = "")
+        public static void SaveComboxIndex<TEnum>(ComboBox comboBox, ref TEnum variable)
         {
-            textbox.Text = Config.Get<string>(key) + suffix; ;
+            variable = (TEnum)Enum.ToObject(typeof(TEnum), comboBox.SelectedIndex);
         }
 
-        public static void LoadGuiElement(CheckBox checkbox, string key)
+        public static void LoadGuiElement(ComboBox comboBox, ref string variable, string suffix = "")
         {
-            checkbox.Checked = Config.Get<bool>(key);
+            comboBox.Text = variable + suffix;
         }
 
-        public static void LoadGuiElement(NumericUpDown upDown, string key)
+        public static void LoadGuiElement(ComboBox comboBox, ref int variable, string suffix = "")
         {
-            upDown.Value = Convert.ToDecimal(Config.Get<float>(key).Clamp((float)upDown.Minimum, (float)upDown.Maximum));
+            comboBox.Text = $"{variable}" + suffix;
+        }
+
+        public static void LoadGuiElement(TextBox textbox, ref string variable, string suffix = "")
+        {
+            textbox.Text = variable + suffix;
+        }
+
+        public static void LoadGuiElement(CheckBox checkbox, ref bool variable)
+        {
+            checkbox.Checked = variable;
+        }
+
+        public static void LoadGuiElement(NumericUpDown upDown, ref float variable)
+        {
+            upDown.Value = Convert.ToDecimal(variable.Clamp((float)upDown.Minimum, (float)upDown.Maximum));
+        }
+
+        public static void LoadGuiElement(NumericUpDown upDown, ref int variable)
+        {
+            upDown.Value = Convert.ToDecimal(variable.Clamp((int)upDown.Minimum, (int)upDown.Maximum));
         }
 
         public enum SaveValueAs { Unchanged, Multiplied, Divided }
 
-        public static void LoadGuiElement(HTAlt.WinForms.HTSlider slider, string key)
+        public static void LoadGuiElement(HTAlt.WinForms.HTSlider slider, ref float variable)
         {
-            var value = Config.Get<float>(key);
-
             if (slider is CustomSlider)
-                ((CustomSlider)slider).ActualValue = (decimal)value.Clamp((float)((CustomSlider)slider).ActualMinimum, (float)((CustomSlider)slider).ActualMaximum);
+                ((CustomSlider)slider).ActualValue = (decimal)variable.Clamp((float)((CustomSlider)slider).ActualMinimum, (float)((CustomSlider)slider).ActualMaximum);
             else
-                slider.Value = value.RoundToInt().Clamp(slider.Minimum, slider.Maximum);
+                slider.Value = variable.RoundToInt().Clamp(slider.Minimum, slider.Maximum);
         }
 
-        public static void LoadComboxIndex(ComboBox comboBox, string key)
+        public static void LoadGuiElement(HTAlt.WinForms.HTSlider slider, ref int variable)
+        {
+            if (slider is CustomSlider)
+                ((CustomSlider)slider).ActualValue = (decimal)variable.Clamp((int)((CustomSlider)slider).ActualMinimum, (int)((CustomSlider)slider).ActualMaximum);
+            else
+                slider.Value = variable.Clamp(slider.Minimum, slider.Maximum);
+        }
+
+        public static void LoadComboxIndex(ComboBox comboBox, ref int variable)
         {
             if (comboBox.Items.Count == 0)
                 return;
 
-            comboBox.SelectedIndex = Config.Get<int>(key).Clamp(0, comboBox.Items.Count - 1);
+            comboBox.SelectedIndex = variable.Clamp(0, comboBox.Items.Count - 1);
+        }
+
+        public static void LoadComboxIndex<TEnum>(ComboBox comboBox, ref TEnum variable)
+        {
+            if (comboBox.Items.Count == 0)
+                return;
+
+            comboBox.SelectedIndex = ((int)(object)variable).Clamp(0, comboBox.Items.Count - 1);
         }
     }
 }

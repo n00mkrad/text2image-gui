@@ -41,13 +41,13 @@ namespace StableDiffusionGui.Main
             CurrentTask = new TtiTaskInfo
             {
                 StartTime = DateTime.Now,
-                OutDir = Config.Get<string>(Config.Keys.OutPath),
-                SubfoldersPerPrompt = Config.Get<bool>(Config.Keys.FolderPerPrompt),
-                IgnoreWildcardsForFilenames = Config.Get<bool>(Config.Keys.FilenameIgnoreWildcards),
+                OutDir = Config.Instance.OutPath,
+                SubfoldersPerPrompt = Config.Instance.FolderPerPrompt,
+                IgnoreWildcardsForFilenames = Config.Instance.FilenameIgnoreWildcards,
                 TargetImgCount = batches.Sum(x => x.GetTargetImgCount()),
             };
 
-            if (Config.Get<bool>(Config.Keys.FolderPerSession))
+            if (Config.Instance.FolderPerSession)
                 CurrentTask.OutDir = Path.Combine(CurrentTask.OutDir, Paths.SessionTimestamp);
 
             foreach (TtiSettings s in batches)
@@ -137,7 +137,7 @@ namespace StableDiffusionGui.Main
 
             Program.SetState(Program.BusyState.Standby);
 
-            NotifyMode notifyMode = (NotifyMode)Config.Get<int>(Config.Keys.NotifyModeIdx);
+            NotifyMode notifyMode = (NotifyMode)Config.Instance.NotifyModeIdx;
 
             if (notifyMode == NotifyMode.Both || notifyMode == NotifyMode.Ping)
                 OsUtils.PlayPingSound(true);
@@ -145,7 +145,7 @@ namespace StableDiffusionGui.Main
             if (notifyMode == NotifyMode.Both || notifyMode == NotifyMode.Notification)
                 OsUtils.ShowNotification("Stable Diffusion GUI", $"Image generation has finished.\nGenerated {CurrentTask.ImgCount} images in {FormatUtils.Time(timeTaken, false)}.", true);
 
-            if (Config.Get<bool>(Config.Keys.UnloadModel))
+            if (Config.Instance.UnloadModel)
                 TtiProcess.Kill();
         }
 

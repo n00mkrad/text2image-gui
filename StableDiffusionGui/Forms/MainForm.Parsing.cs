@@ -96,7 +96,7 @@ namespace StableDiffusionGui.Forms
         {
             TtiSettings settings = new TtiSettings
             {
-                Implementation = ParseUtils.GetEnum<Implementation>(Config.Get<string>(Config.Keys.ImplementationName)),
+                Implementation = Config.Instance.Implementation,
 
                 Prompts = textboxPrompt.TextNoPlaceholder.SplitIntoLines().Where(x => !string.IsNullOrWhiteSpace(x)).ToArray(),
                 NegativePrompt = textboxPromptNeg.Visible ? textboxPromptNeg.TextNoPlaceholder.Trim().Replace(Environment.NewLine, " ") : "",
@@ -115,10 +115,10 @@ namespace StableDiffusionGui.Forms
                     { "symmetry", (comboxSymmetry.Visible ? ((SymmetryMode)comboxSymmetry.SelectedIndex) : SymmetryMode.Disabled).ToJson() },
                     { "inpainting", (comboxInpaintMode.Visible ? ((InpaintMode)comboxInpaintMode.SelectedIndex) : InpaintMode.Disabled).ToJson() },
                     { "clipSegMask", textboxClipsegMask.Text.Trim().ToJson() },
-                    { "model", Config.Get<string>(Config.Keys.Model).ToJson() },
+                    { "model", Config.Instance.Model.ToJson() },
                     { "hiresFix", (checkboxHiresFix.Visible && checkboxHiresFix.Checked).ToJson() },
                     { "lockSeed", checkboxLockSeed.Checked.ToJson() },
-                    { "vae", Config.Get<string>(Config.Keys.ModelVae).ToJson() },
+                    { "vae", Config.Instance.ModelVae.ToJson() },
                     { "perlin", textboxPerlin.GetFloat().ToJson() },
                     { "threshold", textboxThresh.GetInt().ToJson() },
                     { "appendArgs", textboxDebugAppendArgs.Text.ToJson() },

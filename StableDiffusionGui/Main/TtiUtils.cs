@@ -62,7 +62,7 @@ namespace StableDiffusionGui.Main
                         }
                         else // Resize (Fit)
                         {
-                            Size scaleSize = Config.Get<bool>(Config.Keys.InitImageRetainAspectRatio) ? ImgMaths.FitIntoFrame(new Size(img.Width, img.Height), targetSize) : targetSize;
+                            Size scaleSize = Config.Instance.InitImageRetainAspectRatio ? ImgMaths.FitIntoFrame(new Size(img.Width, img.Height), targetSize) : targetSize;
                             img = ImgUtils.ScaleAndPad(img, scaleSize, targetSize);
                         }
 
@@ -139,11 +139,11 @@ namespace StableDiffusionGui.Main
             string name = "";
 
             if (!CurrentSdModelExists())
-                Config.Set(Config.Keys.Model, "");
+                Config.Instance.Model = "";
             else
-                name = Config.Get<string>(Config.Keys.Model);
+                name = Config.Instance.Model;
 
-            var imp = ConfigParser.CurrentImplementation;
+            var imp = Config.Instance.Implementation;
 
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -168,8 +168,8 @@ namespace StableDiffusionGui.Main
 
         public static bool CurrentSdModelExists(List<Model> cachedModels = null)
         {
-            string name = Config.Get<string>(Config.Keys.Model);
-            var imp = ConfigParser.CurrentImplementation;
+            string name = Config.Instance.Model;
+            var imp = Config.Instance.Implementation;
 
             if (string.IsNullOrWhiteSpace(name))
                 return false;
@@ -192,7 +192,7 @@ namespace StableDiffusionGui.Main
 
             envVars["PATH"] = p;
 
-            int cudaDeviceOpt = Config.Get<int>(Config.Keys.CudaDeviceIdx);
+            int cudaDeviceOpt = Config.Instance.CudaDeviceIdx;
 
             if (!allCudaDevices && cudaDeviceOpt > 0)
             {

@@ -49,7 +49,7 @@ namespace StableDiffusionGui.Forms
         private void ImagePopupForm_Shown(object sender, EventArgs e)
         {
             FixLabelPosition();
-            SlideshowMode = Config.Get<bool>(Config.Keys.PopupSlideshowEnabledByDefault);
+            SlideshowMode = Config.Instance.PopupSlideshowEnabledByDefault;
             enableToolStripMenuItem.Checked = SlideshowMode;
             enabledByDefaultToolStripMenuItem.Checked = SlideshowMode;
         }
@@ -283,7 +283,7 @@ namespace StableDiffusionGui.Forms
 
         private void enabledByDefaultToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Config.Set(Config.Keys.PopupSlideshowEnabledByDefault, enabledByDefaultToolStripMenuItem.Checked);
+            Config.Instance.PopupSlideshowEnabledByDefault = enabledByDefaultToolStripMenuItem.Checked;
         }
     }
 }

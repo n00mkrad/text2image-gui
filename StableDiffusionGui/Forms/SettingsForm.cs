@@ -92,7 +92,7 @@ namespace StableDiffusionGui.Forms
                     combox.Items.Add("None");
 
                 models.Where(m => m.Type == type).ToList().ForEach(m => combox.Items.Add(m.Name));
-                ConfigParser.LoadGuiElement(combox, type == Enums.Models.Type.Normal ? Config.Keys.Model : Config.Keys.ModelVae);
+                ConfigParser.LoadGuiElement(combox, ref type == Enums.Models.Type.Normal ? ref Config.Instance.Model : ref Config.Instance.ModelVae);
 
                 if (combox.Items.Count > 0 && combox.SelectedIndex == -1)
                     combox.SelectedIndex = 0;
@@ -119,7 +119,7 @@ namespace StableDiffusionGui.Forms
             foreach (var g in gpus)
                 comboxCudaDevice.Items.Add($"GPU {g.CudaDeviceId} ({g.FullName} - {g.VramGb} GB)");
 
-            ConfigParser.LoadComboxIndex(comboxCudaDevice, Config.Keys.CudaDeviceIdx);
+            ConfigParser.LoadComboxIndex(comboxCudaDevice, ref Config.Instance.CudaDeviceIdx);
         }
 
         private async Task LoadImplementations()
@@ -137,35 +137,35 @@ namespace StableDiffusionGui.Forms
                 disabledImplementations.Add(Implementation.DiffusersOnnx);
 
             comboxImplementation.FillFromEnum<Implementation>(Strings.Implementation, -1, disabledImplementations);
-            comboxImplementation.Text = Strings.Implementation.Get(Config.Get<string>(Config.Keys.ImplementationName));
+            comboxImplementation.Text = Strings.Implementation.Get(Config.Instance.Implementation.ToString());
             _initialImplementationLoad = false;
         }
 
         void LoadSettings()
         {
-            ConfigParser.LoadGuiElement(checkboxFullPrecision, Config.Keys.FullPrecision);
-            ConfigParser.LoadGuiElement(checkboxFolderPerPrompt, Config.Keys.FolderPerPrompt);
-            ConfigParser.LoadGuiElement(checkboxOutputIgnoreWildcards, Config.Keys.FilenameIgnoreWildcards);
-            ConfigParser.LoadGuiElement(checkboxFolderPerSession, Config.Keys.FolderPerSession);
-            ConfigParser.LoadGuiElement(checkboxAdvancedMode, Config.Keys.AdvancedUi);
-            ConfigParser.LoadGuiElement(checkboxMultiPromptsSameSeed, Config.Keys.MultiPromptsSameSeed);
-            ConfigParser.LoadComboxIndex(comboxTimestampInFilename, Config.Keys.FilenameTimestampMode);
-            ConfigParser.LoadGuiElement(checkboxPromptInFilename, Config.Keys.PromptInFilename);
-            ConfigParser.LoadGuiElement(checkboxSeedInFilename, Config.Keys.SeedInFilename);
-            ConfigParser.LoadGuiElement(checkboxScaleInFilename, Config.Keys.ScaleInFilename);
-            ConfigParser.LoadGuiElement(checkboxSamplerInFilename, Config.Keys.SamplerInFilename);
-            ConfigParser.LoadGuiElement(checkboxModelInFilename, Config.Keys.ModelInFilename);
-            ConfigParser.LoadGuiElement(textboxOutPath, Config.Keys.OutPath);
-            ConfigParser.LoadGuiElement(textboxFavsPath, Config.Keys.FavsPath);
-            //ConfigParser.LoadGuiElement(comboxSdModel, Config.Keys.Model);
-            ConfigParser.LoadGuiElement(comboxSdModelVae, Config.Keys.ModelVae);
+            ConfigParser.LoadGuiElement(checkboxFullPrecision, ref Config.Instance.FullPrecision);
+            ConfigParser.LoadGuiElement(checkboxFolderPerPrompt, ref Config.Instance.FolderPerPrompt);
+            ConfigParser.LoadGuiElement(checkboxOutputIgnoreWildcards, ref Config.Instance.FilenameIgnoreWildcards);
+            ConfigParser.LoadGuiElement(checkboxFolderPerSession, ref Config.Instance.FolderPerSession);
+            ConfigParser.LoadGuiElement(checkboxAdvancedMode, ref Config.Instance.AdvancedUi);
+            ConfigParser.LoadGuiElement(checkboxMultiPromptsSameSeed, ref Config.Instance.MultiPromptsSameSeed);
+            ConfigParser.LoadComboxIndex(comboxTimestampInFilename, ref Config.Instance.FilenameTimestampMode);
+            ConfigParser.LoadGuiElement(checkboxPromptInFilename, ref Config.Instance.PromptInFilename);
+            ConfigParser.LoadGuiElement(checkboxSeedInFilename, ref Config.Instance.SeedInFilename);
+            ConfigParser.LoadGuiElement(checkboxScaleInFilename, ref Config.Instance.ScaleInFilename);
+            ConfigParser.LoadGuiElement(checkboxSamplerInFilename, ref Config.Instance.SamplerInFilename);
+            ConfigParser.LoadGuiElement(checkboxModelInFilename, ref Config.Instance.ModelInFilename);
+            ConfigParser.LoadGuiElement(textboxOutPath, ref Config.Instance.OutPath);
+            ConfigParser.LoadGuiElement(textboxFavsPath, ref Config.Instance.FavsPath);
+            //ConfigParser.LoadGuiElement(comboxSdModel, ref Config.Instance.Model);
+            ConfigParser.LoadGuiElement(comboxSdModelVae, ref Config.Instance.ModelVae);
             // ConfigParser.LoadComboxIndex(comboxCudaDevice);
-            ConfigParser.LoadComboxIndex(comboxClipSkip, Config.Keys.ClipSkip);
-            ConfigParser.LoadComboxIndex(comboxNotify, Config.Keys.NotifyModeIdx);
-            ConfigParser.LoadGuiElement(checkboxSaveUnprocessedImages, Config.Keys.SaveUnprocessedImages);
-            ConfigParser.LoadGuiElement(checkboxUnloadModel, Config.Keys.UnloadModel);
-            ConfigParser.LoadGuiElement(checkboxAutoSetResForInitImg, Config.Keys.AutoSetResForInitImg);
-            ConfigParser.LoadGuiElement(checkboxInitImageRetainAspectRatio, Config.Keys.InitImageRetainAspectRatio);
+            ConfigParser.LoadComboxIndex(comboxClipSkip, ref Config.Instance.ClipSkip);
+            ConfigParser.LoadComboxIndex(comboxNotify, ref Config.Instance.NotifyModeIdx);
+            ConfigParser.LoadGuiElement(checkboxSaveUnprocessedImages, ref Config.Instance.SaveUnprocessedImages);
+            ConfigParser.LoadGuiElement(checkboxUnloadModel, ref Config.Instance.UnloadModel);
+            ConfigParser.LoadGuiElement(checkboxAutoSetResForInitImg, ref Config.Instance.AutoSetResForInitImg);
+            ConfigParser.LoadGuiElement(checkboxInitImageRetainAspectRatio, ref Config.Instance.InitImageRetainAspectRatio);
         }
 
         void SaveSettings()
@@ -173,30 +173,32 @@ namespace StableDiffusionGui.Forms
             textboxOutPath.Text = textboxOutPath.Text.Replace(@"\", "/");
             textboxFavsPath.Text = textboxFavsPath.Text.Replace(@"\", "/");
 
-            if (!comboxImplementation.Text.StartsWith("Loading")) Config.Set(Config.Keys.ImplementationName, Strings.Implementation.GetReverse(comboxImplementation.Text));
-            ConfigParser.SaveGuiElement(checkboxFullPrecision, Config.Keys.FullPrecision);
-            ConfigParser.SaveGuiElement(checkboxFolderPerPrompt, Config.Keys.FolderPerPrompt);
-            ConfigParser.SaveGuiElement(checkboxOutputIgnoreWildcards, Config.Keys.FilenameIgnoreWildcards);
-            ConfigParser.SaveGuiElement(checkboxFolderPerSession, Config.Keys.FolderPerSession);
-            ConfigParser.SaveGuiElement(checkboxAdvancedMode, Config.Keys.AdvancedUi);
-            ConfigParser.SaveGuiElement(checkboxMultiPromptsSameSeed, Config.Keys.MultiPromptsSameSeed);
-            ConfigParser.SaveComboxIndex(comboxTimestampInFilename, Config.Keys.FilenameTimestampMode);
-            ConfigParser.SaveGuiElement(checkboxPromptInFilename, Config.Keys.PromptInFilename);
-            ConfigParser.SaveGuiElement(checkboxSeedInFilename, Config.Keys.SeedInFilename);
-            ConfigParser.SaveGuiElement(checkboxScaleInFilename, Config.Keys.ScaleInFilename);
-            ConfigParser.SaveGuiElement(checkboxSamplerInFilename, Config.Keys.SamplerInFilename);
-            ConfigParser.SaveGuiElement(checkboxModelInFilename, Config.Keys.ModelInFilename);
-            ConfigParser.SaveGuiElement(textboxOutPath, Config.Keys.OutPath);
-            ConfigParser.SaveGuiElement(textboxFavsPath, Config.Keys.FavsPath);
-            if (!string.IsNullOrWhiteSpace(comboxSdModel.Text)) ConfigParser.SaveGuiElement(comboxSdModel, Config.Keys.Model);
-            if (!string.IsNullOrWhiteSpace(comboxSdModelVae.Text)) ConfigParser.SaveGuiElement(comboxSdModelVae, Config.Keys.ModelVae);
-            if (!comboxCudaDevice.Text.StartsWith("Loading")) ConfigParser.SaveComboxIndex(comboxCudaDevice, Config.Keys.CudaDeviceIdx);
-            ConfigParser.SaveComboxIndex(comboxClipSkip, Config.Keys.ClipSkip);
-            ConfigParser.SaveComboxIndex(comboxNotify, Config.Keys.NotifyModeIdx);
-            ConfigParser.SaveGuiElement(checkboxSaveUnprocessedImages, Config.Keys.SaveUnprocessedImages);
-            ConfigParser.SaveGuiElement(checkboxUnloadModel, Config.Keys.UnloadModel);
-            ConfigParser.SaveGuiElement(checkboxAutoSetResForInitImg, Config.Keys.AutoSetResForInitImg);
-            ConfigParser.SaveGuiElement(checkboxInitImageRetainAspectRatio, Config.Keys.InitImageRetainAspectRatio);
+            if (!comboxImplementation.Text.StartsWith("Loading")) Config.Instance.Implementation = ParseUtils.GetEnum<Implementation>(comboxImplementation.Text, true, Strings.Implementation);
+            ConfigParser.SaveGuiElement(checkboxFullPrecision, ref Config.Instance.FullPrecision);
+            ConfigParser.SaveGuiElement(checkboxFolderPerPrompt, ref Config.Instance.FolderPerPrompt);
+            ConfigParser.SaveGuiElement(checkboxOutputIgnoreWildcards, ref Config.Instance.FilenameIgnoreWildcards);
+            ConfigParser.SaveGuiElement(checkboxFolderPerSession, ref Config.Instance.FolderPerSession);
+            ConfigParser.SaveGuiElement(checkboxAdvancedMode, ref Config.Instance.AdvancedUi);
+            ConfigParser.SaveGuiElement(checkboxMultiPromptsSameSeed, ref Config.Instance.MultiPromptsSameSeed);
+            ConfigParser.SaveComboxIndex(comboxTimestampInFilename, ref Config.Instance.FilenameTimestampMode);
+            ConfigParser.SaveGuiElement(checkboxPromptInFilename, ref Config.Instance.PromptInFilename);
+            ConfigParser.SaveGuiElement(checkboxSeedInFilename, ref Config.Instance.SeedInFilename);
+            ConfigParser.SaveGuiElement(checkboxScaleInFilename, ref Config.Instance.ScaleInFilename);
+            ConfigParser.SaveGuiElement(checkboxSamplerInFilename, ref Config.Instance.SamplerInFilename);
+            ConfigParser.SaveGuiElement(checkboxModelInFilename, ref Config.Instance.ModelInFilename);
+            ConfigParser.SaveGuiElement(textboxOutPath, ref Config.Instance.OutPath);
+            ConfigParser.SaveGuiElement(textboxFavsPath, ref Config.Instance.FavsPath);
+            if (!string.IsNullOrWhiteSpace(comboxSdModel.Text)) ConfigParser.SaveGuiElement(comboxSdModel, ref Config.Instance.Model);
+            if (!string.IsNullOrWhiteSpace(comboxSdModelVae.Text)) ConfigParser.SaveGuiElement(comboxSdModelVae, ref Config.Instance.ModelVae);
+            if (!comboxCudaDevice.Text.StartsWith("Loading")) ConfigParser.SaveComboxIndex(comboxCudaDevice, ref Config.Instance.CudaDeviceIdx);
+            ConfigParser.SaveComboxIndex(comboxClipSkip, ref Config.Instance.ClipSkip);
+            ConfigParser.SaveComboxIndex(comboxNotify, ref Config.Instance.NotifyModeIdx);
+            ConfigParser.SaveGuiElement(checkboxSaveUnprocessedImages, ref Config.Instance.SaveUnprocessedImages);
+            ConfigParser.SaveGuiElement(checkboxUnloadModel, ref Config.Instance.UnloadModel);
+            ConfigParser.SaveGuiElement(checkboxAutoSetResForInitImg, ref Config.Instance.AutoSetResForInitImg);
+            ConfigParser.SaveGuiElement(checkboxInitImageRetainAspectRatio, ref Config.Instance.InitImageRetainAspectRatio);
+
+            Config.Save();
         }
 
         private void btnOutPathBrowse_Click(object sender, EventArgs e)
@@ -250,7 +252,7 @@ namespace StableDiffusionGui.Forms
 
             try
             {
-                Config.Set(Config.Keys.ImplementationName, CurrImplementation.ToString());
+                Config.Instance.Implementation = CurrImplementation;
                 panelFullPrecision.SetVisible(CurrImplementation.Supports(ImplementationInfo.Feature.HalfPrecisionToggle));
                 panelUnloadModel.SetVisible(CurrImplementation.Supports(ImplementationInfo.Feature.InteractiveCli));
                 panelCudaDevice.SetVisible(CurrImplementation.Supports(ImplementationInfo.Feature.DeviceSelection));

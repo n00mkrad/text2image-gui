@@ -95,7 +95,7 @@ namespace StableDiffusionGui.Forms
 
         private void SaveConfig ()
         {
-            ConfigParser.SaveGuiElement(checkboxDeleteInput, Config.Keys.ConvertModelsDeleteInput);
+            ConfigParser.SaveGuiElement(checkboxDeleteInput, ref Config.Instance.ConvertModelsDeleteInput);
         }
 
         private void comboxInFormat_SelectedIndexChanged(object sender, EventArgs e)
@@ -116,7 +116,7 @@ namespace StableDiffusionGui.Forms
         {
             Refresh();
             comboxInFormat.FillFromEnum<Enums.Models.Format>(Strings.ModelFormats, 0, new[] { Enums.Models.Format.DiffusersOnnx }.ToList());
-            ConfigParser.LoadGuiElement(checkboxDeleteInput, Config.Keys.ConvertModelsDeleteInput);
+            ConfigParser.LoadGuiElement(checkboxDeleteInput, ref Config.Instance.ConvertModelsDeleteInput);
             TabOrderInit(new List<Control>() { comboxInFormat, comboxModel, comboxOutFormat, checkboxDeleteInput, btnRun }, 0);
             await Task.Delay(1);
             Opacity = 1;

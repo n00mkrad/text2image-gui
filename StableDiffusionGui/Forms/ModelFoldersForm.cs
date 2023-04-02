@@ -39,7 +39,7 @@ namespace StableDiffusionGui.Forms
         private void LoadDirs()
         {
             Folders = new List<string>() { Paths.GetModelsPath() };
-            List<string> serializedPaths = Config.Get<List<string>>(Config.Keys.CustomModelDirs);
+            List<string> serializedPaths = Config.Instance.CustomModelDirs;
 
             if (serializedPaths != null)
                 Folders.AddRange(serializedPaths, out Folders);
@@ -47,7 +47,7 @@ namespace StableDiffusionGui.Forms
 
         private void SaveDirs()
         {
-            Config.Set(Config.Keys.CustomModelDirs, Folders.Where(dir => dir != Paths.GetModelsPath() && Directory.Exists(dir)).Select(s => s.Replace(@"\", "/")).ToList());
+            Config.Instance.CustomModelDirs = Folders.Where(dir => dir != Paths.GetModelsPath() && Directory.Exists(dir)).Select(s => s.Replace(@"\", "/")).ToList();
         }
 
         private void FillList()

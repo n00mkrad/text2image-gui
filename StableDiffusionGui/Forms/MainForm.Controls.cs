@@ -25,7 +25,7 @@ namespace StableDiffusionGui.Forms
 
         private List<Control> _debugControls { get { return new List<Control> { panelDebugLoopback, panelDebugPerlinThresh, panelDebugSendStdin, panelDebugAppendArgs }; } }
 
-        public bool IsUsingInpaintingModel { get { return Path.ChangeExtension(Config.Get<string>(Config.Keys.Model), null).EndsWith(Constants.SuffixesPrefixes.InpaintingMdlSuf); } }
+        public bool IsUsingInpaintingModel { get { return Path.ChangeExtension(Config.Instance.Model, null).EndsWith(Constants.SuffixesPrefixes.InpaintingMdlSuf); } }
         public bool AnyInits { get { return MainUi.CurrentInitImgPaths.Any(); } }
         private Dictionary<Panel, int> _panelHeights = new Dictionary<Panel, int>();
 
@@ -39,7 +39,7 @@ namespace StableDiffusionGui.Forms
             comboxResizeGravity.FillFromEnum<ImageMagick.Gravity>(Strings.ImageGravity, 4, new List<ImageMagick.Gravity> { ImageMagick.Gravity.Undefined });
             comboxEmbeddingList.SetItems(new[] { "None" }.Concat(Models.GetEmbeddings().Select(m => m.FormatIndependentName)), UiExtensions.SelectMode.First);
             comboxBackend.FillFromEnum<Implementation>(Strings.Implementation, -1);
-            comboxBackend.Text = Strings.Implementation.Get(Config.Get<string>(Config.Keys.ImplementationName));
+            comboxBackend.Text = Strings.Implementation.Get(Config.Instance.Implementation.ToString());
             ReloadModelsCombox();
             UpdateModel();
             comboxModelArch.FillFromEnum<Enums.Models.SdArch>(Strings.SdModelArch, 0);
@@ -60,7 +60,7 @@ namespace StableDiffusionGui.Forms
             _debugControls.ForEach(c => c.SetVisible(Program.Debug)); // Show debug controls if debug mode is enabled
 
             // Events
-            comboxBackend.SelectedIndexChanged += (s, e) => { Config.Set(Config.Keys.ImplementationName, Strings.Implementation.GetReverse(comboxBackend.Text)); TryRefreshUiState(); }; // Implementation change
+            comboxBackend.SelectedIndexChanged += (s, e) => { Config.Instance.Implementation = ParseUtils.GetEnum<Implementation>(comboxBackend.Text, true, Strings.Implementation); TryRefreshUiState(); }; // Implementation change
             comboxModel.SelectedIndexChanged += (s, e) => ModelChanged();
             comboxModel.DropDown += (s, e) => ReloadModelsCombox();
             comboxModel.DropDownClosed += (s, e) => panelSettings.Focus();
@@ -70,26 +70,26 @@ namespace StableDiffusionGui.Forms
 
         public void LoadControls()
         {
-            ConfigParser.LoadGuiElement(upDownIterations, Config.Keys.Iterations);
-            ConfigParser.LoadGuiElement(sliderSteps, Config.Keys.Steps);
-            ConfigParser.LoadGuiElement(sliderScale, Config.Keys.Scale);
-            ConfigParser.LoadGuiElement(comboxResW, Config.Keys.ResW);
-            ConfigParser.LoadGuiElement(comboxResH, Config.Keys.ResH);
-            ConfigParser.LoadComboxIndex(comboxSampler, Config.Keys.Sampler);
-            ConfigParser.LoadGuiElement(sliderInitStrength, Config.Keys.InitStrength);
-            ConfigParser.LoadGuiElement(checkboxHiresFix, Config.Keys.HiresFix);
+            ConfigParser.LoadGuiElement(upDownIterations, ref Config.Instance.Iterations);
+            ConfigParser.LoadGuiElement(sliderSteps, ref Config.Instance.Steps);
+            ConfigParser.LoadGuiElement(sliderScale, ref Config.Instance.Scale);
+            ConfigParser.LoadGuiElement(comboxResW, ref Config.Instance.ResW);
+            ConfigParser.LoadGuiElement(comboxResH, ref Config.Instance.ResH);
+            ConfigParser.LoadComboxIndex(comboxSampler, ref Config.Instance.SamplerIdx);
+            ConfigParser.LoadGuiElement(sliderInitStrength, ref Config.Instance.InitStrength);
+            ConfigParser.LoadGuiElement(checkboxHiresFix, ref Config.Instance.HiresFix);
         }
 
         public void SaveControls()
         {
-            ConfigParser.SaveGuiElement(upDownIterations, Config.Keys.Iterations);
-            ConfigParser.SaveGuiElement(sliderSteps, Config.Keys.Steps);
-            ConfigParser.SaveGuiElement(sliderScale, Config.Keys.Scale);
-            ConfigParser.SaveGuiElement(comboxResW, Config.Keys.ResW);
-            ConfigParser.SaveGuiElement(comboxResH, Config.Keys.ResH);
-            ConfigParser.SaveComboxIndex(comboxSampler, Config.Keys.Sampler);
-            ConfigParser.SaveGuiElement(sliderInitStrength, Config.Keys.InitStrength);
-            ConfigParser.SaveGuiElement(checkboxHiresFix, Config.Keys.HiresFix);
+            ConfigParser.SaveGuiElement(upDownIterations, ref Config.Instance.Iterations);
+            ConfigParser.SaveGuiElement(sliderSteps, ref Config.Instance.Steps);
+            ConfigParser.SaveGuiElement(sliderScale, ref Config.Instance.Scale);
+            ConfigParser.SaveGuiElement(comboxResW, ref Config.Instance.ResW);
+            ConfigParser.SaveGuiElement(comboxResH, ref Config.Instance.ResH);
+            ConfigParser.SaveComboxIndex(comboxSampler, ref Config.Instance.SamplerIdx);
+            ConfigParser.SaveGuiElement(sliderInitStrength, ref Config.Instance.InitStrength);
+            ConfigParser.SaveGuiElement(checkboxHiresFix, ref Config.Instance.HiresFix);
 
             Config.Instance.ModelArchs[((Model)comboxModel.SelectedItem).FullName] = ParseUtils.GetEnum<Enums.Models.SdArch>(comboxModelArch.Text, true, Strings.SdModelArch);
             Config.Save();
@@ -115,14 +115,14 @@ namespace StableDiffusionGui.Forms
 
         private void RefreshUiState()
         {
-            Implementation imp = ConfigParser.CurrentImplementation;
+            Implementation imp = Config.Instance.Implementation;
             comboxBackend.Text = Strings.Implementation.Get(imp.ToString());
 
             // Panel visibility
             SetVisibility(new Control[] { panelPromptNeg, panelEmbeddings, panelInitImgStrength, panelInpainting, panelScaleImg, panelRes, panelSampler, panelSeamless, panelSymmetry, checkboxHiresFix,
                 textboxClipsegMask, panelResizeGravity, labelResChange, btnResetRes, checkboxShowInitImg, panelModel }, imp);
 
-            bool adv = Config.Get<bool>(Config.Keys.AdvancedUi);
+            bool adv = Config.Instance.AdvancedUi;
             upDownIterations.Maximum = !adv ? 10000 : 100000;
             sliderSteps.ActualMaximum = !adv ? 120 : 500;
             sliderSteps.ChangeStep(!adv ? 5 : 1);
@@ -164,10 +164,12 @@ namespace StableDiffusionGui.Forms
             List<Enums.Models.SdArch> exclusionList = formats.Contains(mdl.Format) ? new List<Enums.Models.SdArch>() : Enum.GetValues(typeof(Enums.Models.SdArch)).Cast<Enums.Models.SdArch>().Skip(1).ToList();
             comboxModelArch.FillFromEnum<Enums.Models.SdArch>(Strings.SdModelArch, 0, exclusionList);
 
+            Console.WriteLine("=> INSTANCE SHOULD BE LOADED NOW!!");
+
             if (Config.Instance.ModelArchs.ContainsKey(mdl.FullName))
                 comboxModelArch.SetIfTextMatches(Config.Instance.ModelArchs[mdl.FullName].ToString(), false, Strings.SdModelArch);
 
-            ConfigParser.SaveGuiElement(comboxModel, Config.Keys.Model);
+            ConfigParser.SaveGuiElement(comboxModel, ref Config.Instance.Model);
         }
 
         private void ResolutionChanged()
@@ -322,12 +324,12 @@ namespace StableDiffusionGui.Forms
                 return;
 
             if (imp == (Implementation)(-1))
-                imp = ConfigParser.CurrentImplementation;
+                imp = Config.Instance.Implementation;
 
             if (imp == (Implementation)(-1))
                 return;
 
-            string currentModel = Config.Get<string>(Config.Keys.Model);
+            string currentModel = Config.Instance.Model;
             ReloadModelsCombox(imp);
             comboxModel.Text = currentModel;
 
@@ -338,7 +340,7 @@ namespace StableDiffusionGui.Forms
         private void ReloadModelsCombox (Implementation imp = (Implementation)(-1))
         {
             if (imp == (Implementation)(-1))
-                imp = ConfigParser.CurrentImplementation;
+                imp = Config.Instance.Implementation;
 
             IEnumerable<Model> models = Models.GetModelsAll().Where(m => m.Type == Enums.Models.Type.Normal && imp.GetInfo().SupportedModelFormats.Contains(m.Format));
             comboxModel.SetItems(models, UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.None);

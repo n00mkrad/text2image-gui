@@ -66,7 +66,7 @@ namespace StableDiffusionGui.Forms
 
         public void TryOpenPostProcessingSettings()
         {
-            var imp = ConfigParser.CurrentImplementation;
+            var imp = Config.Instance.Implementation;
             var supportedImps = new List<Implementation> { Implementation.InvokeAi };
 
             if (!supportedImps.Contains(imp))
@@ -197,7 +197,7 @@ namespace StableDiffusionGui.Forms
                 return;
 
             Size targetSize = TextToImage.CurrentTaskSettings.Params["res"].FromJson<Size>();
-            Size scaleSize = Config.Get<bool>(Config.Keys.InitImageRetainAspectRatio) ? ImgMaths.FitIntoFrame(img.Size, targetSize) : targetSize;
+            Size scaleSize = Config.Instance.InitImageRetainAspectRatio ? ImgMaths.FitIntoFrame(img.Size, targetSize) : targetSize;
             img = ImgUtils.ScaleAndPad(ImgUtils.GetMagickImage(img), scaleSize, targetSize).ToBitmap();
 
             Inpainting.EditCurrentMask(img, IsUsingInpaintingModel);
