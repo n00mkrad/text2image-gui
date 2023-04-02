@@ -47,8 +47,7 @@ namespace StableDiffusionGui.Io
         {
             try
             {
-                string path = Path.Combine(Paths.GetDataPath(), "conf.json");
-                Instance = File.ReadAllText(path).FromJson<ConfigInstance>();
+                Instance = File.ReadAllText(ConfigPath).FromJson<ConfigInstance>();
             }
             catch(Exception ex)
             {
@@ -63,9 +62,8 @@ namespace StableDiffusionGui.Io
         {
             try
             {
-                string path = Path.Combine(Paths.GetDataPath(), "conf.json");
                 Instance.Clean();
-                File.WriteAllText(path, Instance.ToJson(true, true));
+                File.WriteAllText(ConfigPath, Instance.ToJson(true, true));
             }
             catch (Exception ex)
             {
