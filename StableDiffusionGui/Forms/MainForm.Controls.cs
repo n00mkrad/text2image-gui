@@ -164,8 +164,6 @@ namespace StableDiffusionGui.Forms
             List<Enums.Models.SdArch> exclusionList = formats.Contains(mdl.Format) ? new List<Enums.Models.SdArch>() : Enum.GetValues(typeof(Enums.Models.SdArch)).Cast<Enums.Models.SdArch>().Skip(1).ToList();
             comboxModelArch.FillFromEnum<Enums.Models.SdArch>(Strings.SdModelArch, 0, exclusionList);
 
-            Console.WriteLine("=> INSTANCE SHOULD BE LOADED NOW!!");
-
             if (Config.Instance.ModelArchs.ContainsKey(mdl.FullName))
                 comboxModelArch.SetIfTextMatches(Config.Instance.ModelArchs[mdl.FullName].ToString(), false, Strings.SdModelArch);
 

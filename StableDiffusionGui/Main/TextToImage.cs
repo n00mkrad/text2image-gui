@@ -85,11 +85,22 @@ namespace StableDiffusionGui.Main
                 ImageExport.Init();
 
                 if (s.Implementation != Implementation.InvokeAi)
+                {
                     tasks.Add(ImageExport.ExportLoop(tempOutDir, CurrentTask.ImgCount, s.GetTargetImgCount()));
+                    await Task.WhenAll(tasks);
+                }
                 else
-                    tasks.Add(ImageExport.WaitLoop(CurrentTask.ImgCount, s.GetTargetImgCount()));
+                {
+                    await Task.WhenAll(tasks);
+                    //tasks.Add(ImageExport.WaitLoop(CurrentTask.ImgCount, s.GetTargetImgCount()));
 
-                await Task.WhenAll(tasks);
+                    int targetImgCount = s.GetTargetImgCount();
+
+                    while (!Canceled && CurrentTask.ImgCount < targetImgCount)
+                        await Task.Delay(100);
+                }
+
+               
                 MainUi.Queue = MainUi.Queue.Except(new List<TtiSettings> { s }).ToList(); // Remove from queue
             }
 
