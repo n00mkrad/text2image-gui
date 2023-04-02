@@ -9,6 +9,7 @@ using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -160,6 +161,7 @@ namespace StableDiffusionGui.Forms
             //ConfigParser.LoadGuiElement(comboxSdModel, ref Config.Instance.Model);
             ConfigParser.LoadGuiElement(comboxSdModelVae, ref Config.Instance.ModelVae);
             // ConfigParser.LoadComboxIndex(comboxCudaDevice);
+            ConfigParser.LoadGuiElement(checkboxModelCaching, ref Config.Instance.InvokeAllowModelCaching);
             ConfigParser.LoadComboxIndex(comboxClipSkip, ref Config.Instance.ClipSkip);
             ConfigParser.LoadComboxIndex(comboxNotify, ref Config.Instance.NotifyModeIdx);
             ConfigParser.LoadGuiElement(checkboxSaveUnprocessedImages, ref Config.Instance.SaveUnprocessedImages);
@@ -191,6 +193,7 @@ namespace StableDiffusionGui.Forms
             if (!string.IsNullOrWhiteSpace(comboxSdModel.Text)) ConfigParser.SaveGuiElement(comboxSdModel, ref Config.Instance.Model);
             if (!string.IsNullOrWhiteSpace(comboxSdModelVae.Text)) ConfigParser.SaveGuiElement(comboxSdModelVae, ref Config.Instance.ModelVae);
             if (!comboxCudaDevice.Text.StartsWith("Loading")) ConfigParser.SaveComboxIndex(comboxCudaDevice, ref Config.Instance.CudaDeviceIdx);
+            ConfigParser.SaveGuiElement(checkboxModelCaching, ref Config.Instance.InvokeAllowModelCaching);
             ConfigParser.SaveComboxIndex(comboxClipSkip, ref Config.Instance.ClipSkip);
             ConfigParser.SaveComboxIndex(comboxNotify, ref Config.Instance.NotifyModeIdx);
             ConfigParser.SaveGuiElement(checkboxSaveUnprocessedImages, ref Config.Instance.SaveUnprocessedImages);
@@ -259,6 +262,7 @@ namespace StableDiffusionGui.Forms
                 panelSdModel.SetVisible(CurrImplementation.Supports(ImplementationInfo.Feature.CustomModels));
                 panelVae.SetVisible(CurrImplementation.Supports(ImplementationInfo.Feature.CustomVae));
                 panelAdvancedOptsInvoke.SetVisible(CurrImplementation == Implementation.InvokeAi);
+                panelModelCaching.SetVisible(CurrImplementation == Implementation.InvokeAi);
 
                 LoadModels();
 
@@ -285,6 +289,15 @@ namespace StableDiffusionGui.Forms
         {
             comboxSdModel.Enabled = comboxSdModel.Items.Count > 0;
             comboxSdModelVae.Enabled = comboxSdModelVae.Items.Count > 0;
+        }
+
+        private void parentPanel_SizeChanged(object sender, EventArgs e)
+        {
+            var newPadding = parentPanel.Padding;
+            newPadding.Right = parentPanel.VerticalScroll.Visible ? 6 : 0;
+
+            if (parentPanel.Padding.Right != newPadding.Right)
+                parentPanel.Padding = newPadding;
         }
     }
 }

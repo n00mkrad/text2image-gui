@@ -87,11 +87,7 @@ namespace StableDiffusionGui.Ui
 
             if (!_shownBlackImgWarning && ImgUtils.IsAllBlack((Bitmap)img))
             {
-                if(!Config.Instance.FullPrecision)
-                    Logger.Log($"Warning: Your image appears to be completely black. Try enabling Full Precision in the Settings.");
-                else
-                    Logger.Log($"Warning: Your image appears to be completely black. This could be an issue with the model or your settings.");
-
+                Logger.Log($"Warning: Your image appears to be completely black. {(Config.Instance.FullPrecision ? "This could be an issue with the model or your settings" : "Try enabling Full Precision in the Settings")}.");
                 _shownBlackImgWarning = true;
             }
 
