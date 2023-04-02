@@ -8,7 +8,6 @@ namespace StableDiffusionGui.Io
 {
     internal class ConfigParser
     {
-
         public enum StringMode { Any, Int, Float }
 
         public static Enums.StableDiffusion.Implementation CurrentImplementation { get { return ParseUtils.GetEnum<Enums.StableDiffusion.Implementation>(Config.Get<string>(Config.Keys.ImplementationName)); } }

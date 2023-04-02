@@ -15,7 +15,7 @@ namespace StableDiffusionGui.Data
         public Enums.Models.Format Format { get; set; } = (Enums.Models.Format)(-1);
         public Enums.Models.Type Type { get; set; } = (Enums.Models.Type)(-1);
         public Enums.Models.SdArch LoadArchitecture { get; set; } = Enums.Models.SdArch.Automatic;
-        public int BaseResolution { get; set; } = 512;
+        // public int BaseResolution { get; set; } = 512;
         public string Name { get { return _file == null ? _dir.Name : _file.Name; } }
         public string FullName { get { return _file == null ? _dir.FullName : _file.FullName; } }
         public string FormatIndependentName { get { return Path.ChangeExtension(Name, null); } }
@@ -58,10 +58,10 @@ namespace StableDiffusionGui.Data
         {
             LoadArchitecture = arch;
 
-            if (res > 0)
-                BaseResolution = res;
-            else
-                BaseResolution = arch == Enums.Models.SdArch.V2V ? 768 : 512;
+            // if (res > 0)
+            //     BaseResolution = res;
+            // else
+            //     BaseResolution = arch == Enums.Models.SdArch.V2V ? 768 : 512;
         }
 
         public override string ToString()

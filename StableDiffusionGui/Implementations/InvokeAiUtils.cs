@@ -81,7 +81,8 @@ namespace StableDiffusionGui.Implementations
                     if (mdl.Format != Enums.Models.Format.Diffusers)
                     {
                         string config = TtiUtils.GetCkptConfig(mdl, true);
-                        ckptArgs = new List<string>() { $"width: {mdl.BaseResolution}", $"height: {mdl.BaseResolution}" };
+                        int res = mdl.LoadArchitecture == Enums.Models.SdArch.V2V ? 768 : 512;
+                        ckptArgs = new List<string>() { $"width: {res}", $"height: {res}" };
 
                         if (config.IsNotEmpty())
                             ckptArgs.Add($"config: {config}");
@@ -127,7 +128,7 @@ namespace StableDiffusionGui.Implementations
 
             var models = cachedModels.Where(m => Implementation.InvokeAi.GetInfo().SupportedModelFormats.Contains(m.Format));
             models = models.Where(m => m.Type == Enums.Models.Type.Normal || m.Type == Enums.Models.Type.Vae);
-            string modelsStr = string.Join("\n", models.Select(m => $"{m.FullName}{m.LoadArchitecture}{m.BaseResolution}").OrderBy(n => n));
+            string modelsStr = string.Join("\n", models.Select(m => $"{m.FullName}{Config.Instance.ModelArchs.Get(m.FullName, Enums.Models.SdArch.Automatic)}").OrderBy(n => n));
             return IoUtils.GetHash(modelsStr, hashType, false);
         }
 
