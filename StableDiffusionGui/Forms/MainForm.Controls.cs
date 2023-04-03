@@ -91,7 +91,9 @@ namespace StableDiffusionGui.Forms
             ConfigParser.SaveGuiElement(sliderInitStrength, ref Config.Instance.InitStrength);
             ConfigParser.SaveGuiElement(checkboxHiresFix, ref Config.Instance.HiresFix);
 
-            Config.Instance.ModelArchs[((Model)comboxModel.SelectedItem).FullName] = ParseUtils.GetEnum<Enums.Models.SdArch>(comboxModelArch.Text, true, Strings.SdModelArch);
+            if (Config.Instance != null && comboxModel.SelectedIndex >= 0)
+                Config.Instance.ModelArchs[((Model)comboxModel.SelectedItem).FullName] = ParseUtils.GetEnum<Enums.Models.SdArch>(comboxModelArch.Text, true, Strings.SdModelArch);
+
             Config.Save();
         }
 
@@ -160,7 +162,7 @@ namespace StableDiffusionGui.Forms
 
             _prevSelectedModel = mdl.FullName;
             var formats = new List<Enums.Models.Format> { Enums.Models.Format.Pytorch, Enums.Models.Format.Safetensors };
-            
+
             List<Enums.Models.SdArch> exclusionList = formats.Contains(mdl.Format) ? new List<Enums.Models.SdArch>() : Enum.GetValues(typeof(Enums.Models.SdArch)).Cast<Enums.Models.SdArch>().Skip(1).ToList();
             comboxModelArch.FillFromEnum<Enums.Models.SdArch>(Strings.SdModelArch, 0, exclusionList);
 
@@ -335,7 +337,7 @@ namespace StableDiffusionGui.Forms
                 comboxModel.SelectedIndex = 0;
         }
 
-        private void ReloadModelsCombox (Implementation imp = (Implementation)(-1))
+        private void ReloadModelsCombox(Implementation imp = (Implementation)(-1))
         {
             if (imp == (Implementation)(-1))
                 imp = Config.Instance.Implementation;

@@ -878,9 +878,9 @@ namespace StableDiffusionGui.Io
 
                 string cachePath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.Cache.Root);
 
-                foreach (DirectoryInfo dir in new DirectoryInfo(cachePath).GetDirectories())
+                if (Directory.Exists(cachePath))
                 {
-                    if (dir.Name.EndsWith(".tmp"))
+                    foreach (DirectoryInfo dir in new DirectoryInfo(cachePath).GetDirectories().Where(d => d.Name.EndsWith(".tmp")))
                     {
                         bool success = TryDeleteIfExists(dir.FullName);
                         Logger.Log($"Cleanup: {(success ? "Deleted" : "Failed to delete")} '{dir.FullName}'", true);
