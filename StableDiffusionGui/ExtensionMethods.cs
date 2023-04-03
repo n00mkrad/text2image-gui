@@ -498,18 +498,40 @@ namespace StableDiffusionGui
                 if (string.IsNullOrWhiteSpace(s))
                     return default(T);
 
+                return JsonConvert.DeserializeObject<T>(s);
+            }
+            catch (Exception ex)
+            {
+                Logger.Log($"Failed to deserialize ({ex.Message}): \n'{s.Trunc(1000)}'", true);
+                if (Program.Debug) Logger.Log(ex.StackTrace, true);
+                return default(T);
+            }
+        }
+
+        public static T FromJson<T>(this string s, NullValueHandling nullHandling, DefaultValueHandling defHandling, bool useTolerantEnumConv, bool useNullToEmptyStringConv)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(s))
+                    return default(T);
+
                 var settings = new JsonSerializerSettings();
-                settings.Converters.Add(new Serialization.JsonUtils.TolerantEnumConverter()); // Fallback to first enum entry instead of throwing an error
-                settings.Converters.Add(new Serialization.JsonUtils.NullToEmptyStringConverter()); // Deserialize null as empty string instead of null
-                settings.NullValueHandling = NullValueHandling.Ignore;
-                settings.DefaultValueHandling = DefaultValueHandling.Populate;
+
+                if (useTolerantEnumConv)
+                    settings.Converters.Add(new Serialization.JsonUtils.TolerantEnumConverter()); // Fallback to first enum entry instead of throwing an error
+
+                if (useNullToEmptyStringConv)
+                    settings.Converters.Add(new Serialization.JsonUtils.NullToEmptyStringConverter()); // Deserialize null as empty string instead of null
+
+                settings.NullValueHandling = nullHandling;
+                settings.DefaultValueHandling = defHandling;
 
                 return JsonConvert.DeserializeObject<T>(s, settings);
             }
             catch (Exception ex)
             {
                 Logger.Log($"Failed to deserialize ({ex.Message}): \n'{s.Trunc(1000)}'", true);
-                if(Program.Debug) Logger.Log(ex.StackTrace, true);
+                if (Program.Debug) Logger.Log(ex.StackTrace, true);
                 return default(T);
             }
         }
@@ -598,7 +620,7 @@ namespace StableDiffusionGui
             return new ImplementationInfo(imp).SupportedFeatures.Contains(feature);
         }
 
-        public static bool IsUnset<TEnum> (this TEnum myEnum)
+        public static bool IsUnset<TEnum>(this TEnum myEnum)
         {
             return myEnum.Equals(Enum.ToObject(typeof(TEnum), -1));
         }

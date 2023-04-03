@@ -1,4 +1,5 @@
-﻿using StableDiffusionGui.Data;
+﻿using Newtonsoft.Json;
+using StableDiffusionGui.Data;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.Os;
 using System;
@@ -72,7 +73,7 @@ namespace StableDiffusionGui.Io
         public ConfigInstance()
         {
             MultiPromptsSameSeed = true;
-            InitStrength = 0.5f;
+            InitStrength = 0.4f;
             Steps = 25;
             Scale = 8f;
             OutPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), "SDGUI");

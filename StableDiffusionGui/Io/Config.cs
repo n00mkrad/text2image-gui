@@ -4,6 +4,7 @@ using System.IO;
 using StableDiffusionGui.Main;
 using System.Threading.Tasks;
 using StableDiffusionGui.MiscUtils;
+using Newtonsoft.Json;
 
 namespace StableDiffusionGui.Io
 {
@@ -48,7 +49,7 @@ namespace StableDiffusionGui.Io
         {
             try
             {
-                Instance = File.ReadAllText(ConfigPath).FromJson<ConfigInstance>();
+                Instance = File.ReadAllText(ConfigPath).FromJson<ConfigInstance>(NullValueHandling.Ignore, DefaultValueHandling.Include, true, true);
             }
             catch(Exception ex)
             {
