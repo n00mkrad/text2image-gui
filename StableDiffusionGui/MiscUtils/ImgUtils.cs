@@ -302,33 +302,42 @@ namespace StableDiffusionGui.MiscUtils
 
         public static bool IsPartiallyTransparent(Bitmap bitmap)
         {
-            if (bitmap.PixelFormat == PixelFormat.Format32bppArgb || bitmap.PixelFormat == PixelFormat.Format32bppPArgb)
+            try
             {
-                BitmapData data = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, bitmap.PixelFormat);
-                byte[] bytes = new byte[bitmap.Height * data.Stride];
-                Marshal.Copy(data.Scan0, bytes, 0, bytes.Length);
-                bitmap.UnlockBits(data);
-                var alphaBytes = new List<byte>();
+                Bitmap bmp = (Bitmap)bitmap.Clone(); // Create a copy, just to be sure we're not messing with the reference variable
 
-                for (int p = 3; p < bytes.Length; p += 4)
+                if (bmp.PixelFormat == PixelFormat.Format32bppArgb || bmp.PixelFormat == PixelFormat.Format32bppPArgb)
                 {
-                    alphaBytes.Add(bytes[p]);
+                    BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, bmp.PixelFormat);
+                    byte[] bytes = new byte[bmp.Height * data.Stride];
+                    Marshal.Copy(data.Scan0, bytes, 0, bytes.Length);
+                    bmp.UnlockBits(data);
+                    var alphaBytes = new List<byte>();
 
-                    if (bytes[p] != 255)
-                        return true;
+                    for (int p = 3; p < bytes.Length; p += 4)
+                    {
+                        alphaBytes.Add(bytes[p]);
+
+                        if (bytes[p] != 255)
+                            return true;
+                    }
+
+                    return false;
                 }
 
-                return false;
+                // Brute-forced method but it won't ever be used, unless you encounter types not handled above, like 16bppArgb1555 and 64bppArgb.
+                for (int i = 0; i < bmp.Width; i++)
+                {
+                    for (int j = 0; j < bmp.Height; j++)
+                    {
+                        if (bmp.GetPixel(i, j).A != 255)
+                            return true;
+                    }
+                }
             }
-
-            // Brute-forced method but it won't ever be used, unless you encounter types not handled above, like 16bppArgb1555 and 64bppArgb.
-            for (int i = 0; i < bitmap.Width; i++)
+            catch (Exception ex)
             {
-                for (int j = 0; j < bitmap.Height; j++)
-                {
-                    if (bitmap.GetPixel(i, j).A != 255)
-                        return true;
-                }
+                Logger.LogException(ex, true, "Transparency Check Exception:");
             }
 
             return false;
@@ -336,23 +345,37 @@ namespace StableDiffusionGui.MiscUtils
 
         public static bool IsAllBlack(Bitmap bitmap)
         {
-            BitmapData data = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, bitmap.PixelFormat);
-            byte[] bytes = new byte[bitmap.Height * data.Stride];
-            Marshal.Copy(data.Scan0, bytes, 0, bytes.Length);
-            bitmap.UnlockBits(data);
+            var validPixelFormats = new List<PixelFormat> { PixelFormat.Format24bppRgb, PixelFormat.Format32bppArgb, PixelFormat.Format32bppPArgb };
 
-            int channels = 3;
+            if (!validPixelFormats.Contains(bitmap.PixelFormat)) // Invalid format, so return false as default
+                return false;
 
-            if (bitmap.PixelFormat == PixelFormat.Format32bppArgb || bitmap.PixelFormat == PixelFormat.Format32bppPArgb)
-                channels = 4;
-
-            for (int p = 0; p < bytes.Length; p += channels)
+            try
             {
-                if (!(bytes[p] == 0 && bytes[p + 1] == 0 && bytes[p + 2] == 0)) // Condition is true if any pixels is not 0/0/0 and thus not fully black
-                    return false;
-            }
+                Bitmap bmp = (Bitmap)bitmap.Clone(); // Create a copy, just to be sure we're not messing with the reference variable
+                BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, bmp.PixelFormat);
+                byte[] bytes = new byte[bmp.Height * data.Stride];
+                Marshal.Copy(data.Scan0, bytes, 0, bytes.Length);
+                bmp.UnlockBits(data);
 
-            return true;
+                int channels = 3;
+
+                if (bmp.PixelFormat == PixelFormat.Format32bppArgb || bmp.PixelFormat == PixelFormat.Format32bppPArgb)
+                    channels = 4;
+
+                for (int p = 0; p < bytes.Length; p += channels)
+                {
+                    if (!(bytes[p] == 0 && bytes[p + 1] == 0 && bytes[p + 2] == 0)) // Condition is true if any pixels is not 0/0/0 and thus not fully black
+                        return false;
+                }
+
+                return true;
+            }
+            catch(Exception ex)
+            {
+                Logger.LogException(ex, true, "Black Image Check Exception:");
+                return false;
+            }
         }
     }
 }
