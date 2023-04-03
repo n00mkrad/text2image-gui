@@ -88,6 +88,7 @@ namespace StableDiffusionGui.Main
             if (string.IsNullOrWhiteSpace(entry.Message))
                 return;
 
+            Console.WriteLine(entry.ToString(true, true, true));
             entry.TimeEnqueue = DateTime.Now;
             _logQueue.Add(entry);
         }
@@ -162,8 +163,6 @@ namespace StableDiffusionGui.Main
 
             if (!entry.Hidden)
                 _lastUiLine = entry.Message;
-
-            Console.WriteLine(entry.ToString(true, true, true));
 
             if (RealtimeLoggerForm != null)
                 RealtimeLoggerForm.LogAppend(entry.Message.Replace("\n", Environment.NewLine), entry.ReplaceLastLine);
