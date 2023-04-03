@@ -59,11 +59,17 @@ namespace StableDiffusionGui.Ui
 
         public static Dictionary<string, string> ImageImportMode = new Dictionary<string, string>
         {
-            // Seamless Modes
             { Enums.Misc.ImageImportAction.LoadImage.ToString(), "Load as Initialization Image" },
             { Enums.Misc.ImageImportAction.LoadSettings.ToString(), "Use Settings From Metadata" },
             { Enums.Misc.ImageImportAction.LoadImageAndSettings.ToString(), "Load Image and Use Settings From Metadata" },
             { Enums.Misc.ImageImportAction.CopyPrompt.ToString(), "Copy Prompt" },
+        };
+
+        public static Dictionary<string, string> ChromaKeyMode = new Dictionary<string, string>
+        {
+            { Enums.Misc.ChromaKeyColor.Black.ToString(), "Make Black Pixels Transparent" },
+            { Enums.Misc.ChromaKeyColor.White.ToString(), "Make White Pixels Transparent" },
+            { Enums.Misc.ChromaKeyColor.Green.ToString(), "Make Green Pixels Transparent" },
         };
 
         public static Dictionary<string, string> SdPrecision = new Dictionary<string, string>()

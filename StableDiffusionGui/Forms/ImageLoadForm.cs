@@ -1,4 +1,5 @@
 ﻿using StableDiffusionGui.Data;
+using StableDiffusionGui.Extensions;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
@@ -15,6 +16,7 @@ namespace StableDiffusionGui.Forms
     public partial class ImageLoadForm : CustomForm
     {
         public ImageImportAction Action = (ImageImportAction)(-1);
+        public ChromaKeyColor ChromaKeyColor = (ChromaKeyColor)(-1);
         public ImageMetadata CurrentMetadata;
 
         private string _path;
@@ -31,7 +33,8 @@ namespace StableDiffusionGui.Forms
         {
             string filename = Path.GetFileName(_path);
             bool isClipboardImage = filename.StartsWith("clipboard") && _path.GetParentDirOfFile() == Paths.GetSessionDataPath();
-            Text = isClipboardImage ? "Clipboard Image" :  filename.Trunc(120);
+            Text = isClipboardImage ? "Clipboard Image" : filename.Trunc(120);
+            SetChromaKeyVisible(isClipboardImage);
         }
 
         private async void ImageLoadForm_Shown(object sender, EventArgs e)
@@ -53,6 +56,7 @@ namespace StableDiffusionGui.Forms
                     disabledActions.Add(ImageImportAction.CopyPrompt);
                 }
 
+                comboxChromaKey.FillFromEnum<ChromaKeyColor>(Strings.ChromaKeyMode, 0);
                 comboxImportAction.FillFromEnum<ImageImportAction>(Strings.ImageImportMode, 0, disabledActions);
 
                 string n = Environment.NewLine;
@@ -64,11 +68,6 @@ namespace StableDiffusionGui.Forms
 
                     if (!string.IsNullOrWhiteSpace(CurrentMetadata.Prompt))
                     {
-                        btnLoadSettings.Enabled = true;
-                        btnCopyPrompt.Enabled = true;
-                        btnLoadSettings.BackColor = btnInitImage.BackColor;
-                        btnCopyPrompt.BackColor = btnInitImage.BackColor;
-
                         textboxInfo.Text += $"{n}Prompt:{n}{CurrentMetadata.Prompt}{n}";
                         textboxInfo.Text += $"{n}Negative Prompt:{n}{CurrentMetadata.NegativePrompt}{n}";
                         textboxInfo.Text += $"{n}Steps:{n}{CurrentMetadata.Steps}{n}";
@@ -92,7 +91,7 @@ namespace StableDiffusionGui.Forms
                         textboxInfo.Text += $"No Metadata Found in Image.";
                 }
 
-                panelOk.Visible = true;
+                SetOkVisible(true);
                 TabOrderInit(new List<Control>() { textboxInfo, comboxImportAction }, 1);
             }
             catch (Exception ex)
@@ -103,22 +102,16 @@ namespace StableDiffusionGui.Forms
             _ready = true;
         }
 
-        private void btnCopyPrompt_Click(object sender, EventArgs e)
+        private void SetChromaKeyVisible(bool state)
         {
-            Action = ImageImportAction.CopyPrompt;
-            Close();
+            panelChromaKey.SetVisible(state);
+            tablePanel.RowStyles[1].Height = state ? 30 : 0;
         }
 
-        private void btnLoadSettings_Click(object sender, EventArgs e)
+        private void SetOkVisible(bool state)
         {
-            Action = ImageImportAction.LoadSettings;
-            Close();
-        }
-
-        private void btnInitImage_Click(object sender, EventArgs e)
-        {
-            Action = ImageImportAction.LoadImage;
-            Close();
+            panelOk.SetVisible(state);
+            tablePanel.RowStyles[2].Height = state ? 60 : 0;
         }
 
         private void ImageLoadForm_KeyDown(object sender, KeyEventArgs e)
@@ -133,6 +126,10 @@ namespace StableDiffusionGui.Forms
         private void btnOk_Click(object sender, EventArgs e)
         {
             Action = ParseUtils.GetEnum<ImageImportAction>(comboxImportAction.Text, true, Strings.ImageImportMode);
+
+            if (comboxChromaKey.Visible)
+                ChromaKeyColor = ParseUtils.GetEnum<ChromaKeyColor>(comboxChromaKey.Text, true, Strings.ChromaKeyMode);
+
             Close();
         }
     }

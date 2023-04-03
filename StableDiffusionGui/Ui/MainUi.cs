@@ -5,14 +5,12 @@ using StableDiffusionGui.Implementations;
 using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
-using StableDiffusionGui.Main.Utils;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Properties;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
 using System.Resources;
@@ -145,13 +143,25 @@ namespace StableDiffusionGui.Ui
                     imgForm.ShowDialogForm();
 
                     if (imgForm.Action == ImageImportAction.LoadSettings || imgForm.Action == ImageImportAction.LoadImageAndSettings)
+                    {
                         Program.MainForm.LoadMetadataIntoUi(imgForm.CurrentMetadata);
+                    }
+                    else if (imgForm.Action == ImageImportAction.LoadImage || imgForm.Action == ImageImportAction.LoadImageAndSettings)
+                    {
+                        if (imgForm.ChromaKeyColor != (ChromaKeyColor)(-1))
+                        {
+                            ImageMagick.MagickColor keyColor = ImageMagick.MagickColors.Black;
+                            if (imgForm.ChromaKeyColor == ChromaKeyColor.White) keyColor = ImageMagick.MagickColors.White;
+                            if (imgForm.ChromaKeyColor == ChromaKeyColor.Green) keyColor = ImageMagick.MagickColors.Green;
+                            ImgUtils.ReplaceColorWithTransparency(new ImageMagick.MagickImage(paths[0]), keyColor).Write(paths[0]);
+                        }
 
-                    if (imgForm.Action == ImageImportAction.LoadImage || imgForm.Action == ImageImportAction.LoadImageAndSettings)
                         AddInitImages(paths.ToList());
-
-                    if (imgForm.Action == ImageImportAction.CopyPrompt)
+                    }
+                    else if (imgForm.Action == ImageImportAction.CopyPrompt)
+                    {
                         OsUtils.SetClipboard(imgForm.CurrentMetadata.Prompt);
+                    }
                 }
 
                 Program.MainForm.TryRefreshUiState();
