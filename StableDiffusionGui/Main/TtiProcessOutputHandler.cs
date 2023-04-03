@@ -151,7 +151,7 @@ namespace StableDiffusionGui.Main
                     {
                         errMsg += "\n\nCache seems to be corrupted and has been cleared. Please try again.";
                         IoUtils.TryDeleteIfExists(Path.Combine(Environment.ExpandEnvironmentVariables("%USERPROFILE%"), ".cache", "huggingface", "transformers"));
-                        IoUtils.TryDeleteIfExists(Path.Combine(Paths.GetDataPath(), Constants.Dirs.Cache.Root, Constants.Dirs.Cache.Transformers));
+                        IoUtils.TryDeleteIfExists(Path.Combine(Paths.GetDataPath(), Constants.Dirs.Cache.Root, Constants.Dirs.Cache.Hf));
                     }
 
                     _hasErrored = true;
