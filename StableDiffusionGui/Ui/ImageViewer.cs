@@ -85,7 +85,7 @@ namespace StableDiffusionGui.Ui
             Image img = IoUtils.GetImage(_currentImages[_currIndex]);
             Program.MainForm.pictBoxImgViewer.Image = img;
 
-            if (!_shownBlackImgWarning && ImgUtils.IsAllBlack((Bitmap)img))
+            if (!_shownBlackImgWarning && ImgUtils.IsAllBlack((Bitmap)Program.MainForm.pictBoxImgViewer.GetImageSafe()))
             {
                 Logger.Log($"Warning: Your image appears to be completely black. {(Config.Instance.FullPrecision ? "This could be an issue with the model or your settings" : "Try enabling Full Precision in the Settings")}.");
                 _shownBlackImgWarning = true;

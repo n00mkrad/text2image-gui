@@ -9,6 +9,7 @@ using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -40,21 +41,28 @@ namespace StableDiffusionGui.Forms
             LoadModels();
         }
 
-        private void UpdateVisibility ()
+        private void UpdateVisibility()
         {
-            panelDiffSafetensors.SetVisible(_currentOutFormat == Enums.Models.Format.Diffusers);
-            panelFp16.SetVisible(!(_currentOutFormat == Enums.Models.Format.DiffusersOnnx && GpuUtils.CachedGpus.Count <= 0)); // ONNX FP16 conversion currently requires CUDA
+            ((Action)(() =>
+            {
+                panelDiffSafetensors.SetVisible(_currentOutFormat == Enums.Models.Format.Diffusers);
+                panelFp16.SetVisible(!(_currentOutFormat == Enums.Models.Format.DiffusersOnnx && GpuUtils.CachedGpus.Count <= 0)); // ONNX FP16 conversion currently requires CUDA
+                panelModelArch.SetVisible(_currentInFormat == Enums.Models.Format.Pytorch || _currentInFormat == Enums.Models.Format.Pytorch); // Not needed for Diffusers models
+            })).RunWithUiStopped(this);
         }
 
         private void LoadModels()
         {
-            comboxModel.Items.Clear();
-            Models.GetModelsAll().Where(m => m.Format == _currentInFormat && m.Type == Enums.Models.Type.Normal).ToList().ForEach(x => comboxModel.Items.Add(x.Name));
+            ((Action)(() =>
+            {
+                comboxModel.Items.Clear();
+                Models.GetModelsAll().Where(m => m.Format == _currentInFormat && m.Type == Enums.Models.Type.Normal).ToList().ForEach(x => comboxModel.Items.Add(x));
 
-            if (comboxModel.SelectedIndex < 0 && comboxModel.Items.Count > 0)
-                comboxModel.SelectedIndex = 0;
+                if (comboxModel.SelectedIndex < 0 && comboxModel.Items.Count > 0)
+                    comboxModel.SelectedIndex = 0;
 
-            comboxModel.Enabled = comboxModel.Items.Count >= 1;
+                comboxModel.Enabled = comboxModel.Items.Count >= 1;
+            })).RunWithUiStopped(this);
         }
 
         private async void btnRun_Click(object sender, EventArgs e)
@@ -93,9 +101,14 @@ namespace StableDiffusionGui.Forms
             SaveConfig();
         }
 
-        private void SaveConfig ()
+        private void SaveConfig()
         {
             ConfigParser.SaveGuiElement(checkboxDeleteInput, ref Config.Instance.ConvertModelsDeleteInput);
+
+            if (Config.Instance != null && comboxModel.SelectedIndex >= 0)
+                Config.Instance.ModelArchs[((Model)comboxModel.SelectedItem).FullName] = ParseUtils.GetEnum<Enums.Models.SdArch>(comboxModelArch.Text, true, Strings.SdModelArch);
+
+            Config.Save();
         }
 
         private void comboxInFormat_SelectedIndexChanged(object sender, EventArgs e)
@@ -117,9 +130,20 @@ namespace StableDiffusionGui.Forms
             Refresh();
             comboxInFormat.FillFromEnum<Enums.Models.Format>(Strings.ModelFormats, 0, new[] { Enums.Models.Format.DiffusersOnnx }.ToList());
             ConfigParser.LoadGuiElement(checkboxDeleteInput, ref Config.Instance.ConvertModelsDeleteInput);
+            comboxModelArch.FillFromEnum<Enums.Models.SdArch>(Strings.SdModelArch, 0);
             TabOrderInit(new List<Control>() { comboxInFormat, comboxModel, comboxOutFormat, checkboxDeleteInput, btnRun }, 0);
             await Task.Delay(1);
             Opacity = 1;
+        }
+
+        private void comboxModel_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Model mdl = (Model)comboxModel.SelectedItem;
+
+            if (mdl != null && Config.Instance.ModelArchs.ContainsKey(mdl.FullName))
+                comboxModelArch.SetIfTextMatches(Config.Instance.ModelArchs[mdl.FullName].ToString(), false, Strings.SdModelArch);
+            else if (comboxModelArch.Items.Count > 0)
+                comboxModelArch.SelectedIndex = 0;
         }
     }
 }

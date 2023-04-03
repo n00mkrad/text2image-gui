@@ -72,6 +72,12 @@
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.btnReloadModels = new System.Windows.Forms.Button();
             this.btnOpenModelFolder = new System.Windows.Forms.Button();
+            this.panelModelArch = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
+            this.panel12 = new System.Windows.Forms.Panel();
+            this.comboxModelArch = new System.Windows.Forms.ComboBox();
+            this.panel13 = new System.Windows.Forms.Panel();
+            this.label6 = new System.Windows.Forms.Label();
             this.parentPanel.SuspendLayout();
             this.panelDelInput.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -97,6 +103,10 @@
             this.tableLayoutPanel3.SuspendLayout();
             this.panel6.SuspendLayout();
             this.panel7.SuspendLayout();
+            this.panelModelArch.SuspendLayout();
+            this.tableLayoutPanel6.SuspendLayout();
+            this.panel12.SuspendLayout();
+            this.panel13.SuspendLayout();
             this.SuspendLayout();
             // 
             // titleLabel
@@ -122,18 +132,19 @@
             this.parentPanel.Controls.Add(this.panelDiffSafetensors);
             this.parentPanel.Controls.Add(this.panelOutFormat);
             this.parentPanel.Controls.Add(this.panelModel);
+            this.parentPanel.Controls.Add(this.panelModelArch);
             this.parentPanel.Controls.Add(this.panelInFormat);
             this.parentPanel.Controls.Add(this.btnRun);
             this.parentPanel.Location = new System.Drawing.Point(12, 62);
             this.parentPanel.Name = "parentPanel";
-            this.parentPanel.Size = new System.Drawing.Size(560, 257);
+            this.parentPanel.Size = new System.Drawing.Size(560, 292);
             this.parentPanel.TabIndex = 15;
             // 
             // panelDelInput
             // 
             this.panelDelInput.Controls.Add(this.tableLayoutPanel2);
             this.panelDelInput.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelDelInput.Location = new System.Drawing.Point(0, 175);
+            this.panelDelInput.Location = new System.Drawing.Point(0, 210);
             this.panelDelInput.Name = "panelDelInput";
             this.panelDelInput.Size = new System.Drawing.Size(560, 35);
             this.panelDelInput.TabIndex = 102;
@@ -199,7 +210,7 @@
             // 
             this.panelFp16.Controls.Add(this.tableLayoutPanel4);
             this.panelFp16.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelFp16.Location = new System.Drawing.Point(0, 140);
+            this.panelFp16.Location = new System.Drawing.Point(0, 175);
             this.panelFp16.Name = "panelFp16";
             this.panelFp16.Size = new System.Drawing.Size(560, 35);
             this.panelFp16.TabIndex = 104;
@@ -267,7 +278,7 @@
             // 
             this.panelDiffSafetensors.Controls.Add(this.tableLayoutPanel5);
             this.panelDiffSafetensors.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelDiffSafetensors.Location = new System.Drawing.Point(0, 105);
+            this.panelDiffSafetensors.Location = new System.Drawing.Point(0, 140);
             this.panelDiffSafetensors.Name = "panelDiffSafetensors";
             this.panelDiffSafetensors.Size = new System.Drawing.Size(560, 35);
             this.panelDiffSafetensors.TabIndex = 105;
@@ -335,7 +346,7 @@
             // 
             this.panelOutFormat.Controls.Add(this.tableLayoutPanel1);
             this.panelOutFormat.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelOutFormat.Location = new System.Drawing.Point(0, 70);
+            this.panelOutFormat.Location = new System.Drawing.Point(0, 105);
             this.panelOutFormat.Name = "panelOutFormat";
             this.panelOutFormat.Size = new System.Drawing.Size(560, 35);
             this.panelOutFormat.TabIndex = 21;
@@ -405,7 +416,7 @@
             // 
             this.panelModel.Controls.Add(this.tableLayoutPanel8);
             this.panelModel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelModel.Location = new System.Drawing.Point(0, 35);
+            this.panelModel.Location = new System.Drawing.Point(0, 70);
             this.panelModel.Name = "panelModel";
             this.panelModel.Size = new System.Drawing.Size(560, 35);
             this.panelModel.TabIndex = 20;
@@ -447,6 +458,7 @@
             this.comboxModel.Name = "comboxModel";
             this.comboxModel.Size = new System.Drawing.Size(280, 21);
             this.comboxModel.TabIndex = 106;
+            this.comboxModel.SelectedIndexChanged += new System.EventHandler(this.comboxModel_SelectedIndexChanged);
             // 
             // panel26
             // 
@@ -547,7 +559,7 @@
             this.btnRun.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnRun.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.25F);
             this.btnRun.ForeColor = System.Drawing.Color.White;
-            this.btnRun.Location = new System.Drawing.Point(0, 217);
+            this.btnRun.Location = new System.Drawing.Point(0, 252);
             this.btnRun.Name = "btnRun";
             this.btnRun.Size = new System.Drawing.Size(120, 40);
             this.btnRun.TabIndex = 101;
@@ -599,12 +611,81 @@
             this.btnOpenModelFolder.UseVisualStyleBackColor = false;
             this.btnOpenModelFolder.Click += new System.EventHandler(this.btnOpenModelFolder_Click);
             // 
+            // panelModelArch
+            // 
+            this.panelModelArch.Controls.Add(this.tableLayoutPanel6);
+            this.panelModelArch.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelModelArch.Location = new System.Drawing.Point(0, 35);
+            this.panelModelArch.Name = "panelModelArch";
+            this.panelModelArch.Size = new System.Drawing.Size(560, 35);
+            this.panelModelArch.TabIndex = 106;
+            // 
+            // tableLayoutPanel6
+            // 
+            this.tableLayoutPanel6.ColumnCount = 2;
+            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel6.Controls.Add(this.panel12, 0, 0);
+            this.tableLayoutPanel6.Controls.Add(this.panel13, 0, 0);
+            this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel6.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel6.Name = "tableLayoutPanel6";
+            this.tableLayoutPanel6.RowCount = 1;
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel6.Size = new System.Drawing.Size(560, 35);
+            this.tableLayoutPanel6.TabIndex = 1;
+            // 
+            // panel12
+            // 
+            this.panel12.Controls.Add(this.comboxModelArch);
+            this.panel12.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel12.Location = new System.Drawing.Point(280, 0);
+            this.panel12.Margin = new System.Windows.Forms.Padding(0);
+            this.panel12.Name = "panel12";
+            this.panel12.Size = new System.Drawing.Size(280, 35);
+            this.panel12.TabIndex = 88;
+            // 
+            // comboxModelArch
+            // 
+            this.comboxModelArch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboxModelArch.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.comboxModelArch.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboxModelArch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboxModelArch.ForeColor = System.Drawing.Color.White;
+            this.comboxModelArch.FormattingEnabled = true;
+            this.comboxModelArch.Location = new System.Drawing.Point(0, 7);
+            this.comboxModelArch.Name = "comboxModelArch";
+            this.comboxModelArch.Size = new System.Drawing.Size(280, 21);
+            this.comboxModelArch.TabIndex = 107;
+            // 
+            // panel13
+            // 
+            this.panel13.Controls.Add(this.label6);
+            this.panel13.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel13.Location = new System.Drawing.Point(0, 0);
+            this.panel13.Margin = new System.Windows.Forms.Padding(0);
+            this.panel13.Name = "panel13";
+            this.panel13.Size = new System.Drawing.Size(280, 35);
+            this.panel13.TabIndex = 87;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.ForeColor = System.Drawing.Color.White;
+            this.label6.Location = new System.Drawing.Point(5, 11);
+            this.label6.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(136, 13);
+            this.label6.TabIndex = 85;
+            this.label6.Text = "Model Version/Architecture";
+            // 
             // ConvertModelForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.ClientSize = new System.Drawing.Size(584, 331);
+            this.ClientSize = new System.Drawing.Size(584, 366);
             this.Controls.Add(this.btnReloadModels);
             this.Controls.Add(this.btnOpenModelFolder);
             this.Controls.Add(this.parentPanel);
@@ -655,6 +736,11 @@
             this.panel6.ResumeLayout(false);
             this.panel7.ResumeLayout(false);
             this.panel7.PerformLayout();
+            this.panelModelArch.ResumeLayout(false);
+            this.tableLayoutPanel6.ResumeLayout(false);
+            this.panel12.ResumeLayout(false);
+            this.panel13.ResumeLayout(false);
+            this.panel13.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -704,5 +790,11 @@
         private System.Windows.Forms.CheckBox checkboxDiffSafetensors;
         private System.Windows.Forms.Panel panel11;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Panel panelModelArch;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
+        private System.Windows.Forms.Panel panel12;
+        private System.Windows.Forms.ComboBox comboxModelArch;
+        private System.Windows.Forms.Panel panel13;
+        private System.Windows.Forms.Label label6;
     }
 }
