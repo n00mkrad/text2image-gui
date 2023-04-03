@@ -30,17 +30,24 @@ namespace StableDiffusionGui.Forms
             }
             else
             {
-                string initDir = MainUi.CurrentInitImgPaths.Any() ? MainUi.CurrentInitImgPaths[0].GetParentDirOfFile() : Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
-                CommonOpenFileDialog dialog = new CommonOpenFileDialog { RestoreDirectory = false, InitialDirectory = initDir, IsFolderPicker = false, Multiselect = true };
+                if (!Directory.Exists(Config.Instance.LastInitImageParentPath))
+                    Config.Instance.LastInitImageParentPath = MainUi.CurrentInitImgPaths.Any() ? MainUi.CurrentInitImgPaths[0].GetParentDirOfFile() : Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+
+                CommonOpenFileDialog dialog = new CommonOpenFileDialog { RestoreDirectory = false, InitialDirectory = Config.Instance.LastInitImageParentPath, IsFolderPicker = false, Multiselect = true };
 
                 if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
                 {
                     var paths = dialog.FileNames.Where(path => Constants.FileExts.ValidImages.Contains(Path.GetExtension(path).Lower()));
 
                     if (paths.Count() > 0)
+                    {
                         MainUi.HandleDroppedFiles(paths.ToArray(), true);
+                        Config.Instance.LastInitImageParentPath = new FileInfo(paths.First()).Directory.FullName;
+                    }
                     else
+                    {
                         UiUtils.ShowMessageBox(dialog.FileNames.Count() == 1 ? "Invalid file type." : "None of the selected files are valid.");
+                    }
                 }
             }
 

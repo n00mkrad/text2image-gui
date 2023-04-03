@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using StableDiffusionGui.Main;
 using System.Threading.Tasks;
+using StableDiffusionGui.MiscUtils;
 
 namespace StableDiffusionGui.Io
 {
@@ -55,7 +56,13 @@ namespace StableDiffusionGui.Io
             }
 
             if(Instance == null)
+            {
+                if (File.Exists(ConfigPath))
+                     IoUtils.TryMove(ConfigPath, ConfigPath.FilenameSuffix($".failedToLoad{FormatUtils.GetUnixTimestamp()}")); // Move out of the way but don't delete, for data restoration purposes
+
+                Logger.Log("Can't load config from file. Creating new config instead.");
                 Instance = new ConfigInstance();
+            }
         }
 
         public static void Save ()

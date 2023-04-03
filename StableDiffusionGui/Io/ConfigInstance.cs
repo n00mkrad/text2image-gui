@@ -11,9 +11,7 @@ namespace StableDiffusionGui.Io
     public class ConfigInstance
     {
         public EasyDict<string, Enums.Models.SdArch> ModelArchs = new EasyDict<string, Enums.Models.SdArch>();
-
         public EasyDict<string, int> ComboBoxIndexes = new EasyDict<string, int>();
-
         public int CmdDebugMode;
         public bool MultiPromptsSameSeed;
         public int SamplerIdx;
@@ -69,6 +67,7 @@ namespace StableDiffusionGui.Io
         public bool OfflineMode;
         public float SymmetryTimepoint;
         public int ClipSkip;
+        public string LastInitImageParentPath;
 
         public ConfigInstance()
         {
@@ -79,8 +78,6 @@ namespace StableDiffusionGui.Io
             OutPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), "SDGUI");
             FavsPath = Path.Combine(OutPath, Constants.Dirs.ImgFavs);
             Iterations = 5;
-            // Model;
-            // ModelVae;
             EnablePromptHistory = true;
             CodeformerFidelity = 0.6f;
             ResW = 512;
@@ -107,7 +104,7 @@ namespace StableDiffusionGui.Io
 
         public void Clean()
         {
-            ModelArchs.ToList().Where(pair => pair.Value != Enums.Models.SdArch.Automatic && !File.Exists(pair.Key)).ToList().ForEach(pair => ModelArchs.Remove(pair.Key));
+            ModelArchs.ToList().Where(pair => pair.Value == Enums.Models.SdArch.Automatic || !File.Exists(pair.Key)).ToList().ForEach(pair => ModelArchs.Remove(pair.Key));
         }
     }
 }
