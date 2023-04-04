@@ -20,26 +20,14 @@ namespace StableDiffusionGui.Main
         private static readonly int _loopWaitTimeMs = 200;
 
         public static List<string> _outImgs = new List<string>();
-        private static bool _inclPrompt = false;
-        private static bool _inclSeed = false;
-        private static bool _inclScale = false;
-        private static bool _inclSampler = false;
-        private static bool _inclModel = false;
-        private static bool _sessionDir = false;
+        private static ConfigInstance _config = null;
         private static TtiTaskInfo _currTask = null;
         private static TtiSettings _currSettings = null;
 
         public static void Init ()
         {
             _outImgs.Clear();
-            _currTask = TextToImage.CurrentTask;
-            _currSettings = TextToImage.CurrentTaskSettings;
-            _inclPrompt = !_currTask.SubfoldersPerPrompt && Config.Instance.PromptInFilename;
-            _inclSeed = Config.Instance.SeedInFilename;
-            _inclScale = Config.Instance.ScaleInFilename;
-            _inclSampler = Config.Instance.SamplerInFilename;
-            _inclModel = Config.Instance.ModelInFilename;
-            _sessionDir = Config.Instance.FolderPerSession;
+            _config = Config.Instance.Clone();
             _currTask = TextToImage.CurrentTask;
             _currSettings = TextToImage.CurrentTaskSettings;
         }
@@ -142,7 +130,7 @@ namespace StableDiffusionGui.Main
                     int pathBudget = _maxPathLength - img.Directory.FullName.Length - 65;
                     prompt = _currTask.IgnoreWildcardsForFilenames && _currSettings.ProcessedAndRawPrompts.ContainsKey(prompt) ? _currSettings.ProcessedAndRawPrompts[prompt] : prompt;
                     string dirName = string.IsNullOrWhiteSpace(prompt) ? $"unknown_prompt_{FormatUtils.GetUnixTimestamp()}" : FormatUtils.SanitizePromptFilename(FormatUtils.GetPromptWithoutModifiers(prompt), pathBudget);
-                    string subDirPath = _sessionDir ? Path.Combine(_currTask.OutDir, Paths.SessionTimestamp, dirName) : Path.Combine(_currTask.OutDir, dirName);
+                    string subDirPath = _config.FolderPerSession ? Path.Combine(_currTask.OutDir, Paths.SessionTimestamp, dirName) : Path.Combine(_currTask.OutDir, dirName);
                     imageDirMap[img.FullName] = Directory.CreateDirectory(subDirPath).FullName;
                 }
             }
@@ -154,9 +142,9 @@ namespace StableDiffusionGui.Main
                 try
                 {
                     var img = images[i];
-                    string number = _currTask.ImgCount.ToString().PadLeft(_currTask.TargetImgCount.ToString().Length, '0');
-                    string parentDir = _currTask.SubfoldersPerPrompt ? imageDirMap[img.FullName] : _currTask.OutDir;
-                    string renamedPath = GetExportFilename(img.FullName, parentDir, number, "png", _maxPathLength, _inclPrompt, _inclSeed, _inclScale, _inclSampler, _inclModel);
+                    string num = _currTask.ImgCount.ToString().PadLeft(_currTask.TargetImgCount.ToString().Length, '0');
+                    string dir = _currTask.SubfoldersPerPrompt ? imageDirMap[img.FullName] : _currTask.OutDir;
+                    string renamedPath = GetExportFilename(img.FullName, dir, num, "png", _maxPathLength, _config.PromptInFilename, _config.SeedInFilename, _config.ScaleInFilename, _config.SamplerInFilename, _config.ModelInFilename);
                     OverlayMaskIfExists(img.FullName);
                     Logger.Log($"ImageExport: Trying to move {img.Name} => {renamedPath}", true);
                     img.MoveTo(renamedPath);

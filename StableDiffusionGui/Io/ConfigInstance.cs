@@ -103,6 +103,11 @@ namespace StableDiffusionGui.Io
             SymmetryTimepoint = 0.9f;
         }
 
+        public ConfigInstance Clone ()
+        {
+            return this.ToJson().FromJson<ConfigInstance>(NullValueHandling.Ignore, DefaultValueHandling.Include, true, true);
+        }
+
         public void Clean()
         {
             ModelArchs.ToList().Where(pair => pair.Value == Enums.Models.SdArch.Automatic || !File.Exists(pair.Key)).ToList().ForEach(pair => ModelArchs.Remove(pair.Key));
