@@ -25,6 +25,15 @@ namespace StableDiffusionGui.Main.Utils
                 return;
             }
 
+            Logger.Log($"Checking if model is a valid Diffusers model...");
+            bool isDiffusersModel = await DoesUrlExist($"https://huggingface.co/{repoId}/tree/main/unet"); // Verify that this repo contains a Diffusers model
+
+            if (!isDiffusersModel)
+            {
+                Logger.Log("Can't download model: The repository does not seem to contain a Diffusers-format model.", false, Logger.LastUiLine.EndsWith("..."));
+                return;
+            }
+
             Logger.Log($"Checking if FP16 variant exists...");
             bool fp16 = await DoesUrlExist($"https://huggingface.co/{repoId}/tree/fp16"); // This URL will return 404 if there is no FP16 branch
 
