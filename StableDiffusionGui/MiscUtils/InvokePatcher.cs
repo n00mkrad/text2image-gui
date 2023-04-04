@@ -44,6 +44,9 @@ namespace StableDiffusionGui.MiscUtils
                 if (f.Name == "cross_attention_control.py")
                     t = Replace(t, "diffusers.models.attention.CrossAttention, ", "diffusers.models.cross_attention.CrossAttention, ");
 
+                if (f.Name == "args.py")
+                    t = Replace(t, "rfc_dict[\"orig_hash\"] = calculate_init_img_hash(opt.init_img)", "rfc_dict[\"orig_hash\"] = 0", false);
+
                 if (f.Name == "textual_inversion_manager.py")
                 {
                     t = Replace(t, "bin_file = self.hf_concepts_library.get_concept_model_path(concept_name)", "print(f\">> Embedding not found: {concept_name}\", flush=True); return");
@@ -89,7 +92,7 @@ namespace StableDiffusionGui.MiscUtils
             }
         }
 
-        private static void PatchCli (string rootPath)
+        private static void PatchCli(string rootPath)
         {
             string cliPath = IoUtils.GetFileInfosSorted(rootPath, true, "CLI.py").First().FullName;
             var lines = IoUtils.ReadLines(cliPath);
@@ -99,7 +102,7 @@ namespace StableDiffusionGui.MiscUtils
 
             bool indent = false;
 
-            for(int i = 0; i < lines.Length; i++)
+            for (int i = 0; i < lines.Length; i++)
             {
                 string l = lines[i];
 

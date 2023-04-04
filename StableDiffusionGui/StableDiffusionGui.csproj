@@ -293,6 +293,7 @@
       <DependentUpon>WelcomeForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Implementations\InstructPixToPix.cs" />
+    <Compile Include="Implementations\InvokeAiMetadata.cs" />
     <Compile Include="Implementations\OptimizedSd.cs" />
     <Compile Include="Implementations\OptimizedSdUtils.cs" />
     <Compile Include="Implementations\SdOnnx.cs" />

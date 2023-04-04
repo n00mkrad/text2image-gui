@@ -1,16 +1,19 @@
-﻿using StableDiffusionGui.Main;
+﻿using Newtonsoft.Json;
+using StableDiffusionGui.Implementations;
+using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using static StableDiffusionGui.Implementations.InvokeAiMetadata;
 
 namespace StableDiffusionGui.Data
 {
     public class ImageMetadata
     {
-        public enum MetadataType { InvokeAi, Auto1111, Nmkdiffusers, Unknown }
+        public enum MetadataType { InvokeDream, InvokeJson, Auto1111, Nmkdiffusers, Unknown }
         public MetadataType Type { get; set; } = MetadataType.Unknown;
         public string Path { get; set; } = "";
         public string AllText { get; set; } = "";
@@ -31,7 +34,8 @@ namespace StableDiffusionGui.Data
         public Enums.Utils.FaceTool FaceTool { get; set; } = (Enums.Utils.FaceTool)(-1);
 
         private readonly Dictionary<MetadataType, string> _tags = new Dictionary<MetadataType, string>() {
-            { MetadataType.InvokeAi, "Dream: " },
+            { MetadataType.InvokeJson, "sd-metadata: " },
+            { MetadataType.InvokeDream, "Dream: " },
             { MetadataType.Nmkdiffusers, "Nmkdiffusers:" },
             { MetadataType.Auto1111, "parameters:" },
         };
@@ -60,9 +64,15 @@ namespace StableDiffusionGui.Data
 
                 foreach (var tag in pngTextDir.Tags)
                 {
-                    if (tag.Description.Contains(_tags[MetadataType.InvokeAi]))
+                    if (tag.Description.Contains(_tags[MetadataType.InvokeJson]))
                     {
-                        LoadInfoInvokeAi(tag.Description.Split(_tags[MetadataType.InvokeAi]).Last());
+                        LoadInfoInvokeAiJson(tag.Description.Split(_tags[MetadataType.InvokeJson]).Last());
+                        return;
+                    }
+
+                    if (tag.Description.Contains(_tags[MetadataType.InvokeDream]))
+                    {
+                        LoadInfoInvokeAi(tag.Description.Split(_tags[MetadataType.InvokeDream]).Last());
                         return;
                     }
 
@@ -85,9 +95,44 @@ namespace StableDiffusionGui.Data
             }
         }
 
+        public void LoadInfoInvokeAiJson (string info)
+        {
+            Type = MetadataType.InvokeJson;
+            ParsedText = info;
+
+            try
+            {
+                InvokeAiMetadata metadata = info.FromJson<InvokeAiMetadata>(NullValueHandling.Ignore, DefaultValueHandling.Include, true, true);
+
+                Prompt = metadata.ImageData.Prompt.First().Text;
+
+                if (Prompt.EndsWith("]") && Prompt.Contains(" [") && Prompt.Count(x => x == '[') == 1 && Prompt.Count(x => x == ']') == 1)
+                {
+                    NegativePrompt = Prompt.Split(" [").Last().Split(']')[0];
+                    var split = Prompt.Split(" [");
+                    Prompt = string.Join(" [", split.Reverse().Skip(1).Reverse());
+                }
+
+                Steps = metadata.ImageData.Steps;
+                BatchSize = 1;
+                GeneratedResolution = new Size(metadata.ImageData.Width, metadata.ImageData.Height);
+                Scale = metadata.ImageData.CfgScale;
+                Sampler = metadata.ImageData.Sampler;
+                Seed = metadata.ImageData.Seed;
+                InitStrength = 1f - metadata.ImageData.StrengthSteps;
+                InitImgName = "";
+                FaceTool = InvokeGetFaceTool(metadata.ImageData.Facetool);
+
+            }
+            catch (Exception ex)
+            {
+                Logger.Log($"Failed to load InvokeAI JSON image metadata from: {ex.Message}\n{ex.StackTrace}", true);
+            }
+        }
+
         public void LoadInfoInvokeAi(string info)
         {
-            Type = MetadataType.InvokeAi;
+            Type = MetadataType.InvokeDream;
             ParsedText = info;
 
             try

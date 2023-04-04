@@ -116,7 +116,7 @@ namespace StableDiffusionGui.Ui
             else
                 infos.Add($"{meta.GeneratedResolution.Width}x{meta.GeneratedResolution.Height}{(meta.GeneratedResolution == res ? "" : $" => {res.Width}x{res.Height}")}");
 
-            if (meta.InitStrength > 0.0001f)
+            if (meta.InitStrength > 0.0001f && meta.InitStrength < 1.0f)
                 infos.Add($"Strength {meta.InitStrength.ToStringDot()}");
 
             if (!string.IsNullOrWhiteSpace(meta.Sampler))

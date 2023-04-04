@@ -128,6 +128,7 @@
             this.textboxInfo.Placeholder = "";
             this.textboxInfo.PlaceholderTextColor = System.Drawing.Color.Silver;
             this.textboxInfo.ReadOnly = true;
+            this.textboxInfo.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textboxInfo.Size = new System.Drawing.Size(366, 416);
             this.textboxInfo.TabIndex = 79;
             this.textboxInfo.TabStop = false;

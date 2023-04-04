@@ -62,25 +62,20 @@ namespace StableDiffusionGui.Forms
                 string n = Environment.NewLine;
                 textboxInfo.Text += $"Resolution: {pictBox.Image.Size.AsString()}{n}{n}";
 
-                if (!string.IsNullOrWhiteSpace(CurrentMetadata.ParsedText))
+                if (!string.IsNullOrWhiteSpace(CurrentMetadata.Prompt))
                 {
-                    textboxInfo.Text += $"Found Metadata in Image:{n}{CurrentMetadata.ParsedText}{n}";
+                    textboxInfo.Text += $"{n}Prompt:{n}{CurrentMetadata.Prompt}{n}";
+                    textboxInfo.Text += $"{n}Negative Prompt:{n}{CurrentMetadata.NegativePrompt}{n}";
+                    textboxInfo.Text += $"{n}Steps:{n}{CurrentMetadata.Steps}{n}";
+                    textboxInfo.Text += $"{n}Scale:{n}{CurrentMetadata.Scale.ToStringDot("0.00")}{n}";
+                    textboxInfo.Text += $"{n}Seed:{n}{CurrentMetadata.Seed}{n}";
+                    textboxInfo.Text += $"{n}Generated Resolution:{n}{CurrentMetadata.GeneratedResolution.Width}x{CurrentMetadata.GeneratedResolution.Height}{n}";
+                    textboxInfo.Text += $"{n}Sampler:{n}{Strings.Samplers.Get(CurrentMetadata.Sampler, true, true)}{n}";
 
-                    if (!string.IsNullOrWhiteSpace(CurrentMetadata.Prompt))
+                    if (!string.IsNullOrWhiteSpace(CurrentMetadata.InitImgName))
                     {
-                        textboxInfo.Text += $"{n}Prompt:{n}{CurrentMetadata.Prompt}{n}";
-                        textboxInfo.Text += $"{n}Negative Prompt:{n}{CurrentMetadata.NegativePrompt}{n}";
-                        textboxInfo.Text += $"{n}Steps:{n}{CurrentMetadata.Steps}{n}";
-                        textboxInfo.Text += $"{n}Scale:{n}{CurrentMetadata.Scale.ToStringDot("0.00")}{n}";
-                        textboxInfo.Text += $"{n}Seed:{n}{CurrentMetadata.Seed}{n}";
-                        textboxInfo.Text += $"{n}Generated Resolution:{n}{CurrentMetadata.GeneratedResolution.Width}x{CurrentMetadata.GeneratedResolution.Height}{n}";
-                        textboxInfo.Text += $"{n}Sampler:{n}{Strings.Samplers.Get(CurrentMetadata.Sampler, true, true)}{n}";
-
-                        if (!string.IsNullOrWhiteSpace(CurrentMetadata.InitImgName))
-                        {
-                            textboxInfo.Text += $"{n}Init Image:{n}{CurrentMetadata.InitImgName}{n}";
-                            textboxInfo.Text += $"{n}Init Strength:{n}{CurrentMetadata.InitStrength}{n}";
-                        }
+                        textboxInfo.Text += $"{n}Init Image:{n}{CurrentMetadata.InitImgName}{n}";
+                        textboxInfo.Text += $"{n}Init Strength:{n}{CurrentMetadata.InitStrength}{n}";
                     }
                 }
                 else
