@@ -884,7 +884,8 @@
             // 
             // comboxTimestampInFilename
             // 
-            this.comboxTimestampInFilename.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboxTimestampInFilename.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.comboxTimestampInFilename.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.comboxTimestampInFilename.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboxTimestampInFilename.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -897,9 +898,10 @@
             // 
             // checkboxModelInFilename
             // 
+            this.checkboxModelInFilename.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.checkboxModelInFilename.AutoSize = true;
             this.checkboxModelInFilename.ForeColor = System.Drawing.Color.White;
-            this.checkboxModelInFilename.Location = new System.Drawing.Point(392, 10);
+            this.checkboxModelInFilename.Location = new System.Drawing.Point(375, 10);
             this.checkboxModelInFilename.Name = "checkboxModelInFilename";
             this.checkboxModelInFilename.Size = new System.Drawing.Size(55, 17);
             this.checkboxModelInFilename.TabIndex = 115;
@@ -908,9 +910,10 @@
             // 
             // checkboxSamplerInFilename
             // 
+            this.checkboxSamplerInFilename.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.checkboxSamplerInFilename.AutoSize = true;
             this.checkboxSamplerInFilename.ForeColor = System.Drawing.Color.White;
-            this.checkboxSamplerInFilename.Location = new System.Drawing.Point(322, 10);
+            this.checkboxSamplerInFilename.Location = new System.Drawing.Point(305, 10);
             this.checkboxSamplerInFilename.Name = "checkboxSamplerInFilename";
             this.checkboxSamplerInFilename.Size = new System.Drawing.Size(64, 17);
             this.checkboxSamplerInFilename.TabIndex = 114;
@@ -919,9 +922,10 @@
             // 
             // checkboxScaleInFilename
             // 
+            this.checkboxScaleInFilename.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.checkboxScaleInFilename.AutoSize = true;
             this.checkboxScaleInFilename.ForeColor = System.Drawing.Color.White;
-            this.checkboxScaleInFilename.Location = new System.Drawing.Point(263, 10);
+            this.checkboxScaleInFilename.Location = new System.Drawing.Point(246, 10);
             this.checkboxScaleInFilename.Name = "checkboxScaleInFilename";
             this.checkboxScaleInFilename.Size = new System.Drawing.Size(53, 17);
             this.checkboxScaleInFilename.TabIndex = 113;
@@ -930,9 +934,10 @@
             // 
             // checkboxSeedInFilename
             // 
+            this.checkboxSeedInFilename.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.checkboxSeedInFilename.AutoSize = true;
             this.checkboxSeedInFilename.ForeColor = System.Drawing.Color.White;
-            this.checkboxSeedInFilename.Location = new System.Drawing.Point(206, 10);
+            this.checkboxSeedInFilename.Location = new System.Drawing.Point(189, 10);
             this.checkboxSeedInFilename.Name = "checkboxSeedInFilename";
             this.checkboxSeedInFilename.Size = new System.Drawing.Size(51, 17);
             this.checkboxSeedInFilename.TabIndex = 112;
@@ -941,9 +946,10 @@
             // 
             // checkboxPromptInFilename
             // 
+            this.checkboxPromptInFilename.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.checkboxPromptInFilename.AutoSize = true;
             this.checkboxPromptInFilename.ForeColor = System.Drawing.Color.White;
-            this.checkboxPromptInFilename.Location = new System.Drawing.Point(141, 10);
+            this.checkboxPromptInFilename.Location = new System.Drawing.Point(124, 10);
             this.checkboxPromptInFilename.Name = "checkboxPromptInFilename";
             this.checkboxPromptInFilename.Size = new System.Drawing.Size(59, 17);
             this.checkboxPromptInFilename.TabIndex = 111;
@@ -968,9 +974,9 @@
             this.label7.Location = new System.Drawing.Point(2, 11);
             this.label7.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(136, 13);
+            this.label7.Size = new System.Drawing.Size(165, 13);
             this.label7.TabIndex = 85;
-            this.label7.Text = "Data to Include in Filename";
+            this.label7.Text = "Information to Include in Filename";
             // 
             // panelPromptSubfolders
             // 
@@ -1742,9 +1748,9 @@
             this.label2.Location = new System.Drawing.Point(2, 11);
             this.label2.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(368, 13);
+            this.label2.Size = new System.Drawing.Size(376, 13);
             this.label2.TabIndex = 84;
-            this.label2.Text = "Use Full Precision (Useless in Most Cases, but May Fix GTX 16-Series Cards)";
+            this.label2.Text = "Use Full Precision (FP32) - Vram-heavy but Can Fix Certain Compatibility Issues";
             // 
             // panelImplementation
             // 

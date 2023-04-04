@@ -148,7 +148,7 @@ namespace StableDiffusionGui.Implementations
 
                 if (!TtiProcess.IsAiProcessRunning || (TtiProcess.IsAiProcessRunning && TtiProcess.LastStartupSettings != newStartupSettings))
                 {
-                    await InvokeAiUtils.WriteModelsYamlAll(modelFile, vaeFile, cachedModels, cachedModelsVae, modelArch);
+                    InvokeAiUtils.WriteModelsYamlAll(modelFile, vaeFile, cachedModels, cachedModelsVae, modelArch);
                     Models.SetClipSkip(modelFile, Config.Instance.ClipSkip);
                     if (TextToImage.Canceled) return;
 
@@ -259,7 +259,7 @@ namespace StableDiffusionGui.Implementations
             if (modelFile == null)
                 return;
 
-            await InvokeAiUtils.WriteModelsYamlAll(modelFile, vaeFile, cachedModels, cachedModelsVae, Enums.Models.SdArch.Automatic, true);
+            InvokeAiUtils.WriteModelsYamlAll(modelFile, vaeFile, cachedModels, cachedModelsVae, Enums.Models.SdArch.Automatic, true);
             if (TextToImage.Canceled) return;
 
             string batPath = Path.Combine(Paths.GetSessionDataPath(), "invoke.bat");

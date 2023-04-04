@@ -53,7 +53,7 @@ namespace StableDiffusionGui.Implementations
         }
 
         /// <summary> Writes all models into models.yml for InvokeAI to use </summary>
-        public static async Task WriteModelsYamlAll(Model selectedMdl, Model selectedVae, List<Model> cachedModels = null, List<Model> cachedModelsVae = null, Enums.Models.SdArch ckptArch = Enums.Models.SdArch.Automatic, bool quiet = false)
+        public static void WriteModelsYamlAll(Model selectedMdl, Model selectedVae, List<Model> cachedModels = null, List<Model> cachedModelsVae = null, Enums.Models.SdArch ckptArch = Enums.Models.SdArch.Automatic, bool quiet = false)
         {
             try
             {
