@@ -15,7 +15,7 @@ namespace StableDiffusionGui.Main
         private static bool _hasErrored = false;
         private static bool _invokeAiLastModelCached = false;
 
-        public static List<string> LastMessages = new List<string>(); // TODO: Clear this every run?
+        public static List<string> LastMessages = new List<string>();
 
         public static void Reset()
         {
@@ -31,10 +31,6 @@ namespace StableDiffusionGui.Main
             Logger.Log(line, true, false, Constants.Lognames.Sd);
             LastMessages.Insert(0, line);
 
-            //var noLogWildcards = new string[] { "step */*" };
-            //
-            //if (noLogWildcards.Where(w => !line.MatchesWildcard(w)).Any())
-
             bool ellipsis = Program.MainForm.LogText.EndsWith("...");
             string l = Program.MainForm.LogText;
             string errMsg = "";
@@ -44,20 +40,15 @@ namespace StableDiffusionGui.Main
                 bool replace = ellipsis || Logger.LastUiLine.MatchesWildcard("*Generated*image*in*");
 
                 if (!TextToImage.Canceled && line.StartsWith(">> Retrieving model "))
-                {
                     _invokeAiLastModelCached = true;
-                }
-
-                if (!TextToImage.Canceled && line.StartsWith(">> Loading ") && line.Contains(" from "))
-                {
+                else if (!TextToImage.Canceled && line.StartsWith(">> Loading ") && line.Contains(" from "))
                     _invokeAiLastModelCached = false;
-                }
 
                 if (!TextToImage.Canceled && line.MatchesWildcard("*%|*|*/*"))
                 {
                     string progStr = line.Split('|')[2].Trim().Split(' ')[0].Trim(); // => e.g. "3/50"
 
-                    if (!Logger.LastUiLine.MatchesWildcard("*Generated*image*in*"))
+                    if (!line.Lower().Contains("downloading") && !Logger.LastUiLine.MatchesWildcard("*Generated*image*in*"))
                         Logger.LogIfLastLineDoesNotContainMsg($"Generating...", false, ellipsis);
 
                     try
@@ -126,6 +117,11 @@ namespace StableDiffusionGui.Main
                 if (line.Trim().StartsWith(">> Converting legacy checkpoint"))
                 {
                     Logger.Log($"Warning: Model is not in Diffusers format, this makes loading slower due to conversion. For a speedup, convert it to a Diffusers model.", false, ellipsis);
+                }
+
+                if (line.Contains("is not a known model name. Cannot change"))
+                {
+                    Logger.Log($"No model with this name and VAE found. Can't change model.", false, ellipsis);
                 }
 
                 if (!_hasErrored && line.Contains("An error occurred while processing your prompt"))

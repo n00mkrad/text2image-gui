@@ -14,9 +14,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
-using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
 namespace StableDiffusionGui.Implementations
 {
@@ -37,15 +35,15 @@ namespace StableDiffusionGui.Implementations
                 long seed = parameters.FromJson<long>("seed"); // Initial seed
                 string sampler = parameters.FromJson<string>("sampler"); // Sampler
                 var res = parameters.FromJson<Size>("res"); // Image resolution
-                var seamless = parameters.FromJson<SeamlessMode>("seamless"); // Seamless generation mode
-                var symmetry = parameters.FromJson<SymmetryMode>("symmetry"); // Symmetry mode
+                var seamless = parameters.FromJson<Enums.StableDiffusion.SeamlessMode>("seamless"); // Seamless generation mode
+                var symmetry = parameters.FromJson<Enums.StableDiffusion.SymmetryMode>("symmetry"); // Symmetry mode
                 string model = parameters.FromJson<string>("model"); // Model name
                 bool hiresFix = parameters.FromJson<bool>("hiresFix"); // Enable high-resolution fix
                 bool lockSeed = parameters.FromJson<bool>("lockSeed"); // Lock seed (disable auto-increment)
                 string vae = parameters.FromJson<string>("vae").NullToEmpty().Replace("None", ""); // VAE model name
                 float perlin = parameters.FromJson<float>("perlin"); // Perlin noise blend value
                 int threshold = parameters.FromJson<int>("threshold"); // Threshold value
-                var inpaint = parameters.FromJson<InpaintMode>("inpainting"); // Inpainting mode
+                var inpaint = parameters.FromJson<Enums.StableDiffusion.InpaintMode>("inpainting"); // Inpainting mode
                 string clipSegMask = parameters.FromJson<string>("clipSegMask"); // ClipSeg text-based masking prompt
                 var resizeGravity = parameters.FromJson<ImageMagick.Gravity>("resizeGravity", (ImageMagick.Gravity)(-1)); // Inpainting mode
                 var modelArch = parameters.FromJson<Enums.Models.SdArch>("modelArch", Enums.Models.SdArch.Automatic); // SD Ckpt Architecture
@@ -90,7 +88,7 @@ namespace StableDiffusionGui.Implementations
                         args["seed"] = $"-S {seed}";
                         args["perlin"] = perlin > 0f ? $"--perlin {perlin.ToStringDot()}" : "";
                         args["threshold"] = threshold > 0 ? $"--threshold {threshold}" : "";
-                        args["clipSegMask"] = (inpaint == InpaintMode.TextMask && !string.IsNullOrWhiteSpace(clipSegMask)) ? $"-tm {clipSegMask.Wrap()}" : "";
+                        args["clipSegMask"] = (inpaint == Enums.StableDiffusion.InpaintMode.TextMask && !string.IsNullOrWhiteSpace(clipSegMask)) ? $"-tm {clipSegMask.Wrap()}" : "";
                         args["debug"] = parameters.FromJson<string>("appendArgs");
 
                         foreach (float scale in scales)
@@ -112,12 +110,12 @@ namespace StableDiffusionGui.Implementations
                                         foreach (float strength in initStrengths)
                                         {
                                             args["initImg"] = $"-I {initImg.Wrap()}";
-                                            args["initStrength"] = inpaint != InpaintMode.Disabled ? "-f 1.0" : $"-f {strength.ToStringDot("0.###")}"; // Lock to 1.0 when using inpainting
+                                            args["initStrength"] = inpaint != Enums.StableDiffusion.InpaintMode.Disabled ? "-f 1.0" : $"-f {strength.ToStringDot("0.###")}"; // Lock to 1.0 when using inpainting
 
-                                            if (inpaint == InpaintMode.ImageMask)
+                                            if (inpaint == Enums.StableDiffusion.InpaintMode.ImageMask)
                                                 args["inpaintMask"] = $"-M {Inpainting.MaskedImagePath.Wrap()}";
 
-                                            if (inpaint == InpaintMode.Outpaint)
+                                            if (inpaint == Enums.StableDiffusion.InpaintMode.Outpaint)
                                                 args["inpaintMask"] = "--force_outpaint";
 
                                             argLists.Add(new EasyDict<string, string>(args));
@@ -137,6 +135,12 @@ namespace StableDiffusionGui.Implementations
 
                 Logger.Log($"Running Stable Diffusion - {iterations} Iterations, {steps.Length} Steps, Scales {(scales.Length < 4 ? string.Join(", ", scales.Select(x => x.ToStringDot())) : $"{scales.First()}->{scales.Last()}")}, {res.Width}x{res.Height}, Starting Seed: {startSeed}", false, Logger.LastUiLine.EndsWith("..."));
 
+                if (modelFile.Format == Enums.Models.Format.Diffusers && vaeFile != null)
+                {
+                    vaeFile = null; // Diffusers currently doesn't support external VAEs
+                    Logger.Log("External VAEs are currently not supported with Diffusers models. Using this model's built-in VAE instead.");
+                }
+
                 string modelsChecksumStartup = InvokeAiUtils.GetModelsHash(cachedModels);
                 string argsStartup = Args.InvokeAi.GetArgsStartup(cachedModels);
                 string newStartupSettings = $"{argsStartup} {modelsChecksumStartup} {Config.Instance.CudaDeviceIdx} {Config.Instance.ClipSkip}"; // Check if startup settings match - If not, we need to restart the process
@@ -148,7 +152,7 @@ namespace StableDiffusionGui.Implementations
 
                 if (!TtiProcess.IsAiProcessRunning || (TtiProcess.IsAiProcessRunning && TtiProcess.LastStartupSettings != newStartupSettings))
                 {
-                    InvokeAiUtils.WriteModelsYamlAll(modelFile, vaeFile, cachedModels, cachedModelsVae, modelArch);
+                    InvokeAiUtils.WriteModelsYamlAll(cachedModels, cachedModelsVae, modelArch);
                     Models.SetClipSkip(modelFile, Config.Instance.ClipSkip);
                     if (TextToImage.Canceled) return;
 
@@ -181,9 +185,9 @@ namespace StableDiffusionGui.Implementations
 
                     TtiProcessOutputHandler.Reset();
 
-                    string logMdl = Path.ChangeExtension(model, null).Trunc(!string.IsNullOrWhiteSpace(vae) ? 35 : 80).Wrap();
-                    string logVae = Path.GetFileNameWithoutExtension(vae).Trunc(35).Wrap();
-                    Logger.Log($"Loading Stable Diffusion with model {logMdl}{(string.IsNullOrWhiteSpace(vae) ? "" : $" and VAE {logVae}")}...");
+                    string logMdl = modelFile.FormatIndependentName.Trunc(!string.IsNullOrWhiteSpace(vae) ? 35 : 80).Wrap();
+                    string logVae = vaeFile == null ? "" : vaeFile.FormatIndependentName.Trunc(35).Wrap();
+                    Logger.Log($"Loading Stable Diffusion with model {logMdl}{(string.IsNullOrWhiteSpace(logVae) ? "" : $" and VAE {logVae}")}...");
 
                     TtiProcess.CurrentProcess = py;
                     TtiProcess.ProcessExistWasIntentional = false;
@@ -259,7 +263,13 @@ namespace StableDiffusionGui.Implementations
             if (modelFile == null)
                 return;
 
-            InvokeAiUtils.WriteModelsYamlAll(modelFile, vaeFile, cachedModels, cachedModelsVae, Enums.Models.SdArch.Automatic, true);
+            if (modelFile.Format == Enums.Models.Format.Diffusers && vaeFile != null)
+            {
+                vaeFile = null; // Diffusers currently doesn't support external VAEs
+                Logger.Log("External VAEs are currently not supported with Diffusers models. Using this model's built-in VAE instead.");
+            }
+
+            InvokeAiUtils.WriteModelsYamlAll(cachedModels, cachedModelsVae, Enums.Models.SdArch.Automatic, true);
             if (TextToImage.Canceled) return;
 
             string batPath = Path.Combine(Paths.GetSessionDataPath(), "invoke.bat");
@@ -340,7 +350,15 @@ namespace StableDiffusionGui.Implementations
         public static async Task SwitchModel(Model mdl, Model vae = null)
         {
             //NmkdStopwatch timeoutSw = new NmkdStopwatch();
-            Models.SetClipSkip(mdl, Config.Instance.ClipSkip);
+
+            if (mdl.Format == Enums.Models.Format.Diffusers)
+            {
+                Models.SetClipSkip(mdl, Config.Instance.ClipSkip);
+
+                if (vae != null)
+                    vae = null; // Diffusers currently doesn't support external VAEs
+            }
+
             await TtiProcess.WriteStdIn($"!switch {InvokeAiUtils.GetMdlNameForYaml(mdl, vae)}", 1000);
 
             // Logger.Log("SwitchModel waiting...", true);

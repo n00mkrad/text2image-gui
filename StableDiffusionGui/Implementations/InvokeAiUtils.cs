@@ -8,8 +8,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Management.Automation.Language;
-using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
@@ -53,7 +51,7 @@ namespace StableDiffusionGui.Implementations
         }
 
         /// <summary> Writes all models into models.yml for InvokeAI to use </summary>
-        public static void WriteModelsYamlAll(Model selectedMdl, Model selectedVae, List<Model> cachedModels = null, List<Model> cachedModelsVae = null, Enums.Models.SdArch ckptArch = Enums.Models.SdArch.Automatic, bool quiet = false)
+        public static void WriteModelsYamlAll(List<Model> cachedModels = null, List<Model> cachedModelsVae = null, Enums.Models.SdArch ckptArch = Enums.Models.SdArch.Automatic, bool quiet = false)
         {
             try
             {
@@ -94,14 +92,21 @@ namespace StableDiffusionGui.Implementations
                         var properties = new List<string> { weightsPath };
 
                         if (mdl.Format == Enums.Models.Format.Diffusers)
+                        {
                             properties.Add($"format: diffusers"); // Need to specify format for diffusers models
+                        }
                         else if (ckptArgs != null)
+                        {
                             properties.AddRange(ckptArgs);
 
-                        // if (vae != null && vae.FullName.IsNotEmpty())
-                        //     properties.Add($"vae: {vae.FullName.Replace(dataPath, "../..").Wrap(true)}");
+                            if (vae != null && vae.FullName.IsNotEmpty()) // External VAE currently only supported with legacy models
+                                properties.Add($"vae: {vae.FullName.Replace(dataPath, "../..").Wrap(true)}");
+                        }
 
                         text += $"{GetMdlNameForYaml(mdl, vae)}:\n    {string.Join("\n    ", properties)}\n\n";
+
+                        if (mdl.Format == Enums.Models.Format.Diffusers)
+                            break; // Break in order to not write any additional VAE entries as this is currently unuspported with Diffusers models
                     }
                 }
 
