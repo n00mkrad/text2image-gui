@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
@@ -128,6 +129,11 @@ namespace StableDiffusionGui.Main
                 Logger.Log($"Missing initialization images:\n{string.Join("\n", invalidInitImgs.Select(i => Path.GetFileName(i)))}");
                 return false;
             }
+
+            string mdl = s.Params.FromJson<string>("model");
+
+            if (s.Params.FromJson<InpaintMode>("inpainting") != InpaintMode.Disabled && !mdl.Contains("inpainting."))
+                Logger.Log($"Warning: Inpainting is enabled, but '{mdl}' does not appear to be an inpainting model. Quality will be degraded.");
 
             return true;
         }
