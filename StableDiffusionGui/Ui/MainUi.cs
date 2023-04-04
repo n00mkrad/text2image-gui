@@ -148,7 +148,7 @@ namespace StableDiffusionGui.Ui
                     }
                     else if (imgForm.Action == ImageImportAction.LoadImage || imgForm.Action == ImageImportAction.LoadImageAndSettings)
                     {
-                        if (imgForm.ChromaKeyColor != (ChromaKeyColor)(-1))
+                        if (imgForm.ChromaKeyColor != (ChromaKeyColor)(-1) && imgForm.ChromaKeyColor != ChromaKeyColor.None)
                         {
                             ImageMagick.MagickColor keyColor = ImageMagick.MagickColors.Black;
                             if (imgForm.ChromaKeyColor == ChromaKeyColor.White) keyColor = ImageMagick.MagickColors.White;

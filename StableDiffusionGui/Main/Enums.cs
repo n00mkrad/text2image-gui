@@ -55,7 +55,7 @@ namespace StableDiffusionGui.Main
         public class Misc
         {
             public enum ImageImportAction { LoadImage, LoadSettings, LoadImageAndSettings, CopyPrompt /* , LoadIntoImgViewer */ }
-            public enum ChromaKeyColor { Black, White, Green }
+            public enum ChromaKeyColor { None, Black, White, Green }
         }
     }
 }

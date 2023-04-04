@@ -67,6 +67,7 @@ namespace StableDiffusionGui.Ui
 
         public static Dictionary<string, string> ChromaKeyMode = new Dictionary<string, string>
         {
+            { Enums.Misc.ChromaKeyColor.None.ToString(), "Disabled" },
             { Enums.Misc.ChromaKeyColor.Black.ToString(), "Make Black Pixels Transparent" },
             { Enums.Misc.ChromaKeyColor.White.ToString(), "Make White Pixels Transparent" },
             { Enums.Misc.ChromaKeyColor.Green.ToString(), "Make Green Pixels Transparent" },
