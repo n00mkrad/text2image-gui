@@ -19,28 +19,29 @@ namespace StableDiffusionGui.Main
         private static readonly int _loopWaitBeforeStartMs = 1000;
         private static readonly int _loopWaitTimeMs = 200;
 
-        private static List<string> _outImgs = new List<string>();
-        private static bool inclPrompt = false;
-        private static bool inclSeed = false;
-        private static bool inclScale = false;
-        private static bool inclSampler = false;
-        private static bool inclModel = false;
-        private static bool sessionDir = false;
-        private static TtiTaskInfo currTask = null;
-        private static TtiSettings currSettings = null;
+        public static List<string> _outImgs = new List<string>();
+        private static bool _inclPrompt = false;
+        private static bool _inclSeed = false;
+        private static bool _inclScale = false;
+        private static bool _inclSampler = false;
+        private static bool _inclModel = false;
+        private static bool _sessionDir = false;
+        private static TtiTaskInfo _currTask = null;
+        private static TtiSettings _currSettings = null;
 
         public static void Init ()
         {
-            currTask = TextToImage.CurrentTask;
-            currSettings = TextToImage.CurrentTaskSettings;
-            inclPrompt = !currTask.SubfoldersPerPrompt && Config.Instance.PromptInFilename;
-            inclSeed = Config.Instance.SeedInFilename;
-            inclScale = Config.Instance.ScaleInFilename;
-            inclSampler = Config.Instance.SamplerInFilename;
-            inclModel = Config.Instance.ModelInFilename;
-            sessionDir = Config.Instance.FolderPerSession;
-            currTask = TextToImage.CurrentTask;
-            currSettings = TextToImage.CurrentTaskSettings;
+            _outImgs.Clear();
+            _currTask = TextToImage.CurrentTask;
+            _currSettings = TextToImage.CurrentTaskSettings;
+            _inclPrompt = !_currTask.SubfoldersPerPrompt && Config.Instance.PromptInFilename;
+            _inclSeed = Config.Instance.SeedInFilename;
+            _inclScale = Config.Instance.ScaleInFilename;
+            _inclSampler = Config.Instance.SamplerInFilename;
+            _inclModel = Config.Instance.ModelInFilename;
+            _sessionDir = Config.Instance.FolderPerSession;
+            _currTask = TextToImage.CurrentTask;
+            _currSettings = TextToImage.CurrentTaskSettings;
         }
 
         public static async Task ExportLoop(string imagesDir, int startingImgCount, int targetImgCount)
@@ -56,10 +57,10 @@ namespace StableDiffusionGui.Main
                     var files = IoUtils.GetFileInfosSorted(imagesDir, false, "*.png");
                     bool running = TtiProcess.CurrentProcess != null && !TtiProcess.CurrentProcess.HasExited;
 
-                    if (currSettings.Implementation == Enums.StableDiffusion.Implementation.OptimizedSd)
+                    if (_currSettings.Implementation == Enums.StableDiffusion.Implementation.OptimizedSd)
                         running = IoUtils.GetFileInfosSorted(Paths.GetSessionDataPath(), false, "prompts*.*").Any();
-                    else if (currSettings.Implementation.Supports(ImplementationInfo.Feature.InteractiveCli))
-                        running = (currTask.ImgCount - startingImgCount) < targetImgCount;
+                    else if (_currSettings.Implementation.Supports(ImplementationInfo.Feature.InteractiveCli))
+                        running = (_currTask.ImgCount - startingImgCount) < targetImgCount;
 
                     if (!running && !TtiUtils.ImportBusy && !files.Any())
                     {
@@ -67,11 +68,11 @@ namespace StableDiffusionGui.Main
                         break;
                     }
 
-                    var images = files.Where(x => x.CreationTime > currTask.StartTime).OrderBy(x => x.CreationTime).ToList(); // Find images and sort by date, newest to oldest
+                    var images = files.Where(x => x.CreationTime > _currTask.StartTime).OrderBy(x => x.CreationTime).ToList(); // Find images and sort by date, newest to oldest
                     images = images.Where(x => !IoUtils.IsFileLocked(x)).ToList(); // Ignore files that are still in use
                     images = images.Where(x => (DateTime.Now - x.LastWriteTime).TotalMilliseconds >= _minimumImageAgeMs).ToList(); // Wait a certain time to make sure python is done writing to it
 
-                    if (currSettings.Implementation == Enums.StableDiffusion.Implementation.InvokeAi)
+                    if (_currSettings.Implementation == Enums.StableDiffusion.Implementation.InvokeAi)
                     {
                         var lastLines = TtiProcessOutputHandler.LastMessages.Take(3);
                         images = images.Where(img => lastLines.Any(l => l.Contains(img.Name))).ToList(); // Only take image if it was written into SD log. Avoids copying too early (post-proc etc)
@@ -102,7 +103,7 @@ namespace StableDiffusionGui.Main
             {
                 try
                 {
-                    bool running = (currTask.ImgCount - startingImgCount) < targetImgCount;
+                    bool running = (_currTask.ImgCount - startingImgCount) < targetImgCount;
 
                     if (!running && !TtiUtils.ImportBusy)
                     {
@@ -132,16 +133,16 @@ namespace StableDiffusionGui.Main
         {
             Dictionary<string, string> imageDirMap = new Dictionary<string, string>();
 
-            if (currTask.SubfoldersPerPrompt)
+            if (_currTask.SubfoldersPerPrompt)
             {
                 foreach (var img in images)
                 {
                     var imgTimeSinceLastWrite = DateTime.Now - img.LastWriteTime;
                     string prompt = IoUtils.GetImageMetadata(img.FullName).CombinedPrompt;
                     int pathBudget = _maxPathLength - img.Directory.FullName.Length - 65;
-                    prompt = currTask.IgnoreWildcardsForFilenames && currSettings.ProcessedAndRawPrompts.ContainsKey(prompt) ? currSettings.ProcessedAndRawPrompts[prompt] : prompt;
+                    prompt = _currTask.IgnoreWildcardsForFilenames && _currSettings.ProcessedAndRawPrompts.ContainsKey(prompt) ? _currSettings.ProcessedAndRawPrompts[prompt] : prompt;
                     string dirName = string.IsNullOrWhiteSpace(prompt) ? $"unknown_prompt_{FormatUtils.GetUnixTimestamp()}" : FormatUtils.SanitizePromptFilename(FormatUtils.GetPromptWithoutModifiers(prompt), pathBudget);
-                    string subDirPath = sessionDir ? Path.Combine(currTask.OutDir, Paths.SessionTimestamp, dirName) : Path.Combine(currTask.OutDir, dirName);
+                    string subDirPath = _sessionDir ? Path.Combine(_currTask.OutDir, Paths.SessionTimestamp, dirName) : Path.Combine(_currTask.OutDir, dirName);
                     imageDirMap[img.FullName] = Directory.CreateDirectory(subDirPath).FullName;
                 }
             }
@@ -153,9 +154,9 @@ namespace StableDiffusionGui.Main
                 try
                 {
                     var img = images[i];
-                    string number = currTask.ImgCount.ToString().PadLeft(currTask.TargetImgCount.ToString().Length, '0');
-                    string parentDir = currTask.SubfoldersPerPrompt ? imageDirMap[img.FullName] : currTask.OutDir;
-                    string renamedPath = GetExportFilename(img.FullName, parentDir, number, "png", _maxPathLength, inclPrompt, inclSeed, inclScale, inclSampler, inclModel);
+                    string number = _currTask.ImgCount.ToString().PadLeft(_currTask.TargetImgCount.ToString().Length, '0');
+                    string parentDir = _currTask.SubfoldersPerPrompt ? imageDirMap[img.FullName] : _currTask.OutDir;
+                    string renamedPath = GetExportFilename(img.FullName, parentDir, number, "png", _maxPathLength, _inclPrompt, _inclSeed, _inclScale, _inclSampler, _inclModel);
                     OverlayMaskIfExists(img.FullName);
                     Logger.Log($"ImageExport: Trying to move {img.Name} => {renamedPath}", true);
                     img.MoveTo(renamedPath);

@@ -92,14 +92,11 @@ namespace StableDiffusionGui.Main
                 else
                 {
                     await Task.WhenAll(tasks);
-                    //tasks.Add(ImageExport.WaitLoop(CurrentTask.ImgCount, s.GetTargetImgCount()));
-
                     int targetImgCount = s.GetTargetImgCount();
 
                     while (!Canceled && CurrentTask.ImgCount < targetImgCount)
                         await Task.Delay(100);
                 }
-
                
                 MainUi.Queue = MainUi.Queue.Except(new List<TtiSettings> { s }).ToList(); // Remove from queue
             }
