@@ -74,7 +74,10 @@ namespace StableDiffusionGui.MiscUtils
                 }
 
                 if (f.Name == "CLI.py")
+                {
                     t = Replace(t, "print(f'** An error occurred while attempting to initialize the model: \"{str(e)}\"')", "print(f'** An error occurred while attempting to initialize the model: \"{str(e)}\"'); return");
+                    t = Replace(t, "completer.add_history(command)", "pass");
+                }
 
                 if (f.Name == "util.py")
                     t = Replace(t, "x % 64", "x % 8");

@@ -361,6 +361,7 @@ namespace StableDiffusionGui.Implementations
                     vae = null; // Diffusers currently doesn't support external VAEs
             }
 
+            await TtiProcess.WriteStdIn($"!clear");
             await TtiProcess.WriteStdIn($"!switch {InvokeAiUtils.GetMdlNameForYaml(mdl, vae)}", 1000);
 
             // Logger.Log("SwitchModel waiting...", true);

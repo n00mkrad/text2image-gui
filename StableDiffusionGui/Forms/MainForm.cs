@@ -310,7 +310,7 @@ namespace StableDiffusionGui.Forms
 
         private void textboxCliTest_DoubleClick(object sender, EventArgs e)
         {
-            TtiProcess.WriteStdIn(textboxCliTest.Text);
+            TtiProcess.WriteStdIn(textboxCliTest.Text, 0, true);
             textboxCliTest.Text = "";
         }
 

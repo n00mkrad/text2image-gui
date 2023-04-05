@@ -124,16 +124,14 @@ namespace StableDiffusionGui.Main
 
         public static void SoftCancelInvokeAi()
         {
-            OsUtils.SendCtrlC(TtiProcess.CurrentProcess.Id);
-
             var childProcesses = OsUtils.GetChildProcesses(TtiProcess.CurrentProcess);
-
-            foreach (System.Diagnostics.Process p in childProcesses)
+            
+            foreach (System.Diagnostics.Process p in childProcesses.Where(p => p.ProcessName.Lower() == "python"))
                 OsUtils.SendCtrlC(p.Id);
         }
 
         /// <summary> Checks if Stable Diffusion model exists </summary>
-        /// <returns> Model ZlpFileInfo , if it exists - null if not </returns>
+        /// <returns> Model ZlpFileInfo if it exists - null if not </returns>
         public static Model CheckIfCurrentSdModelExists(List<Model> cachedModels = null)
         {
             string name = "";
