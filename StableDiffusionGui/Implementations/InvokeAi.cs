@@ -351,8 +351,6 @@ namespace StableDiffusionGui.Implementations
 
         public static async Task SwitchModel(Model mdl, Model vae = null)
         {
-            //NmkdStopwatch timeoutSw = new NmkdStopwatch();
-
             if (mdl.Format == Enums.Models.Format.Diffusers)
             {
                 Models.SetClipSkip(mdl, Config.Instance.ClipSkip);
@@ -363,59 +361,6 @@ namespace StableDiffusionGui.Implementations
 
             await TtiProcess.WriteStdIn($"!clear");
             await TtiProcess.WriteStdIn($"!switch {InvokeAiUtils.GetMdlNameForYaml(mdl, vae)}", 1000);
-
-            // Logger.Log("SwitchModel waiting...", true);
-            // 
-            // while (true)
-            // {
-            //     await Task.Delay(1);
-            //     var last2 = Logger.GetLastLines(Constants.Lognames.Sd, 2).Select(l => l.Split("invoke> ").Last().Trim());
-            // 
-            //     if (last2.Where(l => l.StartsWith($"New model is current model")).Any())
-            //         return;
-            // 
-            //     if (last2.Where(l => l.StartsWith($"Changing model")).Any())
-            //         break;
-            // 
-            //     if(timeoutSw.ElapsedMs > 10000)
-            //     {
-            //         Logger.Log($"Error switching model: Timed out. (1)");
-            //         return;
-            //     }
-            // }
-            // 
-            // Logger.Log("Loading model...");
-            // 
-            // while (true)
-            // {
-            //     await Task.Delay(10);
-            // 
-            //     if (Logger.GetLastLines(Constants.Lognames.Sd, 15).Where(l => l.Trim().EndsWith($" is not a known model name. Please check your models.yaml file")).Any())
-            //         break;
-            // 
-            //     if (Logger.GetLastLines(Constants.Lognames.Sd, 15).Where(l => l.Contains($" {modelNameInYaml} from ")).Any())
-            //         break;
-            // 
-            //     if (timeoutSw.ElapsedMs > 60000)
-            //     {
-            //         Logger.Log($"Error switching model: Timed out. (2)");
-            //         return;
-            //     }
-            // }
-            // 
-            // while (true)
-            // {
-            //     await Task.Delay(10);
-            // 
-            //     if (Logger.GetLastLines(Constants.Lognames.Sd, 5).Where(l => l.StartsWith(">> Setting Sampler to ")).Any())
-            //         break;
-            // 
-            //     if (timeoutSw.ElapsedMs > 60000)
-            //     {
-            //         Logger.Log($"Error switching model: Timed out. (3)");
-            //         return;
-            //     }
-            // }
         }
 
         public static async Task Cancel()

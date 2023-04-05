@@ -2,7 +2,6 @@
 using StableDiffusionGui.Main;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using ZetaLongPaths;
 
 namespace StableDiffusionGui.MiscUtils
@@ -16,7 +15,7 @@ namespace StableDiffusionGui.MiscUtils
             PatchCli(path);
             MiscPatches(path);
             // TODO: Patch pyproject.toml?
-            Logger.Log("Done.");
+            Logger.Log("Done patching InvokeAI code.");
         }
 
         private static void MiscPatches(string rootPath)
