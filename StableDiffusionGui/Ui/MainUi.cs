@@ -152,7 +152,7 @@ namespace StableDiffusionGui.Ui
                         {
                             ImageMagick.MagickColor keyColor = ImageMagick.MagickColors.Black;
                             if (imgForm.ChromaKeyColor == ChromaKeyColor.White) keyColor = ImageMagick.MagickColors.White;
-                            if (imgForm.ChromaKeyColor == ChromaKeyColor.Green) keyColor = ImageMagick.MagickColors.Green;
+                            if (imgForm.ChromaKeyColor == ChromaKeyColor.Green) keyColor = new ImageMagick.MagickColor(0, ushort.MaxValue, 0);
                             ImgUtils.ReplaceColorWithTransparency(new ImageMagick.MagickImage(paths[0]), keyColor).Write(paths[0]);
                         }
 
