@@ -101,9 +101,6 @@ namespace StableDiffusionGui.Io
             FilenameTimestampMode = Enums.Export.FilenameTimestamp.DateTime;
             WildcardAllowEmptyEntries = true;
             SymmetryTimepoint = 0.9f;
-            bool lowVram = GpuUtils.CachedGpus.Count > 0 && GpuUtils.CachedGpus.First().VramGb < 5.0f;
-            InvokeSequentialGuidance = lowVram;
-            InvokeFreeGpuMem = lowVram;
         }
 
         public ConfigInstance Clone ()
