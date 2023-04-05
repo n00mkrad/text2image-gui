@@ -20,15 +20,13 @@ namespace StableDiffusionGui.Main
                 if (Config.Instance.FullPrecision)
                     args.Add("--precision float32");
 
-                bool lowVram = GpuUtils.CachedGpus.Count > 0 && GpuUtils.CachedGpus.First().VramGb < 5.0f;
-
-                if (lowVram)
-                {
+                if (Config.Instance.InvokeSequentialGuidance)
                     args.Add("--sequential_guidance");
-                    args.Add("--free_gpu_mem");
-                }
 
-                if (!InstallationStatus.HasSdUpscalers() || (lowVram && Config.Instance.MedVramDisablePostProcessing))
+                if (Config.Instance.InvokeFreeGpuMem)
+                    args.Add("--free_gpu_mem");
+
+                if (!InstallationStatus.HasSdUpscalers() || Config.Instance.DisablePostProcessing)
                 {
                     args.Add("--no_upscale");
                     args.Add("--no_restore");
@@ -36,7 +34,7 @@ namespace StableDiffusionGui.Main
 
                 int maxCachedModels = 0;
 
-                if (Config.Instance.InvokeAllowModelCaching) // Disable caching if <6GB free, no matter the total RAM
+                if (Config.Instance.InvokeAllowModelCaching)
                 {
                     maxCachedModels = ((int)Math.Floor((HwInfo.GetTotalRamGb - 11f) / 4f)).Clamp(0, 16); // >16GB => 1 - >20GB => 2 - >24GB => 3 - >28GB => 4 - ...
                     Logger.Log($"InvokeAI Caching: Store up to {maxCachedModels} models in RAM", true);

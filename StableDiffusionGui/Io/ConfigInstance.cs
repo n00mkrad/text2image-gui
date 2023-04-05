@@ -53,8 +53,9 @@ namespace StableDiffusionGui.Io
         public string MotdShownVersion = "";
         public bool HideMotd;
         public bool DisableModelFileValidation;
-        public bool MedVramFreeGpuMem;
-        public bool MedVramDisablePostProcessing;
+        public bool InvokeSequentialGuidance;
+        public bool InvokeFreeGpuMem;
+        public bool DisablePostProcessing;
         public bool InvokeAllowModelCaching;
         public bool EnableTokenizationLogging;
         public bool PopupSlideshowEnabledByDefault;
@@ -93,7 +94,6 @@ namespace StableDiffusionGui.Io
             FilenameIgnoreWildcards = true;
             FaceRestoreStrength = 0.8f;
             UpscaleStrength = 1.0f;
-            MedVramFreeGpuMem = true;
             InvokeAllowModelCaching = true;
             ConvertModelsDeleteInput = true;
             AutoSetResForInitImg = true;
@@ -101,6 +101,9 @@ namespace StableDiffusionGui.Io
             FilenameTimestampMode = Enums.Export.FilenameTimestamp.DateTime;
             WildcardAllowEmptyEntries = true;
             SymmetryTimepoint = 0.9f;
+            bool lowVram = GpuUtils.CachedGpus.Count > 0 && GpuUtils.CachedGpus.First().VramGb < 5.0f;
+            InvokeSequentialGuidance = lowVram;
+            InvokeFreeGpuMem = lowVram;
         }
 
         public ConfigInstance Clone ()

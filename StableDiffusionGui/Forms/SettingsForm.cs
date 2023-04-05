@@ -161,6 +161,9 @@ namespace StableDiffusionGui.Forms
             //ConfigParser.LoadGuiElement(comboxSdModel, ref Config.Instance.Model);
             ConfigParser.LoadGuiElement(comboxSdModelVae, ref Config.Instance.ModelVae);
             // ConfigParser.LoadComboxIndex(comboxCudaDevice);
+            ConfigParser.LoadGuiElement(checkboxSeqGuidance, ref Config.Instance.InvokeSequentialGuidance);
+            ConfigParser.LoadGuiElement(checkboxFreeGpuMem, ref Config.Instance.InvokeFreeGpuMem);
+            ConfigParser.LoadGuiElement(checkboxDisableUpscalers, ref Config.Instance.DisablePostProcessing);
             ConfigParser.LoadGuiElement(checkboxModelCaching, ref Config.Instance.InvokeAllowModelCaching);
             ConfigParser.LoadComboxIndex(comboxClipSkip, ref Config.Instance.ClipSkip);
             ConfigParser.LoadComboxIndex(comboxNotify, ref Config.Instance.NotifyModeIdx);
@@ -193,6 +196,9 @@ namespace StableDiffusionGui.Forms
             if (!string.IsNullOrWhiteSpace(comboxSdModel.Text)) ConfigParser.SaveGuiElement(comboxSdModel, ref Config.Instance.Model);
             if (!string.IsNullOrWhiteSpace(comboxSdModelVae.Text)) ConfigParser.SaveGuiElement(comboxSdModelVae, ref Config.Instance.ModelVae);
             if (!comboxCudaDevice.Text.StartsWith("Loading")) ConfigParser.SaveComboxIndex(comboxCudaDevice, ref Config.Instance.CudaDeviceIdx);
+            ConfigParser.SaveGuiElement(checkboxSeqGuidance, ref Config.Instance.InvokeSequentialGuidance);
+            ConfigParser.SaveGuiElement(checkboxFreeGpuMem, ref Config.Instance.InvokeFreeGpuMem);
+            ConfigParser.SaveGuiElement(checkboxDisableUpscalers, ref Config.Instance.DisablePostProcessing);
             ConfigParser.SaveGuiElement(checkboxModelCaching, ref Config.Instance.InvokeAllowModelCaching);
             ConfigParser.SaveComboxIndex(comboxClipSkip, ref Config.Instance.ClipSkip);
             ConfigParser.SaveComboxIndex(comboxNotify, ref Config.Instance.NotifyModeIdx);
@@ -263,6 +269,7 @@ namespace StableDiffusionGui.Forms
                 panelVae.SetVisible(CurrImplementation.Supports(ImplementationInfo.Feature.CustomVae));
                 panelAdvancedOptsInvoke.SetVisible(CurrImplementation == Implementation.InvokeAi);
                 panelModelCaching.SetVisible(CurrImplementation == Implementation.InvokeAi);
+                panelInvokeLowMem.SetVisible(CurrImplementation == Implementation.InvokeAi);
 
                 LoadModels();
 

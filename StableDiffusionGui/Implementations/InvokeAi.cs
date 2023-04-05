@@ -204,6 +204,8 @@ namespace StableDiffusionGui.Implementations
                     }
 
                     Task.Run(() => TtiProcess.CheckStillRunning());
+
+                    await Task.Delay(1000); // Give it a moment to start up before starting to send stdin - mostly placebo
                 }
                 else
                 {
