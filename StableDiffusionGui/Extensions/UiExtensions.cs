@@ -1,13 +1,8 @@
-﻿using MS.WindowsAPICodePack.Internal;
-using Newtonsoft.Json.Linq;
-using StableDiffusionGui.Main;
-using StableDiffusionGui.MiscUtils;
-using StableDiffusionGui.Ui;
+﻿using StableDiffusionGui.Main;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace StableDiffusionGui.Extensions
@@ -118,8 +113,11 @@ namespace StableDiffusionGui.Extensions
         /// <summary> Sets the visibility of a control while avoiding unnecessary setter calls.  </summary>
         public static void SetVisible(this Control c, bool targetState)
         {
-            if (c.Visible != targetState)
-                c.Visible = targetState;
+            c.InvokeIfNeeded(() =>
+            {
+                if (c.Visible != targetState)
+                    c.Visible = targetState;
+            });
         }
 
         /// <summary> WM_SETREDRAW message is sent to a window to allow changes to be redrawn or to prevent changes from being redrawn. </summary>
@@ -168,7 +166,7 @@ namespace StableDiffusionGui.Extensions
                 form.ResumeRendering();
         }
 
-        public static void PrintThread (this Control c, bool hidden = true)
+        public static void PrintThread(this Control c, bool hidden = true)
         {
             Logger.Log($"Currently{(c.InvokeRequired ? " NOT" : "")} on UI thread ({c.Name})", hidden);
         }
@@ -186,7 +184,7 @@ namespace StableDiffusionGui.Extensions
             return new Font(f.FontFamily, newSize, f.Style, f.Unit);
         }
 
-        public static bool RequiresInvoke (this Control c, Delegate method, params object[] args)
+        public static bool RequiresInvoke(this Control c, Delegate method, params object[] args)
         {
             if (c.InvokeRequired)
             {
@@ -227,7 +225,7 @@ namespace StableDiffusionGui.Extensions
             method();
         }
 
-        public static Image GetImageSafe (this PictureBox pictureBox)
+        public static Image GetImageSafe(this PictureBox pictureBox)
         {
             if (pictureBox.InvokeRequired)
                 return (Image)pictureBox.Invoke(new Func<Image>(() => pictureBox.GetImageSafe()));
