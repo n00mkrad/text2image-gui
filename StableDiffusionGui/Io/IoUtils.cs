@@ -25,7 +25,7 @@ namespace StableDiffusionGui.Io
         {
             try
             {
-                if (!string.IsNullOrWhiteSpace(path))
+                if (path != null && File.Exists(path))
                     return new MagickImage(path).ToBitmap();
             }
             catch (Exception ex)
