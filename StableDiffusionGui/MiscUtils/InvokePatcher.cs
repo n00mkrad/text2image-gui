@@ -70,6 +70,7 @@ namespace StableDiffusionGui.MiscUtils
                     t = Replace(t, "model_data = cache.get_model(previous_model_name)", "model_data = None");
                     t = Replace(t, "assert cfg_scale > 1.0, \"CFG_Scale (-C) must be >1.0\"", "pass # disabled cfg assert");
                     t = Replace(t, "x % 64", "x % 8");
+                    t = Replace(t, "image, seed, _ = r", "image, seed = r");
                 }
 
                 if (f.Name == "CLI.py")
