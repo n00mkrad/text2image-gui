@@ -47,7 +47,7 @@ namespace StableDiffusionGui.Forms
             {
                 panelDiffSafetensors.SetVisible(_currentOutFormat == Enums.Models.Format.Diffusers);
                 panelFp16.SetVisible(!(_currentOutFormat == Enums.Models.Format.DiffusersOnnx && GpuUtils.CachedGpus.Count <= 0)); // ONNX FP16 conversion currently requires CUDA
-                panelModelArch.SetVisible(_currentInFormat == Enums.Models.Format.Pytorch || _currentInFormat == Enums.Models.Format.Pytorch); // Not needed for Diffusers models
+                panelModelArch.SetVisible(_currentInFormat == Enums.Models.Format.Pytorch || _currentInFormat == Enums.Models.Format.Safetensors); // Not needed for Diffusers models
             })).RunWithUiStopped(this);
         }
 
