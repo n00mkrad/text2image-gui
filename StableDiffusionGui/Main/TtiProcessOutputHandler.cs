@@ -62,7 +62,7 @@ namespace StableDiffusionGui.Main
                     catch { }
                 }
 
-                if (!TextToImage.Canceled && line.StartsWith("["))
+                if (!TextToImage.Canceled && line.StartsWith("[") && !line.Contains(".png: !fix "))
                 {
                     string outPath = Path.Combine(Paths.GetSessionDataPath(), "out").Replace('\\', '/');
 
@@ -88,9 +88,16 @@ namespace StableDiffusionGui.Main
                 {
                     try
                     {
-                        string pathSource = line.Split(": !fix ")[1].Split(".png ")[0] + ".png";
-                        string pathOut = line.Substring(line.IndexOf("] ") + 2).Split(": !fix ")[0];
-                        TtiUtils.ExportPostprocessedImage(pathSource, pathOut);
+                        if(LastMessages.Take(5).Any(x => x.Contains("ESRGAN is disabled.")))
+                        {
+                            Logger.Log($"Post-Processing is disabled, can't run enhancement.");
+                        }
+                        else
+                        {
+                            string pathSource = line.Split(": !fix ")[1].Split(".png ")[0] + ".png";
+                            string pathOut = line.Substring(line.IndexOf("] ") + 2).Split(": !fix ")[0];
+                            TtiUtils.ExportPostprocessedImage(pathSource, pathOut);
+                        }
                     }
                     catch (Exception ex)
                     {

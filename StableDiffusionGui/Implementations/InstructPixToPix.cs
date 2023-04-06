@@ -105,7 +105,7 @@ namespace StableDiffusionGui.Implementations
                 Logger.Log($"Running Stable Diffusion - {iterations} Iterations, {steps.Length} Steps, Scales {(scalesTxt.Length < 4 ? string.Join(", ", scalesTxt.Select(x => x.ToStringDot())) : $"{scalesTxt.First()}->{scalesTxt.Last()}")}, Starting Seed: {startSeed}");
 
                 string initsStr = initImages != null ? $" and {initImages.Count} image{(initImages.Count != 1 ? "s" : "")} using {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
-                Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} * {iterations} image{(iterations != 1 ? "s" : "")} * {steps.Length} step value{(steps.Length != 1 ? "s" : "")} * {scalesTxt.Length} scale{(scalesTxt.Length != 1 ? "s" : "")}{initsStr} = {argLists.Count} images total.");
+                Logger.Log(GetImageCountLogString(initImages, prompts.Length, iterations, steps.Length, scalesTxt.Length, scalesImg.Length, argLists.Count));
 
                 if (!TtiProcess.IsAiProcessRunning)
                 {
@@ -161,6 +161,17 @@ namespace StableDiffusionGui.Implementations
                 Logger.Log($"Unhandled Stable Diffusion Error: {ex.Message}");
                 Logger.Log(ex.StackTrace, true);
             }
+        }
+
+        public static string GetImageCountLogString(OrderedDictionary initImages, int prompts, int iterations, int steps, int scalesTxt, int scalesImg, int argLists)
+        {
+            string initsStr = initImages != null ? $" and {initImages.Count} Image{(initImages.Count != 1 ? "s" : "")}" : "";
+            string log = $"{prompts} Prompt{(prompts != 1 ? "s" : "")} * {iterations} Image{(iterations != 1 ? "s" : "")} * {steps} Step Value{(steps != 1 ? "s" : "")} * {scalesTxt} (Prompt) * {scalesImg} (Image) Scale Values{initsStr} = {argLists} Images Total";
+
+            if (ConfigParser.UpscaleAndSaveOriginals)
+                log += $" ({argLists * 2} With Post-processed Images)";
+
+            return $"{log}.";
         }
 
         public static async Task Cancel()
