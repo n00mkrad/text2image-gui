@@ -7,7 +7,6 @@ using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
@@ -18,7 +17,7 @@ namespace StableDiffusionGui
 {
     public static class Program
     {
-        public const string Version = "1.10.0b3";
+        public const string Version = "1.10.0b4";
         public const Enums.Program.UpdateChannel ReleaseChannel = Enums.Program.UpdateChannel.Beta;
 
         public static bool Debug { get { return Debugger.IsAttached || UserArgs.Get("debug").Lower() == true.ToString().Lower(); } }
