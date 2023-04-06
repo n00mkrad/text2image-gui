@@ -132,7 +132,7 @@ namespace StableDiffusionGui.Main
 
             string mdl = s.Params.FromJson<string>("model");
 
-            if (s.Params.FromJson<InpaintMode>("inpainting") != InpaintMode.Disabled && !mdl.Contains("inpainting."))
+            if (s.Params.FromJson<InpaintMode>("inpainting") != InpaintMode.Disabled && !mdl.Contains("inpainting"))
                 Logger.Log($"Warning: Inpainting is enabled, but '{mdl}' does not appear to be an inpainting model. Quality will be degraded.");
 
             return true;

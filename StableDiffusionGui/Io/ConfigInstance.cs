@@ -12,7 +12,6 @@ namespace StableDiffusionGui.Io
     public class ConfigInstance
     {
         public EasyDict<string, Enums.Models.SdArch> ModelArchs = new EasyDict<string, Enums.Models.SdArch>();
-        public EasyDict<string, int> ComboBoxIndexes = new EasyDict<string, int>();
         public int CmdDebugMode;
         public bool MultiPromptsSameSeed;
         public int SamplerIdx;
@@ -70,6 +69,7 @@ namespace StableDiffusionGui.Io
         public float SymmetryTimepoint;
         public int ClipSkip;
         public string LastInitImageParentPath;
+        public bool InvokeAllowMod8;
 
         public ConfigInstance()
         {
