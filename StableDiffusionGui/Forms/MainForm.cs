@@ -187,7 +187,7 @@ namespace StableDiffusionGui.Forms
 
         private void copyImageToClipboardToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OsUtils.SetClipboard(pictBoxImgViewer.Image);
+            OsUtils.SetClipboard(pictBoxImgViewer.GetImageSafe());
         }
 
         private void copySeedToClipboardToolStripMenuItem_Click(object sender, EventArgs e)

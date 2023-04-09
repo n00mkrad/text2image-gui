@@ -1,4 +1,5 @@
-﻿using StableDiffusionGui.Io;
+﻿using StableDiffusionGui.Extensions;
+using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
@@ -128,7 +129,7 @@ namespace StableDiffusionGui.Forms
 
         private void copyImageToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OsUtils.SetClipboard(picBox.Image);
+            OsUtils.SetClipboard(picBox.GetImageSafe());
         }
 
         private void ImagePopupForm_KeyDown(object sender, KeyEventArgs e)
@@ -269,7 +270,7 @@ namespace StableDiffusionGui.Forms
         {
             while (true)
             {
-                infoLabel.Visible = (DateTime.Now - _lastInfoLabelShowTime).TotalMilliseconds <= _infoLabelShowTimeMs;
+                infoLabel.SetVisible((DateTime.Now - _lastInfoLabelShowTime).TotalMilliseconds <= _infoLabelShowTimeMs);
                 await Task.Delay(1);
             }
         }

@@ -215,10 +215,15 @@ namespace StableDiffusionGui.Extensions
         {
             if (c.InvokeRequired)
             {
-                if (c.Disposing || c.IsDisposed)
-                    return;
+                try
+                {
+                    if (c.Disposing || c.IsDisposed)
+                        return;
 
-                c.Invoke(method);
+                    c.Invoke(method);
+                }
+                catch { }
+
                 return;
             }
 

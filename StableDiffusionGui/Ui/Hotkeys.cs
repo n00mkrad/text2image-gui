@@ -60,7 +60,7 @@ namespace StableDiffusionGui.Ui
 
             if (keys == (Keys.Control | Keys.C) && !_anyTextboxFocused) // Hotkey: Copy current image
             {
-                OsUtils.SetClipboard(Program.MainForm.pictBoxImgViewer.Image);
+                OsUtils.SetClipboard(Program.MainForm.pictBoxImgViewer.GetImageSafe());
                 return;
             }
 
@@ -157,7 +157,7 @@ namespace StableDiffusionGui.Ui
 
             if (keys == (Keys.Control | Keys.C) && !_anyTextboxFocused) // Hotkey: Copy current image
             {
-                OsUtils.SetClipboard(Program.MainForm.pictBoxImgViewer.Image);
+                OsUtils.SetClipboard(Program.MainForm.pictBoxImgViewer.GetImageSafe());
                 return;
             }
 

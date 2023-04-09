@@ -254,7 +254,7 @@ namespace StableDiffusionGui.Ui
             if (scaledInitImg == null)
                 return null;
 
-            Image outImg = Program.MainForm.pictBoxImgViewer.Image;
+            Image outImg = Program.MainForm.pictBoxImgViewer.GetImageSafe();
 
             Size targetSize = new Size(new[] { scaledInitImg.Width, outImg.Width }.Max(), new[] { scaledInitImg.Height, outImg.Height }.Max());
             Image img = ImgUtils.JuxtaposeSameSize(ImgUtils.ResizeImage(scaledInitImg, targetSize), ImgUtils.ResizeImage(outImg, targetSize));
