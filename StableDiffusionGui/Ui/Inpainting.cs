@@ -41,7 +41,7 @@ namespace StableDiffusionGui.Ui
             if (initImgs == null || !initImgs.Any())
                 return false;
 
-            if (settings.Params["inpainting"].FromJson<Enums.StableDiffusion.InpaintMode>() == Enums.StableDiffusion.InpaintMode.ImageMask)
+            if (settings.Params["inpainting"].FromJson<Enums.StableDiffusion.ImgMode>() == Enums.StableDiffusion.ImgMode.ImageMask)
             {
                 if (initImgs.Count > 1)
                 {

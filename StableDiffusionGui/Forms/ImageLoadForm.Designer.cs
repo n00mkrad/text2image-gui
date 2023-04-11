@@ -62,7 +62,7 @@
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(884, 512);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(924, 512);
             this.tableLayoutPanel1.TabIndex = 111;
             // 
             // pictBox
@@ -84,7 +84,7 @@
             this.panelRoot.Location = new System.Drawing.Point(512, 0);
             this.panelRoot.Margin = new System.Windows.Forms.Padding(0);
             this.panelRoot.Name = "panelRoot";
-            this.panelRoot.Size = new System.Drawing.Size(372, 512);
+            this.panelRoot.Size = new System.Drawing.Size(412, 512);
             this.panelRoot.TabIndex = 2;
             // 
             // tablePanel
@@ -102,7 +102,7 @@
             this.tablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
-            this.tablePanel.Size = new System.Drawing.Size(372, 512);
+            this.tablePanel.Size = new System.Drawing.Size(412, 512);
             this.tablePanel.TabIndex = 80;
             // 
             // panelInfo
@@ -111,7 +111,7 @@
             this.panelInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelInfo.Location = new System.Drawing.Point(3, 3);
             this.panelInfo.Name = "panelInfo";
-            this.panelInfo.Size = new System.Drawing.Size(366, 416);
+            this.panelInfo.Size = new System.Drawing.Size(406, 416);
             this.panelInfo.TabIndex = 114;
             // 
             // textboxInfo
@@ -129,7 +129,7 @@
             this.textboxInfo.PlaceholderTextColor = System.Drawing.Color.Silver;
             this.textboxInfo.ReadOnly = true;
             this.textboxInfo.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textboxInfo.Size = new System.Drawing.Size(366, 416);
+            this.textboxInfo.Size = new System.Drawing.Size(406, 416);
             this.textboxInfo.TabIndex = 79;
             this.textboxInfo.TabStop = false;
             // 
@@ -140,7 +140,7 @@
             this.panelOk.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelOk.Location = new System.Drawing.Point(3, 455);
             this.panelOk.Name = "panelOk";
-            this.panelOk.Size = new System.Drawing.Size(366, 54);
+            this.panelOk.Size = new System.Drawing.Size(406, 54);
             this.panelOk.TabIndex = 112;
             // 
             // btnOk
@@ -160,7 +160,7 @@
             this.btnOk.Margin = new System.Windows.Forms.Padding(0);
             this.btnOk.Name = "btnOk";
             this.btnOk.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
-            this.btnOk.Size = new System.Drawing.Size(366, 23);
+            this.btnOk.Size = new System.Drawing.Size(406, 23);
             this.btnOk.TabIndex = 111;
             this.btnOk.TabStop = false;
             this.btnOk.Text = "OK";
@@ -179,7 +179,7 @@
             this.comboxImportAction.Location = new System.Drawing.Point(0, 1);
             this.comboxImportAction.Margin = new System.Windows.Forms.Padding(0, 0, 0, 6);
             this.comboxImportAction.Name = "comboxImportAction";
-            this.comboxImportAction.Size = new System.Drawing.Size(366, 24);
+            this.comboxImportAction.Size = new System.Drawing.Size(406, 24);
             this.comboxImportAction.TabIndex = 110;
             // 
             // panelChromaKey
@@ -189,7 +189,7 @@
             this.panelChromaKey.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelChromaKey.Location = new System.Drawing.Point(3, 425);
             this.panelChromaKey.Name = "panelChromaKey";
-            this.panelChromaKey.Size = new System.Drawing.Size(366, 24);
+            this.panelChromaKey.Size = new System.Drawing.Size(406, 24);
             this.panelChromaKey.TabIndex = 113;
             // 
             // label10
@@ -197,12 +197,12 @@
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label10.ForeColor = System.Drawing.Color.White;
-            this.label10.Location = new System.Drawing.Point(5, 5);
+            this.label10.Location = new System.Drawing.Point(0, 5);
             this.label10.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(112, 13);
+            this.label10.Size = new System.Drawing.Size(178, 13);
             this.label10.TabIndex = 111;
-            this.label10.Text = "Restore Transparency";
+            this.label10.Text = "Restore Transparency (Chroma Key)";
             // 
             // comboxChromaKey
             // 
@@ -214,10 +214,10 @@
             this.comboxChromaKey.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.comboxChromaKey.ForeColor = System.Drawing.Color.White;
             this.comboxChromaKey.FormattingEnabled = true;
-            this.comboxChromaKey.Location = new System.Drawing.Point(166, 1);
+            this.comboxChromaKey.Location = new System.Drawing.Point(196, 2);
             this.comboxChromaKey.Margin = new System.Windows.Forms.Padding(0, 0, 0, 6);
             this.comboxChromaKey.Name = "comboxChromaKey";
-            this.comboxChromaKey.Size = new System.Drawing.Size(200, 21);
+            this.comboxChromaKey.Size = new System.Drawing.Size(210, 21);
             this.comboxChromaKey.TabIndex = 110;
             // 
             // ImageLoadForm
@@ -225,7 +225,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.ClientSize = new System.Drawing.Size(884, 512);
+            this.ClientSize = new System.Drawing.Size(924, 512);
             this.Controls.Add(this.tableLayoutPanel1);
             this.ForeColor = System.Drawing.Color.White;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;

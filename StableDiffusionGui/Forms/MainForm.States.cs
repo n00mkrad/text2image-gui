@@ -50,19 +50,19 @@ namespace StableDiffusionGui.Forms
                 return implementation.Supports(Feature.MultipleSamplers);
 
             if (control == panelSeamless)
-                return implementation.Supports(Feature.SeamlessMode) && (!comboxInpaintMode.Visible || (InpaintMode)comboxInpaintMode.SelectedIndex == InpaintMode.Disabled);
+                return implementation.Supports(Feature.SeamlessMode) && (!comboxInpaintMode.Visible || (ImgMode)comboxInpaintMode.SelectedIndex == ImgMode.InitializationImage);
 
             if (control == panelSymmetry)
-                return implementation.Supports(Feature.SymmetricMode) && (!comboxInpaintMode.Visible || (InpaintMode)comboxInpaintMode.SelectedIndex == InpaintMode.Disabled);
+                return implementation.Supports(Feature.SymmetricMode) && (!comboxInpaintMode.Visible || (ImgMode)comboxInpaintMode.SelectedIndex == ImgMode.InitializationImage);
 
             if (control == panelEmbeddings)
                 return implementation.Supports(Feature.Embeddings);
 
             if (control == textboxClipsegMask)
-                return (InpaintMode)comboxInpaintMode.SelectedIndex == InpaintMode.TextMask;
+                return (ImgMode)comboxInpaintMode.SelectedIndex == ImgMode.TextMask;
 
             if (control == panelResizeGravity || control == labelResChange)
-                return comboxInpaintMode.Visible && (InpaintMode)comboxInpaintMode.SelectedIndex == InpaintMode.Outpaint;
+                return comboxInpaintMode.Visible && (ImgMode)comboxInpaintMode.SelectedIndex == ImgMode.Outpainting;
 
             if (control == btnResetRes)
                 return labelResChange.Visible && labelResChange.Text.IsNotEmpty();
@@ -93,7 +93,7 @@ namespace StableDiffusionGui.Forms
             if (imp == Implementation.InstructPixToPix)
                 return false;
 
-            if ((InpaintMode)comboxInpaintMode.SelectedIndex != InpaintMode.Disabled)
+            if ((ImgMode)comboxInpaintMode.SelectedIndex != ImgMode.InitializationImage)
                 return false;
 
             bool img2img = MainUi.CurrentInitImgPaths.Any();

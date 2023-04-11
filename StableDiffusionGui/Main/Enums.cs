@@ -29,7 +29,7 @@ namespace StableDiffusionGui.Main
             public enum Sampler { K_Euler_A, K_Euler, K_Dpmpp_2, K_Lms, Ddim, Plms, K_Heun, K_Dpm_2_A, K_Dpm_2 }
             public enum SeamlessMode { Disabled, SeamlessBoth, SeamlessVert, SeamlessHor }
             public enum SymmetryMode { Disabled, SymVert, SymHor, SymBoth }
-            public enum InpaintMode { Disabled, ImageMask, TextMask, Outpaint }
+            public enum ImgMode { InitializationImage, ImageMask, TextMask, Outpainting }
         }
 
         public class Utils

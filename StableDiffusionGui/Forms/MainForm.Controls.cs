@@ -35,7 +35,7 @@ namespace StableDiffusionGui.Forms
             comboxSampler.FillFromEnum<Sampler>(Strings.Samplers, 0);
             comboxSeamless.FillFromEnum<SeamlessMode>(Strings.SeamlessMode, 0);
             comboxSymmetry.FillFromEnum<SymmetryMode>(Strings.SymmetryMode, 0);
-            comboxInpaintMode.FillFromEnum<InpaintMode>(Strings.InpaintMode, 0);
+            comboxInpaintMode.FillFromEnum<ImgMode>(Strings.InpaintMode, 0);
             comboxResizeGravity.FillFromEnum<ImageMagick.Gravity>(Strings.ImageGravity, 4, new List<ImageMagick.Gravity> { ImageMagick.Gravity.Undefined });
             comboxEmbeddingList.SetItems(new[] { "None" }.Concat(Models.GetEmbeddings().Select(m => m.FormatIndependentName)), UiExtensions.SelectMode.First);
             comboxBackend.FillFromEnum<Implementation>(Strings.Implementation, -1);
@@ -46,8 +46,8 @@ namespace StableDiffusionGui.Forms
 
             // Set categories
             _categoryPanels.Add(btnCollapseImplementation, new List<Panel> { panelBackend, panelModel });
-            _categoryPanels.Add(btnCollapsePrompt, new List<Panel> { panelPrompt, panelPromptNeg, panelEmbeddings, panelAiInputs, panelInitImgStrength });
-            _categoryPanels.Add(btnCollapseGeneration, new List<Panel> { panelInpainting, panelIterations, panelSteps, panelScale, panelScaleImg, panelSeed });
+            _categoryPanels.Add(btnCollapsePrompt, new List<Panel> { panelPrompt, panelPromptNeg, panelEmbeddings, panelAiInputs });
+            _categoryPanels.Add(btnCollapseGeneration, new List<Panel> { panelInpainting, panelInitImgStrength, panelIterations, panelSteps, panelScale, panelScaleImg, panelSeed });
             _categoryPanels.Add(btnCollapseRendering, new List<Panel> { panelRes, panelSampler });
             _categoryPanels.Add(btnCollapseSymmetry, new List<Panel> { panelSeamless, panelSymmetry });
             _categoryPanels.Add(btnCollapseDebug, new List<Panel> { panelDebugAppendArgs, panelDebugSendStdin, panelDebugPerlinThresh, panelDebugLoopback });

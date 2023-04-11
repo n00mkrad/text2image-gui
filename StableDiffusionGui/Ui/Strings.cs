@@ -22,8 +22,9 @@ namespace StableDiffusionGui.Ui
 
         public static Dictionary<string, string> InpaintMode = new Dictionary<string, string>
         {
-            { Enums.StableDiffusion.InpaintMode.ImageMask.ToString(), "Image Mask (Draw Mask)" },
-            { Enums.StableDiffusion.InpaintMode.TextMask.ToString(), "Text Mask (Describe Objects)" },
+            { Enums.StableDiffusion.ImgMode.InitializationImage.ToString(), "Initialization Image (Img2Img)" },
+            { Enums.StableDiffusion.ImgMode.ImageMask.ToString(), "Inpainting with Mask" },
+            { Enums.StableDiffusion.ImgMode.TextMask.ToString(), "Inpainting with Text Description" },
         };
 
         public static Dictionary<string, string> Samplers = new Dictionary<string, string>
@@ -59,7 +60,7 @@ namespace StableDiffusionGui.Ui
 
         public static Dictionary<string, string> ImageImportMode = new Dictionary<string, string>
         {
-            { Enums.Misc.ImageImportAction.LoadImage.ToString(), "Load as Initialization Image" },
+            { Enums.Misc.ImageImportAction.LoadImage.ToString(), "Load Image" },
             { Enums.Misc.ImageImportAction.LoadSettings.ToString(), "Use Settings From Metadata" },
             { Enums.Misc.ImageImportAction.LoadImageAndSettings.ToString(), "Load Image and Use Settings From Metadata" },
             { Enums.Misc.ImageImportAction.CopyPrompt.ToString(), "Copy Prompt" },
@@ -81,10 +82,10 @@ namespace StableDiffusionGui.Ui
 
         public static Dictionary<string, string> ModelFormats = new Dictionary<string, string>()
         {
-            { Enums.Models.Format.Pytorch.ToString(), "Pytorch (ckpt/pt File)" },
+            { Enums.Models.Format.Pytorch.ToString(), "Pytorch (CKPT/PT File)" },
             { Enums.Models.Format.Diffusers.ToString(), "Diffusers (Folder)" },
             { Enums.Models.Format.DiffusersOnnx.ToString(), "Diffusers ONNX (Folder)" },
-            { Enums.Models.Format.Safetensors.ToString(), "Safetensors (safetensors File)" },
+            { Enums.Models.Format.Safetensors.ToString(), "Safetensors (Safetensors File)" },
         };
 
         public static Dictionary<string, string> TimestampModes = new Dictionary<string, string>()

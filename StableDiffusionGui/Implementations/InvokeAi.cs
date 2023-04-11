@@ -43,7 +43,7 @@ namespace StableDiffusionGui.Implementations
                 string vae = parameters.FromJson<string>("vae").NullToEmpty().Replace("None", ""); // VAE model name
                 float perlin = parameters.FromJson<float>("perlin"); // Perlin noise blend value
                 int threshold = parameters.FromJson<int>("threshold"); // Threshold value
-                var inpaint = parameters.FromJson<Enums.StableDiffusion.InpaintMode>("inpainting"); // Inpainting mode
+                var inpaint = parameters.FromJson<Enums.StableDiffusion.ImgMode>("inpainting"); // Inpainting mode
                 string clipSegMask = parameters.FromJson<string>("clipSegMask"); // ClipSeg text-based masking prompt
                 var resizeGravity = parameters.FromJson<ImageMagick.Gravity>("resizeGravity", (ImageMagick.Gravity)(-1)); // Inpainting mode
                 var modelArch = parameters.FromJson<Enums.Models.SdArch>("modelArch", Enums.Models.SdArch.Automatic); // SD Ckpt Architecture
@@ -88,7 +88,7 @@ namespace StableDiffusionGui.Implementations
                         args["seed"] = $"-S {seed}";
                         args["perlin"] = perlin > 0f ? $"--perlin {perlin.ToStringDot()}" : "";
                         args["threshold"] = threshold > 0 ? $"--threshold {threshold}" : "";
-                        args["clipSegMask"] = (inpaint == Enums.StableDiffusion.InpaintMode.TextMask && !string.IsNullOrWhiteSpace(clipSegMask)) ? $"-tm {clipSegMask.Wrap()}" : "";
+                        args["clipSegMask"] = (inpaint == Enums.StableDiffusion.ImgMode.TextMask && !string.IsNullOrWhiteSpace(clipSegMask)) ? $"-tm {clipSegMask.Wrap()}" : "";
                         args["debug"] = parameters.FromJson<string>("appendArgs");
 
                         foreach (float scale in scales)
@@ -110,12 +110,12 @@ namespace StableDiffusionGui.Implementations
                                         foreach (float strength in initStrengths)
                                         {
                                             args["initImg"] = $"-I {initImg.Wrap()}";
-                                            args["initStrength"] = inpaint != Enums.StableDiffusion.InpaintMode.Disabled ? "-f 1.0" : $"-f {strength.ToStringDot("0.###")}"; // Lock to 1.0 when using inpainting
+                                            args["initStrength"] = inpaint != Enums.StableDiffusion.ImgMode.InitializationImage ? "-f 1.0" : $"-f {strength.ToStringDot("0.###")}"; // Lock to 1.0 when using inpainting
 
-                                            if (inpaint == Enums.StableDiffusion.InpaintMode.ImageMask)
+                                            if (inpaint == Enums.StableDiffusion.ImgMode.ImageMask)
                                                 args["inpaintMask"] = $"-M {Inpainting.MaskedImagePath.Wrap()}";
 
-                                            if (inpaint == Enums.StableDiffusion.InpaintMode.Outpaint)
+                                            if (inpaint == Enums.StableDiffusion.ImgMode.Outpainting)
                                                 args["inpaintMask"] = "--force_outpaint";
 
                                             argLists.Add(new EasyDict<string, string>(args));

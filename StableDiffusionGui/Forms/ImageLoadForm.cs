@@ -6,6 +6,7 @@ using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -60,7 +61,8 @@ namespace StableDiffusionGui.Forms
                 comboxImportAction.FillFromEnum<ImageImportAction>(Strings.ImageImportMode, 0, disabledActions);
 
                 string n = Environment.NewLine;
-                textboxInfo.Text += $"Resolution: {pictBox.Image.Size.AsString()}{n}{n}";
+                textboxInfo.Text += $"Resolution: {pictBox.Image.Size.AsString()}{n}";
+                textboxInfo.Text += $"Pixel Format: {pictBox.Image.PixelFormat.AsString()}{n}{n}";
 
                 if (!string.IsNullOrWhiteSpace(CurrentMetadata.Prompt))
                 {

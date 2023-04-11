@@ -587,13 +587,20 @@ namespace StableDiffusionGui
                 }
             }
         }
-
+        
+        // Prettier ToString alternative
         public static string AsString(this Size s, string delimiter = "x", bool swapWidthHeight = false)
         {
             if (swapWidthHeight)
                 return $"{s.Height}{delimiter}{s.Width}";
             else
                 return $"{s.Width}{delimiter}{s.Height}";
+        }
+
+        // Prettier ToString alternative
+        public static string AsString(this System.Drawing.Imaging.PixelFormat pixFmt)
+        {
+            return pixFmt.ToString().Replace("Format", "").Replace("bpp", "-bit ").Replace("PArgb", "Pre-multiplied ARGB ").Replace("Argb", "ARGB ").Replace("Rgb", "RGB ");
         }
 
         /// <summary> Shortcut for !string.IsNullOrWhiteSpace </summary>

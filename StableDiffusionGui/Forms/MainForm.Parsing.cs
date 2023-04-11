@@ -62,7 +62,7 @@ namespace StableDiffusionGui.Forms
                 comboxSampler.SetIfTextMatches(s.Params.Get("sampler").FromJson<string>(), true, Strings.Samplers);
                 SetSliderValues(s.Params.FromJson<List<float>>("initStrengths"), false, sliderInitStrength, textboxExtraInitStrengths);
                 comboxSeamless.SetIfTextMatches(s.Params.Get("seamless").FromJson<string>(), true, Strings.SeamlessMode);
-                comboxInpaintMode.SelectedIndex = (int)s.Params.Get("inpainting").FromJson<InpaintMode>();
+                comboxInpaintMode.SelectedIndex = (int)s.Params.Get("inpainting").FromJson<ImgMode>();
                 checkboxHiresFix.Checked = s.Params.Get("hiresFix").FromJson<bool>();
                 checkboxLockSeed.Checked = s.Params.Get("lockSeed").FromJson<bool>();
 
@@ -113,7 +113,7 @@ namespace StableDiffusionGui.Forms
                     { "initStrengths", panelInitImgStrength.Visible ? MainUi.GetExtraValues(textboxExtraInitStrengths.Text, sliderInitStrength.ActualValueFloat).ToJson() : new List<float>() { 0.5f }.ToJson() },
                     { "seamless", (comboxSeamless.Visible ? ((SeamlessMode)comboxSeamless.SelectedIndex) : SeamlessMode.Disabled).ToJson() },
                     { "symmetry", (comboxSymmetry.Visible ? ((SymmetryMode)comboxSymmetry.SelectedIndex) : SymmetryMode.Disabled).ToJson() },
-                    { "inpainting", (comboxInpaintMode.Visible ? ((InpaintMode)comboxInpaintMode.SelectedIndex) : InpaintMode.Disabled).ToJson() },
+                    { "inpainting", (comboxInpaintMode.Visible ? ((ImgMode)comboxInpaintMode.SelectedIndex) : ImgMode.InitializationImage).ToJson() },
                     { "clipSegMask", textboxClipsegMask.Text.Trim().ToJson() },
                     { "model", Config.Instance.Model.ToJson() },
                     { "hiresFix", (checkboxHiresFix.Visible && checkboxHiresFix.Checked).ToJson() },

@@ -172,15 +172,15 @@ namespace StableDiffusionGui.Forms
             this.sliderSteps = new StableDiffusionGui.Controls.CustomSlider();
             this.panelIterations = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
+            this.panelInitImgStrength = new System.Windows.Forms.Panel();
+            this.label11 = new System.Windows.Forms.Label();
+            this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.panelInpainting = new System.Windows.Forms.Panel();
             this.panelResizeGravity = new System.Windows.Forms.Panel();
             this.label21 = new System.Windows.Forms.Label();
             this.comboxInpaintMode = new System.Windows.Forms.ComboBox();
             this.label10 = new System.Windows.Forms.Label();
             this.panelCollapseGeneration = new System.Windows.Forms.Panel();
-            this.panelInitImgStrength = new System.Windows.Forms.Panel();
-            this.label11 = new System.Windows.Forms.Label();
-            this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.panelAiInputs = new System.Windows.Forms.Panel();
             this.checkboxShowInitImg = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -238,11 +238,11 @@ namespace StableDiffusionGui.Forms
             this.panelSteps.SuspendLayout();
             this.tableLayoutPanel6.SuspendLayout();
             this.panelIterations.SuspendLayout();
+            this.panelInitImgStrength.SuspendLayout();
+            this.tableLayoutPanel4.SuspendLayout();
             this.panelInpainting.SuspendLayout();
             this.panelResizeGravity.SuspendLayout();
             this.panelCollapseGeneration.SuspendLayout();
-            this.panelInitImgStrength.SuspendLayout();
-            this.tableLayoutPanel4.SuspendLayout();
             this.panelAiInputs.SuspendLayout();
             this.panelEmbeddings.SuspendLayout();
             this.panelPromptNeg.SuspendLayout();
@@ -379,7 +379,7 @@ namespace StableDiffusionGui.Forms
             this.fitWindowSizeToImageSizeToolStripMenuItem});
             this.menuStripOutputImg.Name = "menuStripOutputImg";
             this.menuStripOutputImg.ShowImageMargin = false;
-            this.menuStripOutputImg.Size = new System.Drawing.Size(285, 246);
+            this.menuStripOutputImg.Size = new System.Drawing.Size(285, 224);
             // 
             // openFileToolStripMenuItem
             // 
@@ -644,7 +644,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderScale.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScale.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScale.Location = new System.Drawing.Point(308, 2);
+            this.textboxSliderScale.Location = new System.Drawing.Point(308, 4);
             this.textboxSliderScale.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScale.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScale.Name = "textboxSliderScale";
@@ -791,7 +791,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderInitStrength.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderInitStrength.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderInitStrength.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderInitStrength.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderInitStrength.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderInitStrength.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderInitStrength.Name = "textboxSliderInitStrength";
@@ -1311,7 +1311,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderScaleImg.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScaleImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScaleImg.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScaleImg.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderScaleImg.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderScaleImg.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScaleImg.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScaleImg.Name = "textboxSliderScaleImg";
@@ -1730,9 +1730,9 @@ namespace StableDiffusionGui.Forms
             this.panelSettings.Controls.Add(this.panelScale);
             this.panelSettings.Controls.Add(this.panelSteps);
             this.panelSettings.Controls.Add(this.panelIterations);
+            this.panelSettings.Controls.Add(this.panelInitImgStrength);
             this.panelSettings.Controls.Add(this.panelInpainting);
             this.panelSettings.Controls.Add(this.panelCollapseGeneration);
-            this.panelSettings.Controls.Add(this.panelInitImgStrength);
             this.panelSettings.Controls.Add(this.panelAiInputs);
             this.panelSettings.Controls.Add(this.panelEmbeddings);
             this.panelSettings.Controls.Add(this.panelPromptNeg);
@@ -2274,7 +2274,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderSteps.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderSteps.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderSteps.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderSteps.Location = new System.Drawing.Point(308, 2);
+            this.textboxSliderSteps.Location = new System.Drawing.Point(308, 4);
             this.textboxSliderSteps.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderSteps.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderSteps.Name = "textboxSliderSteps";
@@ -2347,6 +2347,48 @@ namespace StableDiffusionGui.Forms
             this.label1.TabIndex = 85;
             this.label1.Text = "Amount Of Images To Generate";
             // 
+            // panelInitImgStrength
+            // 
+            this.panelInitImgStrength.Controls.Add(this.label11);
+            this.panelInitImgStrength.Controls.Add(this.tableLayoutPanel4);
+            this.panelInitImgStrength.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelInitImgStrength.Location = new System.Drawing.Point(0, 395);
+            this.panelInitImgStrength.Name = "panelInitImgStrength";
+            this.panelInitImgStrength.Size = new System.Drawing.Size(651, 35);
+            this.panelInitImgStrength.TabIndex = 8;
+            this.panelInitImgStrength.Visible = false;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.ForeColor = System.Drawing.Color.White;
+            this.label11.Location = new System.Drawing.Point(0, 4);
+            this.label11.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(132, 13);
+            this.label11.TabIndex = 90;
+            this.label11.Text = "Image Strength (Influence)";
+            // 
+            // tableLayoutPanel4
+            // 
+            this.tableLayoutPanel4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel4.ColumnCount = 3;
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 75F));
+            this.tableLayoutPanel4.Controls.Add(this.textboxExtraInitStrengths, 2, 0);
+            this.tableLayoutPanel4.Controls.Add(this.textboxSliderInitStrength, 0, 0);
+            this.tableLayoutPanel4.Controls.Add(this.sliderInitStrength, 0, 0);
+            this.tableLayoutPanel4.Location = new System.Drawing.Point(233, 0);
+            this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
+            this.tableLayoutPanel4.Name = "tableLayoutPanel4";
+            this.tableLayoutPanel4.RowCount = 1;
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(418, 25);
+            this.tableLayoutPanel4.TabIndex = 89;
+            // 
             // panelInpainting
             // 
             this.panelInpainting.Controls.Add(this.panelResizeGravity);
@@ -2356,7 +2398,7 @@ namespace StableDiffusionGui.Forms
             this.panelInpainting.Controls.Add(this.btnResetMask);
             this.panelInpainting.Controls.Add(this.label10);
             this.panelInpainting.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelInpainting.Location = new System.Drawing.Point(0, 395);
+            this.panelInpainting.Location = new System.Drawing.Point(0, 360);
             this.panelInpainting.Name = "panelInpainting";
             this.panelInpainting.Size = new System.Drawing.Size(651, 35);
             this.panelInpainting.TabIndex = 12;
@@ -2405,60 +2447,18 @@ namespace StableDiffusionGui.Forms
             this.label10.Location = new System.Drawing.Point(0, 4);
             this.label10.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(53, 13);
+            this.label10.Size = new System.Drawing.Size(70, 13);
             this.label10.TabIndex = 105;
-            this.label10.Text = "Inpainting";
+            this.label10.Text = "Image Usage";
             // 
             // panelCollapseGeneration
             // 
             this.panelCollapseGeneration.Controls.Add(this.btnCollapseGeneration);
             this.panelCollapseGeneration.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelCollapseGeneration.Location = new System.Drawing.Point(0, 360);
+            this.panelCollapseGeneration.Location = new System.Drawing.Point(0, 325);
             this.panelCollapseGeneration.Name = "panelCollapseGeneration";
             this.panelCollapseGeneration.Size = new System.Drawing.Size(651, 35);
             this.panelCollapseGeneration.TabIndex = 120;
-            // 
-            // panelInitImgStrength
-            // 
-            this.panelInitImgStrength.Controls.Add(this.label11);
-            this.panelInitImgStrength.Controls.Add(this.tableLayoutPanel4);
-            this.panelInitImgStrength.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelInitImgStrength.Location = new System.Drawing.Point(0, 325);
-            this.panelInitImgStrength.Name = "panelInitImgStrength";
-            this.panelInitImgStrength.Size = new System.Drawing.Size(651, 35);
-            this.panelInitImgStrength.TabIndex = 8;
-            this.panelInitImgStrength.Visible = false;
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.ForeColor = System.Drawing.Color.White;
-            this.label11.Location = new System.Drawing.Point(0, 4);
-            this.label11.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(189, 13);
-            this.label11.TabIndex = 90;
-            this.label11.Text = "Initialization Image Strength (Influence)";
-            // 
-            // tableLayoutPanel4
-            // 
-            this.tableLayoutPanel4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel4.ColumnCount = 3;
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 75F));
-            this.tableLayoutPanel4.Controls.Add(this.textboxExtraInitStrengths, 2, 0);
-            this.tableLayoutPanel4.Controls.Add(this.textboxSliderInitStrength, 0, 0);
-            this.tableLayoutPanel4.Controls.Add(this.sliderInitStrength, 0, 0);
-            this.tableLayoutPanel4.Location = new System.Drawing.Point(233, 0);
-            this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
-            this.tableLayoutPanel4.Name = "tableLayoutPanel4";
-            this.tableLayoutPanel4.RowCount = 1;
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(418, 25);
-            this.tableLayoutPanel4.TabIndex = 89;
             // 
             // panelAiInputs
             // 
@@ -2493,9 +2493,9 @@ namespace StableDiffusionGui.Forms
             this.label2.Location = new System.Drawing.Point(0, 4);
             this.label2.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(93, 13);
+            this.label2.Size = new System.Drawing.Size(63, 13);
             this.label2.TabIndex = 83;
-            this.label2.Text = "Initialization Image";
+            this.label2.Text = "Base Image";
             // 
             // panelEmbeddings
             // 
@@ -2903,15 +2903,15 @@ namespace StableDiffusionGui.Forms
             this.tableLayoutPanel6.PerformLayout();
             this.panelIterations.ResumeLayout(false);
             this.panelIterations.PerformLayout();
+            this.panelInitImgStrength.ResumeLayout(false);
+            this.panelInitImgStrength.PerformLayout();
+            this.tableLayoutPanel4.ResumeLayout(false);
+            this.tableLayoutPanel4.PerformLayout();
             this.panelInpainting.ResumeLayout(false);
             this.panelInpainting.PerformLayout();
             this.panelResizeGravity.ResumeLayout(false);
             this.panelResizeGravity.PerformLayout();
             this.panelCollapseGeneration.ResumeLayout(false);
-            this.panelInitImgStrength.ResumeLayout(false);
-            this.panelInitImgStrength.PerformLayout();
-            this.tableLayoutPanel4.ResumeLayout(false);
-            this.tableLayoutPanel4.PerformLayout();
             this.panelAiInputs.ResumeLayout(false);
             this.panelAiInputs.PerformLayout();
             this.panelEmbeddings.ResumeLayout(false);

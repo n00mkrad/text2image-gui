@@ -33,7 +33,7 @@ namespace StableDiffusionGui.Implementations
                 var seamless = parameters.FromJson<SeamlessMode>("seamless");
                 string model = parameters.FromJson<string>("model");
                 bool lockSeed = parameters.FromJson<bool>("lockSeed");
-                InpaintMode inpaint = parameters.FromJson<InpaintMode>("inpainting");
+                ImgMode inpaint = parameters.FromJson<ImgMode>("inpainting");
 
                 var cachedModels = Models.GetModels(Enums.Models.Type.Normal, Implementation.DiffusersOnnx);
                 Model modelDir = TtiUtils.CheckIfCurrentSdModelExists();
@@ -87,7 +87,7 @@ namespace StableDiffusionGui.Implementations
                                             args["initImg"] = initImg;
                                             args["initStrength"] = strength.ToStringDot("0.###");
 
-                                            if (inpaint == InpaintMode.ImageMask)
+                                            if (inpaint == ImgMode.ImageMask)
                                                 args["inpaintMask"] = Inpainting.MaskImagePathDiffusers;
 
                                             argLists.Add(new Dictionary<string, string>(args));
@@ -124,7 +124,7 @@ namespace StableDiffusionGui.Implementations
                     {
                         mode = "img2img";
 
-                        if (inpaintingMdl && inpaint != InpaintMode.Disabled)
+                        if (inpaintingMdl && inpaint != ImgMode.InitializationImage)
                             mode = "inpaint";
                     }
 
