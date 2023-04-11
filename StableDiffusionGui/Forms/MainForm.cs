@@ -4,7 +4,6 @@ using StableDiffusionGui.Implementations;
 using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
-using StableDiffusionGui.Main.Utils;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
@@ -226,12 +225,13 @@ namespace StableDiffusionGui.Forms
 
         private void MainForm_DragEnter(object sender, DragEventArgs e)
         {
-            e.Effect = DragDropEffects.Copy;
+            e.Effect = e.Data.GetDataPresent(DataFormats.FileDrop) ? DragDropEffects.Copy : DragDropEffects.None;
         }
 
         private void MainForm_DragDrop(object sender, DragEventArgs e)
         {
-            MainUi.HandleDroppedFiles((string[])e.Data.GetData(DataFormats.FileDrop));
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                MainUi.HandleDroppedFiles((string[])e.Data.GetData(DataFormats.FileDrop));
         }
 
         #endregion
