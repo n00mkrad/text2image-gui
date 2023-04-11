@@ -9,6 +9,7 @@ using System.Drawing.Imaging;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+
 namespace StableDiffusionGui.MiscUtils
 {
     internal class ImgUtils
@@ -319,7 +320,10 @@ namespace StableDiffusionGui.MiscUtils
                         alphaBytes.Add(bytes[p]);
 
                         if (bytes[p] != 255)
+                        {
+                            Logger.LogIf($"Transparency Check: Pixel {p / 3} alpha is {bytes[p]} => Appears to be (semi)transparent", Program.Debug);
                             return true;
+                        }
                     }
 
                     return false;
@@ -376,6 +380,26 @@ namespace StableDiffusionGui.MiscUtils
                 Logger.LogException(ex, true, "Black Image Check Exception:");
                 return false;
             }
+        }
+    }
+
+    public static class ImageExtensionMethods
+    {
+        public static Bitmap AsBmp (this Image img)
+        {
+            return (Bitmap)img;
+        }
+
+        public static Bitmap ChangeFormat(this Bitmap bmp, PixelFormat targetFormat = PixelFormat.Format24bppRgb)
+        {
+            Bitmap newBmp = new Bitmap(bmp.Width, bmp.Height, targetFormat);
+
+            using (Graphics g = Graphics.FromImage(newBmp))
+            {
+                g.DrawImage(bmp, new Rectangle(0, 0, newBmp.Width, newBmp.Height));
+            }
+
+            return newBmp;
         }
     }
 }

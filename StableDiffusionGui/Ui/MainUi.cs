@@ -11,6 +11,7 @@ using StableDiffusionGui.Properties;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Resources;
@@ -227,13 +228,28 @@ namespace StableDiffusionGui.Ui
             {
                 ((Action)(() =>
                 {
-                    Image clipboardImg = Clipboard.GetImage();
+                    Image clipboardImg = ClipboardUtils.GetImageFromClipboard();
 
                     if (clipboardImg == null)
                         return;
 
                     string savePath = Paths.GetClipboardPath(".png");
-                    clipboardImg.Save(savePath);
+                    bool hasAlpha = ImgUtils.IsPartiallyTransparent(clipboardImg.AsBmp());
+
+                    if (!hasAlpha)
+                        clipboardImg = clipboardImg.AsBmp().ChangeFormat(PixelFormat.Format24bppRgb); // Ditch the alpha channel if there is no transparency
+
+                    clipboardImg.Save(savePath, ImageFormat.Png);
+
+                    if (!File.Exists(savePath))
+                    {
+                        Logger.Log($"Can't use clipboard image! It was retrieved successfully but could not be written to disk for temporary storage.");
+                        return;
+                    }
+
+                    var fi = new FileInfo(savePath);
+                    Logger.LogHidden($"Retrieved {clipboardImg.Size.AsString()} image from clipboard - {(hasAlpha ? "Has" : "No")} Alpha - Saved to '{fi.Name}' ({FormatUtils.Bytes(fi.Length)})");
+
                     HandleDroppedFiles(new string[] { savePath });
                 })).RunInTryCatch("HandlePaste Image Error:");
             }
