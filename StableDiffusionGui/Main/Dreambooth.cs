@@ -1,5 +1,6 @@
 ﻿using StableDiffusionGui.Data;
 using StableDiffusionGui.Io;
+using StableDiffusionGui.Main.Utils;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
@@ -49,7 +50,7 @@ namespace StableDiffusionGui.Main
                 if (!File.Exists(configPath))
                     throw new Exception("Could not create training config.");
 
-                string outPath = Path.Combine(Paths.GetModelsPath(), $"dreambooth-{className}-{CurrentTargetSteps}step-{timestamp}{Constants.FileExts.ValidSdModels.First()}");
+                string outPath = Path.Combine(Paths.GetModelsPath(), $"dreambooth-{className}-{CurrentTargetSteps}step-{timestamp}.diff");
 
                 Process db = OsUtils.NewProcess(!showCmd);
                 db.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand()} && python {Constants.Dirs.SdRepo}/db/main.py -t " +
@@ -60,8 +61,7 @@ namespace StableDiffusionGui.Main
                     $"--gpus {cudaId}, " + // TODO: Support multi-GPU
                     $"--data_root {trainImgDir.FullName.Wrap(true)} " +
                     $"--reg_data_root {trainImgDir.FullName.Wrap(true)} " +
-                    $"--class_word {className.Wrap()} " +
-                    $"&& python {Constants.Dirs.SdRepo}/scripts/prune_model.py -i {Path.Combine(logDir, "checkpoints", "last.ckpt").Wrap(true)} -o {outPath.Wrap(true)}";
+                    $"--class_word {className.Wrap()} ";
 
                 if (!showCmd)
                 {
@@ -82,22 +82,24 @@ namespace StableDiffusionGui.Main
                     db.BeginErrorReadLine();
                 }
 
-                while (!db.HasExited) await Task.Delay(1);
+                while (!db.HasExited) await Task.Delay(100);
 
-                IoUtils.TryDeleteIfExists(Path.Combine(logDir, "checkpoints", "last.ckpt"));
+                Model finalCkpt = new Model(Path.Combine(logDir, "checkpoints", "last.ckpt"));
+                await ConvertModels.Convert(Enums.Models.Format.Pytorch, Enums.Models.Format.Diffusers, finalCkpt, true, true, outPath);
+
+                IoUtils.TryDeleteIfExists(finalCkpt.FullName);
                 IoUtils.TryDeleteIfExists(Path.Combine(logDir, "testtube"));
 
-                // Logger.ClearLogBox();
+                Program.MainForm.SetProgress(0);
                 return outPath;
             }
             catch (Exception ex)
             {
                 UiUtils.ShowMessageBox($"Training Error: {ex.Message}");
                 Logger.Log(ex.StackTrace, true);
+                Program.MainForm.SetProgress(0);
                 return "";
             }
-
-            Program.MainForm.SetProgress(0);
         }
 
         private static async Task<string> WriteConfig (string logDir, ZlpDirectoryInfo trainDir, Enums.Dreambooth.TrainPreset preset, float userlrMult, float userStepsMult)
@@ -148,13 +150,6 @@ namespace StableDiffusionGui.Main
                     return "";
                 }
             }
-
-            // 
-            // if (filesInTrainDir.Count() > trainImgs)
-            // {
-            //     Logger.Log($"Error: Training folder contains invalid files. Currently supported are {string.Join(", ", _validImgExtensions.Select(x => x.Substring(1).ToUpperInvariant()))}.");
-            //     return "";
-            // }
 
             double lr = trainImgs * _learningRateMagicNumber * 0.0000001 * lrMultiplier * userlrMult;
             string lrStr = lr.ToString().Replace(",", ".");

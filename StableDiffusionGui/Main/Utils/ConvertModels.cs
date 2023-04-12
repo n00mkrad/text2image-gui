@@ -19,7 +19,7 @@ namespace StableDiffusionGui.Main.Utils
 
         /// <summary> Converts model weights </summary>
         /// <returns> A model class of the newly created model, or null if it failed </returns>
-        public static async Task<Model> Convert(Format formatIn, Format formatOut, Model model, bool fp16, bool safeDiffusers, bool quiet = false)
+        public static async Task<Model> Convert(Format formatIn, Format formatOut, Model model, bool fp16, bool safeDiffusers, string customOutPath = "")
         {
             try
             {
@@ -27,16 +27,19 @@ namespace StableDiffusionGui.Main.Utils
                 Logger.Log($"Converting model '{model.Name}' - This could take a few minutes...");
 
                 string filename = model.IsDirectory ? model.Name : Path.GetFileNameWithoutExtension(model.Name);
-                string outPath = "";
+                string outPath = customOutPath;
 
                 List<string> outLines = new List<string>();
 
-                switch (formatOut)
+                if (outPath.IsEmpty())
                 {
-                    case Format.Pytorch: outPath = GetOutputPath(model, ".ckpt"); break;
-                    case Format.Diffusers: outPath = GetOutputPath(model, ".diff"); break;
-                    case Format.DiffusersOnnx: outPath = GetOutputPath(model, ".onnx"); break;
-                    case Format.Safetensors: outPath = GetOutputPath(model, ".safetensors"); break;
+                    switch (formatOut)
+                    {
+                        case Format.Pytorch: outPath = GetOutputPath(model, ".ckpt"); break;
+                        case Format.Diffusers: outPath = GetOutputPath(model, ".diff"); break;
+                        case Format.DiffusersOnnx: outPath = GetOutputPath(model, ".onnx"); break;
+                        case Format.Safetensors: outPath = GetOutputPath(model, ".safetensors"); break;
+                    }
                 }
 
                 if (File.Exists(outPath) || Directory.Exists(outPath))

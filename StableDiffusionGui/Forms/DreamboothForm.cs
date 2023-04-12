@@ -167,7 +167,7 @@ namespace StableDiffusionGui.Forms
             Program.SetState(Program.BusyState.Standby);
             btnStart.Text = "Start Training";
 
-            if (File.Exists(outPath))
+            if (Directory.Exists(outPath) && new Model(outPath).Format == Enums.Models.Format.Diffusers)
                 Logger.Log($"Done. Saved trained model to:\n{outPath.Replace(Paths.GetDataPath(), "Data")}");
             else
                 Logger.Log($"Training failed - model file was not saved.");
