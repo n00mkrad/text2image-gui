@@ -241,7 +241,7 @@ namespace StableDiffusionGui.Ui
             else
                 Clear();
 
-            parentDirs.Where(dir => !Directory.EnumerateFileSystemEntries(dir).Any()).ToList().ForEach(dir => IoUtils.TryDeleteIfExists(dir)); // Delete dir if it's now empty
+            parentDirs.Where(dir => Directory.Exists(dir) && !Directory.EnumerateFileSystemEntries(dir).Any()).ToList().ForEach(dir => IoUtils.TryDeleteIfExists(dir)); // Delete dir if it's now empty
         }
 
         public static Image GetCurrentImageComparison ()

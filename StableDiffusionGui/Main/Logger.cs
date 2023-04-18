@@ -1,4 +1,5 @@
-﻿using StableDiffusionGui.Data;
+﻿using HTAlt;
+using StableDiffusionGui.Data;
 using StableDiffusionGui.Forms;
 using StableDiffusionGui.Io;
 using System;
@@ -6,6 +7,8 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace StableDiffusionGui.Main
 {
@@ -30,6 +33,8 @@ namespace StableDiffusionGui.Main
         private static long _currentId;
         private static BlockingCollection<Entry> _logQueue = new BlockingCollection<Entry>();
 
+        public static event EventHandler<string> MessageLogged;
+        public static event EventHandler<string> MessageDequeued;
 
         public class Entry
         {
@@ -88,6 +93,7 @@ namespace StableDiffusionGui.Main
             if (string.IsNullOrWhiteSpace(entry.Message))
                 return;
 
+            MessageLogged?.Invoke(null, entry.Message);
             Console.WriteLine(entry.ToString(true, true, true));
             entry.TimeEnqueue = DateTime.Now;
             _logQueue.Add(entry);
@@ -148,6 +154,7 @@ namespace StableDiffusionGui.Main
             if (entry == null || string.IsNullOrWhiteSpace(entry.Message) || string.IsNullOrWhiteSpace(entry.LogName))
                 return;
 
+            MessageDequeued?.Invoke(null, entry.Message);
             entry.Id = _currentId;
             _currentId++;
             entry.TimeDequeue = DateTime.Now;
@@ -295,6 +302,53 @@ namespace StableDiffusionGui.Main
                 if (CachedLines.ContainsKey(filename))
                     CachedLines[filename] = new ConcurrentQueue<string>();
             }
+        }
+
+        public static async Task<string> WaitForMessageAsync(string targetMessage, bool trim = true, bool contains = false, bool cancel = true)
+        {
+            var tcs = new TaskCompletionSource<bool>();
+            var cts = new CancellationTokenSource(); 
+            string matchingMsg = "";
+
+            EventHandler<string> handler = (sender, message) =>
+            {
+                if (trim)
+                    message = message.Trim();
+
+                if((contains && message.Contains(targetMessage)) || (!contains && message == targetMessage))
+                {
+                    matchingMsg = message;
+                    tcs.TrySetResult(true);
+                }
+            };
+
+            MessageLogged += handler;
+
+            while (!tcs.Task.IsCompleted)
+            {
+                if (cancel && TextToImage.Canceled)
+                {
+                    tcs.TrySetCanceled();
+                    break;
+                }
+
+                await Task.Delay(100);
+            }
+
+            try
+            {
+                await tcs.Task;
+            }
+            catch (OperationCanceledException)
+            {
+                LogHidden("WaitForMessageAsync was cancelled.");
+            }
+            finally
+            {
+                MessageLogged -= handler;
+            }
+
+            return matchingMsg;
         }
     }
 }

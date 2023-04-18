@@ -227,11 +227,6 @@ namespace StableDiffusionGui.MiscUtils
             return originalString.ToList().Where(c => !asciiString.Contains(c)).ToList();
         }
 
-        public static string GetCombinedPrompt (string prompt, string negPrompt)
-        {
-            return $"{prompt.Trim()}{(string.IsNullOrWhiteSpace(negPrompt) ? "" : $" [{negPrompt.Trim()}]")}";
-        }
-
         public static string GetUnixTimestamp ()
         {
             return ((long)(DateTime.Now - new DateTime(1970, 1, 1)).TotalMilliseconds).ToString();

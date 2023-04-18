@@ -1,4 +1,5 @@
-﻿using StableDiffusionGui.Io;
+﻿using StableDiffusionGui.Implementations;
+using StableDiffusionGui.Io;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Ui;
 using System;
@@ -107,7 +108,7 @@ namespace StableDiffusionGui.Main
 
                 if (line.Trim().StartsWith(">> Textual inversion triggers: "))
                 {
-                    Logger.Log($"Model {(_invokeAiLastModelCached ? " retrieved from RAM cache" : "loaded")}.\nCompatible Embeddings: {line.Substring(line.Split("triggers: ")[0].Length + 10)}", false, ellipsis);
+                    Logger.Log($"Model {(_invokeAiLastModelCached ? " retrieved from RAM cache" : "loaded")}.", false, ellipsis);
                 }
 
                 if (line.Trim().StartsWith(">> Preparing tokens for textual inversion"))
@@ -115,11 +116,11 @@ namespace StableDiffusionGui.Main
                     Logger.Log("Loading textual inversion...", false, ellipsis);
                 }
 
-                if (line.Trim().StartsWith(">> Embedding not found:"))
-                {
-                    string emb = line.Split(": ").Last();
-                    Logger.Log($"Warning: No compatible embedding with trigger '{emb}' found!", false, ellipsis);
-                }
+                // if (line.Trim().StartsWith(">> Embedding not found:"))
+                // {
+                //     string emb = line.Split(": ").Last();
+                //     Logger.Log($"Warning: No compatible embedding with trigger '{emb}' found!", false, ellipsis);
+                // }
 
                 if (line.Trim().StartsWith(">> Converting legacy checkpoint"))
                 {

@@ -218,5 +218,58 @@ namespace StableDiffusionGui.Implementations
 
             return true;
         }
+
+        public static string GetCombinedPrompt(string prompt, string negPrompt)
+        {
+            return $"{prompt.Trim()}{(string.IsNullOrWhiteSpace(negPrompt) ? "" : $" [{negPrompt.Trim()}]")}";
+        }
+
+        public static void LoadEmbeddingTriggerTable(string logLine, bool print = false)
+        {
+            InvokeAi.EmbeddingsFilesTriggers.Clear();
+
+            foreach (string entry in logLine.Split(">> Textual inversion triggers:")[1].Split(','))
+            {
+                string[] triggerAndFile = entry.Split(" from ");
+                string trigger = triggerAndFile[0].Trim().Remove("<").Remove(">");
+                string file = Path.ChangeExtension(triggerAndFile[1].Trim(), null);
+                InvokeAi.EmbeddingsFilesTriggers[file] = trigger;
+            }
+
+            if (print)
+                Logger.Log($"Compatible Embeddings: {string.Join(", ", InvokeAi.EmbeddingsFilesTriggers.Keys)}");
+        }
+
+        public static string FixPromptEmbeddingTriggers(string prompt, bool log = true)
+        {
+            List<string> embeddingsInPrompt = FindEmbeddingsInPrompt(prompt);
+            var incompatEmbeddings = new List<string>();
+
+            foreach (string embedding in embeddingsInPrompt)
+            {
+                if (InvokeAi.EmbeddingsFilesTriggers.ContainsValue(embedding)) // Already using trigger instead of filename
+                    continue;
+
+                if (InvokeAi.EmbeddingsFilesTriggers.ContainsKey(embedding))
+                    prompt = prompt.Replace($"<{embedding}>", $"<{InvokeAi.EmbeddingsFilesTriggers[embedding]}>"); // Replace filename with trigger
+                else
+                    incompatEmbeddings.Add(embedding);
+            }
+
+            if (incompatEmbeddings.Any())
+            {
+                string incompatList = string.Join(", ", incompatEmbeddings.Distinct());
+                Logger.LogIf($"The following embeddings are not compatible with the current model: {incompatList}", log, false);
+            }
+
+            return prompt;
+        }
+
+        public static List<string> FindEmbeddingsInPrompt(string s, bool distinct = true)
+        {
+            MatchCollection matches = Regex.Matches(s, @"<([^<>]+)>");
+            List<string> triggers = matches.OfType<Match>().Select(match => match.Groups[1].Value).ToList();
+            return distinct ? triggers.Distinct().ToList() : triggers;
+        }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using StableDiffusionGui.Data;
 using StableDiffusionGui.Extensions;
-using StableDiffusionGui.Forms;
 using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
@@ -20,9 +19,11 @@ namespace StableDiffusionGui.Implementations
 {
     internal class InvokeAi
     {
+
         public enum FixAction { Upscale, FaceRestoration }
 
         public static Dictionary<string, string> PostProcessMovePaths = new Dictionary<string, string>();
+        public static EasyDict<string, string> EmbeddingsFilesTriggers = new EasyDict<string, string>(); // Key = Filename without ext, Value = Trigger
 
         public static async Task Run(string[] prompts, string negPrompt, int iterations, Dictionary<string, string> parameters, string outPath)
         {
@@ -60,7 +61,7 @@ namespace StableDiffusionGui.Implementations
                 OrderedDictionary initImages = initImgs != null && initImgs.Length > 0 ? await TtiUtils.CreateResizedInitImagesIfNeeded(initImgs.ToList(), res, resizeGravity) : null;
 
                 long startSeed = seed;
-                prompts = prompts.Select(p => FormatUtils.GetCombinedPrompt(p, negPrompt)).ToArray(); // Apply negative prompt
+                prompts = prompts.Select(p => InvokeAiUtils.GetCombinedPrompt(p, negPrompt)).ToArray(); // Apply negative prompt
 
                 List<EasyDict<string, string>> argLists = new List<EasyDict<string, string>>(); // List of all args for each command
                 EasyDict<string, string> args = new EasyDict<string, string>(); // List of args for current command
@@ -205,7 +206,8 @@ namespace StableDiffusionGui.Implementations
 
                     Task.Run(() => TtiProcess.CheckStillRunning());
 
-                    await Task.Delay(1000); // Give it a moment to start up before starting to send stdin - mostly placebo
+                    string embeddingMsg = await Logger.WaitForMessageAsync(">> Textual inversion triggers:", true, true);
+                    InvokeAiUtils.LoadEmbeddingTriggerTable(embeddingMsg);
                 }
                 else
                 {
@@ -224,7 +226,8 @@ namespace StableDiffusionGui.Implementations
                     if (!InvokeAiUtils.ValidateCommand(argList, res))
                         continue;
 
-                    string command = string.Join(" ", argList.Where(argEntry => argEntry.Value.IsNotEmpty()).Select(argEntry => argEntry.Value));
+                    argList["prompt"] = InvokeAiUtils.FixPromptEmbeddingTriggers(argList["prompt"]);
+                    string command = string.Join(" ", argList.Where(entry => entry.Value.IsNotEmpty()).Select(argEntry => argEntry.Value));
                     await TtiProcess.WriteStdIn(command);
                     noCommandsSent = false;
                 }
@@ -354,13 +357,11 @@ namespace StableDiffusionGui.Implementations
             if (mdl.Format == Enums.Models.Format.Diffusers)
             {
                 Models.SetClipSkip(mdl, Config.Instance.ClipSkip);
-
-                if (vae != null)
-                    vae = null; // Diffusers currently doesn't support external VAEs
+                vae = null; // Diffusers currently doesn't support external VAEs
             }
 
             await TtiProcess.WriteStdIn($"!clear");
-            await TtiProcess.WriteStdIn($"!switch {InvokeAiUtils.GetMdlNameForYaml(mdl, vae)}", 1000);
+            await TtiProcess.WriteStdIn($"!switch {InvokeAiUtils.GetMdlNameForYaml(mdl, vae)}");
         }
 
         public static async Task Cancel()
