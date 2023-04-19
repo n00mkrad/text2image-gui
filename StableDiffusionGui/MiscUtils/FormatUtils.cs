@@ -1,13 +1,10 @@
-﻿using StableDiffusionGui.Io;
-using StableDiffusionGui.Main;
+﻿using StableDiffusionGui.Main;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace StableDiffusionGui.MiscUtils
 {
@@ -39,15 +36,18 @@ namespace StableDiffusionGui.MiscUtils
         public static string Time(TimeSpan span, bool allowMs = true)
         {
             if (span.TotalHours >= 1f)
-                return span.ToString(@"hh\:mm\:ss");
+                return span.ToString(@"h\:m\:s");
 
             if (span.TotalMinutes >= 1f)
-                return span.ToString(@"mm\:ss");
+                return span.ToString(@"m\:s");
 
             if (span.TotalSeconds >= 1f || !allowMs)
-                return span.ToString(@"ss".TrimStart('0')) + "s";
+            {
+                string format = span.TotalSeconds < 10f ? @"%s\.f" : @"%s";
+                return span.ToString(format) + "s";
+            }
 
-            return span.ToString(@"fff").TrimStart('0') + "ms";
+            return span.ToString(@"fff") + "ms";
         }
 
         public static string Time(Stopwatch sw)

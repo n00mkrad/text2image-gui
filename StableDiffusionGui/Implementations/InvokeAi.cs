@@ -206,7 +206,7 @@ namespace StableDiffusionGui.Implementations
 
                     Task.Run(() => TtiProcess.CheckStillRunning());
 
-                    string embeddingMsg = await Logger.WaitForMessageAsync(">> Textual inversion triggers:", true, true);
+                    string embeddingMsg = await Logger.WaitForMessageAsync(Constants.LogMsgs.Invoke.TiTriggers, true, true);
                     InvokeAiUtils.LoadEmbeddingTriggerTable(embeddingMsg);
                 }
                 else

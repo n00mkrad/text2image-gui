@@ -88,5 +88,13 @@
         {
             public const string ItchPage = "https://nmkd.itch.io/t2i-gui";
         }
+
+        public class LogMsgs
+        {
+            public class Invoke
+            {
+                public const string TiTriggers = ">> Textual inversion triggers:";
+            }
+        }
     }
 }

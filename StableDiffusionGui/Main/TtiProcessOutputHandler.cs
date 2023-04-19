@@ -4,6 +4,7 @@ using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -17,6 +18,8 @@ namespace StableDiffusionGui.Main
         private static bool _invokeAiLastModelCached = false;
 
         public static List<string> LastMessages = new List<string>();
+
+        public static Stopwatch TimeSinceLastImage = new Stopwatch();
 
         public static void Reset()
         {
@@ -45,6 +48,9 @@ namespace StableDiffusionGui.Main
                 else if (!TextToImage.Canceled && line.StartsWith(">> Loading ") && line.Contains(" from "))
                     _invokeAiLastModelCached = false;
 
+                if (!TextToImage.Canceled && line.Remove(" ") == @"Generating:0%||0/1[00:00<?,?it/s]")
+                    TimeSinceLastImage.Restart();
+
                 if (!TextToImage.Canceled && line.MatchesWildcard("*%|*|*/*"))
                 {
                     string progStr = line.Split('|')[2].Trim().Split(' ')[0].Trim(); // => e.g. "3/50"
@@ -69,17 +75,16 @@ namespace StableDiffusionGui.Main
 
                     if (line.Contains(outPath) && new Regex(@"\[\d+(\.\d+)?\] [A-Z]:\/").Matches(line.Trim()).Count >= 1)
                     {
-                        string generatedLine = LastMessages.Take(10).Where(ll => ll.Contains("image(s) generated in")).First();
-                        var split = generatedLine.Split("image(s) generated in ");
-                        TextToImage.CurrentTask.ImgCount += split[0].GetInt();
+                        TextToImage.CurrentTask.ImgCount += 1;
                         Program.MainForm.SetProgress((int)Math.Round(((float)TextToImage.CurrentTask.ImgCount / TextToImage.CurrentTask.TargetImgCount) * 100f));
 
-                        int lastMsPerImg = $"{split[1].Remove(".").Remove("s")}0".GetInt();
+                        int lastMsPerImg = (int)TimeSinceLastImage.ElapsedMilliseconds;
                         int remainingMs = (TextToImage.CurrentTask.TargetImgCount - TextToImage.CurrentTask.ImgCount) * lastMsPerImg;
 
-                        Logger.Log($"Generated {split[0].GetInt()} image in {split[1]} ({TextToImage.CurrentTask.ImgCount}/{TextToImage.CurrentTask.TargetImgCount})" +
+                        Logger.Log($"Generated image in {FormatUtils.Time(lastMsPerImg)} ({TextToImage.CurrentTask.ImgCount}/{TextToImage.CurrentTask.TargetImgCount})" +
                             $"{(TextToImage.CurrentTask.ImgCount > 1 && remainingMs > 1000 ? $" - ETA: {FormatUtils.Time(remainingMs, false)}" : "")}", false, replace || Logger.LastUiLine.MatchesWildcard("*Generated*image*in*"));
 
+                        TimeSinceLastImage.Restart();
                         string path = outPath + line.Split(outPath)[1].Split(':')[0];
                         ImageExport.Export(path);
                     }
@@ -89,7 +94,7 @@ namespace StableDiffusionGui.Main
                 {
                     try
                     {
-                        if(LastMessages.Take(5).Any(x => x.Contains("ESRGAN is disabled.")))
+                        if (LastMessages.Take(5).Any(x => x.Contains("ESRGAN is disabled.")))
                         {
                             Logger.Log($"Post-Processing is disabled, can't run enhancement.");
                         }
@@ -106,7 +111,7 @@ namespace StableDiffusionGui.Main
                     }
                 }
 
-                if (line.Trim().StartsWith(">> Textual inversion triggers: "))
+                if (line.Trim().StartsWith(Constants.LogMsgs.Invoke.TiTriggers))
                 {
                     Logger.Log($"Model {(_invokeAiLastModelCached ? " retrieved from RAM cache" : "loaded")}.", false, ellipsis);
                 }

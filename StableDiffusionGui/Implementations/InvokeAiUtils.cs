@@ -227,8 +227,15 @@ namespace StableDiffusionGui.Implementations
         public static void LoadEmbeddingTriggerTable(string logLine, bool print = false)
         {
             InvokeAi.EmbeddingsFilesTriggers.Clear();
+            var split = logLine.Split(Constants.LogMsgs.Invoke.TiTriggers);
 
-            foreach (string entry in logLine.Split(">> Textual inversion triggers:")[1].Split(','))
+            if (split.Length < 2)
+            {
+                Logger.LogHidden($"Can't load TI triggers from log line because split length is <2: '{logLine}'");
+                return;
+            }
+
+            foreach (string entry in split[1].Split(','))
             {
                 string[] triggerAndFile = entry.Split(" from ");
                 string trigger = triggerAndFile[0].Trim().Remove("<").Remove(">");
