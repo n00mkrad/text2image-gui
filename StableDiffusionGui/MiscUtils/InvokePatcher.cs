@@ -25,7 +25,7 @@ namespace StableDiffusionGui.MiscUtils
                 string originalText = File.ReadAllText(f.FullName);
                 string t = originalText;
 
-                string printPatch = "import functools; print = functools.partial(print, flush=True)";
+                string printPatch = "import functools; print = functools.partial(print)";
 
                 if (!t.StartsWith("print = ") && t.Contains("print") && !t.Contains(printPatch))
                 {
@@ -48,8 +48,9 @@ namespace StableDiffusionGui.MiscUtils
 
                 if (f.Name == "textual_inversion_manager.py")
                 {
-                    t = Replace(t, "bin_file = self.hf_concepts_library.get_concept_model_path(concept_name)", "print(f\">> Embedding not found: {concept_name}\", flush=True); return");
-                    t = Replace(t, "print(\">> Invalid embedding format\")", "print(f\">> Invalid embedding format: {os.path.basename(embedding_file)}\", flush=True)");
+                    t = Replace(t, "bin_file = self.hf_concepts_library.get_concept_model_path(concept_name)", "print(f\">> Embedding not found: {concept_name}\"); return");
+                    t = Replace(t, "print(\">> Invalid embedding format\")", "print(f\">> Invalid embedding format: {os.path.basename(embedding_file)}\")");
+                    t = Replace(t, "return [ti.trigger_string for ti in self.textual_inversions]", "return [f\"{ti.trigger_string} from {self.trigger_to_sourcefile[ti.trigger_string]}\" for ti in self.textual_inversions]");
                 }
 
                 if (f.Name == "globals.py")
@@ -75,7 +76,7 @@ namespace StableDiffusionGui.MiscUtils
 
                 if (f.Name == "CLI.py")
                 {
-                    t = Replace(t, "print(f'** An error occurred while attempting to initialize the model: \"{str(e)}\"')", "print(f'** An error occurred while attempting to initialize the model: \"{str(e)}\"'); return");
+                    t = Replace(t, "print(f'** An error occurred while attempting to initialize the model: \"{str(e)}\"')", "print(f'** An error occurred while attempting to initialize the model: \"{e}\"'); return");
                     t = Replace(t, "completer.add_history(command)", "pass");
                 }
 
