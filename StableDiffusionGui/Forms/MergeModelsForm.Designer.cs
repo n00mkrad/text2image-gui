@@ -126,8 +126,8 @@
             // tableLayoutPanel2
             // 
             this.tableLayoutPanel2.ColumnCount = 2;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
             this.tableLayoutPanel2.Controls.Add(this.panel4, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.panel5, 0, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -142,9 +142,9 @@
             // 
             this.panel4.Controls.Add(this.sliderScale);
             this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel4.Location = new System.Drawing.Point(283, 3);
+            this.panel4.Location = new System.Drawing.Point(227, 3);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(274, 29);
+            this.panel4.Size = new System.Drawing.Size(330, 29);
             this.panel4.TabIndex = 88;
             // 
             // sliderScale
@@ -160,13 +160,12 @@
             this.sliderScale.Maximum = 20;
             this.sliderScale.Name = "sliderScale";
             this.sliderScale.OverlayColor = System.Drawing.Color.White;
-            this.sliderScale.Size = new System.Drawing.Size(274, 29);
+            this.sliderScale.Size = new System.Drawing.Size(330, 29);
             this.sliderScale.SmallChange = ((uint)(1u));
             this.sliderScale.TabIndex = 5;
             this.sliderScale.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
             this.sliderScale.ThumbSize = new System.Drawing.Size(14, 14);
-            this.toolTip.SetToolTip(this.sliderScale, "Higher tries to match your prompt better, but can get chaotic. 7-12 is a safe ran" +
-        "ger for most things.");
+            this.toolTip.SetToolTip(this.sliderScale, "Left: First model\r\nMiddle: 50-50 Blend of both models\r\nRight: Second model");
             this.sliderScale.Value = 10;
             this.sliderScale.Scroll += new System.Windows.Forms.ScrollEventHandler(this.sliderScale_Scroll);
             // 
@@ -176,7 +175,7 @@
             this.panel5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel5.Location = new System.Drawing.Point(3, 3);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(274, 29);
+            this.panel5.Size = new System.Drawing.Size(218, 29);
             this.panel5.TabIndex = 87;
             // 
             // label2
@@ -203,8 +202,8 @@
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
             this.tableLayoutPanel1.Controls.Add(this.panel2, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.panel3, 0, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -220,9 +219,9 @@
             this.panel2.Controls.Add(this.labelWeight2);
             this.panel2.Controls.Add(this.comboxModel2);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel2.Location = new System.Drawing.Point(283, 3);
+            this.panel2.Location = new System.Drawing.Point(227, 3);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(274, 29);
+            this.panel2.Size = new System.Drawing.Size(330, 29);
             this.panel2.TabIndex = 88;
             // 
             // labelWeight2
@@ -230,7 +229,7 @@
             this.labelWeight2.AutoSize = true;
             this.labelWeight2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelWeight2.ForeColor = System.Drawing.Color.White;
-            this.labelWeight2.Location = new System.Drawing.Point(237, 8);
+            this.labelWeight2.Location = new System.Drawing.Point(293, 8);
             this.labelWeight2.Name = "labelWeight2";
             this.labelWeight2.Size = new System.Drawing.Size(30, 13);
             this.labelWeight2.TabIndex = 108;
@@ -246,7 +245,7 @@
             this.comboxModel2.FormattingEnabled = true;
             this.comboxModel2.Location = new System.Drawing.Point(0, 4);
             this.comboxModel2.Name = "comboxModel2";
-            this.comboxModel2.Size = new System.Drawing.Size(231, 21);
+            this.comboxModel2.Size = new System.Drawing.Size(287, 21);
             this.comboxModel2.TabIndex = 106;
             // 
             // panel3
@@ -255,7 +254,7 @@
             this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel3.Location = new System.Drawing.Point(3, 3);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(274, 29);
+            this.panel3.Size = new System.Drawing.Size(218, 29);
             this.panel3.TabIndex = 87;
             // 
             // label1
@@ -282,8 +281,8 @@
             // tableLayoutPanel8
             // 
             this.tableLayoutPanel8.ColumnCount = 2;
-            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40F));
+            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
             this.tableLayoutPanel8.Controls.Add(this.panel25, 0, 0);
             this.tableLayoutPanel8.Controls.Add(this.panel26, 0, 0);
             this.tableLayoutPanel8.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -299,9 +298,9 @@
             this.panel25.Controls.Add(this.labelWeight1);
             this.panel25.Controls.Add(this.comboxModel1);
             this.panel25.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel25.Location = new System.Drawing.Point(283, 3);
+            this.panel25.Location = new System.Drawing.Point(227, 3);
             this.panel25.Name = "panel25";
-            this.panel25.Size = new System.Drawing.Size(274, 29);
+            this.panel25.Size = new System.Drawing.Size(330, 29);
             this.panel25.TabIndex = 88;
             // 
             // labelWeight1
@@ -309,7 +308,7 @@
             this.labelWeight1.AutoSize = true;
             this.labelWeight1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelWeight1.ForeColor = System.Drawing.Color.White;
-            this.labelWeight1.Location = new System.Drawing.Point(237, 8);
+            this.labelWeight1.Location = new System.Drawing.Point(293, 8);
             this.labelWeight1.Name = "labelWeight1";
             this.labelWeight1.Size = new System.Drawing.Size(30, 13);
             this.labelWeight1.TabIndex = 107;
@@ -325,7 +324,7 @@
             this.comboxModel1.FormattingEnabled = true;
             this.comboxModel1.Location = new System.Drawing.Point(0, 4);
             this.comboxModel1.Name = "comboxModel1";
-            this.comboxModel1.Size = new System.Drawing.Size(231, 21);
+            this.comboxModel1.Size = new System.Drawing.Size(287, 21);
             this.comboxModel1.TabIndex = 106;
             // 
             // panel26
@@ -334,7 +333,7 @@
             this.panel26.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel26.Location = new System.Drawing.Point(3, 3);
             this.panel26.Name = "panel26";
-            this.panel26.Size = new System.Drawing.Size(274, 29);
+            this.panel26.Size = new System.Drawing.Size(218, 29);
             this.panel26.TabIndex = 87;
             // 
             // label10

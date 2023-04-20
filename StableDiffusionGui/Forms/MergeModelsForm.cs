@@ -5,8 +5,10 @@ using StableDiffusionGui.Main;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -40,12 +42,18 @@ namespace StableDiffusionGui.Forms
 
         private void LoadModels()
         {
-            var ckptFiles = Models.GetModels();
+            var imp = Enums.StableDiffusion.Implementation.InvokeAi;
+            var models = Models.GetModelsAll().Where(m => m.Type == Enums.Models.Type.Normal);
+            models = models.Where(m => imp.GetInfo().SupportedModelFormats.Contains(m.Format) && m.Format == Enums.Models.Format.Pytorch).ToList();
 
             comboxModel1.Items.Clear();
             comboxModel2.Items.Clear();
-            ckptFiles.ForEach(x => comboxModel1.Items.Add(x.Name));
-            ckptFiles.ForEach(x => comboxModel2.Items.Add(x.Name));
+
+            foreach (Model m in models)
+            {
+                comboxModel1.Items.Add(m.Name);
+                comboxModel2.Items.Add(m.Name);
+            }
 
             if (comboxModel1.SelectedIndex < 0 && comboxModel1.Items.Count > 0)
                 comboxModel1.SelectedIndex = 0;
@@ -65,7 +73,7 @@ namespace StableDiffusionGui.Forms
             labelWeight2.Text = $"{PercentModel2}%";
         }
 
-        private async Task<string> Merge ()
+        private async Task<string> Merge()
         {
             try
             {
@@ -102,7 +110,7 @@ namespace StableDiffusionGui.Forms
                 Logger.ClearLogBox();
                 return outPath;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 UiUtils.ShowMessageBox($"Merging Error: {ex.Message}");
                 Logger.Log(ex.StackTrace);

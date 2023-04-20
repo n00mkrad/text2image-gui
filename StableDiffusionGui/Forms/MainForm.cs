@@ -358,6 +358,8 @@ namespace StableDiffusionGui.Forms
 
         private void openModelMergeToolToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            UiUtils.ShowMessageBox("Model merging code is currently slightly outdated and only works with CKPT models.\n" +
+                "Compatibility will be improved in the future.", UiUtils.MessageType.Warning);
             new MergeModelsForm().ShowDialogForm();
         }
 
