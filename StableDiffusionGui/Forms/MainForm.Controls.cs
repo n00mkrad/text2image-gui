@@ -37,11 +37,11 @@ namespace StableDiffusionGui.Forms
             comboxSymmetry.FillFromEnum<SymmetryMode>(Strings.SymmetryMode, 0);
             comboxInpaintMode.FillFromEnum<ImgMode>(Strings.InpaintMode, 0);
             comboxResizeGravity.FillFromEnum<ImageMagick.Gravity>(Strings.ImageGravity, 4, new List<ImageMagick.Gravity> { ImageMagick.Gravity.Undefined });
-            comboxEmbeddingList.SetItems(new[] { "None" }.Concat(Models.GetEmbeddings().Select(m => m.FormatIndependentName)), UiExtensions.SelectMode.First);
             comboxBackend.FillFromEnum<Implementation>(Strings.Implementation, -1);
             comboxBackend.Text = Strings.Implementation.Get(Config.Instance.Implementation.ToString());
             ReloadModelsCombox();
             UpdateModel();
+            ReloadEmbeddings();
             comboxModelArch.FillFromEnum<Enums.Models.SdArch>(Strings.SdModelArch, 0);
 
             // Set categories
@@ -66,6 +66,7 @@ namespace StableDiffusionGui.Forms
             comboxModel.DropDownClosed += (s, e) => panelSettings.Focus();
             comboxResW.SelectedIndexChanged += (s, e) => ResolutionChanged(); // Resolution change
             comboxResH.SelectedIndexChanged += (s, e) => ResolutionChanged(); // Resolution change
+            comboxEmbeddingList.DropDown += (s, e) => ReloadEmbeddings(); // Reload embeddings
         }
 
         public void LoadControls()
@@ -170,6 +171,12 @@ namespace StableDiffusionGui.Forms
                 comboxModelArch.SetIfTextMatches(Config.Instance.ModelArchs[mdl.FullName].ToString(), false, Strings.SdModelArch);
 
             ConfigParser.SaveGuiElement(comboxModel, ref Config.Instance.Model);
+        }
+
+        public void ReloadEmbeddings ()
+        {
+            IEnumerable<string> embeddings = Models.GetEmbeddings().Select(m => m.FormatIndependentName);
+            comboxEmbeddingList.SetItems(new[] { "None" }.Concat(embeddings), UiExtensions.SelectMode.Retain);
         }
 
         private void ResolutionChanged()
