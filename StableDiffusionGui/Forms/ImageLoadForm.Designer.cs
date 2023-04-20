@@ -200,9 +200,9 @@
             this.label10.Location = new System.Drawing.Point(0, 5);
             this.label10.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(178, 13);
+            this.label10.Size = new System.Drawing.Size(191, 13);
             this.label10.TabIndex = 111;
-            this.label10.Text = "Restore Transparency (Chroma Key)";
+            this.label10.Text = "Transparency From Color (Chroma Key)";
             // 
             // comboxChromaKey
             // 
