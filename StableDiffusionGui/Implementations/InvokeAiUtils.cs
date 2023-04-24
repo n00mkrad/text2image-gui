@@ -227,7 +227,7 @@ namespace StableDiffusionGui.Implementations
         public static void LoadEmbeddingTriggerTable(string logLine, bool print = false)
         {
             InvokeAi.EmbeddingsFilesTriggers.Clear();
-            var split = logLine.Split(Constants.LogMsgs.Invoke.TiTriggers);
+            var split = logLine.Split(Constants.LogMsgs.Invoke.TiTriggers).Where(s => s.IsNotEmpty()).ToArray();
 
             if (split.Length < 2)
             {
@@ -237,10 +237,17 @@ namespace StableDiffusionGui.Implementations
 
             foreach (string entry in split[1].Split(','))
             {
-                string[] triggerAndFile = entry.Split(" from ");
-                string trigger = triggerAndFile[0].Trim().Remove("<").Remove(">");
-                string file = Path.ChangeExtension(triggerAndFile[1].Trim(), null);
-                InvokeAi.EmbeddingsFilesTriggers[file] = trigger;
+                try
+                {
+                    string[] triggerAndFile = entry.Split(" from ");
+                    string trigger = triggerAndFile[0].Trim().Remove("<").Remove(">");
+                    string file = Path.ChangeExtension(triggerAndFile[1].Trim(), null);
+                    InvokeAi.EmbeddingsFilesTriggers[file] = trigger;
+                }
+                catch(Exception ex)
+                {
+                    Logger.LogHidden($"Exception trying to parse TI trigger from '{entry}': {ex.Message}");
+                }
             }
 
             if (print)

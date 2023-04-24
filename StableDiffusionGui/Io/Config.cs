@@ -45,28 +45,29 @@ namespace StableDiffusionGui.Io
             }
         }
 
-        public static void Load ()
+        public static void Load()
         {
             try
             {
                 Instance = File.ReadAllText(ConfigPath).FromJson<ConfigInstance>(NullValueHandling.Ignore, DefaultValueHandling.Include, true, true);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logger.LogException(ex);
             }
 
-            if(Instance == null)
+            if (Instance == null)
             {
                 if (File.Exists(ConfigPath))
-                     IoUtils.TryMove(ConfigPath, ConfigPath.FilenameSuffix($".failedToLoad{FormatUtils.GetUnixTimestamp()}")); // Move out of the way but don't delete, for data restoration purposes
+                    IoUtils.TryMove(ConfigPath, ConfigPath.FilenameSuffix($".failedToLoad{FormatUtils.GetUnixTimestamp()}")); // Move out of the way but don't delete, for data restoration purposes
+                else
+                    Logger.Log("Can't load config file. Creating new config instead.");
 
-                Logger.Log("Can't load config from file. Creating new config instead.");
                 Instance = new ConfigInstance();
             }
         }
 
-        public static void Save ()
+        public static void Save()
         {
             try
             {
