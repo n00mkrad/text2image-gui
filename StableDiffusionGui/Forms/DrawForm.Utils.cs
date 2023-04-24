@@ -20,8 +20,9 @@ namespace StableDiffusionGui.Forms
         public int LastPointX = 0;
         public int LastPointY = 0;
         public bool MouseIsDown = false;
+        public Pen cachedPen = null;
 
-        public void Reset ()
+        public void Reset()
         {
             ScaleFactor = 1f;
             LastPointX = 0;
@@ -29,7 +30,7 @@ namespace StableDiffusionGui.Forms
             MouseIsDown = false;
         }
 
-        public void DrawStart (Point mouseLocation)
+        public void DrawStart(Point mouseLocation)
         {
             ScaleFactor = pictBox.Image == null ? 1f : (float)pictBox.Width / pictBox.Image.Width;
             LastPointX = mouseLocation.X;
@@ -46,7 +47,7 @@ namespace StableDiffusionGui.Forms
             HistorySave();
         }
 
-        public void Draw (MouseEventArgs e)
+        public void Draw(MouseEventArgs e)
         {
             if (!MouseIsDown || e.Button != MouseButtons.Left)
                 return;
@@ -56,17 +57,25 @@ namespace StableDiffusionGui.Forms
 
             int brushSize = sliderBrushSize.Value;
 
+            if (cachedPen == null || cachedPen.Width != brushSize)
+                cachedPen = new Pen(Color.Black, brushSize);
+
+            Point currentPoint = new Point((e.Location.X / ScaleFactor).RoundToInt(), (e.Location.Y / ScaleFactor).RoundToInt());
+
             using (Graphics g = Graphics.FromImage(RawMask))
             {
-                Point scaledPoint = new Point((LastPointX / ScaleFactor).RoundToInt(), (LastPointY / ScaleFactor).RoundToInt());
-                g.DrawEllipse(new Pen(Color.Black, brushSize), new RectangleF(scaledPoint, new SizeF(brushSize, brushSize)));
-                g.SmoothingMode = SmoothingMode.HighQuality;
+                g.SmoothingMode = SmoothingMode.None;
+                g.DrawEllipse(cachedPen, new RectangleF(currentPoint, new SizeF(brushSize, brushSize)));
             }
 
             Apply(false); // Disable blur while drawing for performance reasons
-            pictBox.Invalidate();
-            LastPointX = e.Location.X;
-            LastPointY = e.Location.Y;
+            int x = Math.Min(LastPointX, currentPoint.X) - brushSize / 2;
+            int y = Math.Min(LastPointY, currentPoint.Y) - brushSize / 2;
+            int width = Math.Abs(LastPointX - currentPoint.X) + brushSize;
+            int height = Math.Abs(LastPointY - currentPoint.Y) + brushSize;
+            pictBox.Invalidate(new Rectangle(x, y, width, height));
+            LastPointX = (e.Location.X / ScaleFactor).RoundToInt();
+            LastPointY = (e.Location.Y / ScaleFactor).RoundToInt();
         }
 
         public void Apply(bool blur = true)
