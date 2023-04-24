@@ -24,6 +24,7 @@ namespace StableDiffusionGui.Forms
         public DrawForm(Image background, Image mask = null, bool disableBlurOption = false)
         {
             Reset();
+            DialogResult = DialogResult.None;
 
             Opacity = 0;
             BackgroundImg = background;
@@ -104,6 +105,7 @@ namespace StableDiffusionGui.Forms
 
         private void btnOk_Click(object sender, EventArgs e)
         {
+            DialogResult = DialogResult.OK;
             Mask = pictBox.Image;
             Close();
         }
@@ -191,7 +193,8 @@ namespace StableDiffusionGui.Forms
 
         private void DrawForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Inpainting.CurrentRawMask = RawMask;
+            if (DialogResult == DialogResult.OK)
+                Inpainting.CurrentRawMask = RawMask;
         }
     }
 }
