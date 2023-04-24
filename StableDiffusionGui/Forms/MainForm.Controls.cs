@@ -37,7 +37,7 @@ namespace StableDiffusionGui.Forms
             comboxSymmetry.FillFromEnum<SymmetryMode>(Strings.SymmetryMode, 0);
             comboxInpaintMode.FillFromEnum<ImgMode>(Strings.InpaintMode, 0);
             comboxResizeGravity.FillFromEnum<ImageMagick.Gravity>(Strings.ImageGravity, 4, new List<ImageMagick.Gravity> { ImageMagick.Gravity.Undefined });
-            comboxBackend.FillFromEnum<Implementation>(Strings.Implementation, -1);
+            comboxBackend.FillFromEnum<Implementation>(Strings.Implementation, -1, Implementation.OptimizedSd.AsList());
             comboxBackend.Text = Strings.Implementation.Get(Config.Instance.Implementation.ToString());
             ReloadModelsCombox();
             UpdateModel();

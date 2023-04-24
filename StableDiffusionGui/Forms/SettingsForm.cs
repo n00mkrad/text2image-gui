@@ -65,7 +65,7 @@ namespace StableDiffusionGui.Forms
             }, -1);
 
             Task.Run(() => LoadGpus());
-            Task.Run(() => LoadImplementations());
+            LoadImplementations();
             UpdateComboxStates();
             Opacity = 1;
         }
@@ -123,21 +123,13 @@ namespace StableDiffusionGui.Forms
             ConfigParser.LoadComboxIndex(comboxCudaDevice, ref Config.Instance.CudaDeviceIdx);
         }
 
-        private async Task LoadImplementations()
+        private void LoadImplementations()
         {
-            if(this.RequiresInvoke(new Func<Task>(LoadImplementations)))
+            if(this.RequiresInvoke(new Action(LoadImplementations)))
                 return;
 
             comboxImplementation.Items.Clear();
-            comboxImplementation.Items.Add("Loading available implementations...");
-            comboxImplementation.SelectedIndex = 0;
-
-            var disabledImplementations = new List<Implementation>();
-
-            if (!(await InstallationStatus.HasOnnxAsync(true)))
-                disabledImplementations.Add(Implementation.DiffusersOnnx);
-
-            comboxImplementation.FillFromEnum<Implementation>(Strings.Implementation, -1, disabledImplementations);
+            comboxImplementation.FillFromEnum<Implementation>(Strings.Implementation, -1, Implementation.OptimizedSd.AsList());
             comboxImplementation.Text = Strings.Implementation.Get(Config.Instance.Implementation.ToString());
             _initialImplementationLoad = false;
         }

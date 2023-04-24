@@ -646,5 +646,15 @@ namespace StableDiffusionGui
                 Logger.LogException(ex, true, errorPrefix.IsNotEmpty() ? $"{errorPrefix} " : "");
             }
         }
+
+        public static T[] AsArray<T>(this T obj)
+        {
+            return new[] { obj };
+        }
+
+        public static List<T> AsList<T> (this T obj)
+        {
+            return obj.AsArray().ToList();
+        }
     }
 }
