@@ -20,9 +20,10 @@ namespace StableDiffusionGui.Main
 
             foreach (string prompt in batch.Prompts.Distinct())
             {
-                var newEntry = new TtiSettings() { Prompts = new string[] { prompt }, NegativePrompt = batch.NegativePrompt, Implementation = batch.Implementation, Iterations = batch.Iterations, Params = batch.Params };
+                TtiSettings newEntry = batch.ToJson().FromJson<TtiSettings>(); // Clone
+                newEntry.Prompts = prompt.AsArray();
 
-                if (History.Count < 1 || (History.Count >= 1 && History.First().ToJson() != newEntry.ToJson()))
+                if (History.Count < 1 || (History.Count >= 1 && !newEntry.EqualsWithoutPrompts(History.First())))
                     History.Insert(0, newEntry);
             }
 
@@ -56,7 +57,7 @@ namespace StableDiffusionGui.Main
                 return;
 
             string text = File.ReadAllText(GetJsonPath());
-            History = JsonConvert.DeserializeObject<List<TtiSettings>>(text);
+            History = text.FromJson<List<TtiSettings>>(NullValueHandling.Ignore, DefaultValueHandling.Include, true, true);
         }
 
         private static string GetJsonPath()

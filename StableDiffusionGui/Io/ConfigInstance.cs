@@ -70,6 +70,8 @@ namespace StableDiffusionGui.Io
         public int ClipSkip;
         public string LastInitImageParentPath;
         public bool InvokeAllowMod8;
+        public int EsrganTileSize;
+        public float EsrganDenoise;
 
         public ConfigInstance()
         {
@@ -101,9 +103,11 @@ namespace StableDiffusionGui.Io
             FilenameTimestampMode = Enums.Export.FilenameTimestamp.DateTime;
             WildcardAllowEmptyEntries = true;
             SymmetryTimepoint = 0.9f;
+            EsrganTileSize = 1024;
+            EsrganDenoise = 0.0f;
         }
 
-        public ConfigInstance Clone ()
+        public ConfigInstance Clone()
         {
             return this.ToJson().FromJson<ConfigInstance>(NullValueHandling.Ignore, DefaultValueHandling.Include, true, true);
         }

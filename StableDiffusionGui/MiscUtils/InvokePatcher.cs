@@ -71,7 +71,7 @@ namespace StableDiffusionGui.MiscUtils
                     t = Replace(t, "model_data = cache.get_model(previous_model_name)", "model_data = None");
                     t = Replace(t, "assert cfg_scale > 1.0, \"CFG_Scale (-C) must be >1.0\"", "pass # disabled cfg assert");
                     t = Replace(t, "x % 64", "x % 8");
-                    t = Replace(t, "image, seed, _ = r", "image, seed = r");
+                    t = Replace(t, "image, seed, _ = r", "image, seed, _ = r if len(r) == 3 else (r[0], r[1], None)");
                 }
 
                 if (f.Name == "CLI.py")
@@ -95,6 +95,71 @@ namespace StableDiffusionGui.MiscUtils
                 }
             }
         }
+
+        private static void PatchSchedulers(string rootPath)
+        {
+            string cliPath = IoUtils.GetFileInfosSorted(rootPath, true, "generate.py").Where(f => f.Directory.Name == "backend").First().FullName;
+            var lines = IoUtils.ReadLines(cliPath);
+
+            if (lines.Any(l => l.Contains("nmkd patched")))
+                return;
+
+            string r = "        scheduler_map = dict(\n" +
+                       "            ddim=(diffusers.DDIMScheduler, dict()),\n" +
+                       "            plms=(diffusers.PNDMScheduler, dict()),\n" +
+                       "            lms=(diffusers.LMSDiscreteScheduler, dict()),\n" +
+                       "            heun=(diffusers.HeunDiscreteScheduler, dict()),\n" +
+                       "            euler=(diffusers.EulerDiscreteScheduler, dict(use_karras_sigmas=False)),\n" +
+                       "            k_euler=(diffusers.EulerDiscreteScheduler, dict(use_karras_sigmas=True)),\n" +
+                       "            euler_a=(diffusers.EulerAncestralDiscreteScheduler, dict()),\n" +
+                       "            dpm_2=(diffusers.KDPM2DiscreteScheduler, dict()),\n" +
+                       "            dpm_2_a=(diffusers.KDPM2AncestralDiscreteScheduler, dict()),\n" +
+                       "            dpmpp_2s=(diffusers.DPMSolverSinglestepScheduler, dict()),\n" +
+                       "            dpmpp_2m=(diffusers.DPMSolverMultistepScheduler, dict(use_karras_sigmas=False)),\n" +
+                       "            k_dpmpp_2m=(diffusers.DPMSolverMultistepScheduler, dict(use_karras_sigmas=True)),\n" +
+                       "        )\n\n" +
+                       "        scheduler_convert_map = {\n" +
+                       "            \"k_lms\": \"lms\",\n" +
+                       "            \"k_heun\": \"heun\",\n" +
+                       "            \"k_euler_a\": \"euler_a\",\n" +
+                       "            \"k_dpm_2\": \"dpm_2\",\n" +
+                       "            \"k_dpm_2_a\": \"dpm_2_a\",\n" +
+                       "            \"dpmpp_2\": \"dpmpp_2m\",\n" +
+                       "            \"k_dpmpp_2\": \"k_dpmpp_2m\",\n" +
+                       "        }\n\n" +
+                       "        if self.sampler_name in scheduler_convert_map:\n" +
+                       "            self.sampler_name = scheduler_convert_map[self.sampler_name]";
+
+            bool indent = false;
+
+            for (int i = 0; i < lines.Length; i++)
+            {
+                string l = lines[i];
+
+                if (l == "    while not done:")
+                {
+                    lines[i] = "    while not done:\n        try: # nmkd patched";
+                    indent = true;
+                    continue;
+                }
+
+                if (l == "        print()")
+                {
+                    lines[i] = "            print()\n        except KeyboardInterrupt:\n            pass";
+                    indent = false;
+                    continue;
+                }
+
+                if (indent)
+                    lines[i] = "    " + l;
+
+                if (l.StartsWith("def do_command"))
+                    break;
+            }
+
+            File.WriteAllLines(cliPath, lines);
+        }
+
 
         private static void PatchCli(string rootPath)
         {

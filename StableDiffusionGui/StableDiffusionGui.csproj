@@ -168,7 +168,7 @@
     <Compile Include="Data\ImplementationInfo.cs" />
     <Compile Include="Data\MdlRelease.cs" />
     <Compile Include="Data\Model.cs" />
-    <Compile Include="Data\TtiSettings.cs" />
+    <Compile Include="Data\T2I\TtiSettings.cs" />
     <Compile Include="Data\TtiTaskInfo.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Extensions\UiExtensions.cs" />
@@ -292,6 +292,7 @@
     <Compile Include="Forms\WelcomeForm.Designer.cs">
       <DependentUpon>WelcomeForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Implementations\IImplementation.cs" />
     <Compile Include="Implementations\InstructPixToPix.cs" />
     <Compile Include="Implementations\InvokeAiMetadata.cs" />
     <Compile Include="Implementations\OptimizedSd.cs" />

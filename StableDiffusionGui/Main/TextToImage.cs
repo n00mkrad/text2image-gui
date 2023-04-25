@@ -29,7 +29,7 @@ namespace StableDiffusionGui.Main
             if (Canceled)
                 return;
 
-            await RunTti(new List<TtiSettings>() { settings });
+            await RunTti(settings.AsList());
         }
 
         public static async Task RunTti(List<TtiSettings> batches)
@@ -77,10 +77,10 @@ namespace StableDiffusionGui.Main
 
                 switch (s.Implementation)
                 {
-                    case Implementation.InvokeAi: tasks.Add(InvokeAi.Run(s.Prompts, s.NegativePrompt, s.Iterations, s.Params, tempOutDir)); break;
-                    case Implementation.OptimizedSd: tasks.Add(OptimizedSd.Run(s.Prompts, s.Iterations, s.Params, tempOutDir)); break;
-                    case Implementation.DiffusersOnnx: tasks.Add(SdOnnx.Run(s.Prompts, s.NegativePrompt, s.Iterations, s.Params, tempOutDir)); break;
-                    case Implementation.InstructPixToPix: tasks.Add(InstructPixToPix.Run(s.Prompts, s.NegativePrompt, s.Iterations, s.Params, tempOutDir)); break;
+                    case Implementation.InvokeAi: tasks.Add(InvokeAi.Run(s, tempOutDir)); break;
+                    case Implementation.OptimizedSd: tasks.Add(OptimizedSd.Run(s, tempOutDir)); break;
+                    case Implementation.DiffusersOnnx: tasks.Add(SdOnnx.Run(s, tempOutDir)); break;
+                    case Implementation.InstructPixToPix: tasks.Add(InstructPixToPix.Run(s, tempOutDir)); break;
                 }
 
                 ImageExport.Init();
@@ -99,7 +99,7 @@ namespace StableDiffusionGui.Main
                         await Task.Delay(100);
                 }
                
-                MainUi.Queue = MainUi.Queue.Except(new List<TtiSettings> { s }).ToList(); // Remove from queue
+                MainUi.Queue = MainUi.Queue.Except(s.AsList()).ToList(); // Remove from queue
             }
 
             Done();
@@ -110,11 +110,8 @@ namespace StableDiffusionGui.Main
             if (s == null)
                 return false;
 
-            if (s.Params.ContainsKey("seed"))
-                PreviousSeed = s.Params["seed"].FromJson<long>();
-
             CurrentTaskSettings = s;
-            s.Prompts = s.Prompts.Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
+            s.Prompts = s.Prompts.Where(x => x.IsNotEmpty()).ToArray();
 
             if (!s.Prompts.Any())
             {
@@ -122,7 +119,7 @@ namespace StableDiffusionGui.Main
                 return false;
             }
 
-            var invalidInitImgs = s.Params.FromJson<string[]>("initImgs", new string[0]).Where(i => !File.Exists(i)).ToList();
+            var invalidInitImgs = s.InitImgs.Where(i => !File.Exists(i)).ToList();
 
             if (invalidInitImgs.Any())
             {
@@ -130,10 +127,11 @@ namespace StableDiffusionGui.Main
                 return false;
             }
 
-            string mdl = s.Params.FromJson<string>("model");
+            if (s.ImgMode != ImgMode.InitializationImage && !s.Model.Contains("inpainting"))
+                Logger.Log($"Warning: Inpainting is enabled, but '{s.Model}' does not appear to be an inpainting model. Quality will be degraded.");
 
-            if (s.Params.FromJson<ImgMode>("inpainting") != ImgMode.InitializationImage && !mdl.Contains("inpainting"))
-                Logger.Log($"Warning: Inpainting is enabled, but '{mdl}' does not appear to be an inpainting model. Quality will be degraded.");
+            if (s.Seed >= 0)
+                PreviousSeed = s.Seed;
 
             return true;
         }

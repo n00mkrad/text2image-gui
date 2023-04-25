@@ -51,23 +51,22 @@ namespace StableDiffusionGui.Forms
 
             ((Action)(() =>
             {
-                SetSliderValues(s.Params.FromJson<List<float>>("steps"), true, sliderSteps, textboxExtraSteps);
-                SetSliderValues(s.Params.FromJson<List<float>>("scales"), false, sliderScale, textboxExtraScales);
-                SetSliderValues(s.Params.FromJson<List<float>>("scalesImg"), false, sliderScaleImg, textboxExtraScalesImg);
-                MainUi.CurrentInitImgPaths = s.Params.Get("initImgs").FromJson<List<string>>();
-                Size res = s.Params.Get("res").FromJson<Size>();
-                comboxResW.Text = res.Width.ToString();
-                comboxResH.Text = res.Height.ToString();
-                upDownSeed.Value = s.Params.Get("seed").FromJson<long>();
-                comboxSampler.SetIfTextMatches(s.Params.Get("sampler").FromJson<string>(), true, Strings.Samplers);
-                SetSliderValues(s.Params.FromJson<List<float>>("initStrengths"), false, sliderInitStrength, textboxExtraInitStrengths);
-                comboxSeamless.SetIfTextMatches(s.Params.Get("seamless").FromJson<string>(), true, Strings.SeamlessMode);
-                comboxInpaintMode.SelectedIndex = (int)s.Params.Get("inpainting").FromJson<ImgMode>();
-                checkboxHiresFix.Checked = s.Params.Get("hiresFix").FromJson<bool>();
-                checkboxLockSeed.Checked = s.Params.Get("lockSeed").FromJson<bool>();
+                SetSliderValues(s.Steps, sliderSteps, textboxExtraSteps);
+                SetSliderValues(s.ScalesTxt, false, sliderScale, textboxExtraScales);
+                SetSliderValues(s.ScalesImg, false, sliderScaleImg, textboxExtraScalesImg);
+                MainUi.CurrentInitImgPaths = s.InitImgs.ToList();
+                comboxResW.Text = s.Res.Width.ToString();
+                comboxResH.Text = s.Res.Height.ToString();
+                upDownSeed.Value = s.Seed;
+                comboxSampler.SetIfTextMatches(s.Sampler.ToString(), true, Strings.Samplers);
+                SetSliderValues(s.InitStrengths, false, sliderInitStrength, textboxExtraInitStrengths);
+                comboxSeamless.SetIfTextMatches(s.SeamlessMode.ToString(), true, Strings.SeamlessMode);
+                comboxInpaintMode.SetIfTextMatches(s.ImgMode.ToString(), true, Strings.InpaintMode);
+                checkboxHiresFix.Checked = s.HiresFix;
+                checkboxLockSeed.Checked = s.LockSeed;
 
-                if(s.Params.Get("resizeGravity").IsNotEmpty())
-                    comboxResizeGravity.SetIfTextMatches(s.Params.Get("resizeGravity").FromJson<string>(), true, Strings.ImageGravity);
+                if (s.ResizeGravity != (ImageMagick.Gravity)(-1))
+                    comboxResizeGravity.SetIfTextMatches(s.ResizeGravity.ToString(), true, Strings.ImageGravity);
 
             })).RunWithUiStoppedShowErrors(this, "Error loading image generation settings:");
 
@@ -92,39 +91,41 @@ namespace StableDiffusionGui.Forms
             }
         }
 
+        /// <summary> Set values that have a single slider value and optionally an advanced syntax entry textbox </summary>
+        private static void SetSliderValues(IEnumerable<int> values, CustomSlider slider, TextBox extraValuesTextbox = null)
+        {
+            SetSliderValues(values.Select(n => (float)n), true, slider, extraValuesTextbox);
+        }
+
         public TtiSettings GetCurrentTtiSettings()
         {
             TtiSettings settings = new TtiSettings
             {
                 Implementation = Config.Instance.Implementation,
-
                 Prompts = textboxPrompt.TextNoPlaceholder.SplitIntoLines().Where(x => !string.IsNullOrWhiteSpace(x)).ToArray(),
                 NegativePrompt = textboxPromptNeg.Visible ? textboxPromptNeg.TextNoPlaceholder.Trim().Replace(Environment.NewLine, " ") : "",
                 Iterations = (int)upDownIterations.Value,
-                Params = new EasyDict<string, string>
-                {
-                    { "steps", MainUi.GetExtraValues(textboxExtraSteps.Text, sliderSteps.ActualValueFloat).Select(x => (int)x).ToArray().ToJson() },
-                    { "scales", MainUi.GetExtraValues(textboxExtraScales.Text, sliderScale.ActualValueFloat).ToJson() },
-                    { "scalesImg", MainUi.GetExtraValues(textboxExtraScalesImg.Text, sliderScaleImg.ActualValueFloat).ToJson() },
-                    { "res", new Size(comboxResW.Text.GetInt(), comboxResH.Text.GetInt()).ToJson() },
-                    { "seed", (upDownSeed.Value < 0 ? new Random().Next(0, int.MaxValue) : ((long)upDownSeed.Value)).ToJson() },
-                    { "sampler", ((Sampler)comboxSampler.SelectedIndex).ToString().Lower().ToJson() },
-                    { "initImgs", MainUi.CurrentInitImgPaths.ToJson() },
-                    { "initStrengths", panelInitImgStrength.Visible ? MainUi.GetExtraValues(textboxExtraInitStrengths.Text, sliderInitStrength.ActualValueFloat).ToJson() : new List<float>() { 0.5f }.ToJson() },
-                    { "seamless", (comboxSeamless.Visible ? ((SeamlessMode)comboxSeamless.SelectedIndex) : SeamlessMode.Disabled).ToJson() },
-                    { "symmetry", (comboxSymmetry.Visible ? ((SymmetryMode)comboxSymmetry.SelectedIndex) : SymmetryMode.Disabled).ToJson() },
-                    { "inpainting", (comboxInpaintMode.Visible ? ((ImgMode)comboxInpaintMode.SelectedIndex) : ImgMode.InitializationImage).ToJson() },
-                    { "clipSegMask", textboxClipsegMask.Text.Trim().ToJson() },
-                    { "model", Config.Instance.Model.ToJson() },
-                    { "hiresFix", (checkboxHiresFix.Visible && checkboxHiresFix.Checked).ToJson() },
-                    { "lockSeed", checkboxLockSeed.Checked.ToJson() },
-                    { "vae", Config.Instance.ModelVae.ToJson() },
-                    { "perlin", textboxPerlin.GetFloat().ToJson() },
-                    { "threshold", textboxThresh.GetInt().ToJson() },
-                    { "appendArgs", textboxDebugAppendArgs.Text.ToJson() },
-                    { "resizeGravity", comboxResizeGravity.Visible ? ParseUtils.GetEnum<ImageMagick.Gravity>(comboxResizeGravity.Text, true, Strings.ImageGravity).ToJson() : "" },
-                    { "modelArch", comboxModelArch.Visible ? ParseUtils.GetEnum<Enums.Models.SdArch>(comboxModelArch.Text, true, Strings.SdModelArch).ToJson() : "" },
-                },
+                Steps = MainUi.GetExtraValues(textboxExtraSteps.Text, sliderSteps.ActualValueFloat).Select(x => (int)x).ToArray(),
+                InitImgs = MainUi.CurrentInitImgPaths.ToArray(),
+                ScalesTxt = MainUi.GetExtraValues(textboxExtraScales.Text, sliderScale.ActualValueFloat).ToArray(),
+                InitStrengths = panelInitImgStrength.Visible ? MainUi.GetExtraValues(textboxExtraInitStrengths.Text, sliderInitStrength.ActualValueFloat).ToArray() : new float[] { 0.5f },
+                Seed = (upDownSeed.Value < 0 ? new Random().Next(0, int.MaxValue) : ((long)upDownSeed.Value)),
+                Sampler = ParseUtils.GetEnum<Sampler>(comboxSampler.Text, true, Strings.Samplers),
+                Res = new Size(comboxResW.Text.GetInt(), comboxResH.Text.GetInt()),
+                Model = Config.Instance.Model,
+                Vae = Config.Instance.ModelVae,
+                LockSeed = checkboxLockSeed.Checked,
+                ClipSegMask = textboxClipsegMask.Text.Trim(),
+                ResizeGravity = comboxResizeGravity.Visible ? ParseUtils.GetEnum<ImageMagick.Gravity>(comboxResizeGravity.Text, true, Strings.ImageGravity) : (ImageMagick.Gravity)(-1),
+                ModelArch = comboxModelArch.Visible ? ParseUtils.GetEnum<Enums.Models.SdArch>(comboxModelArch.Text, true, Strings.SdModelArch) : Enums.Models.SdArch.Automatic,
+                SeamlessMode = (comboxSeamless.Visible ? ((SeamlessMode)comboxSeamless.SelectedIndex) : SeamlessMode.Disabled),
+                SymmetryMode = (comboxSymmetry.Visible ? ((SymmetryMode)comboxSymmetry.SelectedIndex) : SymmetryMode.Disabled),
+                HiresFix = checkboxHiresFix.Visible && checkboxHiresFix.Checked,
+                Perlin = textboxPerlin.GetFloat(),
+                Threshold = textboxThresh.GetInt(),
+                ImgMode = (comboxInpaintMode.Visible ? ((ImgMode)comboxInpaintMode.SelectedIndex) : ImgMode.InitializationImage),
+                AppendArgs = textboxDebugAppendArgs.Text,
+                ScalesImg = MainUi.GetExtraValues(textboxExtraScalesImg.Text, sliderScaleImg.ActualValueFloat).ToArray(),
             };
 
             return settings;

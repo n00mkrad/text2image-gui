@@ -25,29 +25,28 @@ namespace StableDiffusionGui.Implementations
         public static Dictionary<string, string> PostProcessMovePaths = new Dictionary<string, string>();
         public static EasyDict<string, string> EmbeddingsFilesTriggers = new EasyDict<string, string>(); // Key = Filename without ext, Value = Trigger
 
-        public static async Task Run(string[] prompts, string negPrompt, int iterations, Dictionary<string, string> parameters, string outPath)
+        public static async Task Run(TtiSettings s, string outPath)
         {
             try
             {
-                string[] initImgs = parameters.FromJson<string[]>("initImgs"); // List of init images
-                float[] initStrengths = parameters.FromJson<float[]>("initStrengths").Select(n => 1f - n).ToArray(); ; // List of init strength values to run
-                int[] steps = parameters.FromJson<int[]>("steps"); // List of diffusion step counts
-                float[] scales = parameters.FromJson<float[]>("scales"); // List of CFG scale values to run
-                long seed = parameters.FromJson<long>("seed"); // Initial seed
-                string sampler = parameters.FromJson<string>("sampler"); // Sampler
-                var res = parameters.FromJson<Size>("res"); // Image resolution
-                var seamless = parameters.FromJson<Enums.StableDiffusion.SeamlessMode>("seamless"); // Seamless generation mode
-                var symmetry = parameters.FromJson<Enums.StableDiffusion.SymmetryMode>("symmetry"); // Symmetry mode
-                string model = parameters.FromJson<string>("model"); // Model name
-                bool hiresFix = parameters.FromJson<bool>("hiresFix"); // Enable high-resolution fix
-                bool lockSeed = parameters.FromJson<bool>("lockSeed"); // Lock seed (disable auto-increment)
-                string vae = parameters.FromJson<string>("vae").NullToEmpty().Replace("None", ""); // VAE model name
-                float perlin = parameters.FromJson<float>("perlin"); // Perlin noise blend value
-                int threshold = parameters.FromJson<int>("threshold"); // Threshold value
-                var inpaint = parameters.FromJson<Enums.StableDiffusion.ImgMode>("inpainting"); // Inpainting mode
-                string clipSegMask = parameters.FromJson<string>("clipSegMask"); // ClipSeg text-based masking prompt
-                var resizeGravity = parameters.FromJson<ImageMagick.Gravity>("resizeGravity", (ImageMagick.Gravity)(-1)); // Inpainting mode
-                var modelArch = parameters.FromJson<Enums.Models.SdArch>("modelArch", Enums.Models.SdArch.Automatic); // SD Ckpt Architecture
+                float[] initStrengths = s.InitStrengths.Select(n => 1f - n).ToArray(); // List of init strength values to run
+                // int[] steps = parameters.FromJson<int[]>("steps"); // List of diffusion step counts
+                // float[] scales = parameters.FromJson<float[]>("scales"); // List of CFG scale values to run
+                // long seed = parameters.FromJson<long>("seed"); // Initial seed
+                // string sampler = parameters.FromJson<string>("sampler"); // Sampler
+                // var res = parameters.FromJson<Size>("res"); // Image resolution
+                // var seamless = parameters.FromJson<Enums.StableDiffusion.SeamlessMode>("seamless"); // Seamless generation mode
+                // var symmetry = parameters.FromJson<Enums.StableDiffusion.SymmetryMode>("symmetry"); // Symmetry mode
+                // string model = parameters.FromJson<string>("model"); // Model name
+                // bool hiresFix = parameters.FromJson<bool>("hiresFix"); // Enable high-resolution fix
+                // bool lockSeed = parameters.FromJson<bool>("lockSeed"); // Lock seed (disable auto-increment)
+                string vae = s.Vae.NullToEmpty().Replace("None", ""); // VAE model name
+                // float perlin = parameters.FromJson<float>("perlin"); // Perlin noise blend value
+                // int threshold = parameters.FromJson<int>("threshold"); // Threshold value
+                // var inpaint = parameters.FromJson<Enums.StableDiffusion.ImgMode>("inpainting"); // Inpainting mode
+                // string clipSegMask = parameters.FromJson<string>("clipSegMask"); // ClipSeg text-based masking prompt
+                // var resizeGravity = parameters.FromJson<ImageMagick.Gravity>("resizeGravity", (ImageMagick.Gravity)(-1)); // Inpainting mode
+                // var modelArch = parameters.FromJson<Enums.Models.SdArch>("modelArch", Enums.Models.SdArch.Automatic); // SD Ckpt Architecture
 
                 var allModels = Models.GetModelsAll();
                 var cachedModels = allModels.Where(m => m.Type == Enums.Models.Type.Normal).ToList();
@@ -56,12 +55,12 @@ namespace StableDiffusionGui.Implementations
                 Model vaeFile = Models.GetModel(cachedModelsVae, vae);
                 if (TextToImage.Canceled) return;
 
-                cachedModels[cachedModels.IndexOf(cachedModels.Where(m => m.FullName == modelFile.FullName).First())].SetArch(modelArch);
+                cachedModels[cachedModels.IndexOf(cachedModels.Where(m => m.FullName == modelFile.FullName).First())].SetArch(s.ModelArch);
 
-                OrderedDictionary initImages = initImgs != null && initImgs.Length > 0 ? await TtiUtils.CreateResizedInitImagesIfNeeded(initImgs.ToList(), res, resizeGravity) : null;
+                OrderedDictionary initImages = s.InitImgs != null && s.InitImgs.Length > 0 ? await TtiUtils.CreateResizedInitImagesIfNeeded(s.InitImgs.ToList(), s.Res, s.ResizeGravity) : null;
 
-                long startSeed = seed;
-                prompts = prompts.Select(p => InvokeAiUtils.GetCombinedPrompt(p, negPrompt)).ToArray(); // Apply negative prompt
+                long startSeed = s.Seed;
+                s.Prompts = s.Prompts.Select(p => InvokeAiUtils.GetCombinedPrompt(p, s.NegativePrompt)).ToArray(); // Apply negative prompt
 
                 List<EasyDict<string, string>> argLists = new List<EasyDict<string, string>>(); // List of all args for each command
                 EasyDict<string, string> args = new EasyDict<string, string>(); // List of args for current command
@@ -69,34 +68,34 @@ namespace StableDiffusionGui.Implementations
                 args["default"] = Args.InvokeAi.GetDefaultArgsCommand();
                 args["upscale"] = Args.InvokeAi.GetUpscaleArgs();
                 args["facefix"] = Args.InvokeAi.GetFaceRestoreArgs();
-                args["seamless"] = Args.InvokeAi.GetSeamlessArg(seamless);
-                args["symmetry"] = Args.InvokeAi.GetSymmetryArg(symmetry);
-                args["hiresFix"] = hiresFix ? "--hires_fix" : "";
+                args["seamless"] = Args.InvokeAi.GetSeamlessArg(s.SeamlessMode);
+                args["symmetry"] = Args.InvokeAi.GetSymmetryArg(s.SymmetryMode);
+                args["hiresFix"] = s.HiresFix ? "--hires_fix" : "";
 
-                foreach (string prompt in prompts)
+                foreach (string prompt in s.Prompts)
                 {
-                    List<string> processedPrompts = PromptWildcardUtils.ApplyWildcardsAll(prompt, iterations, false);
+                    List<string> processedPrompts = PromptWildcardUtils.ApplyWildcardsAll(prompt, s.Iterations, false);
                     TextToImage.CurrentTaskSettings.ProcessedAndRawPrompts = new EasyDict<string, string>(processedPrompts.Distinct().ToDictionary(x => x, x => prompt));
 
-                    for (int i = 0; i < iterations; i++)
+                    for (int i = 0; i < s.Iterations; i++)
                     {
                         args.Remove("initImg");
                         args.Remove("initStrength");
                         args.Remove("inpaintMask");
                         args["prompt"] = processedPrompts[i].Wrap();
-                        args["res"] = $"-W {res.Width} -H {res.Height}";
-                        args["sampler"] = $"-A {sampler}";
-                        args["seed"] = $"-S {seed}";
-                        args["perlin"] = perlin > 0f ? $"--perlin {perlin.ToStringDot()}" : "";
-                        args["threshold"] = threshold > 0 ? $"--threshold {threshold}" : "";
-                        args["clipSegMask"] = (inpaint == Enums.StableDiffusion.ImgMode.TextMask && !string.IsNullOrWhiteSpace(clipSegMask)) ? $"-tm {clipSegMask.Wrap()}" : "";
-                        args["debug"] = parameters.FromJson<string>("appendArgs");
+                        args["res"] = $"-W {s.Res.Width} -H {s.Res.Height}";
+                        args["sampler"] = $"-A {s.Sampler.ToString().Lower()}";
+                        args["seed"] = $"-S {s.Seed}";
+                        args["perlin"] = s.Perlin > 0f ? $"--perlin {s.Perlin.ToStringDot()}" : "";
+                        args["threshold"] = s.Threshold > 0 ? $"--threshold {s.Threshold}" : "";
+                        args["clipSegMask"] = (s.ImgMode == Enums.StableDiffusion.ImgMode.TextMask && !string.IsNullOrWhiteSpace(s.ClipSegMask)) ? $"-tm {s.ClipSegMask.Wrap()}" : "";
+                        args["debug"] = s.AppendArgs;
 
-                        foreach (float scale in scales)
+                        foreach (float scale in s.ScalesTxt)
                         {
                             args["scale"] = $"-C {scale.Clamp(0.01f, 1000f).ToStringDot()}";
 
-                            foreach (int stepCount in steps)
+                            foreach (int stepCount in s.Steps)
                             {
                                 args["steps"] = $"-s {stepCount}";
 
@@ -111,12 +110,12 @@ namespace StableDiffusionGui.Implementations
                                         foreach (float strength in initStrengths)
                                         {
                                             args["initImg"] = $"-I {initImg.Wrap()}";
-                                            args["initStrength"] = inpaint != Enums.StableDiffusion.ImgMode.InitializationImage ? "-f 1.0" : $"-f {strength.ToStringDot("0.###")}"; // Lock to 1.0 when using inpainting
+                                            args["initStrength"] = s.ImgMode != Enums.StableDiffusion.ImgMode.InitializationImage ? "-f 1.0" : $"-f {strength.ToStringDot("0.###")}"; // Lock to 1.0 when using inpainting
 
-                                            if (inpaint == Enums.StableDiffusion.ImgMode.ImageMask)
+                                            if (s.ImgMode == Enums.StableDiffusion.ImgMode.ImageMask)
                                                 args["inpaintMask"] = $"-M {Inpainting.MaskedImagePath.Wrap()}";
 
-                                            if (inpaint == Enums.StableDiffusion.ImgMode.Outpainting)
+                                            if (s.ImgMode == Enums.StableDiffusion.ImgMode.Outpainting)
                                                 args["inpaintMask"] = "--force_outpaint";
 
                                             argLists.Add(new EasyDict<string, string>(args));
@@ -126,15 +125,15 @@ namespace StableDiffusionGui.Implementations
                             }
                         }
 
-                        if (!lockSeed)
-                            seed++;
+                        if (!s.LockSeed)
+                            s.Seed++;
                     }
 
                     if (Config.Instance.MultiPromptsSameSeed)
-                        seed = startSeed;
+                        s.Seed = startSeed;
                 }
 
-                Logger.Log($"Running Stable Diffusion - {iterations} Iterations, {steps.Length} Steps, Scales {(scales.Length < 4 ? string.Join(", ", scales.Select(x => x.ToStringDot())) : $"{scales.First()}->{scales.Last()}")}, {res.Width}x{res.Height}, Starting Seed: {startSeed}", false, Logger.LastUiLine.EndsWith("..."));
+                Logger.Log($"Running Stable Diffusion - {s.Iterations} Iterations, {s.Steps.Length} Steps, Scales {(s.ScalesTxt.Length < 4 ? string.Join(", ", s.ScalesTxt.Select(x => x.ToStringDot())) : $"{s.ScalesTxt.First()}->{s.ScalesTxt.Last()}")}, {s.Res.AsString()}, Starting Seed: {startSeed}", false, Logger.LastUiLine.EndsWith("..."));
 
                 if (modelFile.Format == Enums.Models.Format.Diffusers && vaeFile != null)
                 {
@@ -146,14 +145,14 @@ namespace StableDiffusionGui.Implementations
                 string argsStartup = Args.InvokeAi.GetArgsStartup(cachedModels);
                 string newStartupSettings = $"{argsStartup} {modelsChecksumStartup} {Config.Instance.CudaDeviceIdx} {Config.Instance.ClipSkip}"; // Check if startup settings match - If not, we need to restart the process
 
-                Logger.Log(GetImageCountLogString(initImages, initStrengths, prompts, iterations, steps, scales, argLists));
+                Logger.Log(GetImageCountLogString(initImages, initStrengths, s.Prompts, s.Iterations, s.Steps, s.ScalesTxt, argLists));
 
                 Logger.Clear(Constants.Lognames.Sd);
                 bool restartedInvoke = false; // Will be set to true if InvokeAI was not running before
 
                 if (!TtiProcess.IsAiProcessRunning || (TtiProcess.IsAiProcessRunning && TtiProcess.LastStartupSettings != newStartupSettings))
                 {
-                    InvokeAiUtils.WriteModelsYamlAll(cachedModels, cachedModelsVae, modelArch);
+                    InvokeAiUtils.WriteModelsYamlAll(cachedModels, cachedModelsVae, s.ModelArch);
                     Models.SetClipSkip(modelFile, Config.Instance.ClipSkip);
                     if (TextToImage.Canceled) return;
 
@@ -223,7 +222,7 @@ namespace StableDiffusionGui.Implementations
                     if (TextToImage.Canceled)
                         break;
 
-                    if (!InvokeAiUtils.ValidateCommand(argList, res))
+                    if (!InvokeAiUtils.ValidateCommand(argList, s.Res))
                         continue;
 
                     argList["prompt"] = InvokeAiUtils.FixPromptEmbeddingTriggers(argList["prompt"]);

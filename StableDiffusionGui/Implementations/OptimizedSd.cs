@@ -19,6 +19,11 @@ namespace StableDiffusionGui.Implementations
 {
     internal class OptimizedSd
     {
+        public static async Task Run(TtiSettings s, string outPath)
+        {
+            throw new NotImplementedException("OptimizedSd with TtiSettings not implemented!");
+        }
+
         public static async Task Run(string[] prompts, int iterations, Dictionary<string, string> parameters, string outPath)
         {
             // NOTE: Currently not implemented: Embeddings, Samplers, Seamless Mode, ...

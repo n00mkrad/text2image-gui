@@ -20,28 +20,22 @@ namespace StableDiffusionGui.Implementations
 {
     internal class InstructPixToPix
     {
-        public static async Task Run(string[] prompts, string negPrompt, int iterations, Dictionary<string, string> parameters, string outPath)
+        public static async Task Run(TtiSettings s, string outPath)
         {
             try
             {
-                string[] initImgs = parameters.FromJson<string[]>("initImgs");
-                float[] initStrengths = parameters.FromJson<float[]>("initStrengths").Select(n => 1f - n).ToArray();
-                int[] steps = parameters.FromJson<int[]>("steps");
-                float[] scalesTxt = parameters.FromJson<float[]>("scales");
-                float[] scalesImg = parameters.FromJson<float[]>("scalesImg");
-                long seed = parameters.FromJson<long>("seed");
-                bool lockSeed = parameters.FromJson<bool>("lockSeed"); // Lock seed (disable auto-increment)
+                // string[] s.InitImgs = parameters.FromJson<string[]>("s.InitImgs");
+                // float[] initStrengths = parameters.FromJson<float[]>("initStrengths").Select(n => 1f - n).ToArray();
+                // int[] steps = parameters.FromJson<int[]>("steps");
+                // float[] scalesTxt = parameters.FromJson<float[]>("scales");
+                // float[] scalesImg = parameters.FromJson<float[]>("scalesImg");
+                // long seed = parameters.FromJson<long>("seed");
+                // bool lockSeed = parameters.FromJson<bool>("lockSeed"); // Lock seed (disable auto-increment)
                 // string sampler = parameters.FromJson<string>("sampler");
-                Size res = parameters.FromJson<Size>("res");
+                // Size res = parameters.FromJson<Size>("res");
                 // string model = parameters.FromJson<string>("model");
 
-                // var cachedModels = Models.GetModels(ModelType.Normal, Implementation.DiffusersOnnx);
-                // Model modelDir = TtiUtils.CheckIfCurrentSdModelExists();
-                // 
-                // if (modelDir == null)
-                //     return;
-
-                OrderedDictionary initImages = initImgs != null && initImgs.Length > 0 ? await TtiUtils.CreateResizedInitImagesIfNeeded(initImgs.ToList(), res) : null;
+                OrderedDictionary initImages = s.InitImgs != null && s.InitImgs.Length > 0 ? await TtiUtils.CreateResizedInitImagesIfNeeded(s.InitImgs.ToList(), s.Res) : null;
 
                 if (initImages == null || initImages.Count < 1)
                 {
@@ -49,40 +43,40 @@ namespace StableDiffusionGui.Implementations
                     return;
                 }
 
-                long startSeed = seed;
+                long startSeed = s.Seed;
 
                 List<Dictionary<string, string>> argLists = new List<Dictionary<string, string>>(); // List of all args for each command
                 Dictionary<string, string> args = new Dictionary<string, string>(); // List of args for current command
                 args["prompt"] = "";
 
-                foreach (string prompt in prompts)
+                foreach (string prompt in s.Prompts)
                 {
-                    List<string> processedPrompts = PromptWildcardUtils.ApplyWildcardsAll(prompt, iterations, false);
+                    List<string> processedPrompts = PromptWildcardUtils.ApplyWildcardsAll(prompt, s.Iterations, false);
                     TextToImage.CurrentTaskSettings.ProcessedAndRawPrompts = new EasyDict<string, string>(processedPrompts.Distinct().ToDictionary(x => x, x => prompt));
 
-                    for (int i = 0; i < iterations; i++)
+                    for (int i = 0; i < s.Iterations; i++)
                     {
                         args["initImg"] = "";
                         args["initStrength"] = "0";
                         args["prompt"] = processedPrompts[i];
-                        args["promptNeg"] = negPrompt;
-                        args["seed"] = $"{seed}";
+                        args["promptNeg"] = s.NegativePrompt;
+                        args["seed"] = $"{s.Seed}";
 
-                        foreach (float scale in scalesTxt)
+                        foreach (float scale in s.ScalesTxt)
                         {
                             args["scaleTxt"] = $"{scale.ToStringDot()}";
 
-                            foreach (float scaleImg in scalesImg)
+                            foreach (float scaleImg in s.ScalesImg)
                             {
                                 args["scaleImg"] = $"{scaleImg.ToStringDot()}";
 
-                                foreach (int stepCount in steps)
+                                foreach (int stepCount in s.Steps)
                                 {
                                     args["steps"] = $"{stepCount}";
 
                                     foreach (string initImg in initImages.Values)
                                     {
-                                        foreach (float strength in initStrengths)
+                                        foreach (float strength in s.InitStrengths)
                                         {
                                             args["initImg"] = initImg;
                                             args["initStrength"] = strength.ToStringDot("0.###");
@@ -94,18 +88,18 @@ namespace StableDiffusionGui.Implementations
                             }
                         }
 
-                        if (!lockSeed)
-                            seed++;
+                        if (!s.LockSeed)
+                            s.Seed++;
                     }
 
                     if (Config.Instance.MultiPromptsSameSeed)
-                        seed = startSeed;
+                        s.Seed = startSeed;
                 }
 
-                Logger.Log($"Running Stable Diffusion - {iterations} Iterations, {steps.Length} Steps, Scales {(scalesTxt.Length < 4 ? string.Join(", ", scalesTxt.Select(x => x.ToStringDot())) : $"{scalesTxt.First()}->{scalesTxt.Last()}")}, Starting Seed: {startSeed}");
+                Logger.Log($"Running Stable Diffusion - {s.Iterations} Iterations, {s.Steps.Length} Steps, Scales {(s.ScalesTxt.Length < 4 ? string.Join(", ", s.ScalesTxt.Select(x => x.ToStringDot())) : $"{s.ScalesTxt.First()}->{s.ScalesTxt.Last()}")}, Starting Seed: {startSeed}");
 
-                string initsStr = initImages != null ? $" and {initImages.Count} image{(initImages.Count != 1 ? "s" : "")} using {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
-                Logger.Log(GetImageCountLogString(initImages, prompts.Length, iterations, steps.Length, scalesTxt.Length, scalesImg.Length, argLists.Count));
+                string initsStr = initImages != null ? $" and {initImages.Count} image{(initImages.Count != 1 ? "s" : "")} using {s.InitStrengths.Length} strength{(s.InitStrengths.Length != 1 ? "s" : "")}" : "";
+                Logger.Log(GetImageCountLogString(initImages, s.Prompts.Length, s.Iterations, s.Steps.Length, s.ScalesTxt.Length, s.ScalesImg.Length, argLists.Count));
 
                 if (!TtiProcess.IsAiProcessRunning)
                 {

@@ -31,6 +31,11 @@ namespace StableDiffusionGui.Main
                     args.Add("--no_upscale");
                     args.Add("--no_restore");
                 }
+                else
+                {
+                    args.Add($"--esrgan_bg_tile {Config.Instance.EsrganTileSize}");
+                    args.Add($"--esrgan_denoise_str {Config.Instance.EsrganDenoise.ToStringDot("0.##")}");
+                }
 
                 int maxCachedModels = 0;
 
@@ -43,10 +48,10 @@ namespace StableDiffusionGui.Main
                 args.Add($"--max_loaded_models {maxCachedModels + 1}"); // Add 1 to model count because the arg counts the VRAM loaded model as well
 
                 if (Config.Instance.OfflineMode)
-                    args.Add($"--no-internet");
+                    args.Add("--no-internet");
 
                 if (Models.HasAnyInpaintingModels(cachedModels, Enums.StableDiffusion.Implementation.InvokeAi))
-                    args.Add($"--no-patchmatch"); // Disable patchmatch (used for legacy inpainting) if there are any native inpainting models available
+                    args.Add("--no-patchmatch"); // Disable patchmatch (used for legacy inpainting) if there are any native inpainting models available
 
                 args.Add($"--embedding_path {Path.Combine(Paths.GetDataPath(), Constants.Dirs.Models.Root, Constants.Dirs.Models.Embeddings).Wrap(true)}"); // Embeddings folder path
                 args.Add("--no-nsfw_checker"); // Disable NSFW checker (might become optional in the future)

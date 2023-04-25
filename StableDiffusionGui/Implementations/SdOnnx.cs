@@ -19,21 +19,24 @@ namespace StableDiffusionGui.Implementations
 {
     internal class SdOnnx
     {
-        public static async Task Run(string[] prompts, string promptNeg, int iterations, Dictionary<string, string> parameters, string outPath)
+        public static async Task Run(TtiSettings s, string outPath)
         {
             try
             {
-                string[] initImgs = parameters.FromJson<string[]>("initImgs");
-                float[] initStrengths = parameters.FromJson<float[]>("initStrengths").Select(n => 1f - n).ToArray();
-                int[] steps = parameters.FromJson<int[]>("steps");
-                float[] scales = parameters.FromJson<float[]>("scales");
-                long seed = parameters.FromJson<long>("seed");
-                string sampler = parameters.FromJson<string>("sampler");
-                Size res = parameters.FromJson<Size>("res");
-                var seamless = parameters.FromJson<SeamlessMode>("seamless");
-                string model = parameters.FromJson<string>("model");
-                bool lockSeed = parameters.FromJson<bool>("lockSeed");
-                ImgMode inpaint = parameters.FromJson<ImgMode>("inpainting");
+                // string[] initImgs = parameters.FromJson<string[]>("initImgs");
+                // float[] initStrengths = parameters.FromJson<float[]>("initStrengths").Select(n => 1f - n).ToArray();
+                // int[] steps = parameters.FromJson<int[]>("steps");
+                // float[] scales = parameters.FromJson<float[]>("scales");
+                // long seed = parameters.FromJson<long>("seed");
+                // string sampler = parameters.FromJson<string>("sampler");
+                // Size res = parameters.FromJson<Size>("res");
+                // var seamless = parameters.FromJson<SeamlessMode>("seamless");
+                // string model = parameters.FromJson<string>("model");
+                // bool lockSeed = parameters.FromJson<bool>("lockSeed");
+                // ImgMode inpaint = parameters.FromJson<ImgMode>("inpainting");
+
+
+                float[] initStrengths = s.InitStrengths.Select(n => 1f - n).ToArray();
 
                 var cachedModels = Models.GetModels(Enums.Models.Type.Normal, Implementation.DiffusersOnnx);
                 Model modelDir = TtiUtils.CheckIfCurrentSdModelExists();
@@ -41,36 +44,36 @@ namespace StableDiffusionGui.Implementations
                 if (modelDir == null)
                     return;
 
-                OrderedDictionary initImages = initImgs != null && initImgs.Length > 0 ? await TtiUtils.CreateResizedInitImagesIfNeeded(initImgs.ToList(), res) : null;
+                OrderedDictionary initImages = s.InitImgs != null && s.InitImgs.Length > 0 ? await TtiUtils.CreateResizedInitImagesIfNeeded(s.InitImgs.ToList(), s.Res) : null;
 
-                long startSeed = seed;
+                long startSeed = s.Seed;
 
                 List<Dictionary<string, string>> argLists = new List<Dictionary<string, string>>(); // List of all args for each command
                 Dictionary<string, string> args = new Dictionary<string, string>(); // List of args for current command
                 args["prompt"] = "";
                 args["default"] = "";
 
-                foreach (string prompt in prompts)
+                foreach (string prompt in s.Prompts)
                 {
-                    List<string> processedPrompts = PromptWildcardUtils.ApplyWildcardsAll(prompt, iterations, false);
+                    List<string> processedPrompts = PromptWildcardUtils.ApplyWildcardsAll(prompt, s.Iterations, false);
                     TextToImage.CurrentTaskSettings.ProcessedAndRawPrompts = new EasyDict<string, string>(processedPrompts.Distinct().ToDictionary(x => x, x => prompt));
 
-                    for (int i = 0; i < iterations; i++)
+                    for (int i = 0; i < s.Iterations; i++)
                     {
                         args["initImg"] = "";
                         args["initStrength"] = "0";
                         args["inpaintMask"] = "";
                         args["prompt"] = processedPrompts[i];
-                        args["promptNeg"] = promptNeg;
-                        args["w"] = $"{res.Width}";
-                        args["h"] = $"{res.Height}";
-                        args["seed"] = $"{seed}";
+                        args["promptNeg"] = s.NegativePrompt;
+                        args["w"] = $"{s.Res.Width}";
+                        args["h"] = $"{s.Res.Height}";
+                        args["seed"] = $"{s.Seed}";
 
-                        foreach (float scale in scales)
+                        foreach (float scale in s.ScalesTxt)
                         {
                             args["scale"] = $"{scale.ToStringDot()}";
 
-                            foreach (int stepCount in steps)
+                            foreach (int stepCount in s.Steps)
                             {
                                 args["steps"] = $"{stepCount}";
 
@@ -87,7 +90,7 @@ namespace StableDiffusionGui.Implementations
                                             args["initImg"] = initImg;
                                             args["initStrength"] = strength.ToStringDot("0.###");
 
-                                            if (inpaint == ImgMode.ImageMask)
+                                            if (s.ImgMode == ImgMode.ImageMask)
                                                 args["inpaintMask"] = Inpainting.MaskImagePathDiffusers;
 
                                             argLists.Add(new Dictionary<string, string>(args));
@@ -97,34 +100,32 @@ namespace StableDiffusionGui.Implementations
                             }
                         }
 
-                        if (!lockSeed)
-                            seed++;
+                        if (!s.LockSeed)
+                            s.Seed++;
                     }
 
                     if (Config.Instance.MultiPromptsSameSeed)
-                        seed = startSeed;
+                        s.Seed = startSeed;
                 }
 
-                Logger.Log($"Running Stable Diffusion - {iterations} Iterations, {steps.Length} Steps, Scales {(scales.Length < 4 ? string.Join(", ", scales.Select(x => x.ToStringDot())) : $"{scales.First()}->{scales.Last()}")}, {res.Width}x{res.Height}, Starting Seed: {startSeed}");
+                Logger.Log($"Running Stable Diffusion - {s.Iterations} Iterations, {s.Steps.Length} Steps, Scales {(s.ScalesTxt.Length < 4 ? string.Join(", ", s.ScalesTxt.Select(x => x.ToStringDot())) : $"{s.ScalesTxt.First()}->{s.ScalesTxt.Last()}")}, {s.Res.Width}x{s.Res.Height}, Starting Seed: {startSeed}");
 
                 string initsStr = initImages != null ? $" and {initImages.Count} image{(initImages.Count != 1 ? "s" : "")} using {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
-                Logger.Log($"{prompts.Length} prompt{(prompts.Length != 1 ? "s" : "")} * {iterations} image{(iterations != 1 ? "s" : "")} * {steps.Length} step value{(steps.Length != 1 ? "s" : "")} * {scales.Length} scale{(scales.Length != 1 ? "s" : "")}{initsStr} = {argLists.Count} images total.");
+                Logger.Log($"{s.Prompts.Length} prompt{(s.Prompts.Length != 1 ? "s" : "")} * {s.Iterations} image{(s.Iterations != 1 ? "s" : "")} * {s.Steps.Length} step value{(s.Steps.Length != 1 ? "s" : "")} * {s.ScalesTxt.Length} scale{(s.ScalesTxt.Length != 1 ? "s" : "")}{initsStr} = {argLists.Count} images total.");
 
                 if (!TtiProcess.IsAiProcessRunning)
                 {
-                    PatchDiffusersIfNeeded();
-
                     Process py = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
                     TextToImage.CurrentTask.Processes.Add(py);
 
                     string mode = "txt2img";
                     bool inpaintingMdl = modelDir.Name.EndsWith(Constants.SuffixesPrefixes.InpaintingMdlSuf);
 
-                    if (initImgs != null && initImgs.Length > 0)
+                    if (s.InitImgs != null && s.InitImgs.Length > 0)
                     {
                         mode = "img2img";
 
-                        if (inpaintingMdl && inpaint != ImgMode.InitializationImage)
+                        if (inpaintingMdl && s.ImgMode != ImgMode.InitializationImage)
                             mode = "inpaint";
                     }
 
@@ -148,7 +149,7 @@ namespace StableDiffusionGui.Implementations
 
                     TtiProcessOutputHandler.Reset();
 
-                    Logger.Log($"Loading Stable Diffusion (ONNX) with model {model.Trunc(80).Wrap()}...");
+                    Logger.Log($"Loading Stable Diffusion (ONNX) with model {s.Model.Trunc(80).Wrap()}...");
 
                     TtiProcess.ProcessExistWasIntentional = false;
                     py.Start();
@@ -177,61 +178,6 @@ namespace StableDiffusionGui.Implementations
             {
                 Logger.Log($"Unhandled Stable Diffusion Error: {ex.Message}");
                 Logger.Log(ex.StackTrace, true);
-            }
-        }
-
-        private static void PatchDiffusersIfNeeded()
-        {
-            return;
-
-            string marker = "# PATCHED BY NMKD SD GUI";
-
-            string diffusersPath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdVenv, "Lib", "site-packages", "diffusers");
-
-            string pipelinePath = Path.Combine(diffusersPath, "pipelines", "stable_diffusion", "pipeline_onnx_stable_diffusion.py");
-            string text = File.ReadAllText(pipelinePath);
-
-            if (text.SplitIntoLines()[0].Trim() != marker)
-            {
-                text = text.Replace("    safety_checker: OnnxRuntimeModel", "    # safety_checker: OnnxRuntimeModel");
-                text = text.Replace("    safety_checker=safety_checker", "    # safety_checker=safety_checker");
-                text = text.Replace("    feature_extractor: CLIPFeatureExtractor", "    # feature_extractor: CLIPFeatureExtractor");
-                text = text.Replace("    feature_extractor=feature_extractor", "    # feature_extractor=feature_extractor");
-                text = text.Replace("    if self.safety_checker is not None:", "    if False:");
-                text = text.Replace("    if safety_checker is None and requires_safety_checker:", "    if False:");
-                text = text.Replace("    if safety_checker is not None and feature_extractor is None:", "    if False:");
-                File.WriteAllText(pipelinePath, $"{marker}{Environment.NewLine}{text}");
-                Logger.Log($"Patched {Path.GetFileName(pipelinePath)}", true);
-            }
-
-            pipelinePath = Path.Combine(diffusersPath, "pipelines", "stable_diffusion", "pipeline_onnx_stable_diffusion_img2img.py");
-            text = File.ReadAllText(pipelinePath);
-
-            if (text.SplitIntoLines()[0].Trim() != marker)
-            {
-                text = text.Replace("    safety_checker: OnnxRuntimeModel", "    # safety_checker: OnnxRuntimeModel");
-                text = text.Replace("    safety_checker=safety_checker", "    # safety_checker=safety_checker");
-                text = text.Replace("    if self.safety_checker is not None", "    if False");
-                text = text.Replace("    if safety_checker is None", "    if False");
-                text = text.Replace("    feature_extractor: CLIPFeatureExtractor", "    # feature_extractor: CLIPFeatureExtractor");
-                text = text.Replace("    feature_extractor=feature_extractor,", "    # feature_extractor=feature_extractor,");
-                File.WriteAllText(pipelinePath, $"{marker}{Environment.NewLine}{text}");
-                Logger.Log($"Patched {Path.GetFileName(pipelinePath)}", true);
-            }
-
-            pipelinePath = Path.Combine(diffusersPath, "pipelines", "stable_diffusion", "pipeline_stable_diffusion.py");
-            text = File.ReadAllText(pipelinePath);
-
-            if (text.SplitIntoLines()[0].Trim() != marker)
-            {
-                text = text.Replace("    safety_checker: StableDiffusionSafetyChecker", "    # safety_checker: StableDiffusionSafetyChecker");
-                text = text.Replace("    feature_extractor: CLIPFeatureExtractor,", "    # feature_extractor: CLIPFeatureExtractor,");
-                text = text.Replace("    feature_extractor=feature_extractor", "    # feature_extractor=feature_extractor");
-                text = text.Replace("    safety_checker=safety_checker", "    # safety_checker=safety_checker");
-                text = text.Replace("    if self.safety_checker is not None", "    if False");
-                text = text.Replace("    if safety_checker is None", "    if False");
-                File.WriteAllText(pipelinePath, $"{marker}{Environment.NewLine}{text}");
-                Logger.Log($"Patched {Path.GetFileName(pipelinePath)}", true);
             }
         }
     }

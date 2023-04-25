@@ -226,16 +226,20 @@ namespace StableDiffusionGui.Implementations
 
         public static void LoadEmbeddingTriggerTable(string logLine, bool print = false)
         {
-            InvokeAi.EmbeddingsFilesTriggers.Clear();
-            var split = logLine.Split(Constants.LogMsgs.Invoke.TiTriggers).Where(s => s.IsNotEmpty()).ToArray();
+            if (logLine.IsEmpty())
+                return;
 
-            if (split.Length < 2)
+            string text = logLine.Split(Constants.LogMsgs.Invoke.TiTriggers).Last();
+
+            if (text.IsEmpty())
             {
-                Logger.LogHidden($"Can't load TI triggers from log line because split length is <2: '{logLine}'");
+                Logger.LogHidden($"Can't load TI triggers from log line because split string is empty: '{logLine}'");
                 return;
             }
 
-            foreach (string entry in split[1].Split(','))
+            InvokeAi.EmbeddingsFilesTriggers.Clear();
+
+            foreach (string entry in text.Split(','))
             {
                 try
                 {
@@ -243,6 +247,7 @@ namespace StableDiffusionGui.Implementations
                     string trigger = triggerAndFile[0].Trim().Remove("<").Remove(">");
                     string file = Path.ChangeExtension(triggerAndFile[1].Trim(), null);
                     InvokeAi.EmbeddingsFilesTriggers[file] = trigger;
+                    Logger.LogIf($"Mapped TI file to trigger: {file} => {trigger}", Program.Debug);
                 }
                 catch(Exception ex)
                 {

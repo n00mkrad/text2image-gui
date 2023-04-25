@@ -203,7 +203,7 @@ namespace StableDiffusionGui.Forms
             if (img == null)
                 return;
 
-            Size targetSize = TextToImage.CurrentTaskSettings.Params["res"].FromJson<Size>();
+            Size targetSize = TextToImage.CurrentTaskSettings.Res;
             Size scaleSize = Config.Instance.InitImageRetainAspectRatio ? ImgMaths.FitIntoFrame(img.Size, targetSize) : targetSize;
             img = ImgUtils.ScaleAndPad(ImgUtils.GetMagickImage(img), scaleSize, targetSize).ToBitmap();
 

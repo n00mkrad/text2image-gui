@@ -36,20 +36,18 @@ namespace StableDiffusionGui.Ui
         /// <returns> If inpainting was enabled </returns>
         public static bool PrepareInpaintingIfEnabled(TtiSettings settings)
         {
-            List<string> initImgs = settings.Params["initImgs"].FromJson<List<string>>();
-
-            if (initImgs == null || !initImgs.Any())
+            if (settings.InitImgs == null || !settings.InitImgs.Any())
                 return false;
 
-            if (settings.Params["inpainting"].FromJson<Enums.StableDiffusion.ImgMode>() == Enums.StableDiffusion.ImgMode.ImageMask)
+            if (settings.ImgMode == Enums.StableDiffusion.ImgMode.ImageMask)
             {
-                if (initImgs.Count > 1)
+                if (settings.InitImgs.Length > 1)
                 {
-                    Logger.Log($"Inpainting is currently only available when using a single image as input, but you are using {initImgs.Count}.");
+                    Logger.Log($"Inpainting is currently only available when using a single image as input, but you are using {settings.InitImgs.Length}.");
                     return false;
                 }
 
-                PrepareInpainting(initImgs[0], settings.Params["res"].FromJson<Size>());
+                PrepareInpainting(settings.InitImgs[0], settings.Res);
                 return true;
             }
 

@@ -29,16 +29,17 @@ namespace StableDiffusionGui.Ui
 
         public static Dictionary<string, string> Samplers = new Dictionary<string, string>
         {
-            { Enums.StableDiffusion.Sampler.K_Euler_A.ToString(), "Euler Ancestral" },
-            { Enums.StableDiffusion.Sampler.K_Euler.ToString(), "Euler" },
-            { Enums.StableDiffusion.Sampler.K_Dpmpp_2.ToString(), "DPM++ 2" },
-            // { Enums.StableDiffusion.Sampler.K_Dpmpp_2_A.ToString(), "DPM++ 2 Ancestral" },
-            { Enums.StableDiffusion.Sampler.K_Lms.ToString(), "LMS" },
+            { Enums.StableDiffusion.Sampler.Euler.ToString(), "Euler" },
+            { Enums.StableDiffusion.Sampler.Euler_A.ToString(), "Euler Ancestral" },
+            { Enums.StableDiffusion.Sampler.K_Euler.ToString(), "Euler Karras" },
+            { Enums.StableDiffusion.Sampler.Dpmpp_2M.ToString(), "DPM++ 2M" },
+            { Enums.StableDiffusion.Sampler.K_Dpmpp_2M.ToString(), "DPM++ 2M Karras" },
+            { Enums.StableDiffusion.Sampler.Lms.ToString(), "LMS" },
             { Enums.StableDiffusion.Sampler.Ddim.ToString(), "DDIM" },
             { Enums.StableDiffusion.Sampler.Plms.ToString(), "PLMS" },
-            { Enums.StableDiffusion.Sampler.K_Heun.ToString(), "Heun" },
-            { Enums.StableDiffusion.Sampler.K_Dpm_2.ToString(), "DPM 2" },
-            { Enums.StableDiffusion.Sampler.K_Dpm_2_A.ToString(), "DPM 2 Ancestral" },
+            { Enums.StableDiffusion.Sampler.Heun.ToString(), "Heun" },
+            { Enums.StableDiffusion.Sampler.Dpm_2.ToString(), "DPM 2" },
+            { Enums.StableDiffusion.Sampler.Dpm_2_A.ToString(), "DPM 2 Ancestral" },
         };
 
         public static Dictionary<string, string> PostProcSettingsUiStrings = new Dictionary<string, string>
