@@ -644,7 +644,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderScale.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScale.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScale.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderScale.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderScale.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScale.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScale.Name = "textboxSliderScale";
@@ -791,7 +791,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderInitStrength.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderInitStrength.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderInitStrength.Location = new System.Drawing.Point(308, 2);
+            this.textboxSliderInitStrength.Location = new System.Drawing.Point(308, 4);
             this.textboxSliderInitStrength.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderInitStrength.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderInitStrength.Name = "textboxSliderInitStrength";
@@ -1311,7 +1311,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderScaleImg.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScaleImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScaleImg.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScaleImg.Location = new System.Drawing.Point(308, 2);
+            this.textboxSliderScaleImg.Location = new System.Drawing.Point(308, 4);
             this.textboxSliderScaleImg.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScaleImg.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScaleImg.Name = "textboxSliderScaleImg";
@@ -2274,7 +2274,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderSteps.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderSteps.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderSteps.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderSteps.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderSteps.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderSteps.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderSteps.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderSteps.Name = "textboxSliderSteps";
@@ -2320,7 +2320,7 @@ namespace StableDiffusionGui.Forms
             this.sliderSteps.Value = 20;
             this.sliderSteps.ValueBox = this.textboxSliderSteps;
             this.sliderSteps.ValueStep = new decimal(new int[] {
-            5,
+            1,
             0,
             0,
             0});

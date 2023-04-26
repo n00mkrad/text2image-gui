@@ -128,7 +128,6 @@ namespace StableDiffusionGui.Forms
             bool adv = Config.Instance.AdvancedUi;
             upDownIterations.Maximum = !adv ? 10000 : 100000;
             sliderSteps.ActualMaximum = !adv ? 120 : 500;
-            sliderSteps.ChangeStep(!adv ? 5 : 1);
             sliderScale.ActualMaximum = !adv ? 25 : 50;
             var validResolutions = MainUi.GetResolutions(320, adv ? 4096 : 2048).Select(i => i.ToString());
             comboxResW.SetItems(validResolutions, UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.First);

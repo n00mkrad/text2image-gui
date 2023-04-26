@@ -77,8 +77,8 @@ namespace StableDiffusionGui.Io
         {
             MultiPromptsSameSeed = true;
             InitStrength = 0.4f;
-            Steps = 25;
-            Scale = 8f;
+            Steps = 12;
+            Scale = 7.5f;
             OutPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), "SDGUI");
             FavsPath = Path.Combine(OutPath, Constants.Dirs.ImgFavs);
             Iterations = 5;
