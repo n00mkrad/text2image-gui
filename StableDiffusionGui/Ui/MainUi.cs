@@ -9,6 +9,7 @@ using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Properties;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -52,7 +53,7 @@ namespace StableDiffusionGui.Ui
             }
         }
 
-        public static List<TtiSettings> Queue = new List<TtiSettings>();
+        public static ConcurrentQueue<TtiSettings> Queue = new ConcurrentQueue<TtiSettings>();
         public static string GpuInfo = "";
 
         public static List<int> GetResolutions(int min, int max)

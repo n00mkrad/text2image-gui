@@ -14,6 +14,7 @@ using StableDiffusionGui.Main;
 using ZetaLongPaths;
 using StableDiffusionGui.Data;
 using Newtonsoft.Json.Converters;
+using System.Collections.Concurrent;
 
 namespace StableDiffusionGui
 {
@@ -655,6 +656,14 @@ namespace StableDiffusionGui
         public static List<T> AsList<T> (this T obj)
         {
             return obj.AsArray().ToList();
+        }
+
+        public static void Clear<T> (this ConcurrentQueue<T> queue)
+        {
+            while (queue.TryDequeue(out _))
+            {
+                // Do nothing, just keep dequeuing until the queue is empty
+            }
         }
     }
 }

@@ -161,7 +161,7 @@ namespace StableDiffusionGui.Forms
                             return;
                         }
 
-                        await TextToImage.RunTti(MainUi.Queue);
+                        await TextToImage.RunTti();
                     }
                     else
                     {

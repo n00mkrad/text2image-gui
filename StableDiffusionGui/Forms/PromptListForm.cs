@@ -4,6 +4,7 @@ using StableDiffusionGui.Main;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -14,17 +15,17 @@ namespace StableDiffusionGui.Forms
     public partial class PromptListForm : CustomForm
     {
         public enum ListMode { History, Queue }
-        private ListMode _promptListMode = ListMode.History;
+        public ListMode PromptListMode = ListMode.History;
 
         public PromptListForm(ListMode mode)
         {
-            _promptListMode = mode;
+            PromptListMode = mode;
             InitializeComponent();
         }
 
         private void PromptListForm_Load(object sender, EventArgs e)
         {
-            if (_promptListMode == ListMode.History)
+            if (PromptListMode == ListMode.History)
             {
                 Text = "Prompt History";
                 btnAddPromptsToQueue.Visible = false;
@@ -32,7 +33,7 @@ namespace StableDiffusionGui.Forms
                 panelFilter.Location = new System.Drawing.Point(570, panelFilter.Location.Y);
             }
 
-            if (_promptListMode == ListMode.Queue)
+            if (PromptListMode == ListMode.Queue)
             {
                 Text = "Prompt Queue";
                 btnAddPromptsToQueue.Visible = true;
@@ -49,22 +50,24 @@ namespace StableDiffusionGui.Forms
             Refresh();
             TabOrderInit(new List<Control>() { checkboxEnableHistory, promptListView }, 0);
 
-            if (_promptListMode == ListMode.History)
+            if (PromptListMode == ListMode.History)
                 LoadPromptHistory();
-            if (_promptListMode == ListMode.Queue)
+            if (PromptListMode == ListMode.Queue)
                 LoadQueue();
         }
 
-        private void LoadPromptHistory(string filter = "")
+        private void LoadPromptHistory()
         {
+            string filter = textboxFilter.Text.Trim();
             promptListView.Items.Clear();
             var items = Filter(PromptHistory.History, filter).Select(settings => new ListViewItem() { Text = settings.ToString(), Tag = settings });
             promptListView.Items.AddRange(items.ToArray());
             LoadTooltips();
         }
 
-        private void LoadQueue(string filter = "")
+        public void LoadQueue()
         {
+            string filter = textboxFilter.Text.Trim();
             promptListView.Items.Clear();
             var items = Filter(MainUi.Queue, filter).Select(x => new ListViewItem() { Text = x.ToString(), Tag = x });
             promptListView.Items.AddRange(items.ToArray());
@@ -96,30 +99,41 @@ namespace StableDiffusionGui.Forms
 
         private void deleteSelectedToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (_promptListMode == ListMode.History)
+            if (PromptListMode == ListMode.History)
             {
                 PromptHistory.Delete(promptListView.CheckedItems.Cast<ListViewItem>().Select(x => (TtiSettings)x.Tag).ToList());
                 PromptHistory.Delete(promptListView.SelectedItems.Cast<ListViewItem>().Select(x => (TtiSettings)x.Tag).ToList());
                 LoadPromptHistory();
             }
 
-            if (_promptListMode == ListMode.Queue)
+            if (PromptListMode == ListMode.Queue)
             {
-                MainUi.Queue = MainUi.Queue.Except(promptListView.CheckedItems.Cast<ListViewItem>().Select(x => (TtiSettings)x.Tag).ToList()).ToList();
-                MainUi.Queue = MainUi.Queue.Except(promptListView.SelectedItems.Cast<ListViewItem>().Select(x => (TtiSettings)x.Tag).ToList()).ToList();
+                var checkedItems = new HashSet<TtiSettings>(promptListView.CheckedItems.Cast<ListViewItem>().Select(x => (TtiSettings)x.Tag));
+                var selectedItems = new HashSet<TtiSettings>(promptListView.SelectedItems.Cast<ListViewItem>().Select(x => (TtiSettings)x.Tag));
+
+                TtiSettings item;
+                ConcurrentQueue<TtiSettings> newQueue = new ConcurrentQueue<TtiSettings>();
+
+                while (MainUi.Queue.TryDequeue(out item))
+                {
+                    if (!checkedItems.Contains(item) && !selectedItems.Contains(item))
+                        newQueue.Enqueue(item);
+                }
+
+                MainUi.Queue = newQueue;
                 LoadQueue();
             }
         }
 
         private void deleteAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (_promptListMode == ListMode.History)
+            if (PromptListMode == ListMode.History)
             {
                 PromptHistory.DeleteAll();
                 LoadPromptHistory();
             }
 
-            if (_promptListMode == ListMode.Queue)
+            if (PromptListMode == ListMode.Queue)
             {
                 MainUi.Queue.Clear();
                 LoadQueue();
@@ -139,7 +153,7 @@ namespace StableDiffusionGui.Forms
                     loadPromptAndSettingsIntoGUIToolStripMenuItem.Visible = !multiSelect;
                     copyPromptToolStripMenuItem.Visible = !multiSelect;
 
-                    if (_promptListMode == ListMode.History)
+                    if (PromptListMode == ListMode.History)
                         menuStripPromptHistory.Show(Cursor.Position);
                 }
             }
@@ -166,7 +180,7 @@ namespace StableDiffusionGui.Forms
             if (!settings.Prompts.Where(x => !string.IsNullOrWhiteSpace(x)).Any())
                 return;
 
-            MainUi.Queue.Add(settings);
+            MainUi.Queue.Enqueue(settings);
             LoadQueue();
         }
 
@@ -186,10 +200,10 @@ namespace StableDiffusionGui.Forms
 
             _previousFilterText = t;
 
-            if (_promptListMode == ListMode.History)
-                LoadPromptHistory(t);
-            else if (_promptListMode == ListMode.Queue)
-                LoadQueue(t);
+            if (PromptListMode == ListMode.History)
+                LoadPromptHistory();
+            else if (PromptListMode == ListMode.Queue)
+                LoadQueue();
         }
 
         private void copyPromptToolStripMenuItem_Click(object sender, EventArgs e)

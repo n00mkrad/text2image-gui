@@ -24,10 +24,12 @@ namespace StableDiffusionGui.Main
         private static TtiTaskInfo _currTask = null;
         private static TtiSettings _currSettings = null;
 
-        public static void Init ()
+        public static void Init(bool clearImages)
         {
-            _outImgs.Clear();
-            _config = Config.Instance.Clone();
+            if (clearImages)
+                _outImgs.Clear();
+
+            _config = TextToImage.CurrentTask.Config;
             _currTask = TextToImage.CurrentTask;
             _currSettings = TextToImage.CurrentTaskSettings;
         }
@@ -81,38 +83,7 @@ namespace StableDiffusionGui.Main
             Logger.Log("ExportLoop END", true);
         }
 
-        public static async Task WaitLoop(int startingImgCount, int targetImgCount)
-        {
-            Logger.Log("ExportLoop START", true);
-
-            await Task.Delay(_loopWaitBeforeStartMs);
-
-            while (!TextToImage.Canceled)
-            {
-                try
-                {
-                    bool running = (_currTask.ImgCount - startingImgCount) < targetImgCount;
-
-                    if (!running && !TtiUtils.ImportBusy)
-                    {
-                        Logger.Log($"ExportLoop: Breaking. Process running: {running}", true);
-                        break;
-                    }
-
-                    await Task.Delay(_loopWaitTimeMs);
-                }
-                catch (Exception ex)
-                {
-                    Logger.Log($"Image export error:\n{ex.Message}");
-                    Logger.Log($"{ex.StackTrace}", true);
-                    break;
-                }
-            }
-
-            Logger.Log("ExportLoop END", true);
-        }
-
-        public static void Export (string path)
+        public static void Export(string path)
         {
             Export(new[] { new ZlpFileInfo(path) }.ToList());
         }

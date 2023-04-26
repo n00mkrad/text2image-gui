@@ -1,8 +1,10 @@
 ﻿using StableDiffusionGui.Data;
+using StableDiffusionGui.Forms;
 using StableDiffusionGui.Implementations;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
+using StableDiffusionGui.Properties;
 using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
@@ -10,6 +12,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
 namespace StableDiffusionGui.Main
@@ -22,46 +25,53 @@ namespace StableDiffusionGui.Main
         public static long PreviousSeed = -1;
         public static bool Canceled = false;
 
-        public static async Task RunTti(TtiSettings settings)
+        public static async Task RunTti(TtiSettings settings = null)
         {
-            Inpainting.PrepareInpaintingIfEnabled(settings);
-
-            if (Canceled)
-                return;
-
-            await RunTti(settings.AsList());
-        }
-
-        public static async Task RunTti(List<TtiSettings> batches)
-        {
-            if (batches == null || batches.Count < 1)
-                return;
-
             Program.SetState(Program.BusyState.ImageGeneration);
+            ConfigInstance config = Config.Instance.Clone();
+            bool fromQueue = settings == null;
+            int iteration = 0;
 
-            CurrentTask = new TtiTaskInfo
+            do
             {
-                StartTime = DateTime.Now,
-                OutDir = Config.Instance.OutPath,
-                SubfoldersPerPrompt = Config.Instance.FolderPerPrompt,
-                IgnoreWildcardsForFilenames = Config.Instance.FilenameIgnoreWildcards,
-                TargetImgCount = batches.Sum(x => x.GetTargetImgCount()),
-            };
+                TtiSettings s = null;
 
-            if (Config.Instance.FolderPerSession)
-                CurrentTask.OutDir = Path.Combine(CurrentTask.OutDir, Paths.SessionTimestamp);
+                if (fromQueue) // Pull from queue
+                    MainUi.Queue.TryDequeue(out s);
+                else
+                    s = settings; // Use settings
 
-            foreach (TtiSettings s in batches)
-            {
+                Application.OpenForms.OfType<PromptListForm>().ToList().Where(f => f.PromptListMode == PromptListForm.ListMode.Queue).ToList().ForEach(f => f.LoadQueue());
+
+                if (s == null)
+                    continue;
+
+                CurrentTask = new TtiTaskInfo
+                {
+                    StartTime = DateTime.Now,
+                    OutDir = config.OutPath,
+                    TargetImgCount = s.GetTargetImgCount(),
+                    Config = config,
+                };
+
+                if (config.FolderPerSession)
+                    CurrentTask.OutDir = Path.Combine(CurrentTask.OutDir, Paths.SessionTimestamp);
+
                 if (!ValidateSettings(s))
                     continue;
 
                 TtiUtils.ShowPromptWarnings(s.Prompts.ToList());
 
+                Inpainting.PrepareInpaintingIfEnabled(s);
+
+                if (Canceled)
+                    return;
+
+                iteration++;
                 PromptHistory.Add(s);
 
-                if (batches.Count > 1)
-                    Logger.Log($"Running queue entry with {s.Prompts.Length} prompt{(s.Prompts.Length != 1 ? "s" : "")}...");
+                if (fromQueue)
+                    Logger.Log($"Running queue task {iteration} with {s.Prompts.Length} prompt{(s.Prompts.Length != 1 ? "s" : "")}, {MainUi.Queue.Count} remaining...");
 
                 string tempOutDir = Path.Combine(Paths.GetSessionDataPath(), "out");
                 IoUtils.TryDeleteIfExists(tempOutDir);
@@ -83,7 +93,7 @@ namespace StableDiffusionGui.Main
                     case Implementation.InstructPixToPix: tasks.Add(InstructPixToPix.Run(s, tempOutDir)); break;
                 }
 
-                ImageExport.Init();
+                ImageExport.Init(!fromQueue || (fromQueue && iteration == 1));
 
                 if (s.Implementation != Implementation.InvokeAi)
                 {
@@ -98,9 +108,8 @@ namespace StableDiffusionGui.Main
                     while (!Canceled && CurrentTask.ImgCount < targetImgCount)
                         await Task.Delay(100);
                 }
-               
-                MainUi.Queue = MainUi.Queue.Except(s.AsList()).ToList(); // Remove from queue
-            }
+
+            } while (fromQueue && MainUi.Queue.Any());
 
             Done();
         }

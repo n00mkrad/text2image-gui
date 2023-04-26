@@ -287,9 +287,6 @@ namespace StableDiffusionGui.Forms
 
         private void btnQueue_Click(object sender, EventArgs e)
         {
-            if (Program.Busy)
-                return;
-
             new PromptListForm(PromptListForm.ListMode.Queue).ShowDialogForm();
         }
 
@@ -319,7 +316,7 @@ namespace StableDiffusionGui.Forms
             var settings = GetCurrentTtiSettings();
 
             if (settings.Prompts.Where(x => !string.IsNullOrWhiteSpace(x)).Any())
-                MainUi.Queue.Add(settings);
+                MainUi.Queue.Enqueue(settings);
         }
 
         private void btnQueue_MouseDown(object sender, MouseEventArgs e)
