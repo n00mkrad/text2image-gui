@@ -30,6 +30,7 @@ namespace StableDiffusionGui.Data
         public long Seed { get; set; } = -1;
         public string InitImgName { get; set; } = "";
         public float InitStrength { get; set; } = 0f;
+        public string Model { get; set; } = "";
         public Enums.StableDiffusion.SeamlessMode SeamlessMode { get; set; } = Enums.StableDiffusion.SeamlessMode.Disabled;
         public Enums.Utils.FaceTool FaceTool { get; set; } = (Enums.Utils.FaceTool)(-1);
 
@@ -55,14 +56,15 @@ namespace StableDiffusionGui.Data
             try
             {
                 IEnumerable<MetadataExtractor.Directory> directories = MetadataExtractor.ImageMetadataReader.ReadMetadata(path);
-                MetadataExtractor.Directory pngTextDir = directories.Where(x => x.Name.Lower() == "png-text").FirstOrDefault();
+                List<MetadataExtractor.Directory> pngTextDirs = directories.Where(x => x.Name.Lower() == "png-text").ToList();
 
-                if (pngTextDir == null)
+                if (!pngTextDirs.Any())
                     return;
 
-                AllText = string.Join(Environment.NewLine, pngTextDir.Tags.Select(tag => tag.Description));
+                var tags = pngTextDirs.SelectMany(textDir => textDir.Tags);
+                AllText = string.Join(Environment.NewLine, tags.Select(tag => tag.Description));
 
-                foreach (var tag in pngTextDir.Tags)
+                foreach (var tag in tags)
                 {
                     if (tag.Description.Contains(_tags[MetadataType.InvokeJson]))
                     {
@@ -70,7 +72,7 @@ namespace StableDiffusionGui.Data
                         return;
                     }
 
-                    if (tag.Description.Contains(_tags[MetadataType.InvokeDream]))
+                    if (tag.Description.Contains(_tags[MetadataType.InvokeDream]) && !tags.Any(t => t.Description.Contains(_tags[MetadataType.InvokeJson])))
                     {
                         LoadInfoInvokeAi(tag.Description.Split(_tags[MetadataType.InvokeDream]).Last());
                         return;
@@ -122,7 +124,7 @@ namespace StableDiffusionGui.Data
                 InitStrength = 1f - metadata.ImageData.StrengthSteps;
                 InitImgName = "";
                 FaceTool = InvokeGetFaceTool(metadata.ImageData.Facetool);
-
+                Model = metadata.ModelId;
             }
             catch (Exception ex)
             {

@@ -31,6 +31,9 @@ namespace StableDiffusionGui.Forms
             MainUi.CurrentInitImgPaths.Clear();
             comboxSeamless.SelectedIndex = meta.SeamlessMode == SeamlessMode.Disabled ? 0 : 1;
 
+            if (comboxModel.Items.Cast<object>().Any(item => item.ToString() == meta.Model))
+                comboxModel.Text = meta.Model;
+
             if (meta.InitStrength > 0f)
                 sliderInitStrength.ActualValue = (decimal)meta.InitStrength;
 

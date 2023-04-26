@@ -6,7 +6,6 @@ using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -64,7 +63,7 @@ namespace StableDiffusionGui.Forms
                 textboxInfo.Text += $"Resolution: {pictBox.Image.Size.AsString()}{n}";
                 textboxInfo.Text += $"Pixel Format: {pictBox.Image.PixelFormat.AsString()}{n}{n}";
 
-                if (!string.IsNullOrWhiteSpace(CurrentMetadata.Prompt))
+                if (CurrentMetadata.Prompt.IsNotEmpty())
                 {
                     textboxInfo.Text += $"{n}Prompt:{n}{CurrentMetadata.Prompt}{n}";
                     textboxInfo.Text += $"{n}Negative Prompt:{n}{CurrentMetadata.NegativePrompt}{n}";
@@ -74,15 +73,18 @@ namespace StableDiffusionGui.Forms
                     textboxInfo.Text += $"{n}Generated Resolution:{n}{CurrentMetadata.GeneratedResolution.Width}x{CurrentMetadata.GeneratedResolution.Height}{n}";
                     textboxInfo.Text += $"{n}Sampler:{n}{Strings.Samplers.Get(CurrentMetadata.Sampler, true, true)}{n}";
 
-                    if (!string.IsNullOrWhiteSpace(CurrentMetadata.InitImgName))
+                    if (CurrentMetadata.InitImgName.IsNotEmpty())
                     {
                         textboxInfo.Text += $"{n}Init Image:{n}{CurrentMetadata.InitImgName}{n}";
                         textboxInfo.Text += $"{n}Init Strength:{n}{CurrentMetadata.InitStrength}{n}";
                     }
+
+                    if (CurrentMetadata.Model.IsNotEmpty())
+                        textboxInfo.Text += $"{n}Model:{n}{CurrentMetadata.Model}{n}";
                 }
                 else
                 {
-                    if (!string.IsNullOrWhiteSpace(CurrentMetadata.AllText))
+                    if (CurrentMetadata.AllText.IsNotEmpty())
                         textboxInfo.Text += $"Unknown Metadata Found in Image:{Environment.NewLine}{CurrentMetadata.AllText}";
                     else
                         textboxInfo.Text += $"No Metadata Found in Image.";
