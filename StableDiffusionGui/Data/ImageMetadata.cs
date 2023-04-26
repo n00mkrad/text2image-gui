@@ -124,7 +124,7 @@ namespace StableDiffusionGui.Data
                 InitStrength = 1f - metadata.ImageData.StrengthSteps;
                 InitImgName = "";
                 FaceTool = InvokeGetFaceTool(metadata.ImageData.Facetool);
-                Model = metadata.ModelId;
+                // Model = metadata.ModelId;
             }
             catch (Exception ex)
             {
