@@ -372,8 +372,7 @@ namespace StableDiffusionGui.Forms
 
         private void viewLogInRealtimeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Application.OpenForms.Cast<Form>().Where(f => f is RealtimeLoggerForm).ToList().ForEach(f => f.Close());
-            new RealtimeLoggerForm().Show();
+            OpenLogViewerWindow();
         }
 
         private void fitWindowSizeToImageSizeToolStripMenuItem_Click(object sender, EventArgs e)
@@ -513,7 +512,8 @@ namespace StableDiffusionGui.Forms
         {
             TextBox textbox = InputUtils.IsHoldingShift ? textboxPromptNeg : textboxPrompt;
             textbox.Focus();
-            textbox.AppendText($"{(textbox.Text.TrimStart().Length == 0 ? "" : " ")}<{comboxEmbeddingList.Text}>");
+            textbox.AppendText($"{(textbox.Text.TrimStart().Length == 0 ? "" : ", ")}<{comboxEmbeddingList.Text}>");
+            btnEmbeddingAppend.Focus();
         }
 
         #endregion

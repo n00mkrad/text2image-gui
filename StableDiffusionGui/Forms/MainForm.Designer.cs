@@ -2280,7 +2280,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderSteps.Name = "textboxSliderSteps";
             this.textboxSliderSteps.Size = new System.Drawing.Size(35, 21);
             this.textboxSliderSteps.TabIndex = 92;
-            this.textboxSliderSteps.Text = "100";
+            this.textboxSliderSteps.Text = "20";
             // 
             // sliderSteps
             // 

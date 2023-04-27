@@ -243,6 +243,12 @@ namespace StableDiffusionGui.Forms
             menuStripLogs.Show(Cursor.Position);
         }
 
+        public void OpenLogViewerWindow ()
+        {
+            Application.OpenForms.Cast<Form>().Where(f => f is RealtimeLoggerForm).ToList().ForEach(f => f.Close());
+            new RealtimeLoggerForm().Show();
+        }
+
         public void HandleImageViewerClick(bool rightClick)
         {
             pictBoxImgViewer.Focus();

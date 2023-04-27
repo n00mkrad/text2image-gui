@@ -122,6 +122,12 @@ namespace StableDiffusionGui.Ui
                 return;
             }
 
+            if (keys == Keys.F11) // Hotkey: Open Log Viewer
+            {
+                Program.MainForm.OpenLogViewerWindow();
+                return;
+            }
+
             if (keys == Keys.F12) // Hotkey: Open settings
             {
                 new SettingsForm().ShowDialogForm();
