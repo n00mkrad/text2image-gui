@@ -106,7 +106,7 @@ namespace StableDiffusionGui.Data
             {
                 InvokeAiMetadata metadata = info.FromJson<InvokeAiMetadata>(NullValueHandling.Ignore, DefaultValueHandling.Include, true, true);
 
-                Prompt = metadata.ImageData.Prompt.First().Text;
+                Prompt = string.Join("", metadata.ImageData.Prompt.Select(p => p.Text));
 
                 if (Prompt.EndsWith("]") && Prompt.Contains(" [") && Prompt.Count(x => x == '[') == 1 && Prompt.Count(x => x == ']') == 1)
                 {
