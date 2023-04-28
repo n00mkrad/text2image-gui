@@ -126,10 +126,11 @@ namespace StableDiffusionGui.Forms
                 textboxClipsegMask, panelResizeGravity, labelResChange, btnResetRes, checkboxShowInitImg, panelModel }, imp);
 
             bool adv = Config.Instance.AdvancedUi;
-            upDownIterations.Maximum = !adv ? 10000 : 100000;
-            sliderSteps.ActualMaximum = !adv ? 120 : 500;
-            sliderScale.ActualMaximum = !adv ? 25 : 50;
-            var validResolutions = MainUi.GetResolutions(320, adv ? 4096 : 2048).Select(i => i.ToString());
+            upDownIterations.Maximum = !adv ? Config.IniInstance.IterationsMax : Config.IniInstance.IterationsMax * 10;
+            sliderSteps.ActualMaximum = !adv ? Config.IniInstance.StepsMax : Config.IniInstance.StepsMax * 4;
+            sliderScale.ActualMaximum = (decimal)(!adv ? Config.IniInstance.ScaleMax : Config.IniInstance.ScaleMax * 2);
+            int resMax = !adv ? Config.IniInstance.ResolutionMax : Config.IniInstance.ResolutionMax * 2;
+            var validResolutions = MainUi.GetResolutions(Config.IniInstance.ResolutionMin, resMax).Select(i => i.ToString());
             comboxResW.SetItems(validResolutions, UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.First);
             comboxResH.SetItems(validResolutions, UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.First);
 

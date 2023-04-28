@@ -64,6 +64,7 @@
         public class Files
         {
             public const string Config = "config.json";
+            public const string Ini = "settings.ini";
         }
 
         public class FileExts

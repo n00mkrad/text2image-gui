@@ -12,11 +12,15 @@ namespace StableDiffusionGui.Io
     {
         public static bool Ready = false;
         public static string ConfigPath = "";
+        public static string IniPath = "";
         public static ConfigInstance Instance = null;
+        public static IniInstance IniInstance = null;
 
         public static void Init()
         {
             ConfigPath = Path.Combine(Paths.GetDataPath(), Constants.Files.Config);
+            IniPath = Path.Combine(Constants.Files.Ini);
+            LoadIni();
             Load();
             Ready = true;
         }
@@ -43,6 +47,25 @@ namespace StableDiffusionGui.Io
                 await Task.Delay(500);
                 await Reset(retries, settingsForm);
             }
+        }
+
+        public static void LoadIni ()
+        {
+            try
+            {
+                if (File.Exists(IniPath))
+                {
+                    string text = File.ReadAllText(IniPath);
+                    IniInstance = new IniInstance(text);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogException(ex);
+            }
+
+            if (IniInstance == null)
+                IniInstance = new IniInstance();
         }
 
         public static void Load()

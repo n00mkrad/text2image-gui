@@ -304,6 +304,7 @@
     <Compile Include="Io\Config.cs" />
     <Compile Include="Io\ConfigInstance.cs" />
     <Compile Include="Io\ConfigParser.cs" />
+    <Compile Include="Io\IniInstance.cs" />
     <Compile Include="Io\IoUtils.cs" />
     <Compile Include="Io\Models.cs" />
     <Compile Include="Io\NmkdStreamWriter.cs" />
