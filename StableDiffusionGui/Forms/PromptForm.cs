@@ -8,13 +8,14 @@ namespace StableDiffusionGui.Forms
     {
         public string EnteredText { get; set; } = "";
 
-        public PromptForm(string title, string message, string defaultText)
+        public PromptForm(string title, string message, string defaultText, float widthMultiplier = 1f, float heightMultiplier = 1f)
         {
             InitializeComponent();
             Text = title;
             msgLabel.Text = message;
             textBox.Text = defaultText;
             AcceptButton = confirmBtn;
+            Size = new System.Drawing.Size((Size.Width * widthMultiplier).RoundToInt(), (Size.Height * heightMultiplier).RoundToInt());
         }
 
         private void PromptForm_Load(object sender, EventArgs e)

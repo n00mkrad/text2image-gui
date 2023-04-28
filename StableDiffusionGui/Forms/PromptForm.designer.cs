@@ -36,6 +36,9 @@ namespace StableDiffusionGui.Forms
             // 
             // msgLabel
             // 
+            this.msgLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.msgLabel.ForeColor = System.Drawing.Color.White;
             this.msgLabel.Location = new System.Drawing.Point(13, 13);
             this.msgLabel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 11);
@@ -48,6 +51,8 @@ namespace StableDiffusionGui.Forms
             // textBox
             // 
             this.textBox.AllowDrop = true;
+            this.textBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox.ForeColor = System.Drawing.Color.White;

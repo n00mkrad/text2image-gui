@@ -212,7 +212,7 @@ namespace StableDiffusionGui.Forms
 
         public void ModelDownloadPrompt(string text = "")
         {
-            var form = new PromptForm("Enter Model ID", "Enter a model repository ID\n(Example: \"runwayml/stable-diffusion-v1-5\").", text);
+            var form = new PromptForm("Enter Model ID or URL", "Enter a model repository ID or URL. \n(E.g. \"runwayml/stable-diffusion-v1-5\").", text, 1.4f, 1f);
             form.ShowDialog();
 
             if (form.DialogResult == DialogResult.OK)

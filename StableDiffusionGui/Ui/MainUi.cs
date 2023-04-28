@@ -217,12 +217,10 @@ namespace StableDiffusionGui.Ui
                 ((Action)(() =>
                 {
                     string text = Clipboard.GetText();
+
                     if (text.Trim().Contains("//huggingface.co/"))
-                    {
-                        var split = text.Split("huggingface.co/").Last().Split('/'); // Remove domain name, then split by slashes
-                        string repo = $"{split[0]}/{split[1]}"; // Take username and repo name, ignore anything after that (e.g. "/tree/main" would be ignored)
-                        Program.MainForm.ModelDownloadPrompt(repo);
-                    }
+                        Program.MainForm.ModelDownloadPrompt(text);
+
                 })).RunInTryCatch("HandlePaste Text Error:");
             }
             else
