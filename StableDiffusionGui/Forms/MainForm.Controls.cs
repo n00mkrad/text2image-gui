@@ -172,7 +172,7 @@ namespace StableDiffusionGui.Forms
             ConfigParser.SaveGuiElement(comboxModel, ref Config.Instance.Model);
         }
 
-        public void ReloadEmbeddings ()
+        public void ReloadEmbeddings()
         {
             IEnumerable<string> embeddings = Models.GetEmbeddings().Select(m => m.FormatIndependentName);
             comboxEmbeddingList.SetItems(new[] { "None" }.Concat(embeddings), UiExtensions.SelectMode.Retain);
@@ -243,7 +243,7 @@ namespace StableDiffusionGui.Forms
             menuStripLogs.Show(Cursor.Position);
         }
 
-        public void OpenLogViewerWindow ()
+        public void OpenLogViewerWindow()
         {
             Application.OpenForms.Cast<Form>().Where(f => f is RealtimeLoggerForm).ToList().ForEach(f => f.Close());
             new RealtimeLoggerForm().Show();
@@ -292,6 +292,10 @@ namespace StableDiffusionGui.Forms
                 bar = progressBar;
 
             percent = percent.Clamp(0, 100);
+
+            if (bar.Value == percent)
+                return;
+
             bar.Value = percent;
             bar.Refresh();
 

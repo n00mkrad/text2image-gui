@@ -18,24 +18,28 @@ namespace StableDiffusionGui.Forms
     {
         public void LoadMetadataIntoUi(ImageMetadata meta)
         {
-            textboxPrompt.Text = meta.Prompt;
-            textboxPromptNeg.Text = meta.NegativePrompt;
-            sliderSteps.ActualValue = meta.Steps;
-            sliderScale.ActualValue = (decimal)meta.Scale;
-            sliderScaleImg.ActualValue = (decimal)meta.ScaleImg;
-            comboxResW.Text = meta.GeneratedResolution.Width.ToString();
-            comboxResH.Text = meta.GeneratedResolution.Height.ToString();
-            upDownSeed.Value = meta.Seed;
-            comboxSampler.SetIfTextMatches(meta.Sampler, true, Strings.Samplers);
-            // MainUi.CurrentInitImgPaths = new[] { meta.InitImgName }.Where(x => string.IsNullOrWhiteSpace(x)).ToList(); // Does this even work if we only store the temp path?
-            MainUi.CurrentInitImgPaths.Clear();
-            comboxSeamless.SelectedIndex = meta.SeamlessMode == SeamlessMode.Disabled ? 0 : 1;
+            ((Action)(() =>
+            {
+                textboxPrompt.Text = meta.Prompt;
+                textboxPromptNeg.Text = meta.NegativePrompt;
+                sliderSteps.ActualValue = meta.Steps;
+                sliderScale.ActualValue = (decimal)meta.Scale;
+                sliderScaleImg.ActualValue = (decimal)meta.ScaleImg;
+                comboxResW.Text = meta.GeneratedResolution.Width.ToString();
+                comboxResH.Text = meta.GeneratedResolution.Height.ToString();
+                upDownSeed.Value = meta.Seed;
+                comboxSampler.SetIfTextMatches(meta.Sampler, true, Strings.Samplers);
+                // MainUi.CurrentInitImgPaths = new[] { meta.InitImgName }.Where(x => string.IsNullOrWhiteSpace(x)).ToList(); // Does this even work if we only store the temp path?
+                MainUi.CurrentInitImgPaths.Clear();
+                comboxSeamless.SelectedIndex = meta.SeamlessMode == SeamlessMode.Disabled ? 0 : 1;
 
-            if (comboxModel.Items.Cast<object>().Any(item => item.ToString() == meta.Model))
-                comboxModel.Text = meta.Model;
+                if (comboxModel.Items.Cast<object>().Any(item => item.ToString() == meta.Model))
+                    comboxModel.Text = meta.Model;
 
-            if (meta.InitStrength > 0f)
-                sliderInitStrength.ActualValue = (decimal)meta.InitStrength;
+                if (meta.InitStrength > 0f)
+                    sliderInitStrength.ActualValue = (decimal)meta.InitStrength;
+
+            })).RunWithUiStoppedShowErrors(this, "Error loading metadata into UI:");
 
             TryRefreshUiState();
         }
