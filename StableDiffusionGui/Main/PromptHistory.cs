@@ -62,7 +62,7 @@ namespace StableDiffusionGui.Main
 
         private static string GetJsonPath()
         {
-            return Path.Combine(Paths.GetDataPath(), "promptHistory.json");
+            return Path.Combine(Paths.GetDataPath(), Constants.Files.PromptHistory);
         }
     }
 }

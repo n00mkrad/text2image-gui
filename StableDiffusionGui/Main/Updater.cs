@@ -159,8 +159,11 @@ namespace StableDiffusionGui.Main
             {
                 try
                 {
-                    string targetPath = Path.Combine(targetDataDir, Constants.Files.Config);
-                    File.Copy(Path.Combine(Paths.GetDataPath(), Constants.Files.Config), targetPath);
+                    string targetPathCfg = Path.Combine(targetDataDir, Constants.Files.Config);
+                    File.Copy(Path.Combine(Paths.GetDataPath(), Constants.Files.Config), targetPathCfg);
+
+                    string targetPathIni = Path.Combine(newInstallPath, Constants.Files.Ini);
+                    File.Copy(Path.Combine(Paths.GetExeDir(), Constants.Files.Ini), targetPathIni);
                 }
                 catch (Exception ex)
                 {
@@ -168,6 +171,18 @@ namespace StableDiffusionGui.Main
                     Logger.Log(ex.StackTrace, true, false, Constants.Lognames.Installer);
                     return false;
                 }
+            }
+
+            try
+            {
+                string targetPathPromptHistory = Path.Combine(targetDataDir, Constants.Files.PromptHistory);
+                File.Copy(Path.Combine(Paths.GetDataPath(), Constants.Files.PromptHistory), targetPathPromptHistory);
+            }
+            catch (Exception ex)
+            {
+                Logger.Log($"Error moving prompt history: {ex.Message}");
+                Logger.Log(ex.StackTrace, true, false, Constants.Lognames.Installer);
+                return false;
             }
 
             return true;
