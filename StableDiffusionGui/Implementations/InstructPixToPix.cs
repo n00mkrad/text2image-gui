@@ -8,13 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
-using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using static StableDiffusionGui.Main.Constants;
-using static StableDiffusionGui.Main.Enums.StableDiffusion;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace StableDiffusionGui.Implementations
 {
@@ -24,17 +19,6 @@ namespace StableDiffusionGui.Implementations
         {
             try
             {
-                // string[] s.InitImgs = parameters.FromJson<string[]>("s.InitImgs");
-                // float[] initStrengths = parameters.FromJson<float[]>("initStrengths").Select(n => 1f - n).ToArray();
-                // int[] steps = parameters.FromJson<int[]>("steps");
-                // float[] scalesTxt = parameters.FromJson<float[]>("scales");
-                // float[] scalesImg = parameters.FromJson<float[]>("scalesImg");
-                // long seed = parameters.FromJson<long>("seed");
-                // bool lockSeed = parameters.FromJson<bool>("lockSeed"); // Lock seed (disable auto-increment)
-                // string sampler = parameters.FromJson<string>("sampler");
-                // Size res = parameters.FromJson<Size>("res");
-                // string model = parameters.FromJson<string>("model");
-
                 OrderedDictionary initImages = s.InitImgs != null && s.InitImgs.Length > 0 ? await TtiUtils.CreateResizedInitImagesIfNeeded(s.InitImgs.ToList(), s.Res) : null;
 
                 if (initImages == null || initImages.Count < 1)

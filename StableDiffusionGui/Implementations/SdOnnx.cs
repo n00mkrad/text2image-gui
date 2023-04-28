@@ -23,21 +23,7 @@ namespace StableDiffusionGui.Implementations
         {
             try
             {
-                // string[] initImgs = parameters.FromJson<string[]>("initImgs");
-                // float[] initStrengths = parameters.FromJson<float[]>("initStrengths").Select(n => 1f - n).ToArray();
-                // int[] steps = parameters.FromJson<int[]>("steps");
-                // float[] scales = parameters.FromJson<float[]>("scales");
-                // long seed = parameters.FromJson<long>("seed");
-                // string sampler = parameters.FromJson<string>("sampler");
-                // Size res = parameters.FromJson<Size>("res");
-                // var seamless = parameters.FromJson<SeamlessMode>("seamless");
-                // string model = parameters.FromJson<string>("model");
-                // bool lockSeed = parameters.FromJson<bool>("lockSeed");
-                // ImgMode inpaint = parameters.FromJson<ImgMode>("inpainting");
-
-
                 float[] initStrengths = s.InitStrengths.Select(n => 1f - n).ToArray();
-
                 var cachedModels = Models.GetModels(Enums.Models.Type.Normal, Implementation.DiffusersOnnx);
                 Model modelDir = TtiUtils.CheckIfCurrentSdModelExists();
 
@@ -71,7 +57,7 @@ namespace StableDiffusionGui.Implementations
 
                         foreach (float scale in s.ScalesTxt)
                         {
-                            args["scale"] = $"{scale.ToStringDot()}";
+                            args["scaleTxt"] = $"{scale.ToStringDot()}";
 
                             foreach (int stepCount in s.Steps)
                             {

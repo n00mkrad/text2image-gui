@@ -30,24 +30,7 @@ namespace StableDiffusionGui.Implementations
             try
             {
                 float[] initStrengths = s.InitStrengths.Select(n => 1f - n).ToArray(); // List of init strength values to run
-                // int[] steps = parameters.FromJson<int[]>("steps"); // List of diffusion step counts
-                // float[] scales = parameters.FromJson<float[]>("scales"); // List of CFG scale values to run
-                // long seed = parameters.FromJson<long>("seed"); // Initial seed
-                // string sampler = parameters.FromJson<string>("sampler"); // Sampler
-                // var res = parameters.FromJson<Size>("res"); // Image resolution
-                // var seamless = parameters.FromJson<Enums.StableDiffusion.SeamlessMode>("seamless"); // Seamless generation mode
-                // var symmetry = parameters.FromJson<Enums.StableDiffusion.SymmetryMode>("symmetry"); // Symmetry mode
-                // string model = parameters.FromJson<string>("model"); // Model name
-                // bool hiresFix = parameters.FromJson<bool>("hiresFix"); // Enable high-resolution fix
-                // bool lockSeed = parameters.FromJson<bool>("lockSeed"); // Lock seed (disable auto-increment)
                 string vae = s.Vae.NullToEmpty().Replace("None", ""); // VAE model name
-                // float perlin = parameters.FromJson<float>("perlin"); // Perlin noise blend value
-                // int threshold = parameters.FromJson<int>("threshold"); // Threshold value
-                // var inpaint = parameters.FromJson<Enums.StableDiffusion.ImgMode>("inpainting"); // Inpainting mode
-                // string clipSegMask = parameters.FromJson<string>("clipSegMask"); // ClipSeg text-based masking prompt
-                // var resizeGravity = parameters.FromJson<ImageMagick.Gravity>("resizeGravity", (ImageMagick.Gravity)(-1)); // Inpainting mode
-                // var modelArch = parameters.FromJson<Enums.Models.SdArch>("modelArch", Enums.Models.SdArch.Automatic); // SD Ckpt Architecture
-
                 var allModels = Models.GetModelsAll();
                 var cachedModels = allModels.Where(m => m.Type == Enums.Models.Type.Normal).ToList();
                 var cachedModelsVae = allModels.Where(m => m.Type == Enums.Models.Type.Vae).ToList();
@@ -62,8 +45,8 @@ namespace StableDiffusionGui.Implementations
                 long startSeed = s.Seed;
                 s.Prompts = s.Prompts.Select(p => InvokeAiUtils.GetCombinedPrompt(p, s.NegativePrompt)).ToArray(); // Apply negative prompt
 
-                List<EasyDict<string, string>> argLists = new List<EasyDict<string, string>>(); // List of all args for each command
-                EasyDict<string, string> args = new EasyDict<string, string>(); // List of args for current command
+                var argLists = new List<EasyDict<string, string>>(); // List of all args for each command
+                var args = new EasyDict<string, string>(); // List of args for current command
                 args["prompt"] = "";
                 args["default"] = Args.InvokeAi.GetDefaultArgsCommand();
                 args["upscale"] = Args.InvokeAi.GetUpscaleArgs();
