@@ -34,4 +34,11 @@
 	"hashBasefiles": "5a70532e0df0c2d173e089018bab7af8de384556",
 	"hashRepo": "3ccfa918e45fe0bb5ff6c61515a734338beba867",
 },
+{
+	"version": "1.10.0",
+	"channel": "public",
+	"date": "2023-05-01",
+	"hashBasefiles": "2a7790856ffeaa3b2fa3acc10a3f188a80067570",
+	"hashRepo": "289647c1a87b517ab932a5c36e50debe984828e0",
+},
 ]

@@ -17,8 +17,8 @@ namespace StableDiffusionGui
 {
     public static class Program
     {
-        public const string Version = "1.10.0b6";
-        public const Enums.Program.UpdateChannel ReleaseChannel = Enums.Program.UpdateChannel.Beta;
+        public const string Version = "1.10.0";
+        public const Enums.Program.UpdateChannel ReleaseChannel = Enums.Program.UpdateChannel.Public;
 
         public static bool Debug { get { return Debugger.IsAttached || UserArgs.Get("debug").Lower() == true.ToString().Lower(); } }
 
