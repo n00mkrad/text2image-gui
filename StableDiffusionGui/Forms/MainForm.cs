@@ -527,5 +527,10 @@ namespace StableDiffusionGui.Forms
         {
             ModelDownloadPrompt();
         }
+
+        private void btnExpandLoras_Click(object sender, EventArgs e)
+        {
+            SetLoraPanelSize(MainUi.PromptFieldSizeMode.Toggle);
+        }
     }
 }

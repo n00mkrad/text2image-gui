@@ -222,9 +222,17 @@ namespace StableDiffusionGui.Implementations
             return true;
         }
 
-        public static string GetCombinedPrompt(string prompt, string negPrompt)
+        public static string GetCombinedPrompt(string prompt, string negPrompt, EasyDict<string, float> loras = null)
         {
-            return $"{prompt.Trim()}{(string.IsNullOrWhiteSpace(negPrompt) ? "" : $" [{negPrompt.Trim()}]")}";
+            prompt = prompt.Trim();
+
+            if (loras != null && loras.Any())
+                prompt += " " + string.Join(", ", loras.Select(l => $"withLora({l.Key},{l.Value.ToStringDot("0.###")})"));
+
+            if (negPrompt.IsNotEmpty())
+                prompt += $" [{negPrompt.Trim()}]";
+
+            return prompt;
         }
 
         public static void LoadEmbeddingTriggerTable(string logLine, bool print = false)
@@ -252,7 +260,7 @@ namespace StableDiffusionGui.Implementations
                     InvokeAi.EmbeddingsFilesTriggers[file] = trigger;
                     Logger.LogIf($"Mapped TI file to trigger: {file} => {trigger}", Program.Debug);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Logger.LogHidden($"Exception trying to parse TI trigger from '{entry}': {ex.Message}");
                 }

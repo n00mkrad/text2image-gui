@@ -75,6 +75,18 @@ namespace StableDiffusionGui.Forms
                 if (s.ResizeGravity != (ImageMagick.Gravity)(-1))
                     comboxResizeGravity.SetIfTextMatches(s.ResizeGravity.ToString(), true, Strings.ImageGravity);
 
+                foreach(var lora in s.Loras)
+                {
+                    foreach (var row in gridLoras.Rows.Cast<DataGridViewRow>().Where(r => !r.IsNewRow))
+                    {
+                        if (row.Cells[1].Value.ToString() == lora.Key)
+                        {
+                            row.Cells[0].Value = true;
+                            row.Cells[2].Value = lora.Value.ToStringDot("0.###");
+                        }
+                    }
+                }                      
+
             })).RunWithUiStoppedShowErrors(this, "Error loading image generation settings:");
 
             TryRefreshUiState();
@@ -133,9 +145,32 @@ namespace StableDiffusionGui.Forms
                 ImgMode = (comboxInpaintMode.Visible ? ((ImgMode)comboxInpaintMode.SelectedIndex) : ImgMode.InitializationImage),
                 AppendArgs = textboxDebugAppendArgs.Text,
                 ScalesImg = MainUi.GetExtraValues(textboxExtraScalesImg.Text, sliderScaleImg.ActualValueFloat).ToArray(),
+                Loras = GetLoras(),
             };
 
             return settings;
+        }
+
+        private EasyDict<string, float> GetLoras()
+        {
+            var loras = new EasyDict<string, float>();
+
+            foreach (DataGridViewRow row in gridLoras.Rows)
+            {
+                if (row.IsNewRow)
+                    continue;
+
+                if ((bool)row.Cells[0].Value != true) // Skip disabled LoRAs
+                    continue;
+
+                string name = row.Cells[1].Value.ToString();
+                float weight = row.Cells[2].Value.ToString().GetFloat();
+
+                if (name.IsNotEmpty() && weight > 0.01f)
+                    loras[name] = weight;
+            }
+
+            return loras;
         }
     }
 }

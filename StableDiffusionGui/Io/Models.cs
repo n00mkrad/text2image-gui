@@ -43,6 +43,17 @@ namespace StableDiffusionGui.Io
             return fileList.Select(f => new Model(f, Format.Pytorch, Enums.Models.Type.Embedding)).ToList();
         }
 
+        public static List<Model> GetLoras()
+        {
+            List<string> mdlFolders = new List<string> { Path.Combine(Paths.GetDataPath(), "invoke", "loras") }; // TODO: Don't hardcode
+            var fileList = new List<ZlpFileInfo>();
+
+            foreach (string folderPath in mdlFolders)
+                fileList.AddRange(IoUtils.GetFileInfosSorted(folderPath, false, "*.safetensors").ToList());
+
+            return fileList.Select(f => new Model(f, Format.Safetensors, Enums.Models.Type.Lora)).ToList();
+        }
+
         public static List<Model> GetModelsAll(bool removeUnknownModels = true)
         {
             List<Model> list = new List<Model>();

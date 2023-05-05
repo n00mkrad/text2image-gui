@@ -44,7 +44,7 @@ namespace StableDiffusionGui.Implementations
                 OrderedDictionary initImages = s.InitImgs != null && s.InitImgs.Length > 0 ? await TtiUtils.CreateResizedInitImagesIfNeeded(s.InitImgs.ToList(), s.Res, s.ResizeGravity) : null;
 
                 long startSeed = s.Seed;
-                s.Prompts = s.Prompts.Select(p => InvokeAiUtils.GetCombinedPrompt(p, s.NegativePrompt)).ToArray(); // Apply negative prompt
+                s.Prompts = s.Prompts.Select(p => InvokeAiUtils.GetCombinedPrompt(p, s.NegativePrompt, s.Loras)).ToArray(); // Apply negative prompt
 
                 var argLists = new List<EasyDict<string, string>>(); // List of all args for each command
                 var args = new EasyDict<string, string>(); // List of args for current command

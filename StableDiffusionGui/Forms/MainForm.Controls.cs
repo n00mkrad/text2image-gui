@@ -7,6 +7,7 @@ using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
+using StableDiffusionGui.Properties;
 using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
+using static StableDiffusionGui.Ui.MainUi;
 
 namespace StableDiffusionGui.Forms
 {
@@ -42,11 +44,12 @@ namespace StableDiffusionGui.Forms
             ReloadModelsCombox();
             UpdateModel();
             ReloadEmbeddings();
+            ReloadLoras();
             comboxModelArch.FillFromEnum<Enums.Models.SdArch>(Strings.SdModelArch, 0);
 
             // Set categories
             _categoryPanels.Add(btnCollapseImplementation, new List<Panel> { panelBackend, panelModel });
-            _categoryPanels.Add(btnCollapsePrompt, new List<Panel> { panelPrompt, panelPromptNeg, panelEmbeddings, panelAiInputs });
+            _categoryPanels.Add(btnCollapsePrompt, new List<Panel> { panelPrompt, panelPromptNeg, panelEmbeddings, panelLoras, panelAiInputs });
             _categoryPanels.Add(btnCollapseGeneration, new List<Panel> { panelInpainting, panelInitImgStrength, panelIterations, panelSteps, panelScale, panelScaleImg, panelSeed });
             _categoryPanels.Add(btnCollapseRendering, new List<Panel> { panelRes, panelSampler });
             _categoryPanels.Add(btnCollapseSymmetry, new List<Panel> { panelSeamless, panelSymmetry });
@@ -67,6 +70,7 @@ namespace StableDiffusionGui.Forms
             comboxResW.SelectedIndexChanged += (s, e) => ResolutionChanged(); // Resolution change
             comboxResH.SelectedIndexChanged += (s, e) => ResolutionChanged(); // Resolution change
             comboxEmbeddingList.DropDown += (s, e) => ReloadEmbeddings(); // Reload embeddings
+            gridLoras.KeyUp += (sender, e) => { if(e.KeyCode == Keys.Enter) GridMoveUp(gridLoras); };
         }
 
         public void LoadControls()
@@ -177,6 +181,13 @@ namespace StableDiffusionGui.Forms
         {
             IEnumerable<string> embeddings = Models.GetEmbeddings().Select(m => m.FormatIndependentName);
             comboxEmbeddingList.SetItems(new[] { "None" }.Concat(embeddings), UiExtensions.SelectMode.Retain);
+        }
+
+        public void ReloadLoras()
+        {
+            IEnumerable<string> loras = Models.GetLoras().Select(m => m.FormatIndependentName);
+            gridLoras.Rows.Clear();
+            loras.ToList().ForEach(l => gridLoras.Rows.Add(false, l, "0.5"));
         }
 
         private void ResolutionChanged()
@@ -361,6 +372,45 @@ namespace StableDiffusionGui.Forms
 
             IEnumerable<Model> models = Models.GetModelsAll().Where(m => m.Type == Enums.Models.Type.Normal && imp.GetInfo().SupportedModelFormats.Contains(m.Format));
             comboxModel.SetItems(models, UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.None);
+        }
+
+        private void SetLoraPanelSize(PromptFieldSizeMode sizeMode = PromptFieldSizeMode.Toggle)
+        {
+            ((Action)(() =>
+            {
+                int smallHeight = 70;
+
+                if (panelLoras.Height == 0)
+                    return;
+
+                if (sizeMode == PromptFieldSizeMode.Toggle)
+                    sizeMode = panelLoras.Height == smallHeight ? PromptFieldSizeMode.Expand : PromptFieldSizeMode.Collapse;
+
+                if (sizeMode == PromptFieldSizeMode.Expand)
+                {
+                    btnExpandLoras.BackgroundImage = Resources.upArrowIcon;
+                    panelLoras.Height = smallHeight * 4;
+                }
+
+                if (sizeMode == PromptFieldSizeMode.Collapse)
+                {
+                    btnExpandLoras.BackgroundImage = Resources.downArrowIcon;
+                    panelLoras.Height = smallHeight;
+                }
+
+                Program.MainForm.panelSettings.Focus();
+            })).RunWithUiStopped(Program.MainForm);
+        }
+
+        private void GridMoveUp(DataGridView grid)
+        {
+            if (grid.CurrentCell != null)
+            {
+                int currentRowIndex = grid.CurrentCell.RowIndex;
+
+                if (currentRowIndex > 0)
+                    grid.Rows[currentRowIndex - 1].Cells[grid.CurrentCell.ColumnIndex].Selected = true;
+            }
         }
     }
 }

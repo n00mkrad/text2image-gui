@@ -39,6 +39,7 @@ namespace StableDiffusionGui.Data
         public float Perlin { get; set; } = 0f;
         public int Threshold { get; set; } = 0;
         public ImgMode ImgMode { get; set; } = ImgMode.InitializationImage;
+        public EasyDict<string, float> Loras { get; set; } = new EasyDict<string, float>();
         #endregion
 
         public EasyDict<string, string> ExtraParams { get; set; } = new EasyDict<string, string>();
