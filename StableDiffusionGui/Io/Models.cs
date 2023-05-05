@@ -19,16 +19,16 @@ namespace StableDiffusionGui.Io
             List<string> mdlFolders = new List<string>();
 
             if (includeBuiltin)
-                mdlFolders.Add(Paths.GetModelsPath());
-
-            foreach (Enums.Models.Type type in Enum.GetValues(typeof(Enums.Models.Type)).Cast<Enums.Models.Type>())
             {
-                List<string> customModelDirsList = Config.Instance.CustomModelDirs;
-
-                if (customModelDirsList != null)
-                    mdlFolders.AddRange(customModelDirsList, out mdlFolders);
+                mdlFolders.Add(Paths.GetModelsPath());
+                mdlFolders.Add(Path.Combine(Paths.GetModelsPath(), Constants.Dirs.Models.Vae));
             }
 
+            var customModelDirsList = new List<string>();
+            customModelDirsList.AddRange(Config.Instance.CustomModelDirs);
+            customModelDirsList.AddRange(Config.Instance.CustomVaeDirs);
+
+            mdlFolders.AddRange(customModelDirsList, out mdlFolders);
             return mdlFolders;
         }
 
@@ -60,14 +60,12 @@ namespace StableDiffusionGui.Io
 
             try
             {
-                var subDirs = new List<string>() { Constants.Dirs.Models.Vae, Constants.Dirs.Models.Embeddings };
                 List<string> mdlFolders = GetAllModelDirs();
                 var fileList = new List<ZlpFileInfo>();
 
                 foreach (string folderPath in mdlFolders)
                 {
                     var dirs = new List<string> { folderPath };
-                    subDirs.ForEach(d => dirs.Add(Path.Combine(folderPath, d)));
 
                     foreach (string dir in dirs.Where(d => Directory.Exists(d)))
                         fileList.AddRange(IoUtils.GetFileInfosSorted(dir, false, "*.*").ToList());
@@ -80,7 +78,6 @@ namespace StableDiffusionGui.Io
                 foreach (string folderPath in mdlFolders.Where(dir => Directory.Exists(dir)))
                 {
                     var dirs = new List<string> { folderPath };
-                    subDirs.ForEach(d => dirs.Add(Path.Combine(folderPath, d)));
 
                     foreach (string dir in dirs.Where(d => Directory.Exists(d)))
                         dirList.AddRange(Directory.GetDirectories(dir, "*", SearchOption.TopDirectoryOnly).Select(x => new ZlpDirectoryInfo(x)).ToList());

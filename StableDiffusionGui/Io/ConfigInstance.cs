@@ -49,6 +49,7 @@ namespace StableDiffusionGui.Io
         public bool SaveUnprocessedImages;
         public bool UnloadModel;
         public List<string> CustomModelDirs = new List<string>();
+        public List<string> CustomVaeDirs = new List<string>();
         public string MotdShownVersion = "";
         public bool HideMotd;
         public bool DisableModelFileValidation;

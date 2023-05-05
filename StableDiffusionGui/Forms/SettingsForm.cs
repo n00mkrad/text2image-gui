@@ -205,17 +205,17 @@ namespace StableDiffusionGui.Forms
 
         private void btnOpenModelsFolder_Click(object sender, EventArgs e)
         {
-            SetupModelDirs();
+            SetupModelDirs(ModelFoldersForm.Folder.Models);
         }
 
         private void btnOpenModelsFolderVae_Click(object sender, EventArgs e)
         {
-            SetupModelDirs();
+            SetupModelDirs(ModelFoldersForm.Folder.Vaes);
         }
 
-        private void SetupModelDirs ()
+        private void SetupModelDirs (ModelFoldersForm.Folder folderType)
         {
-            new ModelFoldersForm().ShowDialogForm();
+            new ModelFoldersForm(folderType).ShowDialogForm();
             LoadModels();
         }
 

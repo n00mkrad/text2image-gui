@@ -36,7 +36,7 @@ namespace StableDiffusionGui.Forms
 
         private void btnOpenModelFolder_Click(object sender, EventArgs e)
         {
-            new ModelFoldersForm().ShowDialogForm();
+            new ModelFoldersForm(ModelFoldersForm.Folder.Models).ShowDialogForm();
             LoadModels();
         }
 

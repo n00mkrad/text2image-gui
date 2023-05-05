@@ -1,5 +1,6 @@
 ﻿using Microsoft.WindowsAPICodePack.Dialogs;
 using StableDiffusionGui.Io;
+using StableDiffusionGui.Main;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -7,16 +8,20 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using static StableDiffusionGui.Forms.ModelFoldersForm;
 
 namespace StableDiffusionGui.Forms
 {
     public partial class ModelFoldersForm : Form
     {
+        public enum Folder { Models, Vaes }
         public List<string> Folders = new List<string>();
+        private Folder _folder;
 
-        public ModelFoldersForm()
+        public ModelFoldersForm(Folder folderType)
         {
             InitializeComponent();
+            _folder = folderType;
         }
 
         private void ModelFoldersForm_Load(object sender, EventArgs e)
@@ -38,16 +43,26 @@ namespace StableDiffusionGui.Forms
 
         private void LoadDirs()
         {
-            Folders = new List<string>() { Paths.GetModelsPath() };
-            List<string> serializedPaths = Config.Instance.CustomModelDirs;
-
-            if (serializedPaths != null)
-                Folders.AddRange(serializedPaths, out Folders);
+            if (_folder == Folder.Models)
+            {
+                Folders = new List<string>() { Paths.GetModelsPath() };
+                Folders.AddRange(Config.Instance.CustomModelDirs, out Folders);
+            }
+            else if (_folder == Folder.Vaes)
+            {
+                Folders = new List<string>() { Path.Combine(Paths.GetModelsPath(), Constants.Dirs.Models.Vae) };
+                Folders.AddRange(Config.Instance.CustomVaeDirs, out Folders);
+            }
         }
 
         private void SaveDirs()
         {
-            Config.Instance.CustomModelDirs = Folders.Where(dir => dir != Paths.GetModelsPath() && Directory.Exists(dir)).Select(s => s.Replace(@"\", "/")).ToList();
+            List<string> folders = Folders.Where(dir => dir != Paths.GetModelsPath() && Directory.Exists(dir)).Select(s => s.Replace(@"\", "/")).ToList();
+
+            if (_folder == Folder.Models)
+                Config.Instance.CustomModelDirs = folders;
+            else if (_folder == Folder.Vaes)
+                Config.Instance.CustomVaeDirs = folders;
         }
 
         private void FillList()
