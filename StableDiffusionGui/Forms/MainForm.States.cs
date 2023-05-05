@@ -73,6 +73,9 @@ namespace StableDiffusionGui.Forms
             if(control == panelModel)
                 return implementation.Supports(Feature.CustomModels);
 
+            if (control == panelLoras)
+                return implementation.Supports(Feature.Lora);
+
             return false;
         }
 

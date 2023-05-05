@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
 using static StableDiffusionGui.Ui.MainUi;
@@ -70,8 +71,18 @@ namespace StableDiffusionGui.Forms
             comboxResW.SelectedIndexChanged += (s, e) => ResolutionChanged(); // Resolution change
             comboxResH.SelectedIndexChanged += (s, e) => ResolutionChanged(); // Resolution change
             comboxEmbeddingList.DropDown += (s, e) => ReloadEmbeddings(); // Reload embeddings
-            gridLoras.KeyUp += (sender, e) => { if(e.KeyCode == Keys.Enter) GridMoveUp(gridLoras); };
+            gridLoras.KeyUp += (s, e) => { if (e.KeyCode == Keys.Enter) GridMoveUp(gridLoras); };
+            gridLoras.CurrentCellDirtyStateChanged += (s, e) =>
+            {
+                if (gridLoras.CurrentCell == null || gridLoras.CurrentCell.ValueType != typeof(bool))
+                    return;
+
+                gridLoras.EndEdit();
+                BeginInvoke(new MethodInvoker(() => { SortLoras(); }));
+            };
         }
+
+        bool ignoreNextGridLorasCellEndEdit = false;
 
         public void LoadControls()
         {
@@ -127,7 +138,7 @@ namespace StableDiffusionGui.Forms
 
             // Panel visibility
             SetVisibility(new Control[] { panelPromptNeg, panelEmbeddings, panelInitImgStrength, panelInpainting, panelScaleImg, panelRes, panelSampler, panelSeamless, panelSymmetry, checkboxHiresFix,
-                textboxClipsegMask, panelResizeGravity, labelResChange, btnResetRes, checkboxShowInitImg, panelModel }, imp);
+                textboxClipsegMask, panelResizeGravity, labelResChange, btnResetRes, checkboxShowInitImg, panelModel, panelLoras }, imp);
 
             bool adv = Config.Instance.AdvancedUi;
             upDownIterations.Maximum = !adv ? Config.IniInstance.IterationsMax : Config.IniInstance.IterationsMax * 10;
@@ -185,9 +196,34 @@ namespace StableDiffusionGui.Forms
 
         public void ReloadLoras()
         {
+            var selection = GetLoras(); // Save current selection
             IEnumerable<string> loras = Models.GetLoras().Select(m => m.FormatIndependentName);
             gridLoras.Rows.Clear();
-            loras.ToList().ForEach(l => gridLoras.Rows.Add(false, l, "0.5"));
+            loras.ToList().ForEach(l => gridLoras.Rows.Add(false, l, "0.8"));
+            SetLoras(selection); // Restore selection
+        }
+
+        public void SortLoras()
+        {
+            List<object[]> rowValues = gridLoras.Rows.Cast<DataGridViewRow>().ToList().Select(r => new object[] { r.Cells[0].Value, r.Cells[1].Value, r.Cells[2].Value }).ToList();
+
+            if (rowValues.Count < 2) // No need to sort 1 item
+                return;
+
+            ignoreNextGridLorasCellEndEdit = true;
+            List<object[]> newRowValues = new List<object[]>();
+            rowValues.Where(row => (bool)row[0] == true).ToList().ForEach(row => newRowValues.Add(new object[] { true, (string)row[1], (string)row[2] })); // Add enabled LoRAs first
+            rowValues.Where(row => (bool)row[0] == false).OrderBy(r => (string)r[1]).ToList().ForEach(row => newRowValues.Add(new object[] { false, (string)row[1], (string)row[2] })); // Then the rest (disabled LoRAs)
+
+            if (rowValues.ToJson() == newRowValues.ToJson()) // Brute-force comparison because SequenceEqual didn't work (?)
+            {
+                Console.WriteLine($"Skipped sort because new sequence is equal");
+                return;
+            }
+
+            Console.WriteLine($"Sorting...");
+            gridLoras.Rows.Clear();
+            newRowValues.ForEach(row => gridLoras.Rows.Add((bool)row[0], (string)row[1], (string)row[2]));
         }
 
         private void ResolutionChanged()
@@ -365,7 +401,7 @@ namespace StableDiffusionGui.Forms
                 comboxModel.SelectedIndex = 0;
         }
 
-        private void ReloadModelsCombox(Implementation imp = (Implementation)(-1))
+        public void ReloadModelsCombox(Implementation imp = (Implementation)(-1))
         {
             if (imp == (Implementation)(-1))
                 imp = Config.Instance.Implementation;

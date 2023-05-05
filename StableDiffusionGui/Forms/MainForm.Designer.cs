@@ -98,6 +98,7 @@ namespace StableDiffusionGui.Forms
             this.btnEmbeddingAppend = new HTAlt.WinForms.HTButton();
             this.btnResetRes = new HTAlt.WinForms.HTButton();
             this.comboxModelArch = new System.Windows.Forms.ComboBox();
+            this.btnExpandLoras = new System.Windows.Forms.Button();
             this.btnCollapseDebug = new HTAlt.WinForms.HTButton();
             this.btnCollapseSymmetry = new HTAlt.WinForms.HTButton();
             this.btnCollapseRendering = new HTAlt.WinForms.HTButton();
@@ -126,9 +127,6 @@ namespace StableDiffusionGui.Forms
             this.faceRestorationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.applyAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelSettings = new StableDiffusionGui.Controls.CustomPanel();
-            this.panelLoras = new System.Windows.Forms.Panel();
-            this.gridLoras = new System.Windows.Forms.DataGridView();
-            this.label24 = new System.Windows.Forms.Label();
             this.panelDebugLoopback = new System.Windows.Forms.Panel();
             this.checkboxLoopback = new System.Windows.Forms.CheckBox();
             this.label16 = new System.Windows.Forms.Label();
@@ -187,6 +185,12 @@ namespace StableDiffusionGui.Forms
             this.panelAiInputs = new System.Windows.Forms.Panel();
             this.checkboxShowInitImg = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.panelLoras = new System.Windows.Forms.Panel();
+            this.gridLoras = new System.Windows.Forms.DataGridView();
+            this.ColEnabled = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.ColName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColWeight = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.label24 = new System.Windows.Forms.Label();
             this.panelEmbeddings = new System.Windows.Forms.Panel();
             this.btnEmbeddingCopy = new HTAlt.WinForms.HTButton();
             this.comboxEmbeddingList = new System.Windows.Forms.ComboBox();
@@ -212,10 +216,6 @@ namespace StableDiffusionGui.Forms
             this.menuStripInstall = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.manageInstallationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.installUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ColEnabled = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.ColName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColWeight = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.btnExpandLoras = new System.Windows.Forms.Button();
             this.menuStripOutputImg.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.upDownSeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
@@ -226,8 +226,6 @@ namespace StableDiffusionGui.Forms
             this.menuStripDevTools.SuspendLayout();
             this.menuStripPostProcess.SuspendLayout();
             this.panelSettings.SuspendLayout();
-            this.panelLoras.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.gridLoras)).BeginInit();
             this.panelDebugLoopback.SuspendLayout();
             this.panelDebugPerlinThresh.SuspendLayout();
             this.panelDebugSendStdin.SuspendLayout();
@@ -253,6 +251,8 @@ namespace StableDiffusionGui.Forms
             this.panelResizeGravity.SuspendLayout();
             this.panelCollapseGeneration.SuspendLayout();
             this.panelAiInputs.SuspendLayout();
+            this.panelLoras.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gridLoras)).BeginInit();
             this.panelEmbeddings.SuspendLayout();
             this.panelPromptNeg.SuspendLayout();
             this.panelPrompt.SuspendLayout();
@@ -653,7 +653,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderScale.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScale.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScale.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderScale.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderScale.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScale.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScale.Name = "textboxSliderScale";
@@ -800,7 +800,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderInitStrength.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderInitStrength.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderInitStrength.Location = new System.Drawing.Point(308, 2);
+            this.textboxSliderInitStrength.Location = new System.Drawing.Point(308, 4);
             this.textboxSliderInitStrength.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderInitStrength.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderInitStrength.Name = "textboxSliderInitStrength";
@@ -1320,7 +1320,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderScaleImg.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScaleImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScaleImg.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScaleImg.Location = new System.Drawing.Point(308, 2);
+            this.textboxSliderScaleImg.Location = new System.Drawing.Point(308, 4);
             this.textboxSliderScaleImg.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScaleImg.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScaleImg.Name = "textboxSliderScaleImg";
@@ -1438,6 +1438,26 @@ namespace StableDiffusionGui.Forms
             this.comboxModelArch.TabIndex = 111;
             this.toolTip.SetToolTip(this.comboxModelArch, "Select how the model should be loaded. This is not necessary for Diffusers models" +
         ".");
+            // 
+            // btnExpandLoras
+            // 
+            this.btnExpandLoras.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnExpandLoras.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnExpandLoras.BackgroundImage = global::StableDiffusionGui.Properties.Resources.downArrowIcon;
+            this.btnExpandLoras.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnExpandLoras.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnExpandLoras.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnExpandLoras.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnExpandLoras.Location = new System.Drawing.Point(628, -1);
+            this.btnExpandLoras.Margin = new System.Windows.Forms.Padding(0);
+            this.btnExpandLoras.Name = "btnExpandLoras";
+            this.btnExpandLoras.Size = new System.Drawing.Size(20, 57);
+            this.btnExpandLoras.TabIndex = 107;
+            this.btnExpandLoras.TabStop = false;
+            this.toolTip.SetToolTip(this.btnExpandLoras, "Expand/Collapse Prompt Field");
+            this.btnExpandLoras.UseVisualStyleBackColor = false;
+            this.btnExpandLoras.Click += new System.EventHandler(this.btnExpandLoras_Click);
             // 
             // btnCollapseDebug
             // 
@@ -1760,54 +1780,6 @@ namespace StableDiffusionGui.Forms
             this.panelSettings.TabIndex = 106;
             this.panelSettings.SizeChanged += new System.EventHandler(this.panelSettings_SizeChanged);
             this.panelSettings.Click += new System.EventHandler(this.panel1_Click);
-            // 
-            // panelLoras
-            // 
-            this.panelLoras.Controls.Add(this.btnExpandLoras);
-            this.panelLoras.Controls.Add(this.gridLoras);
-            this.panelLoras.Controls.Add(this.label24);
-            this.panelLoras.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelLoras.Location = new System.Drawing.Point(0, 290);
-            this.panelLoras.Name = "panelLoras";
-            this.panelLoras.Size = new System.Drawing.Size(651, 70);
-            this.panelLoras.TabIndex = 123;
-            // 
-            // dataGridViewLoras
-            // 
-            this.gridLoras.AllowUserToAddRows = false;
-            this.gridLoras.AllowUserToDeleteRows = false;
-            this.gridLoras.AllowUserToResizeColumns = false;
-            this.gridLoras.AllowUserToResizeRows = false;
-            this.gridLoras.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.gridLoras.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.gridLoras.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.Disable;
-            this.gridLoras.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            this.gridLoras.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.ColEnabled,
-            this.ColName,
-            this.ColWeight});
-            this.gridLoras.Location = new System.Drawing.Point(233, 6);
-            this.gridLoras.MultiSelect = false;
-            this.gridLoras.Name = "dataGridViewLoras";
-            this.gridLoras.RowHeadersVisible = false;
-            this.gridLoras.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            this.gridLoras.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.gridLoras.Size = new System.Drawing.Size(395, 57);
-            this.gridLoras.TabIndex = 106;
-            // 
-            // label24
-            // 
-            this.label24.AutoSize = true;
-            this.label24.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label24.ForeColor = System.Drawing.Color.White;
-            this.label24.Location = new System.Drawing.Point(2, 4);
-            this.label24.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
-            this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(58, 13);
-            this.label24.TabIndex = 105;
-            this.label24.Text = "LoRA Files";
             // 
             // panelDebugLoopback
             // 
@@ -2332,7 +2304,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderSteps.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderSteps.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderSteps.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderSteps.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderSteps.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderSteps.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderSteps.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderSteps.Name = "textboxSliderSteps";
@@ -2554,6 +2526,77 @@ namespace StableDiffusionGui.Forms
             this.label2.Size = new System.Drawing.Size(63, 13);
             this.label2.TabIndex = 83;
             this.label2.Text = "Base Image";
+            // 
+            // panelLoras
+            // 
+            this.panelLoras.Controls.Add(this.btnExpandLoras);
+            this.panelLoras.Controls.Add(this.gridLoras);
+            this.panelLoras.Controls.Add(this.label24);
+            this.panelLoras.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelLoras.Location = new System.Drawing.Point(0, 290);
+            this.panelLoras.Name = "panelLoras";
+            this.panelLoras.Size = new System.Drawing.Size(651, 70);
+            this.panelLoras.TabIndex = 123;
+            // 
+            // gridLoras
+            // 
+            this.gridLoras.AllowUserToAddRows = false;
+            this.gridLoras.AllowUserToDeleteRows = false;
+            this.gridLoras.AllowUserToResizeColumns = false;
+            this.gridLoras.AllowUserToResizeRows = false;
+            this.gridLoras.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.gridLoras.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.gridLoras.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.gridLoras.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.Disable;
+            this.gridLoras.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.gridLoras.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ColEnabled,
+            this.ColName,
+            this.ColWeight});
+            this.gridLoras.Location = new System.Drawing.Point(233, -1);
+            this.gridLoras.MultiSelect = false;
+            this.gridLoras.Name = "gridLoras";
+            this.gridLoras.RowHeadersVisible = false;
+            this.gridLoras.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            this.gridLoras.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.gridLoras.Size = new System.Drawing.Size(395, 57);
+            this.gridLoras.TabIndex = 106;
+            // 
+            // ColEnabled
+            // 
+            this.ColEnabled.HeaderText = "Use";
+            this.ColEnabled.Name = "ColEnabled";
+            this.ColEnabled.Width = 40;
+            // 
+            // ColName
+            // 
+            this.ColName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ColName.HeaderText = "File Name";
+            this.ColName.Name = "ColName";
+            this.ColName.ReadOnly = true;
+            this.ColName.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // ColWeight
+            // 
+            this.ColWeight.HeaderText = "Weight";
+            this.ColWeight.MaxInputLength = 8;
+            this.ColWeight.Name = "ColWeight";
+            this.ColWeight.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.ColWeight.Width = 60;
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label24.ForeColor = System.Drawing.Color.White;
+            this.label24.Location = new System.Drawing.Point(2, 4);
+            this.label24.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(58, 13);
+            this.label24.TabIndex = 105;
+            this.label24.Text = "LoRA Files";
             // 
             // panelEmbeddings
             // 
@@ -2872,48 +2915,6 @@ namespace StableDiffusionGui.Forms
             this.installUpdatesToolStripMenuItem.Text = "Install Updates";
             this.installUpdatesToolStripMenuItem.Click += new System.EventHandler(this.installUpdatesToolStripMenuItem_Click);
             // 
-            // ColEnabled
-            // 
-            this.ColEnabled.HeaderText = "Use";
-            this.ColEnabled.Name = "ColEnabled";
-            this.ColEnabled.Width = 40;
-            // 
-            // ColName
-            // 
-            this.ColName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ColName.HeaderText = "File Name";
-            this.ColName.Name = "ColName";
-            this.ColName.ReadOnly = true;
-            this.ColName.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            // 
-            // ColWeight
-            // 
-            this.ColWeight.HeaderText = "Weight";
-            this.ColWeight.MaxInputLength = 8;
-            this.ColWeight.Name = "ColWeight";
-            this.ColWeight.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.ColWeight.Width = 60;
-            // 
-            // btnExpandLoras
-            // 
-            this.btnExpandLoras.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnExpandLoras.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnExpandLoras.BackgroundImage = global::StableDiffusionGui.Properties.Resources.downArrowIcon;
-            this.btnExpandLoras.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnExpandLoras.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnExpandLoras.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnExpandLoras.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnExpandLoras.Location = new System.Drawing.Point(628, 6);
-            this.btnExpandLoras.Margin = new System.Windows.Forms.Padding(0);
-            this.btnExpandLoras.Name = "btnExpandLoras";
-            this.btnExpandLoras.Size = new System.Drawing.Size(20, 57);
-            this.btnExpandLoras.TabIndex = 107;
-            this.btnExpandLoras.TabStop = false;
-            this.toolTip.SetToolTip(this.btnExpandLoras, "Expand/Collapse Prompt Field");
-            this.btnExpandLoras.UseVisualStyleBackColor = false;
-            this.btnExpandLoras.Click += new System.EventHandler(this.btnExpandLoras_Click);
-            // 
             // MainForm
             // 
             this.AllowDrop = true;
@@ -2968,9 +2969,6 @@ namespace StableDiffusionGui.Forms
             this.menuStripDevTools.ResumeLayout(false);
             this.menuStripPostProcess.ResumeLayout(false);
             this.panelSettings.ResumeLayout(false);
-            this.panelLoras.ResumeLayout(false);
-            this.panelLoras.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.gridLoras)).EndInit();
             this.panelDebugLoopback.ResumeLayout(false);
             this.panelDebugLoopback.PerformLayout();
             this.panelDebugPerlinThresh.ResumeLayout(false);
@@ -3017,6 +3015,9 @@ namespace StableDiffusionGui.Forms
             this.panelCollapseGeneration.ResumeLayout(false);
             this.panelAiInputs.ResumeLayout(false);
             this.panelAiInputs.PerformLayout();
+            this.panelLoras.ResumeLayout(false);
+            this.panelLoras.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gridLoras)).EndInit();
             this.panelEmbeddings.ResumeLayout(false);
             this.panelEmbeddings.PerformLayout();
             this.panelPromptNeg.ResumeLayout(false);

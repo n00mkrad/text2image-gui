@@ -6,7 +6,7 @@ namespace StableDiffusionGui.Data
 {
     public class ImplementationInfo
     {
-        public enum Feature { InteractiveCli, CustomModels, CustomVae, HalfPrecisionToggle, NegPrompts, NativeInpainting, DeviceSelection, MultipleSamplers, Embeddings, SeamlessMode, SymmetricMode, HiresFix }
+        public enum Feature { InteractiveCli, CustomModels, CustomVae, HalfPrecisionToggle, NegPrompts, NativeInpainting, DeviceSelection, MultipleSamplers, Embeddings, SeamlessMode, SymmetricMode, HiresFix, Lora }
         public List<Feature> SupportedFeatures = new List<Feature>();
         public Enums.Ai.Backend Backend { get; set; } = Enums.Ai.Backend.Cuda;
         public string[] ValidModelExts { get; set; } = new string[0];
@@ -24,7 +24,7 @@ namespace StableDiffusionGui.Data
                 ValidModelExts = new string[] { ".ckpt", ".safetensors" };
                 ValidModelExtsVae = new string[] { ".ckpt", ".pt" };
                 SupportedFeatures = new List<Feature> { Feature.InteractiveCli, Feature.CustomModels, Feature.CustomVae, Feature.HalfPrecisionToggle, Feature.NegPrompts, Feature.NativeInpainting, Feature.DeviceSelection,
-                    Feature.MultipleSamplers, Feature.Embeddings, Feature.SeamlessMode, Feature.SymmetricMode, Feature.HiresFix };
+                    Feature.MultipleSamplers, Feature.Embeddings, Feature.SeamlessMode, Feature.SymmetricMode, Feature.HiresFix, Feature.Lora };
             }
             else if (imp == Enums.StableDiffusion.Implementation.OptimizedSd)
             {

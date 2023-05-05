@@ -124,6 +124,14 @@ namespace StableDiffusionGui.Ui
                 return;
             }
 
+            if (keys == Keys.F5)
+            {
+                Program.MainForm.ReloadModelsCombox();
+                Program.MainForm.ReloadEmbeddings();
+                Program.MainForm.ReloadLoras();
+                return;
+            }
+
             if (keys == Keys.F11) // Hotkey: Open Log Viewer
             {
                 Program.MainForm.OpenLogViewerWindow();

@@ -75,17 +75,7 @@ namespace StableDiffusionGui.Forms
                 if (s.ResizeGravity != (ImageMagick.Gravity)(-1))
                     comboxResizeGravity.SetIfTextMatches(s.ResizeGravity.ToString(), true, Strings.ImageGravity);
 
-                foreach(var lora in s.Loras)
-                {
-                    foreach (var row in gridLoras.Rows.Cast<DataGridViewRow>().Where(r => !r.IsNewRow))
-                    {
-                        if (row.Cells[1].Value.ToString() == lora.Key)
-                        {
-                            row.Cells[0].Value = true;
-                            row.Cells[2].Value = lora.Value.ToStringDot("0.###");
-                        }
-                    }
-                }                      
+                SetLoras(s.Loras);               
 
             })).RunWithUiStoppedShowErrors(this, "Error loading image generation settings:");
 
@@ -149,6 +139,26 @@ namespace StableDiffusionGui.Forms
             };
 
             return settings;
+        }
+
+        public void SetLoras (EasyDict<string, float> loras)
+        {
+            foreach (var row in gridLoras.Rows.Cast<DataGridViewRow>().Where(r => !r.IsNewRow))
+            {
+                var matches = loras.Where(l => l.Key == row.Cells[1].Value.ToString()).ToList();
+                row.Cells[0].Value = matches.Any();
+
+                if (!matches.Any())
+                {
+                    continue;
+                }
+
+                if (row.Cells[1].Value.ToString() == matches[0].Key)
+                {
+                    row.Cells[0].Value = true;
+                    row.Cells[2].Value = matches[0].Value.ToStringDot("0.###");
+                }
+            }
         }
 
         private EasyDict<string, float> GetLoras()
