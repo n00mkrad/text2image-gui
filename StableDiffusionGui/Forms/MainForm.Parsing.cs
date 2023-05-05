@@ -159,6 +159,8 @@ namespace StableDiffusionGui.Forms
                     row.Cells[2].Value = matches[0].Value.ToStringDot("0.###");
                 }
             }
+
+            BeginInvoke(new MethodInvoker(() => { SortLoras(); }));
         }
 
         private EasyDict<string, float> GetLoras()
