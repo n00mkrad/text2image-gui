@@ -33,6 +33,7 @@
             // Data and below
             public const string Bins = "bin";
             public const string SdRepo = "repo";
+            public const string Invoke = "invoke";
             public const string Dreambooth = "db";
             public const string SdVenv = "venv";
             public const string Python = "py";

@@ -16,7 +16,7 @@ namespace StableDiffusionGui.Installation
     {
         private static readonly string _gitFile = "n00mkrad/stable-diffusion-cust.git";
         private static readonly string _gitBranch = "main";
-        public static readonly string GitCommit = "289647c1a87b517ab932a5c36e50debe984828e0";
+        public static readonly string GitCommit = "056af25fc83a99a18c39834079f754843d51d50a";
 
         private static readonly bool _allowModelDownload = false;
 
@@ -409,16 +409,16 @@ namespace StableDiffusionGui.Installation
 
                 if (File.Exists(easyInstallPth))
                 {
-                    // TODO: Check if this is still needed?
-                    // var easyInstallLines = File.ReadAllLines(easyInstallPth);
-                    // 
-                    // string basePath = String.Join($@"\{Constants.Dirs.SdRepo}", easyInstallLines.Where(l => l.Trim().EndsWith($@"\{Constants.Dirs.SdRepo}")).FirstOrDefault().Split($@"\{Constants.Dirs.SdRepo}").Reverse().Skip(1).Reverse());
-                    // string newBasePath = Paths.GetDataPath().Lower().Replace("/", @"\");
-                    // 
-                    // List<string> newLines = easyInstallLines.Select(l => l.Replace(basePath, newBasePath).Replace(@"\\", @"\")).ToList();
-                    // 
-                    // File.WriteAllLines(easyInstallPth, newLines);
-                    // Logger.Log($"Fixed easy-install.pth.", true);
+                    var easyInstallLines = File.ReadAllLines(easyInstallPth).Select(l => l.Lower()).ToArray();
+
+                    string delim = $@"\{Constants.Dirs.Data.Lower()}\";
+                    string basePath = easyInstallLines.Where(l => l.Contains(delim)).FirstOrDefault().Split(delim).FirstOrDefault();
+                    string newBasePath = Paths.GetDataPath().Lower().Replace("/", @"\");
+                    
+                    List<string> newLines = easyInstallLines.Select(l => l.Replace(basePath, newBasePath).Replace(@"\\", @"\")).ToList();
+                    
+                    File.WriteAllLines(easyInstallPth, newLines);
+                    Logger.Log($"Fixed easy-install.pth.", true);
                 }
 
                 #endregion

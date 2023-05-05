@@ -1,5 +1,6 @@
 ﻿using StableDiffusionGui.Extensions;
 using StableDiffusionGui.Forms;
+using StableDiffusionGui.Implementations;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
@@ -118,7 +119,8 @@ namespace StableDiffusionGui.Ui
 
             if (keys == Keys.F4 && Program.Debug)
             {
-                InvokePatcher.Test();
+                IInvokePatcher patcher = new InvokePatcher235();
+                patcher.Run();
                 return;
             }
 

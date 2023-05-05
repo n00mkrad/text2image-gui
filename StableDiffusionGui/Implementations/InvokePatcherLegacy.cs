@@ -1,14 +1,15 @@
-﻿using StableDiffusionGui.Io;
+﻿using StableDiffusionGui.Implementations;
+using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using System.IO;
 using System.Linq;
 using ZetaLongPaths;
 
-namespace StableDiffusionGui.MiscUtils
+namespace StableDiffusionGui.Implementations
 {
-    internal class InvokePatcher
+    internal class InvokePatcherLegacy : IInvokePatcher
     {
-        public static void Test()
+        public void Run()
         {
             string path = Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdRepo, "invoke");
             PatchTiMgr(path);
@@ -247,19 +248,6 @@ namespace StableDiffusionGui.MiscUtils
                 Logger.Log($"Invoke Patcher WARNING: Text has not changed after replacing '{searchFor}' with '{replaceWith}'.");
 
             return newText;
-        }
-
-        private static void ReplaceInFile(ZlpFileInfo file, string searchFor, string replaceWith)
-        {
-            if (searchFor.IsEmpty())
-                return;
-
-            string path = file.FullName;
-            string text = File.ReadAllText(path);
-            string newText = text.Replace(searchFor, replaceWith);
-
-            if (newText != text)
-                File.WriteAllText(path, newText);
         }
     }
 }

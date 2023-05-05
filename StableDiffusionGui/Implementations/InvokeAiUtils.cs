@@ -16,7 +16,8 @@ namespace StableDiffusionGui.Implementations
 {
     internal class InvokeAiUtils
     {
-        public static string ModelsYamlPath { get { return Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdRepo, "invoke", "configs", "models.yaml"); } }
+        public static string HomePath { get { return Directory.CreateDirectory(Path.Combine(Paths.GetDataPath(), Constants.Dirs.Invoke)).FullName; } }
+        public static string ModelsYamlPath { get { return Path.Combine(Directory.CreateDirectory(Path.Combine(HomePath, "configs")).FullName, "models.yaml"); } }
         private static EasyDict<string, Enums.Models.Format> _modelFormatCache = new EasyDict<string, Enums.Models.Format>();
 
         public static async Task<Model> ConvertVae(Model vae, bool print = true)
@@ -72,7 +73,7 @@ namespace StableDiffusionGui.Implementations
 
                 foreach (Model mdl in cachedModels)
                 {
-                    string weightsPath = $"{(mdl.Format == Enums.Models.Format.Diffusers ? "path" : "weights")}: {mdl.FullName.Replace(dataPath, "../..").Wrap(true)}"; // Weights path, use relative path if possible
+                    string weightsPath = $"{(mdl.Format == Enums.Models.Format.Diffusers ? "path" : "weights")}: {mdl.FullName.Wrap(true)}"; // Weights path, use relative path if possible
 
                     List<string> ckptArgs = null;
 
@@ -88,7 +89,7 @@ namespace StableDiffusionGui.Implementations
 
                     foreach (Model mdlVae in cachedModelsVae)
                     {
-                        var vae = mdlVae == null ? null : mdlVae; //mdlVae.Format == Enums.Models.Format.Diffusers ? mdlVae : await ConvertVae(mdlVae, !quiet);
+                        var vae = mdlVae ?? null; //mdlVae.Format == Enums.Models.Format.Diffusers ? mdlVae : await ConvertVae(mdlVae, !quiet);
                         var properties = new List<string> { weightsPath };
 
                         if (mdl.Format == Enums.Models.Format.Diffusers)
@@ -139,6 +140,8 @@ namespace StableDiffusionGui.Implementations
 
         public static string ConvertAttentionSyntax(string prompt)
         {
+            return prompt;
+
             if (!prompt.Contains("(") && !prompt.Contains("{")) // Skip if no parentheses/curly brackets were used
                 return prompt;
 

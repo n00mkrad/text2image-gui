@@ -293,8 +293,10 @@
       <DependentUpon>WelcomeForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Implementations\IImplementation.cs" />
+    <Compile Include="Implementations\IInvokePatcher.cs" />
     <Compile Include="Implementations\InstructPixToPix.cs" />
     <Compile Include="Implementations\InvokeAiMetadata.cs" />
+    <Compile Include="Implementations\InvokePatcher235.cs" />
     <Compile Include="Implementations\OptimizedSd.cs" />
     <Compile Include="Implementations\OptimizedSdUtils.cs" />
     <Compile Include="Implementations\SdOnnx.cs" />
@@ -341,7 +343,7 @@
     <Compile Include="MiscUtils\ImgMaths.cs" />
     <Compile Include="MiscUtils\ImgUtils.cs" />
     <Compile Include="MiscUtils\InputUtils.cs" />
-    <Compile Include="MiscUtils\InvokePatcher.cs" />
+    <Compile Include="Implementations\InvokePatcherLegacy.cs" />
     <Compile Include="MiscUtils\NmkdStopwatch.cs" />
     <Compile Include="MiscUtils\ParseUtils.cs" />
     <Compile Include="MiscUtils\PromptWildcardUtils.cs" />

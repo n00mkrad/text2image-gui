@@ -14,6 +14,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using static StableDiffusionGui.Main.Constants.LogMsgs;
 
 namespace StableDiffusionGui.Implementations
 {
@@ -143,10 +144,11 @@ namespace StableDiffusionGui.Implementations
 
                     TtiProcess.LastStartupSettings = newStartupSettings;
 
-                    Process py = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd(), Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdVenv, "Scripts", "python.exe"));
+                    Process py = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd(), Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdVenv, "Scripts", "invoke.exe"));
+                    py.StartInfo.EnvironmentVariables["INVOKEAI_ROOT"] = InvokeAiUtils.HomePath;
                     py.StartInfo.RedirectStandardInput = true;
                     py.StartInfo.WorkingDirectory = Paths.GetDataPath();
-                    py.StartInfo.Arguments = $"\"{Constants.Dirs.SdRepo}/invoke/scripts/invoke.py\" --model {InvokeAiUtils.GetMdlNameForYaml(modelFile, vaeFile)} -o {outPath.Wrap(true)} {argsStartup}";
+                    py.StartInfo.Arguments = $"--model {InvokeAiUtils.GetMdlNameForYaml(modelFile, vaeFile)} -o {outPath.Wrap(true)} {argsStartup}";
 
                     foreach (var pair in TtiUtils.GetEnvVarsSd(false, Paths.GetDataPath()))
                         py.StartInfo.EnvironmentVariables[pair.Key] = pair.Value;
@@ -274,7 +276,7 @@ namespace StableDiffusionGui.Implementations
 
         public static void StartCmdInSdEnv()
         {
-            Process.Start("cmd", $"/K title Env: {Constants.Dirs.SdVenv} && cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand(true, Paths.GetDataPath())}");
+            Process.Start("cmd", $"/K title Env: {Constants.Dirs.SdVenv} && cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand(true, Paths.GetDataPath())} && .\\{Constants.Dirs.SdVenv}\\Scripts\\activate.bat");
         }
 
         /// <summary> Run InvokeAI post-processing (!fix) </summary>
