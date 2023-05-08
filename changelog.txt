@@ -7,12 +7,13 @@ SD GUI 1.10.0 Changelog:
 - New: Utility to directly download Huggingface Diffusers models (no need for git clone etc.)
 - New: Option to skip last CLIP layers ("CLIP Skip") which can improve quality with some models
 - New: Chroma key aka "Greenscreen" option when loading an image (e.g. turn black pixels transparent)
+- New additional config file "settings.ini" where power users can adjust certain limits (e.g. max res)
 - Improved: Loading transparent images from clipboard is now possible
 - Improved: Any model format can now be loaded directly, Diffusers (fastest), Safetensors, Ckpt
 - Improved: Prompts can now be longer than 77 tokens (experimental)
 - Improved: Textual Inversion embeddings are now properly integrated, newer formats supported
 - Improved: InstructPix2Pix and SD ONNX no longer need to reload the model on each run
-- Improved: Max res (4096 in adv. mode) and prompt history limit (500 -> 1000) have been doubled
+- Improved: Maximum resolution and prompt history limit have been increased
 - Improved: UI is now split into categories that can be collapsed
 - Improved: A wide range of UI/UX performance improvements, reduced flickering, etc
 - Too many bug fixes to list
