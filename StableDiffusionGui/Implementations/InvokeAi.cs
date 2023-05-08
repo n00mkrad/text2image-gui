@@ -10,16 +10,15 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using static StableDiffusionGui.Main.Constants.LogMsgs;
 
 namespace StableDiffusionGui.Implementations
 {
     internal class InvokeAi
     {
+        public static int Pid = -1;
 
         public enum FixAction { Upscale, FaceRestoration }
 
@@ -358,41 +357,40 @@ namespace StableDiffusionGui.Implementations
                 TtiProcess.Kill();
         }
 
+        public static void SendCtrlC()
+        {
+            if (Pid >= 0)
+                OsUtils.SendCtrlC(Pid);
+        }
+
         private static async Task WaitForCancel()
         {
             Program.MainForm.runBtn.SetEnabled(false);
-            DateTime cancelTime = DateTime.Now;
-            TtiUtils.SoftCancelInvokeAi();
-            await Task.Delay(100);
 
-            KeyValuePair<string, TimeSpan> previousLastLine = new KeyValuePair<string, TimeSpan>();
+            SendCtrlC();
+            SendCtrlC();
+            await Task.Delay(500);
 
             while (true)
             {
-                var entries = Logger.GetLastEntries(Constants.Lognames.Sd, 5);
-                Dictionary<string, TimeSpan> linesWithAge = new Dictionary<string, TimeSpan>();
+                Logger.Entry lastLogEntry = Logger.GetLastEntries(Constants.Lognames.Sd, 1).FirstOrDefault();
 
-                foreach (Logger.Entry entry in entries)
-                    linesWithAge[entry.Message] = DateTime.Now - entry.TimeDequeue;
+                if (lastLogEntry == null)
+                    break;
 
-                linesWithAge = linesWithAge.Where(x => x.Value.TotalMilliseconds >= 0).ToDictionary(p => p.Key, p => p.Value);
+                var msSinceLastMsg = (DateTime.Now - lastLogEntry.TimeDequeue).TotalMilliseconds;
 
-                if (linesWithAge.Count > 0)
+                if (msSinceLastMsg < 200)
                 {
-                    var lastLine = linesWithAge.Last();
-
-                    if (lastLine.Value.TotalMilliseconds > 2000)
-                        break;
-
-                    bool linesChanged = !string.IsNullOrWhiteSpace(previousLastLine.Key) && lastLine.Key != previousLastLine.Key && lastLine.Value.TotalMilliseconds < 500;
-
-                    if (linesChanged && !lastLine.Key.Contains("skipped")) // If lines changed (= still outputting), send ctrl+c again
-                        TtiUtils.SoftCancelInvokeAi();
-
-                    previousLastLine = lastLine;
+                    SendCtrlC();
+                    await Task.Delay(250);
+                }
+                else if (msSinceLastMsg > 2000)
+                {
+                    break;
                 }
 
-                await Task.Delay(100);
+                await Task.Delay(200);
             }
 
             Program.MainForm.runBtn.SetEnabled(true);

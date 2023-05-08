@@ -22,9 +22,9 @@ namespace StableDiffusionGui.Implementations
 
             string path = form.EnteredText.Trim();
             IoUtils.DeleteIfExists(Path.Combine(path, "build")); // Delete build folder
-            //PatchTiMgr(path);
+            PatchTiMgr(path);
             PatchCli(path);
-            //MiscPatches(path);
+            MiscPatches(path);
             Logger.Log("Done patching InvokeAI code.");
         }
 

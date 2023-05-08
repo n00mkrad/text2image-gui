@@ -111,6 +111,11 @@ namespace StableDiffusionGui.Main
                     }
                 }
 
+                if (line.Trim().StartsWith("invoke_pid="))
+                {
+                    InvokeAi.Pid = line.Split('=')[1].GetInt();
+                }
+
                 if (line.Trim().StartsWith(Constants.LogMsgs.Invoke.TiTriggers))
                 {
                     Logger.Log($"Model {(_invokeAiLastModelCached ? " retrieved from RAM cache" : "loaded")}.", false, ellipsis);

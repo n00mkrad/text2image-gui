@@ -122,14 +122,6 @@ namespace StableDiffusionGui.Main
                 UiUtils.ShowMessageBox($"{(prompts.Count > 1 ? "One of your prompts" : "Your prompt")} is very long (>{thresh} words).\n\nThe AI might ignore parts of your prompt. Shorten the prompt to avoid this.");
         }
 
-        public static void SoftCancelInvokeAi()
-        {
-            var childProcesses = OsUtils.GetChildProcesses(TtiProcess.CurrentProcess);
-            
-            foreach (System.Diagnostics.Process p in childProcesses.Where(p => p.ProcessName.Lower() == "python"))
-                OsUtils.SendCtrlC(p.Id);
-        }
-
         /// <summary> Checks if Stable Diffusion model exists </summary>
         /// <returns> Model ZlpFileInfo if it exists - null if not </returns>
         public static Model CheckIfCurrentSdModelExists(List<Model> cachedModels = null)
