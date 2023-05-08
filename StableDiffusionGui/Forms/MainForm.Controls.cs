@@ -206,21 +206,19 @@ namespace StableDiffusionGui.Forms
         public void SortLoras()
         {
             List<object[]> rowValues = gridLoras.Rows.Cast<DataGridViewRow>().ToList().Select(r => new object[] { r.Cells[0].Value, r.Cells[1].Value, r.Cells[2].Value }).ToList();
-
+            
             if (rowValues.Count < 2) // No need to sort 1 item
                 return;
-
+            
             ignoreNextGridLorasCellEndEdit = true;
-            List<object[]> newRowValues = new List<object[]>();
-            rowValues.Where(row => (bool)row[0] == true).ToList().ForEach(row => newRowValues.Add(new object[] { true, (string)row[1], (string)row[2] })); // Add enabled LoRAs first
-            rowValues.Where(row => (bool)row[0] == false).OrderBy(r => (string)r[1]).ToList().ForEach(row => newRowValues.Add(new object[] { false, (string)row[1], (string)row[2] })); // Then the rest (disabled LoRAs)
-
+            List<object[]> newRowValues = rowValues.OrderByDescending(row => (bool)row[0]).ThenBy(row => (string)row[1]).ToList();
+            
             if (rowValues.ToJson() == newRowValues.ToJson()) // Brute-force comparison because SequenceEqual didn't work (?)
             {
                 Console.WriteLine($"Skipped sort because new sequence is equal");
                 return;
             }
-
+            
             Console.WriteLine($"Sorting...");
             gridLoras.Rows.Clear();
             newRowValues.ForEach(row => gridLoras.Rows.Add((bool)row[0], (string)row[1], (string)row[2]));
