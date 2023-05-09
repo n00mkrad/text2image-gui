@@ -140,8 +140,6 @@ namespace StableDiffusionGui.Implementations
 
         public static string ConvertAttentionSyntax(string prompt)
         {
-            return prompt;
-
             if (!prompt.Contains("(") && !prompt.Contains("{")) // Skip if no parentheses/curly brackets were used
                 return prompt;
 
@@ -222,6 +220,7 @@ namespace StableDiffusionGui.Implementations
             return true;
         }
 
+        /// <summary> Combines regular prompt, negative prompt, and LoRAs into single InvokeAI prompt </summary>
         public static string GetCombinedPrompt(string prompt, string negPrompt, EasyDict<string, float> loras = null)
         {
             prompt = prompt.Trim();
