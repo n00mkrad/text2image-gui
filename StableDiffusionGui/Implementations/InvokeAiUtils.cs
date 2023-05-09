@@ -227,7 +227,7 @@ namespace StableDiffusionGui.Implementations
             prompt = prompt.Trim();
 
             if (loras != null && loras.Any())
-                prompt += " " + string.Join(", ", loras.Select(l => $"withLora({l.Key},{l.Value.ToStringDot("0.###")})"));
+                prompt += ", " + string.Join(", ", loras.Select(l => $"withLora({l.Key},{l.Value.ToStringDot("0.###")})"));
 
             if (negPrompt.IsNotEmpty())
                 prompt += $" [{negPrompt.Trim()}]";
