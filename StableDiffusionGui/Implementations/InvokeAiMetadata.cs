@@ -38,7 +38,7 @@ namespace StableDiffusionGui.Implementations
             public float HSymmetryTimePct { get; set; }
 
             [JsonProperty("seed")]
-            public int Seed { get; set; }
+            public long Seed { get; set; }
 
             [JsonProperty("width")]
             public int Width { get; set; }

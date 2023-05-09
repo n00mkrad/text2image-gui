@@ -187,6 +187,9 @@ namespace StableDiffusionGui.Forms
             this.label2 = new System.Windows.Forms.Label();
             this.panelLoras = new System.Windows.Forms.Panel();
             this.gridLoras = new System.Windows.Forms.DataGridView();
+            this.ColEnabled = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.ColName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColWeight = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label24 = new System.Windows.Forms.Label();
             this.panelEmbeddings = new System.Windows.Forms.Panel();
             this.btnEmbeddingCopy = new HTAlt.WinForms.HTButton();
@@ -213,9 +216,6 @@ namespace StableDiffusionGui.Forms
             this.menuStripInstall = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.manageInstallationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.installUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ColEnabled = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.ColName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColWeight = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuStripOutputImg.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.upDownSeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
@@ -581,8 +581,8 @@ namespace StableDiffusionGui.Forms
             this.upDownSeed.ForeColor = System.Drawing.Color.White;
             this.upDownSeed.Location = new System.Drawing.Point(233, 1);
             this.upDownSeed.Maximum = new decimal(new int[] {
-            1410065408,
-            2,
+            -1,
+            2147483647,
             0,
             0});
             this.upDownSeed.Minimum = new decimal(new int[] {
@@ -653,7 +653,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderScale.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScale.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScale.Location = new System.Drawing.Point(308, 2);
+            this.textboxSliderScale.Location = new System.Drawing.Point(308, 4);
             this.textboxSliderScale.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScale.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScale.Name = "textboxSliderScale";
@@ -800,7 +800,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderInitStrength.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderInitStrength.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderInitStrength.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderInitStrength.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderInitStrength.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderInitStrength.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderInitStrength.Name = "textboxSliderInitStrength";
@@ -1320,7 +1320,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderScaleImg.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScaleImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScaleImg.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScaleImg.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderScaleImg.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderScaleImg.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScaleImg.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScaleImg.Name = "textboxSliderScaleImg";
@@ -2304,7 +2304,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderSteps.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderSteps.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderSteps.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderSteps.Location = new System.Drawing.Point(308, 2);
+            this.textboxSliderSteps.Location = new System.Drawing.Point(308, 4);
             this.textboxSliderSteps.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderSteps.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderSteps.Name = "textboxSliderSteps";
@@ -2563,6 +2563,29 @@ namespace StableDiffusionGui.Forms
             this.gridLoras.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.gridLoras.Size = new System.Drawing.Size(395, 57);
             this.gridLoras.TabIndex = 106;
+            // 
+            // ColEnabled
+            // 
+            this.ColEnabled.HeaderText = "Load";
+            this.ColEnabled.Name = "ColEnabled";
+            this.ColEnabled.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.ColEnabled.Width = 45;
+            // 
+            // ColName
+            // 
+            this.ColName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ColName.HeaderText = "File Name";
+            this.ColName.Name = "ColName";
+            this.ColName.ReadOnly = true;
+            this.ColName.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // ColWeight
+            // 
+            this.ColWeight.HeaderText = "Weight";
+            this.ColWeight.MaxInputLength = 8;
+            this.ColWeight.Name = "ColWeight";
+            this.ColWeight.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.ColWeight.Width = 60;
             // 
             // label24
             // 
@@ -2892,29 +2915,6 @@ namespace StableDiffusionGui.Forms
             this.installUpdatesToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
             this.installUpdatesToolStripMenuItem.Text = "Install Updates";
             this.installUpdatesToolStripMenuItem.Click += new System.EventHandler(this.installUpdatesToolStripMenuItem_Click);
-            // 
-            // ColEnabled
-            // 
-            this.ColEnabled.HeaderText = "Load";
-            this.ColEnabled.Name = "ColEnabled";
-            this.ColEnabled.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.ColEnabled.Width = 45;
-            // 
-            // ColName
-            // 
-            this.ColName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ColName.HeaderText = "File Name";
-            this.ColName.Name = "ColName";
-            this.ColName.ReadOnly = true;
-            this.ColName.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            // 
-            // ColWeight
-            // 
-            this.ColWeight.HeaderText = "Weight";
-            this.ColWeight.MaxInputLength = 8;
-            this.ColWeight.Name = "ColWeight";
-            this.ColWeight.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.ColWeight.Width = 60;
             // 
             // MainForm
             // 
