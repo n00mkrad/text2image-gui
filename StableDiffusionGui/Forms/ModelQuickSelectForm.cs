@@ -47,9 +47,17 @@ namespace StableDiffusionGui.Forms
             comboxModel.Items.Clear();
 
             if (_modelType == Enums.Models.Type.Vae)
+            {
                 comboxModel.Items.Add("None");
+                Models.GetVaes().ForEach(x => comboxModel.Items.Add(x.Name));
+            }
+            else
+            {
+                Models.GetModels(_modelType, _implementation).ForEach(x => comboxModel.Items.Add(x.Name));
+            }
+                
 
-            Models.GetModels(_modelType, _implementation).ForEach(x => comboxModel.Items.Add(x.Name));
+            // Models.GetModels(_modelType, _implementation).ForEach(x => comboxModel.Items.Add(x.Name));
 
             if (loadCombox)
                 ConfigParser.LoadGuiElement(comboxModel, ref _modelType == Enums.Models.Type.Normal ? ref Config.Instance.Model : ref Config.Instance.ModelVae);

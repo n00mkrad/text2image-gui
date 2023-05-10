@@ -50,7 +50,7 @@ namespace StableDiffusionGui.Forms
             }
             else if (_folder == Folder.Vaes)
             {
-                Folders = new List<string>() { Path.Combine(Paths.GetModelsPath(), Constants.Dirs.Models.Vae) };
+                Folders = new List<string>() { Paths.GetVaesPath() };
                 Folders.AddRange(Config.Instance.CustomVaeDirs, out Folders);
             }
         }

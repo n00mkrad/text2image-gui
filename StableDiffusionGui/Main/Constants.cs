@@ -41,9 +41,11 @@
 
             public class Models
             {
-                public const string Root = "models";
-                public const string Vae = "vae";
-                public const string Embeddings = "embeddings";
+                public const string Root = "Models";
+                public const string Ckpts = "Checkpoints";
+                public const string Vae = "VAE";
+                public const string Embeddings = "Embeddings";
+                public const string Loras = "LoRAs";
             }
 
             public class Cache

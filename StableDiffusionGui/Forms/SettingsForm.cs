@@ -32,9 +32,18 @@ namespace StableDiffusionGui.Forms
         private void SettingsForm_Load(object sender, EventArgs e)
         {
             _ready = false;
-
             MinimumSize = Size;
             MaximumSize = new System.Drawing.Size(Size.Width, (Size.Height * 1.25f).RoundToInt());
+            InitEvents();
+        }
+
+        private void InitEvents()
+        {
+            btnOutPathBrowse.Click += (s, e) => { BrowsePath(textboxOutPath); };
+            btnEmbeddingsDirBrowse.Click += (s, e) => { BrowsePath(textboxEmbeddingsDir); };
+            btnLorasDirBrowse.Click += (s, e) => { BrowsePath(textboxLorasDir); };
+            btnOutPathBrowse.Click += (s, e) => { BrowsePath(textboxOutPath); };
+            btnFavsPathBrowse.Click += (s, e) => { BrowsePath(textboxFavsPath); };
         }
 
         private void SettingsForm_Shown(object sender, EventArgs e)
@@ -49,6 +58,8 @@ namespace StableDiffusionGui.Forms
                 checkboxUnloadModel,
                 comboxSdModel, btnRefreshModelsDropdown, btnOpenModelsFolder,
                 comboxSdModelVae, btnRefreshModelsDropdownVae, btnOpenModelsFolderVae,
+                textboxEmbeddingsDir,
+                textboxLorasDir,
                 comboxClipSkip,
                 comboxCudaDevice,
                 textboxOutPath, btnOutPathBrowse,
@@ -80,25 +91,36 @@ namespace StableDiffusionGui.Forms
             if (CurrImplementation < 0)
                 return;
 
-            List<Model> models = Models.GetModelsAll().Where(m => CurrImplementation.GetInfo().SupportedModelFormats.Contains(m.Format)).ToList();
-            var types = new List<Enums.Models.Type>() { Enums.Models.Type.Normal, Enums.Models.Type.Vae };
-
-            foreach(var type in types)
+            ((Action)(() =>
             {
-                var combox = type == Enums.Models.Type.Normal ? comboxSdModel : comboxSdModelVae;
-                combox.Items.Clear();
+                comboxSdModel.Items.Clear();
+                Models.GetModelsAll().Where(m => CurrImplementation.GetInfo().SupportedModelFormats.Contains(m.Format)).ToList().ForEach(m => comboxSdModel.Items.Add(m.Name));
+                ConfigParser.LoadGuiElement(comboxSdModel, ref Config.Instance.Model);
 
-                if (type == Enums.Models.Type.Vae)
-                    combox.Items.Add("None");
+                if (comboxSdModel.Items.Count > 0 && comboxSdModel.SelectedIndex == -1)
+                    comboxSdModel.SelectedIndex = 0;
 
-                models.Where(m => m.Type == type).ToList().ForEach(m => combox.Items.Add(m.Name));
-                ConfigParser.LoadGuiElement(combox, ref type == Enums.Models.Type.Normal ? ref Config.Instance.Model : ref Config.Instance.ModelVae);
+                UpdateComboxStates();
+            })).RunWithUiStoppedShowErrors(this);
+        }
 
-                if (combox.Items.Count > 0 && combox.SelectedIndex == -1)
-                    combox.SelectedIndex = 0;
-            }
+        private void LoadVaes()
+        {
+            if (CurrImplementation < 0)
+                return;
 
-            UpdateComboxStates();
+            ((Action)(() =>
+            {
+                comboxSdModelVae.Items.Clear();
+                comboxSdModelVae.Items.Add("None");
+                Models.GetVaes().ForEach(m => comboxSdModelVae.Items.Add(m.Name));
+                ConfigParser.LoadGuiElement(comboxSdModelVae, ref Config.Instance.ModelVae);
+
+                if (comboxSdModelVae.Items.Count > 0 && comboxSdModelVae.SelectedIndex == -1)
+                    comboxSdModelVae.SelectedIndex = 0;
+
+                UpdateComboxStates();
+            })).RunWithUiStoppedShowErrors(this);
         }
 
         private async Task LoadGpus()
@@ -124,7 +146,7 @@ namespace StableDiffusionGui.Forms
 
         private void LoadImplementations()
         {
-            if(this.RequiresInvoke(new Action(LoadImplementations)))
+            if (this.RequiresInvoke(new Action(LoadImplementations)))
                 return;
 
             comboxImplementation.Items.Clear();
@@ -149,6 +171,8 @@ namespace StableDiffusionGui.Forms
             ConfigParser.LoadGuiElement(checkboxModelInFilename, ref Config.Instance.ModelInFilename);
             ConfigParser.LoadGuiElement(textboxOutPath, ref Config.Instance.OutPath);
             ConfigParser.LoadGuiElement(textboxFavsPath, ref Config.Instance.FavsPath);
+            ConfigParser.LoadGuiElement(textboxEmbeddingsDir, ref Config.Instance.EmbeddingsDir);
+            ConfigParser.LoadGuiElement(textboxLorasDir, ref Config.Instance.LorasDir);
             //ConfigParser.LoadGuiElement(comboxSdModel, ref Config.Instance.Model);
             ConfigParser.LoadGuiElement(comboxSdModelVae, ref Config.Instance.ModelVae);
             // ConfigParser.LoadComboxIndex(comboxCudaDevice);
@@ -181,6 +205,8 @@ namespace StableDiffusionGui.Forms
             ConfigParser.SaveGuiElement(checkboxModelInFilename, ref Config.Instance.ModelInFilename);
             ConfigParser.SaveGuiElement(textboxOutPath, ref Config.Instance.OutPath);
             ConfigParser.SaveGuiElement(textboxFavsPath, ref Config.Instance.FavsPath);
+            ConfigParser.SaveGuiElement(textboxEmbeddingsDir, ref Config.Instance.EmbeddingsDir);
+            ConfigParser.SaveGuiElement(textboxLorasDir, ref Config.Instance.LorasDir);
             if (!string.IsNullOrWhiteSpace(comboxSdModel.Text)) ConfigParser.SaveGuiElement(comboxSdModel, ref Config.Instance.Model);
             if (!string.IsNullOrWhiteSpace(comboxSdModelVae.Text)) ConfigParser.SaveGuiElement(comboxSdModelVae, ref Config.Instance.ModelVae);
             if (!comboxCudaDevice.Text.StartsWith("Loading")) ConfigParser.SaveComboxIndex(comboxCudaDevice, ref Config.Instance.CudaDeviceIdx);
@@ -195,12 +221,12 @@ namespace StableDiffusionGui.Forms
             Config.Save();
         }
 
-        private void btnOutPathBrowse_Click(object sender, EventArgs e)
+        private void BrowsePath(TextBox textbox)
         {
-            CommonOpenFileDialog dialog = new CommonOpenFileDialog { InitialDirectory = textboxOutPath.Text, IsFolderPicker = true };
+            CommonOpenFileDialog dialog = new CommonOpenFileDialog { InitialDirectory = textbox.Text, IsFolderPicker = true };
 
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
-                textboxOutPath.Text = dialog.FileName;
+                textbox.Text = dialog.FileName;
         }
 
         private void btnOpenModelsFolder_Click(object sender, EventArgs e)
@@ -213,10 +239,14 @@ namespace StableDiffusionGui.Forms
             SetupModelDirs(ModelFoldersForm.Folder.Vaes);
         }
 
-        private void SetupModelDirs (ModelFoldersForm.Folder folderType)
+        private void SetupModelDirs(ModelFoldersForm.Folder folderType)
         {
             new ModelFoldersForm(folderType).ShowDialogForm();
-            LoadModels();
+
+            if (folderType == ModelFoldersForm.Folder.Vaes)
+                LoadVaes();
+            else
+                LoadModels();
         }
 
         private void btnRefreshModelsDropdown_Click(object sender, EventArgs e)
@@ -226,15 +256,7 @@ namespace StableDiffusionGui.Forms
 
         private void btnRefreshModelsDropdownVae_Click(object sender, EventArgs e)
         {
-            LoadModels();
-        }
-
-        private void btnFavsPathBrowse_Click(object sender, EventArgs e)
-        {
-            CommonOpenFileDialog dialog = new CommonOpenFileDialog { InitialDirectory = textboxFavsPath.Text, IsFolderPicker = true };
-
-            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
-                textboxFavsPath.Text = dialog.FileName;
+            LoadVaes();
         }
 
         private void comboxImplementation_SelectedIndexChanged(object sender, EventArgs e)
@@ -242,20 +264,21 @@ namespace StableDiffusionGui.Forms
             if (CurrImplementation < 0)
                 return;
 
-            this.StopRendering();
-
-            try
+            ((Action)(() =>
             {
                 Config.Instance.Implementation = CurrImplementation;
                 panelFullPrecision.SetVisible(CurrImplementation.Supports(ImplementationInfo.Feature.HalfPrecisionToggle));
                 panelUnloadModel.SetVisible(CurrImplementation.Supports(ImplementationInfo.Feature.InteractiveCli));
                 panelCudaDevice.SetVisible(CurrImplementation.Supports(ImplementationInfo.Feature.DeviceSelection));
                 panelSdModel.SetVisible(CurrImplementation.Supports(ImplementationInfo.Feature.CustomModels));
+                panelEmbeddingsPath.SetVisible(CurrImplementation.Supports(ImplementationInfo.Feature.Embeddings));
+                panelLoras.SetVisible(CurrImplementation.Supports(ImplementationInfo.Feature.Lora));
                 panelVae.SetVisible(CurrImplementation.Supports(ImplementationInfo.Feature.CustomVae));
                 panelAdvancedOptsInvoke.SetVisible(CurrImplementation == Implementation.InvokeAi);
                 panelModelCaching.SetVisible(CurrImplementation == Implementation.InvokeAi);
 
                 LoadModels();
+                LoadVaes();
 
                 if (_ready && CurrImplementation != Implementation.InvokeAi)
                 {
@@ -267,13 +290,7 @@ namespace StableDiffusionGui.Forms
 
                     UiUtils.ShowMessageBox($"Warning: This implementation disables several features.\nOnly use it if you need it due to compatibility or hardware limitations.");
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogException(ex);
-            }
-
-            this.ResumeRendering();
+            })).RunWithUiStoppedShowErrors(this);
         }
 
         private void UpdateComboxStates()

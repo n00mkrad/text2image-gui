@@ -127,6 +127,20 @@
             this.checkboxModelCaching = new System.Windows.Forms.CheckBox();
             this.panel44 = new System.Windows.Forms.Panel();
             this.label21 = new System.Windows.Forms.Label();
+            this.panelLoras = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel19 = new System.Windows.Forms.TableLayoutPanel();
+            this.panel47 = new System.Windows.Forms.Panel();
+            this.textboxLorasDir = new System.Windows.Forms.TextBox();
+            this.btnLorasDirBrowse = new HTAlt.WinForms.HTButton();
+            this.panel48 = new System.Windows.Forms.Panel();
+            this.label23 = new System.Windows.Forms.Label();
+            this.panelEmbeddingsPath = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel18 = new System.Windows.Forms.TableLayoutPanel();
+            this.panel45 = new System.Windows.Forms.Panel();
+            this.textboxEmbeddingsDir = new System.Windows.Forms.TextBox();
+            this.btnEmbeddingsDirBrowse = new HTAlt.WinForms.HTButton();
+            this.panel46 = new System.Windows.Forms.Panel();
+            this.label22 = new System.Windows.Forms.Label();
             this.panelVae = new System.Windows.Forms.Panel();
             this.tableLayoutPanel12 = new System.Windows.Forms.TableLayoutPanel();
             this.panel33 = new System.Windows.Forms.Panel();
@@ -223,6 +237,14 @@
             this.tableLayoutPanel17.SuspendLayout();
             this.panel43.SuspendLayout();
             this.panel44.SuspendLayout();
+            this.panelLoras.SuspendLayout();
+            this.tableLayoutPanel19.SuspendLayout();
+            this.panel47.SuspendLayout();
+            this.panel48.SuspendLayout();
+            this.panelEmbeddingsPath.SuspendLayout();
+            this.tableLayoutPanel18.SuspendLayout();
+            this.panel45.SuspendLayout();
+            this.panel46.SuspendLayout();
             this.panelVae.SuspendLayout();
             this.tableLayoutPanel12.SuspendLayout();
             this.panel33.SuspendLayout();
@@ -279,6 +301,8 @@
             this.parentPanel.Controls.Add(this.panelCudaDevice);
             this.parentPanel.Controls.Add(this.panelAdvancedOptsInvoke);
             this.parentPanel.Controls.Add(this.panelModelCaching);
+            this.parentPanel.Controls.Add(this.panelLoras);
+            this.parentPanel.Controls.Add(this.panelEmbeddingsPath);
             this.parentPanel.Controls.Add(this.panelVae);
             this.parentPanel.Controls.Add(this.panelSdModel);
             this.parentPanel.Controls.Add(this.panelUnloadModel);
@@ -295,7 +319,7 @@
             // 
             this.panelNotify.Controls.Add(this.notificationPanel);
             this.panelNotify.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelNotify.Location = new System.Drawing.Point(0, 715);
+            this.panelNotify.Location = new System.Drawing.Point(0, 785);
             this.panelNotify.Name = "panelNotify";
             this.panelNotify.Size = new System.Drawing.Size(843, 35);
             this.panelNotify.TabIndex = 22;
@@ -369,7 +393,7 @@
             // 
             this.panelAdvancedMode.Controls.Add(this.tableLayoutPanel4);
             this.panelAdvancedMode.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelAdvancedMode.Location = new System.Drawing.Point(0, 680);
+            this.panelAdvancedMode.Location = new System.Drawing.Point(0, 750);
             this.panelAdvancedMode.Name = "panelAdvancedMode";
             this.panelAdvancedMode.Size = new System.Drawing.Size(843, 35);
             this.panelAdvancedMode.TabIndex = 15;
@@ -435,7 +459,7 @@
             // 
             this.panelInitImageRetainAspectRatio.Controls.Add(this.tableLayoutPanel15);
             this.panelInitImageRetainAspectRatio.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelInitImageRetainAspectRatio.Location = new System.Drawing.Point(0, 645);
+            this.panelInitImageRetainAspectRatio.Location = new System.Drawing.Point(0, 715);
             this.panelInitImageRetainAspectRatio.Name = "panelInitImageRetainAspectRatio";
             this.panelInitImageRetainAspectRatio.Size = new System.Drawing.Size(843, 35);
             this.panelInitImageRetainAspectRatio.TabIndex = 29;
@@ -501,7 +525,7 @@
             // 
             this.panelAutoSetResForInitImg.Controls.Add(this.tableLayoutPanel14);
             this.panelAutoSetResForInitImg.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelAutoSetResForInitImg.Location = new System.Drawing.Point(0, 610);
+            this.panelAutoSetResForInitImg.Location = new System.Drawing.Point(0, 680);
             this.panelAutoSetResForInitImg.Name = "panelAutoSetResForInitImg";
             this.panelAutoSetResForInitImg.Size = new System.Drawing.Size(843, 35);
             this.panelAutoSetResForInitImg.TabIndex = 28;
@@ -567,7 +591,7 @@
             // 
             this.panel1.Controls.Add(this.label17);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Location = new System.Drawing.Point(0, 570);
+            this.panel1.Location = new System.Drawing.Point(0, 640);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(843, 40);
             this.panel1.TabIndex = 27;
@@ -587,7 +611,7 @@
             // 
             this.panelSaveUnprocessedImages.Controls.Add(this.panel29);
             this.panelSaveUnprocessedImages.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSaveUnprocessedImages.Location = new System.Drawing.Point(0, 535);
+            this.panelSaveUnprocessedImages.Location = new System.Drawing.Point(0, 605);
             this.panelSaveUnprocessedImages.Name = "panelSaveUnprocessedImages";
             this.panelSaveUnprocessedImages.Size = new System.Drawing.Size(843, 35);
             this.panelSaveUnprocessedImages.TabIndex = 23;
@@ -671,7 +695,7 @@
             // 
             this.panelMultiPromptsSameSeed.Controls.Add(this.panel18);
             this.panelMultiPromptsSameSeed.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelMultiPromptsSameSeed.Location = new System.Drawing.Point(0, 500);
+            this.panelMultiPromptsSameSeed.Location = new System.Drawing.Point(0, 570);
             this.panelMultiPromptsSameSeed.Name = "panelMultiPromptsSameSeed";
             this.panelMultiPromptsSameSeed.Size = new System.Drawing.Size(843, 35);
             this.panelMultiPromptsSameSeed.TabIndex = 17;
@@ -755,7 +779,7 @@
             // 
             this.panelFavsDir.Controls.Add(this.tableLayoutPanel13);
             this.panelFavsDir.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelFavsDir.Location = new System.Drawing.Point(0, 465);
+            this.panelFavsDir.Location = new System.Drawing.Point(0, 535);
             this.panelFavsDir.Name = "panelFavsDir";
             this.panelFavsDir.Size = new System.Drawing.Size(843, 35);
             this.panelFavsDir.TabIndex = 26;
@@ -819,7 +843,6 @@
             this.btnFavsPathBrowse.TabStop = false;
             this.btnFavsPathBrowse.Text = "Browse...";
             this.toolTip.SetToolTip(this.btnFavsPathBrowse, "Browse for an Image Output Folder");
-            this.btnFavsPathBrowse.Click += new System.EventHandler(this.btnFavsPathBrowse_Click);
             // 
             // panel35
             // 
@@ -847,7 +870,7 @@
             // 
             this.panelPromptInFilename.Controls.Add(this.tableLayoutPanel5);
             this.panelPromptInFilename.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelPromptInFilename.Location = new System.Drawing.Point(0, 430);
+            this.panelPromptInFilename.Location = new System.Drawing.Point(0, 500);
             this.panelPromptInFilename.Name = "panelPromptInFilename";
             this.panelPromptInFilename.Size = new System.Drawing.Size(843, 35);
             this.panelPromptInFilename.TabIndex = 16;
@@ -982,7 +1005,7 @@
             // 
             this.panelPromptSubfolders.Controls.Add(this.tableLayoutPanel2);
             this.panelPromptSubfolders.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelPromptSubfolders.Location = new System.Drawing.Point(0, 395);
+            this.panelPromptSubfolders.Location = new System.Drawing.Point(0, 465);
             this.panelPromptSubfolders.Name = "panelPromptSubfolders";
             this.panelPromptSubfolders.Size = new System.Drawing.Size(843, 35);
             this.panelPromptSubfolders.TabIndex = 12;
@@ -1078,7 +1101,7 @@
             // 
             this.panelOutPath.Controls.Add(this.tableLayoutPanel7);
             this.panelOutPath.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelOutPath.Location = new System.Drawing.Point(0, 360);
+            this.panelOutPath.Location = new System.Drawing.Point(0, 430);
             this.panelOutPath.Name = "panelOutPath";
             this.panelOutPath.Size = new System.Drawing.Size(843, 35);
             this.panelOutPath.TabIndex = 13;
@@ -1142,7 +1165,6 @@
             this.btnOutPathBrowse.TabStop = false;
             this.btnOutPathBrowse.Text = "Browse...";
             this.toolTip.SetToolTip(this.btnOutPathBrowse, "Browse for an Image Output Folder");
-            this.btnOutPathBrowse.Click += new System.EventHandler(this.btnOutPathBrowse_Click);
             // 
             // panel24
             // 
@@ -1170,7 +1192,7 @@
             // 
             this.panel5.Controls.Add(this.label5);
             this.panel5.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel5.Location = new System.Drawing.Point(0, 320);
+            this.panel5.Location = new System.Drawing.Point(0, 390);
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(843, 40);
             this.panel5.TabIndex = 14;
@@ -1190,7 +1212,7 @@
             // 
             this.panelCudaDevice.Controls.Add(this.tableLayoutPanel9);
             this.panelCudaDevice.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelCudaDevice.Location = new System.Drawing.Point(0, 285);
+            this.panelCudaDevice.Location = new System.Drawing.Point(0, 355);
             this.panelCudaDevice.Name = "panelCudaDevice";
             this.panelCudaDevice.Size = new System.Drawing.Size(843, 35);
             this.panelCudaDevice.TabIndex = 21;
@@ -1259,7 +1281,7 @@
             // 
             this.panelAdvancedOptsInvoke.Controls.Add(this.tableLayoutPanel16);
             this.panelAdvancedOptsInvoke.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelAdvancedOptsInvoke.Location = new System.Drawing.Point(0, 250);
+            this.panelAdvancedOptsInvoke.Location = new System.Drawing.Point(0, 320);
             this.panelAdvancedOptsInvoke.Name = "panelAdvancedOptsInvoke";
             this.panelAdvancedOptsInvoke.Size = new System.Drawing.Size(843, 35);
             this.panelAdvancedOptsInvoke.TabIndex = 30;
@@ -1333,7 +1355,7 @@
             // 
             this.panelModelCaching.Controls.Add(this.tableLayoutPanel17);
             this.panelModelCaching.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelModelCaching.Location = new System.Drawing.Point(0, 215);
+            this.panelModelCaching.Location = new System.Drawing.Point(0, 285);
             this.panelModelCaching.Name = "panelModelCaching";
             this.panelModelCaching.Size = new System.Drawing.Size(843, 35);
             this.panelModelCaching.TabIndex = 31;
@@ -1393,6 +1415,188 @@
             this.label21.Size = new System.Drawing.Size(152, 13);
             this.label21.TabIndex = 84;
             this.label21.Text = "Cache Loaded Models in RAM";
+            // 
+            // panelLoras
+            // 
+            this.panelLoras.Controls.Add(this.tableLayoutPanel19);
+            this.panelLoras.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelLoras.Location = new System.Drawing.Point(0, 250);
+            this.panelLoras.Name = "panelLoras";
+            this.panelLoras.Size = new System.Drawing.Size(843, 35);
+            this.panelLoras.TabIndex = 33;
+            // 
+            // tableLayoutPanel19
+            // 
+            this.tableLayoutPanel19.ColumnCount = 2;
+            this.tableLayoutPanel19.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel19.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
+            this.tableLayoutPanel19.Controls.Add(this.panel47, 0, 0);
+            this.tableLayoutPanel19.Controls.Add(this.panel48, 0, 0);
+            this.tableLayoutPanel19.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel19.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel19.Name = "tableLayoutPanel19";
+            this.tableLayoutPanel19.RowCount = 1;
+            this.tableLayoutPanel19.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel19.Size = new System.Drawing.Size(843, 35);
+            this.tableLayoutPanel19.TabIndex = 1;
+            // 
+            // panel47
+            // 
+            this.panel47.Controls.Add(this.textboxLorasDir);
+            this.panel47.Controls.Add(this.btnLorasDirBrowse);
+            this.panel47.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel47.Location = new System.Drawing.Point(410, 0);
+            this.panel47.Margin = new System.Windows.Forms.Padding(0);
+            this.panel47.Name = "panel47";
+            this.panel47.Size = new System.Drawing.Size(433, 35);
+            this.panel47.TabIndex = 88;
+            // 
+            // textboxLorasDir
+            // 
+            this.textboxLorasDir.AllowDrop = true;
+            this.textboxLorasDir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.textboxLorasDir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textboxLorasDir.ForeColor = System.Drawing.Color.White;
+            this.textboxLorasDir.Location = new System.Drawing.Point(0, 7);
+            this.textboxLorasDir.MinimumSize = new System.Drawing.Size(4, 21);
+            this.textboxLorasDir.Name = "textboxLorasDir";
+            this.textboxLorasDir.Size = new System.Drawing.Size(352, 20);
+            this.textboxLorasDir.TabIndex = 2;
+            this.textboxLorasDir.WordWrap = false;
+            // 
+            // btnLorasDirBrowse
+            // 
+            this.btnLorasDirBrowse.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.btnLorasDirBrowse.AutoColor = true;
+            this.btnLorasDirBrowse.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnLorasDirBrowse.ButtonImage = null;
+            this.btnLorasDirBrowse.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
+            this.btnLorasDirBrowse.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
+            this.btnLorasDirBrowse.DrawImage = false;
+            this.btnLorasDirBrowse.ForeColor = System.Drawing.Color.White;
+            this.btnLorasDirBrowse.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
+            this.btnLorasDirBrowse.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
+            this.btnLorasDirBrowse.Location = new System.Drawing.Point(358, 6);
+            this.btnLorasDirBrowse.Name = "btnLorasDirBrowse";
+            this.btnLorasDirBrowse.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+            this.btnLorasDirBrowse.Size = new System.Drawing.Size(75, 23);
+            this.btnLorasDirBrowse.TabIndex = 3;
+            this.btnLorasDirBrowse.TabStop = false;
+            this.btnLorasDirBrowse.Text = "Browse...";
+            this.toolTip.SetToolTip(this.btnLorasDirBrowse, "Browse for an Image Output Folder");
+            // 
+            // panel48
+            // 
+            this.panel48.Controls.Add(this.label23);
+            this.panel48.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel48.Location = new System.Drawing.Point(0, 0);
+            this.panel48.Margin = new System.Windows.Forms.Padding(0);
+            this.panel48.Name = "panel48";
+            this.panel48.Size = new System.Drawing.Size(410, 35);
+            this.panel48.TabIndex = 87;
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label23.ForeColor = System.Drawing.Color.White;
+            this.label23.Location = new System.Drawing.Point(2, 11);
+            this.label23.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(103, 13);
+            this.label23.TabIndex = 85;
+            this.label23.Text = "LoRA Models Folder";
+            // 
+            // panelEmbeddingsPath
+            // 
+            this.panelEmbeddingsPath.Controls.Add(this.tableLayoutPanel18);
+            this.panelEmbeddingsPath.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelEmbeddingsPath.Location = new System.Drawing.Point(0, 215);
+            this.panelEmbeddingsPath.Name = "panelEmbeddingsPath";
+            this.panelEmbeddingsPath.Size = new System.Drawing.Size(843, 35);
+            this.panelEmbeddingsPath.TabIndex = 32;
+            // 
+            // tableLayoutPanel18
+            // 
+            this.tableLayoutPanel18.ColumnCount = 2;
+            this.tableLayoutPanel18.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel18.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
+            this.tableLayoutPanel18.Controls.Add(this.panel45, 0, 0);
+            this.tableLayoutPanel18.Controls.Add(this.panel46, 0, 0);
+            this.tableLayoutPanel18.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel18.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel18.Name = "tableLayoutPanel18";
+            this.tableLayoutPanel18.RowCount = 1;
+            this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel18.Size = new System.Drawing.Size(843, 35);
+            this.tableLayoutPanel18.TabIndex = 1;
+            // 
+            // panel45
+            // 
+            this.panel45.Controls.Add(this.textboxEmbeddingsDir);
+            this.panel45.Controls.Add(this.btnEmbeddingsDirBrowse);
+            this.panel45.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel45.Location = new System.Drawing.Point(410, 0);
+            this.panel45.Margin = new System.Windows.Forms.Padding(0);
+            this.panel45.Name = "panel45";
+            this.panel45.Size = new System.Drawing.Size(433, 35);
+            this.panel45.TabIndex = 88;
+            // 
+            // textboxEmbeddingsDir
+            // 
+            this.textboxEmbeddingsDir.AllowDrop = true;
+            this.textboxEmbeddingsDir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.textboxEmbeddingsDir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textboxEmbeddingsDir.ForeColor = System.Drawing.Color.White;
+            this.textboxEmbeddingsDir.Location = new System.Drawing.Point(0, 7);
+            this.textboxEmbeddingsDir.MinimumSize = new System.Drawing.Size(4, 21);
+            this.textboxEmbeddingsDir.Name = "textboxEmbeddingsDir";
+            this.textboxEmbeddingsDir.Size = new System.Drawing.Size(352, 20);
+            this.textboxEmbeddingsDir.TabIndex = 2;
+            this.textboxEmbeddingsDir.WordWrap = false;
+            // 
+            // btnEmbeddingsDirBrowse
+            // 
+            this.btnEmbeddingsDirBrowse.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.btnEmbeddingsDirBrowse.AutoColor = true;
+            this.btnEmbeddingsDirBrowse.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnEmbeddingsDirBrowse.ButtonImage = null;
+            this.btnEmbeddingsDirBrowse.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
+            this.btnEmbeddingsDirBrowse.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
+            this.btnEmbeddingsDirBrowse.DrawImage = false;
+            this.btnEmbeddingsDirBrowse.ForeColor = System.Drawing.Color.White;
+            this.btnEmbeddingsDirBrowse.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
+            this.btnEmbeddingsDirBrowse.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
+            this.btnEmbeddingsDirBrowse.Location = new System.Drawing.Point(358, 6);
+            this.btnEmbeddingsDirBrowse.Name = "btnEmbeddingsDirBrowse";
+            this.btnEmbeddingsDirBrowse.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+            this.btnEmbeddingsDirBrowse.Size = new System.Drawing.Size(75, 23);
+            this.btnEmbeddingsDirBrowse.TabIndex = 3;
+            this.btnEmbeddingsDirBrowse.TabStop = false;
+            this.btnEmbeddingsDirBrowse.Text = "Browse...";
+            this.toolTip.SetToolTip(this.btnEmbeddingsDirBrowse, "Browse for an Image Output Folder");
+            // 
+            // panel46
+            // 
+            this.panel46.Controls.Add(this.label22);
+            this.panel46.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel46.Location = new System.Drawing.Point(0, 0);
+            this.panel46.Margin = new System.Windows.Forms.Padding(0);
+            this.panel46.Name = "panel46";
+            this.panel46.Size = new System.Drawing.Size(410, 35);
+            this.panel46.TabIndex = 87;
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label22.ForeColor = System.Drawing.Color.White;
+            this.label22.Location = new System.Drawing.Point(2, 11);
+            this.label22.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(181, 13);
+            this.label22.TabIndex = 85;
+            this.label22.Text = "Textual Inversion Embeddings Folder";
             // 
             // panelVae
             // 
@@ -1956,6 +2160,18 @@
             this.panel43.PerformLayout();
             this.panel44.ResumeLayout(false);
             this.panel44.PerformLayout();
+            this.panelLoras.ResumeLayout(false);
+            this.tableLayoutPanel19.ResumeLayout(false);
+            this.panel47.ResumeLayout(false);
+            this.panel47.PerformLayout();
+            this.panel48.ResumeLayout(false);
+            this.panel48.PerformLayout();
+            this.panelEmbeddingsPath.ResumeLayout(false);
+            this.tableLayoutPanel18.ResumeLayout(false);
+            this.panel45.ResumeLayout(false);
+            this.panel45.PerformLayout();
+            this.panel46.ResumeLayout(false);
+            this.panel46.PerformLayout();
             this.panelVae.ResumeLayout(false);
             this.tableLayoutPanel12.ResumeLayout(false);
             this.panel33.ResumeLayout(false);
@@ -2126,5 +2342,19 @@
         private System.Windows.Forms.CheckBox checkboxModelCaching;
         private System.Windows.Forms.Panel panel44;
         private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.Panel panelLoras;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel19;
+        private System.Windows.Forms.Panel panel47;
+        private System.Windows.Forms.TextBox textboxLorasDir;
+        private HTAlt.WinForms.HTButton btnLorasDirBrowse;
+        private System.Windows.Forms.Panel panel48;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.Panel panelEmbeddingsPath;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel18;
+        private System.Windows.Forms.Panel panel45;
+        private System.Windows.Forms.TextBox textboxEmbeddingsDir;
+        private HTAlt.WinForms.HTButton btnEmbeddingsDirBrowse;
+        private System.Windows.Forms.Panel panel46;
+        private System.Windows.Forms.Label label22;
     }
 }

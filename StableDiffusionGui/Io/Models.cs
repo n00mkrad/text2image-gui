@@ -19,48 +19,37 @@ namespace StableDiffusionGui.Io
             List<string> mdlFolders = new List<string>();
 
             if (includeBuiltin)
-            {
                 mdlFolders.Add(Paths.GetModelsPath());
-                mdlFolders.Add(Path.Combine(Paths.GetModelsPath(), Constants.Dirs.Models.Vae));
-            }
 
-            var customModelDirsList = new List<string>();
-            customModelDirsList.AddRange(Config.Instance.CustomModelDirs);
-            customModelDirsList.AddRange(Config.Instance.CustomVaeDirs);
-
-            mdlFolders.AddRange(customModelDirsList, out mdlFolders);
+            mdlFolders.AddRange(Config.Instance.CustomModelDirs, out mdlFolders);
             return mdlFolders;
+        }
+
+        public static List<Model> GetVaes()
+        {
+            return GetModelsAll(true, Config.Instance.CustomVaeDirs, Enums.Models.Type.Vae);
         }
 
         public static List<Model> GetEmbeddings ()
         {
-            List<string> mdlFolders = GetAllModelDirs();
-            var fileList = new List<ZlpFileInfo>();
-
-            foreach (string folderPath in mdlFolders)
-                fileList.AddRange(IoUtils.GetFileInfosSorted(Path.Combine(folderPath, Constants.Dirs.Models.Embeddings), false, "*.*").ToList());
-
+            var fileList = IoUtils.GetFileInfosSorted(Paths.GetEmbeddingsPath(), false, "*.*");
             return fileList.Select(f => new Model(f, Format.Pytorch, Enums.Models.Type.Embedding)).ToList();
         }
 
         public static List<Model> GetLoras()
         {
-            List<string> mdlFolders = new List<string> { Path.Combine(Paths.GetDataPath(), "invoke", "loras") }; // TODO: Don't hardcode
-            var fileList = new List<ZlpFileInfo>();
-
-            foreach (string folderPath in mdlFolders)
-                fileList.AddRange(IoUtils.GetFileInfosSorted(folderPath, false, "*.safetensors").ToList());
-
+            var fileList = IoUtils.GetFileInfosSorted(Paths.GetLorasPath(), false, "*.safetensors");
             return fileList.Select(f => new Model(f, Format.Safetensors, Enums.Models.Type.Lora)).ToList();
         }
 
-        public static List<Model> GetModelsAll(bool removeUnknownModels = true)
+        public static List<Model> GetModelsAll(bool removeUnknownModels = true, List<string> overridePaths = null, Enums.Models.Type overrideType = (Enums.Models.Type)(-1))
         {
             List<Model> list = new List<Model>();
 
             try
             {
-                List<string> mdlFolders = GetAllModelDirs();
+                List<string> mdlFolders = overridePaths != null ? overridePaths : GetAllModelDirs();
+
                 var fileList = new List<ZlpFileInfo>();
 
                 foreach (string folderPath in mdlFolders)
@@ -71,7 +60,7 @@ namespace StableDiffusionGui.Io
                         fileList.AddRange(IoUtils.GetFileInfosSorted(dir, false, "*.*").ToList());
                 }
 
-                list.AddRange(fileList.Select(f => new Model(f))); // Add file-based models to final list
+                list.AddRange(fileList.Select(f => new Model(f, type: overrideType))); // Add file-based models to final list
 
                 var dirList = new List<ZlpDirectoryInfo>();
 
@@ -84,7 +73,7 @@ namespace StableDiffusionGui.Io
                 }
 
                 dirList = dirList.Where(d => IsDirDiffusersModel(d.FullName)).ToList();
-                list.AddRange(dirList.Select(f => new Model(f))); // Add folder-based models to final list
+                list.AddRange(dirList.Select(f => new Model(f, type: overrideType))); // Add folder-based models to final list
             }
             catch (Exception ex)
             {
@@ -208,6 +197,9 @@ namespace StableDiffusionGui.Io
 
                 if (parentDirName == Constants.Dirs.Models.Embeddings)
                     return Enums.Models.Type.Embedding;
+
+                if (parentDirName == Constants.Dirs.Models.Loras)
+                    return Enums.Models.Type.Lora;
 
                 return Enums.Models.Type.Normal;
             }

@@ -73,6 +73,8 @@ namespace StableDiffusionGui.Io
         public bool InvokeAllowMod8;
         public int EsrganTileSize;
         public float EsrganDenoise;
+        public string EmbeddingsDir;
+        public string LorasDir;
 
         public ConfigInstance()
         {
@@ -106,6 +108,8 @@ namespace StableDiffusionGui.Io
             SymmetryTimepoint = 0.9f;
             EsrganTileSize = 1024;
             EsrganDenoise = 0.0f;
+            EmbeddingsDir = Paths.GetEmbeddingsPath();
+            LorasDir = Paths.GetLorasPath();
         }
 
         public ConfigInstance Clone()

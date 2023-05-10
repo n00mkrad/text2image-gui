@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using ZetaLongPaths;
-using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
 namespace StableDiffusionGui.Io
 {
@@ -20,6 +19,11 @@ namespace StableDiffusionGui.Io
             SessionTimestamp = $"{n.Year}-{n.Month.ToString().PadLeft(2, '0')}-{n.Day.ToString().PadLeft(2, '0')}-{n.Hour.ToString().PadLeft(2, '0')}-{n.Minute.ToString().PadLeft(2, '0')}-{n.Second.ToString().PadLeft(2, '0')}";
         }
 
+        private static string ReturnDir(string path)
+        {
+            return Directory.CreateDirectory(path).FullName;
+        }
+
         public static string GetExe()
         {
             return System.Reflection.Assembly.GetEntryAssembly().GetName().CodeBase.Replace("file:///", "");
@@ -32,43 +36,47 @@ namespace StableDiffusionGui.Io
 
         public static string GetDataPath()
         {
-            string path = Path.Combine(GetExeDir(), "Data");
-            Directory.CreateDirectory(path);
-            return path;
+            return ReturnDir(Path.Combine(GetExeDir(), Constants.Dirs.Data));
         }
 
         public static string GetSessionsPath()
         {
-            string path = Path.Combine(GetDataPath(), "sessions");
-            Directory.CreateDirectory(path);
-            return path;
+            return ReturnDir(Path.Combine(GetDataPath(), "sessions"));
         }
 
         public static string GetLogPath(bool noSession = false)
         {
-            string path = Path.Combine(GetDataPath(), "logs", (noSession ? "" : SessionTimestamp));
-            Directory.CreateDirectory(path);
-            return path;
+            return ReturnDir(Path.Combine(GetDataPath(), "logs", (noSession ? "" : SessionTimestamp)));
         }
 
         public static string GetModelsPath()
         {
-            string path = Path.Combine(GetDataPath(), Constants.Dirs.Models.Root);
-            return Directory.CreateDirectory(path).FullName;
+            return ReturnDir(Path.Combine(GetExeDir(), Constants.Dirs.Models.Root, Constants.Dirs.Models.Ckpts));
+        }
+
+        public static string GetVaesPath()
+        {
+            return ReturnDir(Path.Combine(GetExeDir(), Constants.Dirs.Models.Root, Constants.Dirs.Models.Vae));
+        }
+
+        public static string GetEmbeddingsPath()
+        {
+            return ReturnDir(Path.Combine(GetExeDir(), Constants.Dirs.Models.Root, Constants.Dirs.Models.Embeddings));
+        }
+
+        public static string GetLorasPath()
+        {
+            return ReturnDir(Path.Combine(GetExeDir(), Constants.Dirs.Models.Root, Constants.Dirs.Models.Loras));
         }
 
         public static string GetSessionDataPath()
         {
-            string path = Path.Combine(GetSessionsPath(), SessionTimestamp);
-            Directory.CreateDirectory(path);
-            return path;
+            return ReturnDir(Path.Combine(GetSessionsPath(), SessionTimestamp));
         }
 
         public static string GetBinPath()
         {
-            string path = Path.Combine(GetDataPath(), Constants.Dirs.Bins);
-            Directory.CreateDirectory(path);
-            return path;
+            return ReturnDir(Path.Combine(GetDataPath(), Constants.Dirs.Bins));
         }
 
         public static string GetClipboardFilename(string extension)
