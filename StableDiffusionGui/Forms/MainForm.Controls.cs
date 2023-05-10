@@ -118,17 +118,7 @@ namespace StableDiffusionGui.Forms
             if (skipIfHidden && Opacity < 1f)
                 return;
 
-            try
-            {
-                this.StopRendering();
-                RefreshUiState();
-                this.ResumeRendering();
-            }
-            catch (Exception ex)
-            {
-                this.ResumeRendering();
-                Logger.LogException(ex, true, "TryRefreshUiState:");
-            }
+            ((Action)(() => RefreshUiState())).RunWithUiStoppedShowErrors(this, "TryRefreshUiState:");
         }
 
         private void RefreshUiState()
