@@ -126,9 +126,7 @@ namespace StableDiffusionGui.Ui
 
             if (keys == Keys.F5)
             {
-                Program.MainForm.ReloadModelsCombox();
-                Program.MainForm.ReloadEmbeddings();
-                Program.MainForm.ReloadLoras();
+                Program.MainForm.TryRefreshUiState();
                 return;
             }
 

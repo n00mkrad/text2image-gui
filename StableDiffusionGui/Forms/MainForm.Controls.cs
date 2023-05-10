@@ -154,7 +154,6 @@ namespace StableDiffusionGui.Forms
             TtiUtils.CleanInitImageList();
 
             btnInitImgBrowse.Text = AnyInits ? $"Clear Image{(MainUi.CurrentInitImgPaths.Count == 1 ? "" : "s")}" : "Load Image(s)";
-
             labelCurrentImage.Text = !AnyInits ? "No image(s) loaded." : (MainUi.CurrentInitImgPaths.Count == 1 ? $"{IoUtils.GetImage(MainUi.CurrentInitImgPaths[0]).Size.AsString()} Image: {Path.GetFileName(MainUi.CurrentInitImgPaths[0])}" : $"{MainUi.CurrentInitImgPaths.Count} Images");
             toolTip.SetToolTip(labelCurrentImage, $"{labelCurrentImage.Text.Trunc(100)}\n\nShift + Hover to preview.");
 
@@ -162,6 +161,8 @@ namespace StableDiffusionGui.Forms
             ResolutionChanged();
             UpdateModel();
             ModelChanged();
+            ReloadLoras();
+            ReloadEmbeddings();
             _categoryPanels.Keys.ToList().ForEach(btn => btn.Parent.SetVisible(_categoryPanels[btn].Any(p => p.Visible))); // Hide collapse buttons if their category has 0 visible panels
 
             #endregion
@@ -192,18 +193,30 @@ namespace StableDiffusionGui.Forms
         {
             IEnumerable<string> embeddings = Models.GetEmbeddings().Select(m => m.FormatIndependentName);
             comboxEmbeddingList.SetItems(new[] { "None" }.Concat(embeddings), UiExtensions.SelectMode.Retain);
+            panelEmbeddings.SetVisible(embeddings.Any()); // Disable panel if no embeddings in folder
         }
 
         public void ReloadLoras()
         {
             var selection = GetLoras(); // Save current selection
             IEnumerable<string> loras = Models.GetLoras().Select(m => m.FormatIndependentName);
-            gridLoras.Rows.Clear();
-            loras.ToList().ForEach(l => gridLoras.Rows.Add(false, l, "0.8"));
-            SetLoras(selection); // Restore selection
+            panelLoras.SetVisible(loras.Any()); // Disable panel if no LoRAs in folder
+
+            if (!loras.Any())
+                return;
+
+            var previousData = gridLoras.Rows.Cast<DataGridViewRow>().Select(row => (bool)row.Cells[0].Value + (string)row.Cells[1].Value + (string)row.Cells[2].Value).ToList();
+            var previousLoraList = gridLoras.Rows.Cast<DataGridViewRow>().Select(row => (string)row.Cells[1].Value).ToList();
+
+            if (!previousLoraList.SequenceEqual(loras))
+            {
+                gridLoras.Rows.Clear();
+                loras.ToList().ForEach(l => gridLoras.Rows.Add(false, l, "0.8"));
+                SetLoras(selection); // Restore selection
+            }
         }
 
-        public void SortLoras()
+        public void SortLoras(bool force = false)
         {
             List<object[]> rowValues = gridLoras.Rows.Cast<DataGridViewRow>().ToList().Select(r => new object[] { r.Cells[0].Value, r.Cells[1].Value, r.Cells[2].Value }).ToList();
             
@@ -213,13 +226,9 @@ namespace StableDiffusionGui.Forms
             ignoreNextGridLorasCellEndEdit = true;
             List<object[]> newRowValues = rowValues.OrderByDescending(row => (bool)row[0]).ThenBy(row => (string)row[1]).ToList();
             
-            if (rowValues.ToJson() == newRowValues.ToJson()) // Brute-force comparison because SequenceEqual didn't work (?)
-            {
-                Console.WriteLine($"Skipped sort because new sequence is equal");
-                return;
-            }
+            if (!force && (rowValues.ToJson() == newRowValues.ToJson())) // Brute-force comparison because SequenceEqual didn't work (?)
+                return; // Skip sort if data is already in correct order
             
-            Console.WriteLine($"Sorting...");
             gridLoras.Rows.Clear();
             newRowValues.ForEach(row => gridLoras.Rows.Add((bool)row[0], (string)row[1], (string)row[2]));
         }

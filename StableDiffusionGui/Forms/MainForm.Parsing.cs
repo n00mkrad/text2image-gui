@@ -160,7 +160,7 @@ namespace StableDiffusionGui.Forms
                 }
             }
 
-            BeginInvoke(new MethodInvoker(() => { SortLoras(); }));
+            BeginInvoke(new MethodInvoker(() => { SortLoras(true); }));
         }
 
         private EasyDict<string, float> GetLoras()
