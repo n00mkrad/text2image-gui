@@ -212,10 +212,20 @@ namespace StableDiffusionGui.Io
         {
             try
             {
-                if (overwrite && File.Exists(target))
-                    File.Delete(target);
+                if (IsPathDirectory(source))
+                {
+                    if (overwrite && Directory.Exists(target))
+                        Directory.Delete(target, true);
 
-                File.Move(source, target);
+                    Directory.Move(source, target);
+                }
+                else
+                {
+                    if (overwrite && File.Exists(target))
+                        File.Delete(target);
+
+                    File.Move(source, target);
+                }
             }
             catch (Exception e)
             {

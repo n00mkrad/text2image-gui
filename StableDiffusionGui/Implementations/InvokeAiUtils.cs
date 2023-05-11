@@ -22,10 +22,10 @@ namespace StableDiffusionGui.Implementations
 
         public static async Task<Model> ConvertVae(Model vae, bool print = true)
         {
-            string outPath = Path.ChangeExtension(vae.FullName, null);
-
-            if (DetectModelFormatCached(vae.FullName) == Enums.Models.Format.Diffusers) // Is already correct format
+            if (vae == null || DetectModelFormatCached(vae.FullName) == Enums.Models.Format.Diffusers) // Is null or already correct format
                 return vae;
+
+            string outPath = GetConvertedVaePath(vae);
 
             if (DetectModelFormatCached(outPath) == Enums.Models.Format.Diffusers) // Conversion already exists at output path
                 return new Model(outPath, Enums.Models.Format.Diffusers);
@@ -41,6 +41,11 @@ namespace StableDiffusionGui.Implementations
                 Logger.Log($"Converted '{vae.FormatIndependentName.Trunc(50)}' to Diffusers format.", false, Logger.LastUiLine.EndsWith("converting to Diffusers format..."));
 
             return convertedVae;
+        }
+
+        public static string GetConvertedVaePath (Model vae)
+        {
+            return Path.Combine(vae.Directory.FullName, "converted", vae.Name);
         }
 
         private static Enums.Models.Format DetectModelFormatCached(string path)
@@ -70,6 +75,8 @@ namespace StableDiffusionGui.Implementations
 
                 cachedModelsVae.Insert(0, null); // Insert null entry, for looping (this is the VAE-less model entry)
                 string dataPath = Paths.GetDataPath();
+
+                cachedModelsVae.ForEach(async v => await ConvertVae(v, true));
 
                 foreach (Model mdl in cachedModels)
                 {
@@ -106,8 +113,8 @@ namespace StableDiffusionGui.Implementations
 
                         text += $"{GetMdlNameForYaml(mdl, vae)}:\n    {string.Join("\n    ", properties)}\n\n";
 
-                        if (mdl.Format == Enums.Models.Format.Diffusers)
-                            break; // Break in order to not write any additional VAE entries as this is currently unuspported with Diffusers models
+                        // if (mdl.Format == Enums.Models.Format.Diffusers)
+                        //     break; // Break in order to not write any additional VAE entries as this is currently unuspported with Diffusers models
                     }
                 }
 

@@ -118,11 +118,11 @@ namespace StableDiffusionGui.Implementations
 
                 Logger.Log($"Running Stable Diffusion - {s.Iterations} Iterations, {s.Steps.Length} Steps, Scales {(s.ScalesTxt.Length < 4 ? string.Join(", ", s.ScalesTxt.Select(x => x.ToStringDot())) : $"{s.ScalesTxt.First()}->{s.ScalesTxt.Last()}")}, {s.Res.AsString()}, Starting Seed: {startSeed}", false, Logger.LastUiLine.EndsWith("..."));
 
-                if (modelFile.Format == Enums.Models.Format.Diffusers && vaeFile != null)
-                {
-                    vaeFile = null; // Diffusers currently doesn't support external VAEs
-                    Logger.Log("External VAEs are currently not supported with Diffusers models. Using this model's built-in VAE instead.");
-                }
+                // if (modelFile.Format == Enums.Models.Format.Diffusers && vaeFile != null)
+                // {
+                //     vaeFile = null; // Diffusers currently doesn't support external VAEs
+                //     Logger.Log("External VAEs are currently not supported with Diffusers models. Using this model's built-in VAE instead.");
+                // }
 
                 string modelsChecksumStartup = InvokeAiUtils.GetModelsHash(cachedModels);
                 string argsStartup = Args.InvokeAi.GetArgsStartup(cachedModels);
@@ -341,11 +341,35 @@ namespace StableDiffusionGui.Implementations
             if (mdl.Format == Enums.Models.Format.Diffusers)
             {
                 Models.SetClipSkip(mdl, Config.Instance.ClipSkip);
-                vae = null; // Diffusers currently doesn't support external VAEs
+                // vae = null; // Diffusers currently doesn't support external VAEs
+
+                HotswapVae(mdl, vae);
             }
 
             await TtiProcess.WriteStdIn($"!clear");
             await TtiProcess.WriteStdIn($"!switch {InvokeAiUtils.GetMdlNameForYaml(mdl, vae)}");
+        }
+
+        public static void HotswapVae(Model mdl, Model vae)
+        {
+            string originalDir = Path.Combine(mdl.FullName, "vae_original");
+            string vaeDir = Path.Combine(mdl.FullName, "vae");
+
+            if (vae == null)
+            {
+                if (Directory.Exists(originalDir))
+                    IoUtils.TryMove(originalDir, vaeDir); // Move original VAE back into place
+            }
+            else
+            {
+                if (Directory.Exists(originalDir)) // If backup of the original VAE folder exists...
+                    IoUtils.TryDeleteIfExists(vaeDir); // ...delete fake VAE link
+
+                if (Directory.Exists(vaeDir) && !IoUtils.TryMove(vaeDir, originalDir, false)) // Return if VAE folder exists and moving it failed
+                    return;
+
+                Process.Start("cmd", $"/c mklink /J {vaeDir.Wrap()} {InvokeAiUtils.GetConvertedVaePath(vae).Wrap()}");
+            }
         }
 
         public static async Task Cancel()
