@@ -62,7 +62,7 @@ namespace StableDiffusionGui.Implementations
                     cachedModels = Models.GetModels(Enums.Models.Type.Normal);
 
                 if (cachedModelsVae == null || cachedModelsVae.Count < 1)
-                    cachedModelsVae = Models.GetModels(Enums.Models.Type.Vae);
+                    cachedModelsVae = Models.GetVaes();
 
                 cachedModelsVae = cachedModelsVae.DistinctBy(m => m.FormatIndependentName).ToList();
 

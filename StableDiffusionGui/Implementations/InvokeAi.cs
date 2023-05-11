@@ -33,7 +33,7 @@ namespace StableDiffusionGui.Implementations
                 string vae = s.Vae.NullToEmpty().Replace("None", ""); // VAE model name
                 var allModels = Models.GetModelsAll();
                 var cachedModels = allModels.Where(m => m.Type == Enums.Models.Type.Normal).ToList();
-                var cachedModelsVae = allModels.Where(m => m.Type == Enums.Models.Type.Vae).ToList();
+                var cachedModelsVae = Models.GetVaes();
                 Model modelFile = TtiUtils.CheckIfCurrentSdModelExists();
                 Model vaeFile = Models.GetModel(cachedModelsVae, vae);
                 if (TextToImage.Canceled) return;
