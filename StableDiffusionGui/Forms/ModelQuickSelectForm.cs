@@ -1,7 +1,7 @@
 ﻿using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
-using StableDiffusionGui.MiscUtils;
 using System;
+using System.Linq;
 using System.Windows.Forms;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
@@ -55,9 +55,6 @@ namespace StableDiffusionGui.Forms
             {
                 Models.GetModels(_modelType, _implementation).ForEach(x => comboxModel.Items.Add(x.Name));
             }
-                
-
-            // Models.GetModels(_modelType, _implementation).ForEach(x => comboxModel.Items.Add(x.Name));
 
             if (loadCombox)
                 ConfigParser.LoadGuiElement(comboxModel, ref _modelType == Enums.Models.Type.Normal ? ref Config.Instance.Model : ref Config.Instance.ModelVae);
@@ -85,7 +82,11 @@ namespace StableDiffusionGui.Forms
             if (comboxModel.Text == "None")
                 return true;
 
-            return Models.GetModel(comboxModel.Text.Trim(), _modelType, _implementation) != null;
+            if (_modelType == Enums.Models.Type.Vae)
+                return Models.GetVaes().Select(v => v.Name).Contains(comboxModel.Text);
+            else
+                return Models.GetModel(comboxModel.Text, _modelType, _implementation) != null;
+
         }
     }
 }
