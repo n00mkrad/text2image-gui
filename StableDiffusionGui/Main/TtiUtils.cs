@@ -319,7 +319,7 @@ namespace StableDiffusionGui.Main
                 file = "v2-inference-v";
 
             if (modelsYamlFormat)
-                return $"configs/stable-diffusion/{file}.yaml"; // Return relative path for models.yaml
+                return $"\"configs/stable-diffusion/{file}.yaml\""; // Return relative path for models.yaml
             else
                 return Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdRepo, "invoke", "invokeai", "configs", "stable-diffusion", $"{file}.yaml"); // Return full path
         }

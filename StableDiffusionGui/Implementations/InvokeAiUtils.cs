@@ -75,12 +75,13 @@ namespace StableDiffusionGui.Implementations
 
                 cachedModelsVae.Insert(0, null); // Insert null entry, for looping (this is the VAE-less model entry)
                 string dataPath = Paths.GetDataPath();
+                string binPath = Paths.GetExeDir();
 
                 cachedModelsVae.ForEach(async v => await ConvertVae(v, true));
 
                 foreach (Model mdl in cachedModels)
                 {
-                    string weightsPath = $"{(mdl.Format == Enums.Models.Format.Diffusers ? "path" : "weights")}: {mdl.FullName.Wrap(true)}"; // Weights path, use relative path if possible
+                    string weightsPath = $"{(mdl.Format == Enums.Models.Format.Diffusers ? "path" : "weights")}: {mdl.FullName.Replace(binPath, "../../").Wrap(true)}"; // Weights path, use relative path if possible
 
                     List<string> ckptArgs = null;
 
@@ -107,14 +108,11 @@ namespace StableDiffusionGui.Implementations
                         {
                             properties.AddRange(ckptArgs);
 
-                            if (vae != null && vae.FullName.IsNotEmpty()) // External VAE currently only supported with legacy models
-                                properties.Add($"vae: {vae.FullName.Replace(dataPath, "../..").Wrap(true)}");
+                            if (vae != null && vae.FullName.IsNotEmpty())
+                                properties.Add($"vae: {vae.FullName.Replace(binPath, "../../").Wrap(true)}");
                         }
 
                         text += $"{GetMdlNameForYaml(mdl, vae)}:\n    {string.Join("\n    ", properties)}\n\n";
-
-                        // if (mdl.Format == Enums.Models.Format.Diffusers)
-                        //     break; // Break in order to not write any additional VAE entries as this is currently unuspported with Diffusers models
                     }
                 }
 
