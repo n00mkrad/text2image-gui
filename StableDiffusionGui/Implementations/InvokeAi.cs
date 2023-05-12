@@ -169,8 +169,8 @@ namespace StableDiffusionGui.Implementations
 
                     TtiProcessOutputHandler.Reset();
 
-                    string logMdl = modelFile.FormatIndependentName.Trunc(!string.IsNullOrWhiteSpace(vae) ? 35 : 80).Wrap();
-                    string logVae = vaeFile == null ? "" : vaeFile.FormatIndependentName.Trunc(35).Wrap();
+                    string logMdl = modelFile.FormatIndependentName.Trunc(vae.IsNotEmpty() ? 40 : 80).Wrap();
+                    string logVae = vaeFile == null ? "" : vaeFile.FormatIndependentName.Trunc(40).Wrap();
                     Logger.Log($"Loading Stable Diffusion with model {logMdl}{(string.IsNullOrWhiteSpace(logVae) ? "" : $" and VAE {logVae}")}...");
 
                     TtiProcess.CurrentProcess = py;

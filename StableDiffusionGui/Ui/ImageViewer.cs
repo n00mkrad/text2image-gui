@@ -27,22 +27,10 @@ namespace StableDiffusionGui.Ui
         private static bool _shownBlackImgWarning = false;
 
         public static DateTime TimeOfLastImageViewerInteraction;
+        public static DateTime TimeOfLastBlackImgWarn;
 
         private const string _strNoPrompt = "No prompt to display.";
         private const string _strNoPromptNeg = "No negative prompt to display.";
-
-        /// <returns> The amount of images shown </returns>
-        public static int SetImages(string imagesDir, ImgShowMode showMode, int amount = -1, string pattern = "*.png", bool recursive = false)
-        {
-            var imgPaths = IoUtils.GetFileInfosSorted(imagesDir, recursive, pattern).OrderBy(x => x.CreationTime).Reverse().ToList(); // Find images and sort by date, newest to oldest
-
-            if (amount > 0)
-                imgPaths = imgPaths.Take(amount).ToList();
-
-            SetImages(imgPaths.Select(x => x.FullName).ToList(), showMode);
-
-            return imgPaths.Count;
-        }
 
         public static void SetImages(List<string> imagePaths, ImgShowMode showMode, bool ignoreTimeout = false)
         {
@@ -63,7 +51,6 @@ namespace StableDiffusionGui.Ui
                     _currIndex = _currentImages.Length - 1;
             }
 
-            _shownBlackImgWarning = false;
             Show();
         }
 
@@ -85,16 +72,14 @@ namespace StableDiffusionGui.Ui
             Image img = IoUtils.GetImage(_currentImages[_currIndex]);
             Program.MainForm.pictBoxImgViewer.Image = img;
 
-            if (!_shownBlackImgWarning && ImgUtils.IsAllBlack((Bitmap)Program.MainForm.pictBoxImgViewer.GetImageSafe()))
+            if ((DateTime.Now - TimeOfLastBlackImgWarn).TotalSeconds >= 60 && ImgUtils.IsAllBlack((Bitmap)Program.MainForm.pictBoxImgViewer.GetImageSafe()))
             {
-                Logger.Log($"Warning: Your image appears to be completely black. {(Config.Instance.FullPrecision ? "This could be an issue with the model or your settings" : "Try enabling Full Precision in the Settings")}.");
-                _shownBlackImgWarning = true;
+                Logger.Log($"Warning: Your image appears to be completely black. This could be an issue with the model, VAE, sampler, or precision settings.");
+                TimeOfLastBlackImgWarn = DateTime.Now;
             }
 
             ImagePopup.UpdateSlideshow(Program.MainForm.pictBoxImgViewer.Image);
-
             ImageMetadata meta = CurrentImageMetadata;
-
             List<string> infos = new List<string>();
 
             if (meta.Seed >= 0)
@@ -244,7 +229,7 @@ namespace StableDiffusionGui.Ui
             parentDirs.Where(dir => Directory.Exists(dir) && !Directory.EnumerateFileSystemEntries(dir).Any()).ToList().ForEach(dir => IoUtils.TryDeleteIfExists(dir)); // Delete dir if it's now empty
         }
 
-        public static Image GetCurrentImageComparison ()
+        public static Image GetCurrentImageComparison()
         {
             if (Program.MainForm.pictBoxImgViewer.Image == null)
                 return null;
