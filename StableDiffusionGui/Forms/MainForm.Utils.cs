@@ -218,5 +218,35 @@ namespace StableDiffusionGui.Forms
             if (form.DialogResult == DialogResult.OK)
                 DownloadModels.DownloadModel(form.EnteredText.Trim());
         }
+
+        public void ShowNotification(string title, string text, bool onlyIfWindowIsInBackground = false, float timeout = 0f)
+        {
+            if (this.RequiresInvoke(new Action<string, string, bool, float>(ShowNotification), title, text, onlyIfWindowIsInBackground, timeout))
+                return;
+
+            if (onlyIfWindowIsInBackground && IsInFocus())
+                return;
+
+            int timeoutMs = (timeout * 1000f).RoundToInt();
+
+            if (timeout <= 0f)
+                timeoutMs = 250 + title.CalculateReadTimeMs() + text.CalculateReadTimeMs();
+
+            var popup = new Tulpep.NotificationWindow.PopupNotifier
+            {
+                TitleText = title,
+                ContentText = text,
+                IsRightToLeft = false,
+                BodyColor = ColorTranslator.FromHtml("#323232"),
+                ContentColor = Color.White,
+                TitleColor = Color.LightGray,
+                GradientPower = 0,
+                AnimationDuration = 200,
+                Delay = timeoutMs,
+                AnimationInterval = 5
+            };
+
+            popup.Popup();
+        }
     }
 }

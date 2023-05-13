@@ -275,7 +275,7 @@ namespace StableDiffusionGui.Main
                 IoUtils.SetImageMetadata(movePath, meta.ParsedText);
 
                 ImageViewer.AppendImage(movePath, ImageViewer.ImgShowMode.ShowLast, false);
-                // OsUtils.ShowNotification("Stable Diffusion GUI", $"Saved post-processed image as '{Path.GetFileName(movePath)}'.", false, 2.5f); // WHY DOES THIS NOT WORK - Threading problem?
+                OsUtils.ShowNotification($"Saved post-processed image as '{Path.GetFileName(movePath)}'.", false);
                 Logger.Log($"Saved post-processed image as '{Path.GetFileName(movePath)}'.");
             }
             catch (Exception ex)

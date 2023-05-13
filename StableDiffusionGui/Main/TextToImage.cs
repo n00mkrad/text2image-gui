@@ -164,7 +164,7 @@ namespace StableDiffusionGui.Main
                 OsUtils.PlayPingSound(true);
 
             if (notifyMode == NotifyMode.Both || notifyMode == NotifyMode.Notification)
-                OsUtils.ShowNotification("Stable Diffusion GUI", $"Image generation has finished.\nGenerated {CurrentTask.ImgCount} images in {FormatUtils.Time(timeTaken, false)}.", true);
+                OsUtils.ShowNotification($"Image generation has finished.\nGenerated {CurrentTask.ImgCount} images in {FormatUtils.Time(timeTaken, false)}.", true);
 
             if (Config.Instance.UnloadModel)
                 TtiProcess.Kill();

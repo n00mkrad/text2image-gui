@@ -1,6 +1,7 @@
 ﻿using StableDiffusionGui.Implementations;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.MiscUtils;
+using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;

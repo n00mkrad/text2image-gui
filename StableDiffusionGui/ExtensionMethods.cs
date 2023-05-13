@@ -665,5 +665,13 @@ namespace StableDiffusionGui
                 // Do nothing, just keep dequeuing until the queue is empty
             }
         }
+
+        public static int CalculateReadTimeMs(this string text, float humanReadSpeedInWpm = 200.0f)
+        {
+            int wordCount = text.Trim().Split(' ').Length;
+            double minutes = wordCount / humanReadSpeedInWpm;
+            int milliseconds = (int)(minutes * 60000);
+            return milliseconds;
+        }
     }
 }

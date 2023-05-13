@@ -176,14 +176,14 @@ namespace StableDiffusionGui.Ui
 
                     if (File.Exists(targetPath))
                     {
-                        OsUtils.ShowNotification("Stable Diffusion GUI", $"Image already exists in favorites folder.", false, 2.0f);
+                        OsUtils.ShowNotification($"Image already exists in favorites folder.", false);
                     }
                     else
                     {
                         if (IoUtils.TryCopy(CurrentImagePath, targetPath, true, true))
-                            OsUtils.ShowNotification("Stable Diffusion GUI", $"Copied image to favorites.", false, 1.5f);
+                            OsUtils.ShowNotification($"Copied image to favorites.", false);
                         else
-                            OsUtils.ShowNotification("Stable Diffusion GUI", $"Failed to copy image!", false, 1.5f);
+                            OsUtils.ShowNotification($"Failed to copy image!", false);
                     }
                 }
                 catch (Exception ex)

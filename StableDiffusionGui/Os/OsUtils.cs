@@ -233,20 +233,14 @@ namespace StableDiffusionGui.Os
             Application.SetSuspendState(PowerState.Suspend, true, true);
         }
 
-        public static void ShowNotification(string title, string text, bool onlyIfWindowIsInBackground = false, float timeout = 3f)
+        public static void ShowNotification(string text, bool onlyIfWindowIsInBackground = false, float timeout = 0f)
         {
-            if (onlyIfWindowIsInBackground && Program.MainForm.IsInFocus())
-                return;
+            ShowNotification("Stable Diffusion GUI", text, onlyIfWindowIsInBackground, timeout);
+        }
 
-            var popup = new PopupNotifier { TitleText = title, ContentText = text, IsRightToLeft = false };
-            popup.BodyColor = System.Drawing.ColorTranslator.FromHtml("#323232");
-            popup.ContentColor = System.Drawing.Color.White;
-            popup.TitleColor = System.Drawing.Color.LightGray;
-            popup.GradientPower = 0;
-            popup.AnimationDuration = 250;
-            popup.Delay = (timeout * 1000).RoundToInt();
-            popup.AnimationInterval = 5;
-            popup.Popup();
+        public static void ShowNotification(string title, string text, bool onlyIfWindowIsInBackground = false, float timeout = 0f)
+        {
+            Program.MainForm.ShowNotification(title, text, onlyIfWindowIsInBackground, timeout);
         }
 
         public static void PlayPingSound(bool onlyIfWindowIsInBackground = false)
