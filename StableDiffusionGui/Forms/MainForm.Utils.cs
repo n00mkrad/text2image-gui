@@ -190,7 +190,7 @@ namespace StableDiffusionGui.Forms
                 return;
             }
 
-            MainUi.AddInitImages(new[] { ImageViewer.CurrentImagePath }.ToList(), true);
+            MainUi.AddInitImages(ImageViewer.CurrentImagePath.AsList(), true);
         }
 
         public void EditMask()

@@ -412,12 +412,12 @@ namespace StableDiffusionGui.Forms
 
         private async void upscaleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            await InvokeAi.RunFix(ImageViewer.CurrentImagePath, new[] { InvokeAi.FixAction.Upscale }.ToList());
+            await InvokeAi.RunFix(ImageViewer.CurrentImagePath, InvokeAi.FixAction.Upscale.AsList());
         }
 
         private async void applyFaceRestorationToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            await InvokeAi.RunFix(ImageViewer.CurrentImagePath, new[] { InvokeAi.FixAction.FaceRestoration }.ToList());
+            await InvokeAi.RunFix(ImageViewer.CurrentImagePath, InvokeAi.FixAction.FaceRestoration.AsList());
         }
 
         private async void applyAllToolStripMenuItem_Click(object sender, EventArgs e)

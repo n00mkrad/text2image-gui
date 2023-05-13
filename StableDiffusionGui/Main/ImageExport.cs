@@ -90,7 +90,7 @@ namespace StableDiffusionGui.Main
 
         public static void Export(string path)
         {
-            Export(new[] { new ZlpFileInfo(path) }.ToList());
+            Export(new ZlpFileInfo(path).AsList());
         }
 
         public static void Export(List<ZlpFileInfo> images)
