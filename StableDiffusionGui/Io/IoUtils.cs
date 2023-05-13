@@ -191,7 +191,7 @@ namespace StableDiffusionGui.Io
             }
         }
 
-        static bool TryCopy(string source, string target, bool overwrite = true, bool showLog = false)
+        public static bool TryCopy(string source, string target, bool overwrite = true, bool showLog = false)
         {
             try
             {

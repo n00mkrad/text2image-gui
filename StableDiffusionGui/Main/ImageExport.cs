@@ -26,12 +26,17 @@ namespace StableDiffusionGui.Main
 
         public static void Init(bool clearImages)
         {
-            if (clearImages)
-                _outImgs.Clear();
-
             _config = TextToImage.CurrentTask.Config;
             _currTask = TextToImage.CurrentTask;
             _currSettings = TextToImage.CurrentTaskSettings;
+
+            if (clearImages)
+            {
+                _outImgs.Clear();
+
+                if (_config.AutoDeleteImgs)
+                    ImageViewer.DeleteAll(false);
+            }
         }
 
         public static async Task ExportLoop(string imagesDir, int startingImgCount, int targetImgCount)

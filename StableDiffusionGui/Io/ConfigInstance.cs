@@ -75,6 +75,7 @@ namespace StableDiffusionGui.Io
         public float EsrganDenoise;
         public string EmbeddingsDir;
         public string LorasDir;
+        public bool AutoDeleteImgs;
 
         public ConfigInstance()
         {

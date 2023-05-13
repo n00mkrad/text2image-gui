@@ -167,21 +167,29 @@ namespace StableDiffusionGui.Ui
 
         public static void CopyCurrentToFavs()
         {
-            string dir = Directory.CreateDirectory(Config.Instance.FavsPath).FullName;
-
             if (File.Exists(CurrentImagePath))
             {
-                string targetPath = Path.Combine(dir, Path.GetFileName(CurrentImagePath));
-
                 try
                 {
-                    File.Copy(CurrentImagePath, targetPath, true);
-                    OsUtils.ShowNotification("Stable Diffusion GUI", $"Copied image to favorites.", false, 1.5f);
+                    string dir = Directory.CreateDirectory(Config.Instance.FavsPath).FullName;
+                    string targetPath = Path.Combine(dir, Path.GetFileName(CurrentImagePath));
+
+                    if (File.Exists(targetPath))
+                    {
+                        OsUtils.ShowNotification("Stable Diffusion GUI", $"Image already exists in favorites folder.", false, 2.0f);
+                    }
+                    else
+                    {
+                        if (IoUtils.TryCopy(CurrentImagePath, targetPath, true, true))
+                            OsUtils.ShowNotification("Stable Diffusion GUI", $"Copied image to favorites.", false, 1.5f);
+                        else
+                            OsUtils.ShowNotification("Stable Diffusion GUI", $"Failed to copy image!", false, 1.5f);
+                    }
                 }
                 catch (Exception ex)
                 {
-                    Logger.Log($"Failed to copy image to favorites: {ex.Message}");
-                    Logger.Log($"Failed to copy '{CurrentImagePath}' => '{targetPath}'\n{ex.StackTrace}", true);
+                    Logger.Log($"Failed to copy image to favorites: {ex.Message}. Check logs for details.");
+                    Logger.Log(ex.StackTrace, true);
                 }
             }
         }

@@ -52,8 +52,16 @@ namespace StableDiffusionGui.Forms
             if (Program.Busy)
             {
                 DialogResult dialogResult = UiUtils.ShowMessageBox($"The program is still busy. Are you sure you want to quit?", UiUtils.MessageType.Warning.ToString(), MessageBoxButtons.YesNo);
-                e.Cancel = dialogResult != DialogResult.Yes;
+
+                if(dialogResult == DialogResult.Yes)
+                {
+                    e.Cancel = true;
+                    return;
+                }
             }
+
+            if (Config.Instance.AutoDeleteImgs)
+                ImageViewer.DeleteAll(false);
         }
 
         private async void MainForm_Shown(object sender, EventArgs e)
@@ -149,15 +157,14 @@ namespace StableDiffusionGui.Forms
 
         private void btnOpenOutFolder_Click(object sender, EventArgs e)
         {
-            string dir = Directory.CreateDirectory(Config.Instance.OutPath).FullName;
-            Process.Start("explorer", dir.Replace("/", @"\").Wrap());
+            menuStripOpenFolder.Show(Cursor.Position);
         }
 
         #region Link Buttons
 
         private void paypalBtn_Click(object sender, EventArgs e)
         {
-            Process.Start("https://www.paypal.com/paypalme/nmkd/8");
+            Process.Start("https://www.paypal.com/paypalme/nmkd");
         }
 
         private void patreonBtn_Click(object sender, EventArgs e)
@@ -531,6 +538,23 @@ namespace StableDiffusionGui.Forms
         private void btnExpandLoras_Click(object sender, EventArgs e)
         {
             SetLoraPanelSize(MainUi.PromptFieldSizeMode.Toggle);
+        }
+
+        private void openOutputFolderToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            string dir = Directory.CreateDirectory(Config.Instance.OutPath).FullName;
+            Process.Start("explorer", dir.Replace("/", @"\").Wrap());
+        }
+
+        private void openFavoritesFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string dir = Directory.CreateDirectory(Config.Instance.FavsPath).FullName;
+            Process.Start("explorer", dir.Replace("/", @"\").Wrap());
+        }
+
+        private void btnSaveToFavs_Click(object sender, EventArgs e)
+        {
+            ImageViewer.CopyCurrentToFavs();
         }
     }
 }
