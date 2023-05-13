@@ -17,6 +17,8 @@ namespace StableDiffusionGui.Main
     {
         private static bool _hasErrored = false;
         private static bool _invokeAiLastModelCached = false;
+        private static bool _isRunningHiResFix = false;
+
 
         public static List<string> LastMessages = new List<string>();
 
@@ -25,6 +27,7 @@ namespace StableDiffusionGui.Main
         public static void Reset()
         {
             _hasErrored = false;
+            _isRunningHiResFix = false;
             LastMessages.Clear();
         }
 
@@ -50,19 +53,31 @@ namespace StableDiffusionGui.Main
                     _invokeAiLastModelCached = false;
 
                 if (!TextToImage.Canceled && line.Remove(" ") == @"Generating:0%||0/1[00:00<?,?it/s]")
+                {
                     TimeSinceLastImage.Restart();
+                    _isRunningHiResFix = false;
+                }
 
-                if (!TextToImage.Canceled && line.MatchesWildcard("*%|*|*/*"))
+                if (!TextToImage.Canceled && line.StartsWith(">> Interpolating from"))
+                {
+                    _isRunningHiResFix = true;
+                }
+
+                if (!TextToImage.Canceled && line.MatchesWildcard("*%|*|*/*") && !line.Lower().Contains("downloading"))
                 {
                     string progStr = line.Split('|')[2].Trim().Split(' ')[0].Trim(); // => e.g. "3/50"
 
-                    if (!line.Lower().Contains("downloading") && !Logger.LastUiLine.MatchesWildcard("*Generated*image*in*"))
+                    if (!Logger.LastUiLine.MatchesWildcard("*Generated*image*in*"))
                         Logger.LogIfLastLineDoesNotContainMsg($"Generating...", false, ellipsis);
 
                     try
                     {
+                        int progressDivisor = TextToImage.CurrentTaskSettings.HiresFix ? 2 : 1;
                         int[] stepsCurrentTarget = progStr.Split('/').Select(x => x.GetInt()).ToArray();
-                        int percent = (((float)stepsCurrentTarget[0] / stepsCurrentTarget[1]) * 100f).RoundToInt();
+                        int percent = ((((float)stepsCurrentTarget[0] / stepsCurrentTarget[1]) * 100f) / progressDivisor).RoundToInt();
+
+                        if (TextToImage.CurrentTaskSettings.HiresFix && _isRunningHiResFix)
+                            percent += 50;
 
                         if (percent > 0 && percent <= 100)
                             Program.MainForm.SetProgressImg(percent);
