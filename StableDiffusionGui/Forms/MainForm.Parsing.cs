@@ -39,6 +39,8 @@ namespace StableDiffusionGui.Forms
                 if (meta.InitStrength > 0f)
                     sliderInitStrength.ActualValue = (decimal)meta.InitStrength;
 
+                SetLoras(meta.Loras);
+
             })).RunWithUiStoppedShowErrors(this, "Error loading metadata into UI:");
 
             TryRefreshUiState();

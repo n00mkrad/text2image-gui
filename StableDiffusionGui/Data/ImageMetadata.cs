@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using static StableDiffusionGui.Implementations.InvokeAiMetadata;
 
 namespace StableDiffusionGui.Data
@@ -14,25 +15,26 @@ namespace StableDiffusionGui.Data
     public class ImageMetadata
     {
         public enum MetadataType { InvokeDream, InvokeJson, Auto1111, Nmkdiffusers, Unknown }
-        public MetadataType Type { get; set; } = MetadataType.Unknown;
-        public string Path { get; set; } = "";
-        public string AllText { get; set; } = "";
-        public string ParsedText { get; set; } = "";
-        public string Prompt { get; set; } = "";
-        public string NegativePrompt { get; set; } = "";
+        public MetadataType Type = MetadataType.Unknown;
+        public string Path = "";
+        public string AllText = "";
+        public string ParsedText = "";
+        public string Prompt = "";
+        public string NegativePrompt = "";
         public string CombinedPrompt { get { return InvokeAiUtils.GetCombinedPrompt(Prompt, NegativePrompt); } }
-        public int Steps { get; set; } = -1;
-        public int BatchSize { get; set; } = 1;
-        public Size GeneratedResolution { get; set; } = new Size();
-        public float Scale { get; set; } = -1;
-        public float ScaleImg { get; set; } = -1;
-        public string Sampler { get; set; } = "";
-        public long Seed { get; set; } = -1;
-        public string InitImgName { get; set; } = "";
-        public float InitStrength { get; set; } = 0f;
-        public string Model { get; set; } = "";
-        public Enums.StableDiffusion.SeamlessMode SeamlessMode { get; set; } = Enums.StableDiffusion.SeamlessMode.Disabled;
-        public Enums.Utils.FaceTool FaceTool { get; set; } = (Enums.Utils.FaceTool)(-1);
+        public int Steps = -1;
+        public int BatchSize = 1;
+        public Size GeneratedResolution = new Size();
+        public float Scale = -1;
+        public float ScaleImg = -1;
+        public string Sampler = "";
+        public long Seed = -1;
+        public string InitImgName = "";
+        public float InitStrength = 0f;
+        public string Model = "";
+        public EasyDict<string, float> Loras = new EasyDict<string, float>();
+        public Enums.StableDiffusion.SeamlessMode SeamlessMode = Enums.StableDiffusion.SeamlessMode.Disabled;
+        public Enums.Utils.FaceTool FaceTool = (Enums.Utils.FaceTool)(-1);
 
         private readonly Dictionary<MetadataType, string> _tags = new Dictionary<MetadataType, string>() {
             { MetadataType.InvokeJson, "sd-metadata: " },
@@ -125,6 +127,7 @@ namespace StableDiffusionGui.Data
                 InitImgName = "";
                 FaceTool = InvokeGetFaceTool(metadata.ImageData.Facetool);
                 // Model = metadata.ModelId;
+                Loras = InvokeGetLoras(ref Prompt);
             }
             catch (Exception ex)
             {
@@ -223,6 +226,19 @@ namespace StableDiffusionGui.Data
                 case "codeformer": return Enums.Utils.FaceTool.CodeFormer;
                 default: return (Enums.Utils.FaceTool)(-1);
             }
+        }
+
+        public EasyDict<string, float> InvokeGetLoras (ref string prompt)
+        {
+            var loras = new EasyDict<string, float>();
+            string pattern = @",\s*withLora\(([^,]+),([^)]+)\)";
+            MatchCollection matches = Regex.Matches(prompt, pattern); // Look for withLora(name,weight) occurences
+
+            foreach (Match match in matches)
+                loras.Add(match.Groups[1].Value, match.Groups[2].Value.GetFloat()); // Add to list
+
+            prompt = Regex.Replace(prompt, pattern, "").Replace("  ", " ").Trim(); // Remove LoRA references from prompt
+            return loras;
         }
 
         public void LoadInfoAuto1111(string info)
