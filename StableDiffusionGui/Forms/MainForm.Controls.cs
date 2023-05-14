@@ -198,11 +198,18 @@ namespace StableDiffusionGui.Forms
             var previousData = gridLoras.Rows.Cast<DataGridViewRow>().Select(row => (bool)row.Cells[0].Value + (string)row.Cells[1].Value + (string)row.Cells[2].Value).ToList();
             var previousLoraList = gridLoras.Rows.Cast<DataGridViewRow>().Select(row => (string)row.Cells[1].Value).ToList();
 
+            if (string.Join("", loras.OrderBy(l => l)) == string.Join("", previousLoraList.OrderBy(l => l)))
+                return;
+
             if (!previousLoraList.SequenceEqual(loras))
             {
                 gridLoras.Rows.Clear();
                 loras.ToList().ForEach(l => gridLoras.Rows.Add(false, l, "0.8"));
                 SetLoras(selection); // Restore selection
+            }
+            else
+            {
+                Debugger.Break(); // This block should never actually run. Should be removed later if it never trips the debugger
             }
         }
 
