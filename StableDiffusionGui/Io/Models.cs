@@ -250,9 +250,6 @@ namespace StableDiffusionGui.Io
                         int layers = line.Split(':').Last().GetInt(false);
                         int newLayers = (layers - layersToSkip).Clamp(1, int.MaxValue);
 
-                        if (layers == newLayers) // Already set to the right value, return to avoid unnecessary I/O
-                            return;
-
                         string newText = $"{line.Split("\"num_hidden_layers\": ")[0]}\"num_hidden_layers\": {newLayers},";
                         lines[i] = newText;
                         Logger.Log($"Clip Skip Patcher: Using {newLayers} out of {layers} layers (Skipping {layersToSkip})", true);
