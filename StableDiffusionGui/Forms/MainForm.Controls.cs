@@ -82,8 +82,6 @@ namespace StableDiffusionGui.Forms
             };
         }
 
-        bool ignoreNextGridLorasCellEndEdit = false;
-
         public void LoadControls()
         {
             ConfigParser.LoadGuiElement(upDownIterations, ref Config.Instance.Iterations);
@@ -220,7 +218,6 @@ namespace StableDiffusionGui.Forms
             if (rowValues.Count < 2) // No need to sort 1 item
                 return;
             
-            ignoreNextGridLorasCellEndEdit = true;
             List<object[]> newRowValues = rowValues.OrderByDescending(row => (bool)row[0]).ThenBy(row => (string)row[1]).ToList();
             
             if (!force && (rowValues.ToJson() == newRowValues.ToJson())) // Brute-force comparison because SequenceEqual didn't work (?)
