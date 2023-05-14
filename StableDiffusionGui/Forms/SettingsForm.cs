@@ -169,6 +169,7 @@ namespace StableDiffusionGui.Forms
             ConfigParser.LoadGuiElement(checkboxScaleInFilename, ref Config.Instance.ScaleInFilename);
             ConfigParser.LoadGuiElement(checkboxSamplerInFilename, ref Config.Instance.SamplerInFilename);
             ConfigParser.LoadGuiElement(checkboxModelInFilename, ref Config.Instance.ModelInFilename);
+            ConfigParser.LoadGuiElement(comboxImgSaveMode, ref Config.Instance.AutoDeleteImgs);
             ConfigParser.LoadGuiElement(textboxOutPath, ref Config.Instance.OutPath);
             ConfigParser.LoadGuiElement(textboxFavsPath, ref Config.Instance.FavsPath);
             ConfigParser.LoadGuiElement(textboxEmbeddingsDir, ref Config.Instance.EmbeddingsDir);
@@ -203,6 +204,7 @@ namespace StableDiffusionGui.Forms
             ConfigParser.SaveGuiElement(checkboxScaleInFilename, ref Config.Instance.ScaleInFilename);
             ConfigParser.SaveGuiElement(checkboxSamplerInFilename, ref Config.Instance.SamplerInFilename);
             ConfigParser.SaveGuiElement(checkboxModelInFilename, ref Config.Instance.ModelInFilename);
+            ConfigParser.SaveGuiElement(comboxImgSaveMode, ref Config.Instance.AutoDeleteImgs);
             ConfigParser.SaveGuiElement(textboxOutPath, ref Config.Instance.OutPath);
             ConfigParser.SaveGuiElement(textboxFavsPath, ref Config.Instance.FavsPath);
             ConfigParser.SaveGuiElement(textboxEmbeddingsDir, ref Config.Instance.EmbeddingsDir);

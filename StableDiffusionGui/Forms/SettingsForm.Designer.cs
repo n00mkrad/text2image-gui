@@ -74,6 +74,12 @@
             this.checkboxMultiPromptsSameSeed = new System.Windows.Forms.CheckBox();
             this.panel22 = new System.Windows.Forms.Panel();
             this.label8 = new System.Windows.Forms.Label();
+            this.panelImgSaveMode = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel20 = new System.Windows.Forms.TableLayoutPanel();
+            this.panel49 = new System.Windows.Forms.Panel();
+            this.comboxImgSaveMode = new System.Windows.Forms.ComboBox();
+            this.panel50 = new System.Windows.Forms.Panel();
+            this.label24 = new System.Windows.Forms.Label();
             this.panelFavsDir = new System.Windows.Forms.Panel();
             this.tableLayoutPanel13 = new System.Windows.Forms.TableLayoutPanel();
             this.panel2 = new System.Windows.Forms.Panel();
@@ -208,6 +214,10 @@
             this.tableLayoutPanel6.SuspendLayout();
             this.panel6.SuspendLayout();
             this.panel22.SuspendLayout();
+            this.panelImgSaveMode.SuspendLayout();
+            this.tableLayoutPanel20.SuspendLayout();
+            this.panel49.SuspendLayout();
+            this.panel50.SuspendLayout();
             this.panelFavsDir.SuspendLayout();
             this.tableLayoutPanel13.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -293,6 +303,7 @@
             this.parentPanel.Controls.Add(this.panel1);
             this.parentPanel.Controls.Add(this.panelSaveUnprocessedImages);
             this.parentPanel.Controls.Add(this.panelMultiPromptsSameSeed);
+            this.parentPanel.Controls.Add(this.panelImgSaveMode);
             this.parentPanel.Controls.Add(this.panelFavsDir);
             this.parentPanel.Controls.Add(this.panelPromptInFilename);
             this.parentPanel.Controls.Add(this.panelPromptSubfolders);
@@ -319,7 +330,7 @@
             // 
             this.panelNotify.Controls.Add(this.notificationPanel);
             this.panelNotify.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelNotify.Location = new System.Drawing.Point(0, 785);
+            this.panelNotify.Location = new System.Drawing.Point(0, 820);
             this.panelNotify.Name = "panelNotify";
             this.panelNotify.Size = new System.Drawing.Size(843, 35);
             this.panelNotify.TabIndex = 22;
@@ -393,7 +404,7 @@
             // 
             this.panelAdvancedMode.Controls.Add(this.tableLayoutPanel4);
             this.panelAdvancedMode.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelAdvancedMode.Location = new System.Drawing.Point(0, 750);
+            this.panelAdvancedMode.Location = new System.Drawing.Point(0, 785);
             this.panelAdvancedMode.Name = "panelAdvancedMode";
             this.panelAdvancedMode.Size = new System.Drawing.Size(843, 35);
             this.panelAdvancedMode.TabIndex = 15;
@@ -459,7 +470,7 @@
             // 
             this.panelInitImageRetainAspectRatio.Controls.Add(this.tableLayoutPanel15);
             this.panelInitImageRetainAspectRatio.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelInitImageRetainAspectRatio.Location = new System.Drawing.Point(0, 715);
+            this.panelInitImageRetainAspectRatio.Location = new System.Drawing.Point(0, 750);
             this.panelInitImageRetainAspectRatio.Name = "panelInitImageRetainAspectRatio";
             this.panelInitImageRetainAspectRatio.Size = new System.Drawing.Size(843, 35);
             this.panelInitImageRetainAspectRatio.TabIndex = 29;
@@ -525,7 +536,7 @@
             // 
             this.panelAutoSetResForInitImg.Controls.Add(this.tableLayoutPanel14);
             this.panelAutoSetResForInitImg.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelAutoSetResForInitImg.Location = new System.Drawing.Point(0, 680);
+            this.panelAutoSetResForInitImg.Location = new System.Drawing.Point(0, 715);
             this.panelAutoSetResForInitImg.Name = "panelAutoSetResForInitImg";
             this.panelAutoSetResForInitImg.Size = new System.Drawing.Size(843, 35);
             this.panelAutoSetResForInitImg.TabIndex = 28;
@@ -591,7 +602,7 @@
             // 
             this.panel1.Controls.Add(this.label17);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Location = new System.Drawing.Point(0, 640);
+            this.panel1.Location = new System.Drawing.Point(0, 675);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(843, 40);
             this.panel1.TabIndex = 27;
@@ -611,7 +622,7 @@
             // 
             this.panelSaveUnprocessedImages.Controls.Add(this.panel29);
             this.panelSaveUnprocessedImages.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSaveUnprocessedImages.Location = new System.Drawing.Point(0, 605);
+            this.panelSaveUnprocessedImages.Location = new System.Drawing.Point(0, 640);
             this.panelSaveUnprocessedImages.Name = "panelSaveUnprocessedImages";
             this.panelSaveUnprocessedImages.Size = new System.Drawing.Size(843, 35);
             this.panelSaveUnprocessedImages.TabIndex = 23;
@@ -695,7 +706,7 @@
             // 
             this.panelMultiPromptsSameSeed.Controls.Add(this.panel18);
             this.panelMultiPromptsSameSeed.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelMultiPromptsSameSeed.Location = new System.Drawing.Point(0, 570);
+            this.panelMultiPromptsSameSeed.Location = new System.Drawing.Point(0, 605);
             this.panelMultiPromptsSameSeed.Name = "panelMultiPromptsSameSeed";
             this.panelMultiPromptsSameSeed.Size = new System.Drawing.Size(843, 35);
             this.panelMultiPromptsSameSeed.TabIndex = 17;
@@ -774,6 +785,78 @@
             this.label8.Size = new System.Drawing.Size(352, 13);
             this.label8.TabIndex = 85;
             this.label8.Text = "When Running Multiple Prompts, Use Same Starting Seed for All of Them";
+            // 
+            // panelImgSaveMode
+            // 
+            this.panelImgSaveMode.Controls.Add(this.tableLayoutPanel20);
+            this.panelImgSaveMode.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelImgSaveMode.Location = new System.Drawing.Point(0, 570);
+            this.panelImgSaveMode.Name = "panelImgSaveMode";
+            this.panelImgSaveMode.Size = new System.Drawing.Size(843, 35);
+            this.panelImgSaveMode.TabIndex = 34;
+            // 
+            // tableLayoutPanel20
+            // 
+            this.tableLayoutPanel20.ColumnCount = 2;
+            this.tableLayoutPanel20.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel20.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
+            this.tableLayoutPanel20.Controls.Add(this.panel49, 0, 0);
+            this.tableLayoutPanel20.Controls.Add(this.panel50, 0, 0);
+            this.tableLayoutPanel20.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel20.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel20.Name = "tableLayoutPanel20";
+            this.tableLayoutPanel20.RowCount = 1;
+            this.tableLayoutPanel20.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel20.Size = new System.Drawing.Size(843, 35);
+            this.tableLayoutPanel20.TabIndex = 1;
+            // 
+            // panel49
+            // 
+            this.panel49.Controls.Add(this.comboxImgSaveMode);
+            this.panel49.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel49.Location = new System.Drawing.Point(410, 0);
+            this.panel49.Margin = new System.Windows.Forms.Padding(0);
+            this.panel49.Name = "panel49";
+            this.panel49.Size = new System.Drawing.Size(433, 35);
+            this.panel49.TabIndex = 88;
+            // 
+            // comboxImgSaveMode
+            // 
+            this.comboxImgSaveMode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboxImgSaveMode.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.comboxImgSaveMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboxImgSaveMode.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboxImgSaveMode.ForeColor = System.Drawing.Color.White;
+            this.comboxImgSaveMode.FormattingEnabled = true;
+            this.comboxImgSaveMode.Items.AddRange(new object[] {
+            "Save All Generated Images, Unless They Were Deleted Manually",
+            "Delete Images That Weren’t Saved Manually (Favorites)"});
+            this.comboxImgSaveMode.Location = new System.Drawing.Point(0, 7);
+            this.comboxImgSaveMode.Name = "comboxImgSaveMode";
+            this.comboxImgSaveMode.Size = new System.Drawing.Size(433, 21);
+            this.comboxImgSaveMode.TabIndex = 106;
+            // 
+            // panel50
+            // 
+            this.panel50.Controls.Add(this.label24);
+            this.panel50.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel50.Location = new System.Drawing.Point(0, 0);
+            this.panel50.Margin = new System.Windows.Forms.Padding(0);
+            this.panel50.Name = "panel50";
+            this.panel50.Size = new System.Drawing.Size(410, 35);
+            this.panel50.TabIndex = 87;
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label24.ForeColor = System.Drawing.Color.White;
+            this.label24.Location = new System.Drawing.Point(2, 11);
+            this.label24.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(94, 13);
+            this.label24.TabIndex = 85;
+            this.label24.Text = "Image Save Mode";
             // 
             // panelFavsDir
             // 
@@ -2118,6 +2201,11 @@
             this.panel6.PerformLayout();
             this.panel22.ResumeLayout(false);
             this.panel22.PerformLayout();
+            this.panelImgSaveMode.ResumeLayout(false);
+            this.tableLayoutPanel20.ResumeLayout(false);
+            this.panel49.ResumeLayout(false);
+            this.panel50.ResumeLayout(false);
+            this.panel50.PerformLayout();
             this.panelFavsDir.ResumeLayout(false);
             this.tableLayoutPanel13.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
@@ -2356,5 +2444,11 @@
         private HTAlt.WinForms.HTButton btnEmbeddingsDirBrowse;
         private System.Windows.Forms.Panel panel46;
         private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.Panel panelImgSaveMode;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel20;
+        private System.Windows.Forms.Panel panel49;
+        private System.Windows.Forms.ComboBox comboxImgSaveMode;
+        private System.Windows.Forms.Panel panel50;
+        private System.Windows.Forms.Label label24;
     }
 }

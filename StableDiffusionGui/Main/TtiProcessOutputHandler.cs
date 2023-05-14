@@ -1,7 +1,6 @@
 ﻿using StableDiffusionGui.Implementations;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.MiscUtils;
-using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
@@ -19,9 +18,7 @@ namespace StableDiffusionGui.Main
         private static bool _invokeAiLastModelCached = false;
         private static bool _isRunningHiResFix = false;
 
-
         public static List<string> LastMessages = new List<string>();
-
         public static Stopwatch TimeSinceLastImage = new Stopwatch();
 
         public static void Reset()

@@ -71,7 +71,18 @@ namespace StableDiffusionGui.Io
 
         public static void LoadGuiElement(ComboBox comboBox, ref int variable, string suffix = "")
         {
-            comboBox.Text = $"{variable}" + suffix;
+            comboBox.Text = variable + suffix;
+        }
+
+        public static void SaveGuiElement(ComboBox comboBox, ref bool variable)
+        {
+            variable = comboBox.SelectedIndex == 0 ? false : true;
+        }
+
+        public static void LoadGuiElement(ComboBox comboBox, ref bool variable, string suffix = "")
+        {
+            if (comboBox.Items != null && comboBox.Items.Count >= 1)
+                comboBox.SelectedIndex = variable ? 1 : 0;
         }
 
         public static void LoadGuiElement(TextBox textbox, ref string variable, string suffix = "")
