@@ -243,9 +243,11 @@ namespace StableDiffusionGui.Forms
                 GradientPower = 0,
                 AnimationDuration = 200,
                 Delay = timeoutMs,
-                AnimationInterval = 5
+                AnimationInterval = 5,
             };
 
+            popup.TitleFont = popup.TitleFont.ChangeSize(popup.TitleFont.Size * 1.3f);
+            popup.ContentFont = popup.ContentFont.ChangeSize(popup.ContentFont.Size * 1.25f);
             popup.Popup();
         }
     }

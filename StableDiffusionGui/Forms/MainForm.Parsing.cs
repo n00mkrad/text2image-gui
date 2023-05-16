@@ -28,7 +28,7 @@ namespace StableDiffusionGui.Forms
                 comboxResW.Text = meta.GeneratedResolution.Width.ToString();
                 comboxResH.Text = meta.GeneratedResolution.Height.ToString();
                 upDownSeed.Value = meta.Seed;
-                comboxSampler.SetIfTextMatches(meta.Sampler, true, Strings.Samplers);
+                comboxSampler.SetWithText(meta.Sampler, true, Strings.Samplers);
                 // MainUi.CurrentInitImgPaths = new[] { meta.InitImgName }.Where(x => string.IsNullOrWhiteSpace(x)).ToList(); // Does this even work if we only store the temp path?
                 MainUi.CurrentInitImgPaths.Clear();
                 comboxSeamless.SelectedIndex = meta.SeamlessMode == SeamlessMode.Disabled ? 0 : 1;
@@ -67,15 +67,15 @@ namespace StableDiffusionGui.Forms
                 comboxResW.Text = s.Res.Width.ToString();
                 comboxResH.Text = s.Res.Height.ToString();
                 upDownSeed.Value = s.Seed;
-                comboxSampler.SetIfTextMatches(s.Sampler.ToString(), true, Strings.Samplers);
+                comboxSampler.SetWithText(s.Sampler.ToString(), true, Strings.Samplers);
                 SetSliderValues(s.InitStrengths, false, sliderInitStrength, textboxExtraInitStrengths);
-                comboxSeamless.SetIfTextMatches(s.SeamlessMode.ToString(), true, Strings.SeamlessMode);
-                comboxInpaintMode.SetIfTextMatches(s.ImgMode.ToString(), true, Strings.InpaintMode);
+                comboxSeamless.SetWithText(s.SeamlessMode.ToString(), true, Strings.SeamlessMode);
+                comboxInpaintMode.SetWithText(s.ImgMode.ToString(), true, Strings.InpaintMode);
                 checkboxHiresFix.Checked = s.HiresFix;
                 checkboxLockSeed.Checked = s.LockSeed;
 
                 if (s.ResizeGravity != (ImageMagick.Gravity)(-1))
-                    comboxResizeGravity.SetIfTextMatches(s.ResizeGravity.ToString(), true, Strings.ImageGravity);
+                    comboxResizeGravity.SetWithText(s.ResizeGravity.ToString(), true, Strings.ImageGravity);
 
                 SetLoras(s.Loras);               
 

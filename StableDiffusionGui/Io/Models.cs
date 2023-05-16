@@ -21,13 +21,15 @@ namespace StableDiffusionGui.Io
             if (includeBuiltin)
                 mdlFolders.Add(Paths.GetModelsPath());
 
-            mdlFolders.AddRange(Config.Instance.CustomModelDirs, out mdlFolders);
+            mdlFolders.Concat(Config.Instance.CustomModelDirs);
             return mdlFolders;
         }
 
         public static List<Model> GetVaes()
         {
-            return GetModelsAll(true, Config.Instance.CustomVaeDirs, Enums.Models.Type.Vae);
+            List<string> dirs = new List<string>(Config.Instance.CustomVaeDirs);
+            dirs.Insert(0, Paths.GetVaesPath());
+            return GetModelsAll(true, dirs, Enums.Models.Type.Vae);
         }
 
         public static List<Model> GetEmbeddings ()

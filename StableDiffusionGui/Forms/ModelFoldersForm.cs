@@ -16,7 +16,9 @@ namespace StableDiffusionGui.Forms
     {
         public enum Folder { Models, Vaes }
         public List<string> Folders = new List<string>();
-        private Folder _folder;
+        private readonly Folder _folder;
+
+        private string DefaultPath { get { return _folder == Folder.Models ? Paths.GetModelsPath() : Paths.GetVaesPath(); } }
 
         public ModelFoldersForm(Folder folderType)
         {
@@ -43,22 +45,25 @@ namespace StableDiffusionGui.Forms
 
         private void LoadDirs()
         {
+            Folders = new List<string>() { DefaultPath };
+
             if (_folder == Folder.Models)
             {
-                Folders = new List<string>() { Paths.GetModelsPath() };
-                Folders.AddRange(Config.Instance.CustomModelDirs, out Folders);
+                Folders.Concat(Config.Instance.CustomModelDirs);
             }
             else if (_folder == Folder.Vaes)
             {
-                Folders = new List<string>() { Paths.GetVaesPath() };
-                Folders.AddRange(Config.Instance.CustomVaeDirs, out Folders);
+                Folders.Concat(Config.Instance.CustomVaeDirs);
             }
         }
 
         private void SaveDirs()
         {
-            List<string> folders = Folders.Where(dir => dir != Paths.GetModelsPath() && Directory.Exists(dir)).Select(s => s.Replace(@"\", "/")).ToList();
+            List<string> folders = Folders.Where(dir => dir != DefaultPath && Directory.Exists(dir)).ToList();
 
+            if (folders.Any())
+                return;
+            
             if (_folder == Folder.Models)
                 Config.Instance.CustomModelDirs = folders;
             else if (_folder == Folder.Vaes)
@@ -102,13 +107,13 @@ namespace StableDiffusionGui.Forms
         private void btnRemove_Click(object sender, EventArgs e)
         {
             var dirsToRemove = GetSelectedItems().Select(x => (string)x.Tag);
-            Folders = Folders.Where(x => x == Paths.GetModelsPath() || !dirsToRemove.Contains(x)).ToList();
+            Folders = Folders.Where(x => x == DefaultPath || !dirsToRemove.Contains(x)).ToList();
             FillList();
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            CommonOpenFileDialog dialog = new CommonOpenFileDialog { InitialDirectory = Paths.GetModelsPath(), IsFolderPicker = true };
+            CommonOpenFileDialog dialog = new CommonOpenFileDialog { InitialDirectory = DefaultPath, IsFolderPicker = true };
 
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
             {

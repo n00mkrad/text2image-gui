@@ -9,7 +9,6 @@ using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -131,6 +130,7 @@ namespace StableDiffusionGui.Forms
             comboxInFormat.FillFromEnum<Enums.Models.Format>(Strings.ModelFormats, 0, Enums.Models.Format.DiffusersOnnx.AsList());
             ConfigParser.LoadGuiElement(checkboxDeleteInput, ref Config.Instance.ConvertModelsDeleteInput);
             comboxModelArch.FillFromEnum<Enums.Models.SdArch>(Strings.SdModelArch, 0);
+            comboxInFormat.SetWithEnum(Enums.Models.Format.Safetensors, true, Strings.ModelFormats);
             TabOrderInit(new List<Control>() { comboxInFormat, comboxModel, comboxOutFormat, checkboxDeleteInput, btnRun }, 0);
             await Task.Delay(1);
             Opacity = 1;
@@ -141,7 +141,7 @@ namespace StableDiffusionGui.Forms
             Model mdl = (Model)comboxModel.SelectedItem;
 
             if (mdl != null && Config.Instance.ModelArchs.ContainsKey(mdl.FullName))
-                comboxModelArch.SetIfTextMatches(Config.Instance.ModelArchs[mdl.FullName].ToString(), false, Strings.SdModelArch);
+                comboxModelArch.SetWithText(Config.Instance.ModelArchs[mdl.FullName].ToString(), false, Strings.SdModelArch);
             else if (comboxModelArch.Items.Count > 0)
                 comboxModelArch.SelectedIndex = 0;
         }

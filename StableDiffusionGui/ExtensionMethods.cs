@@ -427,7 +427,12 @@ namespace StableDiffusionGui
                 comboBox.SelectedIndex = defaultIndex;
         }
 
-        public static void SetIfTextMatches(this ComboBox comboBox, string str, bool ignoreCase = true, Dictionary<string, string> stringMap = null)
+        public static void SetWithEnum<TEnum>(this ComboBox comboBox, TEnum e, bool ignoreCase = true, Dictionary<string, string> stringMap = null)
+        {
+            comboBox.SetWithText(e.ToString(), ignoreCase, stringMap);
+        }
+
+        public static void SetWithText(this ComboBox comboBox, string str, bool ignoreCase = true, Dictionary<string, string> stringMap = null)
         {
             if (stringMap == null)
                 stringMap = new Dictionary<string, string>();
@@ -548,14 +553,6 @@ namespace StableDiffusionGui
             settings.Converters.Add(new StringEnumConverter());
 
             return JsonConvert.SerializeObject(o, indent ? Formatting.Indented : Formatting.None, settings);
-        }
-
-        public static void AddRange<T>(this List<T> listIn, IEnumerable<T> itemsToAdd, out List<T> listOut)
-        {
-            if (itemsToAdd != null)
-                listIn.AddRange(itemsToAdd);
-
-            listOut = listIn;
         }
 
         public static string NullToEmpty(this string s)

@@ -7,6 +7,7 @@ using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static StableDiffusionGui.Main.Enums.Misc;
@@ -81,6 +82,9 @@ namespace StableDiffusionGui.Forms
 
                     if (CurrentMetadata.Model.IsNotEmpty())
                         textboxInfo.Text += $"{n}Model:{n}{CurrentMetadata.Model}{n}";
+
+                    if (CurrentMetadata.Loras != null && CurrentMetadata.Loras.Any())
+                        textboxInfo.Text += $"{n}LoRAs:{n}{string.Join(n, CurrentMetadata.Loras.Select(l => $"{l.Key} - Weight {l.Value.ToStringDot("0.0###")}"))}{n}";
                 }
                 else
                 {

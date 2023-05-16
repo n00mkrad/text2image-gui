@@ -172,7 +172,7 @@ namespace StableDiffusionGui.Forms
             comboxModelArch.FillFromEnum<Enums.Models.SdArch>(Strings.SdModelArch, 0, exclusionList);
 
             if (Config.Instance.ModelArchs.ContainsKey(mdl.FullName))
-                comboxModelArch.SetIfTextMatches(Config.Instance.ModelArchs[mdl.FullName].ToString(), false, Strings.SdModelArch);
+                comboxModelArch.SetWithText(Config.Instance.ModelArchs[mdl.FullName].ToString(), false, Strings.SdModelArch);
 
             ConfigParser.SaveGuiElement(comboxModel, ref Config.Instance.Model);
         }
