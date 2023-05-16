@@ -247,7 +247,7 @@ namespace StableDiffusionGui.Forms
             };
 
             popup.TitleFont = popup.TitleFont.ChangeSize(popup.TitleFont.Size * 1.3f);
-            popup.ContentFont = popup.ContentFont.ChangeSize(popup.ContentFont.Size * 1.25f);
+            popup.ContentFont = popup.ContentFont.ChangeSize(popup.ContentFont.Size * 1.2f);
             popup.Popup();
         }
     }

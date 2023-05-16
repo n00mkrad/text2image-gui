@@ -118,12 +118,6 @@ namespace StableDiffusionGui.Implementations
 
                 Logger.Log($"Running Stable Diffusion - {s.Iterations} Iterations, {s.Steps.Length} Steps, Scales {(s.ScalesTxt.Length < 4 ? string.Join(", ", s.ScalesTxt.Select(x => x.ToStringDot())) : $"{s.ScalesTxt.First()}->{s.ScalesTxt.Last()}")}, {s.Res.AsString()}, Starting Seed: {startSeed}", false, Logger.LastUiLine.EndsWith("..."));
 
-                // if (modelFile.Format == Enums.Models.Format.Diffusers && vaeFile != null)
-                // {
-                //     vaeFile = null; // Diffusers currently doesn't support external VAEs
-                //     Logger.Log("External VAEs are currently not supported with Diffusers models. Using this model's built-in VAE instead.");
-                // }
-
                 string modelsChecksumStartup = InvokeAiUtils.GetModelsHash(cachedModels);
                 string argsStartup = Args.InvokeAi.GetArgsStartup(cachedModels);
                 string newStartupSettings = $"{argsStartup} {modelsChecksumStartup} {Config.Instance.CudaDeviceIdx} {Config.Instance.ClipSkip}"; // Check if startup settings match - If not, we need to restart the process

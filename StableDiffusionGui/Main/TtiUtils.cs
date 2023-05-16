@@ -174,7 +174,6 @@ namespace StableDiffusionGui.Main
             var envVars = new Dictionary<string, string>();
 
             string p = OsUtils.GetPathVar(new string[] {
-                    Path.Combine(baseDir, Constants.Dirs.SdVenv, "Scripts"),
                     Path.Combine(baseDir, Constants.Dirs.Python, "Scripts"),
                     Path.Combine(baseDir, Constants.Dirs.Python),
                     Path.Combine(baseDir, Constants.Dirs.Git, "cmd")
