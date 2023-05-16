@@ -35,6 +35,7 @@ namespace StableDiffusionGui.Data
         public EasyDict<string, float> Loras = new EasyDict<string, float>();
         public Enums.StableDiffusion.SeamlessMode SeamlessMode = Enums.StableDiffusion.SeamlessMode.Disabled;
         public Enums.Utils.FaceTool FaceTool = (Enums.Utils.FaceTool)(-1);
+        public bool HiResFix = false;
 
         private readonly Dictionary<MetadataType, string> _tags = new Dictionary<MetadataType, string>() {
             { MetadataType.InvokeJson, "sd-metadata: " },
@@ -120,6 +121,7 @@ namespace StableDiffusionGui.Data
                 Steps = metadata.ImageData.Steps;
                 BatchSize = 1;
                 GeneratedResolution = new Size(metadata.ImageData.Width, metadata.ImageData.Height);
+                HiResFix = metadata.ImageData.HiResFix;
                 Scale = metadata.ImageData.CfgScale;
                 Sampler = metadata.ImageData.Sampler;
                 Seed = metadata.ImageData.Seed;

@@ -46,6 +46,9 @@ namespace StableDiffusionGui.Implementations
             [JsonProperty("height")]
             public int Height { get; set; }
 
+            [JsonProperty("hires_fix")]
+            public bool HiResFix { get; set; }
+
             [JsonProperty("init_mask")]
             public string InitMask { get; set; }
 

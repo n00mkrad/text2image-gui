@@ -27,6 +27,7 @@ namespace StableDiffusionGui.Forms
                 sliderScaleImg.ActualValue = (decimal)meta.ScaleImg;
                 comboxResW.Text = meta.GeneratedResolution.Width.ToString();
                 comboxResH.Text = meta.GeneratedResolution.Height.ToString();
+                checkboxHiresFix.Checked = meta.HiResFix;
                 upDownSeed.Value = meta.Seed;
                 comboxSampler.SetWithText(meta.Sampler, true, Strings.Samplers);
                 // MainUi.CurrentInitImgPaths = new[] { meta.InitImgName }.Where(x => string.IsNullOrWhiteSpace(x)).ToList(); // Does this even work if we only store the temp path?
