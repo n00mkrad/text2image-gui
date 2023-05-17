@@ -61,7 +61,7 @@ namespace StableDiffusionGui.Main.Utils
             }
 
             Logger.Log($"Downloading {(fp16 ? "FP16 " : "")}model to {savePath.Wrap()}. Estimated size: {(fp16 ? "2" : "4")} GB.");
-            string args = $"/C title Downloading {repoId} - Do not close this window! && cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand(true, Paths.GetDataPath())} && " +
+            string args = $"/C title Downloading {repoId} - Do not close this window! && cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand(true, Paths.GetDataPath())} && {Constants.Files.VenvActivate} && " +
                 $"python {Constants.Dirs.SdRepo}\\scripts\\download_model.py -r {repoId.Wrap()} -c {cachePath.Wrap()} -s {savePath.Wrap()} --revision {rev} && timeout 3";
             Logger.Log($"cmd {args}", true);
             Process.Start("cmd", args);

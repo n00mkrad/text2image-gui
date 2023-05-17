@@ -270,7 +270,7 @@ namespace StableDiffusionGui.Implementations
 
         public static void StartCmdInSdEnv()
         {
-            Process.Start("cmd", $"/K title Env: {Constants.Dirs.SdVenv} && cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand(true, Paths.GetDataPath())} && .\\{Constants.Dirs.SdVenv}\\Scripts\\activate.bat");
+            Process.Start("cmd", $"/K title Env: {Constants.Dirs.SdVenv} && cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand(true, Paths.GetDataPath())} && {Constants.Files.VenvActivate}");
         }
 
         /// <summary> Run InvokeAI post-processing (!fix) </summary>
