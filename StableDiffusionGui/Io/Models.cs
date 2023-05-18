@@ -1,8 +1,11 @@
 ﻿using StableDiffusionGui.Data;
+using StableDiffusionGui.Implementations;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
+using StableDiffusionGui.Os;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using ZetaLongPaths;
@@ -213,7 +216,7 @@ namespace StableDiffusionGui.Io
             return (Enums.Models.Type)(-1);
         }
 
-        public static void SetClipSkip(Model model, int layersToSkip = 1)
+        public static void SetDiffusersClipSkip(Model model, int layersToSkip = 1)
         {
             if(layersToSkip > 0 && model.Format != Format.Diffusers)
             {
@@ -263,6 +266,30 @@ namespace StableDiffusionGui.Io
             catch(Exception ex)
             {
                 Logger.LogException(ex);
+            }
+        }
+
+        public static void HotswapDiffusersVae(Model mdl, Model vae)
+        {
+            string originalDir = Path.Combine(mdl.FullName, "vae_original");
+            string vaeDir = Path.Combine(mdl.FullName, "vae");
+
+            if (vae == null)
+            {
+                if (Directory.Exists(originalDir))
+                    IoUtils.TryMove(originalDir, vaeDir); // Move original VAE back into place
+            }
+            else
+            {
+                if (Directory.Exists(originalDir)) // If backup of the original VAE folder exists...
+                    IoUtils.TryDeleteIfExists(vaeDir); // ...delete fake VAE link
+
+                if (Directory.Exists(vaeDir) && !IoUtils.TryMove(vaeDir, originalDir, false)) // Return if VAE folder exists and moving it failed
+                    return;
+
+                Process p = OsUtils.NewProcess(true);
+                p.StartInfo.Arguments = $"/c mklink /J {vaeDir.Wrap()} {InvokeAiUtils.GetConvertedVaePath(vae).Wrap()}";
+                p.Start();
             }
         }
 

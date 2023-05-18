@@ -334,8 +334,8 @@ namespace StableDiffusionGui.Implementations
         {
             if (mdl.Format == Enums.Models.Format.Diffusers)
             {
-                Models.SetClipSkip(mdl, Config.Instance.ClipSkip);
-                HotswapVae(mdl, vae);
+                Models.SetDiffusersClipSkip(mdl, Config.Instance.ClipSkip);
+                Models.HotswapDiffusersVae(mdl, vae);
             }
 
             if (initial)
@@ -343,30 +343,6 @@ namespace StableDiffusionGui.Implementations
 
             await TtiProcess.WriteStdIn($"!clear");
             await TtiProcess.WriteStdIn($"!switch {InvokeAiUtils.GetMdlNameForYaml(mdl, vae)}");
-        }
-
-        public static void HotswapVae(Model mdl, Model vae)
-        {
-            string originalDir = Path.Combine(mdl.FullName, "vae_original");
-            string vaeDir = Path.Combine(mdl.FullName, "vae");
-
-            if (vae == null)
-            {
-                if (Directory.Exists(originalDir))
-                    IoUtils.TryMove(originalDir, vaeDir); // Move original VAE back into place
-            }
-            else
-            {
-                if (Directory.Exists(originalDir)) // If backup of the original VAE folder exists...
-                    IoUtils.TryDeleteIfExists(vaeDir); // ...delete fake VAE link
-
-                if (Directory.Exists(vaeDir) && !IoUtils.TryMove(vaeDir, originalDir, false)) // Return if VAE folder exists and moving it failed
-                    return;
-
-                Process p = OsUtils.NewProcess(true);
-                p.StartInfo.Arguments = $"/c mklink /J {vaeDir.Wrap()} {InvokeAiUtils.GetConvertedVaePath(vae).Wrap()}";
-                p.Start();
-            }
         }
 
         public static async Task Cancel()

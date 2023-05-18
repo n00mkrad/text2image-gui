@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using ZetaLongPaths;
 using static StableDiffusionGui.Main.Enums.Models;
@@ -49,6 +50,12 @@ namespace StableDiffusionGui.Main.Utils
                 }
 
                 _ckptConfigPath = TtiUtils.GetCkptConfig(model, false);
+
+                if(formatIn == Format.Diffusers)
+                {
+                    Models.SetDiffusersClipSkip(model, 0); // Reset CLIP Skip
+                    Models.HotswapDiffusersVae(model, null); // Reset custom VAE
+                }
 
                 // Pytorch -> Diffusers
                 if (formatIn == Format.Pytorch && formatOut == Format.Diffusers)
