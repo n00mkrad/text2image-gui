@@ -152,9 +152,7 @@ namespace StableDiffusionGui.Forms
                 row.Cells[0].Value = matches.Any();
 
                 if (!matches.Any())
-                {
                     continue;
-                }
 
                 if (row.Cells[1].Value.ToString() == matches[0].Key)
                 {

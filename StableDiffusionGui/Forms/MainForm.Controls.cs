@@ -186,6 +186,7 @@ namespace StableDiffusionGui.Forms
 
         public void ReloadLoras()
         {
+            gridLoras.Rows.Cast<DataGridViewRow>().Where(row => row.Cells[2].Value.ToString().GetFloat() <= 0f).ToList().ForEach(row => row.Cells[2].Value = "1.0");
             var selection = GetLoras(); // Save current selection
             IEnumerable<string> loras = Models.GetLoras().Select(m => m.FormatIndependentName);
             panelLoras.SetVisible(loras.Any()); // Disable panel if no LoRAs in folder
@@ -199,16 +200,9 @@ namespace StableDiffusionGui.Forms
             if (string.Join("", loras.OrderBy(l => l)) == string.Join("", previousLoraList.OrderBy(l => l)))
                 return;
 
-            if (!previousLoraList.SequenceEqual(loras))
-            {
-                gridLoras.Rows.Clear();
-                loras.ToList().ForEach(l => gridLoras.Rows.Add(false, l, "0.8"));
-                SetLoras(selection); // Restore selection
-            }
-            else
-            {
-                Debugger.Break(); // This block should never actually run. Should be removed later if it never trips the debugger
-            }
+            gridLoras.Rows.Clear();
+            loras.ToList().ForEach(l => gridLoras.Rows.Add(false, l, "1.0"));
+            SetLoras(selection); // Restore selection
         }
 
         public void SortLoras(bool force = false)
