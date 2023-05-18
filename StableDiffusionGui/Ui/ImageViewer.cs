@@ -24,8 +24,6 @@ namespace StableDiffusionGui.Ui
         private static string[] _currentImages = new string[0];
         private static int _currIndex = -1;
 
-        private static bool _shownBlackImgWarning = false;
-
         public static DateTime TimeOfLastImageViewerInteraction;
         public static DateTime TimeOfLastBlackImgWarn;
 

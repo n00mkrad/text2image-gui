@@ -335,8 +335,6 @@ namespace StableDiffusionGui.Implementations
             if (mdl.Format == Enums.Models.Format.Diffusers)
             {
                 Models.SetClipSkip(mdl, Config.Instance.ClipSkip);
-                // vae = null; // Diffusers currently doesn't support external VAEs
-
                 HotswapVae(mdl, vae);
             }
 
@@ -362,7 +360,9 @@ namespace StableDiffusionGui.Implementations
                 if (Directory.Exists(vaeDir) && !IoUtils.TryMove(vaeDir, originalDir, false)) // Return if VAE folder exists and moving it failed
                     return;
 
-                Process.Start("cmd", $"/c mklink /J {vaeDir.Wrap()} {InvokeAiUtils.GetConvertedVaePath(vae).Wrap()}");
+                Process p = OsUtils.NewProcess(true);
+                p.StartInfo.Arguments = $"/c mklink /J {vaeDir.Wrap()} {InvokeAiUtils.GetConvertedVaePath(vae).Wrap()}";
+                p.Start();
             }
         }
 
