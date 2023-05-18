@@ -31,5 +31,10 @@ namespace StableDiffusionGui.MiscUtils
         {
             return _etas.Average();
         }
+
+        public void Reset()
+        {
+            _etas.Clear();
+        }
     }
 }

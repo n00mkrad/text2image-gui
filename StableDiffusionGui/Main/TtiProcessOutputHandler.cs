@@ -27,6 +27,7 @@ namespace StableDiffusionGui.Main
             _hasErrored = false;
             _isRunningHiResFix = false;
             LastMessages.Clear();
+            RollingAvg.Reset();
         }
 
         public static void LogOutput(string line, bool stdErr = false)
