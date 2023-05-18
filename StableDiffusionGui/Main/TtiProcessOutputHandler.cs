@@ -20,6 +20,7 @@ namespace StableDiffusionGui.Main
 
         public static List<string> LastMessages = new List<string>();
         public static Stopwatch TimeSinceLastImage = new Stopwatch();
+        public static RollingAverage RollingAvg = new RollingAverage(10);
 
         public static void Reset()
         {
@@ -92,7 +93,8 @@ namespace StableDiffusionGui.Main
                         Program.MainForm.SetProgress((int)Math.Round(((float)TextToImage.CurrentTask.ImgCount / TextToImage.CurrentTask.TargetImgCount) * 100f));
 
                         int lastMsPerImg = (int)TimeSinceLastImage.ElapsedMilliseconds;
-                        int remainingMs = (TextToImage.CurrentTask.TargetImgCount - TextToImage.CurrentTask.ImgCount) * lastMsPerImg;
+                        RollingAvg.AddDataPoint(lastMsPerImg);
+                        int remainingMs = (TextToImage.CurrentTask.TargetImgCount - TextToImage.CurrentTask.ImgCount) * (int)RollingAvg.GetAverage();
 
                         Logger.Log($"Generated image in {FormatUtils.Time(lastMsPerImg)} ({TextToImage.CurrentTask.ImgCount}/{TextToImage.CurrentTask.TargetImgCount})" +
                             $"{(TextToImage.CurrentTask.ImgCount > 1 && remainingMs > 1000 ? $" - ETA: {FormatUtils.Time(remainingMs, false)}" : "")}", false, replace || Logger.LastUiLine.MatchesWildcard("*Generated*image*in*"));

@@ -130,7 +130,7 @@ namespace StableDiffusionGui.Implementations
                 if (!TtiProcess.IsAiProcessRunning || (TtiProcess.IsAiProcessRunning && TtiProcess.LastStartupSettings != newStartupSettings))
                 {
                     InvokeAiUtils.WriteModelsYamlAll(cachedModels, cachedModelsVae, s.ModelArch);
-                    Models.SetClipSkip(modelFile, Config.Instance.ClipSkip);
+                    await SwitchModel(modelFile, vaeFile, true);
                     if (TextToImage.Canceled) return;
 
                     Logger.Log($"(Re)starting InvokeAI. Process running: {TtiProcess.IsAiProcessRunning} - Prev startup string: '{TtiProcess.LastStartupSettings}' - New startup string: '{newStartupSettings}'", true);
@@ -330,13 +330,16 @@ namespace StableDiffusionGui.Implementations
             }
         }
 
-        public static async Task SwitchModel(Model mdl, Model vae = null)
+        public static async Task SwitchModel(Model mdl, Model vae, bool initial = false)
         {
             if (mdl.Format == Enums.Models.Format.Diffusers)
             {
                 Models.SetClipSkip(mdl, Config.Instance.ClipSkip);
                 HotswapVae(mdl, vae);
             }
+
+            if (initial)
+                return;
 
             await TtiProcess.WriteStdIn($"!clear");
             await TtiProcess.WriteStdIn($"!switch {InvokeAiUtils.GetMdlNameForYaml(mdl, vae)}");

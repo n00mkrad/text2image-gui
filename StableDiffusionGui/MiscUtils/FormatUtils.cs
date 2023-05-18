@@ -36,10 +36,10 @@ namespace StableDiffusionGui.MiscUtils
         public static string Time(TimeSpan span, bool allowMs = true)
         {
             if (span.TotalHours >= 1f)
-                return span.ToString(@"h\:m\:s");
+                return span.ToString(@"hh\:mm\:ss");
 
             if (span.TotalMinutes >= 1f)
-                return span.ToString(@"m\:s");
+                return span.ToString(@"mm\:ss");
 
             if (span.TotalSeconds >= 1f || !allowMs)
             {

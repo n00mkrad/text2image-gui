@@ -360,6 +360,7 @@
     <Compile Include="MiscUtils\NmkdStopwatch.cs" />
     <Compile Include="MiscUtils\ParseUtils.cs" />
     <Compile Include="MiscUtils\PromptWildcardUtils.cs" />
+    <Compile Include="MiscUtils\RollingAverage.cs" />
     <Compile Include="Os\GpuUtils.cs" />
     <Compile Include="Os\HwInfo.cs" />
     <Compile Include="Os\ProcessManager.cs" />
