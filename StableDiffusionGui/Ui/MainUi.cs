@@ -60,7 +60,7 @@ namespace StableDiffusionGui.Ui
         {
             int step = Config.Instance.Implementation == Implementation.InstructPixToPix ? 8 : 64;
 
-            if (Config.Instance.InvokeAllowMod8 && Config.Instance.Implementation == Implementation.InvokeAi && Program.MainForm.comboxModel.Text.Contains("inpainting"))
+            if (Config.Instance.InvokeAllowMod8 && Config.Instance.Implementation == Implementation.InvokeAi && Program.MainForm.comboxModel.Text.Lower().Contains("inpainting"))
                 step = 8;
 
             return Enumerable.Range(min, (max - min) + 1).Where(x => x % step == 0).ToList();

@@ -136,7 +136,7 @@ namespace StableDiffusionGui.Main
                 return false;
             }
 
-            if (s.ImgMode != ImgMode.InitializationImage && !s.Model.Contains("inpainting"))
+            if (s.ImgMode != ImgMode.InitializationImage && !s.Model.Lower().Contains("inpainting"))
                 Logger.Log($"Warning: Inpainting is enabled, but '{s.Model}' does not appear to be an inpainting model. Quality will be degraded.");
 
             if (s.Seed >= 0)

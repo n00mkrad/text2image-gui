@@ -209,6 +209,7 @@ namespace StableDiffusionGui.Ui
 
         public static void DeleteCurrent()
         {
+            Program.MainForm.panelSettings.Focus();
             IoUtils.TryDeleteIfExists(CurrentImagePath);
             _currentImages = _currentImages.Where(x => File.Exists(x)).ToArray();
             Move(true);
@@ -218,6 +219,8 @@ namespace StableDiffusionGui.Ui
         {
             if (_currentImages == null || _currentImages.Length < 1)
                 return;
+
+            Program.MainForm.panelSettings.Focus();
 
             if (askForConfirmation)
             {
