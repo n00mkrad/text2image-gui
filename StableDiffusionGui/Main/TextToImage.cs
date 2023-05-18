@@ -65,7 +65,7 @@ namespace StableDiffusionGui.Main
                 Inpainting.PrepareInpaintingIfEnabled(s);
 
                 if (Canceled)
-                    return;
+                    continue;
 
                 iteration++;
                 PromptHistory.Add(s);
