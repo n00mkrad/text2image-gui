@@ -91,7 +91,7 @@ namespace StableDiffusionGui.Implementations
                     TextToImage.CurrentTask.Processes.Add(py);
 
                     py.StartInfo.RedirectStandardInput = true;
-                    py.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand()} && " +
+                    py.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand()} && {Constants.Files.VenvActivate} && " +
                         $"python \"{Constants.Dirs.SdRepo}/nmkdiff/nmkdiffusers.py\" -p InstructPix2Pix -o {outPath.Wrap(true)}";
 
                     Logger.Log("cmd.exe " + py.StartInfo.Arguments, true);

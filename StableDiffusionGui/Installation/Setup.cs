@@ -307,7 +307,7 @@ namespace StableDiffusionGui.Installation
                 }
 
                 Process p = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
-                p.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand(true, Paths.GetDataPath())} && " +
+                p.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand(true, Paths.GetDataPath())} && {Constants.Files.VenvActivate} && " +
                     $"python {Constants.Dirs.SdRepo}/invoke/scripts/nmkd_install_upscalers.py";
                 p.ErrorDataReceived += (sender, line) =>
                 {

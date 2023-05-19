@@ -72,7 +72,7 @@ namespace StableDiffusionGui.Forms
                 List<string> outLines = new List<string>();
 
                 Process p = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
-                p.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand(true, Paths.GetDataPath())} && " +
+                p.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand(true, Paths.GetDataPath())} && {Constants.Files.VenvActivate} && " +
                     $"python {Constants.Dirs.SdRepo}/scripts/prune_model.py -i {model.FullName.Wrap()} -o {outPath.Wrap(true)} {(fp16 ? "-half" : "")}";
 
                 if (!OsUtils.ShowHiddenCmd())

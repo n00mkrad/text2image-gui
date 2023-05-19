@@ -260,6 +260,7 @@ namespace StableDiffusionGui.Implementations
                 $"title Stable Diffusion CLI (InvokeAI)\n" +
                 $"cd /D {Paths.GetDataPath().Wrap()}\n" +
                 $"{TtiUtils.GetEnvVarsSdCommand()}\n" +
+                $"{Constants.Files.VenvActivate}\n" +
                 $"SET \"INVOKEAI_ROOT={InvokeAiUtils.HomePath}\"\n" +
                 $"{Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdVenv, "Scripts", "invoke.exe").Wrap()} --model {InvokeAiUtils.GetMdlNameForYaml(modelFile, vaeFile)} -o {outPath.Wrap(true)} {Args.InvokeAi.GetArgsStartup(cachedModels)}";
 

@@ -53,7 +53,7 @@ namespace StableDiffusionGui.Main
                 string outPath = Path.Combine(Paths.GetModelsPath(), $"dreambooth-{className}-{CurrentTargetSteps}step-{timestamp}.diff");
 
                 Process db = OsUtils.NewProcess(!showCmd);
-                db.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand()} && python {Constants.Dirs.SdRepo}/db/main.py -t " +
+                db.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand()} && {Constants.Files.VenvActivate} && python {Constants.Dirs.SdRepo}/db/main.py -t " +
                     $"--base {configPath.Wrap(true)} " +
                     $"--actual_resume {baseModel.FullName.Wrap(true)} " +
                     $"--name {name.Wrap()} " +

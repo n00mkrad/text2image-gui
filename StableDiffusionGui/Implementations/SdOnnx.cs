@@ -116,7 +116,7 @@ namespace StableDiffusionGui.Implementations
                     }
 
                     py.StartInfo.RedirectStandardInput = true;
-                    py.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand()} && " +
+                    py.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand()} && {Constants.Files.VenvActivate} && " +
                         $"python \"{Constants.Dirs.SdRepo}/nmkdiff/nmkdiffusers.py\" -p SdOnnx -g {mode} -m {modelDir.FullName.Wrap(true)} -o {outPath.Wrap(true)}";
 
                     Logger.Log("cmd.exe " + py.StartInfo.Arguments, true);

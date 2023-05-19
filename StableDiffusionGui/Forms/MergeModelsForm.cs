@@ -87,7 +87,7 @@ namespace StableDiffusionGui.Forms
                 string outPath = Path.Combine(model1.Directory.FullName, filename);
 
                 Process p = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
-                p.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand()} && " +
+                p.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand()} && {Constants.Files.VenvActivate} && " +
                     $"python {Constants.Dirs.SdRepo}/scripts/merge_models.py -1 {model1.FullName.Wrap()} -2 {model2.FullName.Wrap()} -w {(PercentModel2 / 100f).ToStringDot("0.0000")} -o {outPath.Wrap(true)}";
 
                 if (!OsUtils.ShowHiddenCmd())
