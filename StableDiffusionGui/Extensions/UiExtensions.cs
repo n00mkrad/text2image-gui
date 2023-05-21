@@ -120,17 +120,18 @@ namespace StableDiffusionGui.Extensions
             });
         }
 
+        private static HashSet<Control> _nonRenderingControls = new HashSet<Control>();
+
         /// <summary> WM_SETREDRAW message is sent to a window to allow changes to be redrawn or to prevent changes from being redrawn. </summary>
         private const int WM_SETREDRAW = 11;
 
         /// <summary> Suspends painting for the target control. Do not forget to call ResumeRendering! </summary>
         public static void StopRendering(this Control control)
         {
-            Message msgSuspendUpdate = Message.Create(control.Handle, WM_SETREDRAW, IntPtr.Zero,
-                  IntPtr.Zero);
-
+            Message msgSuspendUpdate = Message.Create(control.Handle, WM_SETREDRAW, IntPtr.Zero, IntPtr.Zero);
             NativeWindow window = NativeWindow.FromHandle(control.Handle);
             window.DefWndProc(ref msgSuspendUpdate);
+            _nonRenderingControls.Add(control);
         }
 
         /// <summary> Resumes painting for the target control. Intended to be called following a call to StopRendering(). </summary>
@@ -142,25 +143,29 @@ namespace StableDiffusionGui.Extensions
             window.DefWndProc(ref msgResumeUpdate);
             control.Invalidate();
             control.Refresh();
+            _nonRenderingControls.Remove(control);
         }
 
-        public static void RunWithUiStopped(this Action action, Form form, string errorPrefix = "", bool dontPauseInDebugMode = false)
+        public static bool IsRendering(this Control control)
         {
+            return !_nonRenderingControls.Contains(control);
+        }
+
+        public static void RunWithUiStopped(this Action action, Form form, string errorPrefix = "", bool showErrors = false, bool dontResumeIfAlreadyStopped = true, bool dontPauseInDebugMode = false)
+        {
+            if (form.RequiresInvoke(() => action.RunWithUiStopped(form, errorPrefix, showErrors, dontResumeIfAlreadyStopped, dontPauseInDebugMode)))
+                return;
+
+            if (dontResumeIfAlreadyStopped && !form.IsRendering())
+            {
+                action.RunInTryCatch(errorPrefix, showErrors ? errorPrefix : "");
+                return;
+            }
+
             if (!(dontPauseInDebugMode && Program.Debug))
                 form.StopRendering();
 
-            action.RunInTryCatch(errorPrefix);
-
-            if (!(dontPauseInDebugMode && Program.Debug))
-                form.ResumeRendering();
-        }
-
-        public static void RunWithUiStoppedShowErrors(this Action action, Form form, string errorPrefix = "", bool dontPauseInDebugMode = false)
-        {
-            if (!(dontPauseInDebugMode && Program.Debug))
-                form.StopRendering();
-
-            action.RunInTryCatch(errorPrefix, errorPrefix);
+            action.RunInTryCatch(errorPrefix, showErrors ? errorPrefix : "");
 
             if (!(dontPauseInDebugMode && Program.Debug))
                 form.ResumeRendering();
@@ -192,6 +197,20 @@ namespace StableDiffusionGui.Extensions
                     return true;
 
                 c.Invoke(method, args);
+                return true;
+            }
+
+            return false;
+        }
+
+        public static bool RequiresInvoke(this Control c, Action action)
+        {
+            if (c.InvokeRequired)
+            {
+                if (c.Disposing || c.IsDisposed)
+                    return true;
+
+                c.Invoke(action);
                 return true;
             }
 

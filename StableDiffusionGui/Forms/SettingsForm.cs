@@ -101,7 +101,7 @@ namespace StableDiffusionGui.Forms
                     comboxSdModel.SelectedIndex = 0;
 
                 UpdateComboxStates();
-            })).RunWithUiStoppedShowErrors(this);
+            })).RunWithUiStopped(this, showErrors: true);
         }
 
         private void LoadVaes()
@@ -120,7 +120,7 @@ namespace StableDiffusionGui.Forms
                     comboxSdModelVae.SelectedIndex = 0;
 
                 UpdateComboxStates();
-            })).RunWithUiStoppedShowErrors(this);
+            })).RunWithUiStopped(this, showErrors: true);
         }
 
         private async Task LoadGpus()
@@ -292,7 +292,7 @@ namespace StableDiffusionGui.Forms
 
                     UiUtils.ShowMessageBox($"Warning: This implementation disables several features.\nOnly use it if you need it due to compatibility or hardware limitations.");
                 }
-            })).RunWithUiStoppedShowErrors(this);
+            })).RunWithUiStopped(this, showErrors: true);
         }
 
         private void UpdateComboxStates()

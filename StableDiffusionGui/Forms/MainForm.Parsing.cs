@@ -45,7 +45,7 @@ namespace StableDiffusionGui.Forms
                 textboxExtraInitStrengths.Text = "";
                 SetLoras(meta.Loras);
 
-            })).RunWithUiStoppedShowErrors(this, "Error loading metadata into UI:");
+            })).RunWithUiStopped(this, "Error loading metadata into UI:", true);
 
             TryRefreshUiState();
         }
@@ -83,7 +83,7 @@ namespace StableDiffusionGui.Forms
 
                 SetLoras(s.Loras);               
 
-            })).RunWithUiStoppedShowErrors(this, "Error loading image generation settings:");
+            })).RunWithUiStopped(this, "Error loading image generation settings:", true);
 
             TryRefreshUiState();
         }

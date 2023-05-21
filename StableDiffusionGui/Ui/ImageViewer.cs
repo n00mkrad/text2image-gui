@@ -14,8 +14,12 @@ using System.Windows.Forms;
 
 namespace StableDiffusionGui.Ui
 {
+
     internal class ImageViewer
     {
+        public delegate void ImgChangedEvent();
+        public static event ImgChangedEvent OnImageChanged;
+
         public enum ImgShowMode { DontShow, ShowFirst, ShowLast }
 
         public static string CurrentImagePath { get { try { return _currentImages.Length > 0 ? _currentImages[_currIndex] : ""; } catch { return ""; } } }
@@ -69,6 +73,7 @@ namespace StableDiffusionGui.Ui
             Program.MainForm.pictBoxImgViewer.SetTextSafe("");
             Image img = IoUtils.GetImage(_currentImages[_currIndex]);
             Program.MainForm.pictBoxImgViewer.Image = img;
+            OnImageChanged?.Invoke();
 
             if ((DateTime.Now - TimeOfLastBlackImgWarn).TotalSeconds >= 60 && ImgUtils.IsAllBlack((Bitmap)Program.MainForm.pictBoxImgViewer.GetImageSafe()))
             {
@@ -122,6 +127,7 @@ namespace StableDiffusionGui.Ui
         {
             Program.MainForm.pictBoxImgViewer.SetTextSafe("");
             Program.MainForm.pictBoxImgViewer.Image = null;
+            OnImageChanged?.Invoke();
             Program.MainForm.labelImgInfo.SetTextSafe("No images to show.");
             Program.MainForm.labelImgPrompt.SetTextSafe(_strNoPrompt);
             Program.MainForm.labelImgPromptNeg.SetTextSafe(_strNoPromptNeg);

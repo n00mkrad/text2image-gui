@@ -221,6 +221,7 @@ namespace StableDiffusionGui.Forms
             this.openFavoritesFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btnSaveMode = new System.Windows.Forms.Button();
             this.separator = new System.Windows.Forms.Button();
+            this.flowPanelImgButtons = new System.Windows.Forms.FlowLayoutPanel();
             this.menuStripOutputImg.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.upDownSeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
@@ -271,6 +272,7 @@ namespace StableDiffusionGui.Forms
             ((System.ComponentModel.ISupportInitialize)(this.pictBoxInitImg)).BeginInit();
             this.menuStripInstall.SuspendLayout();
             this.menuStripOpenFolder.SuspendLayout();
+            this.flowPanelImgButtons.SuspendLayout();
             this.SuspendLayout();
             // 
             // runBtn
@@ -659,7 +661,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderScale.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScale.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScale.Location = new System.Drawing.Point(308, 2);
+            this.textboxSliderScale.Location = new System.Drawing.Point(308, 4);
             this.textboxSliderScale.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScale.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScale.Name = "textboxSliderScale";
@@ -806,7 +808,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderInitStrength.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderInitStrength.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderInitStrength.Location = new System.Drawing.Point(308, 2);
+            this.textboxSliderInitStrength.Location = new System.Drawing.Point(308, 4);
             this.textboxSliderInitStrength.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderInitStrength.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderInitStrength.Name = "textboxSliderInitStrength";
@@ -1005,7 +1007,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderScaleImg.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScaleImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScaleImg.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScaleImg.Location = new System.Drawing.Point(308, 2);
+            this.textboxSliderScaleImg.Location = new System.Drawing.Point(308, 4);
             this.textboxSliderScaleImg.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScaleImg.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScaleImg.Name = "textboxSliderScaleImg";
@@ -1133,7 +1135,8 @@ namespace StableDiffusionGui.Forms
             this.btnSaveToFavs.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSaveToFavs.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSaveToFavs.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnSaveToFavs.Location = new System.Drawing.Point(968, 629);
+            this.btnSaveToFavs.Location = new System.Drawing.Point(67, 0);
+            this.btnSaveToFavs.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
             this.btnSaveToFavs.Name = "btnSaveToFavs";
             this.btnSaveToFavs.Size = new System.Drawing.Size(40, 40);
             this.btnSaveToFavs.TabIndex = 120;
@@ -1170,7 +1173,8 @@ namespace StableDiffusionGui.Forms
             this.btnDeleteBatch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnDeleteBatch.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnDeleteBatch.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnDeleteBatch.Location = new System.Drawing.Point(1060, 629);
+            this.btnDeleteBatch.Location = new System.Drawing.Point(159, 0);
+            this.btnDeleteBatch.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
             this.btnDeleteBatch.Name = "btnDeleteBatch";
             this.btnDeleteBatch.Size = new System.Drawing.Size(40, 40);
             this.btnDeleteBatch.TabIndex = 114;
@@ -1361,7 +1365,8 @@ namespace StableDiffusionGui.Forms
             this.btnOpenOutFolder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnOpenOutFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnOpenOutFolder.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnOpenOutFolder.Location = new System.Drawing.Point(1014, 629);
+            this.btnOpenOutFolder.Location = new System.Drawing.Point(113, 0);
+            this.btnOpenOutFolder.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
             this.btnOpenOutFolder.Name = "btnOpenOutFolder";
             this.btnOpenOutFolder.Size = new System.Drawing.Size(40, 40);
             this.btnOpenOutFolder.TabIndex = 94;
@@ -1379,7 +1384,8 @@ namespace StableDiffusionGui.Forms
             this.btnPrevImg.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnPrevImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnPrevImg.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnPrevImg.Location = new System.Drawing.Point(1106, 629);
+            this.btnPrevImg.Location = new System.Drawing.Point(205, 0);
+            this.btnPrevImg.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
             this.btnPrevImg.Name = "btnPrevImg";
             this.btnPrevImg.Size = new System.Drawing.Size(40, 40);
             this.btnPrevImg.TabIndex = 82;
@@ -1397,8 +1403,8 @@ namespace StableDiffusionGui.Forms
             this.btnNextImg.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnNextImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnNextImg.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnNextImg.Location = new System.Drawing.Point(1152, 629);
-            this.btnNextImg.Margin = new System.Windows.Forms.Padding(3, 3, 0, 3);
+            this.btnNextImg.Location = new System.Drawing.Point(251, 0);
+            this.btnNextImg.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
             this.btnNextImg.Name = "btnNextImg";
             this.btnNextImg.Size = new System.Drawing.Size(40, 40);
             this.btnNextImg.TabIndex = 80;
@@ -2328,7 +2334,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderSteps.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderSteps.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderSteps.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderSteps.Location = new System.Drawing.Point(308, 2);
+            this.textboxSliderSteps.Location = new System.Drawing.Point(308, 4);
             this.textboxSliderSteps.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderSteps.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderSteps.Name = "textboxSliderSteps";
@@ -2953,7 +2959,8 @@ namespace StableDiffusionGui.Forms
             this.btnSaveMode.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSaveMode.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSaveMode.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.btnSaveMode.Location = new System.Drawing.Point(922, 629);
+            this.btnSaveMode.Location = new System.Drawing.Point(21, 0);
+            this.btnSaveMode.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
             this.btnSaveMode.Name = "btnSaveMode";
             this.btnSaveMode.Size = new System.Drawing.Size(40, 40);
             this.btnSaveMode.TabIndex = 121;
@@ -2979,6 +2986,22 @@ namespace StableDiffusionGui.Forms
             this.separator.TabStop = false;
             this.separator.UseVisualStyleBackColor = false;
             // 
+            // flowPanelImgButtons
+            // 
+            this.flowPanelImgButtons.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.flowPanelImgButtons.Controls.Add(this.btnNextImg);
+            this.flowPanelImgButtons.Controls.Add(this.btnPrevImg);
+            this.flowPanelImgButtons.Controls.Add(this.btnDeleteBatch);
+            this.flowPanelImgButtons.Controls.Add(this.btnOpenOutFolder);
+            this.flowPanelImgButtons.Controls.Add(this.btnSaveToFavs);
+            this.flowPanelImgButtons.Controls.Add(this.btnSaveMode);
+            this.flowPanelImgButtons.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
+            this.flowPanelImgButtons.Location = new System.Drawing.Point(898, 629);
+            this.flowPanelImgButtons.Margin = new System.Windows.Forms.Padding(3, 3, 0, 3);
+            this.flowPanelImgButtons.Name = "flowPanelImgButtons";
+            this.flowPanelImgButtons.Size = new System.Drawing.Size(294, 40);
+            this.flowPanelImgButtons.TabIndex = 122;
+            // 
             // MainForm
             // 
             this.AllowDrop = true;
@@ -2986,14 +3009,12 @@ namespace StableDiffusionGui.Forms
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.ClientSize = new System.Drawing.Size(1198, 700);
-            this.Controls.Add(this.btnSaveMode);
-            this.Controls.Add(this.btnSaveToFavs);
+            this.Controls.Add(this.flowPanelImgButtons);
             this.Controls.Add(this.progressBarImg);
             this.Controls.Add(this.tableLayoutPanelImgViewers);
             this.Controls.Add(this.btnDreambooth);
             this.Controls.Add(this.labelImgPromptNeg);
             this.Controls.Add(this.labelImgPrompt);
-            this.Controls.Add(this.btnDeleteBatch);
             this.Controls.Add(this.btnPromptHistory);
             this.Controls.Add(this.btnQueue);
             this.Controls.Add(this.btnPostProc);
@@ -3003,10 +3024,7 @@ namespace StableDiffusionGui.Forms
             this.Controls.Add(this.cliButton);
             this.Controls.Add(this.progressBar);
             this.Controls.Add(this.progressCircle);
-            this.Controls.Add(this.btnOpenOutFolder);
-            this.Controls.Add(this.btnPrevImg);
             this.Controls.Add(this.labelImgInfo);
-            this.Controls.Add(this.btnNextImg);
             this.Controls.Add(this.logBox);
             this.Controls.Add(this.installerBtn);
             this.Controls.Add(this.separator);
@@ -3102,6 +3120,7 @@ namespace StableDiffusionGui.Forms
             ((System.ComponentModel.ISupportInitialize)(this.pictBoxInitImg)).EndInit();
             this.menuStripInstall.ResumeLayout(false);
             this.menuStripOpenFolder.ResumeLayout(false);
+            this.flowPanelImgButtons.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -3297,6 +3316,7 @@ namespace StableDiffusionGui.Forms
         private System.Windows.Forms.ToolStripMenuItem openFavoritesFolderToolStripMenuItem;
         public System.Windows.Forms.Button btnSaveToFavs;
         public System.Windows.Forms.Button btnSaveMode;
+        private System.Windows.Forms.FlowLayoutPanel flowPanelImgButtons;
     }
 }
 

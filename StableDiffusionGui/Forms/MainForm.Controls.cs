@@ -14,8 +14,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
 using static StableDiffusionGui.Ui.MainUi;
@@ -71,6 +69,7 @@ namespace StableDiffusionGui.Forms
             comboxModel.DropDownClosed += (s, e) => panelSettings.Focus();
             comboxResW.SelectedIndexChanged += (s, e) => ResolutionChanged(); // Resolution change
             comboxResH.SelectedIndexChanged += (s, e) => ResolutionChanged(); // Resolution change
+            ImageViewer.OnImageChanged += () => UpdateImgViewerBtns(); // Image change
             comboxEmbeddingList.DropDown += (s, e) => ReloadEmbeddings(); // Reload embeddings
             gridLoras.KeyUp += (s, e) => { if (e.KeyCode == Keys.Enter) GridMoveUp(gridLoras); };
             gridLoras.CurrentCellDirtyStateChanged += (s, e) =>
@@ -117,7 +116,7 @@ namespace StableDiffusionGui.Forms
             if (skipIfHidden && Opacity < 1f)
                 return;
 
-            ((Action)(() => RefreshUiState())).RunWithUiStoppedShowErrors(this, "TryRefreshUiState:");
+            ((Action)(() => RefreshUiState())).RunWithUiStopped(this, "TryRefreshUiState:", true);
         }
 
         private void RefreshUiState()
@@ -147,7 +146,7 @@ namespace StableDiffusionGui.Forms
             toolTip.SetToolTip(labelCurrentImage, $"{labelCurrentImage.Text.Trunc(100)}\n\nShift + Hover to preview.");
 
             ImageViewer.UpdateInitImgViewer();
-            UpdateSaveModeBtn();
+            UpdateImgViewerBtns();
             ResolutionChanged();
             UpdateModel();
             ModelChanged();
@@ -447,6 +446,22 @@ namespace StableDiffusionGui.Forms
                 if (currentRowIndex > 0)
                     grid.Rows[currentRowIndex - 1].Cells[grid.CurrentCell.ColumnIndex].Selected = true;
             }
+        }
+
+        public void UpdateImgViewerBtns()
+        {
+            ((Action)(() =>
+            {
+                bool hasImage = pictBoxImgViewer.Image != null;
+                btnNextImg.SetVisible(hasImage);
+                btnPrevImg.SetVisible(hasImage);
+                btnDeleteBatch.SetVisible(hasImage);
+                btnSaveToFavs.SetVisible(hasImage);
+                flowPanelImgButtons.Controls.Cast<Control>().ToList().ForEach(c => c.Padding = new Padding(3, 3, 3, 3));
+                Control rightmost = flowPanelImgButtons.Controls.Cast<Control>().OrderBy(c => c.Right).LastOrDefault();
+                rightmost.Padding = new Padding(rightmost.Padding.Left, rightmost.Padding.Top, 0, rightmost.Padding.Bottom);
+                UpdateSaveModeBtn();
+            })).RunWithUiStopped(this);
         }
 
         public void ToggleSaveMode ()
