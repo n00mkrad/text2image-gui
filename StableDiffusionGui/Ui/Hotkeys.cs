@@ -77,7 +77,7 @@ namespace StableDiffusionGui.Ui
                 return;
             }
 
-            if (keys == (Keys.Control | Keys.D)) // Hotkey: Copy current image to favs
+            if (keys == (Keys.Control | Keys.S)) // Hotkey: Copy current image to favs
             {
                 ImageViewer.CopyCurrentToFavs();
                 return;
