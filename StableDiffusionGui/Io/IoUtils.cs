@@ -374,7 +374,7 @@ namespace StableDiffusionGui.Io
         /// <summary>
         /// Easily rename a file without needing to specify the full move path
         /// </summary>
-        public static bool RenameFile(string path, string newName, bool alsoRenameExtension = false)
+        public static bool RenameFile(string path, string newName, bool alsoRenameExtension = false, bool showLog = false)
         {
             try
             {
@@ -390,7 +390,7 @@ namespace StableDiffusionGui.Io
             }
             catch (Exception e)
             {
-                Logger.Log($"Failed to rename '{path}' to '{newName}': {e.Message}", true);
+                Logger.Log($"Failed to rename '{path}' to '{newName}': {e.Message}", !showLog);
                 return false;
             }
         }

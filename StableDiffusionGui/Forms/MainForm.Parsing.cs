@@ -160,7 +160,7 @@ namespace StableDiffusionGui.Forms
                 if (row.Cells[1].Value.ToString() == matches[0].Key)
                 {
                     row.Cells[0].Value = true;
-                    row.Cells[2].Value = matches[0].Value.ToStringDot("0.###");
+                    row.Cells[2].Value = matches[0].Value.ToStringDot("0.0##");
                 }
             }
 

@@ -1,5 +1,6 @@
 ﻿using ImageMagick;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using StableDiffusionGui.Data;
 using StableDiffusionGui.Extensions;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
@@ -11,8 +12,10 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static StableDiffusionGui.Main.Constants;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
 namespace StableDiffusionGui.Forms
@@ -249,6 +252,40 @@ namespace StableDiffusionGui.Forms
             popup.TitleFont = popup.TitleFont.ChangeSize(popup.TitleFont.Size * 1.3f);
             popup.ContentFont = popup.ContentFont.ChangeSize(popup.ContentFont.Size * 1.2f);
             popup.Popup();
+        }
+
+        public List<Model> ValidateLoraNames (List<Model> loras)
+        {
+            Regex validPattern = new Regex(@"^[\w]+$"); // Alphanumeric, underscores
+            Regex replacePattern = new Regex(@"[^\w]"); // Replace invalid chars
+            Regex multiUnderscoresPattern = new Regex(@"_{2,}"); // For detecting multiple consecutive underscores
+
+            var invalidLorasAndCorrectedNames = new EasyDict<Model, string>();
+
+            if (_shownLoraFilenameWarning || loras.All(l => validPattern.IsMatch(l.FormatIndependentName)))
+                return loras; // Either warning has been shown already, or all are valid.
+
+            _shownLoraFilenameWarning = true;
+
+            foreach (var lora in loras.Where(l => !validPattern.IsMatch(l.FormatIndependentName)))
+            {
+                string validFilename = replacePattern.Replace(lora.FormatIndependentName, "_"); // Remove invalid chars
+                invalidLorasAndCorrectedNames[lora] = multiUnderscoresPattern.Replace(validFilename, "_").Trim('_'); // Remove multiple consecutive underscores and trim start/end
+            }
+
+            UiUtils.ShowMessageBox($"The following LoRA files were not loaded because they have an invalid file name:\n\n{string.Join("\n", invalidLorasAndCorrectedNames.Keys)}\n\n" +
+                    $"Only alphanumeric characters and underscores are allowed. Spaces, hyphens and other special characters are not valid.", UiUtils.MessageType.Warning, Nmkoder.Forms.MessageForm.FontSize.Big);
+
+            string msg = $"Do you want to automatically rename the files to a valid name?\n\n{string.Join("\n", invalidLorasAndCorrectedNames.Select(pair => $"{pair.Key.FormatIndependentName} => {pair.Value}"))}";
+            DialogResult dialogResult = UiUtils.ShowMessageBox(msg, "Auto-Rename", MessageBoxButtons.YesNo, Nmkoder.Forms.MessageForm.FontSize.Big);
+
+            if(dialogResult == DialogResult.Yes)
+            {
+                invalidLorasAndCorrectedNames.ToList().ForEach(pair => IoUtils.RenameFile(pair.Key.FullName, pair.Value, showLog: true));
+                loras = Models.GetLoras(); // Need to reload from disk after renaming, otherwise we still have the old filenames
+            }
+
+            return loras.Where(l => validPattern.IsMatch(l.FormatIndependentName)).ToList();
         }
     }
 }

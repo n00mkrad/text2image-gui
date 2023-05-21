@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
@@ -184,11 +185,14 @@ namespace StableDiffusionGui.Forms
             panelEmbeddings.SetVisible(embeddings.Any()); // Disable panel if no embeddings in folder
         }
 
+        private bool _shownLoraFilenameWarning = false;
+
         public void ReloadLoras()
         {
             gridLoras.Rows.Cast<DataGridViewRow>().Where(row => row.Cells[2].Value.ToString().GetFloat() <= 0f).ToList().ForEach(row => row.Cells[2].Value = "1.0");
             var selection = GetLoras(); // Save current selection
-            IEnumerable<string> loras = Models.GetLoras().Select(m => m.FormatIndependentName);
+            List<Model> loras = Models.GetLoras();
+            loras = ValidateLoraNames(loras);
             panelLoras.SetVisible(loras.Any()); // Disable panel if no LoRAs in folder
 
             if (!loras.Any())
@@ -197,11 +201,11 @@ namespace StableDiffusionGui.Forms
             var previousData = gridLoras.Rows.Cast<DataGridViewRow>().Select(row => (bool)row.Cells[0].Value + (string)row.Cells[1].Value + (string)row.Cells[2].Value).ToList();
             var previousLoraList = gridLoras.Rows.Cast<DataGridViewRow>().Select(row => (string)row.Cells[1].Value).ToList();
 
-            if (string.Join("", loras.OrderBy(l => l)) == string.Join("", previousLoraList.OrderBy(l => l)))
+            if (string.Join("", loras.Select(l => l.FormatIndependentName).OrderBy(l => l)) == string.Join("", previousLoraList.OrderBy(l => l)))
                 return;
 
             gridLoras.Rows.Clear();
-            loras.ToList().ForEach(l => gridLoras.Rows.Add(false, l, "1.0"));
+            loras.ToList().ForEach(l => gridLoras.Rows.Add(false, l.FormatIndependentName, "1.0"));
             SetLoras(selection); // Restore selection
         }
 

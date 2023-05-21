@@ -203,7 +203,7 @@ namespace StableDiffusionGui.Extensions
             if (c.InvokeRequired)
             {
                 if (c.Disposing || c.IsDisposed)
-                    return default(TResult);
+                    return default;
 
                 return (TResult)c.Invoke(method);
             }

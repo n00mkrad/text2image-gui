@@ -14,15 +14,14 @@ namespace StableDiffusionGui.Ui
             if (type == MessageType.Warning) icon = MessageBoxIcon.Warning;
             else if (type == MessageType.Error) icon = MessageBoxIcon.Error;
 
-            MessageForm form = new MessageForm(text, $"{type}");
-            form.MsgFontSize = fontSize;
+            var form = new MessageForm(text, $"{type}") { MsgFontSize = fontSize };
             form.ShowDialogForm();
             return DialogResult.OK;
         }
 
-        public static DialogResult ShowMessageBox(string text, string title, MessageBoxButtons btns = MessageBoxButtons.OK)
+        public static DialogResult ShowMessageBox(string text, string title, MessageBoxButtons btns = MessageBoxButtons.OK, MessageForm.FontSize fontSize = MessageForm.FontSize.Normal)
         {
-            MessageForm form = new MessageForm(text, title, btns);
+            var form = new MessageForm(text, title, btns) { MsgFontSize = fontSize };
             return form.ShowDialogForm();
         }
     }
