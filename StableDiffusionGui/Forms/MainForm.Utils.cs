@@ -273,7 +273,7 @@ namespace StableDiffusionGui.Forms
                 invalidLorasAndCorrectedNames[lora] = multiUnderscoresPattern.Replace(validFilename, "_").Trim('_'); // Remove multiple consecutive underscores and trim start/end
             }
 
-            UiUtils.ShowMessageBox($"The following LoRA files were not loaded because they have an invalid file name:\n\n{string.Join("\n", invalidLorasAndCorrectedNames.Keys)}\n\n" +
+            UiUtils.ShowMessageBox($"The following LoRA files can't be loaded because they have an invalid file name:\n\n{string.Join("\n", invalidLorasAndCorrectedNames.Keys)}\n\n" +
                     $"Only alphanumeric characters and underscores are allowed. Spaces, hyphens and other special characters are not valid.", UiUtils.MessageType.Warning, Nmkoder.Forms.MessageForm.FontSize.Big);
 
             string msg = $"Do you want to automatically rename the files to a valid name?\n\n{string.Join("\n", invalidLorasAndCorrectedNames.Select(pair => $"{pair.Key.FormatIndependentName} => {pair.Value}"))}";
