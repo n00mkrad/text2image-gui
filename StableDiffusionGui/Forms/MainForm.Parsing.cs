@@ -23,7 +23,9 @@ namespace StableDiffusionGui.Forms
                 textboxPrompt.Text = meta.Prompt;
                 textboxPromptNeg.Text = meta.NegativePrompt;
                 sliderSteps.ActualValue = meta.Steps;
+                textboxExtraSteps.Text = "";
                 sliderScale.ActualValue = (decimal)meta.Scale;
+                textboxExtraScales.Text = "";
                 sliderScaleImg.ActualValue = (decimal)meta.ScaleImg;
                 comboxResW.Text = meta.GeneratedResolution.Width.ToString();
                 comboxResH.Text = meta.GeneratedResolution.Height.ToString();
@@ -40,6 +42,7 @@ namespace StableDiffusionGui.Forms
                 if (meta.InitStrength > 0f)
                     sliderInitStrength.ActualValue = (decimal)meta.InitStrength;
 
+                textboxExtraInitStrengths.Text = "";
                 SetLoras(meta.Loras);
 
             })).RunWithUiStoppedShowErrors(this, "Error loading metadata into UI:");
