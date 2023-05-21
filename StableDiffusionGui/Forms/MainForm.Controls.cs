@@ -147,6 +147,7 @@ namespace StableDiffusionGui.Forms
             toolTip.SetToolTip(labelCurrentImage, $"{labelCurrentImage.Text.Trunc(100)}\n\nShift + Hover to preview.");
 
             ImageViewer.UpdateInitImgViewer();
+            UpdateSaveModeBtn();
             ResolutionChanged();
             UpdateModel();
             ModelChanged();
@@ -445,6 +446,26 @@ namespace StableDiffusionGui.Forms
 
                 if (currentRowIndex > 0)
                     grid.Rows[currentRowIndex - 1].Cells[grid.CurrentCell.ColumnIndex].Selected = true;
+            }
+        }
+
+        public void ToggleSaveMode ()
+        {
+            Config.Instance.AutoDeleteImgs = !Config.Instance.AutoDeleteImgs;
+            UpdateSaveModeBtn();
+        }
+
+        public void UpdateSaveModeBtn ()
+        {
+            if (Config.Instance.AutoDeleteImgs && btnSaveMode.BackgroundImage != Resources.IconArchiveOff)
+            {
+                btnSaveMode.BackgroundImage = Resources.IconArchiveOff;
+                toolTip.SetToolTip(btnSaveMode, "Auto-Delete is enabled: Generated images will be deleted as soon as another batch is generated or the program closes.\n\nClick to disable.");
+            }
+            else if(!Config.Instance.AutoDeleteImgs && btnSaveMode.BackgroundImage != Resources.IconArchiveOn)
+            {
+                btnSaveMode.BackgroundImage = Resources.IconArchiveOn;
+                toolTip.SetToolTip(btnSaveMode, "Auto-Delete is disabled: All generated images will be saved.\n\nClick to switch to Auto-Delete mode.");
             }
         }
     }

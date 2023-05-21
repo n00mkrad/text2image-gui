@@ -219,6 +219,7 @@ namespace StableDiffusionGui.Forms
             this.menuStripOpenFolder = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.openOutputFolderToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.openFavoritesFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnSaveMode = new System.Windows.Forms.Button();
             this.separator = new System.Windows.Forms.Button();
             this.menuStripOutputImg.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.upDownSeed)).BeginInit();
@@ -658,7 +659,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderScale.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScale.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScale.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderScale.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderScale.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScale.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScale.Name = "textboxSliderScale";
@@ -805,7 +806,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderInitStrength.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderInitStrength.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderInitStrength.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderInitStrength.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderInitStrength.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderInitStrength.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderInitStrength.Name = "textboxSliderInitStrength";
@@ -1004,7 +1005,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderScaleImg.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScaleImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScaleImg.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScaleImg.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderScaleImg.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderScaleImg.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScaleImg.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScaleImg.Name = "textboxSliderScaleImg";
@@ -2327,7 +2328,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderSteps.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderSteps.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderSteps.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderSteps.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderSteps.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderSteps.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderSteps.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderSteps.Name = "textboxSliderSteps";
@@ -2943,6 +2944,23 @@ namespace StableDiffusionGui.Forms
             this.openFavoritesFolderToolStripMenuItem.Text = "Open Favorites Folder";
             this.openFavoritesFolderToolStripMenuItem.Click += new System.EventHandler(this.openFavoritesFolderToolStripMenuItem_Click);
             // 
+            // btnSaveMode
+            // 
+            this.btnSaveMode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSaveMode.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnSaveMode.BackgroundImage = global::StableDiffusionGui.Properties.Resources.IconArchiveOn;
+            this.btnSaveMode.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnSaveMode.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSaveMode.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSaveMode.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnSaveMode.Location = new System.Drawing.Point(922, 629);
+            this.btnSaveMode.Name = "btnSaveMode";
+            this.btnSaveMode.Size = new System.Drawing.Size(40, 40);
+            this.btnSaveMode.TabIndex = 121;
+            this.btnSaveMode.TabStop = false;
+            this.btnSaveMode.UseVisualStyleBackColor = false;
+            this.btnSaveMode.Click += new System.EventHandler(this.btnSaveMode_Click);
+            // 
             // separator
             // 
             this.separator.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -2968,6 +2986,7 @@ namespace StableDiffusionGui.Forms
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.ClientSize = new System.Drawing.Size(1198, 700);
+            this.Controls.Add(this.btnSaveMode);
             this.Controls.Add(this.btnSaveToFavs);
             this.Controls.Add(this.progressBarImg);
             this.Controls.Add(this.tableLayoutPanelImgViewers);
@@ -3277,6 +3296,7 @@ namespace StableDiffusionGui.Forms
         private System.Windows.Forms.ToolStripMenuItem openOutputFolderToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem openFavoritesFolderToolStripMenuItem;
         public System.Windows.Forms.Button btnSaveToFavs;
+        public System.Windows.Forms.Button btnSaveMode;
     }
 }
 

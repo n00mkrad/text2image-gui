@@ -556,5 +556,10 @@ namespace StableDiffusionGui.Forms
         {
             ImageViewer.CopyCurrentToFavs();
         }
+
+        private void btnSaveMode_Click(object sender, EventArgs e)
+        {
+            ToggleSaveMode();
+        }
     }
 }

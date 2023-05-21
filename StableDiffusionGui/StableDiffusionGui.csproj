@@ -504,6 +504,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon1.ico" />
+    <None Include="Resources\IconArchiveOff.png" />
+    <None Include="Resources\IconArchiveOn.png" />
+    <None Include="Resources\IconDeleteSweep.png" />
+    <None Include="Resources\IconArchive.png" />
     <None Include="Resources\IconSave.png" />
     <None Include="Resources\checkerboard-alpha1.png" />
     <None Include="Resources\iconUtils.png" />
