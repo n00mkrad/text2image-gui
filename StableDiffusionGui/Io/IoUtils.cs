@@ -890,5 +890,19 @@ namespace StableDiffusionGui.Io
                 Logger.Log($"Cleanup Error: {e.Message}\n{e.StackTrace}");
             }
         }
+
+        public static bool WriteAllLinesIfDifferent(string path, IEnumerable<string> newLines, IEnumerable<string> oldLines = null)
+        {
+            if (oldLines == null)
+                oldLines = File.ReadAllLines(path);
+
+            if (string.Join("", newLines) != string.Join("", oldLines))
+            {
+                File.WriteAllLines(path, newLines);
+                return true;
+            }
+
+            return false;
+        }
     }
 }

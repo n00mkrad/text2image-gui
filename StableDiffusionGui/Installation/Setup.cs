@@ -16,7 +16,7 @@ namespace StableDiffusionGui.Installation
     {
         private static readonly string _gitFile = "n00mkrad/stable-diffusion-cust.git";
         private static readonly string _gitBranch = "main";
-        public static readonly string GitCommit = "1dc7af288c95870020d19c5f7bc3f08a1f9a6281";
+        public static readonly string GitCommit = "f84010ef48ccadec74c5b055ebab54cef7cfa1e7";
 
         private static readonly bool _allowModelDownload = false;
 
@@ -42,7 +42,6 @@ namespace StableDiffusionGui.Installation
                         Logger.Log("Install: Downloading model file because there is none.", true, false, Constants.Lognames.Installer);
 
                     await DownloadSdModelFile();
-
                 }
 
                 if (force || (installUpscalers && !InstallationStatus.HasSdUpscalers()))
@@ -359,7 +358,7 @@ namespace StableDiffusionGui.Installation
                 if (IoUtils.GetAmountOfFiles(Path.Combine(GetDataSubPath(Constants.Dirs.SdVenv)), false) < 1)
                     return;
 
-                #region virtualenv (pyvenv.cfg)
+                #region virtualenv (pyvenv.cfg, Scripts)
 
                 Logger.Log($"Fixing pyenv paths...", true);
                 string pyvenvCfgPath = Path.Combine(GetDataSubPath(Constants.Dirs.SdVenv), "pyvenv.cfg");
@@ -373,109 +372,109 @@ namespace StableDiffusionGui.Installation
                     if (pyvenvCfgLines[i].StartsWith("base-executable = ")) pyvenvCfgLines[i] = $"base-executable = {Path.Combine(GetDataSubPath(Constants.Dirs.Python), "python.exe")}"; // Python executable
                 }
 
-                File.WriteAllLines(pyvenvCfgPath, pyvenvCfgLines);
-                Logger.Log($"Fixed pyvenv.cfg", true);
+                if (IoUtils.WriteAllLinesIfDifferent(pyvenvCfgPath, pyvenvCfgLines))
+                    Logger.Log($"Fixed {Path.GetFileName(pyvenvCfgPath)}", true);
 
-                #endregion
-                #region virtualenv (egg-link files)
 
-                string sitePkgsDir = Path.Combine(GetDataSubPath(Constants.Dirs.SdVenv), "Lib", "site-packages");
-                var eggLinks = IoUtils.GetFileInfosSorted(sitePkgsDir, false, "*.egg-link");
+                string activateNuPath = Path.Combine(GetDataSubPath(Constants.Dirs.SdVenv), "Scripts", "activate.nu");
+                var activateNuLines = File.ReadAllLines(activateNuPath);
 
-                List<string> easyInstallPaths = new List<string>();
-
-                foreach (ZlpFileInfo eggLink in eggLinks)
+                for (int i = 0; i < activateNuLines.Length; i++)
                 {
-                    string nameNoExt = Path.GetFileNameWithoutExtension(eggLink.FullName);
-
-                    if (nameNoExt == "invoke-ai")
+                    string searchStr = "let virtual_env = '";
+                    if (activateNuLines[i].Trim().StartsWith(searchStr))
                     {
-                        string path = Path.Combine(GetDataSubPath(Constants.Dirs.SdRepo));
-                        File.WriteAllText(eggLink.FullName, path + "\n.");
+                        var split = activateNuLines[i].Split(searchStr);
+                        activateNuLines[i] = $"{split.First()}{searchStr}{GetDataSubPath(Constants.Dirs.SdVenv).TrimEnd('\\')}'";
                     }
-                    else
+
+                    string searchStr2 = "alias deactivate = source '";
+                    if (activateNuLines[i].Trim().StartsWith(searchStr2))
                     {
-                        string path = Path.Combine(GetDataSubPath(Constants.Dirs.SdVenv), "src", nameNoExt);
-                        File.WriteAllText(eggLink.FullName, path + "\n.");
+                        var split = activateNuLines[i].Split(searchStr2);
+                        activateNuLines[i] = $"{split.First()}{searchStr2}{GetDataSubPath(Constants.Dirs.SdVenv).TrimEnd('\\')}'";
                     }
                 }
 
-                Logger.Log($"Fixed egg-link files", true);
+                if (IoUtils.WriteAllLinesIfDifferent(activateNuPath, activateNuLines))
+                    Logger.Log($"Fixed {Path.GetFileName(activateNuPath)}", true);
 
-                #endregion
-                #region virtualenv (easy-install.pth)
 
-                var easyInstallPth = Path.Combine(sitePkgsDir, "easy-install.pth");
+                string activateBatPath = Path.Combine(GetDataSubPath(Constants.Dirs.SdVenv), "Scripts", "activate.bat");
+                var activateBatLines = File.ReadAllLines(activateBatPath);
 
-                if (File.Exists(easyInstallPth))
+                for (int i = 0; i < activateBatLines.Length; i++)
                 {
-                    var easyInstallLines = File.ReadAllLines(easyInstallPth).Select(l => l.Lower()).ToArray();
-
-                    string delim = $@"\{Constants.Dirs.Data.Lower()}\";
-                    string basePath = easyInstallLines.Where(l => l.Contains(delim)).FirstOrDefault().Split(delim).FirstOrDefault();
-                    string newBasePath = Paths.GetDataPath().Lower().Replace("/", @"\");
-                    
-                    List<string> newLines = easyInstallLines.Select(l => l.Replace(basePath, newBasePath).Replace(@"\\", @"\")).ToList();
-                    
-                    File.WriteAllLines(easyInstallPth, newLines);
-                    Logger.Log($"Fixed easy-install.pth.", true);
-                }
-
-                #endregion
-                #region Finder File (InvokeAI)
-                var finderFiles = IoUtils.GetFileInfosSorted(sitePkgsDir, false, "*invokeai*_finder.py");
-
-                foreach (var file in finderFiles)
-                {
-                    var lines = File.ReadAllLines(file.FullName);
-
-                    for (int i = 0; i < lines.Length; i++)
+                    string searchStr = "@set \"VIRTUAL_ENV=";
+                    if (activateBatLines[i].Trim().StartsWith(searchStr))
                     {
-                        if (lines[i].StartsWith("MAPPING = {"))
-                        {
-                            var entries = lines[i].Split('{')[1].Split('}')[0].Split(',');
-                            var newEntries = new Dictionary<string, string>();
-
-                            foreach (string entry in entries)
-                            {
-                                string name = entry.Split(':')[0].Trim().Trim('\'').TrimEnd().TrimEnd('\'');
-                                string relPath = entry.Split("': '")[1].Trim().Trim('\'').TrimEnd().TrimEnd('\'').Split(@"\\Data").Reverse().Take(1).Reverse().First().TrimStart('\\');
-                                newEntries[name] = relPath;
-                            }
-
-                            lines[i] = $"import os; import sys; MAPPING = {{ {string.Join(", ", newEntries.ToList().Select(x => $"'{x.Key}' : os.path.join(sys.path[0], \"..\", \"..\", \"{x.Value}\")"))} }}";
-                        }
-
-                        if (lines[i].StartsWith("NAMESPACES = {"))
-                        {
-                            var entries = lines[i].Split('{')[1].Split('}')[0].Split(',');
-                            var newEntries = new Dictionary<string, string>();
-
-                            foreach (string entry in entries)
-                            {
-                                string name = entry.Split(':')[0].Trim().Trim('\'').TrimEnd().TrimEnd('\'');
-                                string relPath = entry.Split(": [")[1].Trim().Trim('\'').Split(@"\\Data").Reverse().Take(1).Reverse().First().TrimStart('\\').Split('\'')[0].TrimEnd(']');
-                                newEntries[name] = relPath;
-                            }
-
-                            string join = string.Join(", ", newEntries.ToList().Select(x => $"'{x.Key}' : {(x.Value.IsNotEmpty() ? $"[os.path.join(sys.path[0], \"..\", \"..\", \"{x.Value}\")]" : "[]")}"));
-                            lines[i] = $"import os; import sys; NAMESPACES = {{ {join} }}";
-                        }
+                        var split = activateBatLines[i].Split(searchStr);
+                        activateBatLines[i] = $"{split.First()}{searchStr}{GetDataSubPath(Constants.Dirs.SdVenv).TrimEnd('\\')}\"";
                     }
-
-                    File.WriteAllLines(file.FullName, lines);
                 }
-                #endregion
-                #region CLIP Cache
 
-                string marker = "# PATCHED BY NMKD SD GUI"; // String to mark files as patched
-                string clipPyPath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdVenv, "src", "clip", "clip", "clip.py"); // Path to the main clip script to modify
-                var clipPyLines = File.ReadAllLines(clipPyPath).Where(l => !l.Contains(marker)).ToList(); // All lines, but exclude the marked one to avoid double-patching it
-                string dlLine = clipPyLines.Where(l => l.Trim().StartsWith("model_path = _download(_MODELS[name], download_root or")).FirstOrDefault(); // Find the target line
-                int indentSpaces = dlLine.TakeWhile(char.IsWhiteSpace).Count(); // Count how many spaces there are (python indentation matters!!)
-                string clipCacheDir = Path.Combine(Paths.GetDataPath(), Constants.Dirs.Cache.Root, Constants.Dirs.Cache.Clip); // Our custom cache directory
-                clipPyLines.Insert(clipPyLines.IndexOf(dlLine), $"{new string(' ', indentSpaces)}download_root = {clipCacheDir.Wrap(true)} {marker}"); // Insert a line overwriting the download dir
-                File.WriteAllLines(clipPyPath, clipPyLines); // Save patched file.
+                if (IoUtils.WriteAllLinesIfDifferent(activateBatPath, activateBatLines))
+                    Logger.Log($"Fixed {Path.GetFileName(activateBatPath)}", true);
+
+
+                string activatePath = Path.Combine(GetDataSubPath(Constants.Dirs.SdVenv), "Scripts", "activate");
+                var activateLines = File.ReadAllLines(activatePath);
+
+                for (int i = 0; i < activateLines.Length; i++)
+                {
+                    string searchStr = "VIRTUAL_ENV='";
+                    if (activateLines[i].Trim().StartsWith(searchStr))
+                    {
+                        var split = activateLines[i].Split(searchStr);
+                        activateLines[i] = $"{split.First()}{searchStr}{GetDataSubPath(Constants.Dirs.SdVenv).TrimEnd('\\')}'";
+                    }
+                }
+
+                if (IoUtils.WriteAllLinesIfDifferent(activatePath, activateLines))
+                    Logger.Log($"Fixed {Path.GetFileName(activatePath)}", true);
+
+
+                string activateFishPath = Path.Combine(GetDataSubPath(Constants.Dirs.SdVenv), "Scripts", "activate.fish");
+                var activateFishLines = File.ReadAllLines(activateFishPath);
+
+                for (int i = 0; i < activateFishLines.Length; i++)
+                {
+                    string searchStr = "set -gx VIRTUAL_ENV '";
+                    if (activateFishLines[i].Trim().StartsWith(searchStr))
+                    {
+                        var split = activateFishLines[i].Split(searchStr);
+                        activateFishLines[i] = $"{split.First()}{searchStr}{GetDataSubPath(Constants.Dirs.SdVenv).TrimEnd('\\')}'";
+                    }
+                }
+
+                if (IoUtils.WriteAllLinesIfDifferent(activateFishPath, activateFishLines))
+                    Logger.Log($"Fixed {Path.GetFileName(activateFishPath)}", true);
+
+
+                var scriptsFiles = IoUtils.GetFileInfosSorted(Path.Combine(GetDataSubPath(Constants.Dirs.SdVenv), "Scripts"), true, "*");
+
+                foreach(var file in scriptsFiles)
+                {
+                    if (file.Extension.Lower() == ".exe")
+                        continue;
+
+                    try
+                    {
+                        var lines = File.ReadAllLines(file.FullName);
+
+                        if (!lines[0].StartsWith("#!") || !lines[0].Lower().EndsWith("python.exe"))
+                            continue;
+
+                        lines[0] = $"#!{Path.Combine(GetDataSubPath(Constants.Dirs.SdVenv), "Scripts", "python.exe").TrimEnd('\\')}";
+
+                        if (IoUtils.WriteAllLinesIfDifferent(file.FullName, lines))
+                            Logger.Log($"Fixed shebang in {file.Name}", true);
+                    }
+                    catch(Exception ex)
+                    {
+                        Logger.Log($"Failed to fix shebang in {file.Name}: {ex.Message}\n{ex.StackTrace}", true);
+                    }
+                }
 
                 #endregion
             }

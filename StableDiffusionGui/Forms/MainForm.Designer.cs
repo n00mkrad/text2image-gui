@@ -661,7 +661,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderScale.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScale.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScale.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderScale.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderScale.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScale.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScale.Name = "textboxSliderScale";
@@ -808,7 +808,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderInitStrength.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderInitStrength.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderInitStrength.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderInitStrength.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderInitStrength.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderInitStrength.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderInitStrength.Name = "textboxSliderInitStrength";
@@ -1007,7 +1007,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderScaleImg.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScaleImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScaleImg.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScaleImg.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderScaleImg.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderScaleImg.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScaleImg.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScaleImg.Name = "textboxSliderScaleImg";
@@ -2334,7 +2334,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderSteps.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderSteps.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderSteps.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderSteps.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderSteps.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderSteps.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderSteps.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderSteps.Name = "textboxSliderSteps";
@@ -2912,19 +2912,20 @@ namespace StableDiffusionGui.Forms
             this.manageInstallationToolStripMenuItem,
             this.installUpdatesToolStripMenuItem});
             this.menuStripInstall.Name = "menuStripInstall";
-            this.menuStripInstall.Size = new System.Drawing.Size(179, 48);
+            this.menuStripInstall.ShowImageMargin = false;
+            this.menuStripInstall.Size = new System.Drawing.Size(156, 70);
             // 
             // manageInstallationToolStripMenuItem
             // 
             this.manageInstallationToolStripMenuItem.Name = "manageInstallationToolStripMenuItem";
-            this.manageInstallationToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
+            this.manageInstallationToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
             this.manageInstallationToolStripMenuItem.Text = "Manage Installation";
             this.manageInstallationToolStripMenuItem.Click += new System.EventHandler(this.manageInstallationToolStripMenuItem_Click);
             // 
             // installUpdatesToolStripMenuItem
             // 
             this.installUpdatesToolStripMenuItem.Name = "installUpdatesToolStripMenuItem";
-            this.installUpdatesToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
+            this.installUpdatesToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
             this.installUpdatesToolStripMenuItem.Text = "Install Updates";
             this.installUpdatesToolStripMenuItem.Click += new System.EventHandler(this.installUpdatesToolStripMenuItem_Click);
             // 
@@ -2934,19 +2935,20 @@ namespace StableDiffusionGui.Forms
             this.openOutputFolderToolStripMenuItem1,
             this.openFavoritesFolderToolStripMenuItem});
             this.menuStripOpenFolder.Name = "menuStripOpenFolder";
-            this.menuStripOpenFolder.Size = new System.Drawing.Size(190, 48);
+            this.menuStripOpenFolder.ShowImageMargin = false;
+            this.menuStripOpenFolder.Size = new System.Drawing.Size(165, 48);
             // 
             // openOutputFolderToolStripMenuItem1
             // 
             this.openOutputFolderToolStripMenuItem1.Name = "openOutputFolderToolStripMenuItem1";
-            this.openOutputFolderToolStripMenuItem1.Size = new System.Drawing.Size(189, 22);
+            this.openOutputFolderToolStripMenuItem1.Size = new System.Drawing.Size(164, 22);
             this.openOutputFolderToolStripMenuItem1.Text = "Open Output Folder";
             this.openOutputFolderToolStripMenuItem1.Click += new System.EventHandler(this.openOutputFolderToolStripMenuItem1_Click);
             // 
             // openFavoritesFolderToolStripMenuItem
             // 
             this.openFavoritesFolderToolStripMenuItem.Name = "openFavoritesFolderToolStripMenuItem";
-            this.openFavoritesFolderToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.openFavoritesFolderToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
             this.openFavoritesFolderToolStripMenuItem.Text = "Open Favorites Folder";
             this.openFavoritesFolderToolStripMenuItem.Click += new System.EventHandler(this.openFavoritesFolderToolStripMenuItem_Click);
             // 
