@@ -2913,19 +2913,19 @@ namespace StableDiffusionGui.Forms
             this.installUpdatesToolStripMenuItem});
             this.menuStripInstall.Name = "menuStripInstall";
             this.menuStripInstall.ShowImageMargin = false;
-            this.menuStripInstall.Size = new System.Drawing.Size(156, 70);
+            this.menuStripInstall.Size = new System.Drawing.Size(154, 48);
             // 
             // manageInstallationToolStripMenuItem
             // 
             this.manageInstallationToolStripMenuItem.Name = "manageInstallationToolStripMenuItem";
-            this.manageInstallationToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.manageInstallationToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
             this.manageInstallationToolStripMenuItem.Text = "Manage Installation";
             this.manageInstallationToolStripMenuItem.Click += new System.EventHandler(this.manageInstallationToolStripMenuItem_Click);
             // 
             // installUpdatesToolStripMenuItem
             // 
             this.installUpdatesToolStripMenuItem.Name = "installUpdatesToolStripMenuItem";
-            this.installUpdatesToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.installUpdatesToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
             this.installUpdatesToolStripMenuItem.Text = "Install Updates";
             this.installUpdatesToolStripMenuItem.Click += new System.EventHandler(this.installUpdatesToolStripMenuItem_Click);
             // 

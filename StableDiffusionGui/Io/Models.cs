@@ -269,6 +269,7 @@ namespace StableDiffusionGui.Io
             }
         }
 
+        // TODO: Decide to remove this, or could it be useful for other implementations?
         public static void HotswapDiffusersVae(Model mdl, Model vae)
         {
             string originalDir = Path.Combine(mdl.FullName, "vae_original");

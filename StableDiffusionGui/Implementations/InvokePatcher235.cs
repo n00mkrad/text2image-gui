@@ -1,8 +1,5 @@
 ﻿using StableDiffusionGui.Io;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using StableDiffusionGui.Main;
 using System.IO;
 using StableDiffusionGui.Forms;
@@ -35,7 +32,7 @@ namespace StableDiffusionGui.Implementations
                 string originalText = File.ReadAllText(f.FullName);
                 string t = originalText;
 
-                string printPatch = "import functools; print = functools.partial(print)";
+                string printPatch = "import functools; print = functools.partial(print, flush=True)";
 
                 if (!t.StartsWith("print = ") && t.Contains("print") && !t.Contains(printPatch))
                 {

@@ -2,7 +2,6 @@
 using StableDiffusionGui.Main;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -27,7 +26,7 @@ namespace StableDiffusionGui.MiscUtils
 
             try
             {
-                if(!prompt.Contains(_identifier))
+                if (!prompt.Contains(_identifier))
                     return Enumerable.Repeat(prompt, iterations).ToList();
 
                 string[] split = prompt.Split(_identifier);
@@ -115,13 +114,13 @@ namespace StableDiffusionGui.MiscUtils
                     var combinations = GetAllPossibleCombinations(lists);
                     Logger.Log($"Possible combinations: {string.Join(" * ", lists.Select(x => x.Value.Count().ToString()))} = {combinations.Count()}");
 
-                    for(int comboIdx = 0; comboIdx < combinations.Count(); comboIdx++)
+                    for (int comboIdx = 0; comboIdx < combinations.Count(); comboIdx++)
                     {
                         string processedPrompt = prompt;
 
                         for (int listIdx = 0; listIdx < lists.Count; listIdx++)
                             processedPrompt = processedPrompt.Replace(string.Format(_placeholderPattern, listIdx), combinations.ElementAt(comboIdx).ElementAt(listIdx));
-                        
+
                         outList.Add(processedPrompt);
                     }
                 }
@@ -150,7 +149,7 @@ namespace StableDiffusionGui.MiscUtils
             return outList;
         }
 
-        private static IEnumerable<IEnumerable<string>> GetAllPossibleCombinations (Dictionary<int, List<string>> lists)
+        private static IEnumerable<IEnumerable<string>> GetAllPossibleCombinations(Dictionary<int, List<string>> lists)
         {
             IEnumerable<IEnumerable<string>> combos = new string[][] { new string[0] };
 
@@ -181,7 +180,7 @@ namespace StableDiffusionGui.MiscUtils
             if (lines.Count() <= 0)
                 return new List<string>();
 
-            if(!Config.Instance.WildcardAllowEmptyEntries)
+            if (!Config.Instance.WildcardAllowEmptyEntries)
                 lines = lines.Where(line => !string.IsNullOrWhiteSpace(line)); // Filter out empty entries optionally
 
             if (sortMode == Order.Alphabetical)

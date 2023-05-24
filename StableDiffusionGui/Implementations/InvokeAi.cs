@@ -130,7 +130,7 @@ namespace StableDiffusionGui.Implementations
                 if (!TtiProcess.IsAiProcessRunning || (TtiProcess.IsAiProcessRunning && TtiProcess.LastStartupSettings != newStartupSettings))
                 {
                     InvokeAiUtils.WriteModelsYamlAll(cachedModels, cachedModelsVae, s.ModelArch);
-                    await SwitchModel(modelFile, vaeFile, true);
+                    await SetModel(modelFile, vaeFile, true);
                     if (TextToImage.Canceled) return;
 
                     Logger.Log($"(Re)starting InvokeAI. Process running: {TtiProcess.IsAiProcessRunning} - Prev startup string: '{TtiProcess.LastStartupSettings}' - New startup string: '{newStartupSettings}'", true);
@@ -189,7 +189,7 @@ namespace StableDiffusionGui.Implementations
                 else
                 {
                     TtiProcessOutputHandler.Reset();
-                    await SwitchModel(modelFile, vaeFile);
+                    await SetModel(modelFile, vaeFile);
                     TextToImage.CurrentTask.Processes.Add(TtiProcess.CurrentProcess);
                 }
 
@@ -331,15 +331,12 @@ namespace StableDiffusionGui.Implementations
             }
         }
 
-        public static async Task SwitchModel(Model mdl, Model vae, bool initial = false)
+        public static async Task SetModel(Model mdl, Model vae, bool initial = false)
         {
             if (mdl.Format == Enums.Models.Format.Diffusers)
-            {
                 Models.SetDiffusersClipSkip(mdl, Config.Instance.ClipSkip);
-                Models.HotswapDiffusersVae(mdl, vae);
-            }
 
-            if (initial)
+            if (initial) // No need to run !switch when loading InvokeAI for the first time
                 return;
 
             await TtiProcess.WriteStdIn($"!clear");

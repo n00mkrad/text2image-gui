@@ -70,14 +70,10 @@ namespace StableDiffusionGui.Implementations
                     cachedModelsVae = Models.GetVaes();
 
                 cachedModelsVae = cachedModelsVae.DistinctBy(m => m.FormatIndependentName).ToList();
-
-                string text = "";
-
                 cachedModelsVae.Insert(0, null); // Insert null entry, for looping (this is the VAE-less model entry)
                 string dataPath = Paths.GetDataPath();
                 string binPath = Paths.GetExeDir();
-
-                cachedModelsVae.ForEach(async v => await ConvertVae(v, true));
+                string text = "";
 
                 foreach (Model mdl in cachedModels)
                 {
@@ -107,10 +103,10 @@ namespace StableDiffusionGui.Implementations
                         else if (ckptArgs != null)
                         {
                             properties.AddRange(ckptArgs);
-
-                            if (vae != null && vae.FullName.IsNotEmpty())
-                                properties.Add($"vae: {vae.FullName.Replace(binPath, "../../").Wrap(true)}");
                         }
+
+                        if (vae != null && vae.FullName.IsNotEmpty())
+                            properties.Add($"vae: {vae.FullName.Replace(binPath, "../../").Wrap(true)}");
 
                         text += $"{GetMdlNameForYaml(mdl, vae)}:\n    {string.Join("\n    ", properties)}\n\n";
                     }
