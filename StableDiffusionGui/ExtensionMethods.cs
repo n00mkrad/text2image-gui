@@ -670,5 +670,13 @@ namespace StableDiffusionGui
             int milliseconds = (int)(minutes * 60000);
             return milliseconds;
         }
+
+        public static string Append (this string s, string text, bool comma)
+        {
+            if (comma && !s.TrimEnd().EndsWith(",") && s.IsNotEmpty())
+                return $"{s.TrimEnd()}, {text}";
+
+            return $"{s.TrimEnd()} {text}";
+        }
     }
 }

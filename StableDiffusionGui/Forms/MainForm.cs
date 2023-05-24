@@ -519,7 +519,7 @@ namespace StableDiffusionGui.Forms
         {
             TextBox textbox = InputUtils.IsHoldingShift ? textboxPromptNeg : textboxPrompt;
             textbox.Focus();
-            textbox.AppendText($"{(textbox.Text.TrimStart().Length == 0 ? "" : ", ")}<{comboxEmbeddingList.Text}>");
+            textbox.Text = textbox.Text.Append($"<{comboxEmbeddingList.Text}>", true);
             btnEmbeddingAppend.Focus();
         }
 
