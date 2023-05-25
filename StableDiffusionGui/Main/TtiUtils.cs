@@ -124,29 +124,23 @@ namespace StableDiffusionGui.Main
 
         /// <summary> Checks if Stable Diffusion model exists </summary>
         /// <returns> Model ZlpFileInfo if it exists - null if not </returns>
-        public static Model CheckIfCurrentSdModelExists(List<Model> cachedModels = null)
+        public static Model CheckIfModelExists(string modelName = null, Implementation imp = (Implementation)(-1), List<Model> cachedModels = null)
         {
-            string name = "";
+            if (modelName == null)
+                modelName = Config.Instance.Model;
 
-            if (!CurrentSdModelExists())
-                Config.Instance.Model = "";
-            else
-                name = Config.Instance.Model;
-
-            var imp = Config.Instance.Implementation;
-
-            if (string.IsNullOrWhiteSpace(name))
+            if (modelName.IsEmpty())
             {
                 TextToImage.Cancel($"No Stable Diffusion model file has been set.\nPlease set one in the settings, or quick-switch with Ctrl+M.", true);
                 return null;
             }
             else
             {
-                var model = cachedModels == null ? Models.GetModel(name, Enums.Models.Type.Normal, imp) : Models.GetModel(cachedModels, name, Enums.Models.Type.Normal, imp);
+                Model model;
 
-                if (model == null)
+                if (!ModelExists(out model, modelName, imp))
                 {
-                    TextToImage.Cancel($"Stable Diffusion model file {name.Wrap()} not found.\nPossibly it was moved, renamed, or deleted.", true);
+                    TextToImage.Cancel($"Stable Diffusion model file {modelName.Wrap()} not found.\nPossibly it was moved, renamed, or deleted.", true);
                     return null;
                 }
                 else
@@ -156,16 +150,15 @@ namespace StableDiffusionGui.Main
             }
         }
 
-        public static bool CurrentSdModelExists(List<Model> cachedModels = null)
+        public static bool ModelExists(out Model model, string modelName = null, Implementation imp = (Implementation)(-1), List<Model> cachedModels = null)
         {
-            string name = Config.Instance.Model;
-            var imp = Config.Instance.Implementation;
-
-            if (string.IsNullOrWhiteSpace(name))
+            if (modelName.IsEmpty())
+            {
+                model = null;
                 return false;
+            }
 
-            var model = cachedModels == null ? Models.GetModel(name, Enums.Models.Type.Normal, imp) : Models.GetModel(cachedModels, name, Enums.Models.Type.Normal, imp);
-
+            model = cachedModels == null ? Models.GetModel(modelName, Enums.Models.Type.Normal, imp) : Models.GetModel(cachedModels, modelName, Enums.Models.Type.Normal, imp);
             return model != null;
         }
 

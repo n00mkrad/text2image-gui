@@ -26,6 +26,7 @@ namespace StableDiffusionGui.Implementations
 
         public static async Task Run(string[] prompts, int iterations, Dictionary<string, string> parameters, string outPath)
         {
+            throw new NotImplementedException();
             // NOTE: Currently not implemented: Embeddings, Samplers, Seamless Mode, ...
             string[] initImgs = parameters.Get("initImgs").FromJson<string[]>();
             float[] initStrengths = parameters.Get("initStrengths").FromJson<float[]>().Select(n => 1f - n).ToArray();
@@ -37,7 +38,7 @@ namespace StableDiffusionGui.Implementations
             string modelNoExt = Path.ChangeExtension(model, null);
             bool lockSeed = parameters.Get("lockSeed").FromJson<bool>();
 
-            Model modelFile = TtiUtils.CheckIfCurrentSdModelExists();
+            Model modelFile = TtiUtils.CheckIfModelExists();
 
             if (modelFile == null)
                 return;

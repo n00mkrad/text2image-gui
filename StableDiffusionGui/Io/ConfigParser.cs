@@ -1,6 +1,4 @@
 ﻿using StableDiffusionGui.Controls;
-using StableDiffusionGui.Main;
-using StableDiffusionGui.MiscUtils;
 using System;
 using System.Windows.Forms;
 
@@ -10,7 +8,11 @@ namespace StableDiffusionGui.Io
     {
         public enum StringMode { Any, Int, Float }
 
-        public static bool UpscaleAndSaveOriginals { get { return Config.Instance.SaveUnprocessedImages && (Config.Instance.UpscaleEnable || Config.Instance.FaceRestoreEnable); } }
+        public static bool UpscaleAndSaveOriginals(ConfigInstance instance = null)
+        {
+            if (instance == null) instance = Config.Instance;
+            return instance.SaveUnprocessedImages && (instance.UpscaleEnable || instance.FaceRestoreEnable);
+        }
 
         public static void SaveGuiElement(TextBox textbox, ref string variable)
         {

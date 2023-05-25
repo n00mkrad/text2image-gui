@@ -25,7 +25,7 @@ namespace StableDiffusionGui.Implementations
             {
                 float[] initStrengths = s.InitStrengths.Select(n => 1f - n).ToArray();
                 var cachedModels = Models.GetModels(Enums.Models.Type.Normal, Implementation.DiffusersOnnx);
-                Model modelDir = TtiUtils.CheckIfCurrentSdModelExists();
+                Model modelDir = TtiUtils.CheckIfModelExists(s.Model, Implementation.DiffusersOnnx);
 
                 if (modelDir == null)
                     return;

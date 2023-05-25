@@ -34,7 +34,7 @@ namespace StableDiffusionGui.Implementations
                 var allModels = Models.GetModelsAll();
                 var cachedModels = allModels.Where(m => m.Type == Enums.Models.Type.Normal).ToList();
                 var cachedModelsVae = Models.GetVaes();
-                Model modelFile = TtiUtils.CheckIfCurrentSdModelExists();
+                Model modelFile = TtiUtils.CheckIfModelExists(s.Model, Enums.StableDiffusion.Implementation.InvokeAi);
                 Model vaeFile = Models.GetModel(cachedModelsVae, vae);
                 if (TextToImage.Canceled) return;
 
@@ -224,7 +224,7 @@ namespace StableDiffusionGui.Implementations
             string initsStr = initImages != null ? $" and {initImages.Count} Image{(initImages.Count != 1 ? "s" : "")} Using {initStrengths.Length} Strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
             string log = $"{prompts.Length} Prompt{(prompts.Length != 1 ? "s" : "")} * {iterations} Image{(iterations != 1 ? "s" : "")} * {steps.Length} Step Value{(steps.Length != 1 ? "s" : "")} * {scales.Length} Scale{(scales.Length != 1 ? "s" : "")}{initsStr} = {argLists.Count} Images Total";
 
-            if (ConfigParser.UpscaleAndSaveOriginals)
+            if (ConfigParser.UpscaleAndSaveOriginals())
                 log += $" ({argLists.Count * 2} With Post-processed Images)";
 
             return $"{log}.";
@@ -239,7 +239,7 @@ namespace StableDiffusionGui.Implementations
             var allModels = Models.GetModelsAll();
             var cachedModels = allModels.Where(m => m.Type == Enums.Models.Type.Normal).ToList();
             var cachedModelsVae = allModels.Where(m => m.Type == Enums.Models.Type.Vae).ToList();
-            Model modelFile = TtiUtils.CheckIfCurrentSdModelExists();
+            Model modelFile = TtiUtils.CheckIfModelExists(Config.Instance.Model, Enums.StableDiffusion.Implementation.InvokeAi);
             Model vaeFile = Models.GetModel(cachedModelsVae, Path.GetFileName(vaePath));
 
             if (modelFile == null)

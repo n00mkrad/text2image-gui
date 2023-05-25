@@ -82,7 +82,7 @@ namespace StableDiffusionGui.Data
                     }
                 }
 
-                if (ConfigParser.UpscaleAndSaveOriginals)
+                if (ConfigParser.UpscaleAndSaveOriginals())
                     count *= 2;
 
                 return count;

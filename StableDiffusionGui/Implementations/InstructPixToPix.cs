@@ -146,7 +146,7 @@ namespace StableDiffusionGui.Implementations
             string initsStr = initImages != null ? $" and {initImages.Count} Image{(initImages.Count != 1 ? "s" : "")}" : "";
             string log = $"{prompts} Prompt{(prompts != 1 ? "s" : "")} * {iterations} Image{(iterations != 1 ? "s" : "")} * {steps} Step Value{(steps != 1 ? "s" : "")} * {scalesTxt} (Prompt) * {scalesImg} (Image) Scale Values{initsStr} = {argLists} Images Total";
 
-            if (ConfigParser.UpscaleAndSaveOriginals)
+            if (ConfigParser.UpscaleAndSaveOriginals())
                 log += $" ({argLists * 2} With Post-processed Images)";
 
             return $"{log}.";
