@@ -16,7 +16,8 @@ namespace StableDiffusionGui.Main
     {
         private static bool _hasErrored = false;
         private static bool _invokeAiLastModelCached = false;
-        private static bool _isRunningHiResFix = false;
+        public enum HiresFixStatus { NotUpscaling, WaitingForStart, Upscaling }
+        private static HiresFixStatus _hiresFixStatus;
 
         public static List<string> LastMessages = new List<string>();
         public static Stopwatch TimeSinceLastImage = new Stopwatch();
@@ -25,7 +26,7 @@ namespace StableDiffusionGui.Main
         public static void Reset()
         {
             _hasErrored = false;
-            _isRunningHiResFix = false;
+            _hiresFixStatus = HiresFixStatus.NotUpscaling;
             LastMessages.Clear();
             RollingAvg.Reset();
         }
@@ -51,15 +52,21 @@ namespace StableDiffusionGui.Main
                 else if (!TextToImage.Canceled && line.StartsWith(">> Loading ") && line.Contains(" from "))
                     _invokeAiLastModelCached = false;
 
+                if (!TextToImage.Canceled && _hiresFixStatus == HiresFixStatus.WaitingForStart && line.Remove(" ").MatchesWildcard(@"0%||0/*[00:00<?,?it/s]*"))
+                {
+                    Logger.Log("UPSCALING!", true);
+                    _hiresFixStatus = HiresFixStatus.Upscaling;
+                }
+
                 if (!TextToImage.Canceled && line.Remove(" ") == @"Generating:0%||0/1[00:00<?,?it/s]")
                 {
                     TimeSinceLastImage.Restart();
-                    _isRunningHiResFix = false;
+                    _hiresFixStatus = HiresFixStatus.NotUpscaling;
                 }
 
                 if (!TextToImage.Canceled && line.StartsWith(">> Interpolating from"))
                 {
-                    _isRunningHiResFix = true;
+                    _hiresFixStatus = _hiresFixStatus = HiresFixStatus.WaitingForStart;
                 }
 
                 if (!TextToImage.Canceled && line.MatchesWildcard("*%|*|*/*") && !line.Lower().Contains("downloading"))
@@ -75,7 +82,7 @@ namespace StableDiffusionGui.Main
                         int[] stepsCurrentTarget = progStr.Split('/').Select(x => x.GetInt()).ToArray();
                         int percent = ((((float)stepsCurrentTarget[0] / stepsCurrentTarget[1]) * 100f) / progressDivisor).RoundToInt();
 
-                        if (TextToImage.CurrentTaskSettings.HiresFix && _isRunningHiResFix)
+                        if (TextToImage.CurrentTaskSettings.HiresFix && _hiresFixStatus == HiresFixStatus.Upscaling)
                             percent += 50;
 
                         if (percent > 0 && percent <= 100)
