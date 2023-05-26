@@ -24,7 +24,7 @@ namespace StableDiffusionGui.Io
             if (includeBuiltin)
                 mdlFolders.Add(Paths.GetModelsPath());
 
-            mdlFolders.Concat(Config.Instance.CustomModelDirs);
+            mdlFolders = mdlFolders.Concat(Config.Instance.CustomModelDirs).ToList();
             return mdlFolders;
         }
 

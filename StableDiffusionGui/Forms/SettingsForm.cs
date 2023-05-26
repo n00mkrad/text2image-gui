@@ -94,7 +94,8 @@ namespace StableDiffusionGui.Forms
             ((Action)(() =>
             {
                 comboxSdModel.Items.Clear();
-                Models.GetModelsAll().Where(m => CurrImplementation.GetInfo().SupportedModelFormats.Contains(m.Format)).ToList().ForEach(m => comboxSdModel.Items.Add(m.Name));
+                var models = Models.GetModelsAll().Where(m => CurrImplementation.GetInfo().SupportedModelFormats.Contains(m.Format)).ToList();
+                models.ForEach(m => comboxSdModel.Items.Add(m.Name));
                 ConfigParser.LoadGuiElement(comboxSdModel, ref Config.Instance.Model);
 
                 if (comboxSdModel.Items.Count > 0 && comboxSdModel.SelectedIndex == -1)

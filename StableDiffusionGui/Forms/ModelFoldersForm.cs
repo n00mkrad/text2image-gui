@@ -49,11 +49,11 @@ namespace StableDiffusionGui.Forms
 
             if (_folder == Folder.Models)
             {
-                Folders.Concat(Config.Instance.CustomModelDirs);
+                Folders = Folders.Concat(Config.Instance.CustomModelDirs).ToList();
             }
             else if (_folder == Folder.Vaes)
             {
-                Folders.Concat(Config.Instance.CustomVaeDirs);
+                Folders = Folders.Concat(Config.Instance.CustomVaeDirs).ToList();
             }
         }
 
@@ -61,7 +61,7 @@ namespace StableDiffusionGui.Forms
         {
             List<string> folders = Folders.Where(dir => dir != DefaultPath && Directory.Exists(dir)).ToList();
 
-            if (folders.Any())
+            if (!folders.Any())
                 return;
             
             if (_folder == Folder.Models)
