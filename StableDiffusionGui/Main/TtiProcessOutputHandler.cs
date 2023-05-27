@@ -97,14 +97,21 @@ namespace StableDiffusionGui.Main
                     if (line.Contains(outPath) && new Regex(@"\[\d+(\.\d+)?\] [A-Z]:\/").Matches(line.Trim()).Count >= 1)
                     {
                         TextToImage.CurrentTask.ImgCount += 1;
-                        Program.MainForm.SetProgress((int)Math.Round(((float)TextToImage.CurrentTask.ImgCount / TextToImage.CurrentTask.TargetImgCount) * 100f));
+                        int imgCount = TextToImage.CurrentTask.ImgCount + TextToImage.CompletedTasks.Sum(t => t.ImgCount);
+                        int targetImgCount = TextToImage.CurrentTask.TargetImgCount + TextToImage.CompletedTasks.Sum(t => t.TargetImgCount) + MainUi.Queue.Sum(s => s.GetTargetImgCount(TextToImage.CurrentTask.Config));
+                        Program.MainForm.SetProgress((int)Math.Round(((float)imgCount / targetImgCount) * 100f));
 
                         int lastMsPerImg = (int)TimeSinceLastImage.ElapsedMilliseconds;
                         RollingAvg.AddDataPoint(lastMsPerImg);
                         int remainingMs = (TextToImage.CurrentTask.TargetImgCount - TextToImage.CurrentTask.ImgCount) * (int)RollingAvg.GetAverage();
 
-                        Logger.Log($"Generated image in {FormatUtils.Time(lastMsPerImg)} ({TextToImage.CurrentTask.ImgCount}/{TextToImage.CurrentTask.TargetImgCount})" +
-                            $"{(TextToImage.CurrentTask.ImgCount > 1 && remainingMs > 1000 ? $" - ETA: {FormatUtils.Time(remainingMs, false)}" : "")}", false, replace || Logger.LastUiLine.MatchesWildcard("*Generated*image*in*"));
+                        string imgCountStr = $"{TextToImage.CurrentTask.ImgCount}/{TextToImage.CurrentTask.TargetImgCount}";
+
+                        if (TextToImage.IsRunningQueue)
+                            imgCountStr += $" of this task - {imgCount}/{targetImgCount} total";
+
+                        Logger.Log($"Generated image in {FormatUtils.Time(lastMsPerImg)} ({imgCountStr})" +
+                        $"{(TextToImage.CurrentTask.ImgCount > 2 && remainingMs > 1000 ? $" - ETA: {FormatUtils.Time(remainingMs, false)}" : "")}", false, replace || Logger.LastUiLine.MatchesWildcard("*Generated*image*in*"));
 
                         TimeSinceLastImage.Restart();
                         string path = outPath + line.Split(outPath)[1].Split(':')[0];

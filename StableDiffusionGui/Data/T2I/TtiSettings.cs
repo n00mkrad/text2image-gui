@@ -49,7 +49,7 @@ namespace StableDiffusionGui.Data
         public EasyDict<string, string> RawAndProcessedPrompts { get { return ProcessedAndRawPrompts.SwapKeysValues(); } } // Same as above but Key/Value swapped
 
 
-        public int GetTargetImgCount()
+        public int GetTargetImgCount(ConfigInstance config = null)
         {
             int count = 0;
 
@@ -82,7 +82,7 @@ namespace StableDiffusionGui.Data
                     }
                 }
 
-                if (ConfigParser.UpscaleAndSaveOriginals())
+                if (ConfigParser.UpscaleAndSaveOriginals(config))
                     count *= 2;
 
                 return count;

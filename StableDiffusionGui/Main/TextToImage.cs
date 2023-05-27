@@ -25,15 +25,20 @@ namespace StableDiffusionGui.Main
         public static long PreviousSeed = -1;
         public static bool Canceled = false;
 
+        public static bool IsRunningQueue = false;
+        public static List<TtiTaskInfo> CompletedTasks = new List<TtiTaskInfo>();
+
         public static async Task RunTti(TtiSettings settings = null)
         {
             Program.SetState(Program.BusyState.ImageGeneration);
+            CompletedTasks.Clear();
             ConfigInstance config = Config.Instance.Clone();
             bool fromQueue = settings == null;
             int iteration = 0;
 
             do
             {
+                IsRunningQueue = fromQueue;
                 TtiSettings s = null;
 
                 if (fromQueue) // Pull from queue
@@ -109,6 +114,7 @@ namespace StableDiffusionGui.Main
                         await Task.Delay(100);
                 }
 
+                CompletedTasks.Add(CurrentTask);
             } while (fromQueue && MainUi.Queue.Any());
 
             Done();
@@ -149,6 +155,7 @@ namespace StableDiffusionGui.Main
 
         public static void Done()
         {
+            IsRunningQueue = false;
             TimeSpan timeTaken = DateTime.Now - CurrentTask.StartTime;
 
             if (CurrentTask.ImgCount > 0)
