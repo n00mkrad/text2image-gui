@@ -2,7 +2,6 @@
 using StableDiffusionGui.Forms;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
-using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
@@ -17,8 +16,8 @@ namespace StableDiffusionGui
 {
     public static class Program
     {
-        public const string Version = "1.10.0";
-        public const Enums.Program.UpdateChannel ReleaseChannel = Enums.Program.UpdateChannel.Public;
+        public const string Version = "1.11.0b1";
+        public const Enums.Program.UpdateChannel ReleaseChannel = Enums.Program.UpdateChannel.Beta;
 
         public static bool Debug { get { return Debugger.IsAttached || UserArgs.Get("debug").Lower() == true.ToString().Lower(); } }
 
