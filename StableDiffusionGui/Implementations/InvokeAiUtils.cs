@@ -141,7 +141,7 @@ namespace StableDiffusionGui.Implementations
 
         public static string ConvertAttentionSyntax(string prompt)
         {
-            if (!prompt.Contains("(") && !prompt.Contains("{")) // Skip if no parentheses/curly brackets were used
+            if (!prompt.Contains("(") && !prompt.Contains("{") && !prompt.Contains("<lora:")) // Skip if no parentheses/curly brackets or "<lora:" syntax were used
                 return prompt;
 
             if (PromptUsesNewAttentionSyntax(prompt))
@@ -149,13 +149,13 @@ namespace StableDiffusionGui.Implementations
 
             prompt = prompt.Replace("\\(", "escapedParenthesisOpen").Replace("\\)", "escapedParenthesisClose");
 
-            var parentheses = Regex.Matches(prompt, @"\(((?>[^()]+|\((?<n>)|\)(?<-n>))+(?(n)(?!)))\)"); // Find parenthesis pairs
+            var parentheses = Regex.Matches(prompt, @"(?<=\s|^)\(((?>[^()]+|\((?<n>)|\)(?<-n>))+(?(n)(?!)))\)"); // Find parenthesis pairs preceded by a space or at the beginning
 
             for (int i = 0; i < parentheses.Count; i++)
             {
                 string match = parentheses[i].Value;
 
-                if (match.MatchesRegex(@":\d.\d+\)"))
+                if (match.MatchesRegex(@":-?\d+(\.\d+)?\)")) // Don't append '+' if there is a weight specified
                     continue;
 
                 int count = match.Where(c => c == ')').Count();
@@ -163,23 +163,40 @@ namespace StableDiffusionGui.Implementations
                 prompt = prompt.Replace(match, converted);
             }
 
-            var curlyBrackets = Regex.Matches(prompt, @"\{((?>[^{}]+|\{(?<n>)|\}(?<-n>))+(?(n)(?!)))\}"); // Find curly bracket pairs
+            var curlyBrackets = Regex.Matches(prompt, @"(?<=\s|^)\{((?>[^{}]+|\{(?<n>)|\}(?<-n>))+(?(n)(?!)))\}"); // Find curly bracket pairs preceded by a space or at the beginning
 
             for (int i = 0; i < curlyBrackets.Count; i++)
             {
                 string match = curlyBrackets[i].Value;
+
+                if (match.MatchesRegex(@":-?\d+(\.\d+)?\)")) // Don't append '-' if there is a weight specified
+                    continue;
+
                 int count = match.Where(c => c == '}').Count();
                 string converted = $"({match.Remove("{").Remove("}")}){new string('-', count)}";
                 prompt = prompt.Replace(match, converted);
             }
 
-            var weightsInsideParentheses = Regex.Matches(prompt, @":\d.\d+\)"); // Detect A1111 float weighted parentheses
+            var weightsInsideParentheses = Regex.Matches(prompt, @"\(([^)]+):(-?\d+(\.\d+)?)\)"); // Detect weights after colon inside parentheses
 
             for (int i = 0; i < weightsInsideParentheses.Count; i++)
             {
                 string match = weightsInsideParentheses[i].Value;
-                float weight = match.TrimStart(':').TrimEnd(')').GetFloat();
-                prompt = prompt.Replace(match, $"){weight.ToStringDot("0.#")}");
+                string content = weightsInsideParentheses[i].Groups[1].Value;
+                string weight = weightsInsideParentheses[i].Groups[2].Value;
+                string converted = $"({content}){weight}";
+                prompt = prompt.Replace(match, converted);
+            }
+
+            var loraSyntaxes = Regex.Matches(prompt, @"<lora:([^:>]+):(-?\d+(\.\d+)?)>"); // Detect <lora:FILENAME:1.0> syntax including negative numbers
+
+            for (int i = 0; i < loraSyntaxes.Count; i++)
+            {
+                string match = loraSyntaxes[i].Value;
+                string fileName = loraSyntaxes[i].Groups[1].Value;
+                string number = loraSyntaxes[i].Groups[2].Value;
+                string converted = $"withLora({fileName}:{number})";
+                prompt = prompt.Replace(match, converted);
             }
 
             prompt = prompt.Replace("escapedParenthesisOpen", "\\(").Replace("escapedParenthesisClose", "\\)");

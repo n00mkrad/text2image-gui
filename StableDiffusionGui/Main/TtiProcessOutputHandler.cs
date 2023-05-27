@@ -54,7 +54,6 @@ namespace StableDiffusionGui.Main
 
                 if (!TextToImage.Canceled && _hiresFixStatus == HiresFixStatus.WaitingForStart && line.Remove(" ").MatchesWildcard(@"0%||0/*[00:00<?,?it/s]*"))
                 {
-                    Logger.Log("UPSCALING!", true);
                     _hiresFixStatus = HiresFixStatus.Upscaling;
                 }
 
