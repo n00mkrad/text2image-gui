@@ -1,6 +1,4 @@
-﻿using MS.WindowsAPICodePack.Internal;
-using Newtonsoft.Json.Linq;
-using StableDiffusionGui.Io;
+﻿using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
@@ -12,7 +10,6 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 using ZetaLongPaths;
 
 namespace StableDiffusionGui.Installation
@@ -21,7 +18,7 @@ namespace StableDiffusionGui.Installation
     {
         private static readonly string _gitFile = "n00mkrad/stable-diffusion-cust.git";
         private static readonly string _gitBranch = "main";
-        public static readonly string GitCommit = "b070c6651269b565ebeea2e0df9c668c5e7edb77";
+        public static readonly string GitCommit = "3dd12477f233ea1123dcef72dfe245f9db981c7a";
 
         private static readonly bool _allowModelDownload = false;
 

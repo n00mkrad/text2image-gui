@@ -1,9 +1,7 @@
 ﻿using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.Os;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -73,7 +71,7 @@ namespace StableDiffusionGui.Installation
                 @"realesrgan/realesr-general-x4v3.pth",
             };
 
-            requiredFilesPaths = requiredFilesPaths.Select(f => Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdRepo, "invoke", "models", f)).ToList();
+            requiredFilesPaths = requiredFilesPaths.Select(f => Path.Combine(Paths.GetDataPath(), "invoke", "models", f)).ToList();
             bool hasAllModels = requiredFilesPaths.All(f => File.Exists(f));
 
             if (!hasAllModels)
