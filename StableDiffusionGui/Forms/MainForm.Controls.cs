@@ -178,21 +178,35 @@ namespace StableDiffusionGui.Forms
             ConfigParser.SaveGuiElement(comboxModel, ref Config.Instance.Model);
         }
 
+        private string _lastEmbeddings = "";
+
         public void ReloadEmbeddings()
         {
-            IEnumerable<string> embeddings = Models.GetEmbeddings().Select(m => m.FormatIndependentName);
-            comboxEmbeddingList.SetItems(new[] { "None" }.Concat(embeddings), UiExtensions.SelectMode.Retain);
-            panelEmbeddings.SetVisible(embeddings.Any()); // Disable panel if no embeddings in folder
+            var embeddings = Models.GetEmbeddings();
+            string currEmbeddings = embeddings.Select(l => l.FormatIndependentName).AsString();
+            IEnumerable<string> embeddingNames = embeddings.Select(m => m.FormatIndependentName);
+            comboxEmbeddingList.SetItems(new[] { "None" }.Concat(embeddingNames), UiExtensions.SelectMode.Retain);
+
+            if (currEmbeddings != _lastEmbeddings)
+                embeddings = ValidateEmbeddingNames(embeddings);
+
+            _lastEmbeddings = embeddings.Select(l => l.FormatIndependentName).AsString();
+            panelEmbeddings.SetVisible(embeddingNames.Any()); // Disable panel if no embeddings in folder
         }
 
-        private bool _shownLoraFilenameWarning = false;
+        private string _lastLoras = "";
 
         public void ReloadLoras()
         {
             gridLoras.Rows.Cast<DataGridViewRow>().Where(row => row.Cells[2].Value.ToString().GetFloat() <= 0f).ToList().ForEach(row => row.Cells[2].Value = "1.0");
             var selection = GetLoras(); // Save current selection
             List<Model> loras = Models.GetLoras();
-            loras = ValidateLoraNames(loras);
+            string currLoras = loras.Select(l => l.FormatIndependentName).AsString();
+
+            if (currLoras != _lastLoras)
+                loras = ValidateLoraNames(loras);
+
+            _lastLoras = loras.Select(l => l.FormatIndependentName).AsString();
             panelLoras.SetVisible(loras.Any()); // Disable panel if no LoRAs in folder
 
             if (!loras.Any())
@@ -212,15 +226,15 @@ namespace StableDiffusionGui.Forms
         public void SortLoras(bool force = false)
         {
             List<object[]> rowValues = gridLoras.Rows.Cast<DataGridViewRow>().ToList().Select(r => new object[] { r.Cells[0].Value, r.Cells[1].Value, r.Cells[2].Value }).ToList();
-            
+
             if (rowValues.Count < 2) // No need to sort 1 item
                 return;
-            
+
             List<object[]> newRowValues = rowValues.OrderByDescending(row => (bool)row[0]).ThenBy(row => (string)row[1]).ToList();
-            
+
             if (!force && (rowValues.ToJson() == newRowValues.ToJson())) // Brute-force comparison because SequenceEqual didn't work (?)
                 return; // Skip sort if data is already in correct order
-            
+
             gridLoras.Rows.Clear();
             newRowValues.ForEach(row => gridLoras.Rows.Add((bool)row[0], (string)row[1], (string)row[2]));
         }
@@ -464,20 +478,20 @@ namespace StableDiffusionGui.Forms
             })).RunWithUiStopped(this);
         }
 
-        public void ToggleSaveMode ()
+        public void ToggleSaveMode()
         {
             Config.Instance.AutoDeleteImgs = !Config.Instance.AutoDeleteImgs;
             UpdateSaveModeBtn();
         }
 
-        public void UpdateSaveModeBtn ()
+        public void UpdateSaveModeBtn()
         {
             if (Config.Instance.AutoDeleteImgs && btnSaveMode.BackgroundImage != Resources.IconArchiveOff)
             {
                 btnSaveMode.BackgroundImage = Resources.IconArchiveOff;
                 toolTip.SetToolTip(btnSaveMode, "Auto-Delete is enabled: Generated images will be deleted as soon as another batch is generated or the program closes.\n\nClick to disable.");
             }
-            else if(!Config.Instance.AutoDeleteImgs && btnSaveMode.BackgroundImage != Resources.IconArchiveOn)
+            else if (!Config.Instance.AutoDeleteImgs && btnSaveMode.BackgroundImage != Resources.IconArchiveOn)
             {
                 btnSaveMode.BackgroundImage = Resources.IconArchiveOn;
                 toolTip.SetToolTip(btnSaveMode, "Auto-Delete is disabled: All generated images will be saved.\n\nClick to switch to Auto-Delete mode.");

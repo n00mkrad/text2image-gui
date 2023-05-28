@@ -678,5 +678,10 @@ namespace StableDiffusionGui
 
             return $"{s.TrimEnd()} {text}";
         }
+
+        public static string AsString<T> (this IEnumerable<T> list, string delimiter = ", ")
+        {
+            return string.Join(delimiter, list);
+        }
     }
 }

@@ -262,10 +262,8 @@ namespace StableDiffusionGui.Forms
 
             var invalidLorasAndCorrectedNames = new EasyDict<Model, string>();
 
-            if (_shownLoraFilenameWarning || loras.All(l => validPattern.IsMatch(l.FormatIndependentName)))
-                return loras; // Either warning has been shown already, or all are valid.
-
-            _shownLoraFilenameWarning = true;
+            if (loras.All(l => validPattern.IsMatch(l.FormatIndependentName)))
+                return loras; // All are valid.
 
             foreach (var lora in loras.Where(l => !validPattern.IsMatch(l.FormatIndependentName)))
             {
@@ -286,6 +284,38 @@ namespace StableDiffusionGui.Forms
             }
 
             return loras.Where(l => validPattern.IsMatch(l.FormatIndependentName)).ToList();
+        }
+
+        public List<Model> ValidateEmbeddingNames(List<Model> embeddings)
+        {
+            Regex validPattern = new Regex(@"^[\w.-]+$"); // Alphanumeric, underscores, hyphens, dots
+            Regex replacePattern = new Regex(@"[^\w]"); // Replace invalid chars
+            Regex multiUnderscoresPattern = new Regex(@"_{2,}"); // For detecting multiple consecutive underscores
+
+            var invalidEmbeddingsAndCorrectedNames = new EasyDict<Model, string>();
+
+            if (embeddings.All(l => validPattern.IsMatch(l.FormatIndependentName)))
+                return embeddings; // All are valid.
+
+            foreach (var embedding in embeddings.Where(l => !validPattern.IsMatch(l.FormatIndependentName)))
+            {
+                string validFilename = replacePattern.Replace(embedding.FormatIndependentName, "_"); // Remove invalid chars
+                invalidEmbeddingsAndCorrectedNames[embedding] = multiUnderscoresPattern.Replace(validFilename, "_").Trim('_'); // Remove multiple consecutive underscores and trim start/end
+            }
+
+            UiUtils.ShowMessageBox($"The following embedding files can't be loaded because they have an invalid file name:\n\n{string.Join("\n", invalidEmbeddingsAndCorrectedNames.Keys)}\n\n" +
+                    $"Only alphanumeric characters, underscores, dots, and hypens are allowed. Spaces and other special characters are not valid.", UiUtils.MessageType.Warning, Nmkoder.Forms.MessageForm.FontSize.Big);
+
+            string msg = $"Do you want to automatically rename the files to a valid name?\n\n{string.Join("\n", invalidEmbeddingsAndCorrectedNames.Select(pair => $"{pair.Key.FormatIndependentName} => {pair.Value}"))}";
+            DialogResult dialogResult = UiUtils.ShowMessageBox(msg, "Auto-Rename", MessageBoxButtons.YesNo, Nmkoder.Forms.MessageForm.FontSize.Big);
+
+            if (dialogResult == DialogResult.Yes)
+            {
+                invalidEmbeddingsAndCorrectedNames.ToList().ForEach(pair => IoUtils.RenameFile(pair.Key.FullName, pair.Value, showLog: true));
+                embeddings = Models.GetEmbeddings(); // Need to reload from disk after renaming, otherwise we still have the old filenames
+            }
+
+            return embeddings.Where(l => validPattern.IsMatch(l.FormatIndependentName)).ToList();
         }
     }
 }

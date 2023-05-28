@@ -24,50 +24,33 @@ namespace StableDiffusionGui.Extensions
 
         public enum SelectMode { Retain, None, First, Last }
 
-        public static void SetItems(this ComboBox combox, IEnumerable<object> items, SelectMode select = SelectMode.Retain, SelectMode fallback = SelectMode.First)
+        /// <summary> Sets ComboBox items, but only if the list has actually changed </summary>
+        /// <returns> true if the list was changed, false if the new list is identical with the existing one </returns>
+        public static bool SetItems(this ComboBox combox, IEnumerable<object> items, SelectMode select = SelectMode.Retain, SelectMode fallback = SelectMode.First)
         {
-            if (combox.AreItemsEqualToList(items.ToArray()))
-                return;
+            var newItems = items as object[] ?? items.ToArray();
+
+            if (combox.AreItemsEqualToList(newItems))
+                return false;
 
             string prevText = combox.Text;
-
             combox.Items.Clear();
-            combox.Items.AddRange(items.ToArray());
+            combox.Items.AddRange(newItems);
 
-            if (select == SelectMode.Retain)
+            if (select == SelectMode.Retain && combox.Items.Cast<object>().Any(o => o.ToString() == prevText))
             {
-                if (combox.Items.Cast<object>().Select(o => o.ToString()).Contains(prevText))
-                {
-                    combox.Text = prevText;
-                }
-                else
-                {
-                    if (fallback == SelectMode.First)
-                    {
-                        combox.SelectedIndex = 0;
-                        return;
-                    }
-                    else if (fallback == SelectMode.Last)
-                    {
-                        combox.SelectedIndex = combox.Items.Count - 1;
-                        return;
-                    }
-                }
-
-                return;
+                combox.Text = prevText;
+            }
+            else if ((select == SelectMode.Retain && fallback == SelectMode.First) || select == SelectMode.First)
+            {
+                combox.SelectedItem = combox.Items.Cast<object>().FirstOrDefault();
+            }
+            else if ((select == SelectMode.Retain && fallback == SelectMode.Last) || select == SelectMode.Last)
+            {
+                combox.SelectedItem = combox.Items.Cast<object>().LastOrDefault();
             }
 
-            if (select == SelectMode.First)
-            {
-                combox.SelectedIndex = 0;
-                return;
-            }
-
-            if (select == SelectMode.Last)
-            {
-                combox.SelectedIndex = combox.Items.Count - 1;
-                return;
-            }
+            return true;
         }
 
         public static void SetItems(this ComboBox combox, IEnumerable<object> items, int selectIndex = -1)

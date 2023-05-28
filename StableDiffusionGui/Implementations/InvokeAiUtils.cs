@@ -306,7 +306,7 @@ namespace StableDiffusionGui.Implementations
             if (incompatEmbeddings.Any())
             {
                 string incompatList = string.Join(", ", incompatEmbeddings.Distinct());
-                Logger.LogIf($"The following embeddings are not compatible with the current model: {incompatList}", log, false);
+                Logger.LogIf($"Embeddings not found or incompatible: {incompatList}", log, false);
             }
 
             return prompt;
