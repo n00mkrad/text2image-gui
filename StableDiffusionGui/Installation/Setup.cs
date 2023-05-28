@@ -1,4 +1,6 @@
-﻿using StableDiffusionGui.Io;
+﻿using MS.WindowsAPICodePack.Internal;
+using Newtonsoft.Json.Linq;
+using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
@@ -7,7 +9,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using ZetaLongPaths;
 
 namespace StableDiffusionGui.Installation
@@ -351,6 +356,8 @@ namespace StableDiffusionGui.Installation
 
         #region Utils
 
+        private static readonly Regex _exeShebangRegex = new Regex("(#!\")(.+?)(\")", RegexOptions.Compiled);
+
         public static void PatchFiles()
         {
             try
@@ -453,22 +460,36 @@ namespace StableDiffusionGui.Installation
 
                 var scriptsFiles = IoUtils.GetFileInfosSorted(Path.Combine(GetDataSubPath(Constants.Dirs.SdVenv), "Scripts"), true, "*");
 
-                foreach(var file in scriptsFiles)
+                foreach (var file in scriptsFiles)
                 {
-                    if (file.Extension.Lower() == ".exe")
-                        continue;
-
                     try
                     {
-                        var lines = File.ReadAllLines(file.FullName);
+                        if (file.Extension.Lower() == ".exe")
+                        {
+                            byte[] exeBytes = File.ReadAllBytes(file.FullName);
+                            Encoding encoding = Encoding.Default;
+                            string exeText = encoding.GetString(exeBytes);
+                            exeText = _exeShebangRegex.Replace(exeText, $"$1{Path.Combine(GetDataSubPath(Constants.Dirs.SdVenv), "Scripts", "python.exe")}$3");
+                            byte[] newExeBytes = encoding.GetBytes(exeText);
 
-                        if (!lines[0].StartsWith("#!") || !lines[0].Lower().EndsWith("python.exe"))
-                            continue;
+                            if (newExeBytes.SequenceEqual(exeBytes))
+                                continue;
 
-                        lines[0] = $"#!{Path.Combine(GetDataSubPath(Constants.Dirs.SdVenv), "Scripts", "python.exe").TrimEnd('\\')}";
+                            File.WriteAllBytes(file.FullName, newExeBytes);
+                            Logger.Log($"Fixed shebang in executable {file.Name}", true);
+                        }
+                        else
+                        {
+                            var lines = File.ReadAllLines(file.FullName);
 
-                        if (IoUtils.WriteAllLinesIfDifferent(file.FullName, lines))
-                            Logger.Log($"Fixed shebang in {file.Name}", true);
+                            if (!lines[0].StartsWith("#!") || !lines[0].Lower().EndsWith("python.exe"))
+                                continue;
+
+                            lines[0] = $"#!{Path.Combine(GetDataSubPath(Constants.Dirs.SdVenv), "Scripts", "python.exe")}";
+
+                            if (IoUtils.WriteAllLinesIfDifferent(file.FullName, lines))
+                                Logger.Log($"Fixed shebang in script {file.Name}", true);
+                        }
                     }
                     catch(Exception ex)
                     {
