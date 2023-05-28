@@ -37,7 +37,7 @@ namespace StableDiffusionGui.Io
 
         public static List<Model> GetEmbeddings ()
         {
-            var fileList = IoUtils.GetFileInfosSorted(Paths.GetEmbeddingsPath(), false, "*.*");
+            var fileList = IoUtils.GetFileInfosSorted(Paths.GetEmbeddingsPath(), false, "*.*pt").Where(f => f.Length < 1024 * 1024);
             return fileList.Select(f => new Model(f, Format.Pytorch, Enums.Models.Type.Embedding)).ToList();
         }
 
