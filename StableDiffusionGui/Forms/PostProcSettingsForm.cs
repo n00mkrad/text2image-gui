@@ -34,18 +34,22 @@ namespace StableDiffusionGui.Forms
             UpdateVisibility();
             TabOrderInit(new List<Control>() { checkboxUpscaleEnable, comboxUpscale, checkboxFaceRestorationEnable, comboxFaceRestoration, sliderFaceRestoreStrength, sliderCodeformerFidelity });
             await Task.Delay(1);
-            Opacity = 1;
 
             if (!InstallationStatus.HasSdUpscalers())
             {
-                DialogResult dialogResult = UiUtils.ShowMessageBox("Upscalers are not installed.\nDo you want to open the installer to install them (Up to 1 GB of disk space required)?", "Error", MessageBoxButtons.YesNo);
+                DialogResult dialogResult = UiUtils.ShowMessageBox("Upscalers are not installed.\nDo you want to install them (Roughly 1 GB of disk space required)?", "Error", MessageBoxButtons.YesNo);
 
                 if (dialogResult == DialogResult.Yes)
-                    new InstallerForm().ShowDialogForm();
+                    new InstallerForm(true).ShowDialogForm();
 
                 if (!InstallationStatus.HasSdUpscalers())
+                {
                     Close();
+                    return;
+                }
             }
+
+            Opacity = 1;
         }
 
         private void PostProcSettingsForm_FormClosing(object sender, FormClosingEventArgs e)
