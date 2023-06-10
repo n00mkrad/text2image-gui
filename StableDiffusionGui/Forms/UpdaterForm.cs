@@ -55,7 +55,7 @@ namespace StableDiffusionGui.Forms
         {
             if (Program.Busy)
             {
-                UiUtils.ShowMessageBox("Please wait until the current process has finished.");
+                UiUtils.ShowMessageBox("Please wait until the current task has finished.");
                 return;
             }
 

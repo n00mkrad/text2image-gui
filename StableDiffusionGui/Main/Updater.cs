@@ -1,4 +1,5 @@
 ﻿using StableDiffusionGui.Data;
+using StableDiffusionGui.Forms;
 using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Os;
@@ -13,7 +14,8 @@ namespace StableDiffusionGui.Main
 {
     internal class Updater
     {
-        private static readonly string _basefilesGitUrl = "https://github.com/n00mkrad/text2image-gui-basefiles";
+        private static readonly string _urlBasefilesGit = "https://github.com/n00mkrad/text2image-gui-basefiles";
+        private static readonly string _urlBuilds = "https://github.com/n00mkrad/text2image-gui/raw/main/builds";
 
         public static async Task Install(MdlRelease release, bool copyImages, bool copyModels, bool copyConfig)
         {
@@ -30,10 +32,10 @@ namespace StableDiffusionGui.Main
             {
                 IoUtils.TryDeleteIfExists(tempDir);
                 Logger.Log("Downloading base dependencies...", false, Logger.LastUiLine.EndsWith("..."));
-                await Setup.Clone(_basefilesGitUrl, tempDir, release.HashBasefiles);
+                await Setup.Clone(_urlBasefilesGit, tempDir, release.HashBasefiles);
                 string exePath = Path.Combine(tempDir, "StableDiffusionGui.exe");
                 Logger.Log("Downloading executable...", false, Logger.LastUiLine.EndsWith("..."));
-                await Download($"https://github.com/n00mkrad/text2image-gui/raw/main/builds/{release.Channel}/{release.Version}", exePath);
+                await DownloadRelease(release, exePath);
                 string gitPath = Path.Combine(tempDir, ".git");
                 IoUtils.SetAttributes(gitPath);
                 IoUtils.TryDeleteIfExists(gitPath);
@@ -56,9 +58,27 @@ namespace StableDiffusionGui.Main
             }
         }
 
-        private static string GetLaunchCmd (MdlRelease release)
+        private static async Task DownloadRelease(MdlRelease rel, string savePath)
         {
-            if(release.HashRepo == Setup.GitCommit && InstallationStatus.IsInstalledBasic) // Do not re-install dependencies if they are installed and up-to-date
+            if (Program.UserArgs.ContainsKey("custUpdExe") && Program.Debug) // Assuming exe dir is ...\text2image-gui\StableDiffusionGui\bin\x64\Debug
+            {
+                string exePath = Program.UserArgs.Get("custUpdExe").Trim('\"').Trim('\'');
+
+                if (File.Exists(exePath))
+                    File.Copy(exePath, savePath, true);
+                else
+                    Logger.Log($"Specified local exe path is not valid (file does not exist): '{exePath}'");
+            }
+            else
+            {
+                string url = Path.Combine(_urlBuilds, rel.Channel, rel.Version);
+                await Download(url, savePath);
+            }
+        }
+
+        private static string GetLaunchCmd(MdlRelease release)
+        {
+            if (release.HashRepo == Setup.GitCommit && InstallationStatus.IsInstalledBasic) // Do not re-install dependencies if they are installed and up-to-date
                 return $"{Paths.GetExe().Wrap()} -info=no_reinstall_necessary";
 
             bool onnx = InstallationStatus.HasOnnx();

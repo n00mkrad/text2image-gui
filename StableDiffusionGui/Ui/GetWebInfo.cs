@@ -1,7 +1,10 @@
 ﻿using StableDiffusionGui.Data;
+using StableDiffusionGui.Forms;
+using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -27,12 +30,23 @@ namespace StableDiffusionGui.Ui
             }
         }
 
-        public static async Task<List<MdlRelease>> LoadReleases()
+        public static async Task<List<MdlRelease>> LoadReleases(bool useLocalFileIfDebug = true)
         {
             try
             {
-                string url = $"https://raw.githubusercontent.com/n00mkrad/text2image-gui/main/meta/versions.json";
-                string text = await new WebClient().DownloadStringTaskAsync(new Uri(url));
+                string text = "";
+
+                if (Program.UserArgs.ContainsKey("custUpdJson") && Program.Debug) // Assuming exe dir is ...\text2image-gui\StableDiffusionGui\bin\x64\Debug
+                {
+                    string txtPath = Program.UserArgs.Get("custUpdJson").Trim('\"').Trim('\'');
+                    text = File.ReadAllText(txtPath);
+                }
+                else
+                {
+                    string url = $"https://raw.githubusercontent.com/n00mkrad/text2image-gui/main/meta/versions.json";
+                    text = await new WebClient().DownloadStringTaskAsync(new Uri(url));
+                }
+
                 List<EasyDict<string, string>> data = text.FromJson<List<EasyDict<string, string>>>();
                 return data.ToList().Select(dict => new MdlRelease(dict)).ToList();
             }

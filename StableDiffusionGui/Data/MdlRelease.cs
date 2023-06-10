@@ -3,7 +3,7 @@ using System.Globalization;
 
 namespace StableDiffusionGui.Data
 {
-    internal class MdlRelease
+    public class MdlRelease
     {
         public string Version { get; set; } = "0.0.0";
         public string Channel { get; set; } = "";
