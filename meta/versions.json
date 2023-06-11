@@ -41,11 +41,4 @@
 	"hashBasefiles": "2a7790856ffeaa3b2fa3acc10a3f188a80067570",
 	"hashRepo": "289647c1a87b517ab932a5c36e50debe984828e0",
 },
-{
-	"version": "1.11.0b2",
-	"channel": "beta",
-	"date": "2023-06-10",
-	"hashBasefiles": "c52b124dd540c2d026d9c0d61e8efaab6ff43b15",
-	"hashRepo": "a3d425fed8cce00703d7051a71e1e1490cf7ac70",
-},
 ]
