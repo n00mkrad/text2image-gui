@@ -76,6 +76,7 @@ namespace StableDiffusionGui.Io
         public string EmbeddingsDir;
         public string LorasDir;
         public bool AutoDeleteImgs;
+        public EasyDict<string, float> LoraWeights = new EasyDict<string, float>();
 
         public ConfigInstance()
         {

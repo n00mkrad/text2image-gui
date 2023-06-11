@@ -81,7 +81,7 @@ namespace StableDiffusionGui.Forms
                 if (s.ResizeGravity != (ImageMagick.Gravity)(-1))
                     comboxResizeGravity.SetWithText(s.ResizeGravity.ToString(), true, Strings.ImageGravity);
 
-                SetLoras(s.Loras);               
+                SetLoras(s.Loras);
 
             })).RunWithUiStopped(this, "Error loading image generation settings:", true);
 
@@ -147,27 +147,33 @@ namespace StableDiffusionGui.Forms
             return settings;
         }
 
-        public void SetLoras (EasyDict<string, float> loras)
+        /// <summary> Applies LoRA list to UI list. If <paramref name="checkLoras"/> is false, enable/disable checkboxes are unaffected and only weights are applied </summary>
+        public void SetLoras(EasyDict<string, float> loras, bool checkLoras = true)
         {
             foreach (var row in gridLoras.Rows.Cast<DataGridViewRow>().Where(r => !r.IsNewRow))
             {
                 var matches = loras.Where(l => l.Key == row.Cells[1].Value.ToString()).ToList();
-                row.Cells[0].Value = matches.Any();
+
+                if (checkLoras) // If this is false, also enable/disable the entry if it's in the list. If true, only weight will be set
+                    row.Cells[0].Value = matches.Any();
 
                 if (!matches.Any())
                     continue;
 
                 if (row.Cells[1].Value.ToString() == matches[0].Key)
                 {
-                    row.Cells[0].Value = true;
+                    if (checkLoras)
+                        row.Cells[0].Value = true;
+
                     row.Cells[2].Value = matches[0].Value.ToStringDot("0.0##");
                 }
             }
 
-            BeginInvoke(new MethodInvoker(() => { SortLoras(true); }));
+            if (checkLoras)
+                BeginInvoke(new MethodInvoker(() => { SortLoras(true); }));
         }
 
-        private EasyDict<string, float> GetLoras()
+        private EasyDict<string, float> GetLoras(bool onlyEnabled = true)
         {
             var loras = new EasyDict<string, float>();
 
@@ -176,7 +182,7 @@ namespace StableDiffusionGui.Forms
                 if (row.IsNewRow)
                     continue;
 
-                if ((bool)row.Cells[0].Value != true) // Skip disabled LoRAs
+                if (onlyEnabled && (bool)row.Cells[0].Value != true) // Skip disabled LoRAs if onlyEnabled == True
                     continue;
 
                 string name = row.Cells[1].Value.ToString();

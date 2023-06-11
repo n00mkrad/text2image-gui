@@ -92,6 +92,8 @@ namespace StableDiffusionGui.Forms
             ConfigParser.LoadComboxIndex(comboxSampler, ref Config.Instance.SamplerIdx);
             ConfigParser.LoadGuiElement(sliderInitStrength, ref Config.Instance.InitStrength);
             ConfigParser.LoadGuiElement(checkboxHiresFix, ref Config.Instance.HiresFix);
+
+            SetLoras(Config.Instance.LoraWeights, false);
         }
 
         public void SaveControls()
@@ -108,6 +110,7 @@ namespace StableDiffusionGui.Forms
             if (Config.Instance != null && comboxModel.SelectedIndex >= 0)
                 Config.Instance.ModelArchs[((Model)comboxModel.SelectedItem).FullName] = ParseUtils.GetEnum<Enums.Models.SdArch>(comboxModelArch.Text, true, Strings.SdModelArch);
 
+            Config.Instance.LoraWeights = new EasyDict<string, float>(GetLoras(false).Where(x => x.Value != Constants.Ui.DefaultLoraStrength).ToDictionary(p => p.Key, p => p.Value));
             Config.Save();
         }
 
@@ -198,7 +201,8 @@ namespace StableDiffusionGui.Forms
 
         public void ReloadLoras()
         {
-            gridLoras.Rows.Cast<DataGridViewRow>().Where(row => row.Cells[2].Value.ToString().GetFloat() <= 0f).ToList().ForEach(row => row.Cells[2].Value = "1.0");
+            string defaultStrength = Constants.Ui.DefaultLoraStrength.ToString("0.0##");
+            gridLoras.Rows.Cast<DataGridViewRow>().Where(row => row.Cells[2].Value.ToString().GetFloat() <= 0f).ToList().ForEach(row => row.Cells[2].Value = defaultStrength);
             var selection = GetLoras(); // Save current selection
             List<Model> loras = Models.GetLoras();
             string currLoras = loras.Select(l => l.FormatIndependentName).AsString();
@@ -219,7 +223,7 @@ namespace StableDiffusionGui.Forms
                 return;
 
             gridLoras.Rows.Clear();
-            loras.ToList().ForEach(l => gridLoras.Rows.Add(false, l.FormatIndependentName, "1.0"));
+            loras.ToList().ForEach(l => gridLoras.Rows.Add(false, l.FormatIndependentName, defaultStrength));
             SetLoras(selection); // Restore selection
         }
 

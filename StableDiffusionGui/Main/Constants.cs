@@ -102,5 +102,10 @@
                 public const string TiTriggers = ">> Textual inversion triggers:";
             }
         }
+
+        public class Ui
+        {
+            public const float DefaultLoraStrength = 1.0f;
+        }
     }
 }
