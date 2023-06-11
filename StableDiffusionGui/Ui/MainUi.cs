@@ -112,6 +112,70 @@ namespace StableDiffusionGui.Ui
                 }
             }
 
+            try
+            {
+                string legacyModelFolder = Path.Combine(Paths.GetDataPath(), "models");
+                string legacyVaeFolder = Path.Combine(legacyModelFolder, "vae");
+                string legacyEmbeddingFolder = Path.Combine(legacyModelFolder, "embeddings");
+
+                if (Directory.Exists(legacyModelFolder) && !Config.Instance.CustomModelDirs.Contains(legacyModelFolder))
+                {
+                    if(IoUtils.GetDirSize(legacyModelFolder, true) > 128 * 1024 * 1024)
+                    {
+                        Logger.LogHidden("Found old non-empty model folder, added to custom model folders so models still show up.");
+                        Config.Instance.CustomModelDirs.Add(legacyModelFolder);
+                    }
+                    else
+                    {
+                        IoUtils.TryDeleteIfExists(legacyModelFolder); // Legacy folder is empty, delete it.
+                    }
+                }
+
+                if (Directory.Exists(legacyVaeFolder) && !Config.Instance.CustomVaeDirs.Contains(legacyVaeFolder))
+                {
+                    if(IoUtils.GetDirSize(legacyVaeFolder, true) > 64 * 1024 * 1024)
+                    {
+                        Logger.LogHidden("Found old non-empty VAE folder, added to custom VAE folders so VAE models still show up.");
+                        Config.Instance.CustomVaeDirs.Add(legacyVaeFolder);
+                    }
+                    else
+                    {
+                        IoUtils.TryDeleteIfExists(legacyVaeFolder); // Legacy folder is empty, delete it.
+                    }
+                }
+
+                if (Directory.Exists(legacyEmbeddingFolder) && Config.Instance.EmbeddingsDir != legacyEmbeddingFolder)
+                {
+                    if(IoUtils.GetDirSize(legacyEmbeddingFolder, true) < 1024)
+                    {
+                        Logger.LogHidden("Found old non-empty embeddings folder, moving to new folder.");
+                        string moveMsg = ", your files have been moved there automatically.";
+
+                        try
+                        {
+                            var embeddings = IoUtils.GetFileInfosSorted(legacyEmbeddingFolder, false, "*.*").ToList();
+                            embeddings.ForEach(f => IoUtils.MoveTo(f.FullName, Config.Instance.EmbeddingsDir));
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.LogException(ex, true, "Error moving embeddings:");
+                            moveMsg = ". Moving them automatically failed (check logs for details). Try moving them manually.";
+                        }
+
+                        UiUtils.ShowMessageBox($"Found embedding files in '{legacyEmbeddingFolder}'.\nThis path was changed to {Paths.GetEmbeddingsPath()}{moveMsg}",
+                            UiUtils.MessageType.Warning, Nmkoder.Forms.MessageForm.FontSize.Normal);
+                    }
+                    else
+                    {
+                        IoUtils.TryDeleteIfExists(legacyEmbeddingFolder); // Legacy folder is empty, delete it.
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                Logger.LogException(ex);
+            }
+
             if (Config.Instance.Implementation.Supports(ImplementationInfo.Feature.CustomModels) && Models.GetModelsAll().Count <= 0)
                 UiUtils.ShowMessageBox($"No model files have been found. You will not be able to generate images until you either place a model in Data/models, or set an external folder in the settings.",
                     UiUtils.MessageType.Warning, Nmkoder.Forms.MessageForm.FontSize.Normal);
