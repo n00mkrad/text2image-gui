@@ -42,6 +42,34 @@ namespace StableDiffusionGui.Controls
             base.OnVisibleChanged(e);
         }
 
+        private int _selectionStart = int.MaxValue;
+        private int selectionStart { get { return _selectionStart.Clamp(0, Text.Length); } set { _selectionStart = value; } } 
+        private int selectionLength = 0;
+
+        private void SaveCursorPos()
+        {
+            selectionStart = SelectionStart;
+            selectionLength = SelectionLength;
+        }
+
+        private void RestoreCursorPos()
+        {
+            SelectionStart = selectionStart;
+            SelectionLength = selectionLength;
+        }
+
+        protected override void OnLeave(EventArgs e)
+        {
+            base.OnLeave(e);
+            SaveCursorPos();
+        }
+
+        protected override void OnEnter(EventArgs e)
+        {
+            base.OnEnter(e);
+            RestoreCursorPos();
+        }
+
         protected override void OnGotFocus(EventArgs e)
         {
             if (DisableUnfocusedInput)
@@ -49,6 +77,9 @@ namespace StableDiffusionGui.Controls
 
             UpdatePlaceholderState();
             base.OnGotFocus(e);
+
+            RestoreCursorPos();
+            SelectionLength = 0;
         }
 
         protected override void OnLostFocus(EventArgs e)
@@ -57,6 +88,7 @@ namespace StableDiffusionGui.Controls
                 ReadOnly = true;
 
             UpdatePlaceholderState();
+            SaveCursorPos();
             base.OnLostFocus(e);
         }
 
