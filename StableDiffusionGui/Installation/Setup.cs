@@ -286,6 +286,7 @@ namespace StableDiffusionGui.Installation
                 IoUtils.TryDeleteIfExists(Path.Combine(sitePkgsPath, "pandas", "tests"));
                 IoUtils.TryDeleteIfExists(Path.Combine(sitePkgsPath, "imageio", "resources", "images"));
                 IoUtils.TryDeleteIfExists(GetDataSubPath("0.7.5"));
+                IoUtils.GetFilesSorted(Path.Combine(sitePkgsPath, "cv2"), false, "opencv_videoio_*.dll").ToList().ForEach(f => IoUtils.TryDeleteIfExists(f));
             }
             catch { }
         }
