@@ -351,6 +351,7 @@
     <Compile Include="Main\Updater.cs" />
     <Compile Include="Main\Utils\ConvertModels.cs" />
     <Compile Include="Main\Utils\DownloadModels.cs" />
+    <Compile Include="MiscUtils\Assert.cs" />
     <Compile Include="MiscUtils\ClipboardUtils.cs" />
     <Compile Include="MiscUtils\GaussianBlur.cs" />
     <Compile Include="MiscUtils\ImgMaths.cs" />
@@ -372,6 +373,8 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Serialization\JsonUtils.cs" />
+    <Compile Include="Training\KohyaSettings.cs" />
+    <Compile Include="Training\KohyaTraining.cs" />
     <Compile Include="Ui\Fonts.cs" />
     <Compile Include="Ui\GetWebInfo.cs" />
     <Compile Include="Ui\ImagePopup.cs" />

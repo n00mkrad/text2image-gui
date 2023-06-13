@@ -44,8 +44,8 @@
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.panel8 = new System.Windows.Forms.Panel();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
-            this.textboxSliderLrMultiplier = new System.Windows.Forms.TextBox();
-            this.sliderLrMultiplier = new StableDiffusionGui.Controls.CustomSlider();
+            this.textboxSliderLr = new System.Windows.Forms.TextBox();
+            this.sliderLr = new StableDiffusionGui.Controls.CustomSlider();
             this.panel9 = new System.Windows.Forms.Panel();
             this.label4 = new System.Windows.Forms.Label();
             this.panelToken = new System.Windows.Forms.Panel();
@@ -77,6 +77,18 @@
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.btnInfo = new System.Windows.Forms.Button();
             this.btnOpenModelFolder = new System.Windows.Forms.Button();
+            this.panelProjectName = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel9 = new System.Windows.Forms.TableLayoutPanel();
+            this.panel12 = new System.Windows.Forms.Panel();
+            this.textboxProjName = new System.Windows.Forms.TextBox();
+            this.panel13 = new System.Windows.Forms.Panel();
+            this.label6 = new System.Windows.Forms.Label();
+            this.panelRes = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel10 = new System.Windows.Forms.TableLayoutPanel();
+            this.panel14 = new System.Windows.Forms.Panel();
+            this.comboxRes = new System.Windows.Forms.ComboBox();
+            this.panel15 = new System.Windows.Forms.Panel();
+            this.label7 = new System.Windows.Forms.Label();
             this.parentPanel.SuspendLayout();
             this.panelSteps.SuspendLayout();
             this.tableLayoutPanel6.SuspendLayout();
@@ -104,6 +116,14 @@
             this.tableLayoutPanel8.SuspendLayout();
             this.panel25.SuspendLayout();
             this.panel26.SuspendLayout();
+            this.panelProjectName.SuspendLayout();
+            this.tableLayoutPanel9.SuspendLayout();
+            this.panel12.SuspendLayout();
+            this.panel13.SuspendLayout();
+            this.panelRes.SuspendLayout();
+            this.tableLayoutPanel10.SuspendLayout();
+            this.panel14.SuspendLayout();
+            this.panel15.SuspendLayout();
             this.SuspendLayout();
             // 
             // titleLabel
@@ -114,9 +134,9 @@
             this.titleLabel.Location = new System.Drawing.Point(11, 9);
             this.titleLabel.Margin = new System.Windows.Forms.Padding(3, 0, 3, 10);
             this.titleLabel.Name = "titleLabel";
-            this.titleLabel.Size = new System.Drawing.Size(287, 40);
+            this.titleLabel.Size = new System.Drawing.Size(192, 40);
             this.titleLabel.TabIndex = 14;
-            this.titleLabel.Text = "DreamBooth Training";
+            this.titleLabel.Text = "LoRA Training";
             // 
             // parentPanel
             // 
@@ -126,21 +146,23 @@
             this.parentPanel.AutoScroll = true;
             this.parentPanel.Controls.Add(this.panelSteps);
             this.parentPanel.Controls.Add(this.panelLr);
+            this.parentPanel.Controls.Add(this.panelRes);
             this.parentPanel.Controls.Add(this.panelToken);
             this.parentPanel.Controls.Add(this.btnStart);
             this.parentPanel.Controls.Add(this.panelTrainImgs);
+            this.parentPanel.Controls.Add(this.panelProjectName);
             this.parentPanel.Controls.Add(this.panelTrainPreset);
             this.parentPanel.Controls.Add(this.panelBaseModel);
             this.parentPanel.Location = new System.Drawing.Point(12, 62);
             this.parentPanel.Name = "parentPanel";
-            this.parentPanel.Size = new System.Drawing.Size(760, 287);
+            this.parentPanel.Size = new System.Drawing.Size(760, 357);
             this.parentPanel.TabIndex = 15;
             // 
             // panelSteps
             // 
             this.panelSteps.Controls.Add(this.tableLayoutPanel6);
             this.panelSteps.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSteps.Location = new System.Drawing.Point(0, 175);
+            this.panelSteps.Location = new System.Drawing.Point(0, 245);
             this.panelSteps.Name = "panelSteps";
             this.panelSteps.Size = new System.Drawing.Size(760, 35);
             this.panelSteps.TabIndex = 104;
@@ -175,7 +197,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel7.ColumnCount = 2;
             this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60F));
             this.tableLayoutPanel7.Controls.Add(this.textBox1, 0, 0);
             this.tableLayoutPanel7.Controls.Add(this.sliderSteps, 0, 0);
             this.tableLayoutPanel7.Location = new System.Drawing.Point(0, 4);
@@ -193,50 +215,51 @@
             this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox1.ForeColor = System.Drawing.Color.Silver;
-            this.textBox1.Location = new System.Drawing.Point(410, 1);
+            this.textBox1.Location = new System.Drawing.Point(390, 1);
             this.textBox1.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textBox1.MinimumSize = new System.Drawing.Size(4, 21);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(40, 17);
+            this.textBox1.Size = new System.Drawing.Size(60, 21);
             this.textBox1.TabIndex = 93;
-            this.textBox1.Text = "0";
+            this.textBox1.Text = "100";
             // 
             // sliderSteps
             // 
             this.sliderSteps.ActualMaximum = new decimal(new int[] {
-            2,
+            1000,
             0,
             0,
             0});
             this.sliderSteps.ActualMinimum = new decimal(new int[] {
-            1,
+            100,
             0,
             0,
-            65536});
+            0});
             this.sliderSteps.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.sliderSteps.BorderRoundRectSize = new System.Drawing.Size(12, 12);
             this.sliderSteps.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sliderSteps.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
             this.sliderSteps.ForeColor = System.Drawing.Color.Black;
             this.sliderSteps.InitValue = new decimal(new int[] {
-            1,
+            400,
             0,
             0,
-            -2147483648});
+            0});
             this.sliderSteps.LargeChange = ((uint)(5u));
             this.sliderSteps.Location = new System.Drawing.Point(0, 0);
             this.sliderSteps.Margin = new System.Windows.Forms.Padding(0);
-            this.sliderSteps.Maximum = 20;
+            this.sliderSteps.Maximum = 5000;
+            this.sliderSteps.Minimum = 10;
             this.sliderSteps.Name = "sliderSteps";
             this.sliderSteps.OverlayColor = System.Drawing.Color.White;
-            this.sliderSteps.Size = new System.Drawing.Size(410, 21);
+            this.sliderSteps.Size = new System.Drawing.Size(390, 21);
             this.sliderSteps.SmallChange = ((uint)(1u));
             this.sliderSteps.TabIndex = 4;
             this.sliderSteps.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
             this.sliderSteps.ThumbSize = new System.Drawing.Size(14, 14);
             this.toolTip.SetToolTip(this.sliderSteps, "More steps can help the model learn better, but if it\'s too high it will overfit " +
         "and the model becomes less flexible.");
-            this.sliderSteps.Value = 0;
+            this.sliderSteps.Value = 10;
             this.sliderSteps.ValueBox = this.textBox1;
             this.sliderSteps.ValueStep = new decimal(new int[] {
             10,
@@ -269,7 +292,7 @@
             // 
             this.panelLr.Controls.Add(this.tableLayoutPanel4);
             this.panelLr.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelLr.Location = new System.Drawing.Point(0, 140);
+            this.panelLr.Location = new System.Drawing.Point(0, 210);
             this.panelLr.Name = "panelLr";
             this.panelLr.Size = new System.Drawing.Size(760, 35);
             this.panelLr.TabIndex = 103;
@@ -304,9 +327,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel5.ColumnCount = 2;
             this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this.tableLayoutPanel5.Controls.Add(this.textboxSliderLrMultiplier, 0, 0);
-            this.tableLayoutPanel5.Controls.Add(this.sliderLrMultiplier, 0, 0);
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.tableLayoutPanel5.Controls.Add(this.textboxSliderLr, 0, 0);
+            this.tableLayoutPanel5.Controls.Add(this.sliderLr, 0, 0);
             this.tableLayoutPanel5.Location = new System.Drawing.Point(0, 4);
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
             this.tableLayoutPanel5.RowCount = 1;
@@ -314,65 +337,64 @@
             this.tableLayoutPanel5.Size = new System.Drawing.Size(450, 21);
             this.tableLayoutPanel5.TabIndex = 92;
             // 
-            // textboxSliderLrMultiplier
+            // textboxSliderLr
             // 
-            this.textboxSliderLrMultiplier.AllowDrop = true;
-            this.textboxSliderLrMultiplier.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.textboxSliderLrMultiplier.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textboxSliderLrMultiplier.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textboxSliderLrMultiplier.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textboxSliderLrMultiplier.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderLrMultiplier.Location = new System.Drawing.Point(410, 1);
-            this.textboxSliderLrMultiplier.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
-            this.textboxSliderLrMultiplier.MinimumSize = new System.Drawing.Size(4, 21);
-            this.textboxSliderLrMultiplier.Name = "textboxSliderLrMultiplier";
-            this.textboxSliderLrMultiplier.Size = new System.Drawing.Size(40, 17);
-            this.textboxSliderLrMultiplier.TabIndex = 93;
-            this.textboxSliderLrMultiplier.Text = "1";
+            this.textboxSliderLr.AllowDrop = true;
+            this.textboxSliderLr.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            this.textboxSliderLr.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textboxSliderLr.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textboxSliderLr.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textboxSliderLr.ForeColor = System.Drawing.Color.Silver;
+            this.textboxSliderLr.Location = new System.Drawing.Point(390, 1);
+            this.textboxSliderLr.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
+            this.textboxSliderLr.MinimumSize = new System.Drawing.Size(4, 21);
+            this.textboxSliderLr.Name = "textboxSliderLr";
+            this.textboxSliderLr.Size = new System.Drawing.Size(60, 21);
+            this.textboxSliderLr.TabIndex = 93;
+            this.textboxSliderLr.Text = "0";
             // 
-            // sliderLrMultiplier
+            // sliderLr
             // 
-            this.sliderLrMultiplier.ActualMaximum = new decimal(new int[] {
+            this.sliderLr.ActualMaximum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            196608});
+            this.sliderLr.ActualMinimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            262144});
+            this.sliderLr.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            this.sliderLr.BorderRoundRectSize = new System.Drawing.Size(12, 12);
+            this.sliderLr.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sliderLr.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
+            this.sliderLr.ForeColor = System.Drawing.Color.Black;
+            this.sliderLr.InitValue = new decimal(new int[] {
             2,
             0,
             0,
-            0});
-            this.sliderLrMultiplier.ActualMinimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.sliderLrMultiplier.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.sliderLrMultiplier.BorderRoundRectSize = new System.Drawing.Size(12, 12);
-            this.sliderLrMultiplier.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.sliderLrMultiplier.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
-            this.sliderLrMultiplier.ForeColor = System.Drawing.Color.Black;
-            this.sliderLrMultiplier.InitValue = new decimal(new int[] {
-            1,
-            0,
-            0,
-            -2147483648});
-            this.sliderLrMultiplier.LargeChange = ((uint)(5u));
-            this.sliderLrMultiplier.Location = new System.Drawing.Point(0, 0);
-            this.sliderLrMultiplier.Margin = new System.Windows.Forms.Padding(0);
-            this.sliderLrMultiplier.Maximum = 20;
-            this.sliderLrMultiplier.Minimum = 1;
-            this.sliderLrMultiplier.Name = "sliderLrMultiplier";
-            this.sliderLrMultiplier.OverlayColor = System.Drawing.Color.White;
-            this.sliderLrMultiplier.Size = new System.Drawing.Size(410, 21);
-            this.sliderLrMultiplier.SmallChange = ((uint)(1u));
-            this.sliderLrMultiplier.TabIndex = 4;
-            this.sliderLrMultiplier.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
-            this.sliderLrMultiplier.ThumbSize = new System.Drawing.Size(14, 14);
-            this.toolTip.SetToolTip(this.sliderLrMultiplier, "A higher learning rate can help the model learn faster, but if it\'s too high it w" +
+            262144});
+            this.sliderLr.LargeChange = ((uint)(5u));
+            this.sliderLr.Location = new System.Drawing.Point(0, 0);
+            this.sliderLr.Margin = new System.Windows.Forms.Padding(0);
+            this.sliderLr.Minimum = 10;
+            this.sliderLr.Name = "sliderLr";
+            this.sliderLr.OverlayColor = System.Drawing.Color.White;
+            this.sliderLr.Size = new System.Drawing.Size(390, 21);
+            this.sliderLr.SmallChange = ((uint)(1u));
+            this.sliderLr.TabIndex = 4;
+            this.sliderLr.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
+            this.sliderLr.ThumbSize = new System.Drawing.Size(14, 14);
+            this.toolTip.SetToolTip(this.sliderLr, "A higher learning rate can help the model learn faster, but if it\'s too high it w" +
         "ill overfit and the model becomes less flexible.");
-            this.sliderLrMultiplier.Value = 10;
-            this.sliderLrMultiplier.ValueBox = this.textboxSliderLrMultiplier;
-            this.sliderLrMultiplier.ValueStep = new decimal(new int[] {
+            this.sliderLr.Value = 10;
+            this.sliderLr.ValueBox = this.textboxSliderLr;
+            this.sliderLr.ValueStep = new decimal(new int[] {
             1,
             0,
             0,
-            65536});
+            327680});
             // 
             // panel9
             // 
@@ -391,15 +413,15 @@
             this.label4.Location = new System.Drawing.Point(2, 8);
             this.label4.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(124, 13);
+            this.label4.Size = new System.Drawing.Size(74, 13);
             this.label4.TabIndex = 85;
-            this.label4.Text = "Learning Rate (Multiplier)";
+            this.label4.Text = "Learning Rate";
             // 
             // panelToken
             // 
             this.panelToken.Controls.Add(this.tableLayoutPanel3);
             this.panelToken.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelToken.Location = new System.Drawing.Point(0, 105);
+            this.panelToken.Location = new System.Drawing.Point(0, 140);
             this.panelToken.Name = "panelToken";
             this.panelToken.Size = new System.Drawing.Size(760, 35);
             this.panelToken.TabIndex = 102;
@@ -457,9 +479,9 @@
             this.label3.Location = new System.Drawing.Point(2, 8);
             this.label3.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(166, 13);
+            this.label3.Size = new System.Drawing.Size(265, 13);
             this.label3.TabIndex = 85;
-            this.label3.Text = "Class Token (Override This Class)";
+            this.label3.Text = "Trigger Phrase (Leave Empty to Use Tag Files Instead)";
             // 
             // btnStart
             // 
@@ -469,7 +491,7 @@
             this.btnStart.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.25F);
             this.btnStart.ForeColor = System.Drawing.Color.White;
-            this.btnStart.Location = new System.Drawing.Point(0, 247);
+            this.btnStart.Location = new System.Drawing.Point(0, 317);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(120, 40);
             this.btnStart.TabIndex = 101;
@@ -481,7 +503,7 @@
             // 
             this.panelTrainImgs.Controls.Add(this.tableLayoutPanel2);
             this.panelTrainImgs.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelTrainImgs.Location = new System.Drawing.Point(0, 70);
+            this.panelTrainImgs.Location = new System.Drawing.Point(0, 105);
             this.panelTrainImgs.Name = "panelTrainImgs";
             this.panelTrainImgs.Size = new System.Drawing.Size(760, 35);
             this.panelTrainImgs.TabIndex = 22;
@@ -560,9 +582,9 @@
             this.label2.Location = new System.Drawing.Point(2, 8);
             this.label2.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(114, 13);
+            this.label2.Size = new System.Drawing.Size(117, 13);
             this.label2.TabIndex = 85;
-            this.label2.Text = "Training Images Folder";
+            this.label2.Text = "Training Dataset Folder";
             // 
             // panelTrainPreset
             // 
@@ -742,12 +764,151 @@
             this.btnOpenModelFolder.UseVisualStyleBackColor = false;
             this.btnOpenModelFolder.Click += new System.EventHandler(this.btnOpenModelFolder_Click);
             // 
+            // panelProjectName
+            // 
+            this.panelProjectName.Controls.Add(this.tableLayoutPanel9);
+            this.panelProjectName.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelProjectName.Location = new System.Drawing.Point(0, 70);
+            this.panelProjectName.Name = "panelProjectName";
+            this.panelProjectName.Size = new System.Drawing.Size(760, 35);
+            this.panelProjectName.TabIndex = 105;
+            // 
+            // tableLayoutPanel9
+            // 
+            this.tableLayoutPanel9.ColumnCount = 2;
+            this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40F));
+            this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
+            this.tableLayoutPanel9.Controls.Add(this.panel12, 0, 0);
+            this.tableLayoutPanel9.Controls.Add(this.panel13, 0, 0);
+            this.tableLayoutPanel9.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel9.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel9.Name = "tableLayoutPanel9";
+            this.tableLayoutPanel9.RowCount = 1;
+            this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel9.Size = new System.Drawing.Size(760, 35);
+            this.tableLayoutPanel9.TabIndex = 1;
+            // 
+            // panel12
+            // 
+            this.panel12.Controls.Add(this.textboxProjName);
+            this.panel12.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel12.Location = new System.Drawing.Point(307, 3);
+            this.panel12.Name = "panel12";
+            this.panel12.Size = new System.Drawing.Size(450, 29);
+            this.panel12.TabIndex = 88;
+            // 
+            // textboxProjName
+            // 
+            this.textboxProjName.AllowDrop = true;
+            this.textboxProjName.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textboxProjName.ForeColor = System.Drawing.Color.White;
+            this.textboxProjName.Location = new System.Drawing.Point(0, 4);
+            this.textboxProjName.MinimumSize = new System.Drawing.Size(4, 21);
+            this.textboxProjName.Multiline = true;
+            this.textboxProjName.Name = "textboxProjName";
+            this.textboxProjName.Size = new System.Drawing.Size(450, 21);
+            this.textboxProjName.TabIndex = 4;
+            this.textboxProjName.Text = "MyLora";
+            // 
+            // panel13
+            // 
+            this.panel13.Controls.Add(this.label6);
+            this.panel13.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel13.Location = new System.Drawing.Point(3, 3);
+            this.panel13.Name = "panel13";
+            this.panel13.Size = new System.Drawing.Size(298, 29);
+            this.panel13.TabIndex = 87;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.ForeColor = System.Drawing.Color.White;
+            this.label6.Location = new System.Drawing.Point(2, 8);
+            this.label6.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(269, 13);
+            this.label6.TabIndex = 85;
+            this.label6.Text = "Project Name (Does Not Affect Training, Only Filename)";
+            // 
+            // panelRes
+            // 
+            this.panelRes.Controls.Add(this.tableLayoutPanel10);
+            this.panelRes.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelRes.Location = new System.Drawing.Point(0, 175);
+            this.panelRes.Name = "panelRes";
+            this.panelRes.Size = new System.Drawing.Size(760, 35);
+            this.panelRes.TabIndex = 106;
+            // 
+            // tableLayoutPanel10
+            // 
+            this.tableLayoutPanel10.ColumnCount = 2;
+            this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40F));
+            this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
+            this.tableLayoutPanel10.Controls.Add(this.panel14, 0, 0);
+            this.tableLayoutPanel10.Controls.Add(this.panel15, 0, 0);
+            this.tableLayoutPanel10.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel10.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel10.Name = "tableLayoutPanel10";
+            this.tableLayoutPanel10.RowCount = 1;
+            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel10.Size = new System.Drawing.Size(760, 35);
+            this.tableLayoutPanel10.TabIndex = 1;
+            // 
+            // panel14
+            // 
+            this.panel14.Controls.Add(this.comboxRes);
+            this.panel14.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel14.Location = new System.Drawing.Point(307, 3);
+            this.panel14.Name = "panel14";
+            this.panel14.Size = new System.Drawing.Size(450, 29);
+            this.panel14.TabIndex = 88;
+            // 
+            // comboxRes
+            // 
+            this.comboxRes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboxRes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.comboxRes.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboxRes.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboxRes.ForeColor = System.Drawing.Color.White;
+            this.comboxRes.FormattingEnabled = true;
+            this.comboxRes.Items.AddRange(new object[] {
+            "512px - Recommended GPU VRAM: 8 GB",
+            "640px - Recommended GPU VRAM: 8 GB",
+            "768px - Recommended GPU VRAM: 10 GB",
+            "1024px - Recommended GPU VRAM: 10 GB"});
+            this.comboxRes.Location = new System.Drawing.Point(0, 4);
+            this.comboxRes.Name = "comboxRes";
+            this.comboxRes.Size = new System.Drawing.Size(450, 21);
+            this.comboxRes.TabIndex = 106;
+            // 
+            // panel15
+            // 
+            this.panel15.Controls.Add(this.label7);
+            this.panel15.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel15.Location = new System.Drawing.Point(3, 3);
+            this.panel15.Name = "panel15";
+            this.panel15.Size = new System.Drawing.Size(298, 29);
+            this.panel15.TabIndex = 87;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.ForeColor = System.Drawing.Color.White;
+            this.label7.Location = new System.Drawing.Point(2, 8);
+            this.label7.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(98, 13);
+            this.label7.TabIndex = 85;
+            this.label7.Text = "Training Resolution";
+            // 
             // DreamboothForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.ClientSize = new System.Drawing.Size(784, 361);
+            this.ClientSize = new System.Drawing.Size(784, 431);
             this.Controls.Add(this.btnInfo);
             this.Controls.Add(this.btnOpenModelFolder);
             this.Controls.Add(this.parentPanel);
@@ -802,6 +963,17 @@
             this.panel25.ResumeLayout(false);
             this.panel26.ResumeLayout(false);
             this.panel26.PerformLayout();
+            this.panelProjectName.ResumeLayout(false);
+            this.tableLayoutPanel9.ResumeLayout(false);
+            this.panel12.ResumeLayout(false);
+            this.panel12.PerformLayout();
+            this.panel13.ResumeLayout(false);
+            this.panel13.PerformLayout();
+            this.panelRes.ResumeLayout(false);
+            this.tableLayoutPanel10.ResumeLayout(false);
+            this.panel14.ResumeLayout(false);
+            this.panel15.ResumeLayout(false);
+            this.panel15.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -846,8 +1018,8 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button btnInfo;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
-        private System.Windows.Forms.TextBox textboxSliderLrMultiplier;
-        private Controls.CustomSlider sliderLrMultiplier;
+        private System.Windows.Forms.TextBox textboxSliderLr;
+        private Controls.CustomSlider sliderLr;
         private System.Windows.Forms.Panel panelSteps;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
         private System.Windows.Forms.Panel panel10;
@@ -856,5 +1028,17 @@
         private Controls.CustomSlider sliderSteps;
         private System.Windows.Forms.Panel panel11;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Panel panelProjectName;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel9;
+        private System.Windows.Forms.Panel panel12;
+        private System.Windows.Forms.TextBox textboxProjName;
+        private System.Windows.Forms.Panel panel13;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Panel panelRes;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel10;
+        private System.Windows.Forms.Panel panel14;
+        private System.Windows.Forms.ComboBox comboxRes;
+        private System.Windows.Forms.Panel panel15;
+        private System.Windows.Forms.Label label7;
     }
 }

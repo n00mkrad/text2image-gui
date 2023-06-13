@@ -24,7 +24,7 @@ namespace StableDiffusionGui
         public static List<string> Args = new List<string>(); // All args
         public static Dictionary<string, string> UserArgs = new Dictionary<string, string>(); // User args (excludes 1st which is the path) as key/value pairs
 
-        public enum BusyState { Standby, Installation, ImageGeneration, Script, Dreambooth, PostProcessing, Other }
+        public enum BusyState { Standby, Installation, ImageGeneration, Script, Training, PostProcessing, Other }
         public static BusyState State = BusyState.Standby;
         public static bool Busy { get { return State != BusyState.Standby; } }
         public static MainForm MainForm;

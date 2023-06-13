@@ -4,6 +4,7 @@ using StableDiffusionGui.Extensions;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.Os;
+using StableDiffusionGui.Training;
 using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
@@ -35,6 +36,7 @@ namespace StableDiffusionGui.Forms
             _uiStrings.Add(TrainPreset.LowQuality.ToString(), $"Low Quality, for Testing ({(is4090 ? "4 minutes on RTX 4090" : "6 minutes on RTX 3090")})");
 
             comboxTrainPreset.FillFromEnum<TrainPreset>(_uiStrings, 0);
+            comboxRes.SelectedIndex = 1;
             LoadModels();
         }
 
@@ -43,7 +45,7 @@ namespace StableDiffusionGui.Forms
             Refresh();
 
             TabOrderInit(new List<Control>() {
-                comboxBaseModel, comboxTrainPreset, textboxTrainImgsDir, textboxClassName, sliderLrMultiplier, sliderSteps
+                comboxBaseModel, comboxTrainPreset, textboxTrainImgsDir, textboxClassName, sliderLr, sliderSteps
             });
 
             await PerformChecks();
@@ -56,7 +58,7 @@ namespace StableDiffusionGui.Forms
                 bool valid = true;
                 var gpus = await GpuUtils.GetCudaGpusCached();
 
-                Text = "DreamBooth Training";
+                Text = "LoRa Training";
 
                 if (valid && gpus.Count < 1)
                 {
@@ -68,7 +70,7 @@ namespace StableDiffusionGui.Forms
 
                 if (valid && cudaDeviceOpt == (int)Enums.Cuda.Device.Cpu)
                 {
-                    UiUtils.ShowMessageBox("DreamBooth training is not supported on CPU.", UiUtils.MessageType.Error);
+                    UiUtils.ShowMessageBox("LoRa training is not supported on CPU.", UiUtils.MessageType.Error);
                     valid = false;
                 }
 
@@ -77,18 +79,13 @@ namespace StableDiffusionGui.Forms
                 if(gpus != null && gpus.Count > 0 && cudaDeviceOpt != (int)Enums.Cuda.Device.Cpu)
                     gpu = (cudaDeviceOpt == (int)Enums.Cuda.Device.Automatic) ? gpus[0] : gpus[cudaDeviceOpt - 2];
 
-                if (valid && gpu.VramGb < 23f)
+                if (valid && gpu.VramGb < 7.5f)
                 {
-                    DialogResult result = UiUtils.ShowMessageBox($"Your GPU appears to have {gpu.VramGb} GB VRAM, but 24 GB are currently required for DreamBooth " +
+                    DialogResult result = UiUtils.ShowMessageBox($"Your GPU appears to have {gpu.VramGb} GB VRAM, but 8 GB are currently required for LoRa " +
                         $"training.\n\nContinue anyway?", "VRAM Warning", MessageBoxButtons.YesNo);
                     
                     if(result == DialogResult.No)
                         valid = false;
-                }
-                else if (valid && gpu.VramGb < 25f)
-                {
-                    UiUtils.ShowMessageBox($"Your GPU appears to have {gpu.VramGb} GB VRAM.\nThis is enough to train DreamBooth, but you should make sure that no " +
-                        $"other VRAM-consuming applications are running (Games, Browsers, Game Launchers, AI/ML).", UiUtils.MessageType.Message);
                 }
 
                 if (valid)
@@ -113,7 +110,7 @@ namespace StableDiffusionGui.Forms
         private void LoadModels()
         {
             comboxBaseModel.Items.Clear();
-            Models.GetModels().Where(m => m.Type == Enums.Models.Type.Normal && m.Format == Enums.Models.Format.Pytorch).ToList().ForEach(x => comboxBaseModel.Items.Add(x.Name));
+            Models.GetModels().Where(m => m.Type == Enums.Models.Type.Normal).ToList().ForEach(x => comboxBaseModel.Items.Add(x.Name));
 
             if (comboxBaseModel.SelectedIndex < 0 && comboxBaseModel.Items.Count > 0)
                 comboxBaseModel.SelectedIndex = 0;
@@ -121,7 +118,7 @@ namespace StableDiffusionGui.Forms
 
         private async void btnRun_Click(object sender, EventArgs e)
         {
-            if(Program.State == Program.BusyState.Dreambooth)
+            if(Program.State == Program.BusyState.Training)
             {
                 ProcessManager.FindAndKillOrphans($"*{Constants.Dirs.Dreambooth}*.py*{Paths.SessionTimestamp}*");
                 return;
@@ -147,27 +144,39 @@ namespace StableDiffusionGui.Forms
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(textboxClassName.Text.Trim()))
-            {
-                UiUtils.ShowMessageBox("Please enter a class name.");
-                return;
-            }
+            // if (string.IsNullOrWhiteSpace(textboxClassName.Text.Trim()))
+            // {
+            //     UiUtils.ShowMessageBox("Please enter a class name.");
+            //     return;
+            // }
 
-            Program.SetState(Program.BusyState.Dreambooth);
+            Program.SetState(Program.BusyState.Training);
             btnStart.Text = "Cancel";
 
             ZlpDirectoryInfo trainImgDir = new ZlpDirectoryInfo(textboxTrainImgsDir.Text.Trim());
-            string className = string.Join("_", textboxClassName.Text.Trim().Split(Path.GetInvalidFileNameChars())).Trunc(50, false);
-            textboxClassName.Text = className;
+            string trigger = string.Join("_", textboxClassName.Text.Trim().Split(Path.GetInvalidFileNameChars())).Trunc(75, false);
+            string name = string.Join("_", textboxProjName.Text.Trim().Split(Path.GetInvalidFileNameChars())).Trunc(50, false);
+            textboxClassName.Text = trigger;
             TrainPreset preset = (TrainPreset)comboxTrainPreset.SelectedIndex;
-            float stepsMultiplier = sliderSteps.ActualValueFloat / Dreambooth.GetStepsAndLoggerIntervalAndLrMultiplier(preset).Item1;
+            // float stepsMultiplier = sliderSteps.ActualValueFloat / Training.GetStepsAndLoggerIntervalAndLrMultiplier(preset).Item1;
 
-            string outPath = await Dreambooth.RunTraining(baseModel, trainImgDir, className, preset, sliderLrMultiplier.ActualValueFloat, stepsMultiplier);
+            // string outPath = await Dreambooth.TrainDreamboothLegacy(baseModel, trainImgDir, className, preset, sliderLr.ActualValueFloat, stepsMultiplier);
+
+            KohyaSettings settings = new KohyaSettings(KohyaSettings.NetworkType.LoHa)
+            {
+                Steps = sliderSteps.ActualValueInt,
+                LearningRate = sliderLr.ActualValueFloat,
+                Resolution = comboxRes.Text.Split(" ").First().GetInt(),
+            };
+            
+            string outPath = await Training.KohyaTraining.TrainLora(baseModel, trainImgDir, name, trigger, settings, true);
 
             Program.SetState(Program.BusyState.Standby);
             btnStart.Text = "Start Training";
 
-            if (Directory.Exists(outPath) && new Model(outPath).Format == Enums.Models.Format.Diffusers)
+            Console.WriteLine($"checking:\n{outPath}");
+
+            if (File.Exists(outPath))
                 Logger.Log($"Done. Saved trained model to:\n{outPath.Replace(Paths.GetDataPath(), "Data")}");
             else
                 Logger.Log($"Training failed - model file was not saved.");
@@ -183,7 +192,7 @@ namespace StableDiffusionGui.Forms
 
         private void DreamboothForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (Program.State == Program.BusyState.Dreambooth)
+            if (Program.State == Program.BusyState.Training)
                 e.Cancel = true;
         }
 
@@ -205,6 +214,9 @@ namespace StableDiffusionGui.Forms
 
         private void comboxTrainPreset_SelectedIndexChanged(object sender, EventArgs e)
         {
+            Logger.LogIf("Presets currently not implemented.", Program.Debug, false);
+            return;
+
             TrainPreset preset = (TrainPreset)comboxTrainPreset.SelectedIndex;
             var presetValues = Dreambooth.GetStepsAndLoggerIntervalAndLrMultiplier(preset);
             int steps = presetValues.Item1;

@@ -24,7 +24,7 @@ namespace StableDiffusionGui.Main
 
         public static int CurrentTargetSteps;
 
-        public static async Task<string> RunTraining(Model baseModel, ZlpDirectoryInfo trainImgDir, string className, Enums.Dreambooth.TrainPreset preset, float lrMult = 1f, float stepsMult = 1f)
+        public static async Task<string> TrainDreamboothLegacy(Model baseModel, ZlpDirectoryInfo trainImgDir, string className, Enums.Dreambooth.TrainPreset preset, float lrMult = 1f, float stepsMult = 1f)
         {
             CurrentTargetSteps = 0;
 

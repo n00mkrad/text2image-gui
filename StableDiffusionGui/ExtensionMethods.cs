@@ -563,7 +563,7 @@ namespace StableDiffusionGui
                 return s;
         }
 
-        public static string NameNoExt(this FileInfo file)
+        public static string GetNameNoExt(this FileInfo file)
         {
             return Path.GetFileNameWithoutExtension(file.Name);
         }

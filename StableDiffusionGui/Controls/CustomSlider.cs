@@ -126,7 +126,7 @@ namespace StableDiffusionGui.Controls
         private void UpdateValueBox()
         {
             if (HasValueBox && Visible && ValueBox.Visible)
-                ValueBox.Text = ActualValue.ToString("0.###");
+                ValueBox.Text = ActualValue.ToString("0.######");
         }
 
         private void valueBox_Leave(object s, EventArgs e)

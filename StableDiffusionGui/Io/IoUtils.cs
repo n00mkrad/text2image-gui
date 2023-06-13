@@ -749,7 +749,7 @@ namespace StableDiffusionGui.Io
                 TextToImage.Cancel("File with invalid path detected.", false);
         }
 
-        public static string GetAvailablePath(string path, int maxRetries = 1000000)
+        public static string GetAvailablePath(string path, string nameTemplate = "({0})", int maxRetries = 1000000)
         {
             bool isFile = File.Exists(path);
             bool isDirectory = Directory.Exists(path);
@@ -763,7 +763,7 @@ namespace StableDiffusionGui.Io
 
                 while (File.Exists(path) || Directory.Exists(path))
                 {
-                    path = Path.Combine(dir, $"{name}({counter}){ext}");
+                    path = Path.Combine(dir, name + string.Format(nameTemplate, counter) + ext);
                     counter++;
 
                     if (counter > (maxRetries + 2))

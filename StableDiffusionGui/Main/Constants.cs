@@ -17,7 +17,7 @@
             public const string Prune = "prune";
             public const string Merge = "merge";
             public const string Convert = "convert";
-            public const string Dreambooth = "dreambooth";
+            public const string Training = "training";
             public const string Serialization = "serialization";
         }
 

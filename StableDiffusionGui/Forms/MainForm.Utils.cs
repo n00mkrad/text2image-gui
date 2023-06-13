@@ -254,7 +254,7 @@ namespace StableDiffusionGui.Forms
             popup.Popup();
         }
 
-        public List<Model> ValidateLoraNames (List<Model> loras)
+        public List<Model> ValidateLoraNames(List<Model> loras)
         {
             Regex validPattern = new Regex(@"^[\w]+$"); // Alphanumeric, underscores
             Regex replacePattern = new Regex(@"[^\w]"); // Replace invalid chars
@@ -277,9 +277,15 @@ namespace StableDiffusionGui.Forms
             string msg = $"Do you want to automatically rename the files to a valid name?\n\n{string.Join("\n", invalidLorasAndCorrectedNames.Select(pair => $"{pair.Key.FormatIndependentName} => {pair.Value}"))}";
             DialogResult dialogResult = UiUtils.ShowMessageBox(msg, "Auto-Rename", MessageBoxButtons.YesNo, Nmkoder.Forms.MessageForm.FontSize.Big);
 
-            if(dialogResult == DialogResult.Yes)
+            if (dialogResult == DialogResult.Yes)
             {
-                invalidLorasAndCorrectedNames.ToList().ForEach(pair => IoUtils.RenameFile(pair.Key.FullName, pair.Value, showLog: true));
+
+                foreach (var pair in invalidLorasAndCorrectedNames)
+                {
+                    string newPath = IoUtils.GetAvailablePath(Path.Combine(pair.Key.Directory.FullName, $"{pair.Value}.safetensors"), "_{0}");
+                    IoUtils.RenameFile(pair.Key.FullName, Path.GetFileNameWithoutExtension(newPath), showLog: true);
+                }
+
                 loras = Models.GetLoras(); // Need to reload from disk after renaming, otherwise we still have the old filenames
             }
 
