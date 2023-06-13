@@ -11,7 +11,6 @@ namespace StableDiffusionGui.Forms
     public partial class InstallerForm : CustomForm
     {
         private bool _autoInstall = false;
-        private bool _overrideInstallOnnx = false;
         private bool _overrideInstallUpscalers = false;
         private bool _onlyInstallUpscalers = false;
 
@@ -26,10 +25,9 @@ namespace StableDiffusionGui.Forms
             InitializeComponent();
         }
 
-        public InstallerForm(bool overrideInstallOnnx, bool overrideInstallUpscalers)
+        public InstallerForm(bool autoInstall, bool overrideInstallUpscalers)
         {
-            _autoInstall = true;
-            _overrideInstallOnnx = overrideInstallOnnx;
+            _autoInstall = autoInstall;
             _overrideInstallUpscalers = overrideInstallUpscalers;
             InitializeComponent();
         }
@@ -45,13 +43,12 @@ namespace StableDiffusionGui.Forms
 
             if (InstallationStatus.IsInstalledAll) // Re-install
             {
-                await Setup.Install(true, InstallationStatus.HasOnnx(), InstallationStatus.HasSdUpscalers());
+                await Setup.Install(true, InstallationStatus.HasSdUpscalers());
             }
             else
             {
-                bool installOnnxDml = _autoInstall ? _overrideInstallOnnx : AskInstallOnnxDml();
                 bool installUpscalers = _autoInstall ? _overrideInstallUpscalers : AskInstallUpscalers();
-                await Setup.Install(false, installOnnxDml, installUpscalers);
+                await Setup.Install(false, installUpscalers);
             }
 
             if (_autoInstall)
@@ -136,7 +133,7 @@ namespace StableDiffusionGui.Forms
             bool installOnnxDml = AskInstallOnnxDml();
             Enabled = false;
             Program.SetState(Program.BusyState.Installation);
-            await Setup.InstallRepo(installOnnxDml, commit, false);
+            await Setup.InstallRepo(commit, false);
             Setup.RepoCleanup();
             UpdateStatus();
             Program.SetState(Program.BusyState.Standby);

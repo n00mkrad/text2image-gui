@@ -99,9 +99,8 @@ namespace StableDiffusionGui.Ui
             if (Program.UserArgs.Get(Constants.Args.Install) == true.ToString())
             {
                 Program.MainForm.BringToFront();
-                bool onnx = Program.UserArgs.Get(Constants.Args.InstallOnnx) == true.ToString();
                 bool upscalers = Program.UserArgs.Get(Constants.Args.InstallUpscalers) == true.ToString();
-                new InstallerForm(onnx, upscalers).ShowDialogForm();
+                new InstallerForm(true, upscalers).ShowDialogForm();
             }
             else
             {

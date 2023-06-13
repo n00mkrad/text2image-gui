@@ -22,9 +22,9 @@ namespace StableDiffusionGui.Installation
 
         private static readonly bool _allowModelDownload = false;
 
-        public static async Task Install(bool force = false, bool installOnnxDml = false, bool installUpscalers = true)
+        public static async Task Install(bool force = false, bool installUpscalers = true)
         {
-            Logger.Log($"Installing (Force = {force} - ONNX/DML: {installOnnxDml} - Upscalers: {installUpscalers})", true, false, Constants.Lognames.Installer);
+            Logger.Log($"Installing (Force = {force} - Upscalers: {installUpscalers})", true, false, Constants.Lognames.Installer);
 
             try
             {
@@ -35,7 +35,7 @@ namespace StableDiffusionGui.Installation
                     if (!force)
                         Logger.Log("Install: Cloning repo and setting up env because either SD Repo or SD Env is missing.", true, false, Constants.Lognames.Installer);
 
-                    await InstallRepo(installOnnxDml);
+                    await InstallRepo();
                 }
 
                 if (_allowModelDownload && (force || !InstallationStatus.HasSdModel()))
@@ -76,7 +76,7 @@ namespace StableDiffusionGui.Installation
             Program.SetState(Program.BusyState.Standby);
         }
 
-        public static async Task SetupVenv(bool installOnnx)
+        public static async Task SetupVenv()
         {
             bool clean = IoUtils.TryDeleteIfExists(GetDataSubPath(Constants.Dirs.SdVenv));
 
@@ -94,7 +94,7 @@ namespace StableDiffusionGui.Installation
                 $"SET PATH={OsUtils.GetPathVar(new string[] { $@".\{Constants.Dirs.SdVenv}\Scripts", $@".\{Constants.Dirs.Python}\Scripts", $@".\{Constants.Dirs.Python}", $@".\{Constants.Dirs.Git}\cmd" })}\n" +
                 $"SET HOME={Path.Combine(Paths.GetDataPath(), Constants.Dirs.Git, "home")}\n" +
                 $"python -m virtualenv {Constants.Dirs.SdVenv}\n" +
-                $"{Constants.Dirs.SdRepo}\\install-venv-deps.bat {(installOnnx ? $"&& {Constants.Dirs.SdRepo}\\install-venv-deps-onnx.bat" : "")}\n" +
+                $"{Constants.Dirs.SdRepo}\\install-venv-deps-all.bat\n" +
                 $"");
 
             Logger.Log("Running python environment installation script...");
@@ -199,13 +199,13 @@ namespace StableDiffusionGui.Installation
 
         #region Git
 
-        public static async Task InstallRepo(bool installOnnx, string overrideCommit = "", bool setupVenvAfterwards = true)
+        public static async Task InstallRepo(string overrideCommit = "", bool setupVenvAfterwards = true)
         {
             string commit = string.IsNullOrWhiteSpace(overrideCommit) ? GitCommit : overrideCommit;
             TtiProcess.ProcessExistWasIntentional = true;
             ProcessManager.FindAndKillOrphans($"*invoke.py*{Paths.SessionTimestamp}*");
             await CloneSdRepo($"https://github.com/{_gitFile}", GetDataSubPath(Constants.Dirs.SdRepo), _gitBranch, commit);
-            await SetupVenv(installOnnx);
+            await SetupVenv();
         }
 
         public static async Task CloneSdRepo(string url, string dir, string branch = "main", string commit = "")
