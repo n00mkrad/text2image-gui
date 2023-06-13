@@ -212,7 +212,7 @@ namespace StableDiffusionGui.Ui
                     {
                         Program.MainForm.LoadMetadataIntoUi(imgForm.CurrentMetadata);
                     }
-                    else if (imgForm.Action == ImageImportAction.LoadImage || imgForm.Action == ImageImportAction.LoadImageAndSettings)
+                    if (imgForm.Action == ImageImportAction.LoadImage || imgForm.Action == ImageImportAction.LoadImageAndSettings)
                     {
                         if (imgForm.ChromaKeyColor != (ChromaKeyColor)(-1) && imgForm.ChromaKeyColor != ChromaKeyColor.None)
                         {
@@ -224,7 +224,7 @@ namespace StableDiffusionGui.Ui
 
                         AddInitImages(paths.ToList());
                     }
-                    else if (imgForm.Action == ImageImportAction.CopyPrompt)
+                    if (imgForm.Action == ImageImportAction.CopyPrompt)
                     {
                         OsUtils.SetClipboard(imgForm.CurrentMetadata.Prompt);
                     }
