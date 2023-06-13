@@ -65,7 +65,7 @@
             this.panelTrainPreset = new System.Windows.Forms.Panel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.comboxTrainPreset = new System.Windows.Forms.ComboBox();
+            this.comboxNetworkSize = new System.Windows.Forms.ComboBox();
             this.panel3 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.panelBaseModel = new System.Windows.Forms.Panel();
@@ -612,26 +612,25 @@
             // 
             // panel2
             // 
-            this.panel2.Controls.Add(this.comboxTrainPreset);
+            this.panel2.Controls.Add(this.comboxNetworkSize);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(307, 3);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(450, 29);
             this.panel2.TabIndex = 88;
             // 
-            // comboxTrainPreset
+            // comboxNetworkSize
             // 
-            this.comboxTrainPreset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.comboxTrainPreset.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.comboxTrainPreset.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboxTrainPreset.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.comboxTrainPreset.ForeColor = System.Drawing.Color.White;
-            this.comboxTrainPreset.FormattingEnabled = true;
-            this.comboxTrainPreset.Location = new System.Drawing.Point(0, 4);
-            this.comboxTrainPreset.Name = "comboxTrainPreset";
-            this.comboxTrainPreset.Size = new System.Drawing.Size(450, 21);
-            this.comboxTrainPreset.TabIndex = 106;
-            this.comboxTrainPreset.SelectedIndexChanged += new System.EventHandler(this.comboxTrainPreset_SelectedIndexChanged);
+            this.comboxNetworkSize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboxNetworkSize.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.comboxNetworkSize.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboxNetworkSize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboxNetworkSize.ForeColor = System.Drawing.Color.White;
+            this.comboxNetworkSize.FormattingEnabled = true;
+            this.comboxNetworkSize.Location = new System.Drawing.Point(0, 4);
+            this.comboxNetworkSize.Name = "comboxNetworkSize";
+            this.comboxNetworkSize.Size = new System.Drawing.Size(450, 21);
+            this.comboxNetworkSize.TabIndex = 106;
             // 
             // panel3
             // 
@@ -650,9 +649,9 @@
             this.label1.Location = new System.Drawing.Point(2, 8);
             this.label1.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(78, 13);
+            this.label1.Size = new System.Drawing.Size(159, 13);
             this.label1.TabIndex = 85;
-            this.label1.Text = "Training Preset";
+            this.label1.Text = "LoRA Size (Network Complexity)";
             // 
             // panelBaseModel
             // 
@@ -1002,7 +1001,7 @@
         private System.Windows.Forms.Panel panel5;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btnStart;
-        private System.Windows.Forms.ComboBox comboxTrainPreset;
+        private System.Windows.Forms.ComboBox comboxNetworkSize;
         private System.Windows.Forms.TextBox textboxTrainImgsDir;
         private HTAlt.WinForms.HTButton btnTrainImgsBrowse;
         private System.Windows.Forms.Panel panelToken;

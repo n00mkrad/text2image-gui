@@ -93,14 +93,6 @@ namespace StableDiffusionGui.Training
                     $"--seed={s.Seed} " +
                     $"--clip_skip={s.ClipSkip} " +
                     $"--network_args \"conv_dim={s.ConvDim}\" \"conv_alpha={s.ConvAlpha}\" \"dropout={s.Dropout}\" \"algo={s.Algo}\"";
-                //    $"--base {configPath.Wrap(true)} " +
-                //    $"--actual_resume {baseModel.FullName.Wrap(true)} " +
-                //    $"--name {name.Wrap()} " +
-                //    $"--logdir {logDir.Wrap(true)} " +
-                //    $"--gpus {cudaId}, " + // TODO: Support multi-GPU
-                //    $"--data_root {trainImgDir.FullName.Wrap(true)} " +
-                //    $"--reg_data_root {trainImgDir.FullName.Wrap(true)} " +
-                //    $"--class_word {singleTag.Wrap()} ";
 
                 if (!showCmd)
                 {
@@ -160,11 +152,12 @@ namespace StableDiffusionGui.Training
             string root = Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdRepo, "sd-scripts");
 
             var files = IoUtils.GetFileInfosSorted(root, true, "*.py");
+            var regex = new Regex(@"[^\u0000-\u007F]+", RegexOptions.Compiled);
 
-            foreach(var file in files)
+            foreach (var file in files)
             {
                 string text = File.ReadAllText(file.FullName);
-                string newText = Regex.Replace(text, @"[^\u0000-\u007F]+", "...");
+                string newText = regex.Replace(text, "...");
 
                 if (newText == text)
                     continue;
@@ -231,7 +224,7 @@ namespace StableDiffusionGui.Training
            if (line.Contains("import network module:"))
                Logger.Log($"Preparing training...", false, replace);
            
-           string lastLogLines = string.Join("\n", Logger.GetLastLines(Constants.Lognames.Training, 6));
+           // string lastLogLines = string.Join("\n", Logger.GetLastLines(Constants.Lognames.Training, 6));
            
            if (line.Trim().StartsWith("steps:"))
            {
@@ -246,14 +239,11 @@ namespace StableDiffusionGui.Training
                int remainingMs = speed.IsNotEmpty() ? (stepsGoal - step) * FormatUtils.IterationsToMsPerIteration(speed) : 0;
            
                if ((stepsGoal - step) > 1)
-                   Logger.Log($"Training (Step {step}/{stepsGoal} - {percent}%{(step >= 5 && remainingMs > 1000 ? $" - ETA: {FormatUtils.Time(remainingMs, false)}" : "")})...", false, replace);
+                   Logger.Log($"Training (Step {step}/{stepsGoal} - {percent}%{(step >= 10 && remainingMs > 3000 ? $" - ETA: {FormatUtils.Time(remainingMs, false)}" : "")})...", false, replace);
            }
-           // 
-           // if (line.Contains("Saving"))
-           //     Logger.Log($"Saving checkpoint...", false, replace);
-           // 
-           // if (line.Contains("Pruning..."))
-           //     Logger.Log($"Pruning model...", false, replace);
+           
+           if (line.Contains("saving checkpoint:"))
+               Logger.Log($"Saving LoRA...", false, replace);
 
             if (line.MatchesWildcard("*%|*/*[*B/s]*") && !line.Lower().Contains("it/s") && !line.Lower().Contains("s/it"))
             {

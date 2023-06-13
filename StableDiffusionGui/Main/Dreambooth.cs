@@ -24,7 +24,7 @@ namespace StableDiffusionGui.Main
 
         public static int CurrentTargetSteps;
 
-        public static async Task<string> TrainDreamboothLegacy(Model baseModel, ZlpDirectoryInfo trainImgDir, string className, Enums.Dreambooth.TrainPreset preset, float lrMult = 1f, float stepsMult = 1f)
+        public static async Task<string> TrainDreamboothLegacy(Model baseModel, ZlpDirectoryInfo trainImgDir, string className, Enums.Training.TrainPreset preset, float lrMult = 1f, float stepsMult = 1f)
         {
             CurrentTargetSteps = 0;
 
@@ -101,7 +101,7 @@ namespace StableDiffusionGui.Main
             }
         }
 
-        private static async Task<string> WriteConfig (string logDir, ZlpDirectoryInfo trainDir, Enums.Dreambooth.TrainPreset preset, float userlrMult, float userStepsMult)
+        private static async Task<string> WriteConfig (string logDir, ZlpDirectoryInfo trainDir, Enums.Training.TrainPreset preset, float userlrMult, float userStepsMult)
         {
             string configPath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdRepo, Constants.Dirs.Dreambooth, "configs", "stable-diffusion", "v1-finetune_unfrozen.yaml");
             var configLines = File.ReadAllLines(configPath).ToArray();
@@ -166,18 +166,18 @@ namespace StableDiffusionGui.Main
             return configOutPath;
         }
 
-        public static Tuple<int, int, float> GetStepsAndLoggerIntervalAndLrMultiplier (Enums.Dreambooth.TrainPreset preset)
+        public static Tuple<int, int, float> GetStepsAndLoggerIntervalAndLrMultiplier (Enums.Training.TrainPreset preset)
         {
-            if (preset == Enums.Dreambooth.TrainPreset.VeryHighQuality)
+            if (preset == Enums.Training.TrainPreset.VeryHighQuality)
                 return new Tuple<int, int, float> (4000, 1000, 1f);
 
-            if (preset == Enums.Dreambooth.TrainPreset.HighQuality)
+            if (preset == Enums.Training.TrainPreset.HighQuality)
                 return new Tuple<int, int, float>(2000, 500, 2f);
 
-            if (preset == Enums.Dreambooth.TrainPreset.MedQuality)
+            if (preset == Enums.Training.TrainPreset.MedQuality)
                 return new Tuple<int, int, float>(1000, 250, 4f);
 
-            if (preset == Enums.Dreambooth.TrainPreset.LowQuality)
+            if (preset == Enums.Training.TrainPreset.LowQuality)
                 return new Tuple<int, int, float>(250, 250, 16f);
 
             return new Tuple<int, int, float>(4000, 1000, 1f);

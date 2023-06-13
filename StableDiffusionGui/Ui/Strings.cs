@@ -126,5 +126,13 @@ namespace StableDiffusionGui.Ui
             { Enums.Models.SdArch.V2.ToString(), "SD 2.x (512 px)" },
             { Enums.Models.SdArch.V2V.ToString(), "SD 2.x (768 px)" },
         };
+
+        public static Dictionary<string, string> LoraSizes = new Dictionary<string, string>
+        {
+            { Enums.Training.LoraSizes.Tiny.ToString(), "Tiny (7.5 MB File)" },
+            { Enums.Training.LoraSizes.Small.ToString(), "Small (15 MB File)" },
+            { Enums.Training.LoraSizes.Normal.ToString(), "Normal (30 MB File)" },
+            { Enums.Training.LoraSizes.Big.ToString(), "Big (60 MB File)" },
+        };
     }
 }

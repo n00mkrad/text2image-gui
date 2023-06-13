@@ -20,7 +20,6 @@ namespace StableDiffusionGui.Main
             public enum Format { Diffusers, Pytorch, Safetensors, DiffusersOnnx }
             public enum Type { Normal, Vae, Embedding, Lora }
             public enum SdArch { Automatic, V1, V2, V2V }
-
         }
 
         public class StableDiffusion
@@ -37,9 +36,10 @@ namespace StableDiffusionGui.Main
             public enum FaceTool { Gfpgan, CodeFormer }
         }
 
-        public class Dreambooth
+        public class Training
         {
             public enum TrainPreset { VeryHighQuality, HighQuality, MedQuality, LowQuality }
+            public enum LoraSizes { Tiny, Small, Normal, Big }
         }
 
         public class Ai
