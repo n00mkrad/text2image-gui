@@ -37,13 +37,15 @@ namespace StableDiffusionGui.Io
 
         public static List<Model> GetEmbeddings ()
         {
-            var fileList = IoUtils.GetFileInfosSorted(Paths.GetEmbeddingsPath(), false, "*.*pt").Where(f => f.Length < 1024 * 1024);
+            string path = Config.Instance == null ? Paths.GetEmbeddingsPath() : Config.Instance.EmbeddingsDir;
+            var fileList = IoUtils.GetFileInfosSorted(path, false, "*.*pt").Where(f => f.Length < 1024 * 1024);
             return fileList.Select(f => new Model(f, Format.Pytorch, Enums.Models.Type.Embedding)).ToList();
         }
 
         public static List<Model> GetLoras()
         {
-            var fileList = IoUtils.GetFileInfosSorted(Paths.GetLorasPath(), false, "*.safetensors");
+            string path = Config.Instance == null ? Paths.GetLorasPath() : Config.Instance.LorasDir;
+            var fileList = IoUtils.GetFileInfosSorted(path, false, "*.safetensors");
             return fileList.Select(f => new Model(f, Format.Safetensors, Enums.Models.Type.Lora)).ToList();
         }
 

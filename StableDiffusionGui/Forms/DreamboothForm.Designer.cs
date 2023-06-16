@@ -559,7 +559,6 @@
             this.textboxClassName.ForeColor = System.Drawing.Color.White;
             this.textboxClassName.Location = new System.Drawing.Point(0, 4);
             this.textboxClassName.MinimumSize = new System.Drawing.Size(4, 21);
-            this.textboxClassName.Multiline = true;
             this.textboxClassName.Name = "textboxClassName";
             this.textboxClassName.Size = new System.Drawing.Size(456, 21);
             this.textboxClassName.TabIndex = 4;
@@ -676,7 +675,6 @@
             this.textboxTrainImgsDir.Location = new System.Drawing.Point(0, 3);
             this.textboxTrainImgsDir.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
             this.textboxTrainImgsDir.MinimumSize = new System.Drawing.Size(4, 21);
-            this.textboxTrainImgsDir.Multiline = true;
             this.textboxTrainImgsDir.Name = "textboxTrainImgsDir";
             this.textboxTrainImgsDir.Size = new System.Drawing.Size(372, 21);
             this.textboxTrainImgsDir.TabIndex = 4;
@@ -744,7 +742,6 @@
             this.textboxProjName.ForeColor = System.Drawing.Color.White;
             this.textboxProjName.Location = new System.Drawing.Point(0, 4);
             this.textboxProjName.MinimumSize = new System.Drawing.Size(4, 21);
-            this.textboxProjName.Multiline = true;
             this.textboxProjName.Name = "textboxProjName";
             this.textboxProjName.Size = new System.Drawing.Size(456, 21);
             this.textboxProjName.TabIndex = 4;

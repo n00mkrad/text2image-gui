@@ -20,12 +20,9 @@ namespace StableDiffusionGui.Forms
 {
     public partial class DreamboothForm : CustomForm
     {
-        private Dictionary<string, string> _uiStrings = new Dictionary<string, string>();
-
         public DreamboothForm()
         {
             InitializeComponent();
-            AllowTextboxTab = false;
         }
 
         private void DreamboothForm_Load(object sender, EventArgs e)
@@ -50,8 +47,8 @@ namespace StableDiffusionGui.Forms
             TabOrderInit(new List<Control>() {
                 comboxBaseModel,
                 comboxNetworkSize, upDownClipSkip,
-                textboxTrainImgsDir,
                 textboxProjName,
+                textboxTrainImgsDir,
                 textboxTrainImgsDir, btnTrainImgsBrowse,
                 textboxClassName,
                 comboxRes, checkboxAspectBuckets,
@@ -59,6 +56,7 @@ namespace StableDiffusionGui.Forms
                 sliderSteps
             });
 
+            AllowTextboxTab = false;
             sliderSteps.ActualMaximum = Config.IniInstance.LoraMaxSteps;
             LoadControls();
             await PerformChecks();
