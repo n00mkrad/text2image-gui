@@ -507,6 +507,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon1.ico" />
+    <None Include="Resources\IconTrainModel.png" />
     <None Include="Resources\IconArchiveOff.png" />
     <None Include="Resources\IconArchiveOn.png" />
     <None Include="Resources\IconDeleteSweep.png" />

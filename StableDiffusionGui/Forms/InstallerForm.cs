@@ -130,7 +130,6 @@ namespace StableDiffusionGui.Forms
                 commit = form.EnteredText.Trim();
             }
 
-            bool installOnnxDml = AskInstallOnnxDml();
             Enabled = false;
             Program.SetState(Program.BusyState.Installation);
             await Setup.InstallRepo(commit, false);
@@ -151,12 +150,6 @@ namespace StableDiffusionGui.Forms
             await Setup.InstallUpscalers();
             UpdateStatus();
             Enabled = true;
-        }
-
-        private bool AskInstallOnnxDml()
-        {
-            DialogResult res = UiUtils.ShowMessageBox("Do you want to download the Stable Diffusion ONNX/DirectML files?\n\nThey are only needed if you have an AMD GPU.", "Setup", MessageBoxButtons.YesNo);
-            return res == DialogResult.Yes;
         }
 
         private bool AskInstallUpscalers()

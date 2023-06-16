@@ -30,15 +30,17 @@ namespace StableDiffusionGui.Forms
 
         private void DreamboothForm_Load(object sender, EventArgs e)
         {
-            bool is4090 = GpuUtils.CachedGpus.Where(x => x.FullName.Contains("RTX 4090")).Any();
-            _uiStrings.Add(TrainPreset.VeryHighQuality.ToString(), $"Very High Quality ({(is4090 ? "50 minutes on RTX 4090" : "80 minutes on RTX 3090")})");
-            _uiStrings.Add(TrainPreset.HighQuality.ToString(), $"High Quality ({(is4090 ? "25 minutes on RTX 4090" : "40 minutes on RTX 3090")})");
-            _uiStrings.Add(TrainPreset.MedQuality.ToString(), $"Medium Quality ({(is4090 ? "12 minutes on RTX 4090" : "20 minutes on RTX 3090")})");
-            _uiStrings.Add(TrainPreset.LowQuality.ToString(), $"Low Quality, for Testing ({(is4090 ? "4 minutes on RTX 4090" : "6 minutes on RTX 3090")})");
-
             comboxNetworkSize.FillFromEnum<LoraSizes>(Strings.LoraSizes, 2);
             comboxRes.SelectedIndex = 1;
             LoadModels();
+
+            if (Config.Instance.LastTrainingBaseModel.IsEmpty())
+            {
+                var matchingModels = comboxBaseModel.Items.Cast<object>().Select(o => o.ToString()).Where(m => m.Lower().StartsWith("animefull"));
+
+                if (matchingModels.Any())
+                    comboxBaseModel.Text = matchingModels.First();
+            }
         }
 
         private async void DreamboothForm_Shown(object sender, EventArgs e)
@@ -46,9 +48,19 @@ namespace StableDiffusionGui.Forms
             Refresh();
 
             TabOrderInit(new List<Control>() {
-                comboxBaseModel, comboxNetworkSize, textboxTrainImgsDir, textboxClassName, sliderLr, sliderSteps
+                comboxBaseModel,
+                comboxNetworkSize, upDownClipSkip,
+                textboxTrainImgsDir,
+                textboxProjName,
+                textboxTrainImgsDir, btnTrainImgsBrowse,
+                textboxClassName,
+                comboxRes, checkboxAspectBuckets,
+                sliderLr,
+                sliderSteps
             });
 
+            sliderSteps.ActualMaximum = Config.IniInstance.LoraMaxSteps;
+            LoadControls();
             await PerformChecks();
         }
 
@@ -110,8 +122,8 @@ namespace StableDiffusionGui.Forms
 
         private void LoadModels()
         {
-            comboxBaseModel.Items.Clear();
-            Models.GetModels().Where(m => m.Type == Enums.Models.Type.Normal).ToList().ForEach(x => comboxBaseModel.Items.Add(x.Name));
+            var models = Models.GetModels().Where(m => m.Type == Enums.Models.Type.Normal).Select(m => m.Name);
+            comboxBaseModel.SetItems(models, UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.First);
 
             if (comboxBaseModel.SelectedIndex < 0 && comboxBaseModel.Items.Count > 0)
                 comboxBaseModel.SelectedIndex = 0;
@@ -119,6 +131,8 @@ namespace StableDiffusionGui.Forms
 
         private async void btnRun_Click(object sender, EventArgs e)
         {
+            SaveControls();
+
             if (Program.State == Program.BusyState.Training)
             {
                 ProcessManager.FindAndKillOrphans($"*{Constants.Dirs.Dreambooth}*.py*{Paths.SessionTimestamp}*");
@@ -151,6 +165,7 @@ namespace StableDiffusionGui.Forms
                 return;
             }
 
+            TtiProcess.Kill();
             Program.SetState(Program.BusyState.Training);
             btnStart.Text = "Cancel";
 
@@ -158,16 +173,14 @@ namespace StableDiffusionGui.Forms
             string trigger = string.Join("_", textboxClassName.Text.Trim().Split(Path.GetInvalidFileNameChars())).Trunc(75, false);
             string name = string.Join("_", textboxProjName.Text.Trim().Split(Path.GetInvalidFileNameChars())).Trunc(50, false);
             textboxClassName.Text = trigger;
-            //TrainPreset preset = (TrainPreset)comboxNetworkSize.SelectedIndex;
-            // float stepsMultiplier = sliderSteps.ActualValueFloat / Training.GetStepsAndLoggerIntervalAndLrMultiplier(preset).Item1;
-
-            // string outPath = await Dreambooth.TrainDreamboothLegacy(baseModel, trainImgDir, className, preset, sliderLr.ActualValueFloat, stepsMultiplier);
 
             KohyaSettings settings = new KohyaSettings(KohyaSettings.NetworkType.LoHa)
             {
                 Steps = sliderSteps.ActualValueInt,
                 LearningRate = sliderLr.ActualValueFloat,
                 Resolution = comboxRes.Text.Split(" ").First().GetInt(),
+                ClipSkip = (int)upDownClipSkip.Value,
+                UseAspectBuckets = checkboxAspectBuckets.Checked,
             };
 
             var size = ParseUtils.GetEnum<LoraSizes>(comboxNetworkSize.Text, true, Strings.LoraSizes);
@@ -199,6 +212,8 @@ namespace StableDiffusionGui.Forms
 
         private void DreamboothForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            SaveControls();
+
             if (Program.State == Program.BusyState.Training)
                 e.Cancel = true;
         }
@@ -217,6 +232,28 @@ namespace StableDiffusionGui.Forms
         private void OpenGuide()
         {
             System.Diagnostics.Process.Start("https://github.com/n00mkrad/text2image-gui/blob/main/docs/DreamBooth.md");
+        }
+
+        private void SaveControls()
+        {
+            Config.Instance.LastTrainingBaseModel = comboxBaseModel.Text;
+            ConfigParser.SaveGuiElement(upDownClipSkip, ref Config.Instance.LastLoraClipSkip);
+            ConfigParser.SaveGuiElement(textboxTrainImgsDir, ref Config.Instance.LastLoraDataDir);
+            ConfigParser.SaveGuiElement(textboxProjName, ref Config.Instance.LastLoraTrainName);
+            ConfigParser.SaveGuiElement(textboxClassName, ref Config.Instance.LastLoraTrainTrigger);
+        }
+
+        private void LoadControls()
+        {
+            if (comboxBaseModel.Items.Cast<object>().Any(item => item.ToString() == Config.Instance.LastTrainingBaseModel))
+                comboxBaseModel.Text = Config.Instance.LastTrainingBaseModel;
+
+            ConfigParser.LoadGuiElement(upDownClipSkip, ref Config.Instance.LastLoraClipSkip);
+            ConfigParser.LoadGuiElement(textboxProjName, ref Config.Instance.LastLoraTrainName);
+            ConfigParser.LoadGuiElement(textboxClassName, ref Config.Instance.LastLoraTrainTrigger);
+
+            if (Directory.Exists(Config.Instance.LastLoraDataDir))
+                textboxTrainImgsDir.Text = Config.Instance.LastLoraDataDir;
         }
     }
 }

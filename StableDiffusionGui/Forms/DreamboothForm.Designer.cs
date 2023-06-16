@@ -48,6 +48,13 @@
             this.sliderLr = new StableDiffusionGui.Controls.CustomSlider();
             this.panel9 = new System.Windows.Forms.Panel();
             this.label4 = new System.Windows.Forms.Label();
+            this.panelRes = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel10 = new System.Windows.Forms.TableLayoutPanel();
+            this.panel15 = new System.Windows.Forms.Panel();
+            this.label7 = new System.Windows.Forms.Label();
+            this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
+            this.checkboxAspectBuckets = new System.Windows.Forms.CheckBox();
+            this.comboxRes = new System.Windows.Forms.ComboBox();
             this.panelToken = new System.Windows.Forms.Panel();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.panel6 = new System.Windows.Forms.Panel();
@@ -58,16 +65,26 @@
             this.panelTrainImgs = new System.Windows.Forms.Panel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.panel4 = new System.Windows.Forms.Panel();
-            this.textboxTrainImgsDir = new System.Windows.Forms.TextBox();
+            this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
             this.btnTrainImgsBrowse = new HTAlt.WinForms.HTButton();
+            this.textboxTrainImgsDir = new System.Windows.Forms.TextBox();
             this.panel5 = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
+            this.panelProjectName = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel9 = new System.Windows.Forms.TableLayoutPanel();
+            this.panel12 = new System.Windows.Forms.Panel();
+            this.textboxProjName = new System.Windows.Forms.TextBox();
+            this.panel13 = new System.Windows.Forms.Panel();
+            this.label6 = new System.Windows.Forms.Label();
             this.panelTrainPreset = new System.Windows.Forms.Panel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.comboxNetworkSize = new System.Windows.Forms.ComboBox();
             this.panel3 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.upDownClipSkip = new System.Windows.Forms.NumericUpDown();
+            this.label11 = new System.Windows.Forms.Label();
+            this.comboxNetworkSize = new System.Windows.Forms.ComboBox();
+            this.label9 = new System.Windows.Forms.Label();
             this.panelBaseModel = new System.Windows.Forms.Panel();
             this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
             this.panel25 = new System.Windows.Forms.Panel();
@@ -77,18 +94,6 @@
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.btnInfo = new System.Windows.Forms.Button();
             this.btnOpenModelFolder = new System.Windows.Forms.Button();
-            this.panelProjectName = new System.Windows.Forms.Panel();
-            this.tableLayoutPanel9 = new System.Windows.Forms.TableLayoutPanel();
-            this.panel12 = new System.Windows.Forms.Panel();
-            this.textboxProjName = new System.Windows.Forms.TextBox();
-            this.panel13 = new System.Windows.Forms.Panel();
-            this.label6 = new System.Windows.Forms.Label();
-            this.panelRes = new System.Windows.Forms.Panel();
-            this.tableLayoutPanel10 = new System.Windows.Forms.TableLayoutPanel();
-            this.panel14 = new System.Windows.Forms.Panel();
-            this.comboxRes = new System.Windows.Forms.ComboBox();
-            this.panel15 = new System.Windows.Forms.Panel();
-            this.label7 = new System.Windows.Forms.Label();
             this.parentPanel.SuspendLayout();
             this.panelSteps.SuspendLayout();
             this.tableLayoutPanel6.SuspendLayout();
@@ -100,6 +105,10 @@
             this.panel8.SuspendLayout();
             this.tableLayoutPanel5.SuspendLayout();
             this.panel9.SuspendLayout();
+            this.panelRes.SuspendLayout();
+            this.tableLayoutPanel10.SuspendLayout();
+            this.panel15.SuspendLayout();
+            this.flowLayoutPanel2.SuspendLayout();
             this.panelToken.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             this.panel6.SuspendLayout();
@@ -107,23 +116,21 @@
             this.panelTrainImgs.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.panel4.SuspendLayout();
+            this.flowLayoutPanel3.SuspendLayout();
             this.panel5.SuspendLayout();
-            this.panelTrainPreset.SuspendLayout();
-            this.tableLayoutPanel1.SuspendLayout();
-            this.panel2.SuspendLayout();
-            this.panel3.SuspendLayout();
-            this.panelBaseModel.SuspendLayout();
-            this.tableLayoutPanel8.SuspendLayout();
-            this.panel25.SuspendLayout();
-            this.panel26.SuspendLayout();
             this.panelProjectName.SuspendLayout();
             this.tableLayoutPanel9.SuspendLayout();
             this.panel12.SuspendLayout();
             this.panel13.SuspendLayout();
-            this.panelRes.SuspendLayout();
-            this.tableLayoutPanel10.SuspendLayout();
-            this.panel14.SuspendLayout();
-            this.panel15.SuspendLayout();
+            this.panelTrainPreset.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
+            this.panel3.SuspendLayout();
+            this.flowLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.upDownClipSkip)).BeginInit();
+            this.panelBaseModel.SuspendLayout();
+            this.tableLayoutPanel8.SuspendLayout();
+            this.panel25.SuspendLayout();
+            this.panel26.SuspendLayout();
             this.SuspendLayout();
             // 
             // titleLabel
@@ -131,7 +138,7 @@
             this.titleLabel.AutoSize = true;
             this.titleLabel.Font = new System.Drawing.Font("Yu Gothic UI", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.titleLabel.ForeColor = System.Drawing.Color.White;
-            this.titleLabel.Location = new System.Drawing.Point(11, 9);
+            this.titleLabel.Location = new System.Drawing.Point(8, 9);
             this.titleLabel.Margin = new System.Windows.Forms.Padding(3, 0, 3, 10);
             this.titleLabel.Name = "titleLabel";
             this.titleLabel.Size = new System.Drawing.Size(192, 40);
@@ -155,7 +162,7 @@
             this.parentPanel.Controls.Add(this.panelBaseModel);
             this.parentPanel.Location = new System.Drawing.Point(12, 62);
             this.parentPanel.Name = "parentPanel";
-            this.parentPanel.Size = new System.Drawing.Size(760, 357);
+            this.parentPanel.Size = new System.Drawing.Size(760, 392);
             this.parentPanel.TabIndex = 15;
             // 
             // panelSteps
@@ -186,9 +193,10 @@
             // 
             this.panel10.Controls.Add(this.tableLayoutPanel7);
             this.panel10.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel10.Location = new System.Drawing.Point(307, 3);
+            this.panel10.Location = new System.Drawing.Point(304, 3);
+            this.panel10.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
             this.panel10.Name = "panel10";
-            this.panel10.Size = new System.Drawing.Size(450, 29);
+            this.panel10.Size = new System.Drawing.Size(456, 29);
             this.panel10.TabIndex = 88;
             // 
             // tableLayoutPanel7
@@ -204,7 +212,7 @@
             this.tableLayoutPanel7.Name = "tableLayoutPanel7";
             this.tableLayoutPanel7.RowCount = 1;
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel7.Size = new System.Drawing.Size(450, 21);
+            this.tableLayoutPanel7.Size = new System.Drawing.Size(456, 21);
             this.tableLayoutPanel7.TabIndex = 92;
             // 
             // textBox1
@@ -215,11 +223,11 @@
             this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox1.ForeColor = System.Drawing.Color.Silver;
-            this.textBox1.Location = new System.Drawing.Point(390, 1);
+            this.textBox1.Location = new System.Drawing.Point(396, 1);
             this.textBox1.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textBox1.MinimumSize = new System.Drawing.Size(4, 21);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(60, 21);
+            this.textBox1.Size = new System.Drawing.Size(60, 17);
             this.textBox1.TabIndex = 93;
             this.textBox1.Text = "100";
             // 
@@ -252,7 +260,7 @@
             this.sliderSteps.Minimum = 10;
             this.sliderSteps.Name = "sliderSteps";
             this.sliderSteps.OverlayColor = System.Drawing.Color.White;
-            this.sliderSteps.Size = new System.Drawing.Size(390, 21);
+            this.sliderSteps.Size = new System.Drawing.Size(396, 21);
             this.sliderSteps.SmallChange = ((uint)(1u));
             this.sliderSteps.TabIndex = 4;
             this.sliderSteps.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
@@ -271,9 +279,10 @@
             // 
             this.panel11.Controls.Add(this.label5);
             this.panel11.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel11.Location = new System.Drawing.Point(3, 3);
+            this.panel11.Location = new System.Drawing.Point(0, 3);
+            this.panel11.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
             this.panel11.Name = "panel11";
-            this.panel11.Size = new System.Drawing.Size(298, 29);
+            this.panel11.Size = new System.Drawing.Size(301, 29);
             this.panel11.TabIndex = 87;
             // 
             // label5
@@ -316,9 +325,10 @@
             // 
             this.panel8.Controls.Add(this.tableLayoutPanel5);
             this.panel8.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel8.Location = new System.Drawing.Point(307, 3);
+            this.panel8.Location = new System.Drawing.Point(304, 3);
+            this.panel8.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
             this.panel8.Name = "panel8";
-            this.panel8.Size = new System.Drawing.Size(450, 29);
+            this.panel8.Size = new System.Drawing.Size(456, 29);
             this.panel8.TabIndex = 88;
             // 
             // tableLayoutPanel5
@@ -334,7 +344,7 @@
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
             this.tableLayoutPanel5.RowCount = 1;
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(450, 21);
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(456, 21);
             this.tableLayoutPanel5.TabIndex = 92;
             // 
             // textboxSliderLr
@@ -345,13 +355,13 @@
             this.textboxSliderLr.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textboxSliderLr.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderLr.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderLr.Location = new System.Drawing.Point(390, 1);
+            this.textboxSliderLr.Location = new System.Drawing.Point(396, 1);
             this.textboxSliderLr.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderLr.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderLr.Name = "textboxSliderLr";
-            this.textboxSliderLr.Size = new System.Drawing.Size(60, 21);
+            this.textboxSliderLr.Size = new System.Drawing.Size(60, 17);
             this.textboxSliderLr.TabIndex = 93;
-            this.textboxSliderLr.Text = "0";
+            this.textboxSliderLr.Text = "0,0001";
             // 
             // sliderLr
             // 
@@ -381,7 +391,7 @@
             this.sliderLr.Minimum = 10;
             this.sliderLr.Name = "sliderLr";
             this.sliderLr.OverlayColor = System.Drawing.Color.White;
-            this.sliderLr.Size = new System.Drawing.Size(390, 21);
+            this.sliderLr.Size = new System.Drawing.Size(396, 21);
             this.sliderLr.SmallChange = ((uint)(1u));
             this.sliderLr.TabIndex = 4;
             this.sliderLr.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
@@ -400,9 +410,10 @@
             // 
             this.panel9.Controls.Add(this.label4);
             this.panel9.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel9.Location = new System.Drawing.Point(3, 3);
+            this.panel9.Location = new System.Drawing.Point(0, 3);
+            this.panel9.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
             this.panel9.Name = "panel9";
-            this.panel9.Size = new System.Drawing.Size(298, 29);
+            this.panel9.Size = new System.Drawing.Size(301, 29);
             this.panel9.TabIndex = 87;
             // 
             // label4
@@ -416,6 +427,96 @@
             this.label4.Size = new System.Drawing.Size(74, 13);
             this.label4.TabIndex = 85;
             this.label4.Text = "Learning Rate";
+            // 
+            // panelRes
+            // 
+            this.panelRes.Controls.Add(this.tableLayoutPanel10);
+            this.panelRes.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelRes.Location = new System.Drawing.Point(0, 175);
+            this.panelRes.Name = "panelRes";
+            this.panelRes.Size = new System.Drawing.Size(760, 35);
+            this.panelRes.TabIndex = 106;
+            // 
+            // tableLayoutPanel10
+            // 
+            this.tableLayoutPanel10.ColumnCount = 2;
+            this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40F));
+            this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
+            this.tableLayoutPanel10.Controls.Add(this.panel15, 0, 0);
+            this.tableLayoutPanel10.Controls.Add(this.flowLayoutPanel2, 1, 0);
+            this.tableLayoutPanel10.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel10.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel10.Name = "tableLayoutPanel10";
+            this.tableLayoutPanel10.RowCount = 1;
+            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel10.Size = new System.Drawing.Size(760, 35);
+            this.tableLayoutPanel10.TabIndex = 1;
+            // 
+            // panel15
+            // 
+            this.panel15.Controls.Add(this.label7);
+            this.panel15.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel15.Location = new System.Drawing.Point(0, 3);
+            this.panel15.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
+            this.panel15.Name = "panel15";
+            this.panel15.Size = new System.Drawing.Size(301, 29);
+            this.panel15.TabIndex = 87;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.ForeColor = System.Drawing.Color.White;
+            this.label7.Location = new System.Drawing.Point(2, 8);
+            this.label7.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(98, 13);
+            this.label7.TabIndex = 85;
+            this.label7.Text = "Training Resolution";
+            // 
+            // flowLayoutPanel2
+            // 
+            this.flowLayoutPanel2.Controls.Add(this.checkboxAspectBuckets);
+            this.flowLayoutPanel2.Controls.Add(this.comboxRes);
+            this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
+            this.flowLayoutPanel2.Location = new System.Drawing.Point(304, 3);
+            this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
+            this.flowLayoutPanel2.Name = "flowLayoutPanel2";
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(456, 29);
+            this.flowLayoutPanel2.TabIndex = 88;
+            // 
+            // checkboxAspectBuckets
+            // 
+            this.checkboxAspectBuckets.AutoSize = true;
+            this.checkboxAspectBuckets.Checked = true;
+            this.checkboxAspectBuckets.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkboxAspectBuckets.Location = new System.Drawing.Point(323, 7);
+            this.checkboxAspectBuckets.Margin = new System.Windows.Forms.Padding(3, 7, 0, 3);
+            this.checkboxAspectBuckets.Name = "checkboxAspectBuckets";
+            this.checkboxAspectBuckets.Size = new System.Drawing.Size(133, 17);
+            this.checkboxAspectBuckets.TabIndex = 107;
+            this.checkboxAspectBuckets.Text = "Aspect Ratio Grouping";
+            this.checkboxAspectBuckets.UseVisualStyleBackColor = true;
+            // 
+            // comboxRes
+            // 
+            this.comboxRes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboxRes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.comboxRes.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboxRes.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboxRes.ForeColor = System.Drawing.Color.White;
+            this.comboxRes.FormattingEnabled = true;
+            this.comboxRes.Items.AddRange(new object[] {
+            "512px - Recommended GPU VRAM: 8 GB",
+            "640px - Recommended GPU VRAM: 8 GB",
+            "768px - Recommended GPU VRAM: 10 GB",
+            "1024px - Recommended GPU VRAM: 10 GB"});
+            this.comboxRes.Location = new System.Drawing.Point(0, 4);
+            this.comboxRes.Margin = new System.Windows.Forms.Padding(0, 4, 3, 3);
+            this.comboxRes.Name = "comboxRes";
+            this.comboxRes.Size = new System.Drawing.Size(317, 21);
+            this.comboxRes.TabIndex = 106;
             // 
             // panelToken
             // 
@@ -445,9 +546,10 @@
             // 
             this.panel6.Controls.Add(this.textboxClassName);
             this.panel6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel6.Location = new System.Drawing.Point(307, 3);
+            this.panel6.Location = new System.Drawing.Point(304, 3);
+            this.panel6.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
             this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(450, 29);
+            this.panel6.Size = new System.Drawing.Size(456, 29);
             this.panel6.TabIndex = 88;
             // 
             // textboxClassName
@@ -459,16 +561,17 @@
             this.textboxClassName.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxClassName.Multiline = true;
             this.textboxClassName.Name = "textboxClassName";
-            this.textboxClassName.Size = new System.Drawing.Size(450, 21);
+            this.textboxClassName.Size = new System.Drawing.Size(456, 21);
             this.textboxClassName.TabIndex = 4;
             // 
             // panel7
             // 
             this.panel7.Controls.Add(this.label3);
             this.panel7.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel7.Location = new System.Drawing.Point(3, 3);
+            this.panel7.Location = new System.Drawing.Point(0, 3);
+            this.panel7.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
             this.panel7.Name = "panel7";
-            this.panel7.Size = new System.Drawing.Size(298, 29);
+            this.panel7.Size = new System.Drawing.Size(301, 29);
             this.panel7.TabIndex = 87;
             // 
             // label3
@@ -491,7 +594,7 @@
             this.btnStart.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.25F);
             this.btnStart.ForeColor = System.Drawing.Color.White;
-            this.btnStart.Location = new System.Drawing.Point(0, 317);
+            this.btnStart.Location = new System.Drawing.Point(0, 352);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(120, 40);
             this.btnStart.TabIndex = 101;
@@ -525,25 +628,25 @@
             // 
             // panel4
             // 
-            this.panel4.Controls.Add(this.textboxTrainImgsDir);
-            this.panel4.Controls.Add(this.btnTrainImgsBrowse);
+            this.panel4.Controls.Add(this.flowLayoutPanel3);
             this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel4.Location = new System.Drawing.Point(307, 3);
+            this.panel4.Location = new System.Drawing.Point(304, 3);
+            this.panel4.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(450, 29);
+            this.panel4.Size = new System.Drawing.Size(456, 29);
             this.panel4.TabIndex = 88;
             // 
-            // textboxTrainImgsDir
+            // flowLayoutPanel3
             // 
-            this.textboxTrainImgsDir.AllowDrop = true;
-            this.textboxTrainImgsDir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.textboxTrainImgsDir.ForeColor = System.Drawing.Color.White;
-            this.textboxTrainImgsDir.Location = new System.Drawing.Point(0, 4);
-            this.textboxTrainImgsDir.MinimumSize = new System.Drawing.Size(4, 21);
-            this.textboxTrainImgsDir.Multiline = true;
-            this.textboxTrainImgsDir.Name = "textboxTrainImgsDir";
-            this.textboxTrainImgsDir.Size = new System.Drawing.Size(366, 21);
-            this.textboxTrainImgsDir.TabIndex = 4;
+            this.flowLayoutPanel3.Controls.Add(this.btnTrainImgsBrowse);
+            this.flowLayoutPanel3.Controls.Add(this.textboxTrainImgsDir);
+            this.flowLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flowLayoutPanel3.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
+            this.flowLayoutPanel3.Location = new System.Drawing.Point(0, 0);
+            this.flowLayoutPanel3.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
+            this.flowLayoutPanel3.Name = "flowLayoutPanel3";
+            this.flowLayoutPanel3.Size = new System.Drawing.Size(456, 29);
+            this.flowLayoutPanel3.TabIndex = 89;
             // 
             // btnTrainImgsBrowse
             // 
@@ -556,7 +659,7 @@
             this.btnTrainImgsBrowse.ForeColor = System.Drawing.Color.White;
             this.btnTrainImgsBrowse.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
             this.btnTrainImgsBrowse.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
-            this.btnTrainImgsBrowse.Location = new System.Drawing.Point(372, 2);
+            this.btnTrainImgsBrowse.Location = new System.Drawing.Point(378, 3);
             this.btnTrainImgsBrowse.Name = "btnTrainImgsBrowse";
             this.btnTrainImgsBrowse.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
             this.btnTrainImgsBrowse.Size = new System.Drawing.Size(75, 23);
@@ -565,13 +668,27 @@
             this.btnTrainImgsBrowse.Text = "Browse...";
             this.btnTrainImgsBrowse.Click += new System.EventHandler(this.btnTrainImgsBrowse_Click);
             // 
+            // textboxTrainImgsDir
+            // 
+            this.textboxTrainImgsDir.AllowDrop = true;
+            this.textboxTrainImgsDir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textboxTrainImgsDir.ForeColor = System.Drawing.Color.White;
+            this.textboxTrainImgsDir.Location = new System.Drawing.Point(0, 3);
+            this.textboxTrainImgsDir.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
+            this.textboxTrainImgsDir.MinimumSize = new System.Drawing.Size(4, 21);
+            this.textboxTrainImgsDir.Multiline = true;
+            this.textboxTrainImgsDir.Name = "textboxTrainImgsDir";
+            this.textboxTrainImgsDir.Size = new System.Drawing.Size(372, 21);
+            this.textboxTrainImgsDir.TabIndex = 4;
+            // 
             // panel5
             // 
             this.panel5.Controls.Add(this.label2);
             this.panel5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel5.Location = new System.Drawing.Point(3, 3);
+            this.panel5.Location = new System.Drawing.Point(0, 3);
+            this.panel5.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(298, 29);
+            this.panel5.Size = new System.Drawing.Size(301, 29);
             this.panel5.TabIndex = 87;
             // 
             // label2
@@ -585,6 +702,75 @@
             this.label2.Size = new System.Drawing.Size(117, 13);
             this.label2.TabIndex = 85;
             this.label2.Text = "Training Dataset Folder";
+            // 
+            // panelProjectName
+            // 
+            this.panelProjectName.Controls.Add(this.tableLayoutPanel9);
+            this.panelProjectName.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelProjectName.Location = new System.Drawing.Point(0, 70);
+            this.panelProjectName.Name = "panelProjectName";
+            this.panelProjectName.Size = new System.Drawing.Size(760, 35);
+            this.panelProjectName.TabIndex = 105;
+            // 
+            // tableLayoutPanel9
+            // 
+            this.tableLayoutPanel9.ColumnCount = 2;
+            this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40F));
+            this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
+            this.tableLayoutPanel9.Controls.Add(this.panel12, 0, 0);
+            this.tableLayoutPanel9.Controls.Add(this.panel13, 0, 0);
+            this.tableLayoutPanel9.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel9.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel9.Name = "tableLayoutPanel9";
+            this.tableLayoutPanel9.RowCount = 1;
+            this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel9.Size = new System.Drawing.Size(760, 35);
+            this.tableLayoutPanel9.TabIndex = 1;
+            // 
+            // panel12
+            // 
+            this.panel12.Controls.Add(this.textboxProjName);
+            this.panel12.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel12.Location = new System.Drawing.Point(304, 3);
+            this.panel12.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
+            this.panel12.Name = "panel12";
+            this.panel12.Size = new System.Drawing.Size(456, 29);
+            this.panel12.TabIndex = 88;
+            // 
+            // textboxProjName
+            // 
+            this.textboxProjName.AllowDrop = true;
+            this.textboxProjName.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textboxProjName.ForeColor = System.Drawing.Color.White;
+            this.textboxProjName.Location = new System.Drawing.Point(0, 4);
+            this.textboxProjName.MinimumSize = new System.Drawing.Size(4, 21);
+            this.textboxProjName.Multiline = true;
+            this.textboxProjName.Name = "textboxProjName";
+            this.textboxProjName.Size = new System.Drawing.Size(456, 21);
+            this.textboxProjName.TabIndex = 4;
+            this.textboxProjName.Text = "MyLora";
+            // 
+            // panel13
+            // 
+            this.panel13.Controls.Add(this.label6);
+            this.panel13.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel13.Location = new System.Drawing.Point(0, 3);
+            this.panel13.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
+            this.panel13.Name = "panel13";
+            this.panel13.Size = new System.Drawing.Size(301, 29);
+            this.panel13.TabIndex = 87;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.ForeColor = System.Drawing.Color.White;
+            this.label6.Location = new System.Drawing.Point(2, 8);
+            this.label6.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(269, 13);
+            this.label6.TabIndex = 85;
+            this.label6.Text = "Project Name (Does Not Affect Training, Only Filename)";
             // 
             // panelTrainPreset
             // 
@@ -600,8 +786,8 @@
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
-            this.tableLayoutPanel1.Controls.Add(this.panel2, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.panel3, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel1, 1, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -610,35 +796,14 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(760, 35);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
-            // panel2
-            // 
-            this.panel2.Controls.Add(this.comboxNetworkSize);
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel2.Location = new System.Drawing.Point(307, 3);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(450, 29);
-            this.panel2.TabIndex = 88;
-            // 
-            // comboxNetworkSize
-            // 
-            this.comboxNetworkSize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.comboxNetworkSize.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.comboxNetworkSize.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboxNetworkSize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.comboxNetworkSize.ForeColor = System.Drawing.Color.White;
-            this.comboxNetworkSize.FormattingEnabled = true;
-            this.comboxNetworkSize.Location = new System.Drawing.Point(0, 4);
-            this.comboxNetworkSize.Name = "comboxNetworkSize";
-            this.comboxNetworkSize.Size = new System.Drawing.Size(450, 21);
-            this.comboxNetworkSize.TabIndex = 106;
-            // 
             // panel3
             // 
             this.panel3.Controls.Add(this.label1);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel3.Location = new System.Drawing.Point(3, 3);
+            this.panel3.Location = new System.Drawing.Point(0, 3);
+            this.panel3.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(298, 29);
+            this.panel3.Size = new System.Drawing.Size(301, 29);
             this.panel3.TabIndex = 87;
             // 
             // label1
@@ -649,9 +814,81 @@
             this.label1.Location = new System.Drawing.Point(2, 8);
             this.label1.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(159, 13);
+            this.label1.Size = new System.Drawing.Size(118, 13);
             this.label1.TabIndex = 85;
-            this.label1.Text = "LoRA Size (Network Complexity)";
+            this.label1.Text = "LoRA Network Settings";
+            // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.Controls.Add(this.upDownClipSkip);
+            this.flowLayoutPanel1.Controls.Add(this.label11);
+            this.flowLayoutPanel1.Controls.Add(this.comboxNetworkSize);
+            this.flowLayoutPanel1.Controls.Add(this.label9);
+            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(304, 3);
+            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(456, 29);
+            this.flowLayoutPanel1.TabIndex = 88;
+            // 
+            // upDownClipSkip
+            // 
+            this.upDownClipSkip.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.upDownClipSkip.ForeColor = System.Drawing.Color.White;
+            this.upDownClipSkip.Location = new System.Drawing.Point(416, 4);
+            this.upDownClipSkip.Margin = new System.Windows.Forms.Padding(3, 4, 0, 3);
+            this.upDownClipSkip.Maximum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.upDownClipSkip.Name = "upDownClipSkip";
+            this.upDownClipSkip.Size = new System.Drawing.Size(40, 20);
+            this.upDownClipSkip.TabIndex = 0;
+            this.upDownClipSkip.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.ForeColor = System.Drawing.Color.White;
+            this.label11.Location = new System.Drawing.Point(353, 8);
+            this.label11.Margin = new System.Windows.Forms.Padding(0, 8, 3, 0);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(57, 13);
+            this.label11.TabIndex = 108;
+            this.label11.Text = "CLIP Skip:";
+            // 
+            // comboxNetworkSize
+            // 
+            this.comboxNetworkSize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboxNetworkSize.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.comboxNetworkSize.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboxNetworkSize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboxNetworkSize.ForeColor = System.Drawing.Color.White;
+            this.comboxNetworkSize.FormattingEnabled = true;
+            this.comboxNetworkSize.Location = new System.Drawing.Point(36, 3);
+            this.comboxNetworkSize.Margin = new System.Windows.Forms.Padding(3, 3, 6, 3);
+            this.comboxNetworkSize.Name = "comboxNetworkSize";
+            this.comboxNetworkSize.Size = new System.Drawing.Size(311, 21);
+            this.comboxNetworkSize.TabIndex = 106;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.ForeColor = System.Drawing.Color.White;
+            this.label9.Location = new System.Drawing.Point(0, 8);
+            this.label9.Margin = new System.Windows.Forms.Padding(0, 8, 3, 0);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(30, 13);
+            this.label9.TabIndex = 107;
+            this.label9.Text = "Size:";
             // 
             // panelBaseModel
             // 
@@ -681,9 +918,10 @@
             // 
             this.panel25.Controls.Add(this.comboxBaseModel);
             this.panel25.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel25.Location = new System.Drawing.Point(307, 3);
+            this.panel25.Location = new System.Drawing.Point(304, 3);
+            this.panel25.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
             this.panel25.Name = "panel25";
-            this.panel25.Size = new System.Drawing.Size(450, 29);
+            this.panel25.Size = new System.Drawing.Size(456, 29);
             this.panel25.TabIndex = 88;
             // 
             // comboxBaseModel
@@ -695,17 +933,19 @@
             this.comboxBaseModel.ForeColor = System.Drawing.Color.White;
             this.comboxBaseModel.FormattingEnabled = true;
             this.comboxBaseModel.Location = new System.Drawing.Point(0, 4);
+            this.comboxBaseModel.Margin = new System.Windows.Forms.Padding(3, 3, 0, 3);
             this.comboxBaseModel.Name = "comboxBaseModel";
-            this.comboxBaseModel.Size = new System.Drawing.Size(450, 21);
+            this.comboxBaseModel.Size = new System.Drawing.Size(456, 21);
             this.comboxBaseModel.TabIndex = 106;
             // 
             // panel26
             // 
             this.panel26.Controls.Add(this.label10);
             this.panel26.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel26.Location = new System.Drawing.Point(3, 3);
+            this.panel26.Location = new System.Drawing.Point(0, 3);
+            this.panel26.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
             this.panel26.Name = "panel26";
-            this.panel26.Size = new System.Drawing.Size(298, 29);
+            this.panel26.Size = new System.Drawing.Size(301, 29);
             this.panel26.TabIndex = 87;
             // 
             // label10
@@ -763,151 +1003,12 @@
             this.btnOpenModelFolder.UseVisualStyleBackColor = false;
             this.btnOpenModelFolder.Click += new System.EventHandler(this.btnOpenModelFolder_Click);
             // 
-            // panelProjectName
-            // 
-            this.panelProjectName.Controls.Add(this.tableLayoutPanel9);
-            this.panelProjectName.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelProjectName.Location = new System.Drawing.Point(0, 70);
-            this.panelProjectName.Name = "panelProjectName";
-            this.panelProjectName.Size = new System.Drawing.Size(760, 35);
-            this.panelProjectName.TabIndex = 105;
-            // 
-            // tableLayoutPanel9
-            // 
-            this.tableLayoutPanel9.ColumnCount = 2;
-            this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40F));
-            this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
-            this.tableLayoutPanel9.Controls.Add(this.panel12, 0, 0);
-            this.tableLayoutPanel9.Controls.Add(this.panel13, 0, 0);
-            this.tableLayoutPanel9.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel9.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel9.Name = "tableLayoutPanel9";
-            this.tableLayoutPanel9.RowCount = 1;
-            this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel9.Size = new System.Drawing.Size(760, 35);
-            this.tableLayoutPanel9.TabIndex = 1;
-            // 
-            // panel12
-            // 
-            this.panel12.Controls.Add(this.textboxProjName);
-            this.panel12.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel12.Location = new System.Drawing.Point(307, 3);
-            this.panel12.Name = "panel12";
-            this.panel12.Size = new System.Drawing.Size(450, 29);
-            this.panel12.TabIndex = 88;
-            // 
-            // textboxProjName
-            // 
-            this.textboxProjName.AllowDrop = true;
-            this.textboxProjName.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.textboxProjName.ForeColor = System.Drawing.Color.White;
-            this.textboxProjName.Location = new System.Drawing.Point(0, 4);
-            this.textboxProjName.MinimumSize = new System.Drawing.Size(4, 21);
-            this.textboxProjName.Multiline = true;
-            this.textboxProjName.Name = "textboxProjName";
-            this.textboxProjName.Size = new System.Drawing.Size(450, 21);
-            this.textboxProjName.TabIndex = 4;
-            this.textboxProjName.Text = "MyLora";
-            // 
-            // panel13
-            // 
-            this.panel13.Controls.Add(this.label6);
-            this.panel13.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel13.Location = new System.Drawing.Point(3, 3);
-            this.panel13.Name = "panel13";
-            this.panel13.Size = new System.Drawing.Size(298, 29);
-            this.panel13.TabIndex = 87;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.ForeColor = System.Drawing.Color.White;
-            this.label6.Location = new System.Drawing.Point(2, 8);
-            this.label6.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(269, 13);
-            this.label6.TabIndex = 85;
-            this.label6.Text = "Project Name (Does Not Affect Training, Only Filename)";
-            // 
-            // panelRes
-            // 
-            this.panelRes.Controls.Add(this.tableLayoutPanel10);
-            this.panelRes.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelRes.Location = new System.Drawing.Point(0, 175);
-            this.panelRes.Name = "panelRes";
-            this.panelRes.Size = new System.Drawing.Size(760, 35);
-            this.panelRes.TabIndex = 106;
-            // 
-            // tableLayoutPanel10
-            // 
-            this.tableLayoutPanel10.ColumnCount = 2;
-            this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40F));
-            this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
-            this.tableLayoutPanel10.Controls.Add(this.panel14, 0, 0);
-            this.tableLayoutPanel10.Controls.Add(this.panel15, 0, 0);
-            this.tableLayoutPanel10.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel10.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel10.Name = "tableLayoutPanel10";
-            this.tableLayoutPanel10.RowCount = 1;
-            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel10.Size = new System.Drawing.Size(760, 35);
-            this.tableLayoutPanel10.TabIndex = 1;
-            // 
-            // panel14
-            // 
-            this.panel14.Controls.Add(this.comboxRes);
-            this.panel14.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel14.Location = new System.Drawing.Point(307, 3);
-            this.panel14.Name = "panel14";
-            this.panel14.Size = new System.Drawing.Size(450, 29);
-            this.panel14.TabIndex = 88;
-            // 
-            // comboxRes
-            // 
-            this.comboxRes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.comboxRes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.comboxRes.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboxRes.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.comboxRes.ForeColor = System.Drawing.Color.White;
-            this.comboxRes.FormattingEnabled = true;
-            this.comboxRes.Items.AddRange(new object[] {
-            "512px - Recommended GPU VRAM: 8 GB",
-            "640px - Recommended GPU VRAM: 8 GB",
-            "768px - Recommended GPU VRAM: 10 GB",
-            "1024px - Recommended GPU VRAM: 10 GB"});
-            this.comboxRes.Location = new System.Drawing.Point(0, 4);
-            this.comboxRes.Name = "comboxRes";
-            this.comboxRes.Size = new System.Drawing.Size(450, 21);
-            this.comboxRes.TabIndex = 106;
-            // 
-            // panel15
-            // 
-            this.panel15.Controls.Add(this.label7);
-            this.panel15.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel15.Location = new System.Drawing.Point(3, 3);
-            this.panel15.Name = "panel15";
-            this.panel15.Size = new System.Drawing.Size(298, 29);
-            this.panel15.TabIndex = 87;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.ForeColor = System.Drawing.Color.White;
-            this.label7.Location = new System.Drawing.Point(2, 8);
-            this.label7.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(98, 13);
-            this.label7.TabIndex = 85;
-            this.label7.Text = "Training Resolution";
-            // 
             // DreamboothForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.ClientSize = new System.Drawing.Size(784, 431);
+            this.ClientSize = new System.Drawing.Size(784, 466);
             this.Controls.Add(this.btnInfo);
             this.Controls.Add(this.btnOpenModelFolder);
             this.Controls.Add(this.parentPanel);
@@ -940,6 +1041,12 @@
             this.tableLayoutPanel5.PerformLayout();
             this.panel9.ResumeLayout(false);
             this.panel9.PerformLayout();
+            this.panelRes.ResumeLayout(false);
+            this.tableLayoutPanel10.ResumeLayout(false);
+            this.panel15.ResumeLayout(false);
+            this.panel15.PerformLayout();
+            this.flowLayoutPanel2.ResumeLayout(false);
+            this.flowLayoutPanel2.PerformLayout();
             this.panelToken.ResumeLayout(false);
             this.tableLayoutPanel3.ResumeLayout(false);
             this.panel6.ResumeLayout(false);
@@ -949,30 +1056,28 @@
             this.panelTrainImgs.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
             this.panel4.ResumeLayout(false);
-            this.panel4.PerformLayout();
+            this.flowLayoutPanel3.ResumeLayout(false);
+            this.flowLayoutPanel3.PerformLayout();
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
-            this.panelTrainPreset.ResumeLayout(false);
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.panel2.ResumeLayout(false);
-            this.panel3.ResumeLayout(false);
-            this.panel3.PerformLayout();
-            this.panelBaseModel.ResumeLayout(false);
-            this.tableLayoutPanel8.ResumeLayout(false);
-            this.panel25.ResumeLayout(false);
-            this.panel26.ResumeLayout(false);
-            this.panel26.PerformLayout();
             this.panelProjectName.ResumeLayout(false);
             this.tableLayoutPanel9.ResumeLayout(false);
             this.panel12.ResumeLayout(false);
             this.panel12.PerformLayout();
             this.panel13.ResumeLayout(false);
             this.panel13.PerformLayout();
-            this.panelRes.ResumeLayout(false);
-            this.tableLayoutPanel10.ResumeLayout(false);
-            this.panel14.ResumeLayout(false);
-            this.panel15.ResumeLayout(false);
-            this.panel15.PerformLayout();
+            this.panelTrainPreset.ResumeLayout(false);
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
+            this.flowLayoutPanel1.ResumeLayout(false);
+            this.flowLayoutPanel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.upDownClipSkip)).EndInit();
+            this.panelBaseModel.ResumeLayout(false);
+            this.tableLayoutPanel8.ResumeLayout(false);
+            this.panel25.ResumeLayout(false);
+            this.panel26.ResumeLayout(false);
+            this.panel26.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -990,7 +1095,6 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Panel panelTrainPreset;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnOpenModelFolder;
@@ -1035,9 +1139,15 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Panel panelRes;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel10;
-        private System.Windows.Forms.Panel panel14;
         private System.Windows.Forms.ComboBox comboxRes;
         private System.Windows.Forms.Panel panel15;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.NumericUpDown upDownClipSkip;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
+        private System.Windows.Forms.CheckBox checkboxAspectBuckets;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel3;
     }
 }

@@ -139,6 +139,7 @@ namespace StableDiffusionGui.Implementations
 
                     Process py = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd(), Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdVenv, "Scripts", "invoke.exe"));
                     py.StartInfo.EnvironmentVariables["INVOKEAI_ROOT"] = InvokeAiUtils.HomePath;
+                    py.StartInfo.EnvironmentVariables["INVOKE_NMKD_HIRES_MINDIM_MULT"] = Config.IniInstance.HiresFixMinimumDimensionMultiplier.ToStringDot("0.0##");
                     py.StartInfo.RedirectStandardInput = true;
                     py.StartInfo.WorkingDirectory = Paths.GetDataPath();
                     py.StartInfo.Arguments = $"--model {InvokeAiUtils.GetMdlNameForYaml(modelFile, vaeFile)} -o {outPath.Wrap(true)} {argsStartup}";
@@ -262,6 +263,7 @@ namespace StableDiffusionGui.Implementations
                 $"{TtiUtils.GetEnvVarsSdCommand()}\n" +
                 $"{Constants.Files.VenvActivate}\n" +
                 $"SET \"INVOKEAI_ROOT={InvokeAiUtils.HomePath}\"\n" +
+                $"SET \"INVOKE_NMKD_HIRES_MINDIM_MULT={Config.IniInstance.HiresFixMinimumDimensionMultiplier.ToStringDot("0.0##")}\"\n" +
                 $"{Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdVenv, "Scripts", "invoke.exe").Wrap()} --model {InvokeAiUtils.GetMdlNameForYaml(modelFile, vaeFile)} -o {outPath.Wrap(true)} {Args.InvokeAi.GetArgsStartup(cachedModels)}";
 
             File.WriteAllText(batPath, batText);

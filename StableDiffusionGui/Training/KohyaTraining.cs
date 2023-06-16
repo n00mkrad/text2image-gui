@@ -43,7 +43,7 @@ namespace StableDiffusionGui.Training
 
                 if (singleCaption.IsNotEmpty())
                     tempFiles = CreateSingleTagTxts(images, singleCaption);
-                
+
                 int repeats = (int)Math.Ceiling((double)(s.Steps * s.BatchSize) / images.Count);
 
                 TtiProcess.ProcessExistWasIntentional = true;
@@ -147,7 +147,7 @@ namespace StableDiffusionGui.Training
         }
 
         /// <summary> Removes Japanese comments and prints from scripts, as this can cause text decoding errors </summary>
-        private static void PatchScripts ()
+        private static void PatchScripts()
         {
             string root = Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdRepo, "sd-scripts");
 
@@ -159,6 +159,9 @@ namespace StableDiffusionGui.Training
                 string text = File.ReadAllText(file.FullName);
                 string newText = regex.Replace(text, "...");
 
+                if (file.Name == "train_util.py")
+                    newText = newText.Replace("logging_dir=logging_dir,", ""); // Seems to break with accelerate==0.20.3
+
                 if (newText == text)
                     continue;
 
@@ -169,11 +172,11 @@ namespace StableDiffusionGui.Training
 
         /// <summary> Creates a TXT for each image file with the provided tag. </summary>
         /// <returns> The paths of the created files </returns>
-        private static List<string> CreateSingleTagTxts (List<ZlpFileInfo> imageFiles, string tag)
+        private static List<string> CreateSingleTagTxts(List<ZlpFileInfo> imageFiles, string tag)
         {
             var paths = new List<string>();
 
-            foreach(var imgFile in imageFiles)
+            foreach (var imgFile in imageFiles)
             {
                 string txtPath = Path.ChangeExtension(imgFile.FullName, "txt");
                 File.WriteAllText(txtPath, tag);
@@ -218,32 +221,32 @@ namespace StableDiffusionGui.Training
 
             bool replace = ellipsis;
 
-           if (line.Contains("Load dataset config from"))
-               Logger.Log("Loading dataset...", false, replace);
-           
-           if (line.Contains("import network module:"))
-               Logger.Log($"Preparing training...", false, replace);
-           
-           // string lastLogLines = string.Join("\n", Logger.GetLastLines(Constants.Lognames.Training, 6));
-           
-           if (line.Trim().StartsWith("steps:"))
-           {
+            if (line.Contains("Load dataset config from"))
+                Logger.Log("Loading dataset...", false, replace);
+
+            if (line.Contains("import network module:"))
+                Logger.Log($"Preparing training...", false, replace);
+
+            // string lastLogLines = string.Join("\n", Logger.GetLastLines(Constants.Lognames.Training, 6));
+
+            if (line.Trim().StartsWith("steps:"))
+            {
                 int percent = line.Split("%").First().GetInt();
                 int step = line.Split(" [").First().Split(' ').Last().Split("/").First().GetInt(true);
                 int stepsGoal = line.Split(" [").First().Split('/').Last().GetInt(true);
 
                 if (percent > 0 && percent <= 100)
-                   Program.MainForm.SetProgress(percent);
-           
-               string speed = line.Contains(", loss=") ? line.Split(", loss=").First().Split(' ').Last() : "";
-               int remainingMs = speed.IsNotEmpty() ? (stepsGoal - step) * FormatUtils.IterationsToMsPerIteration(speed) : 0;
-           
-               if ((stepsGoal - step) > 1)
-                   Logger.Log($"Training (Step {step}/{stepsGoal} - {percent}%{(step >= 10 && remainingMs > 3000 ? $" - ETA: {FormatUtils.Time(remainingMs, false)}" : "")})...", false, replace);
-           }
-           
-           if (line.Contains("saving checkpoint:"))
-               Logger.Log($"Saving LoRA...", false, replace);
+                    Program.MainForm.SetProgress(percent);
+
+                string speed = line.Contains(", loss=") ? line.Split(", loss=").First().Split(' ').Last() : "";
+                int remainingMs = speed.IsNotEmpty() ? (stepsGoal - step) * FormatUtils.IterationsToMsPerIteration(speed) : 0;
+
+                if ((stepsGoal - step) > 1)
+                    Logger.Log($"Training (Step {step}/{stepsGoal} - {percent}%{(step >= 10 && remainingMs > 3000 ? $" - ETA: {FormatUtils.Time(remainingMs, false)}" : "")})...", false, replace);
+            }
+
+            if (line.Contains("saving checkpoint:"))
+                Logger.Log($"Saving LoRA...", false, replace);
 
             if (line.MatchesWildcard("*%|*/*[*B/s]*") && !line.Lower().Contains("it/s") && !line.Lower().Contains("s/it"))
             {

@@ -77,6 +77,11 @@ namespace StableDiffusionGui.Io
         public string LorasDir;
         public bool AutoDeleteImgs;
         public EasyDict<string, float> LoraWeights = new EasyDict<string, float>();
+        public string LastTrainingBaseModel;
+        public int LastLoraClipSkip;
+        public string LastLoraTrainName;
+        public string LastLoraTrainTrigger;
+        public string LastLoraDataDir;
 
         public ConfigInstance()
         {
