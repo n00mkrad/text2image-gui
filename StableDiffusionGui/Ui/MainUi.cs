@@ -470,56 +470,6 @@ namespace StableDiffusionGui.Ui
             })).RunWithUiStopped(Program.MainForm);
         }
 
-        public static void LoadAutocompleteData(AutocompleteMenuNS.AutocompleteMenu menu, TextBox textbox)
-        {
-            LoadAutocompleteData(menu, new[] { textbox });
-        }
-
-        public static void LoadAutocompleteData(AutocompleteMenuNS.AutocompleteMenu menu, IEnumerable<TextBox> textboxes)
-        {
-            foreach (TextBox textbox in textboxes)
-            {
-                List<string> autoCompleteStrings = new List<string>();
-
-                autoCompleteStrings.AddRange(IoUtils.GetFileInfosSorted(Path.Combine(Paths.GetExeDir(), "Wildcards")).Select(x => $"{x.NameNoExt()}"));
-                // autoCompleteStrings.AddRange(IoUtils.GetFileInfosSorted(Path.Combine(Paths.GetExeDir(), "Wildcards")).Select(x => $"~{x.NameNoExt()}"));
-                // autoCompleteStrings.AddRange(IoUtils.GetFileInfosSorted(Path.Combine(Paths.GetExeDir(), "Wildcards")).Select(x => $"~~{x.NameNoExt()}"));
-                // autoCompleteStrings.AddRange(IoUtils.GetFileInfosSorted(Path.Combine(Paths.GetExeDir(), "Wildcards")).Select(x => $"~~~{x.NameNoExt()}"));
-
-                menu.Items = autoCompleteStrings.ToArray();
-            }
-        }
-
-        public static string[] GetAutocompleteStrings()
-        {
-            List<string> strings = new List<string>();
-            strings.AddRange(IoUtils.GetFileInfosSorted(Path.Combine(Paths.GetExeDir(), "Wildcards")).Select(x => $"{x.NameNoExt()}"));
-            return strings.ToArray();
-        }
-
-        public static AutocompleteMenuNS.AutocompleteMenu ShowAutocompleteMenu(TextBox textbox)
-        {
-            var menu = MakeAutocompleteMenu(textbox.Font);
-            menu.Show(textbox, true);
-            return menu;
-        }
-
-        public static AutocompleteMenuNS.AutocompleteMenu MakeAutocompleteMenu(Font font)
-        {
-            AutocompleteMenuNS.AutocompleteMenu menu = new AutocompleteMenuNS.AutocompleteMenu();
-            menu.AllowsTabKey = true;
-            menu.AppearInterval = 250;
-            menu.Colors = ((AutocompleteMenuNS.Colors)(new ResourceManager(typeof(StableDiffusionGui.Forms.MainForm)).GetObject("promptAutocomplete.Colors")));
-            menu.Font = font;
-            menu.Items = GetAutocompleteStrings();
-            menu.LeftPadding = 0;
-            menu.MaximumSize = new Size(300, 100);
-            menu.MinFragmentLength = 100;
-            menu.SearchPattern = "[\\w\\.-]";
-            menu.TargetControlWrapper = null;
-            return menu;
-        }
-
         public static void SetResolutionForInitImage(string initImgPath)
         {
             Size newRes = GetResolutionForInitImage(IoUtils.GetImage(initImgPath).Size);
