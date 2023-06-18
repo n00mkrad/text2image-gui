@@ -445,6 +445,7 @@ namespace StableDiffusionGui.Forms
         private void btnDreambooth_Click(object sender, EventArgs e)
         {
             new DreamboothForm().ShowDialogForm();
+            RefreshUiState();
         }
 
         private void comboxInpaintMode_SelectedIndexChanged(object sender, EventArgs e)
