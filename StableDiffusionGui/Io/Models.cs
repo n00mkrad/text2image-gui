@@ -290,9 +290,7 @@ namespace StableDiffusionGui.Io
                 if (Directory.Exists(vaeDir) && !IoUtils.TryMove(vaeDir, originalDir, false)) // Return if VAE folder exists and moving it failed
                     return;
 
-                Process p = OsUtils.NewProcess(true);
-                p.StartInfo.Arguments = $"/c mklink /J {vaeDir.Wrap()} {InvokeAiUtils.GetConvertedVaePath(vae).Wrap()}";
-                p.Start();
+                IoUtils.CreateJunction(vaeDir, InvokeAiUtils.GetConvertedVaePath(vae));
             }
         }
 

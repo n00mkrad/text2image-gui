@@ -55,31 +55,42 @@ namespace StableDiffusionGui.Main
             }
         }
 
-        public static void Kill(bool all = true)
+        public static void KillAll ()
         {
-            Logger.Log($"Killing current processes.", true);
             AllProcesses = AllProcesses.Where(p => p != null && !p.HasExited).ToList();
-            var procList = all ? AllProcesses : TextToImage.CurrentTask.Processes;
+            Kill(AllProcesses);
+        }
 
-            if (TextToImage.CurrentTask != null)
+        public static void Kill(List<Process> overrideProcessList = null)
+        {
+            Logger.Log($"Killing processes.", true);
+            var procList = new List<Process>();
+
+            if(overrideProcessList != null)
             {
-                foreach (Process process in procList)
-                {
-                    try
-                    {
-                        if (process != null && !process.HasExited)
-                        {
-                            if (process == CurrentProcess)
-                                ProcessExistWasIntentional = true;
+                procList = overrideProcessList;
+            }
+            else if (TextToImage.CurrentTask != null)
+            {
+                procList = TextToImage.CurrentTask.Processes;
+            }
 
-                            OsUtils.KillProcessTree(process.Id);
-                            Logger.Log($"Killed proc tree with PID {process.Id}", true);
-                        }
-                    }
-                    catch (Exception e)
+            foreach (Process process in procList)
+            {
+                try
+                {
+                    if (process != null && !process.HasExited)
                     {
-                        Logger.Log($"Failed to kill process tree: {e.Message}", true);
+                        if (process == CurrentProcess)
+                            ProcessExistWasIntentional = true;
+
+                        OsUtils.KillProcessTree(process.Id);
+                        Logger.Log($"Killed proc tree with PID {process.Id}", true);
                     }
+                }
+                catch (Exception e)
+                {
+                    Logger.Log($"Failed to kill process tree: {e.Message}", true);
                 }
             }
         }

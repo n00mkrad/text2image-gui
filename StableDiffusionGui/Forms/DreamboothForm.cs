@@ -133,7 +133,8 @@ namespace StableDiffusionGui.Forms
 
             if (Program.State == Program.BusyState.Training)
             {
-                TtiProcess.Kill();
+                TtiProcess.KillAll();
+                btnStart.DisableFor(1000);
                 return;
             }
 
@@ -163,8 +164,9 @@ namespace StableDiffusionGui.Forms
                 return;
             }
 
-            TtiProcess.Kill();
+            TtiProcess.KillAll();
             Program.SetState(Program.BusyState.Training);
+            btnStart.DisableFor(2000);
             btnStart.Text = "Cancel";
 
             ZlpDirectoryInfo trainImgDir = new ZlpDirectoryInfo(textboxTrainImgsDir.Text.Trim());
@@ -195,7 +197,7 @@ namespace StableDiffusionGui.Forms
             Console.WriteLine($"checking:\n{outPath}");
 
             if (File.Exists(outPath))
-                Logger.Log($"Done. Saved trained model to:\n{outPath.Replace(Paths.GetModelsPath(), "Models")}");
+                Logger.Log($"Done. Saved LoRA model to:\n{outPath.Replace(Paths.GetLogPath(), Constants.Dirs.Models.Loras)}");
             else
                 Logger.Log($"Training failed - model file was not saved.");
         }

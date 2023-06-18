@@ -263,5 +263,34 @@ namespace StableDiffusionGui.Extensions
         {
             return form.InvokeIfNeeded(() => form.ShowDialog(owner));
         }
+
+        public static void DisableFor(this Control control, int milliseconds)
+        {
+            control.Enabled = false;
+
+            var timer = new System.Threading.Timer((obj) =>
+            {
+                if (control.IsDisposed)
+                    return;
+
+                if (control.InvokeRequired)
+                {
+                    control.Invoke(new Action(() =>
+                    {
+                        control.Enabled = true;
+                        ((System.Threading.Timer)control.Tag).Dispose();
+                        control.Tag = null;
+                    }));
+                }
+                else
+                {
+                    control.Enabled = true;
+                    ((System.Threading.Timer)control.Tag).Dispose();
+                    control.Tag = null;
+                }
+
+            }, null, milliseconds, System.Threading.Timeout.Infinite);
+            control.Tag = timer; // keep a reference to the timer
+        }
     }
 }

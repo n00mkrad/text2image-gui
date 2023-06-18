@@ -15,7 +15,9 @@ namespace StableDiffusionGui.Forms
             msgLabel.Text = message;
             textBox.Text = defaultText;
             AcceptButton = confirmBtn;
-            Size = new System.Drawing.Size((Size.Width * widthMultiplier).RoundToInt(), (Size.Height * heightMultiplier).RoundToInt());
+            int width = (Size.Width * widthMultiplier).RoundToInt().Clamp(200, Screen.FromControl(this).Bounds.Width);
+            int height = (Size.Height * heightMultiplier).RoundToInt().Clamp(100, Screen.FromControl(this).Bounds.Height);
+            Size = new System.Drawing.Size(width, height);
         }
 
         private void PromptForm_Load(object sender, EventArgs e)

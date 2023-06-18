@@ -352,7 +352,7 @@ namespace StableDiffusionGui.Implementations
             if (lastLogLines.Where(x => x.Contains("%|") || x.Contains("error occurred")).Any()) // Only attempt a soft cancel if we've been generating anything
                 await WaitForCancel();
             else // This condition should be true if we cancel while it's still initializing, so we can just force kill the process
-                TtiProcess.Kill();
+                TtiProcess.KillAll();
         }
 
         public static void SendCtrlC()

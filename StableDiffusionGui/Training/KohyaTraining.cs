@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using ZetaLongPaths;
 using System.IO;
 using System.Text.RegularExpressions;
+using StableDiffusionGui.Forms;
 
 namespace StableDiffusionGui.Training
 {
@@ -21,6 +22,7 @@ namespace StableDiffusionGui.Training
     {
         static readonly string[] _validImageExts = new string[] { ".png", ".jpg", ".jpeg", ".jfif", ".bmp" };
         static readonly bool _useVisibleCmdWindow = false;
+        private static string _currentArchivalLogDir = "";
 
         public static async Task<string> TrainLora(Model baseModel, ZlpDirectoryInfo dataDir, string name, string singleCaption, KohyaSettings s, bool verboseFilename, string outDir = "")
         {
@@ -31,18 +33,13 @@ namespace StableDiffusionGui.Training
 
                 Logger.ClearLogBox();
 
-                var images = IoUtils.GetFileInfosSorted(dataDir.FullName).Where(f => _validImageExts.Contains(f.Extension.Lower())).ToList(); ;
+                var images = IoUtils.GetFileInfosSorted(dataDir.FullName).Where(f => _validImageExts.Contains(f.Extension.Lower())).ToList();
                 Assert.Check(images.Count > 0, "No valid images found!");
 
                 if (singleCaption.IsEmpty())
                 {
                     Assert.Check(CheckIfCaptionsExist(images), "At least one image file is missing a caption file!");
                 }
-
-                var tempFiles = new List<string>();
-
-                if (singleCaption.IsNotEmpty())
-                    tempFiles = CreateSingleTagTxts(images, singleCaption);
 
                 int repeats = (int)Math.Ceiling((double)(s.Steps * s.BatchSize) / images.Count);
 
@@ -52,9 +49,6 @@ namespace StableDiffusionGui.Training
                 bool showCmd = _useVisibleCmdWindow || OsUtils.ShowHiddenCmd();
 
                 string timestamp = FormatUtils.GetUnixTimestamp();
-                string logDir = Path.Combine(Paths.GetLogPath(), "_training");
-                Directory.CreateDirectory(logDir);
-
                 string configPath = Path.Combine(Paths.GetSessionDataPath(), $"loraCfg{timestamp}.toml");
                 string configText = GetConfig(s.Resolution, dataDir.FullName, repeats);
                 File.WriteAllText(configPath, configText);
@@ -69,12 +63,10 @@ namespace StableDiffusionGui.Training
 
                 string outPath = IoUtils.GetAvailablePath(Path.Combine(outDir, $"{filename}.safetensors"), "_{0}");
                 filename = new FileInfo(outPath).GetNameNoExt();
+                _currentArchivalLogDir = IoUtils.CreateDir(Path.Combine(Paths.GetLogPath(), $"train_{filename}"), true).FullName;
+                string captionsDir = CreateDataset(images, singleCaption);
 
-                PatchScripts();
-                Process py = OsUtils.NewProcess(!showCmd);
-                py.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand()} && {Constants.Files.VenvActivate} && " +
-                    $"python \"{Constants.Dirs.SdRepo}\\sd-scripts\\train_network.py\" " +
-                    $"--pretrained_model_name_or_path={baseModel.FullName.Wrap()} " +
+                string args = $"--pretrained_model_name_or_path={baseModel.FullName.Wrap()} " +
                     $"--dataset_config={configPath.Wrap()} " +
                     $"--output_dir={outDir.Wrap()} " +
                     $"--output_name={filename} " +
@@ -93,6 +85,19 @@ namespace StableDiffusionGui.Training
                     $"--seed={s.Seed} " +
                     $"--clip_skip={s.ClipSkip} " +
                     $"--network_args \"conv_dim={s.ConvDim}\" \"conv_alpha={s.ConvAlpha}\" \"dropout={s.Dropout}\" \"algo={s.Algo}\"";
+
+                if (InputUtils.IsHoldingShift)
+                {
+                    var form = new PromptForm("Edit LoRA Training Command", "LoRA Training Arguments:", args, 5f);
+
+                    if(form.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                        args = form.EnteredText.Trim();
+                }
+
+                PatchScripts();
+                Process py = OsUtils.NewProcess(!showCmd);
+                py.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand()} && {Constants.Files.VenvActivate} && " +
+                    $"python \"{Constants.Dirs.SdRepo}\\sd-scripts\\train_network.py\" {args}";
 
                 if (!showCmd)
                 {
@@ -114,9 +119,11 @@ namespace StableDiffusionGui.Training
                     py.BeginErrorReadLine();
                 }
 
+                string log = $"Base Model:\n{baseModel.FullName}\n\nSteps:\n{s.Steps}\n\nLearning Rate:\n{s.LearningRate.ToStringDot("0.########")}\n\nFull Command:\ncmd {py.StartInfo.Arguments}\n\n";
+                File.WriteAllText(Path.Combine(_currentArchivalLogDir, "info.txt"), log);
                 while (!py.HasExited) await Task.Delay(100);
 
-                tempFiles.ForEach(path => IoUtils.TryDeleteIfExists(path));
+                IoUtils.TryDeleteIfExists(captionsDir);
 
                 Program.MainForm.SetProgress(0);
                 return outPath;
@@ -147,7 +154,7 @@ namespace StableDiffusionGui.Training
             return content;
         }
 
-        /// <summary> Removes Japanese comments and prints from scripts, as this can cause text decoding errors </summary>
+        /// <summary> Removes Japanese (or rather all non-UTF8) comments and prints from scripts, as this can cause text decoding errors </summary>
         private static void PatchScripts()
         {
             string root = Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdRepo, "sd-scripts");
@@ -161,7 +168,10 @@ namespace StableDiffusionGui.Training
                 string newText = regex.Replace(text, "...");
 
                 if (file.Name == "train_util.py")
+                {
+                    newText = newText.Replace("base_name = os.path.splitext(img_path)[0]", "base_name = os.path.join(os.path.dirname(img_path), \"captions\", os.path.splitext(os.path.basename(img_path))[0])"); // Use subfolder for captions
                     newText = newText.Replace("logging_dir=logging_dir,", ""); // Seems to break with accelerate==0.20.3
+                }
 
                 if (newText == text)
                     continue;
@@ -171,20 +181,35 @@ namespace StableDiffusionGui.Training
             }
         }
 
-        /// <summary> Creates a TXT for each image file with the provided tag. </summary>
-        /// <returns> The paths of the created files </returns>
-        private static List<string> CreateSingleTagTxts(List<ZlpFileInfo> imageFiles, string tag)
+        private static string CreateDataset(List<ZlpFileInfo> imageFiles, string tag = "")
         {
-            var paths = new List<string>();
+            if (imageFiles == null || !imageFiles.Any())
+                return null;
+
+            string tagsDir = Path.Combine(imageFiles.First().Directory.FullName, "captions");
+            Directory.CreateDirectory(tagsDir);
 
             foreach (var imgFile in imageFiles)
             {
-                string txtPath = Path.ChangeExtension(imgFile.FullName, "txt");
-                File.WriteAllText(txtPath, tag);
-                paths.Add(txtPath);
+                string txtPathTarget = Path.Combine(tagsDir, $"{Path.GetFileNameWithoutExtension(imgFile.FullName)}.txt");
+
+                if (tag.IsNotEmpty())
+                {
+                    File.WriteAllText(txtPathTarget, tag); // Write new tag file for all
+                }
+                else
+                {
+                    string txtPathSource = Path.ChangeExtension(imgFile.FullName, "txt");
+
+                    if (File.Exists(txtPathSource))
+                        IoUtils.CopyTo(txtPathSource, tagsDir); // Copy existing tags
+                }
             }
 
-            return paths;
+            IoUtils.CopyDir(tagsDir, Path.Combine(_currentArchivalLogDir, "captions"));
+            File.WriteAllText(Path.Combine(_currentArchivalLogDir, "images.txt"), string.Join("\n", imageFiles.Select(f => f.FullName)));
+
+            return tagsDir;
         }
 
         /// <summary> Checks if every image has a tag file. </summary>

@@ -1,6 +1,7 @@
 ﻿using Force.Crc32;
 using ImageMagick;
 using StableDiffusionGui.Data;
+using StableDiffusionGui.Implementations;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
@@ -463,20 +464,6 @@ namespace StableDiffusionGui.Io
             }
         }
 
-        public static bool CreateDir(string path)		// Returns whether the dir already existed
-        {
-            if (string.IsNullOrWhiteSpace(path))
-                return false;
-
-            if (!Directory.Exists(path))
-            {
-                Directory.CreateDirectory(path);
-                return false;
-            }
-
-            return true;
-        }
-
         public static string[] GetFilesSorted(string path, bool recursive = false, string pattern = "*")
         {
             try
@@ -903,6 +890,26 @@ namespace StableDiffusionGui.Io
             }
 
             return false;
+        }
+
+        public static void CreateJunction (string junctionPath, string targetPath)
+        {
+            Process p = OsUtils.NewProcess(true);
+            p.StartInfo.Arguments = $"/c mklink /J {junctionPath.Wrap()} {targetPath.Wrap()}";
+            p.Start();
+        }
+
+        public static DirectoryInfo CreateDir(string path, bool deleteIfExists)
+        {
+            if (Directory.Exists(path))
+            {
+                if (deleteIfExists)
+                    TryDeleteIfExists(path);
+                else
+                    return new DirectoryInfo(path); // Already exists.
+            }
+
+            return Directory.CreateDirectory(path);
         }
     }
 }

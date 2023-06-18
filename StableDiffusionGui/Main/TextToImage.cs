@@ -86,7 +86,7 @@ namespace StableDiffusionGui.Main
                 List<Task> tasks = new List<Task>();
 
                 if (LastImplementation != s.Implementation)
-                    TtiProcess.Kill();
+                    TtiProcess.KillAll();
 
                 LastImplementation = s.Implementation;
 
@@ -174,7 +174,7 @@ namespace StableDiffusionGui.Main
                 OsUtils.ShowNotification($"Image generation has finished.\nGenerated {CurrentTask.ImgCount} images in {FormatUtils.Time(timeTaken, false)}.", true);
 
             if (Config.Instance.UnloadModel)
-                TtiProcess.Kill();
+                TtiProcess.KillAll();
         }
 
         public static void CancelManually()
@@ -211,7 +211,7 @@ namespace StableDiffusionGui.Main
                 }
                 else
                 {
-                    TtiProcess.Kill();
+                    TtiProcess.KillAll();
                 }
             }
 
