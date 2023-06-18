@@ -560,7 +560,7 @@
             this.textboxClassName.Location = new System.Drawing.Point(0, 4);
             this.textboxClassName.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxClassName.Name = "textboxClassName";
-            this.textboxClassName.Size = new System.Drawing.Size(456, 21);
+            this.textboxClassName.Size = new System.Drawing.Size(456, 20);
             this.textboxClassName.TabIndex = 4;
             // 
             // panel7
@@ -676,7 +676,7 @@
             this.textboxTrainImgsDir.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
             this.textboxTrainImgsDir.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxTrainImgsDir.Name = "textboxTrainImgsDir";
-            this.textboxTrainImgsDir.Size = new System.Drawing.Size(372, 21);
+            this.textboxTrainImgsDir.Size = new System.Drawing.Size(372, 20);
             this.textboxTrainImgsDir.TabIndex = 4;
             // 
             // panel5
@@ -743,7 +743,7 @@
             this.textboxProjName.Location = new System.Drawing.Point(0, 4);
             this.textboxProjName.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxProjName.Name = "textboxProjName";
-            this.textboxProjName.Size = new System.Drawing.Size(456, 21);
+            this.textboxProjName.Size = new System.Drawing.Size(456, 20);
             this.textboxProjName.TabIndex = 4;
             this.textboxProjName.Text = "MyLora";
             // 

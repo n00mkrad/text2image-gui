@@ -133,7 +133,7 @@ namespace StableDiffusionGui.Forms
 
             if (Program.State == Program.BusyState.Training)
             {
-                ProcessManager.FindAndKillOrphans($"*{Constants.Dirs.Dreambooth}*.py*{Paths.SessionTimestamp}*");
+                TtiProcess.Kill();
                 return;
             }
 

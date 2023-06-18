@@ -71,8 +71,8 @@ namespace StableDiffusionGui.Training
                 filename = new FileInfo(outPath).GetNameNoExt();
 
                 PatchScripts();
-                Process proc = OsUtils.NewProcess(!showCmd);
-                proc.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand()} && {Constants.Files.VenvActivate} && " +
+                Process py = OsUtils.NewProcess(!showCmd);
+                py.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand()} && {Constants.Files.VenvActivate} && " +
                     $"python \"{Constants.Dirs.SdRepo}\\sd-scripts\\train_network.py\" " +
                     $"--pretrained_model_name_or_path={baseModel.FullName.Wrap()} " +
                     $"--dataset_config={configPath.Wrap()} " +
@@ -96,24 +96,25 @@ namespace StableDiffusionGui.Training
 
                 if (!showCmd)
                 {
-                    proc.OutputDataReceived += (sender, line) => { Log(line?.Data); };
-                    proc.ErrorDataReceived += (sender, line) => { Log(line?.Data, true); };
+                    py.OutputDataReceived += (sender, line) => { Log(line?.Data); };
+                    py.ErrorDataReceived += (sender, line) => { Log(line?.Data, true); };
                 }
 
                 Logger.Log($"Starting training.\nLoading...");
 
                 DreamboothOutputHandler.Start();
-                Logger.Log($"cmd {proc.StartInfo.Arguments}", true);
-                proc.Start();
-                OsUtils.AttachOrphanHitman(proc);
+                Logger.Log($"cmd {py.StartInfo.Arguments}", true);
+                py.Start();
+                TtiProcess.CurrentProcess = py;
+                OsUtils.AttachOrphanHitman(py);
 
                 if (!showCmd)
                 {
-                    proc.BeginOutputReadLine();
-                    proc.BeginErrorReadLine();
+                    py.BeginOutputReadLine();
+                    py.BeginErrorReadLine();
                 }
 
-                while (!proc.HasExited) await Task.Delay(100);
+                while (!py.HasExited) await Task.Delay(100);
 
                 tempFiles.ForEach(path => IoUtils.TryDeleteIfExists(path));
 
