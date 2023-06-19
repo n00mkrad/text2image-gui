@@ -134,5 +134,12 @@ namespace StableDiffusionGui.Ui
             { Enums.Training.LoraSizes.Normal.ToString(), "Normal (30 MB File)" },
             { Enums.Training.LoraSizes.Big.ToString(), "Big (60 MB File)" },
         };
+
+        public static Dictionary<string, string> CaptionModes = new Dictionary<string, string>
+        {
+            { Enums.Training.CaptionMode.NoCaption.ToString(), "No Caption (LoRA will always influence image)" },
+            { Enums.Training.CaptionMode.UseSinglePhrase.ToString(), "Use a Single Word or Phrase" },
+            { Enums.Training.CaptionMode.UseTxtFiles.ToString(), "Read Captions From TXT Files in Training Folder" },
+        };
     }
 }

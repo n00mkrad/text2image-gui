@@ -40,6 +40,7 @@ namespace StableDiffusionGui.Main
         {
             public enum TrainPreset { VeryHighQuality, HighQuality, MedQuality, LowQuality }
             public enum LoraSizes { Tiny, Small, Normal, Big }
+            public enum CaptionMode { NoCaption, UseSinglePhrase, UseTxtFiles }
         }
 
         public class Ai

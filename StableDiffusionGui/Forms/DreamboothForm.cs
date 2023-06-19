@@ -28,6 +28,7 @@ namespace StableDiffusionGui.Forms
         private void DreamboothForm_Load(object sender, EventArgs e)
         {
             comboxNetworkSize.FillFromEnum<LoraSizes>(Strings.LoraSizes, 2);
+            comboxCaptions.FillFromEnum<CaptionMode>(Strings.CaptionModes, 1);
             comboxRes.SelectedIndex = 1;
             comboxSaveFormat.SelectedIndex = 0;
             comboxTrainFormat.SelectedIndex = 0;
@@ -172,9 +173,7 @@ namespace StableDiffusionGui.Forms
             btnStart.Text = "Cancel";
 
             ZlpDirectoryInfo trainImgDir = new ZlpDirectoryInfo(textboxTrainImgsDir.Text.Trim());
-            string trigger = string.Join("_", textboxClassName.Text.Trim().Split(Path.GetInvalidFileNameChars())).Trunc(75, false);
             string name = string.Join("_", textboxProjName.Text.Trim().Split(Path.GetInvalidFileNameChars())).Trunc(50, false);
-            textboxClassName.Text = trigger;
 
             KohyaSettings settings = new KohyaSettings(KohyaSettings.NetworkType.LoHa)
             {
@@ -198,7 +197,10 @@ namespace StableDiffusionGui.Forms
             if (size == LoraSizes.Normal) { settings.NetworkDim = 8; settings.ConvDim = 4; }
             if (size == LoraSizes.Big) { settings.NetworkDim = 16; settings.ConvDim = 8; }
 
-            string outPath = await KohyaTraining.TrainLora(baseModel, trainImgDir, name, trigger, settings, true);
+            var captionMode = ParseUtils.GetEnum<CaptionMode>(comboxCaptions.Text, true, Strings.CaptionModes);
+
+            string trigger = captionMode == CaptionMode.UseTxtFiles ? null : textboxClassName.Visible ? textboxClassName.Text.Trim() : "";
+            string outPath = await KohyaTraining.TrainLora(baseModel, trainImgDir, name, trigger, settings, checkboxDebugOpts.Checked);
 
             Program.SetState(Program.BusyState.Standby);
             btnStart.Text = "Start Training";
@@ -262,12 +264,27 @@ namespace StableDiffusionGui.Forms
             ConfigParser.LoadGuiElement(textboxClassName, ref Config.Instance.LastLoraTrainTrigger);
 
             if (Directory.Exists(Config.Instance.LastLoraDataDir))
+            {
                 textboxTrainImgsDir.Text = Config.Instance.LastLoraDataDir;
+
+                if (IoUtils.GetFilesSorted(Config.Instance.LastLoraDataDir, false, "*.txt").Any())
+                    comboxCaptions.SetWithEnum(CaptionMode.UseTxtFiles, true, Strings.CaptionModes);
+            }
         }
 
         private void checkboxDebugOpts_CheckedChanged(object sender, EventArgs e)
         {
             flowLayoutPanelDebugOpts.Visible = checkboxDebugOpts.Checked;
+        }
+
+        private void comboxCaptions_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ((Action)(() =>
+            {
+                var selectedMode = ParseUtils.GetEnum<CaptionMode>(comboxCaptions.Text, true, Strings.CaptionModes);
+                textboxClassName.Visible = selectedMode == CaptionMode.UseSinglePhrase;
+                comboxCaptions.Size = new System.Drawing.Size(selectedMode == CaptionMode.UseSinglePhrase ? 200 : 456, textboxClassName.Size.Height);
+            })).RunWithUiStopped(this);
         }
     }
 }

@@ -9,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using ZetaLongPaths;
 using System.IO;
@@ -24,7 +23,7 @@ namespace StableDiffusionGui.Training
         static readonly bool _useVisibleCmdWindow = false;
         private static string _currentArchivalLogDir = "";
 
-        public static async Task<string> TrainLora(Model baseModel, ZlpDirectoryInfo dataDir, string name, string singleCaption, KohyaSettings s, bool verboseFilename, string outDir = "")
+        public static async Task<string> TrainLora(Model baseModel, ZlpDirectoryInfo dataDir, string name, string caption, KohyaSettings s, bool verboseFilename, string outDir = "")
         {
             try
             {
@@ -35,11 +34,6 @@ namespace StableDiffusionGui.Training
 
                 var images = IoUtils.GetFileInfosSorted(dataDir.FullName).Where(f => _validImageExts.Contains(f.Extension.Lower())).ToList();
                 Assert.Check(images.Count > 0, "No valid images found!");
-
-                if (singleCaption.IsEmpty())
-                {
-                    Assert.Check(CheckIfCaptionsExist(images), "At least one image file is missing a caption file!");
-                }
 
                 int repeats = (int)Math.Ceiling((double)(s.Steps * s.BatchSize) / images.Count);
 
@@ -60,7 +54,7 @@ namespace StableDiffusionGui.Training
                 string outPath = IoUtils.GetAvailablePath(Path.Combine(outDir, $"{filename}.safetensors"), "_{0}");
                 filename = new FileInfo(outPath).GetNameNoExt();
                 _currentArchivalLogDir = IoUtils.CreateDir(Path.Combine(Paths.GetLogPath(), $"train_{filename}"), true).FullName;
-                string captionsDir = CreateDataset(images, singleCaption);
+                string captionsDir = CreateDataset(images, caption);
 
                 if(s.AgumentColor || s.AugmentFlip)
                 {
@@ -191,28 +185,33 @@ namespace StableDiffusionGui.Training
             }
         }
 
-        private static string CreateDataset(List<ZlpFileInfo> imageFiles, string tag = "")
+        private static string CreateDataset(List<ZlpFileInfo> imageFiles, string caption)
         {
             if (imageFiles == null || !imageFiles.Any())
                 return null;
 
             string tagsDir = Path.Combine(imageFiles.First().Directory.FullName, "captions");
+            IoUtils.DeleteIfExists(tagsDir);
+
+            if (caption != null && caption.IsEmpty())
+                return null;
+
             Directory.CreateDirectory(tagsDir);
 
             foreach (var imgFile in imageFiles)
             {
                 string txtPathTarget = Path.Combine(tagsDir, $"{Path.GetFileNameWithoutExtension(imgFile.FullName)}.txt");
 
-                if (tag.IsNotEmpty())
-                {
-                    File.WriteAllText(txtPathTarget, tag); // Write new tag file for all
-                }
-                else
+                if(caption == null) // No caption from GUI, use TXTs
                 {
                     string txtPathSource = Path.ChangeExtension(imgFile.FullName, "txt");
 
                     if (File.Exists(txtPathSource))
                         IoUtils.CopyTo(txtPathSource, tagsDir); // Copy existing tags
+                }
+                else
+                {
+                    File.WriteAllText(txtPathTarget, caption); // Write new tag file for all
                 }
             }
 

@@ -44,6 +44,8 @@
             this.checkboxAugColor = new System.Windows.Forms.CheckBox();
             this.checkboxAugFlip = new System.Windows.Forms.CheckBox();
             this.checkboxShuffleTags = new System.Windows.Forms.CheckBox();
+            this.textboxSeed = new System.Windows.Forms.TextBox();
+            this.label12 = new System.Windows.Forms.Label();
             this.panelSteps = new System.Windows.Forms.Panel();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
             this.panel10 = new System.Windows.Forms.Panel();
@@ -70,6 +72,7 @@
             this.panelToken = new System.Windows.Forms.Panel();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.panel6 = new System.Windows.Forms.Panel();
+            this.comboxCaptions = new System.Windows.Forms.ComboBox();
             this.textboxClassName = new System.Windows.Forms.TextBox();
             this.panel7 = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
@@ -106,8 +109,6 @@
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.btnInfo = new System.Windows.Forms.Button();
             this.btnOpenModelFolder = new System.Windows.Forms.Button();
-            this.textboxSeed = new System.Windows.Forms.TextBox();
-            this.label12 = new System.Windows.Forms.Label();
             this.parentPanel.SuspendLayout();
             this.panelDebug.SuspendLayout();
             this.tableLayoutPanel11.SuspendLayout();
@@ -344,6 +345,31 @@
             this.checkboxShuffleTags.TabIndex = 112;
             this.checkboxShuffleTags.Text = "Shuffle Tags";
             this.checkboxShuffleTags.UseVisualStyleBackColor = true;
+            // 
+            // textboxSeed
+            // 
+            this.textboxSeed.AllowDrop = true;
+            this.textboxSeed.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textboxSeed.ForeColor = System.Drawing.Color.White;
+            this.textboxSeed.Location = new System.Drawing.Point(80, 31);
+            this.textboxSeed.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
+            this.textboxSeed.MinimumSize = new System.Drawing.Size(4, 21);
+            this.textboxSeed.Name = "textboxSeed";
+            this.textboxSeed.Size = new System.Drawing.Size(50, 20);
+            this.textboxSeed.TabIndex = 113;
+            this.textboxSeed.Text = "42";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label12.ForeColor = System.Drawing.Color.White;
+            this.label12.Location = new System.Drawing.Point(42, 36);
+            this.label12.Margin = new System.Windows.Forms.Padding(0, 8, 3, 0);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(35, 13);
+            this.label12.TabIndex = 114;
+            this.label12.Text = "Seed:";
             // 
             // panelSteps
             // 
@@ -724,6 +750,7 @@
             // 
             // panel6
             // 
+            this.panel6.Controls.Add(this.comboxCaptions);
             this.panel6.Controls.Add(this.textboxClassName);
             this.panel6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel6.Location = new System.Drawing.Point(304, 3);
@@ -732,15 +759,35 @@
             this.panel6.Size = new System.Drawing.Size(456, 29);
             this.panel6.TabIndex = 88;
             // 
+            // comboxCaptions
+            // 
+            this.comboxCaptions.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboxCaptions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.comboxCaptions.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboxCaptions.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboxCaptions.ForeColor = System.Drawing.Color.White;
+            this.comboxCaptions.FormattingEnabled = true;
+            this.comboxCaptions.Items.AddRange(new object[] {
+            "512px - Recommended GPU VRAM: 8 GB",
+            "640px - Recommended GPU VRAM: 8 GB",
+            "768px - Recommended GPU VRAM: 10 GB",
+            "1024px - Recommended GPU VRAM: 10 GB"});
+            this.comboxCaptions.Location = new System.Drawing.Point(0, 4);
+            this.comboxCaptions.Margin = new System.Windows.Forms.Padding(0, 4, 3, 3);
+            this.comboxCaptions.Name = "comboxCaptions";
+            this.comboxCaptions.Size = new System.Drawing.Size(456, 21);
+            this.comboxCaptions.TabIndex = 107;
+            this.comboxCaptions.SelectedIndexChanged += new System.EventHandler(this.comboxCaptions_SelectedIndexChanged);
+            // 
             // textboxClassName
             // 
             this.textboxClassName.AllowDrop = true;
             this.textboxClassName.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textboxClassName.ForeColor = System.Drawing.Color.White;
-            this.textboxClassName.Location = new System.Drawing.Point(0, 4);
+            this.textboxClassName.Location = new System.Drawing.Point(206, 4);
             this.textboxClassName.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxClassName.Name = "textboxClassName";
-            this.textboxClassName.Size = new System.Drawing.Size(456, 20);
+            this.textboxClassName.Size = new System.Drawing.Size(250, 20);
             this.textboxClassName.TabIndex = 4;
             // 
             // panel7
@@ -761,9 +808,9 @@
             this.label3.Location = new System.Drawing.Point(2, 8);
             this.label3.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(265, 13);
+            this.label3.Size = new System.Drawing.Size(128, 13);
             this.label3.TabIndex = 85;
-            this.label3.Text = "Trigger Phrase (Leave Empty to Use Tag Files Instead)";
+            this.label3.Text = "Captions (Image Tagging)";
             // 
             // btnStart
             // 
@@ -877,9 +924,9 @@
             this.label2.Location = new System.Drawing.Point(2, 8);
             this.label2.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(117, 13);
+            this.label2.Size = new System.Drawing.Size(76, 13);
             this.label2.TabIndex = 85;
-            this.label2.Text = "Training Dataset Folder";
+            this.label2.Text = "Dataset Folder";
             // 
             // panelProjectName
             // 
@@ -1180,31 +1227,6 @@
             this.btnOpenModelFolder.UseVisualStyleBackColor = false;
             this.btnOpenModelFolder.Click += new System.EventHandler(this.btnOpenModelFolder_Click);
             // 
-            // textboxSeed
-            // 
-            this.textboxSeed.AllowDrop = true;
-            this.textboxSeed.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.textboxSeed.ForeColor = System.Drawing.Color.White;
-            this.textboxSeed.Location = new System.Drawing.Point(80, 31);
-            this.textboxSeed.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
-            this.textboxSeed.MinimumSize = new System.Drawing.Size(4, 21);
-            this.textboxSeed.Name = "textboxSeed";
-            this.textboxSeed.Size = new System.Drawing.Size(50, 21);
-            this.textboxSeed.TabIndex = 113;
-            this.textboxSeed.Text = "42";
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.ForeColor = System.Drawing.Color.White;
-            this.label12.Location = new System.Drawing.Point(42, 36);
-            this.label12.Margin = new System.Windows.Forms.Padding(0, 8, 3, 0);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(35, 13);
-            this.label12.TabIndex = 114;
-            this.label12.Text = "Seed:";
-            // 
             // DreamboothForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1371,5 +1393,6 @@
         private System.Windows.Forms.CheckBox checkboxShuffleTags;
         private System.Windows.Forms.TextBox textboxSeed;
         private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.ComboBox comboxCaptions;
     }
 }
