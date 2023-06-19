@@ -44,8 +44,6 @@ namespace StableDiffusionGui.Training
                 int repeats = (int)Math.Ceiling((double)(s.Steps * s.BatchSize) / images.Count);
 
                 TtiProcess.ProcessExistWasIntentional = true;
-                ProcessManager.FindAndKillOrphans($"*{Constants.Dirs.SdRepo}*.py*{Paths.SessionTimestamp}*");
-
                 bool showCmd = _useVisibleCmdWindow || OsUtils.ShowHiddenCmd();
 
                 string timestamp = FormatUtils.GetUnixTimestamp();
@@ -54,17 +52,21 @@ namespace StableDiffusionGui.Training
                 File.WriteAllText(configPath, configText);
 
                 string lrStr = s.LearningRate.ToStringDot("0.######").Split('.').Last();
-                string filename = "";
+                string filename = $"{name}_{s.Steps}s_lr{lrStr}_{s.Resolution}px";
 
                 if (verboseFilename)
-                    filename = $"{name}_{s.Steps}s_lr{lrStr}_{s.Resolution}px_loha_nd{s.NetworkDim}c{s.ConvDim}";
-                else
-                    filename = $"{name}_{s.Steps}s_lr{lrStr}_{s.Resolution}px";
+                    filename += $"_loha_nd{s.NetworkDim}c{s.ConvDim}";
 
                 string outPath = IoUtils.GetAvailablePath(Path.Combine(outDir, $"{filename}.safetensors"), "_{0}");
                 filename = new FileInfo(outPath).GetNameNoExt();
                 _currentArchivalLogDir = IoUtils.CreateDir(Path.Combine(Paths.GetLogPath(), $"train_{filename}"), true).FullName;
                 string captionsDir = CreateDataset(images, singleCaption);
+
+                if(s.AgumentColor || s.AugmentFlip)
+                {
+                    s.CacheLatents = false;
+                    Logger.Log($"Warning: Latents Caching has been disabled because it cannot be used with Color/Flip augmentations. This will increase VRAM usage.");
+                }
 
                 string args = $"--pretrained_model_name_or_path={baseModel.FullName.Wrap()} " +
                     $"--dataset_config={configPath.Wrap()} " +
@@ -74,10 +76,13 @@ namespace StableDiffusionGui.Training
                     $"--prior_loss_weight=1.0 " +
                     $"--max_train_steps={s.Steps} " +
                     $"--learning_rate={s.LearningRate.ToStringDot("0.########")} " +
-                    $"--mixed_precision=\"fp16\" " +
-                    $"--save_precision=\"fp16\" " +
-                    $"--cache_latents " +
-                    $"--gradient_checkpointing " +
+                    $"--mixed_precision={s.TrainFormat} " +
+                    $"--save_precision={s.TrainFormat} " +
+                    $"{(s.CacheLatents ? "--cache_latents" : "")} " +
+                    $"{(s.GradientCheckpointing ? "--gradient_checkpointing" : "")} " +
+                    $"{(s.AugmentFlip ? "--flip_aug" : "")} " +
+                    $"{(s.AgumentColor ? "--color_aug" : "")} " +
+                    $"{(s.ShuffleCaption ? "--shuffle_caption" : "")} " +
                     $"--save_every_n_epochs=999 " +
                     $"--network_module=lycoris.kohya " +
                     $"--network_dim={s.NetworkDim} " +
@@ -112,6 +117,7 @@ namespace StableDiffusionGui.Training
                 py.Start();
                 TtiProcess.CurrentProcess = py;
                 OsUtils.AttachOrphanHitman(py);
+                StartLogging();
 
                 if (!showCmd)
                 {
@@ -121,7 +127,11 @@ namespace StableDiffusionGui.Training
 
                 string log = $"Base Model:\n{baseModel.FullName}\n\nSteps:\n{s.Steps}\n\nLearning Rate:\n{s.LearningRate.ToStringDot("0.########")}\n\nFull Command:\ncmd {py.StartInfo.Arguments}\n\n";
                 File.WriteAllText(Path.Combine(_currentArchivalLogDir, "info.txt"), log);
+                var sw = new NmkdStopwatch();
                 while (!py.HasExited) await Task.Delay(100);
+
+                if(!TextToImage.Canceled)
+                Logger.Log($"Training has finished after {FormatUtils.Time(sw.ElapsedMilliseconds)}.");
 
                 IoUtils.TryDeleteIfExists(captionsDir);
 
@@ -249,6 +259,9 @@ namespace StableDiffusionGui.Training
 
             if (line.Contains("Load dataset config from"))
                 Logger.Log("Loading dataset...", false, replace);
+
+            if (line.Contains("caching latents."))
+                Logger.Log($"Caching dataset latents...", false, replace);
 
             if (line.Contains("import network module:"))
                 Logger.Log($"Preparing training...", false, replace);

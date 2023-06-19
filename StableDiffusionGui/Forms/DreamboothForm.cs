@@ -29,6 +29,8 @@ namespace StableDiffusionGui.Forms
         {
             comboxNetworkSize.FillFromEnum<LoraSizes>(Strings.LoraSizes, 2);
             comboxRes.SelectedIndex = 1;
+            comboxSaveFormat.SelectedIndex = 0;
+            comboxTrainFormat.SelectedIndex = 0;
             LoadModels();
 
             if (Config.Instance.LastTrainingBaseModel.IsEmpty())
@@ -181,6 +183,13 @@ namespace StableDiffusionGui.Forms
                 Resolution = comboxRes.Text.Split(" ").First().GetInt(),
                 ClipSkip = (int)upDownClipSkip.Value,
                 UseAspectBuckets = checkboxAspectBuckets.Checked,
+                GradientCheckpointing = checkboxGradCkpt.Checked,
+                TrainFormat = comboxTrainFormat.Text.Split(':').Last().Trim().Lower(),
+                SaveFormat = comboxSaveFormat.Text.Split(':').Last().Trim().Lower(),
+                AugmentFlip = checkboxAugFlip.Checked,
+                AgumentColor = checkboxAugColor.Checked,
+                ShuffleCaption = checkboxShuffleTags.Checked,
+                Seed = textboxSeed.GetInt(),
             };
 
             var size = ParseUtils.GetEnum<LoraSizes>(comboxNetworkSize.Text, true, Strings.LoraSizes);
@@ -189,7 +198,7 @@ namespace StableDiffusionGui.Forms
             if (size == LoraSizes.Normal) { settings.NetworkDim = 8; settings.ConvDim = 4; }
             if (size == LoraSizes.Big) { settings.NetworkDim = 16; settings.ConvDim = 8; }
 
-            string outPath = await Training.KohyaTraining.TrainLora(baseModel, trainImgDir, name, trigger, settings, true);
+            string outPath = await KohyaTraining.TrainLora(baseModel, trainImgDir, name, trigger, settings, true);
 
             Program.SetState(Program.BusyState.Standby);
             btnStart.Text = "Start Training";
@@ -197,7 +206,7 @@ namespace StableDiffusionGui.Forms
             Console.WriteLine($"checking:\n{outPath}");
 
             if (File.Exists(outPath))
-                Logger.Log($"Done. Saved LoRA model to:\n{outPath.Replace(Paths.GetLogPath(), Constants.Dirs.Models.Loras)}");
+                Logger.Log($"Done. Saved LoRA model to:\n{outPath.Replace(Paths.GetLorasPath(), Constants.Dirs.Models.Loras)}");
             else
                 Logger.Log($"Training failed - model file was not saved.");
         }
@@ -254,6 +263,11 @@ namespace StableDiffusionGui.Forms
 
             if (Directory.Exists(Config.Instance.LastLoraDataDir))
                 textboxTrainImgsDir.Text = Config.Instance.LastLoraDataDir;
+        }
+
+        private void checkboxDebugOpts_CheckedChanged(object sender, EventArgs e)
+        {
+            flowLayoutPanelDebugOpts.Visible = checkboxDebugOpts.Checked;
         }
     }
 }

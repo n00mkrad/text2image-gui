@@ -18,6 +18,13 @@ namespace StableDiffusionGui.Training
         public bool UseAspectBuckets = true;
         public int ClipSkip;
         public int Dropout;
+        public bool CacheLatents = true;
+        public bool GradientCheckpointing = true;
+        public string TrainFormat = "fp16";
+        public string SaveFormat = "fp16";
+        public bool AugmentFlip = false;
+        public bool AgumentColor = false;
+        public bool ShuffleCaption = false;
 
         public string Algo
         {

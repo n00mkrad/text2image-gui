@@ -32,6 +32,18 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DreamboothForm));
             this.titleLabel = new System.Windows.Forms.Label();
             this.parentPanel = new System.Windows.Forms.Panel();
+            this.panelDebug = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel11 = new System.Windows.Forms.TableLayoutPanel();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.checkboxDebugOpts = new System.Windows.Forms.CheckBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.flowLayoutPanelDebugOpts = new System.Windows.Forms.FlowLayoutPanel();
+            this.checkboxGradCkpt = new System.Windows.Forms.CheckBox();
+            this.comboxSaveFormat = new System.Windows.Forms.ComboBox();
+            this.comboxTrainFormat = new System.Windows.Forms.ComboBox();
+            this.checkboxAugColor = new System.Windows.Forms.CheckBox();
+            this.checkboxAugFlip = new System.Windows.Forms.CheckBox();
+            this.checkboxShuffleTags = new System.Windows.Forms.CheckBox();
             this.panelSteps = new System.Windows.Forms.Panel();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
             this.panel10 = new System.Windows.Forms.Panel();
@@ -94,7 +106,13 @@
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.btnInfo = new System.Windows.Forms.Button();
             this.btnOpenModelFolder = new System.Windows.Forms.Button();
+            this.textboxSeed = new System.Windows.Forms.TextBox();
+            this.label12 = new System.Windows.Forms.Label();
             this.parentPanel.SuspendLayout();
+            this.panelDebug.SuspendLayout();
+            this.tableLayoutPanel11.SuspendLayout();
+            this.panel2.SuspendLayout();
+            this.flowLayoutPanelDebugOpts.SuspendLayout();
             this.panelSteps.SuspendLayout();
             this.tableLayoutPanel6.SuspendLayout();
             this.panel10.SuspendLayout();
@@ -151,6 +169,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.parentPanel.AutoScroll = true;
+            this.parentPanel.Controls.Add(this.panelDebug);
             this.parentPanel.Controls.Add(this.panelSteps);
             this.parentPanel.Controls.Add(this.panelLr);
             this.parentPanel.Controls.Add(this.panelRes);
@@ -164,6 +183,167 @@
             this.parentPanel.Name = "parentPanel";
             this.parentPanel.Size = new System.Drawing.Size(760, 392);
             this.parentPanel.TabIndex = 15;
+            // 
+            // panelDebug
+            // 
+            this.panelDebug.Controls.Add(this.tableLayoutPanel11);
+            this.panelDebug.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelDebug.Location = new System.Drawing.Point(0, 280);
+            this.panelDebug.Name = "panelDebug";
+            this.panelDebug.Size = new System.Drawing.Size(760, 70);
+            this.panelDebug.TabIndex = 107;
+            // 
+            // tableLayoutPanel11
+            // 
+            this.tableLayoutPanel11.ColumnCount = 2;
+            this.tableLayoutPanel11.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40F));
+            this.tableLayoutPanel11.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
+            this.tableLayoutPanel11.Controls.Add(this.panel2, 0, 0);
+            this.tableLayoutPanel11.Controls.Add(this.flowLayoutPanelDebugOpts, 1, 0);
+            this.tableLayoutPanel11.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel11.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel11.Name = "tableLayoutPanel11";
+            this.tableLayoutPanel11.RowCount = 1;
+            this.tableLayoutPanel11.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel11.Size = new System.Drawing.Size(760, 70);
+            this.tableLayoutPanel11.TabIndex = 1;
+            // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.checkboxDebugOpts);
+            this.panel2.Controls.Add(this.label8);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel2.Location = new System.Drawing.Point(0, 3);
+            this.panel2.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(301, 64);
+            this.panel2.TabIndex = 87;
+            // 
+            // checkboxDebugOpts
+            // 
+            this.checkboxDebugOpts.AutoSize = true;
+            this.checkboxDebugOpts.Location = new System.Drawing.Point(103, 7);
+            this.checkboxDebugOpts.Margin = new System.Windows.Forms.Padding(3, 7, 0, 3);
+            this.checkboxDebugOpts.Name = "checkboxDebugOpts";
+            this.checkboxDebugOpts.Size = new System.Drawing.Size(53, 17);
+            this.checkboxDebugOpts.TabIndex = 108;
+            this.checkboxDebugOpts.Text = "Show";
+            this.checkboxDebugOpts.UseVisualStyleBackColor = true;
+            this.checkboxDebugOpts.CheckedChanged += new System.EventHandler(this.checkboxDebugOpts_CheckedChanged);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.ForeColor = System.Drawing.Color.White;
+            this.label8.Location = new System.Drawing.Point(2, 8);
+            this.label8.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(95, 13);
+            this.label8.TabIndex = 85;
+            this.label8.Text = "Developer Options";
+            // 
+            // flowLayoutPanelDebugOpts
+            // 
+            this.flowLayoutPanelDebugOpts.Controls.Add(this.checkboxGradCkpt);
+            this.flowLayoutPanelDebugOpts.Controls.Add(this.comboxSaveFormat);
+            this.flowLayoutPanelDebugOpts.Controls.Add(this.comboxTrainFormat);
+            this.flowLayoutPanelDebugOpts.Controls.Add(this.checkboxAugColor);
+            this.flowLayoutPanelDebugOpts.Controls.Add(this.checkboxAugFlip);
+            this.flowLayoutPanelDebugOpts.Controls.Add(this.checkboxShuffleTags);
+            this.flowLayoutPanelDebugOpts.Controls.Add(this.textboxSeed);
+            this.flowLayoutPanelDebugOpts.Controls.Add(this.label12);
+            this.flowLayoutPanelDebugOpts.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flowLayoutPanelDebugOpts.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
+            this.flowLayoutPanelDebugOpts.Location = new System.Drawing.Point(304, 3);
+            this.flowLayoutPanelDebugOpts.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
+            this.flowLayoutPanelDebugOpts.Name = "flowLayoutPanelDebugOpts";
+            this.flowLayoutPanelDebugOpts.Size = new System.Drawing.Size(456, 64);
+            this.flowLayoutPanelDebugOpts.TabIndex = 88;
+            this.flowLayoutPanelDebugOpts.Visible = false;
+            // 
+            // checkboxGradCkpt
+            // 
+            this.checkboxGradCkpt.AutoSize = true;
+            this.checkboxGradCkpt.Checked = true;
+            this.checkboxGradCkpt.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkboxGradCkpt.Location = new System.Drawing.Point(319, 7);
+            this.checkboxGradCkpt.Margin = new System.Windows.Forms.Padding(3, 7, 0, 3);
+            this.checkboxGradCkpt.Name = "checkboxGradCkpt";
+            this.checkboxGradCkpt.Size = new System.Drawing.Size(137, 17);
+            this.checkboxGradCkpt.TabIndex = 107;
+            this.checkboxGradCkpt.Text = "Gradient Checkpointing";
+            this.toolTip.SetToolTip(this.checkboxGradCkpt, "Significantly reduces VRAM usage, but is slightly slower.");
+            this.checkboxGradCkpt.UseVisualStyleBackColor = true;
+            // 
+            // comboxSaveFormat
+            // 
+            this.comboxSaveFormat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboxSaveFormat.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.comboxSaveFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboxSaveFormat.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboxSaveFormat.ForeColor = System.Drawing.Color.White;
+            this.comboxSaveFormat.FormattingEnabled = true;
+            this.comboxSaveFormat.Items.AddRange(new object[] {
+            "Save Format: FP16",
+            "Save Format: BF16",
+            "Save Format: Float"});
+            this.comboxSaveFormat.Location = new System.Drawing.Point(193, 4);
+            this.comboxSaveFormat.Margin = new System.Windows.Forms.Padding(0, 4, 3, 3);
+            this.comboxSaveFormat.Name = "comboxSaveFormat";
+            this.comboxSaveFormat.Size = new System.Drawing.Size(120, 21);
+            this.comboxSaveFormat.TabIndex = 109;
+            // 
+            // comboxTrainFormat
+            // 
+            this.comboxTrainFormat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboxTrainFormat.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.comboxTrainFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboxTrainFormat.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboxTrainFormat.ForeColor = System.Drawing.Color.White;
+            this.comboxTrainFormat.FormattingEnabled = true;
+            this.comboxTrainFormat.Items.AddRange(new object[] {
+            "Train Format: FP16",
+            "Train Format: BF16",
+            "Train Format: Float"});
+            this.comboxTrainFormat.Location = new System.Drawing.Point(70, 4);
+            this.comboxTrainFormat.Margin = new System.Windows.Forms.Padding(0, 4, 3, 3);
+            this.comboxTrainFormat.Name = "comboxTrainFormat";
+            this.comboxTrainFormat.Size = new System.Drawing.Size(120, 21);
+            this.comboxTrainFormat.TabIndex = 108;
+            // 
+            // checkboxAugColor
+            // 
+            this.checkboxAugColor.AutoSize = true;
+            this.checkboxAugColor.Location = new System.Drawing.Point(338, 35);
+            this.checkboxAugColor.Margin = new System.Windows.Forms.Padding(3, 7, 0, 3);
+            this.checkboxAugColor.Name = "checkboxAugColor";
+            this.checkboxAugColor.Size = new System.Drawing.Size(118, 17);
+            this.checkboxAugColor.TabIndex = 110;
+            this.checkboxAugColor.Text = "Color Augmentation";
+            this.checkboxAugColor.UseVisualStyleBackColor = true;
+            // 
+            // checkboxAugFlip
+            // 
+            this.checkboxAugFlip.AutoSize = true;
+            this.checkboxAugFlip.Location = new System.Drawing.Point(225, 35);
+            this.checkboxAugFlip.Margin = new System.Windows.Forms.Padding(3, 7, 0, 3);
+            this.checkboxAugFlip.Name = "checkboxAugFlip";
+            this.checkboxAugFlip.Size = new System.Drawing.Size(110, 17);
+            this.checkboxAugFlip.TabIndex = 111;
+            this.checkboxAugFlip.Text = "Flip Augmentation";
+            this.checkboxAugFlip.UseVisualStyleBackColor = true;
+            // 
+            // checkboxShuffleTags
+            // 
+            this.checkboxShuffleTags.AutoSize = true;
+            this.checkboxShuffleTags.Location = new System.Drawing.Point(136, 35);
+            this.checkboxShuffleTags.Margin = new System.Windows.Forms.Padding(3, 7, 0, 3);
+            this.checkboxShuffleTags.Name = "checkboxShuffleTags";
+            this.checkboxShuffleTags.Size = new System.Drawing.Size(86, 17);
+            this.checkboxShuffleTags.TabIndex = 112;
+            this.checkboxShuffleTags.Text = "Shuffle Tags";
+            this.checkboxShuffleTags.UseVisualStyleBackColor = true;
             // 
             // panelSteps
             // 
@@ -1000,6 +1180,31 @@
             this.btnOpenModelFolder.UseVisualStyleBackColor = false;
             this.btnOpenModelFolder.Click += new System.EventHandler(this.btnOpenModelFolder_Click);
             // 
+            // textboxSeed
+            // 
+            this.textboxSeed.AllowDrop = true;
+            this.textboxSeed.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textboxSeed.ForeColor = System.Drawing.Color.White;
+            this.textboxSeed.Location = new System.Drawing.Point(80, 31);
+            this.textboxSeed.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
+            this.textboxSeed.MinimumSize = new System.Drawing.Size(4, 21);
+            this.textboxSeed.Name = "textboxSeed";
+            this.textboxSeed.Size = new System.Drawing.Size(50, 21);
+            this.textboxSeed.TabIndex = 113;
+            this.textboxSeed.Text = "42";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label12.ForeColor = System.Drawing.Color.White;
+            this.label12.Location = new System.Drawing.Point(42, 36);
+            this.label12.Margin = new System.Windows.Forms.Padding(0, 8, 3, 0);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(35, 13);
+            this.label12.TabIndex = 114;
+            this.label12.Text = "Seed:";
+            // 
             // DreamboothForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1024,6 +1229,12 @@
             this.Shown += new System.EventHandler(this.DreamboothForm_Shown);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.DreamboothForm_KeyDown);
             this.parentPanel.ResumeLayout(false);
+            this.panelDebug.ResumeLayout(false);
+            this.tableLayoutPanel11.ResumeLayout(false);
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
+            this.flowLayoutPanelDebugOpts.ResumeLayout(false);
+            this.flowLayoutPanelDebugOpts.PerformLayout();
             this.panelSteps.ResumeLayout(false);
             this.tableLayoutPanel6.ResumeLayout(false);
             this.panel10.ResumeLayout(false);
@@ -1146,5 +1357,19 @@
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
         private System.Windows.Forms.CheckBox checkboxAspectBuckets;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel3;
+        private System.Windows.Forms.Panel panelDebug;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel11;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.CheckBox checkboxDebugOpts;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanelDebugOpts;
+        private System.Windows.Forms.CheckBox checkboxGradCkpt;
+        private System.Windows.Forms.ComboBox comboxTrainFormat;
+        private System.Windows.Forms.ComboBox comboxSaveFormat;
+        private System.Windows.Forms.CheckBox checkboxAugColor;
+        private System.Windows.Forms.CheckBox checkboxAugFlip;
+        private System.Windows.Forms.CheckBox checkboxShuffleTags;
+        private System.Windows.Forms.TextBox textboxSeed;
+        private System.Windows.Forms.Label label12;
     }
 }
