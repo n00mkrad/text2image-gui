@@ -211,7 +211,6 @@ namespace StableDiffusionGui.Forms
                 loras = ValidateLoraNames(loras);
 
             _lastLoras = loras.Select(l => l.FormatIndependentName).AsString();
-            panelLoras.SetVisible(loras.Any()); // Disable panel if no LoRAs in folder
 
             if (!loras.Any())
                 return;
@@ -225,6 +224,7 @@ namespace StableDiffusionGui.Forms
             gridLoras.Rows.Clear();
             loras.ToList().ForEach(l => gridLoras.Rows.Add(false, l.FormatIndependentName, defaultStrength));
             SetLoras(selection); // Restore selection
+            SetVisibility(panelLoras);
         }
 
         public void SortLoras(bool force = false)

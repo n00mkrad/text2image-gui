@@ -74,7 +74,7 @@ namespace StableDiffusionGui.Forms
                 return implementation.Supports(Feature.CustomModels);
 
             if (control == panelLoras)
-                return implementation.Supports(Feature.Lora);
+                return implementation.Supports(Feature.Lora) && gridLoras.Rows.Count > 0;
 
             return false;
         }
