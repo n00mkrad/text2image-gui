@@ -110,8 +110,22 @@ namespace StableDiffusionGui.Main
                         if (TextToImage.IsRunningQueue)
                             imgCountStr += $" of this task - {imgCount}/{targetImgCount} total";
 
-                        Logger.Log($"Generated image in {FormatUtils.Time(lastMsPerImg)} ({imgCountStr})" +
-                        $"{(TextToImage.CurrentTask.ImgCount > 2 && remainingMs > 1000 ? $" - ETA: {FormatUtils.Time(remainingMs, false)}" : "")}", false, replace || Logger.LastUiLine.MatchesWildcard("*Generated*image*in*"));
+                        string etaStr = "";
+
+                        if (imgCount > 2)
+                        {
+                            etaStr += $" - ETA: {FormatUtils.Time(remainingMs, false)}";
+
+                            if (TextToImage.IsRunningQueue && imgCount > 4)
+                            {
+                                int remainingMsTotal = (targetImgCount - imgCount) * (int)RollingAvg.GetAverage();
+
+                                if (remainingMsTotal != remainingMs)
+                                    etaStr += $" for this task - {FormatUtils.Time(remainingMsTotal, false)} for entire queue";
+                            }
+                        }
+
+                        Logger.Log($"Generated image in {FormatUtils.Time(lastMsPerImg)} ({imgCountStr}){etaStr}", false, replace || Logger.LastUiLine.MatchesWildcard("*Generated*image*in*"));
 
                         TimeSinceLastImage.Restart();
                         string path = outPath + line.Split(outPath)[1].Split(':')[0];
