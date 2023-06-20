@@ -82,7 +82,7 @@
 
         public class SuffixesPrefixes
         {
-            public const string InpaintingMdlSuf = "-inpainting";
+            public const string InpaintingMdlSuf = "inpainting";
         }
 
         public class Limits
