@@ -53,7 +53,7 @@ namespace StableDiffusionGui.Forms
             {
                 DialogResult dialogResult = UiUtils.ShowMessageBox($"The program is still busy. Are you sure you want to quit?", UiUtils.MessageType.Warning.ToString(), MessageBoxButtons.YesNo);
 
-                if(dialogResult == DialogResult.Yes)
+                if(dialogResult != DialogResult.Yes)
                 {
                     e.Cancel = true;
                     return;
