@@ -467,12 +467,19 @@ namespace StableDiffusionGui.Installation
                             byte[] exeBytes = File.ReadAllBytes(file.FullName);
                             Encoding encoding = Encoding.Default;
                             string exeText = encoding.GetString(exeBytes);
-                            exeText = _exeShebangRegex.Replace(exeText, $"$1{Path.Combine(GetDataSubPath(Constants.Dirs.SdVenv), "Scripts", "python.exe")}$3");
-                            byte[] newExeBytes = encoding.GetBytes(exeText);
+                            string shebang = _exeShebangRegex.Match(exeText).Value.NullToEmpty();
+                            string pyPath = Path.Combine(GetDataSubPath(Constants.Dirs.SdVenv), "Scripts", "python.exe");
 
-                            if (newExeBytes.SequenceEqual(exeBytes))
+                            if (shebang.IsEmpty() || shebang.Contains(pyPath, StringComparison.OrdinalIgnoreCase))
                                 continue;
 
+                            Logger.Log($"Detected invalid shebang in executable {file.Name}: {shebang}", true);
+                            exeText = _exeShebangRegex.Replace(exeText, $"$1{pyPath}$3");
+                            byte[] newExeBytes = encoding.GetBytes(exeText);
+                            
+                            if (newExeBytes.SequenceEqual(exeBytes))
+                                continue;
+                            
                             File.WriteAllBytes(file.FullName, newExeBytes);
                             Logger.Log($"Fixed shebang in executable {file.Name}", true);
                         }

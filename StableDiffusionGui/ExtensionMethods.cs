@@ -683,5 +683,10 @@ namespace StableDiffusionGui
         {
             return string.Join(delimiter, list);
         }
+
+        public static bool Contains(this string s, string toCheck, StringComparison comp)
+        {
+            return s?.IndexOf(toCheck, comp) >= 0;
+        }
     }
 }
