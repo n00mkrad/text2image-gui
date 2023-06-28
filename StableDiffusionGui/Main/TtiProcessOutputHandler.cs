@@ -104,6 +104,7 @@ namespace StableDiffusionGui.Main
                         int lastMsPerImg = (int)TimeSinceLastImage.ElapsedMilliseconds;
                         RollingAvg.AddDataPoint(lastMsPerImg);
                         int remainingMs = (TextToImage.CurrentTask.TargetImgCount - TextToImage.CurrentTask.ImgCount) * (int)RollingAvg.GetAverage();
+                        int remainingMsTotal = (targetImgCount - imgCount) * (int)RollingAvg.GetAverage();
 
                         string imgCountStr = $"{TextToImage.CurrentTask.ImgCount}/{TextToImage.CurrentTask.TargetImgCount}";
 
@@ -112,14 +113,12 @@ namespace StableDiffusionGui.Main
 
                         string etaStr = "";
 
-                        if (imgCount > 2)
+                        if (imgCount > 2 && remainingMsTotal > 2000)
                         {
                             etaStr += $" - ETA: {FormatUtils.Time(remainingMs, false)}";
 
                             if (TextToImage.IsRunningQueue && imgCount > 4)
                             {
-                                int remainingMsTotal = (targetImgCount - imgCount) * (int)RollingAvg.GetAverage();
-
                                 if (remainingMsTotal != remainingMs)
                                     etaStr += $" for this task - {FormatUtils.Time(remainingMsTotal, false)} for entire queue";
                             }
