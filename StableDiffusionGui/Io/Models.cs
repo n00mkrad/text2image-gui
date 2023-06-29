@@ -22,7 +22,7 @@ namespace StableDiffusionGui.Io
             List<string> mdlFolders = new List<string>();
 
             if (includeBuiltin)
-                mdlFolders.Add(Paths.GetModelsPath());
+                mdlFolders.Add(Paths.GetModelsPath(false));
 
             mdlFolders = mdlFolders.Concat(Config.Instance.CustomModelDirs).ToList();
             return mdlFolders;
@@ -31,7 +31,7 @@ namespace StableDiffusionGui.Io
         public static List<Model> GetVaes()
         {
             List<string> dirs = new List<string>(Config.Instance.CustomVaeDirs);
-            dirs.Insert(0, Paths.GetVaesPath());
+            dirs.Insert(0, Paths.GetVaesPath(false));
             return GetModelsAll(true, dirs, Enums.Models.Type.Vae);
         }
 

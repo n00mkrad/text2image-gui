@@ -247,12 +247,6 @@ namespace StableDiffusionGui.Implementations
             if (modelFile == null)
                 return;
 
-            if (modelFile.Format == Enums.Models.Format.Diffusers && vaeFile != null)
-            {
-                vaeFile = null; // Diffusers currently doesn't support external VAEs
-                Logger.Log("External VAEs are currently not supported with Diffusers models. Using this model's built-in VAE instead.");
-            }
-
             InvokeAiUtils.WriteModelsYamlAll(cachedModels, cachedModelsVae, Enums.Models.SdArch.Automatic, true);
             if (TextToImage.Canceled) return;
 

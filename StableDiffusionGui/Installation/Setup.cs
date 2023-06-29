@@ -20,8 +20,6 @@ namespace StableDiffusionGui.Installation
         private static readonly string _gitBranch = "main";
         public static readonly string GitCommit = "eda6e02496ef43aeb8a56c8ba1d2df7ecb18e1a7";
 
-        private static readonly bool _allowModelDownload = false;
-
         public static async Task Install(bool force = false, bool installUpscalers = true)
         {
             Logger.Log($"Installing (Force = {force} - Upscalers: {installUpscalers})", true, false, Constants.Lognames.Installer);
@@ -36,14 +34,6 @@ namespace StableDiffusionGui.Installation
                         Logger.Log("Install: Cloning repo and setting up env because either SD Repo or SD Env is missing.", true, false, Constants.Lognames.Installer);
 
                     await InstallRepo();
-                }
-
-                if (_allowModelDownload && (force || !InstallationStatus.HasSdModel()))
-                {
-                    if (!force)
-                        Logger.Log("Install: Downloading model file because there is none.", true, false, Constants.Lognames.Installer);
-
-                    await DownloadSdModelFile();
                 }
 
                 if (force || (installUpscalers && !InstallationStatus.HasSdUpscalers()))
@@ -166,35 +156,6 @@ namespace StableDiffusionGui.Installation
                     Logger.Log($"Installing {split.First().Trim()} ({split.Last().Trim()})", false, Logger.LastUiLine.EndsWith("%)"));
                 }
             }
-        }
-
-        public static async Task DownloadSdModelFile(bool force = false)
-        {
-            string mdlPath = Path.Combine(Paths.GetModelsPath(), "sd-v1-5-fp16.ckpt");
-            bool hasModel = IoUtils.GetFileInfosSorted(Paths.GetModelsPath(), false, "*.ckpt").Where(x => x.Length == 2133058272).Any();
-
-            if (hasModel && !force)
-            {
-                Logger.Log($"Model file already exists, won't redownload.");
-                return;
-            }
-
-            IoUtils.TryDeleteIfExists(mdlPath);
-            Logger.Log("Downloading model file...");
-
-            Process p = OsUtils.NewProcess(true);
-            p.ErrorDataReceived += (sender, line) => { try { Logger.Log($"Downloading... ({line.Data?.Trim().Split(' ')[0]}%)", false, Logger.LastUiLine.EndsWith("%)"), Constants.Lognames.Installer); } catch { } };
-            p.StartInfo.Arguments = $"/C curl -k \"https://dl.nmkd-hz.de/tti/sd/models/sd-v1-5-fp16.ckpt\" -o {mdlPath.Wrap()}";
-            p.Start();
-            p.BeginErrorReadLine();
-
-            while (!p.HasExited)
-                await Task.Delay(1);
-
-            if (File.Exists(mdlPath))
-                Logger.Log($"Model file downloaded ({FormatUtils.Bytes(new ZlpFileInfo(mdlPath).Length)}).");
-            else
-                Logger.Log($"Failed to download model file due to an unknown error. Check the log files.");
         }
 
         #region Git

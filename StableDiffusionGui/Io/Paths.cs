@@ -1,10 +1,6 @@
-﻿using StableDiffusionGui.Data;
-using StableDiffusionGui.Main;
+﻿using StableDiffusionGui.Main;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using ZetaLongPaths;
 
 namespace StableDiffusionGui.Io
 {
@@ -19,9 +15,21 @@ namespace StableDiffusionGui.Io
             SessionTimestamp = $"{n.Year}-{n.Month.ToString().PadLeft(2, '0')}-{n.Day.ToString().PadLeft(2, '0')}-{n.Hour.ToString().PadLeft(2, '0')}-{n.Minute.ToString().PadLeft(2, '0')}-{n.Second.ToString().PadLeft(2, '0')}";
         }
 
-        private static string ReturnDir(string path)
+        public static string ReturnDir(string path, bool create = true, bool expand = false)
         {
-            return Directory.CreateDirectory(path).FullName;
+            bool relativePath = path[1] != ':'; // If the second char is ':', there is a drive letter, meaning it's an absolute path
+            string absPath = path;
+
+            if (relativePath && expand)
+                absPath = Path.Combine(GetExeDir(), path);
+
+            if (create)
+                Directory.CreateDirectory(absPath);
+
+            if (expand)
+                path = absPath;
+
+            return path;
         }
 
         public static string GetExe()
@@ -49,24 +57,28 @@ namespace StableDiffusionGui.Io
             return ReturnDir(Path.Combine(GetDataPath(), "logs", (noSession ? "" : SessionTimestamp)));
         }
 
-        public static string GetModelsPath()
+        public static string GetModelsPath(bool relative = true, bool create = true)
         {
-            return ReturnDir(Path.Combine(GetExeDir(), Constants.Dirs.Models.Root, Constants.Dirs.Models.Ckpts));
+            string path = Path.Combine(Constants.Dirs.Models.Root, Constants.Dirs.Models.Ckpts);
+            return ReturnDir(path, create, !relative);
         }
 
-        public static string GetVaesPath()
+        public static string GetVaesPath(bool relative = true, bool create = true)
         {
-            return ReturnDir(Path.Combine(GetExeDir(), Constants.Dirs.Models.Root, Constants.Dirs.Models.Vae));
+            string path = Path.Combine(Constants.Dirs.Models.Root, Constants.Dirs.Models.Vae);
+            return ReturnDir(path, create, !relative);
         }
 
-        public static string GetEmbeddingsPath()
+        public static string GetEmbeddingsPath(bool relative = true, bool create = true)
         {
-            return ReturnDir(Path.Combine(GetExeDir(), Constants.Dirs.Models.Root, Constants.Dirs.Models.Embeddings));
+            string path = Path.Combine(Constants.Dirs.Models.Root, Constants.Dirs.Models.Embeddings);
+            return ReturnDir(path, create, !relative);
         }
 
-        public static string GetLorasPath()
+        public static string GetLorasPath(bool relative = true, bool create = true)
         {
-            return ReturnDir(Path.Combine(GetExeDir(), Constants.Dirs.Models.Root, Constants.Dirs.Models.Loras));
+            string path = Path.Combine(Constants.Dirs.Models.Root, Constants.Dirs.Models.Loras);
+            return ReturnDir(path, create, !relative);
         }
 
         public static string GetSessionDataPath()

@@ -54,10 +54,10 @@ namespace StableDiffusionGui.Main
                     args.Add("--no-patchmatch"); // Disable patchmatch (used for legacy inpainting) if there are any native inpainting models available
 
                 if (Directory.Exists(Config.Instance.EmbeddingsDir))
-                    args.Add($"--embedding_directory {Config.Instance.EmbeddingsDir.Wrap(true)}"); // Embeddings folder path
+                    args.Add($"--embedding_directory {Paths.ReturnDir(Config.Instance.EmbeddingsDir, true, true).Wrap(true)}"); // Embeddings folder path
 
                 if (Directory.Exists(Config.Instance.LorasDir))
-                    args.Add($"--lora_directory {Config.Instance.LorasDir.Wrap(true)}"); // LoRA folder path
+                    args.Add($"--lora_directory {Paths.ReturnDir(Config.Instance.LorasDir, true, true).Wrap(true)}"); // LoRA folder path
 
                 args.Add("--no-nsfw_checker"); // Disable NSFW checker (might become optional in the future)
                 args.Add("--no-xformers"); // Disable xformers until Pytorch >1.11 slowdown is investigated and xformers works
