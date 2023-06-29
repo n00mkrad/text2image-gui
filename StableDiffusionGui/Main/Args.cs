@@ -53,8 +53,12 @@ namespace StableDiffusionGui.Main
                 if (Models.HasAnyInpaintingModels(cachedModels, Enums.StableDiffusion.Implementation.InvokeAi))
                     args.Add("--no-patchmatch"); // Disable patchmatch (used for legacy inpainting) if there are any native inpainting models available
 
-                args.Add($"--embedding_directory {Config.Instance.EmbeddingsDir.Wrap(true)}"); // Embeddings folder path
-                args.Add($"--lora_directory {Config.Instance.LorasDir.Wrap(true)}"); // LoRA folder path
+                if (Directory.Exists(Config.Instance.EmbeddingsDir))
+                    args.Add($"--embedding_directory {Config.Instance.EmbeddingsDir.Wrap(true)}"); // Embeddings folder path
+
+                if (Directory.Exists(Config.Instance.LorasDir))
+                    args.Add($"--lora_directory {Config.Instance.LorasDir.Wrap(true)}"); // LoRA folder path
+
                 args.Add("--no-nsfw_checker"); // Disable NSFW checker (might become optional in the future)
                 args.Add("--no-xformers"); // Disable xformers until Pytorch >1.11 slowdown is investigated and xformers works
                 args.Add("--png_compression 1"); // Higher compression levels are barely worth it
