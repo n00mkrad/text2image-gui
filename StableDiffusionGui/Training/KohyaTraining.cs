@@ -35,6 +35,12 @@ namespace StableDiffusionGui.Training
                 var images = IoUtils.GetFileInfosSorted(dataDir.FullName).Where(f => _validImageExts.Contains(f.Extension.Lower())).ToList();
                 Assert.Check(images.Count > 0, "No valid images found!");
 
+                if (baseModel.Format == Enums.Models.Format.Diffusers)
+                {
+                    Models.SetDiffusersClipSkip(baseModel, 0); // Reset CLIP Skip
+                    Models.HotswapDiffusersVae(baseModel, null); // Reset custom VAE
+                }
+
                 int repeats = (int)Math.Ceiling((double)(s.Steps * s.BatchSize) / images.Count);
 
                 TtiProcess.ProcessExistWasIntentional = true;
