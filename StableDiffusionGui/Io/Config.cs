@@ -84,7 +84,7 @@ namespace StableDiffusionGui.Io
                 if (File.Exists(ConfigPath))
                     IoUtils.TryMove(ConfigPath, ConfigPath.FilenameSuffix($".failedToLoad{FormatUtils.GetUnixTimestamp()}")); // Move out of the way but don't delete, for data restoration purposes
                 else
-                    Logger.Log("Can't load config file. Creating new config instead.");
+                    Logger.Log("Can't load config file. Creating new config instead.", true);
 
                 Instance = new ConfigInstance();
             }

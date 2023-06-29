@@ -137,12 +137,13 @@ namespace StableDiffusionGui.Implementations
 
                     TtiProcess.LastStartupSettings = newStartupSettings;
 
-                    Process py = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd(), Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdVenv, "Scripts", "invoke.exe"));
+                    string invokeExePath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdVenv, "Scripts", "invokeai.exe");
+                    Process py = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd(), Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdVenv, "Scripts", "python.exe"));
                     py.StartInfo.EnvironmentVariables["INVOKEAI_ROOT"] = InvokeAiUtils.HomePath;
                     py.StartInfo.EnvironmentVariables["INVOKE_NMKD_HIRES_MINDIM_MULT"] = Config.IniInstance.HiresFixMinimumDimensionMultiplier.ToStringDot("0.0##");
                     py.StartInfo.RedirectStandardInput = true;
                     py.StartInfo.WorkingDirectory = Paths.GetDataPath();
-                    py.StartInfo.Arguments = $"--model {InvokeAiUtils.GetMdlNameForYaml(modelFile, vaeFile)} -o {outPath.Wrap(true)} {argsStartup}";
+                    py.StartInfo.Arguments = $"{invokeExePath.Wrap()} --model {InvokeAiUtils.GetMdlNameForYaml(modelFile, vaeFile)} -o {outPath.Wrap(true)} {argsStartup}";
 
                     foreach (var pair in TtiUtils.GetEnvVarsSd(false, Paths.GetDataPath()))
                         py.StartInfo.EnvironmentVariables[pair.Key] = pair.Value;
@@ -261,10 +262,10 @@ namespace StableDiffusionGui.Implementations
                 $"title Stable Diffusion CLI (InvokeAI)\n" +
                 $"cd /D {Paths.GetDataPath().Wrap()}\n" +
                 $"{TtiUtils.GetEnvVarsSdCommand()}\n" +
-                $"{Constants.Files.VenvActivate}\n" +
                 $"SET \"INVOKEAI_ROOT={InvokeAiUtils.HomePath}\"\n" +
                 $"SET \"INVOKE_NMKD_HIRES_MINDIM_MULT={Config.IniInstance.HiresFixMinimumDimensionMultiplier.ToStringDot("0.0##")}\"\n" +
-                $"{Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdVenv, "Scripts", "invoke.exe").Wrap()} --model {InvokeAiUtils.GetMdlNameForYaml(modelFile, vaeFile)} -o {outPath.Wrap(true)} {Args.InvokeAi.GetArgsStartup(cachedModels)}";
+                $"{Constants.Files.VenvActivate} && " +
+                $"python {Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdVenv, "Scripts", "invoke.exe").Wrap()} --model {InvokeAiUtils.GetMdlNameForYaml(modelFile, vaeFile)} -o {outPath.Wrap(true)} {Args.InvokeAi.GetArgsStartup(cachedModels)}";
 
             File.WriteAllText(batPath, batText);
             Process cli = Process.Start(batPath);

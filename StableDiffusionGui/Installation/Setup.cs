@@ -464,6 +464,8 @@ namespace StableDiffusionGui.Installation
                     {
                         if (file.Extension.Lower() == ".exe")
                         {
+                            continue;
+
                             byte[] exeBytes = File.ReadAllBytes(file.FullName);
                             Encoding encoding = Encoding.Default;
                             string exeText = encoding.GetString(exeBytes);
