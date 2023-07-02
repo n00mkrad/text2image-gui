@@ -60,9 +60,6 @@ namespace StableDiffusionGui.Forms
         private void SaveDirs()
         {
             List<string> folders = Folders.Where(dir => dir != DefaultPath && Directory.Exists(dir)).ToList();
-
-            if (!folders.Any())
-                return;
             
             if (_folder == Folder.Models)
                 Config.Instance.CustomModelDirs = folders;
