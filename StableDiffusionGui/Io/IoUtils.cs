@@ -916,6 +916,9 @@ namespace StableDiffusionGui.Io
                         Logger.Log($"Cleanup: {(success ? "Deleted" : "Failed to delete")} '{dir.FullName}'", true);
                     }
                 }
+
+                foreach(var dirInfo in new DirectoryInfo(Paths.GetExeDir()).GetDirectories().Where(d => d.Name == "upd" || d.Name.StartsWith("upd_")))
+                    TryDeleteIfExists(dirInfo.FullName);
             }
             catch (Exception e)
             {

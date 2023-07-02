@@ -20,7 +20,7 @@ namespace StableDiffusionGui.Main
         public static async Task Install(MdlRelease release)
         {
             Logger.ClearLogBox();
-            string tempDir = IoUtils.GetAvailablePath(Path.Combine(Paths.GetExeDir() + "upd"), "{0}");
+            string tempDir = IoUtils.GetAvailablePath(Path.Combine(Paths.GetExeDir() + "upd"), "_{0}");
 
             if (!InstallationStatus.HasBins())
             {
