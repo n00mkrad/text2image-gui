@@ -78,7 +78,7 @@ namespace StableDiffusionGui.Forms
             Enabled = false;
             Program.SetState(Program.BusyState.Installation);
             btnInstall.Text = "Installing...";
-            await Updater.Install(selectedRelease, checkboxKeepImages.Checked, checkboxKeepModels.Checked, checkboxKeepSettings.Checked);
+            await Updater.Install(selectedRelease /*, checkboxKeepImages.Checked, checkboxKeepModels.Checked, checkboxKeepSettings.Checked */);
             btnInstall.Text = "Install Selected Release";
             Enabled = true;
             Program.SetState(Program.BusyState.Standby);

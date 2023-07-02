@@ -90,6 +90,7 @@
             this.panelCopy.Name = "panelCopy";
             this.panelCopy.Size = new System.Drawing.Size(560, 35);
             this.panelCopy.TabIndex = 104;
+            this.panelCopy.Visible = false;
             // 
             // tableLayoutPanel1
             // 

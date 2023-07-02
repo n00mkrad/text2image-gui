@@ -1,9 +1,9 @@
 ﻿using StableDiffusionGui.Data;
-using StableDiffusionGui.Forms;
 using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Os;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -17,14 +17,14 @@ namespace StableDiffusionGui.Main
         private static readonly string _urlBasefilesGit = "https://github.com/n00mkrad/text2image-gui-basefiles";
         private static readonly string _urlBuilds = "https://github.com/n00mkrad/text2image-gui/raw/main/builds";
 
-        public static async Task Install(MdlRelease release, bool copyImages, bool copyModels, bool copyConfig)
+        public static async Task Install(MdlRelease release)
         {
             Logger.ClearLogBox();
-            string tempDir = IoUtils.GetAvailablePath(Paths.GetExeDir().TrimEnd('\\') + "-upd");
+            string tempDir = IoUtils.GetAvailablePath(Path.Combine(Paths.GetExeDir() + "upd"), "{0}");
 
             if (!InstallationStatus.HasBins())
             {
-                Logger.Log($"Error: Can't install update because required files are missing.");
+                Logger.Log($"Error: Can't install update because required files are missing. Try doing a fresh install.");
                 return;
             }
 
@@ -36,16 +36,13 @@ namespace StableDiffusionGui.Main
                 string exePath = Path.Combine(tempDir, "StableDiffusionGui.exe");
                 Logger.Log("Downloading executable...", false, Logger.LastUiLine.EndsWith("..."));
                 await DownloadRelease(release, exePath);
-                string gitPath = Path.Combine(tempDir, ".git");
-                IoUtils.SetAttributes(gitPath);
-                IoUtils.TryDeleteIfExists(gitPath);
-                Logger.Log("Moving files...", false, Logger.LastUiLine.EndsWith("..."));
-                bool moveFilesSuccess = await Task.Run(() => Move(tempDir, copyImages, copyModels, copyConfig, release.HashRepo == Setup.GitCommit));
-                Logger.Log($"Move success: {moveFilesSuccess}", true);
-                Logger.Log("Preparing to start new version and delete old files...", false, Logger.LastUiLine.EndsWith("..."));
+                Directory.GetDirectories(tempDir, ".git", SearchOption.AllDirectories).ToList().ForEach(d => IoUtils.TryDeleteIfExists(d)); // Delete all .git dirs
+                IoUtils.GetFilesSorted(tempDir, ".git*").ToList().ForEach(d => IoUtils.TryDeleteIfExists(d)); // Delete all .gitignore etc files
+                Logger.Log("Installing update files...", false, Logger.LastUiLine.EndsWith("..."));
+                string moveCmd = Move(tempDir);
                 string launchCmd = GetLaunchCmd(release);
                 Process p = OsUtils.NewProcess(true);
-                p.StartInfo.Arguments = $"/C cd /D C:/ && timeout 2 && rmdir /s/q {Paths.GetExeDir().Wrap().TrimEnd('\\')} && move {tempDir.TrimEnd('\\').Wrap()} {Paths.GetExeDir().TrimEnd('\\').Wrap()} && {launchCmd}";
+                p.StartInfo.Arguments = $"/C cd /D C:/ && timeout 2 {moveCmd} && {launchCmd} && rmdir /s/q {tempDir.Wrap().TrimEnd('\\')} ";
                 p.Start();
                 Program.SetState(Program.BusyState.Standby);
                 Program.MainForm.Close();
@@ -86,7 +83,67 @@ namespace StableDiffusionGui.Main
             return $"{Paths.GetExe().Wrap()} -{Constants.Args.Install}={true} -{Constants.Args.InstallUpscalers}={up} -info={info}";
         }
 
-        private static bool Move(string newInstallPath, bool images, bool models, bool config, bool repoAndVenv)
+        private static string Move(string updateDir)
+        {
+            string newDataDir = Path.Combine(updateDir, "Data");
+            string cmd = "";
+
+            // Remove existing data subdirs, overwriting is not a good idea for python etc, but keep dirs not in update
+            List<string> rootSubdirs = new DirectoryInfo(updateDir).GetDirectories().Select(d => d.Name).ToList();
+            List<string> dataSubdirs = new DirectoryInfo(newDataDir).GetDirectories().Select(d => d.Name).ToList();
+
+            // Move data subdirs (delete existing first)
+            foreach (string dataDir in dataSubdirs)
+            {
+                string oldPath = Path.Combine(Paths.GetDataPath(), dataDir);
+                bool success = IoUtils.TryDeleteIfExists(oldPath);
+
+                if (success)
+                    IoUtils.TryMove(Path.Combine(newDataDir, dataDir), oldPath);
+
+                if (IoUtils.GetDirSize(newDataDir, true) <= 0)
+                    IoUtils.TryDeleteIfExists(newDataDir);
+            }
+
+            // Move other subdirs (keep existing, overwrite files)
+            foreach (string dir in rootSubdirs)
+            {
+                string oldPath = Path.Combine(Paths.GetExeDir(), dir);
+                IoUtils.TryMove(Path.Combine(updateDir, dir), oldPath);
+            }
+
+            var oldRootFiles = IoUtils.GetFilesSorted(Paths.GetExeDir(), false).ToList();
+            oldRootFiles.ForEach(f => IoUtils.TryDeleteIfExists(f));
+
+            foreach (string oldRootFile in oldRootFiles)
+            {
+                bool success = IoUtils.TryDeleteIfExists(oldRootFile);
+
+                if (!success)
+                    cmd += $" && del {oldRootFile.Wrap()}";
+            }
+
+            var newRootFiles = IoUtils.GetFilesSorted(updateDir, false).ToList();
+            var renameUpdFilesPaths = new List<string>();
+
+            foreach (string newRootFile in newRootFiles)
+            {
+                string targetPath = Path.Combine(Paths.GetExeDir(), Path.GetFileName(newRootFile));
+
+                if (File.Exists(targetPath))
+                {
+                    string oldTargetPath = targetPath;
+                    targetPath += ".upd";
+                    cmd += $" && move {targetPath.Wrap()} {oldTargetPath.Wrap()}";
+                }
+
+                IoUtils.TryMove(newRootFile, targetPath);
+            }
+
+            return cmd;
+        }
+
+        private static bool MoveOld(string newInstallPath, bool images, bool models, bool config, bool repoAndVenv)
         {
             string targetDataDir = Directory.CreateDirectory(Path.Combine(newInstallPath, Constants.Dirs.Data)).FullName;
 

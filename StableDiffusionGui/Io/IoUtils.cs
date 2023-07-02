@@ -215,10 +215,15 @@ namespace StableDiffusionGui.Io
             {
                 if (IsPathDirectory(source))
                 {
-                    if (overwrite && Directory.Exists(target))
-                        Directory.Delete(target, true);
-
-                    Directory.Move(source, target);
+                    if (Directory.Exists(target))
+                    {
+                        MergeDirectories(source, target, overwrite);
+                        Directory.Delete(source, true);
+                    }
+                    else
+                    {
+                        Directory.Move(source, target);
+                    }
                 }
                 else
                 {
@@ -235,6 +240,37 @@ namespace StableDiffusionGui.Io
             }
 
             return true;
+        }
+
+        private static void MergeDirectories(string source, string target, bool overwrite)
+        {
+            // Get the subdirectories for the specified directory.
+            DirectoryInfo dir = new DirectoryInfo(source);
+
+            if (!dir.Exists)
+                return;
+
+            DirectoryInfo[] dirs = dir.GetDirectories();
+            // If the destination directory doesn't exist, create it.
+            if (!Directory.Exists(target))
+            {
+                Directory.CreateDirectory(target);
+            }
+
+            // Get the files in the directory and copy them to the new location.
+            FileInfo[] files = dir.GetFiles();
+            foreach (FileInfo file in files)
+            {
+                string tempPath = Path.Combine(target, file.Name);
+                file.CopyTo(tempPath, overwrite);
+            }
+
+            // Copy subdirectories and their contents to new location.
+            foreach (DirectoryInfo subdir in dirs)
+            {
+                string tempPath = Path.Combine(target, subdir.Name);
+                MergeDirectories(subdir.FullName, tempPath, overwrite);
+            }
         }
 
         /// <summary>
@@ -298,10 +334,19 @@ namespace StableDiffusionGui.Io
                 DeleteIfExists(path);
                 return true;
             }
-            catch (Exception e)
+            catch
             {
-                Logger.Log($"TryDeleteIfExists: Error trying to delete {path}: {e.Message}", true);
-                return false;
+                try
+                {
+                    SetAttributes(path);
+                    DeleteIfExists(path);
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    Logger.Log($"TryDeleteIfExists: Error trying to delete {path}: {e.Message}", true);
+                    return false;
+                }
             }
         }
 
