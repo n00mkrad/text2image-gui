@@ -22,17 +22,13 @@ namespace StableDiffusionGui.Installation
             bool hasOk = File.Exists(Path.Combine(Paths.GetDataPath(), Constants.Dirs.Bins, $"{Constants.Bins.OrphanHitman}.exe"));
 
             Logger.Log($"HasBins - Has Python: {hasPy} - Has Git: {hasGit} - Has WKL: {hasWkl} - Has OK: {hasOk}", true);
-
             return hasPy && hasGit && hasWkl && hasOk;
         }
 
         public static bool HasSdRepo ()
         {
-            string repoPath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdRepo);
-            bool hasInvoke = File.Exists(Path.Combine(repoPath, "invoke", "scripts", "invoke.py"));
-
-            Logger.Log($"HasSdRepo - Has invoke.py: {hasInvoke}", true);
-
+            bool hasInvoke = File.Exists(Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdVenv, "Scripts", "invoke.exe"));
+            Logger.Log($"HasSdRepo - Has invoke.exe: {hasInvoke}", true);
             return hasInvoke;
         }
 
@@ -42,7 +38,6 @@ namespace StableDiffusionGui.Installation
             bool hasTorch = Directory.Exists(Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdVenv, "Lib", "site-packages", "torch"));
 
             Logger.Log($"HasSdEnv - Has Python Exe: {hasPy} - Has Pytorch: {hasTorch}", true);
-
             return hasPy && hasTorch;
         }
 
