@@ -1,40 +1,5 @@
 [
 {
-	"version": "1.10.0b1",
-	"channel": "beta",
-	"date": "2023-03-29",
-	"hashBasefiles": "085bc52762bdeabaa6b83be536b81f93dfc8987c",
-	"hashRepo": "f6f904e554ba7c7e64bbd807926f27eb4d5e3671",
-},
-{
-	"version": "1.10.0b2",
-	"channel": "beta",
-	"date": "2023-03-29",
-	"hashBasefiles": "085bc52762bdeabaa6b83be536b81f93dfc8987c",
-	"hashRepo": "f6f904e554ba7c7e64bbd807926f27eb4d5e3671",
-},
-{
-	"version": "1.10.0b3",
-	"channel": "beta",
-	"date": "2023-04-03",
-	"hashBasefiles": "085bc52762bdeabaa6b83be536b81f93dfc8987c",
-	"hashRepo": "66447f7d88a44bd03053f35039b3211035b9247a",
-},
-{
-	"version": "1.10.0b4",
-	"channel": "beta",
-	"date": "2023-04-06",
-	"hashBasefiles": "085bc52762bdeabaa6b83be536b81f93dfc8987c",
-	"hashRepo": "66447f7d88a44bd03053f35039b3211035b9247a",
-},
-{
-	"version": "1.10.0b6",
-	"channel": "beta",
-	"date": "2023-04-26",
-	"hashBasefiles": "5a70532e0df0c2d173e089018bab7af8de384556",
-	"hashRepo": "3ccfa918e45fe0bb5ff6c61515a734338beba867",
-},
-{
 	"version": "1.10.0",
 	"channel": "public",
 	"date": "2023-05-01",
@@ -50,8 +15,8 @@
 },
 {
 	"version": "1.11.0b4",
-	"channel": "dev",
-	"date": "2023-07-02",
+	"channel": "beta",
+	"date": "2023-07-03",
 	"hashBasefiles": "7fdca6308bf1cffbdf77b1b30723611868b466a0",
 	"hashRepo": "eda6e02496ef43aeb8a56c8ba1d2df7ecb18e1a7",
 },
