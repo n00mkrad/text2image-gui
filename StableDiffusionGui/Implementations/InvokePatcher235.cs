@@ -42,6 +42,11 @@ namespace StableDiffusionGui.Implementations
                         t = $"{printPatch}\n{t}";
                 }
 
+                if (f.Name == "globals.py")
+                {
+                    t = Replace(t, "    '''\n    home: ", "    '''\n    return Path(osp.abspath(osp.join(os.environ.get('INVOKEAI_ROOT'), '..', 'cache', 'hf')),\"\") \n    home: ");
+                }
+
                 if (f.Name == "args.py")
                     t = Replace(t, "rfc_dict[\"orig_hash\"] = calculate_init_img_hash(opt.init_img)", "rfc_dict[\"orig_hash\"] = 0", false);
 
@@ -54,8 +59,8 @@ namespace StableDiffusionGui.Implementations
 
                 if (f.Name == "model_manager.py")
                 {
-                    // t = Replace(t, "def _cached_sha256(self, path, data) -> Union[str, bytes]:", "def _cached_sha256(self, path, data) -> Union[str, bytes]:\n        return 0");
                     t = Replace(t, "print(\"   | Calculating sha256 hash of model files\")", "return 0");
+                    t = Replace(t, "legacy_layout = False", "return"); // Disable legacy cache layout check as it seems completely unnecessary
                 }
 
                 if (f.Name == "generate.py")
