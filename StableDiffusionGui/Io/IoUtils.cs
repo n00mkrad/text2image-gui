@@ -55,12 +55,12 @@ namespace StableDiffusionGui.Io
             return lines.ToArray();
         }
 
-        public static bool IsPathDirectory(string path)
+        /// <summary> Checks if path is a file or directory </summary>
+        /// <returns> true if the path is a directory, false if it is a file, null if it's neither (e.g. invalid or empty) </returns>
+        public static bool? IsPathDirectory(string path)
         {
-            if (path == null)
-                throw new ArgumentNullException("path");
-
-            path = path.Trim();
+            if (path.IsEmpty())
+                return null;
 
             if (Directory.Exists(path))
                 return true;
@@ -68,10 +68,7 @@ namespace StableDiffusionGui.Io
             if (File.Exists(path))
                 return false;
 
-            if (new string[2] { "\\", "/" }.Any((string x) => path.EndsWith(x)))
-                return true;
-
-            return string.IsNullOrWhiteSpace(Path.GetExtension(path));
+            return null;
         }
 
         public static bool IsFileValid(string path)
@@ -101,7 +98,7 @@ namespace StableDiffusionGui.Io
             if (path == null)
                 return false;
 
-            if (IsPathDirectory(path))
+            if (IsPathDirectory(path) == true)
                 return IsDirValid(path);
             else
                 return IsFileValid(path);
@@ -213,7 +210,7 @@ namespace StableDiffusionGui.Io
         {
             try
             {
-                if (IsPathDirectory(source))
+                if (IsPathDirectory(source) == true)
                 {
                     if (Directory.Exists(target))
                     {
@@ -282,7 +279,7 @@ namespace StableDiffusionGui.Io
 
             try
             {
-                if (IsPathDirectory(path))
+                if (IsPathDirectory(path) == true)
                 {
                     while (Directory.Exists(renamedPath))
                         renamedPath += "_";
@@ -328,7 +325,7 @@ namespace StableDiffusionGui.Io
         {
             try
             {
-                if ((IsPathDirectory(path) && !Directory.Exists(path)) || (!IsPathDirectory(path) && !File.Exists(path)))
+                if ((IsPathDirectory(path) == true && !Directory.Exists(path)) || (IsPathDirectory(path) == false && !File.Exists(path)))
                     return true;
 
                 DeleteIfExists(path);
@@ -355,13 +352,13 @@ namespace StableDiffusionGui.Io
             if (log)
                 Logger.Log($"DeleteIfExists({path})", true);
 
-            if (!IsPathDirectory(path) && File.Exists(path))
+            if (IsPathDirectory(path) == false && File.Exists(path))
             {
                 File.Delete(path);
                 return true;
             }
 
-            if (IsPathDirectory(path) && Directory.Exists(path))
+            if (IsPathDirectory(path) == true && Directory.Exists(path))
             {
                 Directory.Delete(path, true);
                 return true;

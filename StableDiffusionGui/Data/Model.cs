@@ -31,7 +31,7 @@ namespace StableDiffusionGui.Data
 
         public Model(string dataPath, Enums.Models.Format format = (Enums.Models.Format)(-1), Enums.Models.Type type = (Enums.Models.Type)(-1))
         {
-            if (IoUtils.IsPathDirectory(dataPath))
+            if (IoUtils.IsPathDirectory(dataPath) == true)
                 _dir = new ZlpDirectoryInfo(dataPath);
             else
                 _file = new ZlpFileInfo(dataPath);
