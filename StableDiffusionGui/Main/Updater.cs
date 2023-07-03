@@ -20,11 +20,12 @@ namespace StableDiffusionGui.Main
         public static async Task Install(MdlRelease release)
         {
             Logger.ClearLogBox();
+            IoUtils.Cleanup();
             string tempDir = IoUtils.GetAvailablePath(Path.Combine(Paths.GetExeDir() + "upd"), "_{0}");
 
-            if (!InstallationStatus.HasBins())
+            if (!InstallationStatus.HasGit)
             {
-                Logger.Log($"Error: Can't install update because required files are missing. Try doing a fresh install.");
+                Logger.Log($"Error: Can't install update because required files are missing. Try doing a fresh install.\n(Bundled Git installation not found)");
                 return;
             }
 

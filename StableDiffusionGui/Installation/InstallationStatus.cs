@@ -12,11 +12,12 @@ namespace StableDiffusionGui.Installation
     {
         public static bool IsInstalledBasic { get { return HasBins() && HasSdRepo() && HasSdEnv(); } }
         public static bool IsInstalledAll { get { return IsInstalledBasic && HasSdUpscalers(); } }
+        public static bool HasGit { get { return File.Exists(Path.Combine(Paths.GetDataPath(), Constants.Dirs.Git, "cmd", "git.exe")); } }
 
         public static bool HasBins()
         {
             bool hasPy = File.Exists(Path.Combine(Paths.GetDataPath(), Constants.Dirs.Python, "python.exe"));
-            bool hasGit = File.Exists(Path.Combine(Paths.GetDataPath(), Constants.Dirs.Git, "cmd", "git.exe"));
+            bool hasGit = HasGit;
             bool hasWkl = File.Exists(Path.Combine(Paths.GetDataPath(), Constants.Dirs.Bins, $"{Constants.Bins.WindowsKill}.exe"));
             bool hasOk = File.Exists(Path.Combine(Paths.GetDataPath(), Constants.Dirs.Bins, $"{Constants.Bins.OrphanHitman}.exe"));
 
