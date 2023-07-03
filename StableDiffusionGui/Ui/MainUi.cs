@@ -119,7 +119,7 @@ namespace StableDiffusionGui.Ui
 
                 if (Directory.Exists(legacyModelFolder) && !Config.Instance.CustomModelDirs.Contains(legacyModelFolder))
                 {
-                    if(IoUtils.GetDirSize(legacyModelFolder, true) > 128 * 1024 * 1024)
+                    if (IoUtils.GetDirSize(legacyModelFolder, true) > 128 * 1024 * 1024)
                     {
                         Logger.LogHidden("Found old non-empty model folder, added to custom model folders so models still show up.");
                         Config.Instance.CustomModelDirs.Add(legacyModelFolder);
@@ -132,7 +132,7 @@ namespace StableDiffusionGui.Ui
 
                 if (Directory.Exists(legacyVaeFolder) && !Config.Instance.CustomVaeDirs.Contains(legacyVaeFolder))
                 {
-                    if(IoUtils.GetDirSize(legacyVaeFolder, true) > 64 * 1024 * 1024)
+                    if (IoUtils.GetDirSize(legacyVaeFolder, true) > 64 * 1024 * 1024)
                     {
                         Logger.LogHidden("Found old non-empty VAE folder, added to custom VAE folders so VAE models still show up.");
                         Config.Instance.CustomVaeDirs.Add(legacyVaeFolder);
@@ -145,7 +145,7 @@ namespace StableDiffusionGui.Ui
 
                 if (Directory.Exists(legacyEmbeddingFolder) && Config.Instance.EmbeddingsDir != legacyEmbeddingFolder)
                 {
-                    if(IoUtils.GetDirSize(legacyEmbeddingFolder, true) < 1024)
+                    if (IoUtils.GetDirSize(legacyEmbeddingFolder, true) < 1024)
                     {
                         Logger.LogHidden("Found old non-empty embeddings folder, moving to new folder.");
                         string moveMsg = ", your files have been moved there automatically.";
@@ -170,7 +170,7 @@ namespace StableDiffusionGui.Ui
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logger.LogException(ex);
             }
@@ -322,6 +322,28 @@ namespace StableDiffusionGui.Ui
             prompt = prompt.Remove("\""); // Don't allow "
             prompt = InvokeAiUtils.ConvertAttentionSyntax(prompt); // Convert old (multi-bracket) emphasis/attention syntax to new one (with +/-)
             return prompt;
+        }
+
+        public static string GetValuesStr(List<float> numbers, bool ignoreSingleValue = true)
+        {
+            if (numbers == null || numbers.Count <= 0)
+                return "";
+
+            if (numbers.Count == 1 && !ignoreSingleValue)
+                return numbers[0].ToStringDot("0.###");
+
+            const float tolerance = 1e-5f; // Tolerance for float comparison
+            float interval = numbers[1] - numbers[0];
+
+            for (int i = 2; i < numbers.Count; i++)
+            {
+                if (Math.Abs((numbers[i] - numbers[i - 1]) - interval) > tolerance)
+                {
+                    return string.Join(",", numbers);
+                }
+            }
+
+            return $"{numbers[0]} > {numbers[numbers.Count - 1]} : {interval}";
         }
 
         public static List<float> GetExtraValues(string text, float sliderValue)

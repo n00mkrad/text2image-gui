@@ -97,12 +97,8 @@ namespace StableDiffusionGui.Forms
             }
             else
             {
-                var v = toInt ? values.Select(x => ((int)x).ToString()) : values.Select(x => x.ToStringDot());
-
-                if (v.Count() > 1)
-                    extraValuesTextbox.Text = string.Join(",", v);
-                else
-                    extraValuesTextbox.Text = "";
+                var v = toInt ? values.Select(x => (float)(int)x) : values;
+                extraValuesTextbox.Text = MainUi.GetValuesStr(v.ToList());
             }
         }
 
