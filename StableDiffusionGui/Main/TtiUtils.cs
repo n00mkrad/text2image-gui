@@ -313,7 +313,7 @@ namespace StableDiffusionGui.Main
             if (modelsYamlFormat)
                 return $"\"configs/stable-diffusion/{file}.yaml\""; // Return relative path for models.yaml
             else
-                return Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdRepo, "invoke", "invokeai", "configs", "stable-diffusion", $"{file}.yaml"); // Return full path
+                return Path.Combine(Paths.GetDataPath(), "invoke", "configs", "stable-diffusion", $"{file}.yaml"); // Return full path
         }
     }
 }
