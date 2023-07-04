@@ -83,6 +83,8 @@ namespace StableDiffusionGui.Io
         public string LastLoraTrainTrigger;
         public string LastLoraDataDir;
         public bool DontClearPipCache;
+        public bool AlwaysClearInpaintMask;
+        public int ImageCacheMaxSizeMb;
 
         public ConfigInstance()
         {
@@ -118,6 +120,11 @@ namespace StableDiffusionGui.Io
             EsrganDenoise = 0.0f;
             EmbeddingsDir = Paths.GetEmbeddingsPath();
             LorasDir = Paths.GetLorasPath();
+
+            float ramGb = HwInfo.GetTotalRamGb;
+            ImageCacheMaxSizeMb = 64;
+            if (ramGb > 14f) ImageCacheMaxSizeMb = 128;
+            if (ramGb > 22f) ImageCacheMaxSizeMb = 256;
         }
 
         public ConfigInstance Clone()

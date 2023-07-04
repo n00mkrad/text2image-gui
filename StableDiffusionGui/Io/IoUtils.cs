@@ -1,7 +1,6 @@
 ﻿using Force.Crc32;
 using ImageMagick;
 using StableDiffusionGui.Data;
-using StableDiffusionGui.Implementations;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
@@ -22,12 +21,22 @@ namespace StableDiffusionGui.Io
 {
     internal class IoUtils
     {
-        public static Image GetImage(string path, bool returnDummyIfNull = true, Image dummy = null)
+        public static Image GetImage(string path, bool returnDummyIfNull = true, Image dummy = null, bool allowCacheLoad = true, bool allowCacheStore = true)
         {
             try
             {
                 if (path != null && File.Exists(path))
-                    return new MagickImage(path).ToBitmap();
+                {
+                    if (Program.Debug)
+                        Logger.Log($"Loading image: {path}{(allowCacheLoad && ImageCache.Contains(path) ? " [Cached]" : "")}", true);
+
+                    if (allowCacheLoad && allowCacheStore)
+                        return ImageCache.GetOrLoadAndStore(path, p => new MagickImage(path).ToBitmap());
+                    else if (allowCacheLoad)
+                        return ImageCache.GetOrLoad(path, p => new MagickImage(path).ToBitmap());
+                    else
+                        return new MagickImage(path).ToBitmap();
+                }
             }
             catch (Exception ex)
             {
@@ -914,7 +923,7 @@ namespace StableDiffusionGui.Io
                     }
                 }
 
-                foreach(var dirInfo in new DirectoryInfo(Paths.GetExeDir()).GetDirectories().Where(d => d.Name == "upd" || d.Name.StartsWith("upd_")))
+                foreach (var dirInfo in new DirectoryInfo(Paths.GetExeDir()).GetDirectories().Where(d => d.Name == "upd" || d.Name.StartsWith("upd_")))
                     TryDeleteIfExists(dirInfo.FullName);
             }
             catch (Exception e)
@@ -937,7 +946,7 @@ namespace StableDiffusionGui.Io
             return false;
         }
 
-        public static void CreateJunction (string junctionPath, string targetPath)
+        public static void CreateJunction(string junctionPath, string targetPath)
         {
             Process p = OsUtils.NewProcess(true);
             p.StartInfo.Arguments = $"/c mklink /J {junctionPath.Wrap()} {targetPath.Wrap()}";

@@ -217,6 +217,7 @@ namespace StableDiffusionGui.Ui
         {
             Program.MainForm.panelSettings.Focus();
             IoUtils.TryDeleteIfExists(CurrentImagePath);
+            ImageCache.Remove(CurrentImagePath);
             _currentImages = _currentImages.Where(x => File.Exists(x)).ToArray();
             Move(true);
         }
@@ -238,6 +239,7 @@ namespace StableDiffusionGui.Ui
 
             var parentDirs = _currentImages.Select(x => x.GetParentDirOfFile());
 
+            ImageCache.Remove(_currentImages.ToList());
             _currentImages.ToList().ForEach(x => IoUtils.TryDeleteIfExists(x));
             _currentImages = _currentImages.Where(x => File.Exists(x)).ToArray();
 

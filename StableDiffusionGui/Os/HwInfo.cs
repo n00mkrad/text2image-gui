@@ -1,11 +1,7 @@
 ﻿using Microsoft.VisualBasic.Devices;
-using StableDiffusionGui.Main;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management;
-using ZetaLongPaths;
 
 namespace StableDiffusionGui.Os
 {

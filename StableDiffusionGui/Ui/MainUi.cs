@@ -35,20 +35,25 @@ namespace StableDiffusionGui.Ui
                     value = new List<string>();
 
                 _currentInitImgPaths = value;
+                Image first = null;
 
                 if (value != null && value.Count() > 0)
                 {
                     Logger.Log(value.Count() == 1 ? $"Now using initialization image {Path.GetFileName(value[0]).Wrap()}." : $"Now using {value.Count()} initialization images.");
 
+                    first = ImageCache.GetOrLoadAndStore(value[0], f => IoUtils.GetImage(value[0], allowCacheStore: true)); // Load and cache first image since we need it more often in the UI
+
                     if (Config.Instance.AutoSetResForInitImg)
-                        SetResolutionForInitImage(value[0]);
+                    {
+                        SetResolutionForInitImage(first);
+                    }
                 }
 
-                if (Inpainting.CurrentMask != null || Inpainting.CurrentRawMask != null)
+                if (first != null && Inpainting.CurrentMask != null || Inpainting.CurrentRawMask != null)
                 {
-                    var size = GetResolutionForInitImage(IoUtils.GetImage(value[0]).Size); // Scaled mod64 size, not actual source size
+                    var size = GetResolutionForInitImage(first.Size); // Scaled mod64 size, not actual source size
 
-                    if (size != Inpainting.CurrentMask.Size || size != Inpainting.CurrentRawMask.Size)
+                    if (Config.Instance.AlwaysClearInpaintMask || (size != Inpainting.CurrentMask.Size || size != Inpainting.CurrentRawMask.Size))
                     {
                         Inpainting.ClearMask();
                         Logger.Log("New image has a different size - Inpainting mask has been cleared.");
@@ -233,8 +238,6 @@ namespace StableDiffusionGui.Ui
                         OsUtils.SetClipboard(imgForm.CurrentMetadata.Prompt);
                     }
                 }
-
-                Program.MainForm.TryRefreshUiState();
             }
             else
             {
@@ -499,7 +502,12 @@ namespace StableDiffusionGui.Ui
 
         public static void SetResolutionForInitImage(string initImgPath)
         {
-            Size newRes = GetResolutionForInitImage(IoUtils.GetImage(initImgPath).Size);
+            SetResolutionForInitImage(IoUtils.GetImage(initImgPath));
+        }
+
+        public static void SetResolutionForInitImage(Image initImg)
+        {
+            Size newRes = GetResolutionForInitImage(initImg.Size);
             Program.MainForm.comboxResW.Text = newRes.Width.ToString();
             Program.MainForm.comboxResH.Text = newRes.Height.ToString();
         }
