@@ -353,12 +353,17 @@ namespace StableDiffusionGui.Os
 
         /// <summary> Lists all installed pip packages </summary>
         /// <returns> List of packages </returns>
-        public static async Task<List<string>> GetPythonPkgList(bool stripVersion = true)
+        public static async Task<List<string>> GetPythonPkgList(string venv = "", bool stripVersion = true)
         {
             var list = new List<string>();
             Process p = NewProcess(true);
             p.StartInfo.EnvironmentVariables["PATH"] = TtiUtils.GetEnvVarsSd(true, Paths.GetDataPath()).First().Value;
-            p.StartInfo.Arguments = $"/C python -m pip freeze";
+
+            if (venv.IsNotEmpty())
+                p.StartInfo.Arguments = $"/C \"{venv.TrimEnd('\\').TrimEnd('/')}\\Scripts\\activate.bat\" && python -m pip freeze";
+            else
+                p.StartInfo.Arguments = $"/C python -m pip freeze";
+
             string output = await Task.Run(() => GetProcStdOut(p, true));
             list = output.SplitIntoLines().Where(l => !string.IsNullOrWhiteSpace(l)).ToList();
 

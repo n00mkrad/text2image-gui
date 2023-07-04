@@ -132,7 +132,7 @@ namespace StableDiffusionGui.Forms
 
             Enabled = false;
             Program.SetState(Program.BusyState.Installation);
-            await Setup.InstallRepo(commit, false);
+            await Setup.InstallRepo(commit, InputUtils.IsHoldingShift);
             Setup.RepoCleanup();
             UpdateStatus();
             Program.SetState(Program.BusyState.Standby);

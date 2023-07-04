@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Management.Automation.Runspaces;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -17,7 +18,7 @@ namespace StableDiffusionGui.Installation
     {
         private static readonly string _gitFile = "n00mkrad/stable-diffusion-cust.git";
         private static readonly string _gitBranch = "main";
-        public static readonly string GitCommit = "668b0ca0b19e331bb1ded8b0e2bd6bb8c2a3b949";
+        public static readonly string GitCommit = "dceae0cfeb8deea72ecac7b3e59dad16fea1ad0b";
 
         public static async Task Install(bool force = false, bool installUpscalers = true)
         {
@@ -32,7 +33,7 @@ namespace StableDiffusionGui.Installation
                     if (!force)
                         Logger.Log("Install: Cloning repo and setting up env because either SD Repo or SD Env is missing.", true, false, Constants.Lognames.Installer);
 
-                    await InstallRepo();
+                    await InstallRepo("", force);
                 }
 
                 if (force || (installUpscalers && !InstallationStatus.HasSdUpscalers()))
@@ -65,15 +66,37 @@ namespace StableDiffusionGui.Installation
             Program.SetState(Program.BusyState.Standby);
         }
 
-        public static async Task SetupVenv()
+        public static async Task SetupVenv(bool deleteVenvFirst = false)
         {
-            bool clean = IoUtils.TryDeleteIfExists(GetDataSubPath(Constants.Dirs.SdVenv));
+            Logger.Log("Checking python environment...");
 
-            if (!clean)
+            if (deleteVenvFirst)
             {
-                Logger.Log("Failed to install python environment: Can't delete existing folder.");
-                return;
+                bool clean = IoUtils.TryDeleteIfExists(GetDataSubPath(Constants.Dirs.SdVenv));
+
+                if (!clean)
+                {
+                    Logger.Log("Failed to install python environment: Can't delete existing folder.");
+                    return;
+                }
             }
+
+            var pkgs = await OsUtils.GetPythonPkgList(Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdVenv), false);
+            var installLines = new List<string>();
+            var depsBatLines = IoUtils.ReadLines(Path.Combine(GetDataSubPath(Constants.Dirs.SdRepo), "install-venv-deps-all.bat"));
+
+            for(int i = 0; i < depsBatLines.Count(); i++)
+            {
+                var matches = Regex.Matches(depsBatLines[i], @"([a-zA-Z0-9_-]+==[a-zA-Z0-9_.+]+)", RegexOptions.Compiled);
+                List<string> linePkgs = matches.Cast<Match>().Select(match => match.Value.ToString()).ToList();
+
+                if (linePkgs.Any() && linePkgs.All(linePkg => pkgs.Contains(linePkg))) // Skip this line if we already have this version of this package installed
+                    continue;
+
+                installLines.Add(depsBatLines[i]);
+            }
+
+            Logger.Log($"Will install {installLines.Count} python packages.", false, Logger.LastUiLine.EndsWith("..."));
 
             string repoPath = GetDataSubPath(Constants.Dirs.SdRepo);
             string batPath = Path.Combine(repoPath, "install.bat");
@@ -83,10 +106,8 @@ namespace StableDiffusionGui.Installation
                 $"SET PATH={OsUtils.GetPathVar(new string[] { $@".\{Constants.Dirs.SdVenv}\Scripts", $@".\{Constants.Dirs.Python}\Scripts", $@".\{Constants.Dirs.Python}", $@".\{Constants.Dirs.Git}\cmd" })}\n" +
                 $"SET HOME={Path.Combine(Paths.GetDataPath(), Constants.Dirs.Git, "home")}\n" +
                 $"python -m virtualenv {Constants.Dirs.SdVenv}\n" +
-                $"{Constants.Dirs.SdRepo}\\install-venv-deps-all.bat\n" +
+                $"\n{string.Join("\n", installLines)}\n\n" +
                 $"");
-
-            Logger.Log("Running python environment installation script...");
 
             Process p = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd(), batPath);
 
@@ -159,13 +180,13 @@ namespace StableDiffusionGui.Installation
 
         #region Git
 
-        public static async Task InstallRepo(string overrideCommit = "", bool setupVenvAfterwards = true)
+        public static async Task InstallRepo(string overrideCommit = "", bool cleanVenvInstall = false)
         {
             string commit = string.IsNullOrWhiteSpace(overrideCommit) ? GitCommit : overrideCommit;
             TtiProcess.ProcessExistWasIntentional = true;
             ProcessManager.FindAndKillOrphans($"*invoke.py*{Paths.SessionTimestamp}*");
             await CloneSdRepo($"https://github.com/{_gitFile}", GetDataSubPath(Constants.Dirs.SdRepo), _gitBranch, commit);
-            await SetupVenv();
+            await SetupVenv(cleanVenvInstall);
         }
 
         public static async Task CloneSdRepo(string url, string dir, string branch = "main", string commit = "")
