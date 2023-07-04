@@ -66,14 +66,14 @@ namespace StableDiffusionGui
                     UserArgs.Add(split[0], split[1]); // Add key+value
                 }
                 catch { }
+            }
 
-                if (UserArgs.Any())
-                {
-                    Logger.Log($"Args:", true);
+            if (UserArgs.Any())
+            {
+                Logger.Log($"Args:", true);
 
-                    foreach (var a in UserArgs)
-                        Logger.Log($"-{a.Key}={a.Value}", true);
-                }
+                foreach (var a in UserArgs)
+                    Logger.Log($"-{a.Key}={a.Value}", true);
             }
         }
 

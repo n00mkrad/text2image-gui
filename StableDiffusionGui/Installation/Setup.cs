@@ -352,8 +352,6 @@ namespace StableDiffusionGui.Installation
 
         #region Utils
 
-        private static readonly Regex _exeShebangRegex = new Regex("(#!\")(.+?)(\")", RegexOptions.Compiled);
-
         public static void PatchFiles()
         {
             try
@@ -361,9 +359,7 @@ namespace StableDiffusionGui.Installation
                 if (IoUtils.GetAmountOfFiles(Path.Combine(GetDataSubPath(Constants.Dirs.SdVenv)), false) < 1)
                     return;
 
-                #region virtualenv (pyvenv.cfg, Scripts)
-
-                Logger.Log($"Fixing pyenv paths...", true);
+                Logger.Log($"Validating paths...", true);
                 string pyvenvCfgPath = Path.Combine(GetDataSubPath(Constants.Dirs.SdVenv), "pyvenv.cfg");
                 var pyvenvCfgLines = File.ReadAllLines(pyvenvCfgPath);
 
@@ -377,7 +373,6 @@ namespace StableDiffusionGui.Installation
 
                 if (IoUtils.WriteAllLinesIfDifferent(pyvenvCfgPath, pyvenvCfgLines))
                     Logger.Log($"Fixed {Path.GetFileName(pyvenvCfgPath)}", true);
-
 
                 string activateNuPath = Path.Combine(GetDataSubPath(Constants.Dirs.SdVenv), "Scripts", "activate.nu");
                 var activateNuLines = File.ReadAllLines(activateNuPath);
@@ -460,30 +455,7 @@ namespace StableDiffusionGui.Installation
                 {
                     try
                     {
-                        if (file.Extension.Lower() == ".exe")
-                        {
-                            continue;
-
-                            byte[] exeBytes = File.ReadAllBytes(file.FullName);
-                            Encoding encoding = Encoding.Default;
-                            string exeText = encoding.GetString(exeBytes);
-                            string shebang = _exeShebangRegex.Match(exeText).Value.NullToEmpty();
-                            string pyPath = Path.Combine(GetDataSubPath(Constants.Dirs.SdVenv), "Scripts", "python.exe");
-
-                            if (shebang.IsEmpty() || shebang.Contains(pyPath, StringComparison.OrdinalIgnoreCase))
-                                continue;
-
-                            Logger.Log($"Detected invalid shebang in executable {file.Name}: {shebang}", true);
-                            exeText = _exeShebangRegex.Replace(exeText, $"$1{pyPath}$3");
-                            byte[] newExeBytes = encoding.GetBytes(exeText);
-                            
-                            if (newExeBytes.SequenceEqual(exeBytes))
-                                continue;
-                            
-                            File.WriteAllBytes(file.FullName, newExeBytes);
-                            Logger.Log($"Fixed shebang in executable {file.Name}", true);
-                        }
-                        else
+                        if (file.Extension.Lower() != ".exe")
                         {
                             var lines = File.ReadAllLines(file.FullName);
 
@@ -502,7 +474,7 @@ namespace StableDiffusionGui.Installation
                     }
                 }
 
-                #endregion
+                Logger.Log($"Validating complete.", true);
             }
             catch (Exception ex)
             {
