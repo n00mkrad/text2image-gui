@@ -473,7 +473,7 @@ namespace StableDiffusionGui.Installation
                     }
                 }
 
-                Logger.Log($"Validating complete.", true);
+                Logger.Log($"Validation complete.", true);
             }
             catch (Exception ex)
             {
