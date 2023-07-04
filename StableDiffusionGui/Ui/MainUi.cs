@@ -15,7 +15,6 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using System.Resources;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static StableDiffusionGui.Main.Enums.Misc;
@@ -47,8 +46,13 @@ namespace StableDiffusionGui.Ui
 
                 if (Inpainting.CurrentMask != null || Inpainting.CurrentRawMask != null)
                 {
-                    Inpainting.ClearMask();
-                    Logger.Log("Inpainting mask has been cleared.");
+                    var size = GetResolutionForInitImage(IoUtils.GetImage(value[0]).Size); // Scaled mod64 size, not actual source size
+
+                    if (size != Inpainting.CurrentMask.Size || size != Inpainting.CurrentRawMask.Size)
+                    {
+                        Inpainting.ClearMask();
+                        Logger.Log("New image has a different size - Inpainting mask has been cleared.");
+                    }
                 }
             }
         }
