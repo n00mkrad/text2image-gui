@@ -28,7 +28,7 @@ namespace StableDiffusionGui.Training
             try
             {
                 if (!Directory.Exists(outDir))
-                    outDir = Paths.GetLorasPath();
+                    outDir = Paths.GetLorasPath(false);
 
                 Logger.ClearLogBox();
 
