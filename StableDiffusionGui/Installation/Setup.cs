@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Management.Automation.Runspaces;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -23,6 +22,7 @@ namespace StableDiffusionGui.Installation
         public static async Task Install(bool force = false, bool installUpscalers = true)
         {
             Logger.Log($"Installing (Force = {force} - Upscalers: {installUpscalers})", true, false, Constants.Lognames.Installer);
+            Logger.ClearLogBox();
 
             try
             {
@@ -33,7 +33,10 @@ namespace StableDiffusionGui.Installation
                     if (!force)
                         Logger.Log("Install: Cloning repo and setting up env because either SD Repo or SD Env is missing.", true, false, Constants.Lognames.Installer);
 
-                    await InstallRepo("", force);
+                    bool installRepoSuccess = await InstallRepo("", force);
+
+                    if (!installRepoSuccess)
+                        throw new Exception("Repo installation failed. Check logs for details.");
                 }
 
                 if (force || (installUpscalers && !InstallationStatus.HasSdUpscalers()))
@@ -128,10 +131,13 @@ namespace StableDiffusionGui.Installation
             while (!p.HasExited) await Task.Delay(1);
 
             Logger.Log("Cleaning up...", false, Logger.LastUiLine.EndsWith("..."));
-            IoUtils.TryDeleteIfExists(Path.Combine(Environment.ExpandEnvironmentVariables("%LOCALAPPDATA%"), "pip", "cache"));
+
+            if(!Config.Instance.DontClearPipCache)
+                IoUtils.TryDeleteIfExists(Path.Combine(Environment.ExpandEnvironmentVariables("%LOCALAPPDATA%"), "pip", "cache"));
+
             RepoCleanup();
             PatchUtils.PatchAllPkgs();
-            Logger.Log("Done.");
+            Logger.Log("Done.", false, Logger.LastUiLine.EndsWith("..."));
         }
 
         private static void HandleInstallScriptOutput(string log, bool conda, bool stderr)
@@ -153,7 +159,14 @@ namespace StableDiffusionGui.Installation
 
                 if (log.StartsWith("Collecting "))
                 {
-                    string name = log.Split("Collecting ")[1].Split("=")[0].Split("<")[0].Split(">")[0].Split("!")[0].Trim().Replace(" git+", " ").Trunc(150, false);
+                    string name = log.Split("Collecting ")[1].Split("=")[0].Split("<")[0].Split(">")[0].Split("!")[0].Replace("git+", "").Replace("https://github.com/", "").Replace(".git", " (Git)");
+                    name = name.Split("@")[0].Trim().Trunc(150, false);
+                    Logger.Log($"Installing {name}...", false, Logger.LastUiLine.EndsWith("..."));
+                }
+
+                if (log.StartsWith("Processing "))
+                {
+                    string name = log.Split("Processing ")[1].Split('/').Last().Split('\\').Last();
                     Logger.Log($"Installing {name}...", false, Logger.LastUiLine.EndsWith("..."));
                 }
 
@@ -180,13 +193,23 @@ namespace StableDiffusionGui.Installation
 
         #region Git
 
-        public static async Task InstallRepo(string overrideCommit = "", bool cleanVenvInstall = false)
+        public static async Task<bool> InstallRepo(string overrideCommit = "", bool cleanVenvInstall = false)
         {
-            string commit = string.IsNullOrWhiteSpace(overrideCommit) ? GitCommit : overrideCommit;
-            TtiProcess.ProcessExistWasIntentional = true;
-            ProcessManager.FindAndKillOrphans($"*invoke.py*{Paths.SessionTimestamp}*");
-            await CloneSdRepo($"https://github.com/{_gitFile}", GetDataSubPath(Constants.Dirs.SdRepo), _gitBranch, commit);
-            await SetupVenv(cleanVenvInstall);
+            try
+            {
+                string commit = string.IsNullOrWhiteSpace(overrideCommit) ? GitCommit : overrideCommit;
+                TtiProcess.ProcessExistWasIntentional = true;
+                ProcessManager.FindAndKillOrphans($"*invoke.py*{Paths.SessionTimestamp}*");
+                await CloneSdRepo($"https://github.com/{_gitFile}", GetDataSubPath(Constants.Dirs.SdRepo), _gitBranch, commit);
+                await SetupVenv(cleanVenvInstall);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Logger.Log($"Error installing repo: {ex.Message}");
+                Logger.Log(ex.StackTrace, true);
+                return false;
+            }
         }
 
         public static async Task CloneSdRepo(string url, string dir, string branch = "main", string commit = "")
@@ -231,19 +254,11 @@ namespace StableDiffusionGui.Installation
             try
             {
                 string repoPath = GetDataSubPath(Constants.Dirs.SdRepo);
-                string venvSrcPath = Path.Combine(GetDataSubPath(Constants.Dirs.SdVenv), "src");
                 string sitePkgsPath = Path.Combine(GetDataSubPath(Constants.Dirs.SdVenv), "Lib", "site-packages");
 
                 var dirs = new List<ZlpDirectoryInfo>();
 
                 dirs.AddRange(Directory.GetDirectories(repoPath, "*", SearchOption.AllDirectories).Select(x => new ZlpDirectoryInfo(x)));
-                dirs.AddRange(Directory.GetDirectories(venvSrcPath, "*", SearchOption.AllDirectories).Select(x => new ZlpDirectoryInfo(x)));
-
-                new ZlpDirectoryInfo(repoPath).Attributes = ZetaLongPaths.Native.FileAttributes.Normal;
-                IoUtils.SetAttributes(repoPath, ZetaLongPaths.Native.FileAttributes.Normal);
-
-                new ZlpDirectoryInfo(venvSrcPath).Attributes = ZetaLongPaths.Native.FileAttributes.Normal;
-                IoUtils.SetAttributes(venvSrcPath, ZetaLongPaths.Native.FileAttributes.Normal);
 
                 foreach (var dir in dirs)
                 {
@@ -262,14 +277,16 @@ namespace StableDiffusionGui.Installation
 
                 var unneededFileTypes = new List<string> { "jpg", "jpeg", "png", "gif", "ipynb", "ttf" };
                 unneededFileTypes.ForEach(ext => IoUtils.GetFilesSorted(repoPath, true, $"*.{ext}").ToList().ForEach(x => IoUtils.TryDeleteIfExists(x)));
-                unneededFileTypes.ForEach(ext => IoUtils.GetFilesSorted(venvSrcPath, true, $"*.{ext}").ToList().ForEach(x => IoUtils.TryDeleteIfExists(x)));
 
                 IoUtils.TryDeleteIfExists(Path.Combine(sitePkgsPath, "pandas", "tests"));
                 IoUtils.TryDeleteIfExists(Path.Combine(sitePkgsPath, "imageio", "resources", "images"));
                 IoUtils.TryDeleteIfExists(GetDataSubPath("0.7.5"));
                 IoUtils.GetFilesSorted(Path.Combine(sitePkgsPath, "cv2"), false, "opencv_videoio_*.dll").ToList().ForEach(f => IoUtils.TryDeleteIfExists(f));
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Logger.LogException(ex, true, "RepoCleanup Exception: ");
+            }
         }
 
         #endregion

@@ -122,6 +122,7 @@ namespace StableDiffusionGui.Forms
         private async void btnClone_Click(object sender, EventArgs e)
         {
             string commit = "";
+            Logger.ClearLogBox();
 
             if (InputUtils.IsHoldingShift)
             {

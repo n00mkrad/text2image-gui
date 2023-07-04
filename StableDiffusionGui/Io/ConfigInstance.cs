@@ -82,6 +82,7 @@ namespace StableDiffusionGui.Io
         public string LastLoraTrainName;
         public string LastLoraTrainTrigger;
         public string LastLoraDataDir;
+        public bool DontClearPipCache;
 
         public ConfigInstance()
         {
