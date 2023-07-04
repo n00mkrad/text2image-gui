@@ -76,9 +76,6 @@ namespace StableDiffusionGui.Main
 
         private static string GetLaunchCmd(MdlRelease release)
         {
-            if (release.HashRepo == Setup.GitCommit && InstallationStatus.IsInstalledBasic) // Do not re-install dependencies if they are installed and up-to-date
-                return $"{Paths.GetExe().Wrap()} -info=no_reinstall_necessary";
-
             bool up = InstallationStatus.HasSdUpscalers();
             string info = $"targetHash_{release.HashRepo}_oldHash_{Setup.GitCommit}_installedBasic_{InstallationStatus.IsInstalledBasic}";
             return $"{Paths.GetExe().Wrap()} -{Constants.Args.Install}={true} -{Constants.Args.InstallUpscalers}={up} -info={info}";
