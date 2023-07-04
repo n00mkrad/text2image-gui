@@ -1,6 +1,5 @@
 ﻿using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
-using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using System;
 using System.Collections.Generic;
@@ -18,7 +17,7 @@ namespace StableDiffusionGui.Installation
     {
         private static readonly string _gitFile = "n00mkrad/stable-diffusion-cust.git";
         private static readonly string _gitBranch = "main";
-        public static readonly string GitCommit = "eda6e02496ef43aeb8a56c8ba1d2df7ecb18e1a7";
+        public static readonly string GitCommit = "668b0ca0b19e331bb1ded8b0e2bd6bb8c2a3b949";
 
         public static async Task Install(bool force = false, bool installUpscalers = true)
         {
@@ -266,12 +265,12 @@ namespace StableDiffusionGui.Installation
                 if (forceReinstall)
                 {
                     var dirs = new[] { "realesrgan", "gfpgan", "codeformer" }.ToList();
-                    dirs.ForEach(dir => IoUtils.DeleteIfExists(Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdRepo, "invoke", "models", dir)));
+                    dirs.ForEach(dir => IoUtils.DeleteIfExists(Path.Combine(Paths.GetDataPath(), "invoke", "models", dir)));
                 }
 
                 Process p = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
                 p.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand(true, Paths.GetDataPath())} && {Constants.Files.VenvActivate} && " +
-                    $"python {Constants.Dirs.SdRepo}/invoke/scripts/nmkd_install_upscalers.py";
+                    $"python {Constants.Dirs.SdRepo}/scripts/nmkd_install_upscalers.py";
                 p.ErrorDataReceived += (sender, line) =>
                 {
                     if (line.Data != null && line.Data.Contains("%|") && line.Data.Trim().EndsWith("B/s]"))

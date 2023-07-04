@@ -232,7 +232,7 @@ namespace StableDiffusionGui.Implementations
             return $"{log}.";
         }
 
-        public static async Task RunCli(string outPath, string vaePath)
+        public static void RunCli(string outPath, string vaePath)
         {
             if (Program.Busy)
                 return;
