@@ -11,6 +11,7 @@ namespace StableDiffusionGui.Forms
     public partial class InstallerForm : CustomForm
     {
         private bool _autoInstall = false;
+        private bool _updateDeps = false;
         private bool _overrideInstallUpscalers = false;
         private bool _onlyInstallUpscalers = false;
 
@@ -21,13 +22,16 @@ namespace StableDiffusionGui.Forms
 
         public InstallerForm(bool onlyInstallUpscalers)
         {
+            _autoInstall = false;
+            _updateDeps = false;
             _onlyInstallUpscalers = onlyInstallUpscalers;
             InitializeComponent();
         }
 
-        public InstallerForm(bool autoInstall, bool overrideInstallUpscalers)
+        public InstallerForm(bool autoInstall, bool updateDeps, bool overrideInstallUpscalers)
         {
             _autoInstall = autoInstall;
+            _updateDeps = updateDeps;
             _overrideInstallUpscalers = overrideInstallUpscalers;
             InitializeComponent();
         }
@@ -48,7 +52,8 @@ namespace StableDiffusionGui.Forms
             else
             {
                 bool installUpscalers = _autoInstall ? _overrideInstallUpscalers : AskInstallUpscalers();
-                await Setup.Install(false, installUpscalers);
+                bool updateDeps = _autoInstall && _updateDeps;
+                await Setup.Install(false, updateDeps, installUpscalers);
             }
 
             if (_autoInstall)

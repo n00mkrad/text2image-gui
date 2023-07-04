@@ -19,7 +19,7 @@ namespace StableDiffusionGui.Installation
         private static readonly string _gitBranch = "main";
         public static readonly string GitCommit = "dceae0cfeb8deea72ecac7b3e59dad16fea1ad0b";
 
-        public static async Task Install(bool force = false, bool installUpscalers = true)
+        public static async Task Install(bool force = false, bool forceUpdateDeps = false, bool installUpscalers = true)
         {
             Logger.Log($"Installing (Force = {force} - Upscalers: {installUpscalers})", true, false, Constants.Lognames.Installer);
             Logger.ClearLogBox();
@@ -28,7 +28,7 @@ namespace StableDiffusionGui.Installation
             {
                 Program.SetState(Program.BusyState.Installation);
 
-                if (force || !InstallationStatus.HasSdRepo() || !InstallationStatus.HasSdEnv())
+                if (force || forceUpdateDeps || !InstallationStatus.HasSdRepo() || !InstallationStatus.HasSdEnv())
                 {
                     if (!force)
                         Logger.Log("Install: Cloning repo and setting up env because either SD Repo or SD Env is missing.", true, false, Constants.Lognames.Installer);

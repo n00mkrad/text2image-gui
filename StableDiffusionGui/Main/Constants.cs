@@ -5,6 +5,7 @@
         public class Args
         {
             public const string Install = "install";
+            public const string UpdateDeps = "update-deps";
             public const string InstallOnnx = "install-onnx";
             public const string InstallUpscalers = "install-upscalers";
         }

@@ -78,7 +78,7 @@ namespace StableDiffusionGui.Main
         {
             bool up = InstallationStatus.HasSdUpscalers();
             string info = $"targetHash_{release.HashRepo}_oldHash_{Setup.GitCommit}_installedBasic_{InstallationStatus.IsInstalledBasic}";
-            return $"{Paths.GetExe().Wrap()} -{Constants.Args.Install}={true} -{Constants.Args.InstallUpscalers}={up} -info={info}";
+            return $"{Paths.GetExe().Wrap()} -{Constants.Args.Install}={true} -{Constants.Args.UpdateDeps}={true} -{Constants.Args.InstallUpscalers}={up} -info={info}";
         }
 
         private static string Move(string updateDir)

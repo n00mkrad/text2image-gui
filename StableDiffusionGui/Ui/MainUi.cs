@@ -96,11 +96,12 @@ namespace StableDiffusionGui.Ui
                 Logger.Log($"Debug mode enabled. {(System.Diagnostics.Debugger.IsAttached ? "Debugger is attached." : "")}");
             }
 
-            if (Program.UserArgs.Get(Constants.Args.Install) == true.ToString())
+            if (Program.UserArgs.Get(Constants.Args.Install).GetBool() == true)
             {
                 Program.MainForm.BringToFront();
-                bool upscalers = Program.UserArgs.Get(Constants.Args.InstallUpscalers) == true.ToString();
-                new InstallerForm(true, upscalers).ShowDialogForm();
+                bool updDeps = Program.UserArgs.Get(Constants.Args.UpdateDeps).GetBool() == true;
+                bool upscalers = Program.UserArgs.Get(Constants.Args.InstallUpscalers).GetBool() == true;
+                new InstallerForm(true, updDeps, upscalers).ShowDialogForm();
             }
             else
             {
