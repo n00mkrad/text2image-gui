@@ -26,12 +26,7 @@ namespace StableDiffusionGui.Implementations
         public static EasyDict<string, string> EmbeddingsFilesTriggers = new EasyDict<string, string>(); // Key = Filename without ext, Value = Trigger
 
         private static OperationOrder _opOrder = new OperationOrder();
-        private static Action<OperationOrder.LoopAction> _loopIterations;
-        private static Action<OperationOrder.LoopAction> _loopPrompts;
-        private static Action<OperationOrder.LoopAction> _loopScales;
-        private static Action<OperationOrder.LoopAction> _loopSteps;
-        private static Action<OperationOrder.LoopAction> _loopInits;
-        private static Action<OperationOrder.LoopAction> _loopInitStrengths;
+        private static Action<OperationOrder.LoopAction> _loopIterations, _loopPrompts, _loopScales, _loopSteps, _loopInits, _loopInitStrengths, _loopLoraWeights;
 
         public static async Task Run(TtiSettings s, string outPath)
         {
@@ -71,10 +66,14 @@ namespace StableDiffusionGui.Implementations
                 if (initImages == null || initImages.Count <= 0)
                     _opOrder.LoopOrder.Remove(OperationOrder.LoopAction.InitStrengths);
 
+                if (!s.Loras.Any())
+                    _opOrder.LoopOrder.Remove(OperationOrder.LoopAction.LoraWeight);
+
                 List<string> processedPrompts = null;
                 TextToImage.CurrentTaskSettings.ProcessedAndRawPrompts = new EasyDict<string, string>();
 
                 int currentIteration = 0;
+                float currentLoraWeight = 1.0f;
 
                 void NextAction(OperationOrder.LoopAction thisAction)
                 {
@@ -89,7 +88,13 @@ namespace StableDiffusionGui.Implementations
 
                 void FinalAction()
                 {
-                    args["prompt"] = processedPrompts[currentIteration].Wrap();
+                    string currPrompt = processedPrompts[currentIteration];
+
+                    if (s.Loras != null && s.Loras.Count == 1)
+                        foreach (var lora in s.Loras)
+                            currPrompt = currPrompt.Replace($"{lora.Key}Weight", currentLoraWeight.ToStringDot("0.0###"));
+
+                    args["prompt"] = currPrompt.Wrap();
                     argLists.Add(new EasyDict<string, string>(args));
                 }
 
@@ -165,6 +170,15 @@ namespace StableDiffusionGui.Implementations
                         else
                             args["inpaintMask"] = "";
 
+                        NextAction(thisAction);
+                    }
+                };
+
+                _loopLoraWeights = (thisAction) =>
+                {
+                    foreach (float weight in s.Loras.First().Value)
+                    {
+                        currentLoraWeight = weight;
                         NextAction(thisAction);
                     }
                 };
@@ -294,6 +308,7 @@ namespace StableDiffusionGui.Implementations
             if (a == OperationOrder.LoopAction.Step) _loopSteps(a);
             if (a == OperationOrder.LoopAction.InitImg) _loopInits(a);
             if (a == OperationOrder.LoopAction.InitStrengths) _loopInitStrengths(a);
+            if (a == OperationOrder.LoopAction.LoraWeight) _loopLoraWeights(a);
         }
 
         public static string GetImageCountLogString(OrderedDictionary initImages, float[] initStrengths, string[] prompts, int iterations, int[] steps, float[] scales, List<EasyDict<string, string>> argLists)
