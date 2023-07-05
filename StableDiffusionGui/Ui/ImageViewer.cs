@@ -113,7 +113,7 @@ namespace StableDiffusionGui.Ui
             string prompt = meta.Prompt;
 
             if (meta.Loras.Any())
-                prompt += $" (With {string.Join(", ", meta.Loras.Select(l => l.Key))})";
+                prompt += $" (With {string.Join(", ", meta.Loras.Select(l => $"{l.Key} at {l.Value.ToStringDot("0.###")}"))})";
 
             Program.MainForm.labelImgInfo.SetTextSafe($"Image {_currIndex + 1}/{_currentImages.Length} {(infos.Count > 0 ? $" - {string.Join(" - ", infos)}" : "")}");
             Program.MainForm.labelImgPrompt.SetTextSafe(prompt.IsNotEmpty() ? prompt : _strNoPrompt);
