@@ -340,6 +340,9 @@ namespace StableDiffusionGui.Ui
             if (numbers.Count == 1 && !ignoreSingleValue)
                 return numbers[0].ToStringDot("0.###");
 
+            if (numbers.Count == 2)
+                return string.Join(",", numbers);
+
             const float tolerance = 1e-5f; // Tolerance for float comparison
             float interval = numbers[1] - numbers[0];
 
