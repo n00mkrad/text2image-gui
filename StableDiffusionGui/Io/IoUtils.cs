@@ -725,14 +725,18 @@ namespace StableDiffusionGui.Io
             string hashStr = "";
             NmkdStopwatch sw = new NmkdStopwatch();
 
-            if (Directory.Exists(pathOrString))
-            {
-                Logger.Log($"Path '{pathOrString}' is directory! Returning empty hash.", true);
-                return hashStr;
-            }
             try
             {
-                var stream = File.Exists(pathOrString) ? File.OpenRead(pathOrString) : StringToStream(pathOrString);
+                var invalidChars = Path.GetInvalidPathChars();
+                bool validPath = !pathOrString.Any(c => invalidChars.Contains(c));
+
+                if (validPath && Directory.Exists(pathOrString))
+                {
+                    Logger.Log($"Path '{pathOrString}' is directory! Returning empty hash.", true);
+                    return hashStr;
+                } 
+
+                var stream = validPath && File.Exists(pathOrString) ? File.OpenRead(pathOrString) : StringToStream(pathOrString);
 
                 if (hashType == Hash.MD5)
                 {
