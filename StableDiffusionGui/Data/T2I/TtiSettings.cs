@@ -7,6 +7,7 @@ using static StableDiffusionGui.Main.Enums.StableDiffusion;
 using Newtonsoft.Json;
 using System.Drawing;
 using StableDiffusionGui.Ui;
+using static StableDiffusionGui.Serialization.JsonUtils;
 
 namespace StableDiffusionGui.Data
 {
@@ -19,6 +20,7 @@ namespace StableDiffusionGui.Data
         public int[] Steps { get; set; } = new int[0];
         public string[] InitImgs { get; set; } = new string[] { "" };
         public float[] InitStrengths { get; set; } = new float[0];
+        [JsonIgnore]
         public float[] InitStrengthsReverse { get { return InitStrengths.Select(n => 1f - n).ToArray(); } }
         public float[] ScalesTxt { get; set; } = new float[0];
         public float[] ScalesImg { get; set; } = new float[0];
@@ -40,7 +42,8 @@ namespace StableDiffusionGui.Data
         public float Perlin { get; set; } = 0f;
         public int Threshold { get; set; } = 0;
         public ImgMode ImgMode { get; set; } = ImgMode.InitializationImage;
-        public EasyDict<string, float> Loras { get; set; } = new EasyDict<string, float>();
+        [JsonConverter(typeof(EasyDictValueToListConverter<string, float>))]
+        public EasyDict<string, List<float>> Loras { get; set; } = new EasyDict<string, List<float>>();
         #endregion
 
         public EasyDict<string, string> ExtraParams { get; set; } = new EasyDict<string, string>();

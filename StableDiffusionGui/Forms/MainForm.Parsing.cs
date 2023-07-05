@@ -43,7 +43,7 @@ namespace StableDiffusionGui.Forms
                     sliderInitStrength.ActualValue = (decimal)meta.InitStrength;
 
                 textboxExtraInitStrengths.Text = "";
-                SetLoras(meta.Loras);
+                SetLoras(new EasyDict<string, List<float>>(meta.Loras.ToDictionary(p => p.Key, p => p.Value.AsList())));
 
             })).RunWithUiStopped(this, "Error loading metadata into UI:", true);
 
@@ -144,7 +144,7 @@ namespace StableDiffusionGui.Forms
         }
 
         /// <summary> Applies LoRA list to UI list. If <paramref name="checkLoras"/> is false, enable/disable checkboxes are unaffected and only weights are applied </summary>
-        public void SetLoras(EasyDict<string, float> loras, bool checkLoras = true)
+        public void SetLoras(EasyDict<string, List<float>> loras, bool checkLoras = true)
         {
             foreach (var row in gridLoras.Rows.Cast<DataGridViewRow>().Where(r => !r.IsNewRow))
             {
@@ -161,7 +161,7 @@ namespace StableDiffusionGui.Forms
                     if (checkLoras)
                         row.Cells[0].Value = true;
 
-                    row.Cells[2].Value = matches[0].Value.ToStringDot("0.0##");
+                    row.Cells[2].Value = MainUi.GetValuesStr(matches[0].Value, false);
                 }
             }
 
@@ -169,9 +169,9 @@ namespace StableDiffusionGui.Forms
                 BeginInvoke(new MethodInvoker(() => { SortLoras(true); }));
         }
 
-        private EasyDict<string, float> GetLoras(bool onlyEnabled = true)
+        private EasyDict<string, List<float>> GetLoras(bool onlyEnabled = true)
         {
-            var loras = new EasyDict<string, float>();
+            var loras = new EasyDict<string, List<float>>();
 
             foreach (DataGridViewRow row in gridLoras.Rows)
             {
@@ -182,10 +182,9 @@ namespace StableDiffusionGui.Forms
                     continue;
 
                 string name = row.Cells[1].Value.ToString();
-                float weight = row.Cells[2].Value.ToString().GetFloat();
 
-                if (name.IsNotEmpty() && weight > 0.01f)
-                    loras[name] = weight;
+                if (name.IsNotEmpty())
+                    loras[name] = MainUi.GetExtraValues(row.Cells[2].Value.ToString(), 1.0f);
             }
 
             return loras;

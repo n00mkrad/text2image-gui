@@ -341,7 +341,7 @@ namespace StableDiffusionGui.Ui
                 return numbers[0].ToStringDot("0.###");
 
             if (numbers.Count == 2)
-                return string.Join(",", numbers);
+                return string.Join(",", numbers.Select(f => f.ToStringDot("0.###")));
 
             const float tolerance = 1e-5f; // Tolerance for float comparison
             float interval = numbers[1] - numbers[0];
@@ -350,16 +350,16 @@ namespace StableDiffusionGui.Ui
             {
                 if (Math.Abs((numbers[i] - numbers[i - 1]) - interval) > tolerance)
                 {
-                    return string.Join(",", numbers);
+                    return string.Join(",", numbers.Select(f => f.ToStringDot("0.###")));
                 }
             }
 
-            return $"{numbers[0]} > {numbers[numbers.Count - 1]} : {interval}";
+            return $"{numbers[0].ToStringDot("0.###")} > {numbers[numbers.Count - 1].ToStringDot("0.###")} : {interval.ToStringDot("0.###")}";
         }
 
-        public static List<float> GetExtraValues(string text, float sliderValue)
+        public static List<float> GetExtraValues(string text, float baseValue)
         {
-            var values = new List<float>() { sliderValue };
+            var values = new List<float>() { baseValue };
 
             if (text.MatchesWildcard("* > * : *"))
             {

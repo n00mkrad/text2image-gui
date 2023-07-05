@@ -110,7 +110,7 @@ namespace StableDiffusionGui.Forms
             if (Config.Instance != null && comboxModel.SelectedIndex >= 0)
                 Config.Instance.ModelArchs[((Model)comboxModel.SelectedItem).FullName] = ParseUtils.GetEnum<Enums.Models.SdArch>(comboxModelArch.Text, true, Strings.SdModelArch);
 
-            Config.Instance.LoraWeights = new EasyDict<string, float>(GetLoras(false).Where(x => x.Value != Constants.Ui.DefaultLoraStrength).ToDictionary(p => p.Key, p => p.Value));
+            Config.Instance.LoraWeights = new EasyDict<string, List<float>>(GetLoras(false).Where(x => x.Value.Count != 1 || x.Value[0] != Constants.Ui.DefaultLoraStrength).ToDictionary(p => p.Key, p => p.Value));
             Config.Save();
         }
 
@@ -202,7 +202,7 @@ namespace StableDiffusionGui.Forms
         public void ReloadLoras()
         {
             string defaultStrength = Constants.Ui.DefaultLoraStrength.ToString("0.0##");
-            gridLoras.Rows.Cast<DataGridViewRow>().Where(row => row.Cells[2].Value.ToString().GetFloat() <= 0f).ToList().ForEach(row => row.Cells[2].Value = defaultStrength);
+            // gridLoras.Rows.Cast<DataGridViewRow>().Where(row => row.Cells[2].Value.ToString().GetFloat() <= 0f).ToList().ForEach(row => row.Cells[2].Value = defaultStrength);
             var selection = GetLoras(); // Save current selection
             List<Model> loras = Models.GetLoras();
             string currLoras = loras.Select(l => l.FormatIndependentName).AsString();

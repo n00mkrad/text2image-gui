@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using StableDiffusionGui.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -97,6 +98,83 @@ namespace StableDiffusionGui.Serialization
 
             public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
             {
+                serializer.Serialize(writer, value);
+            }
+        }
+
+        public class SingleValueToListConverter<T> : JsonConverter
+        {
+            public override bool CanConvert(Type objectType)
+            {
+                return objectType == typeof(List<T>);
+            }
+
+            public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+            {
+                if (reader.TokenType == JsonToken.StartArray)
+                {
+                    // If it's an array, let JSON.NET handle it with default behavior
+                    return serializer.Deserialize(reader, objectType);
+                }
+                else
+                {
+                    // Otherwise, it's a single value; deserialize it and add to a list
+                    T item = serializer.Deserialize<T>(reader);
+                    return new List<T> { item };
+                }
+            }
+
+            public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+            {
+                // Let JSON.NET handle the serialization with default behavior
+                serializer.Serialize(writer, value);
+            }
+        }
+
+        public class EasyDictValueToListConverter<TKey, TValue> : JsonConverter
+        {
+            public override bool CanConvert(Type objectType)
+            {
+                return objectType == typeof(EasyDict<TKey, List<TValue>>);
+            }
+
+            public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+            {
+                var result = new EasyDict<TKey, List<TValue>>();
+
+                if (reader.TokenType == JsonToken.StartObject)
+                {
+                    // Load the JSON object into a JObject
+                    var jObject = Newtonsoft.Json.Linq.JObject.Load(reader);
+
+                    foreach (var prop in jObject.Properties())
+                    {
+                        TKey key = (TKey)Convert.ChangeType(prop.Name, typeof(TKey));
+                        List<TValue> values;
+
+                        // Check if the property value is an array
+                        if (prop.Value.Type == Newtonsoft.Json.Linq.JTokenType.Array)
+                        {
+                            // Deserialize as a list
+                            values = prop.Value.ToObject<List<TValue>>();
+                        }
+                        else
+                        {
+                            // Deserialize as a single value and add to a list
+                            TValue value = prop.Value.ToObject<TValue>();
+                            values = new List<TValue> { value };
+                        }
+
+                        result.Add(key, values);
+                    }
+                }
+
+                return result;
+            }
+
+            public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+            {
+                // Let JSON.NET handle the serialization with default behavior
                 serializer.Serialize(writer, value);
             }
         }

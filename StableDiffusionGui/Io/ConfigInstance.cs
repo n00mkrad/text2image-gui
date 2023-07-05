@@ -76,7 +76,7 @@ namespace StableDiffusionGui.Io
         public string EmbeddingsDir;
         public string LorasDir;
         public bool AutoDeleteImgs;
-        public EasyDict<string, float> LoraWeights = new EasyDict<string, float>();
+        public EasyDict<string, List<float>> LoraWeights = new EasyDict<string, List<float>>();
         public string LastTrainingBaseModel;
         public int LastLoraClipSkip;
         public string LastLoraTrainName;

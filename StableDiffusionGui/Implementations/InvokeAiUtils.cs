@@ -238,15 +238,20 @@ namespace StableDiffusionGui.Implementations
         }
 
         /// <summary> Combines regular prompt, negative prompt, and LoRAs into single InvokeAI prompt </summary>
-        public static string GetCombinedPrompt(string prompt, string negPrompt, EasyDict<string, float> loras = null)
+        public static string GetCombinedPrompt(string prompt, string negPrompt, EasyDict<string, List<float>> loras = null)
         {
             prompt = prompt.Trim();
 
             if (loras != null && loras.Any())
-                prompt = prompt.Append(string.Join(", ", loras.Select(l => $"withLora({l.Key},{l.Value.ToStringDot("0.###")})")), true);
+            {
+                var loraStrs = loras.Select(l => $"withLora({l.Key},{(l.Value.Count == 1 || loras.Count > 1 ? l.Value[0].ToStringDot("0.###") : $"{l.Key}Weight")})");
+                prompt = prompt.Append(string.Join(", ", loraStrs), true);
+            }
 
             if (negPrompt.IsNotEmpty())
+            {
                 prompt = prompt.Append($"[{negPrompt.Trim()}]", false);
+            }
 
             return prompt;
         }

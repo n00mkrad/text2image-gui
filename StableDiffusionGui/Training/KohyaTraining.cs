@@ -65,7 +65,7 @@ namespace StableDiffusionGui.Training
                 if(s.AgumentColor || s.AugmentFlip)
                 {
                     s.CacheLatents = false;
-                    Logger.Log($"Warning: Latents Caching has been disabled because it cannot be used with Color/Flip augmentations. This will increase VRAM usage.");
+                    Logger.Log($"Warning: Latents Caching has been disabled because it cannot be used with augmentations. This will increase VRAM usage.");
                 }
 
                 string args = $"--pretrained_model_name_or_path={baseModel.FullName.Wrap()} " +
