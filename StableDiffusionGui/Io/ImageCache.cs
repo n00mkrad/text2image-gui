@@ -90,8 +90,8 @@ namespace StableDiffusionGui.Io
         {
             long size = GetCacheSizeInBytes();
 
-            if (Program.Debug)
-                Logger.Log($"Image Cache: {((float)size / 1024 / 1024).RoundToInt()}/{((float)MaxCacheSizeBytes / 1024 / 1024).RoundToInt()} MB in RAM", true);
+            // if (Program.Debug)
+            //     Logger.Log($"Image Cache: {((float)size / 1024 / 1024).RoundToInt()}/{((float)MaxCacheSizeBytes / 1024 / 1024).RoundToInt()} MB in RAM", true);
 
             if (size > MaxCacheSizeBytes)
             {

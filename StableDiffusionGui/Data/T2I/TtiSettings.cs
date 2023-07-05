@@ -19,6 +19,7 @@ namespace StableDiffusionGui.Data
         public int[] Steps { get; set; } = new int[0];
         public string[] InitImgs { get; set; } = new string[] { "" };
         public float[] InitStrengths { get; set; } = new float[0];
+        public float[] InitStrengthsReverse { get { return InitStrengths.Select(n => 1f - n).ToArray(); } }
         public float[] ScalesTxt { get; set; } = new float[0];
         public float[] ScalesImg { get; set; } = new float[0];
         public long Seed { get; set; } = 0;

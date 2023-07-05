@@ -25,11 +25,18 @@ namespace StableDiffusionGui.Implementations
         public static Dictionary<string, string> PostProcessMovePaths = new Dictionary<string, string>();
         public static EasyDict<string, string> EmbeddingsFilesTriggers = new EasyDict<string, string>(); // Key = Filename without ext, Value = Trigger
 
+        private static OperationOrder _opOrder = new OperationOrder();
+        private static Action<OperationOrder.LoopAction> _loopIterations;
+        private static Action<OperationOrder.LoopAction> _loopPrompts;
+        private static Action<OperationOrder.LoopAction> _loopScales;
+        private static Action<OperationOrder.LoopAction> _loopSteps;
+        private static Action<OperationOrder.LoopAction> _loopInits;
+        private static Action<OperationOrder.LoopAction> _loopInitStrengths;
+
         public static async Task Run(TtiSettings s, string outPath)
         {
             try
             {
-                float[] initStrengths = s.InitStrengths.Select(n => 1f - n).ToArray(); // List of init strength values to run
                 string vae = s.Vae.NullToEmpty().Replace("None", ""); // VAE model name
                 var allModels = Models.GetModelsAll();
                 var cachedModels = allModels.Where(m => m.Type == Enums.Models.Type.Normal).ToList();
@@ -54,67 +61,115 @@ namespace StableDiffusionGui.Implementations
                 args["seamless"] = Args.InvokeAi.GetSeamlessArg(s.SeamlessMode);
                 args["symmetry"] = Args.InvokeAi.GetSymmetryArg(s.SymmetryMode);
                 args["hiresFix"] = s.HiresFix ? "--hires_fix" : "";
+                args["perlin"] = s.Perlin > 0f ? $"--perlin {s.Perlin.ToStringDot()}" : "";
+                args["threshold"] = s.Threshold > 0 ? $"--threshold {s.Threshold}" : "";
+                args["clipSegMask"] = (s.ImgMode == Enums.StableDiffusion.ImgMode.TextMask && !string.IsNullOrWhiteSpace(s.ClipSegMask)) ? $"-tm {s.ClipSegMask.Wrap()}" : "";
+                args["debug"] = s.AppendArgs;
+                args["res"] = $"-W {s.Res.Width} -H {s.Res.Height}";
+                args["sampler"] = $"-A {s.Sampler.ToString().Lower()}";
 
-                foreach (string prompt in s.Prompts)
+                if (initImages == null || initImages.Count <= 0)
+                    _opOrder.LoopOrder.Remove(OperationOrder.LoopAction.InitStrengths);
+
+                List<string> processedPrompts = null;
+                TextToImage.CurrentTaskSettings.ProcessedAndRawPrompts = new EasyDict<string, string>();
+
+                int currentIteration = 0;
+
+                void NextAction(OperationOrder.LoopAction thisAction)
                 {
-                    List<string> processedPrompts = PromptWildcardUtils.ApplyWildcardsAll(prompt, s.Iterations, false);
-                    TextToImage.CurrentTaskSettings.ProcessedAndRawPrompts = new EasyDict<string, string>(processedPrompts.Distinct().ToDictionary(x => x, x => prompt));
+                    if (_opOrder.SeedResetActions.Contains(thisAction))
+                        s.Seed = startSeed;
+
+                    if (_opOrder.SeedIncrementActions.Contains(thisAction) && !s.LockSeed)
+                        s.Seed++;
+
+                    RunNextLoopAction(thisAction, () => FinalAction());
+                }
+
+                void FinalAction()
+                {
+                    args["prompt"] = processedPrompts[currentIteration].Wrap();
+                    argLists.Add(new EasyDict<string, string>(args));
+                }
+
+                _loopPrompts = (thisAction) =>
+                {
+                    foreach (string prompt in s.Prompts)
+                    {
+                        processedPrompts = PromptWildcardUtils.ApplyWildcardsAll(prompt, s.Iterations, false);
+                        TextToImage.CurrentTaskSettings.ProcessedAndRawPrompts = new EasyDict<string, string>(processedPrompts.Distinct().ToDictionary(x => x, x => prompt));
+                        NextAction(thisAction);
+                    }
+                };
+
+                _loopIterations = (thisAction) =>
+                {
+                    currentIteration = 0;
 
                     for (int i = 0; i < s.Iterations; i++)
                     {
-                        args.Remove("initImg");
-                        args.Remove("initStrength");
-                        args.Remove("inpaintMask");
-                        args["prompt"] = processedPrompts[i].Wrap();
-                        args["res"] = $"-W {s.Res.Width} -H {s.Res.Height}";
-                        args["sampler"] = $"-A {s.Sampler.ToString().Lower()}";
                         args["seed"] = $"-S {s.Seed}";
-                        args["perlin"] = s.Perlin > 0f ? $"--perlin {s.Perlin.ToStringDot()}" : "";
-                        args["threshold"] = s.Threshold > 0 ? $"--threshold {s.Threshold}" : "";
-                        args["clipSegMask"] = (s.ImgMode == Enums.StableDiffusion.ImgMode.TextMask && !string.IsNullOrWhiteSpace(s.ClipSegMask)) ? $"-tm {s.ClipSegMask.Wrap()}" : "";
-                        args["debug"] = s.AppendArgs;
-
-                        foreach (float scale in s.ScalesTxt)
-                        {
-                            args["scale"] = $"-C {scale.Clamp(0.01f, 1000f).ToStringDot()}";
-
-                            foreach (int stepCount in s.Steps)
-                            {
-                                args["steps"] = $"-s {stepCount}";
-
-                                if (initImages == null) // No init image(s)
-                                {
-                                    argLists.Add(new EasyDict<string, string>(args));
-                                }
-                                else // With init image(s)
-                                {
-                                    foreach (string initImg in initImages.Values)
-                                    {
-                                        foreach (float strength in initStrengths)
-                                        {
-                                            args["initImg"] = $"-I {initImg.Wrap()}";
-                                            args["initStrength"] = s.ImgMode != Enums.StableDiffusion.ImgMode.InitializationImage ? "-f 1.0" : $"-f {strength.ToStringDot("0.###")}"; // Lock to 1.0 when using inpainting
-
-                                            if (s.ImgMode == Enums.StableDiffusion.ImgMode.ImageMask)
-                                                args["inpaintMask"] = $"-M {Inpainting.MaskedImagePath.Wrap()}";
-
-                                            if (s.ImgMode == Enums.StableDiffusion.ImgMode.Outpainting)
-                                                args["inpaintMask"] = "--force_outpaint";
-
-                                            argLists.Add(new EasyDict<string, string>(args));
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        if (!s.LockSeed)
-                            s.Seed++;
+                        NextAction(thisAction);
+                        currentIteration++;
                     }
+                };
 
-                    if (Config.Instance.MultiPromptsSameSeed)
-                        s.Seed = startSeed;
-                }
+                _loopScales = (thisAction) =>
+                {
+                    foreach (float scale in s.ScalesTxt)
+                    {
+                        args["scale"] = $"-C {scale.Clamp(0.01f, 1000f).ToStringDot()}";
+                        NextAction(thisAction);
+                    }
+                };
+
+                _loopSteps = (thisAction) =>
+                {
+                    foreach (int stepCount in s.Steps)
+                    {
+                        args["steps"] = $"-s {stepCount}";
+
+                        NextAction(thisAction);
+                    }
+                };
+
+                _loopInits = (thisAction) =>
+                {
+                    if (initImages == null) // No init image(s)
+                    {
+                        args["initImg"] = "";
+                        args["initStrength"] = "";
+                        NextAction(thisAction);
+                    }
+                    else // With init image(s)
+                    {
+                        foreach (string initImg in initImages.Values)
+                        {
+                            args["initImg"] = $"-I {initImg.Wrap()}";
+                            NextAction(thisAction);
+                        }
+                    }
+                };
+
+                _loopInitStrengths = (thisAction) =>
+                {
+                    foreach (float strength in s.InitStrengthsReverse)
+                    {
+                        args["initStrength"] = s.ImgMode != Enums.StableDiffusion.ImgMode.InitializationImage ? "-f 1.0" : $"-f {strength.ToStringDot("0.###")}"; // Lock to 1.0 when using inpainting
+
+                        if (s.ImgMode == Enums.StableDiffusion.ImgMode.ImageMask)
+                            args["inpaintMask"] = $"-M {Inpainting.MaskedImagePath.Wrap()}";
+                        else if (s.ImgMode == Enums.StableDiffusion.ImgMode.Outpainting)
+                            args["inpaintMask"] = "--force_outpaint";
+                        else
+                            args["inpaintMask"] = "";
+
+                        NextAction(thisAction);
+                    }
+                };
+
+                RunLoopAction(_opOrder.LoopOrder.First());
 
                 Logger.Log($"Running Stable Diffusion - {s.Iterations} Iterations, {s.Steps.Length} Steps, Scales {(s.ScalesTxt.Length < 4 ? string.Join(", ", s.ScalesTxt.Select(x => x.ToStringDot())) : $"{s.ScalesTxt.First()}->{s.ScalesTxt.Last()}")}, {s.Res.AsString()}, Starting Seed: {startSeed}", false, Logger.LastUiLine.EndsWith("..."));
 
@@ -122,7 +177,7 @@ namespace StableDiffusionGui.Implementations
                 string argsStartup = Args.InvokeAi.GetArgsStartup(cachedModels);
                 string newStartupSettings = $"{argsStartup} {modelsChecksumStartup} {Config.Instance.CudaDeviceIdx} {Config.Instance.ClipSkip}"; // Check if startup settings match - If not, we need to restart the process
 
-                Logger.Log(GetImageCountLogString(initImages, initStrengths, s.Prompts, s.Iterations, s.Steps, s.ScalesTxt, argLists));
+                Logger.Log(GetImageCountLogString(initImages, s.InitStrengthsReverse, s.Prompts, s.Iterations, s.Steps, s.ScalesTxt, argLists));
 
                 Logger.Clear(Constants.Lognames.Sd);
                 bool restartedInvoke = false; // Will be set to true if InvokeAI was not running before
@@ -219,6 +274,26 @@ namespace StableDiffusionGui.Implementations
                 Logger.Log($"Unhandled Stable Diffusion Error: {ex.Message}");
                 Logger.Log(ex.StackTrace, true);
             }
+        }
+
+        static void RunNextLoopAction(OperationOrder.LoopAction previousAction, Action doneAction)
+        {
+            int actionIndex = _opOrder.LoopOrder.IndexOf(previousAction);
+
+            if (actionIndex + 1 < _opOrder.LoopOrder.Count)
+                RunLoopAction(_opOrder.LoopOrder.ElementAt(actionIndex + 1));
+            else
+                doneAction(); // End
+        }
+
+        static void RunLoopAction(OperationOrder.LoopAction a)
+        {
+            if (a == OperationOrder.LoopAction.Prompt) _loopPrompts(a);
+            if (a == OperationOrder.LoopAction.Iteration) _loopIterations(a);
+            if (a == OperationOrder.LoopAction.Scale) _loopScales(a);
+            if (a == OperationOrder.LoopAction.Step) _loopSteps(a);
+            if (a == OperationOrder.LoopAction.InitImg) _loopInits(a);
+            if (a == OperationOrder.LoopAction.InitStrengths) _loopInitStrengths(a);
         }
 
         public static string GetImageCountLogString(OrderedDictionary initImages, float[] initStrengths, string[] prompts, int iterations, int[] steps, float[] scales, List<EasyDict<string, string>> argLists)
