@@ -106,9 +106,17 @@
             this.comboxBaseModel = new System.Windows.Forms.ComboBox();
             this.panel26 = new System.Windows.Forms.Panel();
             this.label10 = new System.Windows.Forms.Label();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel12 = new System.Windows.Forms.TableLayoutPanel();
+            this.panel14 = new System.Windows.Forms.Panel();
+            this.comboxTrainMethod = new System.Windows.Forms.ComboBox();
+            this.panel16 = new System.Windows.Forms.Panel();
+            this.label13 = new System.Windows.Forms.Label();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.btnInfo = new System.Windows.Forms.Button();
             this.btnOpenModelFolder = new System.Windows.Forms.Button();
+            this.comboxBatchSize = new System.Windows.Forms.ComboBox();
+            this.label14 = new System.Windows.Forms.Label();
             this.parentPanel.SuspendLayout();
             this.panelDebug.SuspendLayout();
             this.tableLayoutPanel11.SuspendLayout();
@@ -150,6 +158,10 @@
             this.tableLayoutPanel8.SuspendLayout();
             this.panel25.SuspendLayout();
             this.panel26.SuspendLayout();
+            this.panel1.SuspendLayout();
+            this.tableLayoutPanel12.SuspendLayout();
+            this.panel14.SuspendLayout();
+            this.panel16.SuspendLayout();
             this.SuspendLayout();
             // 
             // titleLabel
@@ -180,16 +192,17 @@
             this.parentPanel.Controls.Add(this.panelProjectName);
             this.parentPanel.Controls.Add(this.panelTrainPreset);
             this.parentPanel.Controls.Add(this.panelBaseModel);
+            this.parentPanel.Controls.Add(this.panel1);
             this.parentPanel.Location = new System.Drawing.Point(12, 62);
             this.parentPanel.Name = "parentPanel";
-            this.parentPanel.Size = new System.Drawing.Size(760, 392);
+            this.parentPanel.Size = new System.Drawing.Size(760, 427);
             this.parentPanel.TabIndex = 15;
             // 
             // panelDebug
             // 
             this.panelDebug.Controls.Add(this.tableLayoutPanel11);
             this.panelDebug.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelDebug.Location = new System.Drawing.Point(0, 280);
+            this.panelDebug.Location = new System.Drawing.Point(0, 315);
             this.panelDebug.Name = "panelDebug";
             this.panelDebug.Size = new System.Drawing.Size(760, 70);
             this.panelDebug.TabIndex = 107;
@@ -249,6 +262,8 @@
             this.flowLayoutPanelDebugOpts.Controls.Add(this.checkboxGradCkpt);
             this.flowLayoutPanelDebugOpts.Controls.Add(this.comboxSaveFormat);
             this.flowLayoutPanelDebugOpts.Controls.Add(this.comboxTrainFormat);
+            this.flowLayoutPanelDebugOpts.Controls.Add(this.comboxBatchSize);
+            this.flowLayoutPanelDebugOpts.Controls.Add(this.label14);
             this.flowLayoutPanelDebugOpts.Controls.Add(this.checkboxAugColor);
             this.flowLayoutPanelDebugOpts.Controls.Add(this.checkboxAugFlip);
             this.flowLayoutPanelDebugOpts.Controls.Add(this.checkboxShuffleTags);
@@ -355,7 +370,7 @@
             this.textboxSeed.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
             this.textboxSeed.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSeed.Name = "textboxSeed";
-            this.textboxSeed.Size = new System.Drawing.Size(50, 20);
+            this.textboxSeed.Size = new System.Drawing.Size(50, 21);
             this.textboxSeed.TabIndex = 113;
             this.textboxSeed.Text = "42";
             // 
@@ -375,7 +390,7 @@
             // 
             this.panelSteps.Controls.Add(this.tableLayoutPanel6);
             this.panelSteps.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSteps.Location = new System.Drawing.Point(0, 245);
+            this.panelSteps.Location = new System.Drawing.Point(0, 280);
             this.panelSteps.Name = "panelSteps";
             this.panelSteps.Size = new System.Drawing.Size(760, 35);
             this.panelSteps.TabIndex = 104;
@@ -507,7 +522,7 @@
             // 
             this.panelLr.Controls.Add(this.tableLayoutPanel4);
             this.panelLr.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelLr.Location = new System.Drawing.Point(0, 210);
+            this.panelLr.Location = new System.Drawing.Point(0, 245);
             this.panelLr.Name = "panelLr";
             this.panelLr.Size = new System.Drawing.Size(760, 35);
             this.panelLr.TabIndex = 103;
@@ -638,7 +653,7 @@
             // 
             this.panelRes.Controls.Add(this.tableLayoutPanel10);
             this.panelRes.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelRes.Location = new System.Drawing.Point(0, 175);
+            this.panelRes.Location = new System.Drawing.Point(0, 210);
             this.panelRes.Name = "panelRes";
             this.panelRes.Size = new System.Drawing.Size(760, 35);
             this.panelRes.TabIndex = 106;
@@ -728,7 +743,7 @@
             // 
             this.panelToken.Controls.Add(this.tableLayoutPanel3);
             this.panelToken.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelToken.Location = new System.Drawing.Point(0, 140);
+            this.panelToken.Location = new System.Drawing.Point(0, 175);
             this.panelToken.Name = "panelToken";
             this.panelToken.Size = new System.Drawing.Size(760, 35);
             this.panelToken.TabIndex = 102;
@@ -820,7 +835,7 @@
             this.btnStart.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.25F);
             this.btnStart.ForeColor = System.Drawing.Color.White;
-            this.btnStart.Location = new System.Drawing.Point(0, 352);
+            this.btnStart.Location = new System.Drawing.Point(0, 387);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(120, 40);
             this.btnStart.TabIndex = 101;
@@ -832,7 +847,7 @@
             // 
             this.panelTrainImgs.Controls.Add(this.tableLayoutPanel2);
             this.panelTrainImgs.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelTrainImgs.Location = new System.Drawing.Point(0, 105);
+            this.panelTrainImgs.Location = new System.Drawing.Point(0, 140);
             this.panelTrainImgs.Name = "panelTrainImgs";
             this.panelTrainImgs.Size = new System.Drawing.Size(760, 35);
             this.panelTrainImgs.TabIndex = 22;
@@ -932,7 +947,7 @@
             // 
             this.panelProjectName.Controls.Add(this.tableLayoutPanel9);
             this.panelProjectName.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelProjectName.Location = new System.Drawing.Point(0, 70);
+            this.panelProjectName.Location = new System.Drawing.Point(0, 105);
             this.panelProjectName.Name = "panelProjectName";
             this.panelProjectName.Size = new System.Drawing.Size(760, 35);
             this.panelProjectName.TabIndex = 105;
@@ -1000,7 +1015,7 @@
             // 
             this.panelTrainPreset.Controls.Add(this.tableLayoutPanel1);
             this.panelTrainPreset.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelTrainPreset.Location = new System.Drawing.Point(0, 35);
+            this.panelTrainPreset.Location = new System.Drawing.Point(0, 70);
             this.panelTrainPreset.Name = "panelTrainPreset";
             this.panelTrainPreset.Size = new System.Drawing.Size(760, 35);
             this.panelTrainPreset.TabIndex = 21;
@@ -1118,7 +1133,7 @@
             // 
             this.panelBaseModel.Controls.Add(this.tableLayoutPanel8);
             this.panelBaseModel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelBaseModel.Location = new System.Drawing.Point(0, 0);
+            this.panelBaseModel.Location = new System.Drawing.Point(0, 35);
             this.panelBaseModel.Name = "panelBaseModel";
             this.panelBaseModel.Size = new System.Drawing.Size(760, 35);
             this.panelBaseModel.TabIndex = 20;
@@ -1184,6 +1199,76 @@
             this.label10.TabIndex = 85;
             this.label10.Text = "Base Model (Train on Top of This)";
             // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.tableLayoutPanel12);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(760, 35);
+            this.panel1.TabIndex = 108;
+            // 
+            // tableLayoutPanel12
+            // 
+            this.tableLayoutPanel12.ColumnCount = 2;
+            this.tableLayoutPanel12.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40F));
+            this.tableLayoutPanel12.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
+            this.tableLayoutPanel12.Controls.Add(this.panel14, 0, 0);
+            this.tableLayoutPanel12.Controls.Add(this.panel16, 0, 0);
+            this.tableLayoutPanel12.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel12.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel12.Name = "tableLayoutPanel12";
+            this.tableLayoutPanel12.RowCount = 1;
+            this.tableLayoutPanel12.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel12.Size = new System.Drawing.Size(760, 35);
+            this.tableLayoutPanel12.TabIndex = 1;
+            // 
+            // panel14
+            // 
+            this.panel14.Controls.Add(this.comboxTrainMethod);
+            this.panel14.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel14.Location = new System.Drawing.Point(304, 3);
+            this.panel14.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
+            this.panel14.Name = "panel14";
+            this.panel14.Size = new System.Drawing.Size(456, 29);
+            this.panel14.TabIndex = 88;
+            // 
+            // comboxTrainMethod
+            // 
+            this.comboxTrainMethod.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboxTrainMethod.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.comboxTrainMethod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboxTrainMethod.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboxTrainMethod.ForeColor = System.Drawing.Color.White;
+            this.comboxTrainMethod.FormattingEnabled = true;
+            this.comboxTrainMethod.Location = new System.Drawing.Point(0, 4);
+            this.comboxTrainMethod.Margin = new System.Windows.Forms.Padding(3, 3, 0, 3);
+            this.comboxTrainMethod.Name = "comboxTrainMethod";
+            this.comboxTrainMethod.Size = new System.Drawing.Size(456, 21);
+            this.comboxTrainMethod.TabIndex = 106;
+            // 
+            // panel16
+            // 
+            this.panel16.Controls.Add(this.label13);
+            this.panel16.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel16.Location = new System.Drawing.Point(0, 3);
+            this.panel16.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
+            this.panel16.Name = "panel16";
+            this.panel16.Size = new System.Drawing.Size(301, 29);
+            this.panel16.TabIndex = 87;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label13.ForeColor = System.Drawing.Color.White;
+            this.label13.Location = new System.Drawing.Point(2, 8);
+            this.label13.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(84, 13);
+            this.label13.TabIndex = 85;
+            this.label13.Text = "Training Method";
+            // 
             // toolTip
             // 
             this.toolTip.AutomaticDelay = 200;
@@ -1227,12 +1312,43 @@
             this.btnOpenModelFolder.UseVisualStyleBackColor = false;
             this.btnOpenModelFolder.Click += new System.EventHandler(this.btnOpenModelFolder_Click);
             // 
+            // comboxBatchSize
+            // 
+            this.comboxBatchSize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboxBatchSize.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.comboxBatchSize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboxBatchSize.ForeColor = System.Drawing.Color.White;
+            this.comboxBatchSize.FormattingEnabled = true;
+            this.comboxBatchSize.Items.AddRange(new object[] {
+            "1",
+            "2",
+            "3",
+            "4"});
+            this.comboxBatchSize.Location = new System.Drawing.Point(32, 4);
+            this.comboxBatchSize.Margin = new System.Windows.Forms.Padding(0, 4, 3, 3);
+            this.comboxBatchSize.Name = "comboxBatchSize";
+            this.comboxBatchSize.Size = new System.Drawing.Size(35, 21);
+            this.comboxBatchSize.TabIndex = 115;
+            this.comboxBatchSize.Text = "4";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label14.ForeColor = System.Drawing.Color.White;
+            this.label14.Location = new System.Drawing.Point(5, 8);
+            this.label14.Margin = new System.Windows.Forms.Padding(0, 8, 3, 0);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(24, 13);
+            this.label14.TabIndex = 116;
+            this.label14.Text = "BS:";
+            // 
             // DreamboothForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.ClientSize = new System.Drawing.Size(784, 466);
+            this.ClientSize = new System.Drawing.Size(784, 501);
             this.Controls.Add(this.btnInfo);
             this.Controls.Add(this.btnOpenModelFolder);
             this.Controls.Add(this.parentPanel);
@@ -1308,6 +1424,11 @@
             this.panel25.ResumeLayout(false);
             this.panel26.ResumeLayout(false);
             this.panel26.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.tableLayoutPanel12.ResumeLayout(false);
+            this.panel14.ResumeLayout(false);
+            this.panel16.ResumeLayout(false);
+            this.panel16.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1394,5 +1515,13 @@
         private System.Windows.Forms.TextBox textboxSeed;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.ComboBox comboxCaptions;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel12;
+        private System.Windows.Forms.Panel panel14;
+        private System.Windows.Forms.ComboBox comboxTrainMethod;
+        private System.Windows.Forms.Panel panel16;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.ComboBox comboxBatchSize;
+        private System.Windows.Forms.Label label14;
     }
 }

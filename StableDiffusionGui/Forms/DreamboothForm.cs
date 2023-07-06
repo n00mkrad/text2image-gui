@@ -27,7 +27,8 @@ namespace StableDiffusionGui.Forms
 
         private void DreamboothForm_Load(object sender, EventArgs e)
         {
-            comboxNetworkSize.FillFromEnum<LoraSizes>(Strings.LoraSizes, 2);
+            comboxNetworkSize.FillFromEnum<LoraSize>(Strings.LoraSizes, 2);
+            comboxTrainMethod.FillFromEnum<KohyaSettings.NetworkType>(Strings.LoraNetworkTypes, 0, KohyaSettings.NetworkType.LoCon.AsList());
             comboxCaptions.FillFromEnum<CaptionMode>(Strings.CaptionModes, 1);
             comboxRes.SelectedIndex = 1;
             comboxSaveFormat.SelectedIndex = 0;
@@ -93,7 +94,7 @@ namespace StableDiffusionGui.Forms
                 if (gpus != null && gpus.Count > 0 && cudaDeviceOpt != (int)Enums.Cuda.Device.Cpu)
                     gpu = (cudaDeviceOpt == (int)Enums.Cuda.Device.Automatic) ? gpus[0] : gpus[cudaDeviceOpt - 2];
 
-                if (valid && gpu.VramGb < 7.5f)
+                if (valid && gpu.VramGb < 7f)
                 {
                     DialogResult result = UiUtils.ShowMessageBox($"Your GPU appears to have {gpu.VramGb} GB VRAM, but 8 GB are currently required for LoRA " +
                         $"training.\n\nContinue anyway?", "VRAM Warning", MessageBoxButtons.YesNo);
@@ -175,10 +176,13 @@ namespace StableDiffusionGui.Forms
             ZlpDirectoryInfo trainImgDir = new ZlpDirectoryInfo(textboxTrainImgsDir.Text.Trim());
             string name = string.Join("_", textboxProjName.Text.Trim().Split(Path.GetInvalidFileNameChars())).Trunc(50, false);
 
-            KohyaSettings settings = new KohyaSettings(KohyaSettings.NetworkType.LoHa)
+            var trainMethod = ParseUtils.GetEnum<KohyaSettings.NetworkType>(comboxTrainMethod.Text, true, Strings.LoraNetworkTypes);
+
+            KohyaSettings settings = new KohyaSettings(trainMethod)
             {
-                Steps = sliderSteps.ActualValueInt,
-                LearningRate = sliderLr.ActualValueFloat,
+                BatchSize = comboxBatchSize.GetInt(),
+                Steps = sliderSteps.ActualValueInt * (4 / comboxBatchSize.GetInt()), // Compensate for sub-4 batch sizes
+                LearningRate = sliderLr.ActualValueFloat / (comboxBatchSize.GetInt() / 4f),
                 Resolution = comboxRes.Text.Split(" ").First().GetInt(),
                 ClipSkip = (int)upDownClipSkip.Value,
                 UseAspectBuckets = checkboxAspectBuckets.Checked,
@@ -191,24 +195,18 @@ namespace StableDiffusionGui.Forms
                 Seed = textboxSeed.GetInt(),
             };
 
-            var size = ParseUtils.GetEnum<LoraSizes>(comboxNetworkSize.Text, true, Strings.LoraSizes);
-            if (size == LoraSizes.Tiny) { settings.NetworkDim = 2; settings.ConvDim = 1; }
-            if (size == LoraSizes.Small) { settings.NetworkDim = 4; settings.ConvDim = 2; }
-            if (size == LoraSizes.Normal) { settings.NetworkDim = 8; settings.ConvDim = 4; }
-            if (size == LoraSizes.Big) { settings.NetworkDim = 16; settings.ConvDim = 8; }
+            var size = ParseUtils.GetEnum<LoraSize>(comboxNetworkSize.Text, true, Strings.LoraSizes);
+            KohyaTraining.ApplyPreset(ref settings, size);
 
             var captionMode = ParseUtils.GetEnum<CaptionMode>(comboxCaptions.Text, true, Strings.CaptionModes);
-
             string trigger = captionMode == CaptionMode.UseTxtFiles ? null : textboxClassName.Visible ? textboxClassName.Text.Trim() : "";
             string outPath = await KohyaTraining.TrainLora(baseModel, trainImgDir, name, trigger, settings, checkboxDebugOpts.Checked);
 
             Program.SetState(Program.BusyState.Standby);
             btnStart.Text = "Start Training";
 
-            Console.WriteLine($"checking:\n{outPath}");
-
             if (File.Exists(outPath))
-                Logger.Log($"Done. Saved LoRA model to:\n{outPath.Replace(Paths.GetLorasPath(), Constants.Dirs.Models.Loras)}");
+                Logger.Log($"Done. Saved LoRA model to:\n{outPath.Replace(Paths.GetLorasPath(false), Constants.Dirs.Models.Loras)}");
             else
                 Logger.Log($"Training failed - model file was not saved.");
         }

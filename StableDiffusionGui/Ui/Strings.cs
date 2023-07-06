@@ -1,4 +1,5 @@
 ﻿using StableDiffusionGui.Main;
+using StableDiffusionGui.Training;
 using System.Collections.Generic;
 using static StableDiffusionGui.Forms.PostProcSettingsForm;
 
@@ -129,10 +130,10 @@ namespace StableDiffusionGui.Ui
 
         public static Dictionary<string, string> LoraSizes = new Dictionary<string, string>
         {
-            { Enums.Training.LoraSizes.Tiny.ToString(), "Tiny (7.5 MB File)" },
-            { Enums.Training.LoraSizes.Small.ToString(), "Small (15 MB File)" },
-            { Enums.Training.LoraSizes.Normal.ToString(), "Normal (30 MB File)" },
-            { Enums.Training.LoraSizes.Big.ToString(), "Big (60 MB File)" },
+            { Enums.Training.LoraSize.Tiny.ToString(), "Tiny (7.5 MB File)" },
+            { Enums.Training.LoraSize.Small.ToString(), "Small (15 MB File)" },
+            { Enums.Training.LoraSize.Normal.ToString(), "Normal (30 MB File)" },
+            { Enums.Training.LoraSize.Big.ToString(), "Big (60 MB File)" },
         };
 
         public static Dictionary<string, string> CaptionModes = new Dictionary<string, string>
@@ -140,6 +141,12 @@ namespace StableDiffusionGui.Ui
             { Enums.Training.CaptionMode.NoCaption.ToString(), "No Caption (LoRA will always influence image)" },
             { Enums.Training.CaptionMode.UseSinglePhrase.ToString(), "Use a Single Word or Phrase" },
             { Enums.Training.CaptionMode.UseTxtFiles.ToString(), "Read Captions From TXT Files in Training Folder" },
+        };
+
+        public static Dictionary<string, string> LoraNetworkTypes = new Dictionary<string, string>
+        {
+            { KohyaSettings.NetworkType.LoCon.ToString(), "LoRA (Vanilla)" },
+            { KohyaSettings.NetworkType.LoHa.ToString(), "LoHa (LyCORIS)" },
         };
     }
 }

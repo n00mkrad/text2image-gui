@@ -1,6 +1,5 @@
 ﻿using StableDiffusionGui.Data;
 using StableDiffusionGui.Io;
-using StableDiffusionGui.Main.Utils;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
@@ -14,6 +13,7 @@ using ZetaLongPaths;
 using System.IO;
 using System.Text.RegularExpressions;
 using StableDiffusionGui.Forms;
+using static StableDiffusionGui.Main.Enums.Training;
 
 namespace StableDiffusionGui.Training
 {
@@ -48,14 +48,14 @@ namespace StableDiffusionGui.Training
 
                 string timestamp = FormatUtils.GetUnixTimestamp();
                 string configPath = Path.Combine(Paths.GetSessionDataPath(), $"loraCfg{timestamp}.toml");
-                string configText = GetConfig(s.Resolution, dataDir.FullName, repeats);
+                string configText = GetConfig(s.Resolution, dataDir.FullName, repeats, s.BatchSize);
                 File.WriteAllText(configPath, configText);
 
                 string lrStr = s.LearningRate.ToStringDot("0.######").Split('.').Last();
                 string filename = $"{name}_{s.Steps}s_lr{lrStr}_{s.Resolution}px";
 
                 if (verboseFilename)
-                    filename += $"_loha_nd{s.NetworkDim}c{s.ConvDim}";
+                    filename += $"_loha_nd{s.NetworkDim}cd{s.ConvDim}_na{s.NetworkAlpha}";
 
                 string outPath = IoUtils.GetAvailablePath(Path.Combine(outDir, $"{filename}.safetensors"), "_{0}");
                 filename = new FileInfo(outPath).GetNameNoExt();
@@ -68,28 +68,11 @@ namespace StableDiffusionGui.Training
                     Logger.Log($"Warning: Latents Caching has been disabled because it cannot be used with augmentations. This will increase VRAM usage.");
                 }
 
-                string args = $"--pretrained_model_name_or_path={baseModel.FullName.Wrap()} " +
-                    $"--dataset_config={configPath.Wrap()} " +
-                    $"--output_dir={outDir.Wrap()} " +
-                    $"--output_name={filename} " +
-                    $"--save_model_as=safetensors " +
-                    $"--prior_loss_weight=1.0 " +
-                    $"--max_train_steps={s.Steps} " +
-                    $"--learning_rate={s.LearningRate.ToStringDot("0.########")} " +
-                    $"--mixed_precision={s.TrainFormat} " +
-                    $"--save_precision={s.TrainFormat} " +
-                    $"{(s.CacheLatents ? "--cache_latents" : "")} " +
-                    $"{(s.GradientCheckpointing ? "--gradient_checkpointing" : "")} " +
-                    $"{(s.AugmentFlip ? "--flip_aug" : "")} " +
-                    $"{(s.AgumentColor ? "--color_aug" : "")} " +
-                    $"{(s.ShuffleCaption ? "--shuffle_caption" : "")} " +
-                    $"--save_every_n_epochs=999 " +
-                    $"--network_module=lycoris.kohya " +
-                    $"--network_dim={s.NetworkDim} " +
-                    $"--network_alpha={s.NetworkAlpha} " +
-                    $"--seed={s.Seed} " +
-                    $"--clip_skip={s.ClipSkip} " +
-                    $"--network_args \"conv_dim={s.ConvDim}\" \"conv_alpha={s.ConvAlpha}\" \"dropout={s.Dropout}\" \"algo={s.Algo}\"";
+                s.BaseModelPath = baseModel.FullName;
+                s.OutDir = outDir;
+                s.OutFilename = filename;
+                s.DatasetConfigPath = configPath;
+                string args = s.GetCliArgs();
 
                 if (InputUtils.IsHoldingShift)
                 {
@@ -162,6 +145,24 @@ namespace StableDiffusionGui.Training
                 $"";
 
             return content;
+        }
+
+        public static void ApplyPreset (ref KohyaSettings s, LoraSize size)
+        {
+            if(s.NetModule == KohyaSettings.NetworkModule.LoRa)
+            {
+                if (size == LoraSize.Tiny) { s.NetworkDim = 16; s.ConvDim = 8; }
+                if (size == LoraSize.Small) { s.NetworkDim = 32; s.ConvDim = 16; }
+                if (size == LoraSize.Normal) { s.NetworkDim = 64; s.ConvDim = 32; }
+                if (size == LoraSize.Big) { s.NetworkDim = 128; s.NetworkAlpha = 64; }
+            }
+            else if (s.LoraType == KohyaSettings.NetworkType.LoHa)
+            {
+                if (size == LoraSize.Tiny) { s.NetworkDim = 2; s.ConvDim = 1; }
+                if (size == LoraSize.Small) { s.NetworkDim = 4; s.ConvDim = 2; }
+                if (size == LoraSize.Normal) { s.NetworkDim = 8; s.ConvDim = 4; }
+                if (size == LoraSize.Big) { s.NetworkDim = 16; s.ConvDim = 8; }
+            }
         }
 
         /// <summary> Removes Japanese (or rather all non-UTF8) comments and prints from scripts, as this can cause text decoding errors </summary>
