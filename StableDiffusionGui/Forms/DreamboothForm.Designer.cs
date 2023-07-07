@@ -41,6 +41,8 @@
             this.checkboxGradCkpt = new System.Windows.Forms.CheckBox();
             this.comboxSaveFormat = new System.Windows.Forms.ComboBox();
             this.comboxTrainFormat = new System.Windows.Forms.ComboBox();
+            this.comboxBatchSize = new System.Windows.Forms.ComboBox();
+            this.label14 = new System.Windows.Forms.Label();
             this.checkboxAugColor = new System.Windows.Forms.CheckBox();
             this.checkboxAugFlip = new System.Windows.Forms.CheckBox();
             this.checkboxShuffleTags = new System.Windows.Forms.CheckBox();
@@ -115,8 +117,6 @@
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.btnInfo = new System.Windows.Forms.Button();
             this.btnOpenModelFolder = new System.Windows.Forms.Button();
-            this.comboxBatchSize = new System.Windows.Forms.ComboBox();
-            this.label14 = new System.Windows.Forms.Label();
             this.parentPanel.SuspendLayout();
             this.panelDebug.SuspendLayout();
             this.tableLayoutPanel11.SuspendLayout();
@@ -303,7 +303,7 @@
             this.comboxSaveFormat.Items.AddRange(new object[] {
             "Save Format: FP16",
             "Save Format: BF16",
-            "Save Format: Float"});
+            "Save Format: FP32"});
             this.comboxSaveFormat.Location = new System.Drawing.Point(193, 4);
             this.comboxSaveFormat.Margin = new System.Windows.Forms.Padding(0, 4, 3, 3);
             this.comboxSaveFormat.Name = "comboxSaveFormat";
@@ -321,12 +321,43 @@
             this.comboxTrainFormat.Items.AddRange(new object[] {
             "Train Format: FP16",
             "Train Format: BF16",
-            "Train Format: Float"});
+            "Train Format: FP32"});
             this.comboxTrainFormat.Location = new System.Drawing.Point(70, 4);
             this.comboxTrainFormat.Margin = new System.Windows.Forms.Padding(0, 4, 3, 3);
             this.comboxTrainFormat.Name = "comboxTrainFormat";
             this.comboxTrainFormat.Size = new System.Drawing.Size(120, 21);
             this.comboxTrainFormat.TabIndex = 108;
+            // 
+            // comboxBatchSize
+            // 
+            this.comboxBatchSize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboxBatchSize.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.comboxBatchSize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboxBatchSize.ForeColor = System.Drawing.Color.White;
+            this.comboxBatchSize.FormattingEnabled = true;
+            this.comboxBatchSize.Items.AddRange(new object[] {
+            "1",
+            "2",
+            "3",
+            "4"});
+            this.comboxBatchSize.Location = new System.Drawing.Point(32, 4);
+            this.comboxBatchSize.Margin = new System.Windows.Forms.Padding(0, 4, 3, 3);
+            this.comboxBatchSize.Name = "comboxBatchSize";
+            this.comboxBatchSize.Size = new System.Drawing.Size(35, 21);
+            this.comboxBatchSize.TabIndex = 115;
+            this.comboxBatchSize.Text = "4";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label14.ForeColor = System.Drawing.Color.White;
+            this.label14.Location = new System.Drawing.Point(5, 8);
+            this.label14.Margin = new System.Windows.Forms.Padding(0, 8, 3, 0);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(24, 13);
+            this.label14.TabIndex = 116;
+            this.label14.Text = "BS:";
             // 
             // checkboxAugColor
             // 
@@ -370,7 +401,7 @@
             this.textboxSeed.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
             this.textboxSeed.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSeed.Name = "textboxSeed";
-            this.textboxSeed.Size = new System.Drawing.Size(50, 21);
+            this.textboxSeed.Size = new System.Drawing.Size(50, 20);
             this.textboxSeed.TabIndex = 113;
             this.textboxSeed.Text = "42";
             // 
@@ -1311,37 +1342,6 @@
             this.toolTip.SetToolTip(this.btnOpenModelFolder, "Manage Model Folders");
             this.btnOpenModelFolder.UseVisualStyleBackColor = false;
             this.btnOpenModelFolder.Click += new System.EventHandler(this.btnOpenModelFolder_Click);
-            // 
-            // comboxBatchSize
-            // 
-            this.comboxBatchSize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.comboxBatchSize.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.comboxBatchSize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.comboxBatchSize.ForeColor = System.Drawing.Color.White;
-            this.comboxBatchSize.FormattingEnabled = true;
-            this.comboxBatchSize.Items.AddRange(new object[] {
-            "1",
-            "2",
-            "3",
-            "4"});
-            this.comboxBatchSize.Location = new System.Drawing.Point(32, 4);
-            this.comboxBatchSize.Margin = new System.Windows.Forms.Padding(0, 4, 3, 3);
-            this.comboxBatchSize.Name = "comboxBatchSize";
-            this.comboxBatchSize.Size = new System.Drawing.Size(35, 21);
-            this.comboxBatchSize.TabIndex = 115;
-            this.comboxBatchSize.Text = "4";
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label14.ForeColor = System.Drawing.Color.White;
-            this.label14.Location = new System.Drawing.Point(5, 8);
-            this.label14.Margin = new System.Windows.Forms.Padding(0, 8, 3, 0);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(24, 13);
-            this.label14.TabIndex = 116;
-            this.label14.Text = "BS:";
             // 
             // DreamboothForm
             // 

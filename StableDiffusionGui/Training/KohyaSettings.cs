@@ -29,8 +29,8 @@ namespace StableDiffusionGui.Training
         public int Dropout;
         public bool CacheLatents = true;
         public bool GradientCheckpointing = true;
-        public string TrainFormat = "fp16";
-        public string SaveFormat = "fp16";
+        public string TrainMixedPrec = "fp16";
+        public string SaveMixedPrec = "fp16";
         public bool AugmentFlip = false;
         public bool AgumentColor = false;
         public bool ShuffleCaption = false;
@@ -75,8 +75,8 @@ namespace StableDiffusionGui.Training
             argList.Add($"prior_loss_weight=1.0");
             argList.Add($"max_train_steps={Steps}");
             argList.Add($"learning_rate={LearningRate.ToStringDot("0.##########")}");
-            argList.Add($"mixed_precision={TrainFormat}");
-            argList.Add($"save_precision={TrainFormat}");
+            argList.Add($"mixed_precision={TrainMixedPrec}");
+            argList.Add($"save_precision={TrainMixedPrec}");
             argList.Add($"save_every_n_epochs=100");
 
             if (CacheLatents)
