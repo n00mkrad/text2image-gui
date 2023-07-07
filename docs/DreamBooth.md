@@ -1,17 +1,12 @@
-# DreamBooth Training GUI
-Basic training GUI for [DreamBooth](https://dreambooth.github.io/).
+# LoRA Training GUI
+Basic training GUI for LoRA/LyCORIS techniques, allowing you to train characters, concepts or styles that you can apply on top of any model, instead of having to make it a completely separate model (Dreambooth).
 
 
 
 ## System Requirements
 
-- **GPU:** Nvidia GPU with 24 GB VRAM, Turing Architecture (2018) or newer
-- **RAM:** 32 GB RAM
-- **Disk:** 12 GB on NVME SSD (another free 30 GB for temporary files recommended)
-
-**Performance Reference:** RTX 3090 (no OC) should achieve a speed of around 1.1 seconds per training iteration/step.
-
-**Important:** The current implementation is rather fast but also VRAM-hungry. Close all GPU-accelerated programs during training, this includes Web Browsers, web-based applications (Discord, Game Launchers, GitHub Desktop, Visual Studio, etc.), and obviously games. **Without the full 24 GB available, training will slow down a lot!**
+- **GPU:** Nvidia GPU with 8 GB VRAM, Turing Architecture (2018) or newer recommended (6 GB has been reported to work as well)
+- **RAM:** 32 GB RAM (16 GB should work as well, but is not tested)
 
 
 
@@ -19,31 +14,38 @@ Basic training GUI for [DreamBooth](https://dreambooth.github.io/).
 
 ### Preparing Your Dataset
 
-* Use 4-20 images for training. More images are not necessarily better. **Quality over quantity!** 5 hand-picked, manually cropped images can be better than 200 bulk-downloaded images that were automatically cropped/padded. 
-* Resize images to 512px on the longer side, then pad them to fill 512x512.
+* Use 5-100 images for training. More images are not necessarily better. **Quality over quantity!** 15 hand-picked, manually tagged images can be better than 300 bulk-downloaded images.
+* Size and aspect ratio does not matter much, though it's optimal to crop away unneeded borders of your image, only focusing on your subject.
 * Use images that represent your character/object in different (optimally somewhat neutral) poses/scenarios. Variation helps (e.g. if all your images have a blank white background, it will be harder for your model to generate a different background). Avoid low-quality images, messy images where the subject is not clear, and unusual poses. Overall, you need to **find a sweet spot between variety and uniformity**.
 
 
 
 ### Settings
 
-- **Base Model:** Set the model you want to use as a "template". Your new object/character will be added into it.
-  - You do **not** need a "full-ema" model for this. It works, but there is no benefit over a 4 GB model. You can also use 2 GB (fp16) models as base, but this might decrease quality slightly.
-  - The resulting model should, apart from minor "bleeding", still work the same as the base model, it is not limited to your trained concept.
+- **Training Method:** Currently, only LoHa is implemented. It is a more efficient alternative to the conventional LoRA training method.
+- **Base Model:** Set the model you want to use as a "template". For best results, use a rather neutral model (e.g. SD 1.5 for realistic LoRAs, or animefull-final for 2D art)
+- **LoRA Network Settings:** For simplicity, you don't need to set all values manually, so I made presets. The highest quality is recommended.
+  - **Size:** Set the network size, smaller results in a smaller file size and potentially faster generation speed, but might lose details.
+  - **CLIP Skip:** This should match your base model (0 for SD 1.5 based models, 2 for NovelAI based models).
+- **Project Name:** This is only used for the filename of the LoRA file and does not affect training.
+- **Dataset Folder:** Specify the path to your training images (and TXT files if you want to use captions).
+- **Captions:** Each image gets trained with a caption, here you can change what should be used as caption
+  - **No Caption:** Trains images with an empty caption, this means the LoRA will always affect your image, since you can't prompt it.
+  - **Single Phrase:** Use a single word/phrase for all images. Easy, but does not allow fine control over the results.
+  - **TXT Captions:** Read captions from TXT files (e.g. image.png needs to have image.txt) in the training folder. Requires tagging, but is the most flexible option.
+- **Training Resolution:** Change the resolution to which the images will be resized. Usually 512 or 640 is fine. Higher is not always better.
+  - **Aspect Ratio Grouping:** Enabled by default, groups images of similar aspect ratios together, which makes training more efficient.
 
-- **Training Preset:** For simplicity, you don't need to set all values manually, so I made presets. The highest quality is recommended.
-  - Very High Quality: 4000 Steps (Reference)
-  - High Quality: 2000 Steps, 2x Learning Rate to compensate
-  - Medium Quality: 1000 Steps, 4x Learning Rate to compensate
-  - Low Quality: 250 Steps, 16x Learning Rate to compensate
+- **Learning Rate:** Controls how "aggressively" the images are trained. High values allow you to use a lower step count (= faster training) but might result in lower quality or an "overbaked" model that is not very flexible.
+  - Generally, you should increase the LR the more "complex" your training images are. Simple line art might require a lower than default value, very messy and detailed images might require a high value. 
 
-- **Training Images Folder:** Specify the path to your training images. **They need to be 512x512** - If they aren't, you should resize and pad them.
-  - An automatic resizing/padding tool is planned for a future update.
+- **Training Steps:** Controls for how long the model should be trained. Each step trains one batch of images (4 by default).
 
-- **Class Token:** This is the word that we will use to put our new character/object in. Once done, you can type this to generate it.
-  - Currently, the class is fully replaced, instead of using regularization like in the original implementation. This means that you shouldn't use a generic class like "man" or "person" because otherwise every man/person will look like the training data.
-  - Try to use existing classes, especially for characters. For example, if your base model was trained on Gelbooru, and you want to train a model on Zelda, use `princess_zelda` as that's already an existing tag/token in the model.
-
-- **Learning Rate:** Usually "Normal" is fine. However, if your trained model does not seem to properly learn the data, you can increase this.
-  - A learning rate that's too high can result in overfitting (model is not flexible and does not react to prompt changes) or decreased visual quality.
+- **Developer Options:**
+  - **Train Format / Data Format:** Use 16-bit Float, 16-bit BFloat, or 32-bit Float for training/saving the model. Note: "float" might be broken currently!
+  - **Gradient Checkpointing:** Reduces VRAM usage a lot, but also slows down training a little bit (~20%). Don't disable it unless you have 16+ GB VRAM.
+  - **Seed:** Set initial seed for training. Does not appear to actually work with the current code though, as using the same seed+settings still results in slightly different generated images.
+  - **Shuffle Tags:** Randomizes tag order for each trained image, assuming they are comma-separated. Only use this with Booru-style tags.
+  - **Flip Augmentation:** Increases dataset diversity by flipping your image. Do not use this if you need to retain asymmetric traits in your images.
+  - **Color Augmentation:** Increases dataset diversity by altering the colors. Needs testing, may not actually improve results.
 
