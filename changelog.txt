@@ -1,3 +1,22 @@
+SD GUI 1.11.0 Changelog:
+- New: LoRA and LyCORIS support
+- New: LoRA training GUI (replaces Dreambooth, works with 8 GB GPUs)
+- New: Option to auto-delete generated images afterwards (if they weren't copied to favs)
+- Improved: Updater is much more stable now, and only re-installs updated/new packages
+- Improved: External VAEs now also work with Diffusers models
+- Improved: Image progress bar now takes high-res fix into account instead of running twice
+- Improved: Max seed increased from 4294967295 to 9223372036854775807 (int64 max)
+- Improved: VAE folders are now separate from model folders (again)
+- Improved: Embeddings folder path can now be changed
+- Improved: Progress bar and ETA now accounts for queued tasks instead of running per-task
+- Improved: Image Viewer buttons (e.g. prev/next) are now disabled when there are no images to show
+- Improved: Various UI/UX improvements
+- Fixed issues caused by moving the installation folder, this should now work without problems
+- Fixed: Applying CLIP Skip to a model would make it impossible to disable it again
+- Fixed: Inpainting model name check is no longer case-sensitive and no longer requires a hyphen
+- Fixed: "Append To Prompt" button for embeddings will no longer add a comma if there already is one
+
+
 SD GUI 1.10.0 Changelog:
 - New: Support for Stable Diffusion 2.x models
 - New: Added outpainting (expanding images into any direction)
