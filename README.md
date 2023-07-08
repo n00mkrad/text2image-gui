@@ -32,12 +32,6 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code: [Cod
 - **RAM:** 16 GB RAM
 - **Disk:** 12 GB on SSD (another free 5 GB for temporary files recommended)
 
-#### Professional/DreamBooth-capable:
-
-- **GPU:** Nvidia GPU with 24GB VRAM, Turing Architecture (2018) or newer
-- **RAM:** 32 GB RAM
-- **Disk:** 12 GB on NVME SSD (another free 25 GB for temporary files recommended), **system-managed paging file enabled**
-
 
 
 ## Features and How to Use Them
@@ -63,16 +57,16 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code: [Cod
 
 ### Additional Inputs
 
-* **Load Image(s):** Load an initialization image that will be used together with your text prompt ("img2img")
+* **Textual Inversion Embeddings:** Select a prompt embedding and add it to your prompt (Path can be set in Settings).
+* **LoRA Files:** (Hidden if not files are in the folder) Select LoRA models and set the weight.
+* **Base Image:** Load an initialization image that will be used together with your text prompt ("img2img"), or for inpainting
   * Loading multiple images means that each image will be processed separately.
-
-* **Load Concept:** Load a Textual Inversion concept to apply a style or use a specific character
 
 
 
 ### Stable Diffusion Settings
 
-* **Steps:** More steps can increase detail, but only to a certain extent. Depending on the sampler, 20-60 is a good range.
+* **Steps:** More steps can increase detail, but only to a certain extent. Depending on the sampler, 15-50 is a good range.
   * Has a linear performance impact: Doubling the step count means each image takes twice as long to generate.
 * **Prompt Guidance (CFG Scale):** Lower values are closer to the raw output of the AI, higher values try to respect your prompt more accurately.
   * Use low values if you are happy with the AI's representation of your prompt. Use higher values if not - but going too high will degrade quality.
@@ -82,10 +76,11 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code: [Cod
   * Lock Seed Option: Disable incrementing the seed by 1 for each image. Only useful in combination with wildcards.
 * **Resolution:** Adjust image size. Only values that are divisible by 64 are possible. Sizes above 512x512 can lead to repeated patterns.
   * Higher resolution images require more VRAM and are slower to generate.
-  * High-Resolution Fix: Enable this to avoid getting repeated patterns at high resolutions (~768px+). Can reduce fidelity though.
+  * High-Resolution Fix: Enable this to avoid getting repeated patterns at high resolutions (~768px+).
   
-* **Sampler:** Changes the way images are sampled. Euler Ancestral is the default because it's fast and tends to look good even with few steps.
+* **Sampler:** Changes the way images are sampled. DPM++ 2M Karras is the default because it's fast and tends to look good even with 10-20 steps.
 * **Generate Seamless Images:** Generates seamless/tileable images, very useful for making game textures or repeating backgrounds.
+* **Generate Symmetric Images:** Generates images that are mirrored on one axis.
 
 
 
@@ -101,52 +96,85 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code: [Cod
 
 ### Settings Button (Top Bar)
 
+*Note: Some options might be hidden depending on the selected implementation.*
+
 * **Image Generation Implementation:** Choose the AI implementation that's used for image generation.
   * Stable Diffusion - [InvokeAI](https://github.com/invoke-ai/InvokeAI/): Supports the most features, but struggles with 4 GB or less VRAM, requires an Nvidia GPU
-  * Stable Diffusion - [OptimizedSD](https://github.com/basujindal/stable-diffusion): Lacks many features, but runs on 4 GB or even less VRAM, requires an Nvidia GPU
   * Stable Diffusion - [ONNX](https://github.com/huggingface/diffusers): Lacks some features and is relatively slow, but can utilize AMD GPUs (any DirectML capable card)
+  * InstructPix2Pix - For instruction-based image editing. Requires an Nvidia GPU
   
 * **Use Full Precision:** Use FP32 instead of FP16 math, which requires more VRAM but can fix certain compatibility issues.*
+
 * **Unload Model After Each Generation:** Completely unload Stable Diffusion after images are generated.*
+
 * **Stable Diffusion Model File:** Select the model file to use for image generation.
-  * Included models are located in `Data/models`. You can add more folder paths by clicking on "Folders...".
+  
+  * Included models are located in `Models/Checkpoints`. You can add external folder paths by clicking on "Folders...".
+  
 * **Stable Diffusion VAE:** Select external VAE (Variational Autoencoder) model. VAEs can improve image quality.*
+
+  * Default path is `Models/VAEs`. You can add external folder paths by clicking on "Folders...".
+
+* **Textual Inversion Embeddings Folder:** Select folder where embeddings (usually `.pt` files) are loaded from.
+
+* **LoRA Models Folder:** Select folder where LoRA models (`.safetensors` files) are loaded from.
+
+* **Cache Models in RAM:** When enabled, models are offloaded into RAM when switching to a new one. This makes it very fast to switch back, but takes up 2GB+ per cached model.
+
+* **Skip Final CLIP Layers (CLIP Skip):** Can improve quality on certain models.
+
 * **CUDA Device:** Allows your to specify the GPU to run the AI on, or set it to run on the CPU (very slow).*
+
+  
+
 * **Image Output Folder:** Set the folder where your generated images will be saved.
+
 * **Output Subfolder Options:**
+
   * Subfolder Per Prompt: Save images in a subfolder for each prompt. Negative prompt is excluded from the folder name.
   * Ignore Wildcards: Use wildcard name (as in prompt input) instead of the replaced text in file/folder names.
   * Subfolder Per Session: Save images in a subfolder for each session (every time the program is started).
 
+* **Information to Include in Filename:** Specify which information should be included in the filename.
+
 * **Favorites Folder:** Specify your favorites folder, where your favorite images will be copied to (right-click image viewer or use Ctrl+D)
-* **Metadata to Include in Filename:** Specify which information should be included in the filename.
+
+* **Image Save Mode:** Choose whether you want to delete or keep generated images by default.
+
 * **When Running Multiple Prompts, Use Same Starting Seed for All of Them:** If enabled, the seed resets to the starting value for every new prompt. If disabled, the seed will be incremented by 1 after each iteration, being sequential until all prompts/iterations have been generated.
+
 * **When Post-Processing Is Enabled, Also Save Un-Processed Image:** When enabled, both the "raw" and the post-processed image will be saved.
+
+  
+
 * **Automatically Set Generation Resolution After Loading an Initialization Image:** Automatically sets the image generation to match your image.
+
 * **Retain Aspect Ratio of Initialization Image (If It Needs Resizing):** Use padding (black borders) instead of stretching, in case the init image resolution does not match the image generation resolution.
+
 * **Advanced Mode:** Increases the limits of the sliders in the main window. Not very useful most of the time unless you really need those high values.
+
 * **Notify When Image Generation Has Finished:** Play a sound, show a notification, or do both if image generation finishes in background.
-
-
-
-**May not be available with certain implementations*
 
 
 
 ### Logs Button (Top Bar)
 
-* **Open Logs Folder:** Opens the log folder of the current session. The application deletes logs older than 3 days on every startup.
-* **Copy \<logname\>.txt**: Copy one of the log files generated in the current session to clipboard.
+* **Open Logs Folder:** Opens the log folder of the current session. The application deletes older logs on every startup.
+* **\<logname\>.txt**: Open the log file or copy the text.
 
 
 
-### Installer Button (Top Bar)
+### Installation Manager & Updater Button (Top Bar)
 
-* **Installation Status:** Shows which modules are installed (checkboxes are not interactive and only indicate if a module is installed correctly!).
-* **Re-Install Python Dependencies:** Re-installs the Stable Diffusion code from its repository and re-installs all required python packages.
-* **Re-Install Upscalers:** (Re-)Installs upscaling files (RealESRGAN, GFPGAN, CodeFormer, including model files).
-* **(Re-)Install:** Installs everything. Skips already installed components.
-* **Uninstall:** Removes everything except for Conda which is included and needed for a re-installation.
+* **Manage Installation:** Allows you to check if your installation is valid and can repair/reset it.
+  * **Installation Status:** Shows which modules are installed (checkboxes are not interactive and only indicate if a module is installed correctly!).
+  * **Re-Install Python Dependencies:** Re-installs the Stable Diffusion code from its repository and re-installs all required python packages.
+  * **Re-Install Upscalers:** (Re-)Installs upscaling files (RealESRGAN, GFPGAN, CodeFormer, including model files).
+  * **(Re-)Install:** Installs everything. Skips already installed components.
+  * **Uninstall:** Removes everything except for Conda which is included and needed for a re-installation.
+
+
+- **Install Updates:** Allows you to update to a new version or re-install the current one.
 
 
 
@@ -168,9 +196,9 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code: [Cod
 
 
 
-### DreamBooth Button (Top Bar)
+### Training Button (Top Bar)
 
-* Opens DreamBooth training window ([Guide here](https://github.com/n00mkrad/text2image-gui/blob/main/DreamBooth.md))
+* Opens LoRA training window ([Guide here](https://github.com/n00mkrad/text2image-gui/blob/main/DreamBooth.md))
 
 
 
