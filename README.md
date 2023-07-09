@@ -58,7 +58,7 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code: [Cod
 ### Additional Inputs
 
 * **Textual Inversion Embeddings:** Select a prompt embedding and add it to your prompt (Path can be set in Settings).
-* **LoRA Files:** (Hidden if not files are in the folder) Select LoRA models and set the weight.
+* **LoRA Files:** (Hidden if no files are in the folder) Select LoRA models and set the weight.
 * **Base Image:** Load an initialization image that will be used together with your text prompt ("img2img"), or for inpainting
   * Loading multiple images means that each image will be processed separately.
 
