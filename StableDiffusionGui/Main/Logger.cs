@@ -171,8 +171,8 @@ namespace StableDiffusionGui.Main
             if (!entry.Hidden)
                 _lastUiLine = entry.Message;
 
-            if (RealtimeLoggerForm != null)
-                RealtimeLoggerForm.LogAppend(entry.Message.Replace("\n", Environment.NewLine), entry.ReplaceLastLine);
+            if (RealtimeLoggerForm != null && !RealtimeLoggerForm.IsDisposed)
+                RealtimeLoggerForm.LogAppend(entry.Message.Replace("\n", Environment.NewLine));
 
             if (!entry.Hidden)
                 Program.MainForm.LogAppend(entry.Message.Replace("\n", Environment.NewLine), entry.ReplaceLastLine);
