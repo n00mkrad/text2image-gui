@@ -96,12 +96,15 @@ namespace StableDiffusionGui.Main
 
                     if (line.Contains(outPath) && new Regex(@"\[\d+(\.\d+)?\] [A-Z]:\/").Matches(line.Trim()).Count >= 1)
                     {
-                        TextToImage.CurrentTask.ImgCount += 1;
+                        int lastMsPerImg = (int)TimeSinceLastImage.ElapsedMilliseconds;
+
+                        string path = outPath + line.Split(outPath)[1].Split(':')[0];
+                        ImageExport.Export(path);
+
                         int imgCount = TextToImage.CurrentTask.ImgCount + TextToImage.CompletedTasks.Sum(t => t.ImgCount);
                         int targetImgCount = TextToImage.CurrentTask.TargetImgCount + TextToImage.CompletedTasks.Sum(t => t.TargetImgCount) + MainUi.Queue.Sum(s => s.GetTargetImgCount(TextToImage.CurrentTask.Config));
                         Program.MainForm.SetProgress((int)Math.Round(((float)imgCount / targetImgCount) * 100f));
 
-                        int lastMsPerImg = (int)TimeSinceLastImage.ElapsedMilliseconds;
                         RollingAvg.AddDataPoint(lastMsPerImg);
                         int remainingMs = (TextToImage.CurrentTask.TargetImgCount - TextToImage.CurrentTask.ImgCount) * (int)RollingAvg.GetAverage();
                         int remainingMsTotal = (targetImgCount - imgCount) * (int)RollingAvg.GetAverage();
@@ -127,8 +130,6 @@ namespace StableDiffusionGui.Main
                         Logger.Log($"Generated image in {FormatUtils.Time(lastMsPerImg)} ({imgCountStr}){etaStr}", false, replace || Logger.LastUiLine.MatchesWildcard("*Generated*image*in*"));
 
                         TimeSinceLastImage.Restart();
-                        string path = outPath + line.Split(outPath)[1].Split(':')[0];
-                        ImageExport.Export(path);
                     }
                 }
 
@@ -267,7 +268,6 @@ namespace StableDiffusionGui.Main
                 if (!TextToImage.Canceled && line.Contains("Image generated in "))
                 {
                     var split = line.Split("Image generated in ");
-                    TextToImage.CurrentTask.ImgCount += 1;
                     Program.MainForm.SetProgress((int)Math.Round(((float)TextToImage.CurrentTask.ImgCount / TextToImage.CurrentTask.TargetImgCount) * 100f));
 
                     int lastMsPerImg = $"{split[1].Remove(".").Remove("s")}0".GetInt();
@@ -277,6 +277,40 @@ namespace StableDiffusionGui.Main
                         $"{(TextToImage.CurrentTask.ImgCount > 1 && remainingMs > 1000 ? $" - ETA: {FormatUtils.Time(remainingMs, false)}" : "")}", false, replace || Logger.LastUiLine.MatchesWildcard("*Generated*image*in*"));
                 }
             }
+
+            if (TextToImage.CurrentTaskSettings != null && TextToImage.CurrentTaskSettings.Implementation == Enums.StableDiffusion.Implementation.SdXl)
+            {
+                bool replace = ellipsis || Logger.LastUiLine.MatchesWildcard("*Image*generated*in*");
+
+                if (line.StartsWith("Model loaded"))
+                {
+                    Logger.Log($"{line}", false, ellipsis);
+                }
+
+                if (!TextToImage.Canceled && line.MatchesWildcard("*%|*| *") && !line.Contains("Fetching") && !line.Contains("Loading checkpoint"))
+                {
+                    if (!Logger.LastUiLine.MatchesWildcard("*Generated*image*in*"))
+                        Logger.LogIfLastLineDoesNotContainMsg($"Generating...");
+
+                    int percent = line.Split("%|")[0].GetInt();
+
+                    if (percent > 0 && percent <= 100)
+                        Program.MainForm.SetProgressImg(percent);
+                }
+
+                if (!TextToImage.Canceled && line.Contains("Image generated in "))
+                {
+                    var split = line.Split("Image generated in ");
+                    Program.MainForm.SetProgress((int)Math.Round(((float)TextToImage.CurrentTask.ImgCount / TextToImage.CurrentTask.TargetImgCount) * 100f));
+
+                    int lastMsPerImg = $"{split[1].Remove(".").Remove("s")}0".GetInt();
+                    int remainingMs = (TextToImage.CurrentTask.TargetImgCount - TextToImage.CurrentTask.ImgCount) * lastMsPerImg;
+
+                    Logger.Log($"Generated 1 image in {split[1]} ({TextToImage.CurrentTask.ImgCount}/{TextToImage.CurrentTask.TargetImgCount})" +
+                        $"{(TextToImage.CurrentTask.ImgCount > 1 && remainingMs > 1000 ? $" - ETA: {FormatUtils.Time(remainingMs, false)}" : "")}", false, replace || Logger.LastUiLine.MatchesWildcard("*Generated*image*in*"));
+                }
+            }
+
 
             if (TextToImage.CurrentTaskSettings != null && TextToImage.CurrentTaskSettings.Implementation == Enums.StableDiffusion.Implementation.InstructPixToPix)
             {
@@ -306,7 +340,6 @@ namespace StableDiffusionGui.Main
                 if (!TextToImage.Canceled && line.Contains("Image generated in "))
                 {
                     var split = line.Split("Image generated in ");
-                    TextToImage.CurrentTask.ImgCount += 1;
                     Program.MainForm.SetProgress((int)Math.Round(((float)TextToImage.CurrentTask.ImgCount / TextToImage.CurrentTask.TargetImgCount) * 100f));
 
                     int lastMsPerImg = $"{split[1].Remove(".").Remove("s")}0".GetInt();

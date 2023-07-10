@@ -311,6 +311,7 @@
     <Compile Include="Implementations\OptimizedSd.cs" />
     <Compile Include="Implementations\OptimizedSdUtils.cs" />
     <Compile Include="Implementations\SdOnnx.cs" />
+    <Compile Include="Implementations\SdXl.cs" />
     <Compile Include="Installation\EnabledFeatures.cs" />
     <Compile Include="Installation\InstallationStatus.cs" />
     <Compile Include="Installation\Setup.cs" />

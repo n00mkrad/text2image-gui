@@ -188,6 +188,9 @@ namespace StableDiffusionGui.Forms
             this.label2 = new System.Windows.Forms.Label();
             this.panelLoras = new System.Windows.Forms.Panel();
             this.gridLoras = new System.Windows.Forms.DataGridView();
+            this.ColEnabled = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.ColName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColWeight = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label24 = new System.Windows.Forms.Label();
             this.panelEmbeddings = new System.Windows.Forms.Panel();
             this.btnEmbeddingCopy = new HTAlt.WinForms.HTButton();
@@ -218,9 +221,6 @@ namespace StableDiffusionGui.Forms
             this.flowPanelImgButtons = new System.Windows.Forms.FlowLayoutPanel();
             this.btnSaveMode = new System.Windows.Forms.Button();
             this.separator = new System.Windows.Forms.Button();
-            this.ColEnabled = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.ColName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColWeight = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuStripOutputImg.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.upDownSeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
@@ -2577,6 +2577,29 @@ namespace StableDiffusionGui.Forms
             this.gridLoras.Size = new System.Drawing.Size(395, 57);
             this.gridLoras.TabIndex = 106;
             // 
+            // ColEnabled
+            // 
+            this.ColEnabled.HeaderText = "Load";
+            this.ColEnabled.Name = "ColEnabled";
+            this.ColEnabled.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.ColEnabled.Width = 45;
+            // 
+            // ColName
+            // 
+            this.ColName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ColName.HeaderText = "File Name";
+            this.ColName.Name = "ColName";
+            this.ColName.ReadOnly = true;
+            this.ColName.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // ColWeight
+            // 
+            this.ColWeight.HeaderText = "Weight";
+            this.ColWeight.MaxInputLength = 20;
+            this.ColWeight.Name = "ColWeight";
+            this.ColWeight.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.ColWeight.Width = 80;
+            // 
             // label24
             // 
             this.label24.AutoSize = true;
@@ -2949,29 +2972,6 @@ namespace StableDiffusionGui.Forms
             this.separator.TabIndex = 75;
             this.separator.TabStop = false;
             this.separator.UseVisualStyleBackColor = false;
-            // 
-            // ColEnabled
-            // 
-            this.ColEnabled.HeaderText = "Load";
-            this.ColEnabled.Name = "ColEnabled";
-            this.ColEnabled.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.ColEnabled.Width = 45;
-            // 
-            // ColName
-            // 
-            this.ColName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ColName.HeaderText = "File Name";
-            this.ColName.Name = "ColName";
-            this.ColName.ReadOnly = true;
-            this.ColName.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            // 
-            // ColWeight
-            // 
-            this.ColWeight.HeaderText = "Weight";
-            this.ColWeight.MaxInputLength = 20;
-            this.ColWeight.Name = "ColWeight";
-            this.ColWeight.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.ColWeight.Width = 80;
             // 
             // MainForm
             // 

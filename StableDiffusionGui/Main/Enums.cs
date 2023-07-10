@@ -24,7 +24,7 @@ namespace StableDiffusionGui.Main
 
         public class StableDiffusion
         {
-            public enum Implementation { InvokeAi, OptimizedSd, DiffusersOnnx, InstructPixToPix }
+            public enum Implementation { InvokeAi, OptimizedSd, DiffusersOnnx, InstructPixToPix, SdXl }
             public enum Sampler { K_Dpmpp_2M, Dpmpp_2M, Euler, K_Euler, Euler_A, Ddim, Lms, Plms, Heun, Dpm_2, Dpm_2_A }
             public enum SeamlessMode { Disabled, SeamlessBoth, SeamlessVert, SeamlessHor }
             public enum SymmetryMode { Disabled, SymVert, SymHor, SymBoth }

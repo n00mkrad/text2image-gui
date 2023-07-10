@@ -70,7 +70,7 @@
             public const string Config = "config.json";
             public const string Ini = "settings.ini";
             public const string PromptHistory = "promptHistory.json";
-            public static string VenvActivate { get { return $".\\{Dirs.SdVenv}\\Scripts\\activate"; } }
+            public static string VenvActivate { get { return $".\\{Dirs.SdVenv}\\Scripts\\activate.bat"; } }
         }
 
         public class FileExts

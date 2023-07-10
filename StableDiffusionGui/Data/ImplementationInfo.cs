@@ -37,12 +37,18 @@ namespace StableDiffusionGui.Data
             {
                 Backend = Enums.Ai.Backend.DirectMl;
                 SupportedModelFormats = new Format[] { Format.DiffusersOnnx };
-                SupportedFeatures = new List<Feature> { Feature.InteractiveCli, Feature.CustomModels, Feature.HalfPrecisionToggle, Feature.NegPrompts };
+                SupportedFeatures = new List<Feature> { Feature.InteractiveCli, Feature.CustomModels, Feature.HalfPrecisionToggle, Feature.NegPrompts, Feature.MultipleSamplers };
             }
             else if (imp == Enums.StableDiffusion.Implementation.InstructPixToPix)
             {
                 Backend = Enums.Ai.Backend.Cuda;
                 SupportedFeatures = new List<Feature> { Feature.InteractiveCli, Feature.NegPrompts };
+            }
+            else if (imp == Enums.StableDiffusion.Implementation.SdXl)
+            {
+                Backend = Enums.Ai.Backend.Cuda;
+                SupportedModelFormats = new Format[] { Format.Safetensors };
+                SupportedFeatures = new List<Feature> { Feature.InteractiveCli, Feature.CustomModels, Feature.HalfPrecisionToggle, Feature.NegPrompts, Feature.MultipleSamplers };
             }
         }
     }

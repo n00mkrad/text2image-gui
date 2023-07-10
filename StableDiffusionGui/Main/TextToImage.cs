@@ -96,6 +96,7 @@ namespace StableDiffusionGui.Main
                     case Implementation.OptimizedSd: tasks.Add(OptimizedSd.Run(s, tempOutDir)); break;
                     case Implementation.DiffusersOnnx: tasks.Add(SdOnnx.Run(s, tempOutDir)); break;
                     case Implementation.InstructPixToPix: tasks.Add(InstructPixToPix.Run(s, tempOutDir)); break;
+                    case Implementation.SdXl: tasks.Add(SdXl.Run(s, tempOutDir)); break;
                 }
 
                 ImageExport.Init(!fromQueue || (fromQueue && iteration == 1));
@@ -117,6 +118,7 @@ namespace StableDiffusionGui.Main
                 CompletedTasks.Add(CurrentTask);
             } while (fromQueue && MainUi.Queue.Any());
 
+            // await Task.Delay(100);
             Done();
         }
 

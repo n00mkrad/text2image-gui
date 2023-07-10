@@ -85,6 +85,7 @@ namespace StableDiffusionGui.Io
         public bool DontClearPipCache;
         public bool AlwaysClearInpaintMask;
         public int ImageCacheMaxSizeMb;
+        public bool SdXlOptimize;
 
         public ConfigInstance()
         {
@@ -125,6 +126,8 @@ namespace StableDiffusionGui.Io
             ImageCacheMaxSizeMb = 64;
             if (ramGb > 14f) ImageCacheMaxSizeMb = 128;
             if (ramGb > 22f) ImageCacheMaxSizeMb = 256;
+
+            SdXlOptimize = true;
         }
 
         public ConfigInstance Clone()

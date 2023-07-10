@@ -111,6 +111,7 @@ namespace StableDiffusionGui.Main
                 }
             }
 
+            _currTask.ImgCount += images.Count;
             List<string> renamedImgPaths = new List<string>();
 
             for (int i = 0; i < images.Count; i++)
@@ -122,7 +123,7 @@ namespace StableDiffusionGui.Main
                     string dir = _currTask.SubfoldersPerPrompt ? imageDirMap[img.FullName] : _currTask.OutDir;
                     string renamedPath = GetExportFilename(img.FullName, dir, num, "png", _maxPathLength, _config.PromptInFilename, _config.SeedInFilename, _config.ScaleInFilename, _config.SamplerInFilename, _config.ModelInFilename);
                     OverlayMaskIfExists(img.FullName);
-                    Logger.Log($"ImageExport: Trying to move {img.Name} => {renamedPath}", true);
+                    Logger.Log($"ImageExport: Moving {img.Name} => {renamedPath}", true);
                     img.MoveTo(renamedPath);
                     renamedImgPaths.Add(renamedPath);
                 }

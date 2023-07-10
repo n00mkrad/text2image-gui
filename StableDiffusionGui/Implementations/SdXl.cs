@@ -8,23 +8,25 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
 namespace StableDiffusionGui.Implementations
 {
-    internal class SdOnnx
+    internal class SdXl
     {
         public static async Task Run(TtiSettings s, string outPath)
         {
             try
             {
                 float[] initStrengths = s.InitStrengths.Select(n => 1f - n).ToArray();
-                var cachedModels = Models.GetModels(Enums.Models.Type.Normal, Implementation.DiffusersOnnx);
-                Model modelDir = TtiUtils.CheckIfModelExists(s.Model, Implementation.DiffusersOnnx);
+                var cachedModels = Models.GetModels(Enums.Models.Type.Normal, Implementation.SdXl);
+                Model model = cachedModels.Where(m => m.Name.Contains("sd_xl_base")).FirstOrDefault(); //TtiUtils.CheckIfModelExists(s.Model, Implementation.DiffusersOnnx);
 
-                if (modelDir == null)
+                if (model == null)
                     return;
 
                 OrderedDictionary initImages = s.InitImgs != null && s.InitImgs.Length > 0 ? await TtiUtils.CreateResizedInitImagesIfNeeded(s.InitImgs.ToList(), s.Res) : null;
@@ -100,10 +102,11 @@ namespace StableDiffusionGui.Implementations
                 if (!TtiProcess.IsAiProcessRunning)
                 {
                     Process py = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
+                    py.StartInfo.RedirectStandardInput = true;
                     TextToImage.CurrentTask.Processes.Add(py);
 
                     string mode = "txt2img";
-                    bool inpaintingMdl = modelDir.Name.EndsWith(Constants.SuffixesPrefixes.InpaintingMdlSuf);
+                    bool inpaintingMdl = model.Name.EndsWith(Constants.SuffixesPrefixes.InpaintingMdlSuf);
 
                     if (s.InitImgs != null && s.InitImgs.Length > 0)
                     {
@@ -113,10 +116,30 @@ namespace StableDiffusionGui.Implementations
                             mode = "inpaint";
                     }
 
-                    py.StartInfo.RedirectStandardInput = true;
-                    py.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand()} && {Constants.Files.VenvActivate} && " +
-                        $"python \"{Constants.Dirs.SdRepo}/nmkdiff/nmkdiffusers.py\" -p SdOnnx -g {mode} -m {modelDir.FullName.Wrap(true)} -o {outPath.Wrap(true)}";
+                    var scriptArgs = new List<string> { "-p SdXl" };
+                    scriptArgs.Add($"-g {mode}");
+                    scriptArgs.Add($"-m {model.FullName.Wrap()}");
+                    scriptArgs.Add($"-o {outPath.Wrap(true)}");
 
+                    string refineModelName = model.Name.Replace("_base", "_refiner");
+                    string refinePath = Path.Combine(model.Directory.FullName, refineModelName);
+
+                    if (refinePath != model.FullName && IoUtils.IsPathValid(refinePath))
+                    {
+                        Logger.Log($"Found Refiner Model: {refineModelName}");
+                        scriptArgs.Add($"-m2 {refinePath.Wrap()}");
+                    }
+                    else
+                    {
+                        Logger.Log("Warning: Refiner model not found.");
+                    }
+
+                    if (Config.Instance.SdXlOptimize)
+                    {
+                        scriptArgs.Add($"--sdxl_optimize");
+                    }
+
+                    py.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand()} && {Constants.Files.VenvActivate} && python {Constants.Dirs.SdRepo}/nmkdiff/nmkdiffusers.py {string.Join(" ", scriptArgs)}";
                     Logger.Log("cmd.exe " + py.StartInfo.Arguments, true);
 
                     if (!OsUtils.ShowHiddenCmd())
@@ -133,7 +156,7 @@ namespace StableDiffusionGui.Implementations
 
                     TtiProcessOutputHandler.Reset();
 
-                    Logger.Log($"Loading Stable Diffusion (ONNX) with model {s.Model.Trunc(80).Wrap()}...");
+                    Logger.Log($"Loading Stable Diffusion (XL) with model {s.Model.Trunc(80).Wrap()}...");
 
                     TtiProcess.ProcessExistWasIntentional = false;
                     py.Start();
