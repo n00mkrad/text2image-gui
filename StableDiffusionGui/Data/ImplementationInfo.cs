@@ -47,7 +47,7 @@ namespace StableDiffusionGui.Data
             else if (imp == Enums.StableDiffusion.Implementation.SdXl)
             {
                 Backend = Enums.Ai.Backend.Cuda;
-                SupportedModelFormats = new Format[] { Format.Safetensors };
+                SupportedModelFormats = new Format[] { Format.Safetensors, Format.Diffusers };
                 SupportedFeatures = new List<Feature> { Feature.InteractiveCli, Feature.CustomModels, Feature.HalfPrecisionToggle, Feature.NegPrompts, Feature.MultipleSamplers };
             }
         }

@@ -24,7 +24,7 @@ namespace StableDiffusionGui.Implementations
             {
                 float[] initStrengths = s.InitStrengths.Select(n => 1f - n).ToArray();
                 var cachedModels = Models.GetModels(Enums.Models.Type.Normal, Implementation.SdXl);
-                Model model = cachedModels.Where(m => m.Name.Contains("sd_xl_base")).FirstOrDefault(); //TtiUtils.CheckIfModelExists(s.Model, Implementation.DiffusersOnnx);
+                Model model = TtiUtils.CheckIfModelExists(s.Model, Implementation.SdXl, cachedModels);
 
                 if (model == null)
                     return;
@@ -121,7 +121,7 @@ namespace StableDiffusionGui.Implementations
                     scriptArgs.Add($"-m {model.FullName.Wrap()}");
                     scriptArgs.Add($"-o {outPath.Wrap(true)}");
 
-                    string refineModelName = model.Name.Replace("_base", "_refiner");
+                    string refineModelName = model.Name.Replace("base", "refiner");
                     string refinePath = Path.Combine(model.Directory.FullName, refineModelName);
 
                     if (refinePath != model.FullName && IoUtils.IsPathValid(refinePath))
