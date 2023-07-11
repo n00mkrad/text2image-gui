@@ -49,7 +49,7 @@ namespace StableDiffusionGui.Forms
 
             // Set categories
             _categoryPanels.Add(btnCollapseImplementation, new List<Panel> { panelBackend, panelModel });
-            _categoryPanels.Add(btnCollapsePrompt, new List<Panel> { panelPrompt, panelPromptNeg, panelEmbeddings, panelLoras, panelAiInputs });
+            _categoryPanels.Add(btnCollapsePrompt, new List<Panel> { panelPrompt, panelPromptNeg, panelEmbeddings, panelLoras, panelBaseImg });
             _categoryPanels.Add(btnCollapseGeneration, new List<Panel> { panelInpainting, panelInitImgStrength, panelIterations, panelSteps, panelScale, panelScaleImg, panelSeed });
             _categoryPanels.Add(btnCollapseRendering, new List<Panel> { panelRes, panelSampler });
             _categoryPanels.Add(btnCollapseSymmetry, new List<Panel> { panelSeamless, panelSymmetry });
@@ -128,7 +128,7 @@ namespace StableDiffusionGui.Forms
             comboxBackend.Text = Strings.Implementation.Get(imp.ToString());
 
             // Panel visibility
-            SetVisibility(new Control[] { panelAiInputs, panelPromptNeg, panelEmbeddings, panelInitImgStrength, panelInpainting, panelScaleImg, panelRes, panelSampler, panelSeamless, panelSymmetry, checkboxHiresFix,
+            SetVisibility(new Control[] { panelBaseImg, panelPromptNeg, panelEmbeddings, panelInitImgStrength, panelInpainting, panelScaleImg, panelRes, panelSampler, panelSeamless, panelSymmetry, checkboxHiresFix,
                 textboxClipsegMask, panelResizeGravity, labelResChange, btnResetRes, checkboxShowInitImg, panelModel, panelLoras }, imp);
 
             bool adv = Config.Instance.AdvancedUi;
@@ -172,7 +172,13 @@ namespace StableDiffusionGui.Forms
             _prevSelectedModel = mdl.FullName;
             var formats = new List<Enums.Models.Format> { Enums.Models.Format.Pytorch, Enums.Models.Format.Safetensors };
 
-            List<Enums.Models.SdArch> exclusionList = formats.Contains(mdl.Format) ? new List<Enums.Models.SdArch>() : Enum.GetValues(typeof(Enums.Models.SdArch)).Cast<Enums.Models.SdArch>().Skip(1).ToList();
+            var exclusionList = new List<Enums.Models.SdArch>();
+
+            if (Config.Instance.Implementation != Implementation.InvokeAi)
+                exclusionList = Enum.GetValues(typeof(Enums.Models.SdArch)).Cast<Enums.Models.SdArch>().Skip(1).ToList();
+            else
+                exclusionList = formats.Contains(mdl.Format) ? new List<Enums.Models.SdArch>() : Enum.GetValues(typeof(Enums.Models.SdArch)).Cast<Enums.Models.SdArch>().Take(1).ToList();
+
             comboxModelArch.FillFromEnum<Enums.Models.SdArch>(Strings.SdModelArch, 0, exclusionList);
 
             if (Config.Instance.ModelArchs.ContainsKey(mdl.FullName))
