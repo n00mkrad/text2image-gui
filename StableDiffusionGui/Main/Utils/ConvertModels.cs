@@ -7,9 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
-using ZetaLongPaths;
 using static StableDiffusionGui.Main.Enums.Models;
 
 namespace StableDiffusionGui.Main.Utils
@@ -20,12 +18,15 @@ namespace StableDiffusionGui.Main.Utils
 
         /// <summary> Converts model weights </summary>
         /// <returns> A model class of the newly created model, or null if it failed </returns>
-        public static async Task<Model> Convert(Format formatIn, Format formatOut, Model model, bool fp16, bool safeDiffusers, string customOutPath = "")
+        public static async Task<Model> Convert(Format formatIn, Format formatOut, Model model, bool fp16, bool safeDiffusers, string customOutPath = "", bool quiet = false)
         {
             try
             {
-                Logger.ClearLogBox();
-                Logger.Log($"Converting model '{model.Name}' - This could take a few minutes...");
+                if (!quiet)
+                {
+                    Logger.ClearLogBox();
+                    Logger.Log($"Converting model '{model.Name}' - This could take a few minutes...");
+                }
 
                 string filename = model.IsDirectory ? model.Name : Path.GetFileNameWithoutExtension(model.Name);
                 string outPath = customOutPath;
@@ -43,11 +44,8 @@ namespace StableDiffusionGui.Main.Utils
                     }
                 }
 
-                if (File.Exists(outPath) || Directory.Exists(outPath))
-                {
-                    Logger.Log($"Can't convert model because a file or directory already exists at the output path: {outPath}");
-                    return null;
-                }
+                Assert.Check(!File.Exists(outPath) && !Directory.Exists(outPath), $"Can't convert model because a file or directory already exists at the output path: {outPath}");
+                Assert.Check(IoUtils.GetFreeDiskSpaceGb(outPath) >= 5f, $"Not enough disk space on {Path.GetPathRoot(outPath)}.");
 
                 _ckptConfigPath = TtiUtils.GetCkptConfig(model, false);
 
@@ -112,34 +110,35 @@ namespace StableDiffusionGui.Main.Utils
                 }
                 else
                 {
-                    Logger.Log($"Error: Conversion from {formatIn} to {formatOut} not implemented!");
+                    throw new Exception($"Conversion from {formatIn} to {formatOut} not implemented!");
                 }
 
                 if (File.Exists(outPath) || Directory.Exists(outPath))
                 {
-                    Logger.Log($"Done. Saved converted model to:\n{outPath.Replace(Paths.GetDataPath(), "Data")}");
+                    if (!quiet)
+                        Logger.Log($"Done. Saved converted model to:\n{outPath.Replace(Paths.GetDataPath(), "Data")}");
 
                     if (Config.Instance.ConvertModelsDeleteInput)
                     {
                         bool deleteSuccess = IoUtils.TryDeleteIfExists(model.FullName);
-                        Logger.Log($"{(deleteSuccess ? "Deleted" : "Failed to delete")} input file '{model.Name}'.");
+
+                        if (!quiet)
+                            Logger.Log($"{(deleteSuccess ? "Deleted" : "Failed to delete")} input file '{model.Name}'.");
                     }
 
                     return Models.GetModelsAll().Where(m => m.FullName == outPath).FirstOrDefault();
                 }
                 else
                 {
-                    Logger.Log($"Failed to convert model.");
+                    throw new Exception($"Failed to convert model.");
                 }
             }
             catch (Exception ex)
             {
-                Logger.Log($"Conversion Error: {ex.Message}");
-                Logger.Log(ex.StackTrace);
+                Logger.Log($"Conversion Error: {ex.Message}", quiet);
+                Logger.Log(ex.StackTrace, true);
                 return null;
             }
-
-            return null;
         }
 
         private static string GetTempPath()
@@ -149,8 +148,19 @@ namespace StableDiffusionGui.Main.Utils
 
         private static async Task ConvPytorchDiffusers(string inPath, string outPath, bool deleteInput = false, bool safetensors = true, bool fp16 = true)
         {
-            await RunPython($"python repo/scripts/diff/convert_original_stable_diffusion_to_diffusers.py --checkpoint_path {inPath.Wrap(true)} --dump_path {outPath.Wrap(true)} " +
+            string filename = Path.GetFileName(inPath).Lower();
+            bool nai = filename.Contains("animefull") || filename.Contains("novel");
+            string firstTryScript = nai ? "convert_original_stable_diffusion_to_diffusers_old" : "convert_original_stable_diffusion_to_diffusers";
+            string secondTryScript = nai ? "convert_original_stable_diffusion_to_diffusers" : "convert_original_stable_diffusion_to_diffusers_old";
+
+            string output = await RunPython($"python repo/scripts/diff/{firstTryScript}.py --checkpoint_path {inPath.Wrap(true)} --dump_path {outPath.Wrap(true)} " +
                         $"--original_config_file {_ckptConfigPath.Wrap(true)} {(safetensors ? "--to_safetensors" : "")} {(fp16 ? "--half" : "")}");
+
+            if(!Directory.Exists(outPath) || output.SplitIntoLines().Last().Contains("KeyError:"))
+            {
+                await RunPython($"python repo/scripts/diff/{secondTryScript}.py --checkpoint_path {inPath.Wrap(true)} --dump_path {outPath.Wrap(true)} " +
+                        $"--original_config_file {_ckptConfigPath.Wrap(true)} {(safetensors ? "--to_safetensors" : "")} {(fp16 ? "--half" : "")}");
+            }
 
             if (deleteInput)
                 IoUtils.TryDeleteIfExists(inPath);
@@ -202,15 +212,22 @@ namespace StableDiffusionGui.Main.Utils
             return Directory.Exists(outPath) ? outPath : "";
         }
 
-        private static async Task RunPython(string cmd)
+        private static async Task<string> RunPython(string cmd)
         {
+            string output = "";
             Process p = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
             p.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand(true, Paths.GetDataPath())} && {Constants.Files.VenvActivate} && {cmd}";
 
+            void PythonLog (DataReceivedEventArgs data)
+            {
+                Logger.Log(data?.Data, true, false, Constants.Lognames.Convert);
+                output += $"{data.Data}\n";
+            }
+
             if (!OsUtils.ShowHiddenCmd())
             {
-                p.OutputDataReceived += (sender, line) => { Logger.Log(line?.Data, true, false, Constants.Lognames.Convert); };
-                p.ErrorDataReceived += (sender, line) => { Logger.Log(line?.Data, true, false, Constants.Lognames.Convert); };
+                p.OutputDataReceived += (sender, line) => PythonLog(line);
+                p.ErrorDataReceived += (sender, line) => PythonLog(line);
             }
 
             Logger.Log($"cmd {p.StartInfo.Arguments}", true);
@@ -223,52 +240,13 @@ namespace StableDiffusionGui.Main.Utils
             }
 
             while (!p.HasExited) await Task.Delay(1);
+            return output.Trim('\n');
         }
 
         private static string GetOutputPath(Model model, string extension, bool noOverwrite = true)
         {
-            if (model.IsDirectory)
-            {
-                string filename = model.Name;
-                string pathNoExt = Path.Combine(model.Directory.FullName, filename);
-                string path = pathNoExt + extension;
-
-                if (Directory.Exists(path) && noOverwrite)
-                {
-                    for (int attempt = 0; attempt < 10000; attempt++)
-                    {
-                        path = $"{pathNoExt}_{attempt + 1}{extension}";
-
-                        if (!File.Exists(path))
-                            return path;
-                    }
-
-                    Logger.Log($"Failed to get unique directory! Using '{path}'", true);
-                }
-
-                return path;
-            }
-            else
-            {
-                string filename = Path.GetFileNameWithoutExtension(model.Name);
-                string pathNoExt = Path.Combine(model.Directory.FullName, filename);
-                string path = pathNoExt + extension;
-
-                if (File.Exists(path) && noOverwrite)
-                {
-                    for (int attempt = 0; attempt < 10000; attempt++)
-                    {
-                        path = $"{pathNoExt}_{attempt + 1}{extension}";
-
-                        if (!File.Exists(path))
-                            return path;
-                    }
-
-                    Logger.Log($"Failed to get unique filename! Using '{path}'", true);
-                }
-
-                return path;
-            }
+            string desiredPath = Path.Combine(model.Directory.FullName, model.Name) + extension;
+            return IoUtils.GetAvailablePath(desiredPath, "_{0}");
         }
     }
 }

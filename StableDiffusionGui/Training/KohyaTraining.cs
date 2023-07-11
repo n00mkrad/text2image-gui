@@ -14,11 +14,13 @@ using System.IO;
 using System.Text.RegularExpressions;
 using StableDiffusionGui.Forms;
 using static StableDiffusionGui.Main.Enums.Training;
+using StableDiffusionGui.Main.Utils;
 
 namespace StableDiffusionGui.Training
 {
     internal class KohyaTraining
     {
+        private static List<string> _currentTempPaths = new List<string>();
         static readonly string[] _validImageExts = new string[] { ".png", ".jpg", ".jpeg", ".jfif", ".bmp" };
         static readonly bool _useVisibleCmdWindow = false;
         private static string _currentArchivalLogDir = "";
@@ -31,7 +33,7 @@ namespace StableDiffusionGui.Training
                     outDir = Paths.GetLorasPath(false);
 
                 Logger.ClearLogBox();
-
+                Assert.Check(baseModel != null, "Base model not valid!");
                 var images = IoUtils.GetFileInfosSorted(dataDir.FullName).Where(f => _validImageExts.Contains(f.Extension.Lower())).ToList();
                 Assert.Check(images.Count > 0, "No valid images found!");
 
@@ -39,6 +41,13 @@ namespace StableDiffusionGui.Training
                 {
                     Models.SetDiffusersClipSkip(baseModel, 0); // Reset CLIP Skip
                     Models.HotswapDiffusersVae(baseModel, null); // Reset custom VAE
+                }
+                else
+                {
+                    Logger.Log($"Converting base model...");
+                    _currentTempPaths.Add(Path.Combine(Paths.GetSessionDataPath(), $"lorabase{FormatUtils.GetUnixTimestamp()}"));
+                    baseModel = await ConvertModels.Convert(baseModel.Format, Enums.Models.Format.Diffusers, baseModel, true, true, _currentTempPaths.Last(), true);
+                    Assert.Check(baseModel != null, "Base model conversion failed!");
                 }
 
                 int repeats = (int)Math.Ceiling((double)(s.Steps * s.BatchSize) / images.Count);
@@ -61,6 +70,7 @@ namespace StableDiffusionGui.Training
                 filename = new FileInfo(outPath).GetNameNoExt();
                 _currentArchivalLogDir = IoUtils.CreateDir(Path.Combine(Paths.GetLogPath(), $"train_{filename}"), true).FullName;
                 string captionsDir = CreateDataset(images, caption);
+                _currentTempPaths.Add(captionsDir);
 
                 if(s.AgumentColor || s.AugmentFlip)
                 {
@@ -116,9 +126,8 @@ namespace StableDiffusionGui.Training
                 if(!TextToImage.Canceled)
                 Logger.Log($"Training has finished after {FormatUtils.Time(sw.ElapsedMilliseconds)}.");
 
-                IoUtils.TryDeleteIfExists(captionsDir);
-
                 Program.MainForm.SetProgress(0);
+                Cleanup();
                 return outPath;
             }
             catch (Exception ex)
@@ -126,6 +135,7 @@ namespace StableDiffusionGui.Training
                 UiUtils.ShowMessageBox($"Training Error: {ex.Message}");
                 Logger.Log(ex.StackTrace, true);
                 Program.MainForm.SetProgress(0);
+                Cleanup();
                 return "";
             }
         }
@@ -228,18 +238,10 @@ namespace StableDiffusionGui.Training
             return tagsDir;
         }
 
-        /// <summary> Checks if every image has a tag file. </summary>
-        private static bool CheckIfCaptionsExist(List<ZlpFileInfo> imageFiles, string ext = ".txt")
+        public static void Cleanup ()
         {
-            foreach (var imgFile in imageFiles)
-            {
-                string txtPath = Path.ChangeExtension(imgFile.FullName, "txt");
-
-                if (!File.Exists(txtPath))
-                    return false;
-            }
-
-            return true;
+            foreach (string path in _currentTempPaths)
+                IoUtils.TryDeleteIfExists(path);
         }
 
         private static bool _hasErrored = false;

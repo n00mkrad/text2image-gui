@@ -134,6 +134,7 @@ namespace StableDiffusionGui.Forms
         private async void btnRun_Click(object sender, EventArgs e)
         {
             SaveControls();
+            KohyaTraining.Cleanup();
 
             if (Program.State == Program.BusyState.Training)
             {

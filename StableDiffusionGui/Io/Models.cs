@@ -104,7 +104,7 @@ namespace StableDiffusionGui.Io
             if(implementation == Implementation.SdXl)
                 models = models.Where(m => m.Size > 5 * 1024 * 1024 * 1024L && m.Name.Lower().Contains("xl") && !m.Name.Lower().Contains("refine"));
             else
-                models = models.Where(m => (m.Size > 12 * 1024 * 1024 * 1024L && m.Name.Lower().Contains("xl")) == false);
+                models = models.Where(m => (m.Size > 5 * 1024 * 1024 * 1024L && m.Name.Lower().Contains("xl")) == false);
 
             List<Model> distinctOrderedList = models.DistinctBy(x => x.Name).OrderBy(x => x.FormatIndependentName).ToList();
             if (Program.Debug) Logger.Log($"GetModels took {sw.ElapsedMilliseconds} ms", true);
