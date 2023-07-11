@@ -194,7 +194,7 @@ namespace StableDiffusionGui.Forms
                 embeddings = ValidateEmbeddingNames(embeddings);
 
             _lastEmbeddings = embeddings.Select(l => l.FormatIndependentName).AsString();
-            panelEmbeddings.SetVisible(embeddingNames.Any()); // Disable panel if no embeddings in folder
+            SetVisibility(panelEmbeddings);
         }
 
         private string _lastLoras = "";

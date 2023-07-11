@@ -56,7 +56,7 @@ namespace StableDiffusionGui.Forms
                 return implementation.Supports(Feature.SymmetricMode) && (!comboxInpaintMode.Visible || (ImgMode)comboxInpaintMode.SelectedIndex == ImgMode.InitializationImage);
 
             if (control == panelEmbeddings)
-                return implementation.Supports(Feature.Embeddings);
+                return implementation.Supports(Feature.Embeddings) && comboxEmbeddingList.Items.Count > 0;
 
             if (control == textboxClipsegMask)
                 return (ImgMode)comboxInpaintMode.SelectedIndex == ImgMode.TextMask;
