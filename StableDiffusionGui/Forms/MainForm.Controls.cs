@@ -128,7 +128,7 @@ namespace StableDiffusionGui.Forms
             comboxBackend.Text = Strings.Implementation.Get(imp.ToString());
 
             // Panel visibility
-            SetVisibility(new Control[] { panelPromptNeg, panelEmbeddings, panelInitImgStrength, panelInpainting, panelScaleImg, panelRes, panelSampler, panelSeamless, panelSymmetry, checkboxHiresFix,
+            SetVisibility(new Control[] { panelAiInputs, panelPromptNeg, panelEmbeddings, panelInitImgStrength, panelInpainting, panelScaleImg, panelRes, panelSampler, panelSeamless, panelSymmetry, checkboxHiresFix,
                 textboxClipsegMask, panelResizeGravity, labelResChange, btnResetRes, checkboxShowInitImg, panelModel, panelLoras }, imp);
 
             bool adv = Config.Instance.AdvancedUi;

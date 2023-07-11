@@ -28,6 +28,9 @@ namespace StableDiffusionGui.Forms
             if (implementation.IsUnset())
                 implementation = Config.Instance.Implementation;
 
+            if (control == panelAiInputs)
+                return implementation.Supports(Feature.Img2Img);
+
             if (control == panelRes)
                 return ResolutionAdjustAvailable(implementation);
 

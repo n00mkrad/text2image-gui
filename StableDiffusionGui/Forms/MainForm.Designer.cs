@@ -183,7 +183,7 @@ namespace StableDiffusionGui.Forms
             this.comboxInpaintMode = new System.Windows.Forms.ComboBox();
             this.label10 = new System.Windows.Forms.Label();
             this.panelCollapseGeneration = new System.Windows.Forms.Panel();
-            this.panelAiInputs = new System.Windows.Forms.Panel();
+            this.panelBaseImg = new System.Windows.Forms.Panel();
             this.checkboxShowInitImg = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.panelLoras = new System.Windows.Forms.Panel();
@@ -255,7 +255,7 @@ namespace StableDiffusionGui.Forms
             this.panelInpainting.SuspendLayout();
             this.panelResizeGravity.SuspendLayout();
             this.panelCollapseGeneration.SuspendLayout();
-            this.panelAiInputs.SuspendLayout();
+            this.panelBaseImg.SuspendLayout();
             this.panelLoras.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridLoras)).BeginInit();
             this.panelEmbeddings.SuspendLayout();
@@ -658,7 +658,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderScale.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScale.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScale.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderScale.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderScale.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScale.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScale.Name = "textboxSliderScale";
@@ -802,7 +802,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderInitStrength.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderInitStrength.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderInitStrength.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderInitStrength.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderInitStrength.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderInitStrength.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderInitStrength.Name = "textboxSliderInitStrength";
@@ -996,7 +996,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderScaleImg.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScaleImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScaleImg.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScaleImg.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderScaleImg.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderScaleImg.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScaleImg.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScaleImg.Name = "textboxSliderScaleImg";
@@ -1780,7 +1780,7 @@ namespace StableDiffusionGui.Forms
             this.panelSettings.Controls.Add(this.panelInitImgStrength);
             this.panelSettings.Controls.Add(this.panelInpainting);
             this.panelSettings.Controls.Add(this.panelCollapseGeneration);
-            this.panelSettings.Controls.Add(this.panelAiInputs);
+            this.panelSettings.Controls.Add(this.panelBaseImg);
             this.panelSettings.Controls.Add(this.panelLoras);
             this.panelSettings.Controls.Add(this.panelEmbeddings);
             this.panelSettings.Controls.Add(this.panelPromptNeg);
@@ -2317,7 +2317,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderSteps.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderSteps.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderSteps.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderSteps.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderSteps.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderSteps.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderSteps.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderSteps.Name = "textboxSliderSteps";
@@ -2503,17 +2503,17 @@ namespace StableDiffusionGui.Forms
             this.panelCollapseGeneration.Size = new System.Drawing.Size(651, 35);
             this.panelCollapseGeneration.TabIndex = 120;
             // 
-            // panelAiInputs
+            // panelBaseImg
             // 
-            this.panelAiInputs.Controls.Add(this.checkboxShowInitImg);
-            this.panelAiInputs.Controls.Add(this.label2);
-            this.panelAiInputs.Controls.Add(this.labelCurrentImage);
-            this.panelAiInputs.Controls.Add(this.btnInitImgBrowse);
-            this.panelAiInputs.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelAiInputs.Location = new System.Drawing.Point(0, 360);
-            this.panelAiInputs.Name = "panelAiInputs";
-            this.panelAiInputs.Size = new System.Drawing.Size(651, 35);
-            this.panelAiInputs.TabIndex = 17;
+            this.panelBaseImg.Controls.Add(this.checkboxShowInitImg);
+            this.panelBaseImg.Controls.Add(this.label2);
+            this.panelBaseImg.Controls.Add(this.labelCurrentImage);
+            this.panelBaseImg.Controls.Add(this.btnInitImgBrowse);
+            this.panelBaseImg.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelBaseImg.Location = new System.Drawing.Point(0, 360);
+            this.panelBaseImg.Name = "panelBaseImg";
+            this.panelBaseImg.Size = new System.Drawing.Size(651, 35);
+            this.panelBaseImg.TabIndex = 17;
             // 
             // checkboxShowInitImg
             // 
@@ -2751,9 +2751,9 @@ namespace StableDiffusionGui.Forms
             this.label23.Location = new System.Drawing.Point(0, 4);
             this.label23.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(107, 13);
+            this.label23.Size = new System.Drawing.Size(135, 13);
             this.label23.TabIndex = 105;
-            this.label23.Text = "Model Name/Version";
+            this.label23.Text = "Model Name / Architecture";
             // 
             // panelBackend
             // 
@@ -3068,8 +3068,8 @@ namespace StableDiffusionGui.Forms
             this.panelResizeGravity.ResumeLayout(false);
             this.panelResizeGravity.PerformLayout();
             this.panelCollapseGeneration.ResumeLayout(false);
-            this.panelAiInputs.ResumeLayout(false);
-            this.panelAiInputs.PerformLayout();
+            this.panelBaseImg.ResumeLayout(false);
+            this.panelBaseImg.PerformLayout();
             this.panelLoras.ResumeLayout(false);
             this.panelLoras.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridLoras)).EndInit();
@@ -3208,7 +3208,7 @@ namespace StableDiffusionGui.Forms
         public System.Windows.Forms.Panel panelInitImgStrength;
         public System.Windows.Forms.Panel panelInpainting;
         public System.Windows.Forms.Panel panelDebugSendStdin;
-        public System.Windows.Forms.Panel panelAiInputs;
+        public System.Windows.Forms.Panel panelBaseImg;
         public System.Windows.Forms.Panel panelDebugPerlinThresh;
         public System.Windows.Forms.Panel panelPromptNeg;
         public System.Windows.Forms.Panel panelPrompt;

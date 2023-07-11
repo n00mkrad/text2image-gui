@@ -6,7 +6,7 @@ namespace StableDiffusionGui.Data
 {
     public class ImplementationInfo
     {
-        public enum Feature { InteractiveCli, CustomModels, CustomVae, HalfPrecisionToggle, NegPrompts, NativeInpainting, DeviceSelection, MultipleSamplers, Embeddings, SeamlessMode, SymmetricMode, HiresFix, Lora }
+        public enum Feature { InteractiveCli, CustomModels, CustomVae, HalfPrecisionToggle, NegPrompts, Img2Img, NativeInpainting, DeviceSelection, MultipleSamplers, Embeddings, SeamlessMode, SymmetricMode, HiresFix, Lora }
         public List<Feature> SupportedFeatures = new List<Feature>();
         public Enums.Ai.Backend Backend { get; set; } = Enums.Ai.Backend.Cuda;
         public string[] ValidModelExts { get; set; } = new string[0];
@@ -23,7 +23,7 @@ namespace StableDiffusionGui.Data
                 SupportedModelFormats = new Format[] { Format.Pytorch, Format.Safetensors, Format.Diffusers };
                 ValidModelExts = new string[] { ".ckpt", ".safetensors" };
                 ValidModelExtsVae = new string[] { ".ckpt", ".pt" };
-                SupportedFeatures = new List<Feature> { Feature.InteractiveCli, Feature.CustomModels, Feature.CustomVae, Feature.HalfPrecisionToggle, Feature.NegPrompts, Feature.NativeInpainting, Feature.DeviceSelection,
+                SupportedFeatures = new List<Feature> { Feature.InteractiveCli, Feature.CustomModels, Feature.CustomVae, Feature.HalfPrecisionToggle, Feature.NegPrompts, Feature.Img2Img, Feature.NativeInpainting, Feature.DeviceSelection,
                     Feature.MultipleSamplers, Feature.Embeddings, Feature.SeamlessMode, Feature.SymmetricMode, Feature.HiresFix, Feature.Lora };
             }
             else if (imp == Enums.StableDiffusion.Implementation.OptimizedSd)
@@ -31,18 +31,18 @@ namespace StableDiffusionGui.Data
                 Backend = Enums.Ai.Backend.Cuda;
                 SupportedModelFormats = new Format[] { Format.Pytorch };
                 ValidModelExts = new string[] { ".ckpt" };
-                SupportedFeatures = new List<Feature> { Feature.CustomModels, Feature.HalfPrecisionToggle, Feature.DeviceSelection };
+                SupportedFeatures = new List<Feature> { Feature.CustomModels, Feature.HalfPrecisionToggle, Feature.DeviceSelection, Feature.Img2Img };
             }
             else if (imp == Enums.StableDiffusion.Implementation.DiffusersOnnx)
             {
                 Backend = Enums.Ai.Backend.DirectMl;
                 SupportedModelFormats = new Format[] { Format.DiffusersOnnx };
-                SupportedFeatures = new List<Feature> { Feature.InteractiveCli, Feature.CustomModels, Feature.HalfPrecisionToggle, Feature.NegPrompts, Feature.MultipleSamplers };
+                SupportedFeatures = new List<Feature> { Feature.InteractiveCli, Feature.CustomModels, Feature.HalfPrecisionToggle, Feature.NegPrompts, Feature.MultipleSamplers, Feature.Img2Img };
             }
             else if (imp == Enums.StableDiffusion.Implementation.InstructPixToPix)
             {
                 Backend = Enums.Ai.Backend.Cuda;
-                SupportedFeatures = new List<Feature> { Feature.InteractiveCli, Feature.NegPrompts };
+                SupportedFeatures = new List<Feature> { Feature.InteractiveCli, Feature.NegPrompts, Feature.Img2Img };
             }
             else if (imp == Enums.StableDiffusion.Implementation.SdXl)
             {
