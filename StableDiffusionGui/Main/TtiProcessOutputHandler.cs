@@ -68,7 +68,7 @@ namespace StableDiffusionGui.Main
                     _hiresFixStatus = _hiresFixStatus = HiresFixStatus.WaitingForStart;
                 }
 
-                if (!TextToImage.Canceled && line.MatchesWildcard("*%|*|*/*") && !line.Lower().Contains("downloading"))
+                if (!TextToImage.Canceled && line.MatchesWildcard("*%|*|*/*") && !line.Lower().Contains("downloading") && !line.Contains("Loading pipeline components"))
                 {
                     string progStr = line.Split('|')[2].Trim().Split(' ')[0].Trim(); // => e.g. "3/50"
 

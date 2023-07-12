@@ -66,7 +66,6 @@ namespace StableDiffusionGui.Forms
                 checkboxFolderPerPrompt, checkboxOutputIgnoreWildcards, checkboxFolderPerSession,
                 checkboxPromptInFilename, checkboxSeedInFilename, checkboxScaleInFilename, checkboxSamplerInFilename, checkboxModelInFilename,
                 textboxFavsPath, btnFavsPathBrowse,
-                checkboxMultiPromptsSameSeed,
                 checkboxSaveUnprocessedImages,
                 checkboxAutoSetResForInitImg,
                 checkboxInitImageRetainAspectRatio,
@@ -163,7 +162,6 @@ namespace StableDiffusionGui.Forms
             ConfigParser.LoadGuiElement(checkboxOutputIgnoreWildcards, ref Config.Instance.FilenameIgnoreWildcards);
             ConfigParser.LoadGuiElement(checkboxFolderPerSession, ref Config.Instance.FolderPerSession);
             ConfigParser.LoadGuiElement(checkboxAdvancedMode, ref Config.Instance.AdvancedUi);
-            ConfigParser.LoadGuiElement(checkboxMultiPromptsSameSeed, ref Config.Instance.MultiPromptsSameSeed);
             ConfigParser.LoadComboxIndex(comboxTimestampInFilename, ref Config.Instance.FilenameTimestampMode);
             ConfigParser.LoadGuiElement(checkboxPromptInFilename, ref Config.Instance.PromptInFilename);
             ConfigParser.LoadGuiElement(checkboxSeedInFilename, ref Config.Instance.SeedInFilename);
@@ -198,7 +196,6 @@ namespace StableDiffusionGui.Forms
             ConfigParser.SaveGuiElement(checkboxOutputIgnoreWildcards, ref Config.Instance.FilenameIgnoreWildcards);
             ConfigParser.SaveGuiElement(checkboxFolderPerSession, ref Config.Instance.FolderPerSession);
             ConfigParser.SaveGuiElement(checkboxAdvancedMode, ref Config.Instance.AdvancedUi);
-            ConfigParser.SaveGuiElement(checkboxMultiPromptsSameSeed, ref Config.Instance.MultiPromptsSameSeed);
             ConfigParser.SaveComboxIndex(comboxTimestampInFilename, ref Config.Instance.FilenameTimestampMode);
             ConfigParser.SaveGuiElement(checkboxPromptInFilename, ref Config.Instance.PromptInFilename);
             ConfigParser.SaveGuiElement(checkboxSeedInFilename, ref Config.Instance.SeedInFilename);

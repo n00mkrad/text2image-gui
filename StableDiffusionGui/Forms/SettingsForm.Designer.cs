@@ -66,14 +66,6 @@
             this.checkboxSaveUnprocessedImages = new System.Windows.Forms.CheckBox();
             this.panel32 = new System.Windows.Forms.Panel();
             this.label13 = new System.Windows.Forms.Label();
-            this.panelMultiPromptsSameSeed = new System.Windows.Forms.Panel();
-            this.panel18 = new System.Windows.Forms.Panel();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
-            this.panel6 = new System.Windows.Forms.Panel();
-            this.checkboxMultiPromptsSameSeed = new System.Windows.Forms.CheckBox();
-            this.panel22 = new System.Windows.Forms.Panel();
-            this.label8 = new System.Windows.Forms.Label();
             this.panelImgSaveMode = new System.Windows.Forms.Panel();
             this.tableLayoutPanel20 = new System.Windows.Forms.TableLayoutPanel();
             this.panel49 = new System.Windows.Forms.Panel();
@@ -208,12 +200,6 @@
             this.tableLayoutPanel10.SuspendLayout();
             this.panel31.SuspendLayout();
             this.panel32.SuspendLayout();
-            this.panelMultiPromptsSameSeed.SuspendLayout();
-            this.panel18.SuspendLayout();
-            this.panel3.SuspendLayout();
-            this.tableLayoutPanel6.SuspendLayout();
-            this.panel6.SuspendLayout();
-            this.panel22.SuspendLayout();
             this.panelImgSaveMode.SuspendLayout();
             this.tableLayoutPanel20.SuspendLayout();
             this.panel49.SuspendLayout();
@@ -302,7 +288,6 @@
             this.parentPanel.Controls.Add(this.panelAutoSetResForInitImg);
             this.parentPanel.Controls.Add(this.panel1);
             this.parentPanel.Controls.Add(this.panelSaveUnprocessedImages);
-            this.parentPanel.Controls.Add(this.panelMultiPromptsSameSeed);
             this.parentPanel.Controls.Add(this.panelImgSaveMode);
             this.parentPanel.Controls.Add(this.panelFavsDir);
             this.parentPanel.Controls.Add(this.panelPromptInFilename);
@@ -330,7 +315,7 @@
             // 
             this.panelNotify.Controls.Add(this.notificationPanel);
             this.panelNotify.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelNotify.Location = new System.Drawing.Point(0, 820);
+            this.panelNotify.Location = new System.Drawing.Point(0, 785);
             this.panelNotify.Name = "panelNotify";
             this.panelNotify.Size = new System.Drawing.Size(843, 35);
             this.panelNotify.TabIndex = 22;
@@ -404,7 +389,7 @@
             // 
             this.panelAdvancedMode.Controls.Add(this.tableLayoutPanel4);
             this.panelAdvancedMode.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelAdvancedMode.Location = new System.Drawing.Point(0, 785);
+            this.panelAdvancedMode.Location = new System.Drawing.Point(0, 750);
             this.panelAdvancedMode.Name = "panelAdvancedMode";
             this.panelAdvancedMode.Size = new System.Drawing.Size(843, 35);
             this.panelAdvancedMode.TabIndex = 15;
@@ -470,7 +455,7 @@
             // 
             this.panelInitImageRetainAspectRatio.Controls.Add(this.tableLayoutPanel15);
             this.panelInitImageRetainAspectRatio.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelInitImageRetainAspectRatio.Location = new System.Drawing.Point(0, 750);
+            this.panelInitImageRetainAspectRatio.Location = new System.Drawing.Point(0, 715);
             this.panelInitImageRetainAspectRatio.Name = "panelInitImageRetainAspectRatio";
             this.panelInitImageRetainAspectRatio.Size = new System.Drawing.Size(843, 35);
             this.panelInitImageRetainAspectRatio.TabIndex = 29;
@@ -536,7 +521,7 @@
             // 
             this.panelAutoSetResForInitImg.Controls.Add(this.tableLayoutPanel14);
             this.panelAutoSetResForInitImg.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelAutoSetResForInitImg.Location = new System.Drawing.Point(0, 715);
+            this.panelAutoSetResForInitImg.Location = new System.Drawing.Point(0, 680);
             this.panelAutoSetResForInitImg.Name = "panelAutoSetResForInitImg";
             this.panelAutoSetResForInitImg.Size = new System.Drawing.Size(843, 35);
             this.panelAutoSetResForInitImg.TabIndex = 28;
@@ -602,7 +587,7 @@
             // 
             this.panel1.Controls.Add(this.label17);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Location = new System.Drawing.Point(0, 675);
+            this.panel1.Location = new System.Drawing.Point(0, 640);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(843, 40);
             this.panel1.TabIndex = 27;
@@ -622,7 +607,7 @@
             // 
             this.panelSaveUnprocessedImages.Controls.Add(this.panel29);
             this.panelSaveUnprocessedImages.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSaveUnprocessedImages.Location = new System.Drawing.Point(0, 640);
+            this.panelSaveUnprocessedImages.Location = new System.Drawing.Point(0, 605);
             this.panelSaveUnprocessedImages.Name = "panelSaveUnprocessedImages";
             this.panelSaveUnprocessedImages.Size = new System.Drawing.Size(843, 35);
             this.panelSaveUnprocessedImages.TabIndex = 23;
@@ -701,90 +686,6 @@
             this.label13.Size = new System.Drawing.Size(324, 13);
             this.label13.TabIndex = 85;
             this.label13.Text = "When Post-Processing Is Enabled, Also Save Un-Processed Image";
-            // 
-            // panelMultiPromptsSameSeed
-            // 
-            this.panelMultiPromptsSameSeed.Controls.Add(this.panel18);
-            this.panelMultiPromptsSameSeed.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelMultiPromptsSameSeed.Location = new System.Drawing.Point(0, 605);
-            this.panelMultiPromptsSameSeed.Name = "panelMultiPromptsSameSeed";
-            this.panelMultiPromptsSameSeed.Size = new System.Drawing.Size(843, 35);
-            this.panelMultiPromptsSameSeed.TabIndex = 17;
-            // 
-            // panel18
-            // 
-            this.panel18.Controls.Add(this.panel3);
-            this.panel18.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel18.Location = new System.Drawing.Point(0, 0);
-            this.panel18.Name = "panel18";
-            this.panel18.Size = new System.Drawing.Size(843, 35);
-            this.panel18.TabIndex = 17;
-            // 
-            // panel3
-            // 
-            this.panel3.Controls.Add(this.tableLayoutPanel6);
-            this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel3.Location = new System.Drawing.Point(0, 0);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(843, 35);
-            this.panel3.TabIndex = 16;
-            // 
-            // tableLayoutPanel6
-            // 
-            this.tableLayoutPanel6.ColumnCount = 2;
-            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
-            this.tableLayoutPanel6.Controls.Add(this.panel6, 0, 0);
-            this.tableLayoutPanel6.Controls.Add(this.panel22, 0, 0);
-            this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel6.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel6.Name = "tableLayoutPanel6";
-            this.tableLayoutPanel6.RowCount = 1;
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel6.Size = new System.Drawing.Size(843, 35);
-            this.tableLayoutPanel6.TabIndex = 2;
-            // 
-            // panel6
-            // 
-            this.panel6.Controls.Add(this.checkboxMultiPromptsSameSeed);
-            this.panel6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel6.Location = new System.Drawing.Point(410, 0);
-            this.panel6.Margin = new System.Windows.Forms.Padding(0);
-            this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(433, 35);
-            this.panel6.TabIndex = 88;
-            // 
-            // checkboxMultiPromptsSameSeed
-            // 
-            this.checkboxMultiPromptsSameSeed.AutoSize = true;
-            this.checkboxMultiPromptsSameSeed.ForeColor = System.Drawing.Color.White;
-            this.checkboxMultiPromptsSameSeed.Location = new System.Drawing.Point(5, 10);
-            this.checkboxMultiPromptsSameSeed.Name = "checkboxMultiPromptsSameSeed";
-            this.checkboxMultiPromptsSameSeed.Size = new System.Drawing.Size(15, 14);
-            this.checkboxMultiPromptsSameSeed.TabIndex = 111;
-            this.checkboxMultiPromptsSameSeed.UseVisualStyleBackColor = true;
-            // 
-            // panel22
-            // 
-            this.panel22.Controls.Add(this.label8);
-            this.panel22.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel22.Location = new System.Drawing.Point(0, 0);
-            this.panel22.Margin = new System.Windows.Forms.Padding(0);
-            this.panel22.Name = "panel22";
-            this.panel22.Size = new System.Drawing.Size(410, 35);
-            this.panel22.TabIndex = 87;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.ForeColor = System.Drawing.Color.White;
-            this.label8.Location = new System.Drawing.Point(2, 11);
-            this.label8.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(352, 13);
-            this.label8.TabIndex = 85;
-            this.label8.Text = "When Running Multiple Prompts, Use Same Starting Seed for All of Them";
             // 
             // panelImgSaveMode
             // 
@@ -2193,14 +2094,6 @@
             this.panel31.PerformLayout();
             this.panel32.ResumeLayout(false);
             this.panel32.PerformLayout();
-            this.panelMultiPromptsSameSeed.ResumeLayout(false);
-            this.panel18.ResumeLayout(false);
-            this.panel3.ResumeLayout(false);
-            this.tableLayoutPanel6.ResumeLayout(false);
-            this.panel6.ResumeLayout(false);
-            this.panel6.PerformLayout();
-            this.panel22.ResumeLayout(false);
-            this.panel22.PerformLayout();
             this.panelImgSaveMode.ResumeLayout(false);
             this.tableLayoutPanel20.ResumeLayout(false);
             this.panel49.ResumeLayout(false);
@@ -2321,24 +2214,16 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Panel panelPromptInFilename;
-        private System.Windows.Forms.Panel panelMultiPromptsSameSeed;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         private System.Windows.Forms.Panel panel16;
         private System.Windows.Forms.CheckBox checkboxAdvancedMode;
         private System.Windows.Forms.Panel panel17;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Panel panel18;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
         private System.Windows.Forms.Panel panel19;
         private System.Windows.Forms.CheckBox checkboxPromptInFilename;
         private System.Windows.Forms.Panel panel20;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
-        private System.Windows.Forms.Panel panel6;
-        private System.Windows.Forms.CheckBox checkboxMultiPromptsSameSeed;
-        private System.Windows.Forms.Panel panel22;
-        private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Panel panelOutPath;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel7;
         private System.Windows.Forms.Panel panel23;
