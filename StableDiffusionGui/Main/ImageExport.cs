@@ -4,6 +4,7 @@ using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,6 +15,9 @@ namespace StableDiffusionGui.Main
 {
     internal class ImageExport
     {
+        public static Stopwatch TimeSinceLastImage = new Stopwatch();
+        public static RollingAverage RollingAvg = new RollingAverage(10);
+
         private static readonly int _maxPathLength = 230;
         private static readonly int _minimumImageAgeMs = 200;
         private static readonly int _loopWaitBeforeStartMs = 1000;
@@ -29,6 +33,8 @@ namespace StableDiffusionGui.Main
             _config = TextToImage.CurrentTask.Config;
             _currTask = TextToImage.CurrentTask;
             _currSettings = TextToImage.CurrentTaskSettings;
+            RollingAvg.Reset();
+            TimeSinceLastImage.Restart();
 
             if (clearImages)
             {
@@ -73,7 +79,8 @@ namespace StableDiffusionGui.Main
                         images = images.Where(img => lastLines.Any(l => l.Contains(img.Name))).ToList(); // Only take image if it was written into SD log. Avoids copying too early (post-proc etc)
                     }
 
-                    Export(images);
+                    if (images.Any())
+                        Export(images);
 
                     await Task.Delay(_loopWaitTimeMs);
                 }
@@ -112,6 +119,7 @@ namespace StableDiffusionGui.Main
             }
 
             _currTask.ImgCount += images.Count;
+            ExportLog(images.Count);
             List<string> renamedImgPaths = new List<string>();
 
             for (int i = 0; i < images.Count; i++)
@@ -137,6 +145,44 @@ namespace StableDiffusionGui.Main
 
             if (_outImgs.Count > 0)
                 ImageViewer.SetImages(_outImgs.Where(x => File.Exists(x)).ToList(), ImageViewer.ImgShowMode.ShowLast);
+        }
+
+        private static void ExportLog(int amount)
+        {
+            if (amount < 1)
+                return;
+
+            int imgCount = TextToImage.CurrentTask.ImgCount + TextToImage.CompletedTasks.Sum(t => t.ImgCount);
+            int targetImgCount = TextToImage.CurrentTask.TargetImgCount + TextToImage.CompletedTasks.Sum(t => t.TargetImgCount) + MainUi.Queue.Sum(s => s.GetTargetImgCount(TextToImage.CurrentTask.Config));
+            Program.MainForm.SetProgress((int)Math.Round(((float)imgCount / targetImgCount) * 100f));
+
+            int lastMsPerImg = (int)TimeSinceLastImage.ElapsedMilliseconds;
+            RollingAvg.AddDataPoint(lastMsPerImg);
+            int remainingMs = (TextToImage.CurrentTask.TargetImgCount - TextToImage.CurrentTask.ImgCount) * (int)RollingAvg.GetAverage();
+            int remainingMsTotal = (targetImgCount - imgCount) * (int)RollingAvg.GetAverage();
+
+            string imgCountStr = $"{TextToImage.CurrentTask.ImgCount}/{TextToImage.CurrentTask.TargetImgCount}";
+
+            if (TextToImage.IsRunningQueue)
+                imgCountStr += $" of this task - {imgCount}/{targetImgCount} total";
+
+            string etaStr = "";
+
+            if (imgCount > 2 && remainingMsTotal > 2000)
+            {
+                etaStr += $" - ETA: {FormatUtils.Time(remainingMs, false)}";
+
+                if (TextToImage.IsRunningQueue && imgCount > 4)
+                {
+                    if (remainingMsTotal != remainingMs)
+                        etaStr += $" for this task - {FormatUtils.Time(remainingMsTotal, false)} for entire queue";
+                }
+            }
+
+            string imgsStr = amount > 1 ? $"{amount} images" : "image";
+            Logger.Log($"Generated {imgsStr} in {FormatUtils.Time(lastMsPerImg)} ({imgCountStr}){etaStr}", false, Program.MainForm.LogText.EndsWith("...") || Logger.LastUiLine.MatchesWildcard("*Generated*image*in*"));
+
+            TimeSinceLastImage.Restart();
         }
 
         public static string GetExportFilename(string filePath, string parentDir, string suffix, string ext, int pathLimit, bool inclPrompt, bool inclSeed, bool inclScale, bool inclSampler, bool inclModel)

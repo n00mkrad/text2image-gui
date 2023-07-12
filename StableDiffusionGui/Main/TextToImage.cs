@@ -118,7 +118,6 @@ namespace StableDiffusionGui.Main
                 CompletedTasks.Add(CurrentTask);
             } while (fromQueue && MainUi.Queue.Any());
 
-            // await Task.Delay(100);
             Done();
         }
 
