@@ -270,7 +270,6 @@ namespace StableDiffusionGui.Main
                 }
             }
 
-
             if (TextToImage.CurrentTaskSettings != null && TextToImage.CurrentTaskSettings.Implementation == Enums.StableDiffusion.Implementation.InstructPixToPix)
             {
                 bool replace = ellipsis || Logger.LastUiLine.MatchesWildcard("*Image*generated*in*");

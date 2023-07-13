@@ -175,6 +175,7 @@ namespace StableDiffusionGui.Forms
             btnStart.Text = "Cancel";
 
             ZlpDirectoryInfo trainImgDir = new ZlpDirectoryInfo(textboxTrainImgsDir.Text.Trim());
+            textboxProjName.Text = FormatUtils.SanitizePromptFilename(textboxProjName.Text);
             string name = string.Join("_", textboxProjName.Text.Trim().Split(Path.GetInvalidFileNameChars())).Trunc(50, false);
 
             var trainMethod = ParseUtils.GetEnum<KohyaSettings.NetworkType>(comboxTrainMethod.Text, true, Strings.LoraNetworkTypes);
