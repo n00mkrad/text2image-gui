@@ -149,7 +149,7 @@ namespace StableDiffusionGui.Main
 
         private static void ExportLog(int amount)
         {
-            if (amount < 1)
+            if (amount < 1 || TextToImage.Canceled)
                 return;
 
             int imgCount = TextToImage.CurrentTask.ImgCount + TextToImage.CompletedTasks.Sum(t => t.ImgCount);

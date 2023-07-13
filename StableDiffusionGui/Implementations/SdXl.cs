@@ -54,6 +54,7 @@ namespace StableDiffusionGui.Implementations
                         args["h"] = $"{s.Res.Height}";
                         args["seed"] = $"{s.Seed}";
                         args["sampler"] = s.Sampler.ToString().Lower();
+                        args["refineFrac"] = TextToImage.CurrentTask.Config.SdXlRefinerStrength.ToStringDot("0.####");
 
                         foreach (float scale in s.ScalesTxt)
                         {

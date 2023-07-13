@@ -229,9 +229,9 @@ namespace StableDiffusionGui.Main
                 {
                     if (!Logger.LastUiLine.MatchesWildcard("*Generated*image*in*"))
                         Logger.LogIfLastLineDoesNotContainMsg($"Generating...");
-
+                
                     int percent = line.Split("%|")[0].GetInt();
-
+                
                     if (percent > 0 && percent <= 100)
                         Program.MainForm.SetProgressImg(percent);
                 }
@@ -246,7 +246,12 @@ namespace StableDiffusionGui.Main
                     Logger.Log($"{line}", false, ellipsis);
                 }
 
-                if (!TextToImage.Canceled && line.MatchesWildcard("*%|*| *") && !line.Contains("Fetching") && !line.Contains("Loading checkpoint"))
+                if (!TextToImage.Canceled && line.Trim().StartsWith("0%") && line.Contains("[00:00<?, ?it/s]"))
+                {
+                    ImageExport.TimeSinceLastImage.Restart();
+                }
+
+                if (!TextToImage.Canceled && line.MatchesWildcard("*%|*| *") && !line.Contains("Loading"))
                 {
                     if (!Logger.LastUiLine.MatchesWildcard("*Generated*image*in*"))
                         Logger.LogIfLastLineDoesNotContainMsg($"Generating...");
@@ -255,18 +260,6 @@ namespace StableDiffusionGui.Main
 
                     if (percent > 0 && percent <= 100)
                         Program.MainForm.SetProgressImg(percent);
-                }
-
-                if (!TextToImage.Canceled && line.Contains("Image generated in "))
-                {
-                    var split = line.Split("Image generated in ");
-                    Program.MainForm.SetProgress((int)Math.Round(((float)TextToImage.CurrentTask.ImgCount / TextToImage.CurrentTask.TargetImgCount) * 100f));
-
-                    int lastMsPerImg = $"{split[1].Remove(".").Remove("s")}0".GetInt();
-                    int remainingMs = (TextToImage.CurrentTask.TargetImgCount - TextToImage.CurrentTask.ImgCount) * lastMsPerImg;
-
-                    Logger.Log($"Generated 1 image in {split[1]} ({TextToImage.CurrentTask.ImgCount}/{TextToImage.CurrentTask.TargetImgCount})" +
-                        $"{(TextToImage.CurrentTask.ImgCount > 1 && remainingMs > 1000 ? $" - ETA: {FormatUtils.Time(remainingMs, false)}" : "")}", false, replace || Logger.LastUiLine.MatchesWildcard("*Generated*image*in*"));
                 }
             }
 
