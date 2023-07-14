@@ -80,6 +80,8 @@ namespace StableDiffusionGui.Forms
                 gridLoras.EndEdit();
                 BeginInvoke(new MethodInvoker(() => { SortLoras(); }));
             };
+            comboxResH.LostFocus += (s, e) => { ValidateCustomRes(comboxResH); };
+            comboxResW.LostFocus += (s, e) => { ValidateCustomRes(comboxResW); };
         }
 
         public void LoadControls()
@@ -158,6 +160,23 @@ namespace StableDiffusionGui.Forms
             _categoryPanels.Keys.ToList().ForEach(btn => btn.Parent.SetVisible(_categoryPanels[btn].Any(p => p.Visible))); // Hide collapse buttons if their category has 0 visible panels
 
             #endregion
+        }
+
+        private void ValidateCustomRes (ComboBox box = null)
+        {
+            if(box == null || box == comboxResW)
+            {
+                int w = comboxResW.Text.GetInt();
+                w = w.Clamp(256, 8192).RoundMod(MainUi.CurrentModulo);
+                comboxResW.Text = w.ToString();
+            }
+
+            if (box == null || box == comboxResH)
+            {
+                int h = comboxResH.Text.GetInt();
+                h = h.Clamp(256, 8192).RoundMod(MainUi.CurrentModulo);
+                comboxResH.Text = h.ToString();
+            }
         }
 
         private string _prevSelectedModel = "";

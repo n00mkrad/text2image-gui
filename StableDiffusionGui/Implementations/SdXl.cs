@@ -10,7 +10,6 @@ using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
@@ -145,8 +144,8 @@ namespace StableDiffusionGui.Implementations
 
                     if (!OsUtils.ShowHiddenCmd())
                     {
-                        py.OutputDataReceived += (sender, line) => { TtiProcessOutputHandler.LogOutput(line.Data); };
-                        py.ErrorDataReceived += (sender, line) => { TtiProcessOutputHandler.LogOutput(line.Data, true); };
+                        py.OutputDataReceived += (sender, line) => { HandleOutput(line.Data); };
+                        py.ErrorDataReceived += (sender, line) => { HandleOutput(line.Data); };
                     }
 
                     if (TtiProcess.CurrentProcess != null)
@@ -156,6 +155,7 @@ namespace StableDiffusionGui.Implementations
                     }
 
                     TtiProcessOutputHandler.Reset();
+                    _genState = GenerationState.Base;
 
                     Logger.Log($"Loading Stable Diffusion (XL) with model {s.Model.Trunc(80).Wrap()}...");
 
@@ -186,6 +186,53 @@ namespace StableDiffusionGui.Implementations
             {
                 Logger.Log($"Unhandled Stable Diffusion Error: {ex.Message}");
                 Logger.Log(ex.StackTrace, true);
+            }
+        }
+
+        public enum GenerationState { Base, Refiner }
+        private static GenerationState _genState = GenerationState.Base;
+
+        public static void HandleOutput (string line)
+        {
+            if (TextToImage.Canceled || TextToImage.CurrentTaskSettings == null)
+                return;
+
+            Logger.Log(line, true, false, Constants.Lognames.Sd);
+            TtiProcessOutputHandler.LastMessages.Insert(0, line);
+
+            bool ellipsis = Program.MainForm.LogText.EndsWith("...");
+            bool replace = ellipsis || Logger.LastUiLine.MatchesWildcard("*Image*generated*in*");
+
+            if (line.StartsWith("Model loaded"))
+            {
+                Logger.Log($"{line}", false, ellipsis);
+                ImageExport.TimeSinceLastImage.Restart();
+            }
+
+            if (line.Contains("Running base model"))
+            {
+                _genState = GenerationState.Base;
+            }
+
+            if (line.Contains("Running refine model"))
+            {
+                _genState = GenerationState.Refiner;
+            }
+
+            if (line.MatchesWildcard("*%|*| *") && !line.Contains("Loading"))
+            {
+                if (!Logger.LastUiLine.MatchesWildcard("*Generated*image*in*"))
+                    Logger.LogIfLastLineDoesNotContainMsg($"Generating...");
+
+                float refineStrength = TextToImage.CurrentTask.Config.SdXlRefinerStrength;
+                float percentMultiplier = _genState == GenerationState.Base ? refineStrength : (1f - refineStrength);
+                int percent = (line.Split("%|")[0].GetInt() * percentMultiplier).RoundToInt();
+
+                if (_genState == GenerationState.Refiner)
+                    percent += (100f * refineStrength).RoundToInt();
+
+                if (percent > 0 && percent <= 100)
+                    Program.MainForm.SetProgressImg(percent);
             }
         }
     }

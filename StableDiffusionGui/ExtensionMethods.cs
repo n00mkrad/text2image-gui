@@ -317,10 +317,10 @@ namespace StableDiffusionGui
             return regex.IsMatch(str);
         }
 
-        public static int RoundMod(this int n, int mod = 2)     // Round to a number that's divisible by 2 (for h264 etc)
+        public static int RoundMod(this int n, int mod = 2)     // Round to a number that's divisible by mod
         {
-            int a = (n / 2) * 2;    // Smaller multiple
-            int b = a + 2;   // Larger multiple
+            int a = (n / mod) * mod;    // Smaller multiple
+            int b = a + mod;   // Larger multiple
             return (n - a > b - n) ? b : a; // Return of closest of two
         }
 

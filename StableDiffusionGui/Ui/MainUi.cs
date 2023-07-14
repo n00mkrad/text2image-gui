@@ -64,10 +64,11 @@ namespace StableDiffusionGui.Ui
 
         public static ConcurrentQueue<TtiSettings> Queue = new ConcurrentQueue<TtiSettings>();
         public static string GpuInfo = "";
+        public static int CurrentModulo { get { return Config.Instance.Implementation == Implementation.InstructPixToPix ? 8 : 64; } }
 
         public static List<int> GetResolutions(int min, int max)
         {
-            int step = Config.Instance.Implementation == Implementation.InstructPixToPix ? 8 : 64;
+            int step = CurrentModulo;
 
             if (Config.Instance.InvokeAllowMod8 && Config.Instance.Implementation == Implementation.InvokeAi && Program.MainForm.comboxModel.Text.Lower().Contains("inpainting"))
                 step = 8;

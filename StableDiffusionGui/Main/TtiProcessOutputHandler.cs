@@ -4,7 +4,6 @@ using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -232,32 +231,6 @@ namespace StableDiffusionGui.Main
                 
                     int percent = line.Split("%|")[0].GetInt();
                 
-                    if (percent > 0 && percent <= 100)
-                        Program.MainForm.SetProgressImg(percent);
-                }
-            }
-
-            if (TextToImage.CurrentTaskSettings != null && TextToImage.CurrentTaskSettings.Implementation == Enums.StableDiffusion.Implementation.SdXl)
-            {
-                bool replace = ellipsis || Logger.LastUiLine.MatchesWildcard("*Image*generated*in*");
-
-                if (line.StartsWith("Model loaded"))
-                {
-                    Logger.Log($"{line}", false, ellipsis);
-                }
-
-                if (!TextToImage.Canceled && line.Trim().StartsWith("0%") && line.Contains("[00:00<?, ?it/s]"))
-                {
-                    ImageExport.TimeSinceLastImage.Restart();
-                }
-
-                if (!TextToImage.Canceled && line.MatchesWildcard("*%|*| *") && !line.Contains("Loading"))
-                {
-                    if (!Logger.LastUiLine.MatchesWildcard("*Generated*image*in*"))
-                        Logger.LogIfLastLineDoesNotContainMsg($"Generating...");
-
-                    int percent = line.Split("%|")[0].GetInt();
-
                     if (percent > 0 && percent <= 100)
                         Program.MainForm.SetProgressImg(percent);
                 }

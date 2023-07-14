@@ -2108,7 +2108,6 @@ namespace StableDiffusionGui.Forms
             // comboxResH
             // 
             this.comboxResH.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.comboxResH.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboxResH.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.comboxResH.ForeColor = System.Drawing.Color.White;
             this.comboxResH.FormattingEnabled = true;
@@ -2120,7 +2119,6 @@ namespace StableDiffusionGui.Forms
             // comboxResW
             // 
             this.comboxResW.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.comboxResW.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboxResW.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.comboxResW.ForeColor = System.Drawing.Color.White;
             this.comboxResW.FormattingEnabled = true;
