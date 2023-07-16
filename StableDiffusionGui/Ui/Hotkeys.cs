@@ -130,6 +130,12 @@ namespace StableDiffusionGui.Ui
                 return;
             }
 
+            // if (keys == Keys.F10) // Hotkey: UI TEST
+            // {
+            //     UiConstruction.CreateMainWindowOption();
+            //     return;
+            // }
+
             if (keys == Keys.F11) // Hotkey: Open Log Viewer
             {
                 Program.MainForm.OpenLogViewerWindow();

@@ -117,6 +117,7 @@ namespace StableDiffusionGui.Forms
                 NegativePrompt = textboxPromptNeg.Visible ? textboxPromptNeg.TextNoPlaceholder.Trim().Replace(Environment.NewLine, " ") : "",
                 Iterations = (int)upDownIterations.Value,
                 Steps = MainUi.GetExtraValues(textboxExtraSteps.Text, sliderSteps.ActualValueFloat).Select(x => (int)x).ToArray(),
+                RefinerStrengths = MainUi.GetExtraValues(textboxExtraRefinerValues.Text, sliderRefinerStart.ActualValueFloat).ToArray(),
                 InitImgs = MainUi.CurrentInitImgPaths.ToArray(),
                 ScalesTxt = MainUi.GetExtraValues(textboxExtraScales.Text, sliderScale.ActualValueFloat).ToArray(),
                 InitStrengths = panelInitImgStrength.Visible ? MainUi.GetExtraValues(textboxExtraInitStrengths.Text, sliderInitStrength.ActualValueFloat).ToArray() : new float[] { 0.5f },

@@ -22,7 +22,7 @@ namespace StableDiffusionGui.Forms
 {
     public partial class MainForm
     {
-        private Dictionary<Control, List<Panel>> _categoryPanels = new Dictionary<Control, List<Panel>>(); // Key: Collapse Button - Value: Child Panels
+        public Dictionary<Control, List<Panel>> CategoryPanels = new Dictionary<Control, List<Panel>>(); // Key: Collapse Button - Value: Child Panels
         private List<Control> _expandedCategories = new List<Control>();
 
         private List<Control> _debugControls { get { return new List<Control> { panelDebugLoopback, panelDebugPerlinThresh, panelDebugSendStdin, panelDebugAppendArgs }; } }
@@ -48,17 +48,17 @@ namespace StableDiffusionGui.Forms
             comboxModelArch.FillFromEnum<Enums.Models.SdArch>(Strings.SdModelArch, 0);
 
             // Set categories
-            _categoryPanels.Add(btnCollapseImplementation, new List<Panel> { panelBackend, panelModel });
-            _categoryPanels.Add(btnCollapsePrompt, new List<Panel> { panelPrompt, panelPromptNeg, panelEmbeddings, panelLoras, panelBaseImg });
-            _categoryPanels.Add(btnCollapseGeneration, new List<Panel> { panelInpainting, panelInitImgStrength, panelIterations, panelSteps, panelScale, panelScaleImg, panelSeed });
-            _categoryPanels.Add(btnCollapseRendering, new List<Panel> { panelRes, panelSampler });
-            _categoryPanels.Add(btnCollapseSymmetry, new List<Panel> { panelSeamless, panelSymmetry });
-            _categoryPanels.Add(btnCollapseDebug, new List<Panel> { panelDebugAppendArgs, panelDebugSendStdin, panelDebugPerlinThresh, panelDebugLoopback });
+            CategoryPanels.Add(btnCollapseImplementation, new List<Panel> { panelBackend, panelModel });
+            CategoryPanels.Add(btnCollapsePrompt, new List<Panel> { panelPrompt, panelPromptNeg, panelEmbeddings, panelLoras, panelBaseImg });
+            CategoryPanels.Add(btnCollapseGeneration, new List<Panel> { panelInpainting, panelInitImgStrength, panelIterations, panelSteps, panelRefineStart, panelScale, panelScaleImg, panelSeed });
+            CategoryPanels.Add(btnCollapseRendering, new List<Panel> { panelRes, panelSampler });
+            CategoryPanels.Add(btnCollapseSymmetry, new List<Panel> { panelSeamless, panelSymmetry });
+            CategoryPanels.Add(btnCollapseDebug, new List<Panel> { panelDebugAppendArgs, panelDebugSendStdin, panelDebugPerlinThresh, panelDebugLoopback });
 
             // Expand default categories
             _expandedCategories = new List<Control> { btnCollapsePrompt, btnCollapseRendering, btnCollapseGeneration };
-            _categoryPanels.Keys.ToList().ForEach(c => c.Click += (s, e) => CollapseToggle((Control)s));
-            _categoryPanels.Keys.ToList().ForEach(c => CollapseToggle(c, _expandedCategories.Contains(c)));
+            CategoryPanels.Keys.ToList().ForEach(c => c.Click += (s, e) => CollapseToggle((Control)s));
+            CategoryPanels.Keys.ToList().ForEach(c => CollapseToggle(c, _expandedCategories.Contains(c)));
 
             _debugControls.ForEach(c => c.SetVisible(Program.Debug)); // Show debug controls if debug mode is enabled
 
@@ -88,6 +88,7 @@ namespace StableDiffusionGui.Forms
         {
             ConfigParser.LoadGuiElement(upDownIterations, ref Config.Instance.Iterations);
             ConfigParser.LoadGuiElement(sliderSteps, ref Config.Instance.Steps);
+            ConfigParser.LoadGuiElement(sliderRefinerStart, ref Config.Instance.SdXlRefinerStrength);
             ConfigParser.LoadGuiElement(sliderScale, ref Config.Instance.Scale);
             ConfigParser.LoadGuiElement(comboxResW, ref Config.Instance.ResW);
             ConfigParser.LoadGuiElement(comboxResH, ref Config.Instance.ResH);
@@ -102,6 +103,7 @@ namespace StableDiffusionGui.Forms
         {
             ConfigParser.SaveGuiElement(upDownIterations, ref Config.Instance.Iterations);
             ConfigParser.SaveGuiElement(sliderSteps, ref Config.Instance.Steps);
+            ConfigParser.SaveGuiElement(sliderRefinerStart, ref Config.Instance.SdXlRefinerStrength);
             ConfigParser.SaveGuiElement(sliderScale, ref Config.Instance.Scale);
             ConfigParser.SaveGuiElement(comboxResW, ref Config.Instance.ResW);
             ConfigParser.SaveGuiElement(comboxResH, ref Config.Instance.ResH);
@@ -130,7 +132,7 @@ namespace StableDiffusionGui.Forms
             comboxBackend.Text = Strings.Implementation.Get(imp.ToString());
 
             // Panel visibility
-            SetVisibility(new Control[] { panelBaseImg, panelPromptNeg, panelEmbeddings, panelInitImgStrength, panelInpainting, panelScaleImg, panelRes, panelSampler, panelSeamless, panelSymmetry, checkboxHiresFix,
+            SetVisibility(new Control[] { panelBaseImg, panelPromptNeg, panelEmbeddings, panelRefineStart, panelInitImgStrength, panelInpainting, panelScaleImg, panelRes, panelSampler, panelSeamless, panelSymmetry, checkboxHiresFix,
                 textboxClipsegMask, panelResizeGravity, labelResChange, btnResetRes, checkboxShowInitImg, panelModel, panelLoras }, imp);
 
             bool adv = Config.Instance.AdvancedUi;
@@ -157,7 +159,7 @@ namespace StableDiffusionGui.Forms
             ModelChanged();
             ReloadLoras();
             ReloadEmbeddings();
-            _categoryPanels.Keys.ToList().ForEach(btn => btn.Parent.SetVisible(_categoryPanels[btn].Any(p => p.Visible))); // Hide collapse buttons if their category has 0 visible panels
+            CategoryPanels.Keys.ToList().ForEach(btn => btn.Parent.SetVisible(CategoryPanels[btn].Any(p => p.Visible))); // Hide collapse buttons if their category has 0 visible panels
 
             #endregion
         }
@@ -406,7 +408,7 @@ namespace StableDiffusionGui.Forms
         {
             ((Action)(() =>
             {
-                List<Panel> panels = _categoryPanels[collapseBtn];
+                List<Panel> panels = CategoryPanels[collapseBtn];
                 bool show = overrideState != null ? (bool)overrideState : panels.Any(c => c.Height == 0);
                 panels.Where(p => p.Height > 0).ToList().ForEach(p => _panelHeights[p] = p.Height);
                 panels.ForEach(p => p.Height = show ? _panelHeights[p] : 0);
@@ -526,5 +528,6 @@ namespace StableDiffusionGui.Forms
                 toolTip.SetToolTip(btnSaveMode, "Auto-Delete is disabled: All generated images will be saved.\n\nClick to switch to Auto-Delete mode.");
             }
         }
+
     }
 }

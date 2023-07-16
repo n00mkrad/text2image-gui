@@ -399,6 +399,7 @@
     <Compile Include="Ui\ImageViewer.cs" />
     <Compile Include="Ui\Hotkeys.cs" />
     <Compile Include="Ui\Strings.cs" />
+    <Compile Include="Ui\UiConstruction.cs" />
     <Compile Include="Ui\UiUtils.cs" />
     <EmbeddedResource Include="Forms\ConvertModelForm.resx">
       <DependentUpon>ConvertModelForm.cs</DependentUpon>

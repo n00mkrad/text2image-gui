@@ -53,33 +53,37 @@ namespace StableDiffusionGui.Implementations
                         args["h"] = $"{s.Res.Height}";
                         args["seed"] = $"{s.Seed}";
                         args["sampler"] = s.Sampler.ToString().Lower();
-                        args["refineFrac"] = TextToImage.CurrentTask.Config.SdXlRefinerStrength.ToStringDot("0.####");
 
                         foreach (float scale in s.ScalesTxt)
                         {
                             args["scaleTxt"] = $"{scale.ToStringDot()}";
 
-                            foreach (int stepCount in s.Steps)
+                            foreach (float refinerStrength in s.RefinerStrengths)
                             {
-                                args["steps"] = $"{stepCount}";
+                                args["refineFrac"] = $"{(1f - refinerStrength).ToStringDot()}";
 
-                                if (initImages == null) // No init image(s)
+                                foreach (int stepCount in s.Steps)
                                 {
-                                    argLists.Add(new Dictionary<string, string>(args));
-                                }
-                                else // With init image(s)
-                                {
-                                    foreach (string initImg in initImages.Values)
+                                    args["steps"] = $"{stepCount}";
+
+                                    if (initImages == null) // No init image(s)
                                     {
-                                        foreach (float strength in initStrengths)
+                                        argLists.Add(new Dictionary<string, string>(args));
+                                    }
+                                    else // With init image(s)
+                                    {
+                                        foreach (string initImg in initImages.Values)
                                         {
-                                            args["initImg"] = initImg;
-                                            args["initStrength"] = strength.ToStringDot("0.###");
+                                            foreach (float strength in initStrengths)
+                                            {
+                                                args["initImg"] = initImg;
+                                                args["initStrength"] = strength.ToStringDot("0.###");
 
-                                            if (s.ImgMode == ImgMode.ImageMask)
-                                                args["inpaintMask"] = Inpainting.MaskImagePathDiffusers;
+                                                if (s.ImgMode == ImgMode.ImageMask)
+                                                    args["inpaintMask"] = Inpainting.MaskImagePathDiffusers;
 
-                                            argLists.Add(new Dictionary<string, string>(args));
+                                                argLists.Add(new Dictionary<string, string>(args));
+                                            }
                                         }
                                     }
                                 }
@@ -192,9 +196,9 @@ namespace StableDiffusionGui.Implementations
         public enum GenerationState { Base, Refiner }
         private static GenerationState _genState = GenerationState.Base;
 
-        public static void HandleOutput (string line)
+        public static void HandleOutput(string line)
         {
-            if (TextToImage.Canceled || TextToImage.CurrentTaskSettings == null)
+            if (TextToImage.Canceled || TextToImage.CurrentTaskSettings == null || line == null)
                 return;
 
             Logger.Log(line, true, false, Constants.Lognames.Sd);
@@ -224,14 +228,14 @@ namespace StableDiffusionGui.Implementations
                 if (!Logger.LastUiLine.MatchesWildcard("*Generated*image*in*"))
                     Logger.LogIfLastLineDoesNotContainMsg($"Generating...");
 
-                float refineStrength = TextToImage.CurrentTask.Config.SdXlRefinerStrength;
-                float percentMultiplier = _genState == GenerationState.Base ? refineStrength : (1f - refineStrength);
-                int percent = (line.Split("%|")[0].GetInt() * percentMultiplier).RoundToInt();
+                int percent = 0;
 
-                if (_genState == GenerationState.Refiner)
-                    percent += (100f * refineStrength).RoundToInt();
+                if (_genState == GenerationState.Base)
+                    percent = (line.Split("%|")[0].GetInt() * 0.7).RoundToInt();
+                else
+                    percent = (line.Split("%|")[0].GetInt() * 0.3).RoundToInt() + 70;
 
-                if (percent > 0 && percent <= 100)
+                if (percent >= 0 && percent < 100)
                     Program.MainForm.SetProgressImg(percent);
             }
         }

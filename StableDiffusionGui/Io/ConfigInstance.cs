@@ -129,7 +129,7 @@ namespace StableDiffusionGui.Io
             if (ramGb > 22f) ImageCacheMaxSizeMb = 256;
 
             SdXlOptimize = true;
-            SdXlRefinerStrength = 0.75f;
+            SdXlRefinerStrength = 0.2f;
         }
 
         public ConfigInstance Clone()

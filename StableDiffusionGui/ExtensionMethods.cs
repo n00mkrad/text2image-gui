@@ -289,7 +289,7 @@ namespace StableDiffusionGui
             return filename + suffix + ext;
         }
 
-        public static string ToStringDot(this float f, string format = "")
+        public static string ToStringDot(this float f, string format = "0.######")
         {
             if (string.IsNullOrWhiteSpace(format))
                 return f.ToString().Replace(",", ".");

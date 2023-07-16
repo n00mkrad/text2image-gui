@@ -18,6 +18,7 @@ namespace StableDiffusionGui.Data
         public string NegativePrompt { get; set; } = "";
         public int Iterations { get; set; } = 1;
         public int[] Steps { get; set; } = new int[0];
+        public float[] RefinerStrengths { get; set; } = new float[0];
         public string[] InitImgs { get; set; } = new string[] { "" };
         public float[] InitStrengths { get; set; } = new float[0];
         [JsonIgnore]
@@ -61,10 +62,9 @@ namespace StableDiffusionGui.Data
             {
                 int iniImgMult = (InitImgs == null || InitImgs.Length < 1) ? 1 : InitImgs.Length * InitStrengths.Length.Clamp(1, int.MaxValue); // 1 if no inits, otherwise init count
                 int scalesMult = ScalesTxt.Length.Clamp(1, int.MaxValue) * ScalesImg.Length.Clamp(1, int.MaxValue); // Use 1 instead of 0 for empty lists
-                int stepsMult = Steps.Length.Clamp(1, int.MaxValue);
                 int lorasMult = Loras != null && Loras.Count == 1 ? Loras.First().Value.Count : 1;
 
-                count = Prompts.Length * Iterations * scalesMult * stepsMult * iniImgMult * lorasMult;
+                count = Prompts.Length * Iterations * scalesMult * Steps.Length * iniImgMult * lorasMult * RefinerStrengths.Length;
 
                 if (ConfigParser.UpscaleAndSaveOriginals(config))
                     count *= 2;
