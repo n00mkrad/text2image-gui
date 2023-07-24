@@ -18,7 +18,7 @@ namespace StableDiffusionGui.Main
         {
             public enum Precision { Fp16, Fp32 }
             public enum Format { Diffusers, Pytorch, Safetensors, DiffusersOnnx }
-            public enum Type { Normal, Vae, Embedding, Lora }
+            public enum Type { Normal, Vae, Refiner, Embedding, Lora }
             public enum SdArch { Automatic, V1, V2, V2V }
         }
 
@@ -28,7 +28,7 @@ namespace StableDiffusionGui.Main
             public enum Sampler { K_Dpmpp_2M, Dpmpp_2M, Euler, K_Euler, Euler_A, Ddim, Lms, Plms, Heun, Dpm_2, Dpm_2_A }
             public enum SeamlessMode { Disabled, SeamlessBoth, SeamlessVert, SeamlessHor }
             public enum SymmetryMode { Disabled, SymVert, SymHor, SymBoth }
-            public enum ImgMode { InitializationImage, ImageMask, TextMask, Outpainting }
+            public enum ImgMode { InitializationImage, ImageMask, Outpainting }
         }
 
         public class Utils

@@ -15,9 +15,13 @@ using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
 namespace StableDiffusionGui.Implementations
 {
-    internal class SdXl
+    internal class SdXl : IImplementation
     {
-        public static async Task Run(TtiSettings s, string outPath)
+        public List<string> LastMessages { get => _lastMessages; }
+        private List<string> _lastMessages = new List<string>();
+        private bool _hasErrored = false;
+
+        public async Task Run(TtiSettings s, string outPath)
         {
             try
             {
@@ -29,8 +33,8 @@ namespace StableDiffusionGui.Implementations
                     return;
 
                 OrderedDictionary initImages = s.InitImgs != null && s.InitImgs.Length > 0 ? await TtiUtils.CreateResizedInitImagesIfNeeded(s.InitImgs.ToList(), s.Res) : null;
-
                 long startSeed = s.Seed;
+                bool refine = s.RefinerStrengths.All(rs => rs >= 0.05f);
 
                 List<Dictionary<string, string>> argLists = new List<Dictionary<string, string>>(); // List of all args for each command
                 Dictionary<string, string> args = new Dictionary<string, string>(); // List of args for current command
@@ -120,22 +124,41 @@ namespace StableDiffusionGui.Implementations
                             mode = "inpaint";
                     }
 
-                    var scriptArgs = new List<string> { "-p SdXl" };
-                    scriptArgs.Add($"-g {mode}");
-                    scriptArgs.Add($"-m {model.FullName.Wrap()}");
-                    scriptArgs.Add($"-o {outPath.Wrap(true)}");
+                    var scriptArgs = new List<string>
+                    {
+                        $"-p SdXl",
+                        $"-g {mode}",
+                        $"-m {model.FullName.Wrap()}",
+                        $"-o {outPath.Wrap(true)}"
+                    };
 
                     string refineModelName = model.Name.Replace("base", "refiner");
                     string refinePath = Path.Combine(model.Directory.FullName, refineModelName);
 
-                    if (refinePath != model.FullName && IoUtils.IsPathValid(refinePath))
+                    if(refine)
                     {
-                        Logger.Log($"Found Refiner Model: {refineModelName}");
-                        scriptArgs.Add($"-m2 {refinePath.Wrap()}");
-                    }
-                    else
-                    {
-                        Logger.Log("Warning: Refiner model not found.");
+                        if (refinePath != model.FullName && IoUtils.IsPathValid(refinePath))
+                        {
+                            Logger.Log($"Using Refiner Model '{refineModelName}'.");
+                            scriptArgs.Add($"-m2 {refinePath.Wrap()}");
+                        }
+                        else
+                        {
+                            var refinersAll = Models.GetModels(Enums.Models.Type.Refiner, Implementation.SdXl);
+                            var refinersDiffFirst = refinersAll.Where(m => m.Format == Enums.Models.Format.Diffusers).ToList();
+                            refinersDiffFirst.AddRange(refinersAll.Where(m => m.Format == Enums.Models.Format.Safetensors).ToList());
+
+                            if (refinersDiffFirst.Any())
+                            {
+                                string refineName = refineModelName != model.Name ? $"'{refineModelName}' " : "";
+                                Logger.Log($"No corresponding refiner model {refineName}found, using '{refinersDiffFirst.First().Name}' instead.");
+                                scriptArgs.Add($"-m2 {refinersDiffFirst.First().FullName.Wrap()}");
+                            }
+                            else
+                            {
+                                Logger.Log("Warning: No refiner model found.");
+                            }
+                        }
                     }
 
                     if (Config.Instance.SdXlOptimize)
@@ -158,10 +181,11 @@ namespace StableDiffusionGui.Implementations
                         OsUtils.KillProcessTree(TtiProcess.CurrentProcess.Id);
                     }
 
-                    TtiProcessOutputHandler.Reset();
+                    ResetLogger();
                     _genState = GenerationState.Base;
 
-                    Logger.Log($"Loading Stable Diffusion (XL) with model {s.Model.Trunc(80).Wrap()}...");
+                    string modelStr = refine ? "(Base+Refiner)" : "(Base)";
+                    Logger.Log($"Loading Stable Diffusion XL with model {s.Model.Trunc(80).Wrap()} {modelStr}...");
 
                     TtiProcess.ProcessExistWasIntentional = false;
                     py.Start();
@@ -179,7 +203,7 @@ namespace StableDiffusionGui.Implementations
                 }
                 else
                 {
-                    TtiProcessOutputHandler.Reset();
+                    ResetLogger();
                     TextToImage.CurrentTask.Processes.Add(TtiProcess.CurrentProcess);
                 }
 
@@ -194,9 +218,10 @@ namespace StableDiffusionGui.Implementations
         }
 
         public enum GenerationState { Base, Refiner }
-        private static GenerationState _genState = GenerationState.Base;
+        private GenerationState _genState = GenerationState.Base;
+        private float _refineFrac = 0.7f;
 
-        public static void HandleOutput(string line)
+        public void HandleOutput(string line)
         {
             if (TextToImage.Canceled || TextToImage.CurrentTaskSettings == null || line == null)
                 return;
@@ -205,12 +230,17 @@ namespace StableDiffusionGui.Implementations
             TtiProcessOutputHandler.LastMessages.Insert(0, line);
 
             bool ellipsis = Program.MainForm.LogText.EndsWith("...");
-            bool replace = ellipsis || Logger.LastUiLine.MatchesWildcard("*Image*generated*in*");
+            // bool replace = ellipsis || Logger.LastUiLine.MatchesWildcard("*Image*generated*in*");
 
             if (line.StartsWith("Model loaded"))
             {
                 Logger.Log($"{line}", false, ellipsis);
                 ImageExport.TimeSinceLastImage.Restart();
+            }
+
+            if (line.Contains("refine_frac = "))
+            {
+                _refineFrac = line.Split("refine_frac =")[1].GetFloat();
             }
 
             if (line.Contains("Running base model"))
@@ -231,13 +261,53 @@ namespace StableDiffusionGui.Implementations
                 int percent = 0;
 
                 if (_genState == GenerationState.Base)
-                    percent = (line.Split("%|")[0].GetInt() * 0.7).RoundToInt();
+                    percent = (line.Split("%|")[0].GetInt() * _refineFrac).RoundToInt();
                 else
-                    percent = (line.Split("%|")[0].GetInt() * 0.3).RoundToInt() + 70;
+                    percent = (line.Split("%|")[0].GetInt() * 1.0f - _refineFrac).RoundToInt() + (100 * _refineFrac).RoundToInt();
 
                 if (percent >= 0 && percent < 100)
                     Program.MainForm.SetProgressImg(percent);
             }
+
+            TtiProcessOutputHandler.HandleLogGeneric(this, line, _hasErrored);
+        }
+
+        public void ResetLogger()
+        {
+            _hasErrored = false;
+            LastMessages.Clear();
+        }
+
+        public async Task Cancel()
+        {
+            Program.MainForm.runBtn.Enabled = false;
+
+            await TtiProcess.WriteStdIn("stop", 0, true);
+
+            await Task.Delay(100);
+
+            while (true)
+            {
+                var entries = Logger.GetLastEntries(Constants.Lognames.Sd, 5);
+                Dictionary<string, TimeSpan> linesWithAge = new Dictionary<string, TimeSpan>();
+
+                foreach (Logger.Entry entry in entries)
+                    linesWithAge[entry.Message] = DateTime.Now - entry.TimeDequeue;
+
+                linesWithAge = linesWithAge.Where(x => x.Value.TotalMilliseconds >= 0).ToDictionary(p => p.Key, p => p.Value);
+
+                if (linesWithAge.Count > 0)
+                {
+                    var lastLine = linesWithAge.Last();
+
+                    if (lastLine.Value.TotalMilliseconds > 2000)
+                        break;
+                }
+
+                await Task.Delay(100);
+            }
+
+            Program.MainForm.runBtn.Enabled = true;
         }
     }
 }

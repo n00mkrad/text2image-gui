@@ -1,10 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using StableDiffusionGui.Data;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace StableDiffusionGui.Implementations
 {
     public interface IImplementation
     {
-        Task Run(string[] prompts, string negPrompt, int iterations, Dictionary<string, string> parameters, string outPath);
+        List<string> LastMessages { get; }
+        Task Run(TtiSettings s, string outPath);
+        void HandleOutput(string line);
+        Task Cancel ();
     }
 }

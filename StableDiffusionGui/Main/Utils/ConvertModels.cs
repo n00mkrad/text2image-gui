@@ -126,7 +126,12 @@ namespace StableDiffusionGui.Main.Utils
                             Logger.Log($"{(deleteSuccess ? "Deleted" : "Failed to delete")} input file '{model.Name}'.");
                     }
 
-                    return Models.GetModelsAll().Where(m => m.FullName == outPath).FirstOrDefault();
+                    var mdl = Models.GetModelsAll().Where(m => m.FullName == outPath).FirstOrDefault();
+
+                    if (mdl == null)
+                        return new Model(outPath, formatOut, Enums.Models.Type.Normal);
+                    else
+                        return mdl;
                 }
                 else
                 {

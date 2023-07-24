@@ -13,9 +13,13 @@ using System.Threading.Tasks;
 
 namespace StableDiffusionGui.Implementations
 {
-    internal class InstructPixToPix
+    internal class InstructPixToPix : IImplementation
     {
-        public static async Task Run(TtiSettings s, string outPath)
+        public List<string> LastMessages { get => _lastMessages; }
+        private List<string> _lastMessages = new List<string>();
+        private bool _hasErrored = false;
+
+        public async Task Run(TtiSettings s, string outPath)
         {
             try
             {
@@ -98,8 +102,8 @@ namespace StableDiffusionGui.Implementations
 
                     if (!OsUtils.ShowHiddenCmd())
                     {
-                        py.OutputDataReceived += (sender, line) => { TtiProcessOutputHandler.LogOutput(line.Data); };
-                        py.ErrorDataReceived += (sender, line) => { TtiProcessOutputHandler.LogOutput(line.Data, true); };
+                        py.OutputDataReceived += (sender, line) => { HandleOutput(line.Data); };
+                        py.ErrorDataReceived += (sender, line) => { HandleOutput(line.Data); };
                     }
 
                     if (TtiProcess.CurrentProcess != null)
@@ -110,7 +114,7 @@ namespace StableDiffusionGui.Implementations
 
                     Logger.Log($"Loading Stable Diffusion (InstructPix2Pix)...");
 
-                    TtiProcessOutputHandler.Reset();
+                    ResetLogger();
                     TtiProcess.CurrentProcess = py;
                     TtiProcess.ProcessExistWasIntentional = false;
                     py.Start();
@@ -127,7 +131,7 @@ namespace StableDiffusionGui.Implementations
                 }
                 else
                 {
-                    TtiProcessOutputHandler.Reset();
+                    ResetLogger();
                     TextToImage.CurrentTask.Processes.Add(TtiProcess.CurrentProcess);
                 }
 
@@ -141,7 +145,7 @@ namespace StableDiffusionGui.Implementations
             }
         }
 
-        public static string GetImageCountLogString(OrderedDictionary initImages, int prompts, int iterations, int steps, int scalesTxt, int scalesImg, int argLists)
+        public string GetImageCountLogString(OrderedDictionary initImages, int prompts, int iterations, int steps, int scalesTxt, int scalesImg, int argLists)
         {
             string initsStr = initImages != null ? $" and {initImages.Count} Image{(initImages.Count != 1 ? "s" : "")}" : "";
             string log = $"{prompts} Prompt{(prompts != 1 ? "s" : "")} * {iterations} Image{(iterations != 1 ? "s" : "")} * {steps} Step Value{(steps != 1 ? "s" : "")} * {scalesTxt} (Prompt) * {scalesImg} (Image) Scale Values{initsStr} = {argLists} Images Total";
@@ -152,11 +156,54 @@ namespace StableDiffusionGui.Implementations
             return $"{log}.";
         }
 
-        public static async Task Cancel()
+        public void HandleOutput(string line)
+        {
+            if (TextToImage.Canceled || TextToImage.CurrentTaskSettings == null || line == null)
+                return;
+
+            Logger.Log(line, true, false, Constants.Lognames.Sd);
+            _lastMessages.Insert(0, line);
+
+            bool ellipsis = Program.MainForm.LogText.EndsWith("...");
+            bool replace = ellipsis || Logger.LastUiLine.MatchesWildcard("*Image*generated*in*");
+
+            if (line.StartsWith("Model loaded"))
+            {
+                Logger.Log($"{line}", false, ellipsis);
+            }
+
+            if (!TextToImage.Canceled && line.Trim().StartsWith("0%") && line.Contains("[00:00<?, ?it/s]"))
+            {
+                ImageExport.TimeSinceLastImage.Restart();
+            }
+
+            if (!TextToImage.Canceled && line.MatchesWildcard("*%|*| *") && !line.Contains("Fetching ") && !line.Contains("Downloading "))
+            {
+                if (!Logger.LastUiLine.MatchesWildcard("*Generated*image*in*") && !line.Contains("B/s"))
+                    Logger.LogIfLastLineDoesNotContainMsg($"Generating...");
+
+                int percent = line.Split("%|")[0].GetInt();
+
+                if (percent > 0 && percent <= 100)
+                {
+                    Program.MainForm.SetProgressImg(percent);
+                }
+            }
+
+            TtiProcessOutputHandler.HandleLogGeneric(this, line, _hasErrored);
+        }
+
+        public void ResetLogger()
+        {
+            _hasErrored = false;
+            LastMessages.Clear();
+        }
+
+        public async Task Cancel()
         {
             Program.MainForm.runBtn.Enabled = false;
 
-            await TtiProcess.WriteStdIn($"stop", 0, true);
+            await TtiProcess.WriteStdIn("stop", 0, true);
 
             await Task.Delay(100);
 

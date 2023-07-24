@@ -62,7 +62,7 @@ namespace StableDiffusionGui.Forms
                 return implementation.Supports(Feature.Embeddings) && comboxEmbeddingList.Items.Count > 0;
 
             if (control == textboxClipsegMask)
-                return (ImgMode)comboxInpaintMode.SelectedIndex == ImgMode.TextMask;
+                return false; // return (ImgMode)comboxInpaintMode.SelectedIndex == ImgMode.TextMask;
 
             if (control == panelResizeGravity || control == labelResChange)
                 return comboxInpaintMode.Visible && (ImgMode)comboxInpaintMode.SelectedIndex == ImgMode.Outpainting;

@@ -14,9 +14,13 @@ using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
 namespace StableDiffusionGui.Implementations
 {
-    internal class SdOnnx
+    internal class SdOnnx : IImplementation
     {
-        public static async Task Run(TtiSettings s, string outPath)
+        public List<string> LastMessages { get => _lastMessages; set => _lastMessages = value; }
+        private List<string> _lastMessages = new List<string>();
+        private bool _hasErrored = false;
+
+        public async Task Run(TtiSettings s, string outPath)
         {
             try
             {
@@ -121,8 +125,8 @@ namespace StableDiffusionGui.Implementations
 
                     if (!OsUtils.ShowHiddenCmd())
                     {
-                        py.OutputDataReceived += (sender, line) => { TtiProcessOutputHandler.LogOutput(line.Data); };
-                        py.ErrorDataReceived += (sender, line) => { TtiProcessOutputHandler.LogOutput(line.Data, true); };
+                        py.OutputDataReceived += (sender, line) => { HandleOutput(line.Data); };
+                        py.ErrorDataReceived += (sender, line) => { HandleOutput(line.Data); };
                     }
 
                     if (TtiProcess.CurrentProcess != null)
@@ -131,7 +135,7 @@ namespace StableDiffusionGui.Implementations
                         OsUtils.KillProcessTree(TtiProcess.CurrentProcess.Id);
                     }
 
-                    TtiProcessOutputHandler.Reset();
+                    ResetLogger();
 
                     Logger.Log($"Loading Stable Diffusion (ONNX) with model {s.Model.Trunc(80).Wrap()}...");
 
@@ -151,7 +155,7 @@ namespace StableDiffusionGui.Implementations
                 }
                 else
                 {
-                    TtiProcessOutputHandler.Reset();
+                    ResetLogger();
                     TextToImage.CurrentTask.Processes.Add(TtiProcess.CurrentProcess);
                 }
 
@@ -163,6 +167,79 @@ namespace StableDiffusionGui.Implementations
                 Logger.Log($"Unhandled Stable Diffusion Error: {ex.Message}");
                 Logger.Log(ex.StackTrace, true);
             }
+        }
+
+        public void HandleOutput(string line)
+        {
+            if (TextToImage.Canceled || TextToImage.CurrentTaskSettings == null || line == null)
+                return;
+
+            Logger.Log(line, true, false, Constants.Lognames.Sd);
+            _lastMessages.Insert(0, line);
+
+            bool ellipsis = Program.MainForm.LogText.EndsWith("...");
+            bool replace = ellipsis || Logger.LastUiLine.MatchesWildcard("*Image*generated*in*");
+
+            if (line.StartsWith("Model loaded"))
+            {
+                Logger.Log($"{line}", false, ellipsis);
+            }
+
+            if (!TextToImage.Canceled && line.Trim().StartsWith("0%") && line.Contains("[00:00<?, ?it/s]"))
+            {
+                ImageExport.TimeSinceLastImage.Restart();
+            }
+
+            if (!TextToImage.Canceled && line.MatchesWildcard("*%|*| *") && !line.Contains("Fetching ") && !line.Contains("Loading pipeline components"))
+            {
+                if (!Logger.LastUiLine.MatchesWildcard("*Generated*image*in*"))
+                    Logger.LogIfLastLineDoesNotContainMsg($"Generating...");
+
+                int percent = line.Split("%|")[0].GetInt();
+
+                if (percent > 0 && percent <= 100)
+                    Program.MainForm.SetProgressImg(percent);
+            }
+
+            TtiProcessOutputHandler.HandleLogGeneric(this, line, _hasErrored);
+        }
+
+        public void ResetLogger()
+        {
+            _hasErrored = false;
+            LastMessages.Clear();
+        }
+
+        public async Task Cancel()
+        {
+            Program.MainForm.runBtn.Enabled = false;
+
+            await TtiProcess.WriteStdIn("stop", 0, true);
+
+            await Task.Delay(100);
+
+            while (true)
+            {
+                var entries = Logger.GetLastEntries(Constants.Lognames.Sd, 5);
+                Dictionary<string, TimeSpan> linesWithAge = new Dictionary<string, TimeSpan>();
+
+                foreach (Logger.Entry entry in entries)
+                    linesWithAge[entry.Message] = DateTime.Now - entry.TimeDequeue;
+
+                linesWithAge = linesWithAge.Where(x => x.Value.TotalMilliseconds >= 0).ToDictionary(p => p.Key, p => p.Value);
+
+                if (linesWithAge.Count > 0)
+                {
+                    var lastLine = linesWithAge.Last();
+
+                    if (lastLine.Value.TotalMilliseconds > 2000)
+                        break;
+                }
+
+                await Task.Delay(100);
+            }
+
+            Program.MainForm.runBtn.Enabled = true;
         }
     }
 }

@@ -53,7 +53,7 @@ namespace StableDiffusionGui.Forms
             {
                 DialogResult dialogResult = UiUtils.ShowMessageBox($"The program is still busy. Are you sure you want to quit?", UiUtils.MessageType.Warning.ToString(), MessageBoxButtons.YesNo);
 
-                if(dialogResult != DialogResult.Yes)
+                if (dialogResult != DialogResult.Yes)
                 {
                     e.Cancel = true;
                     return;
@@ -81,7 +81,7 @@ namespace StableDiffusionGui.Forms
             textboxPromptNeg.MaxLength = 0;
             pictBoxImgViewer.MouseWheel += (s, e) => { ImageViewer.Move(e.Delta > 0); }; // Scroll on MouseWheel
 
-            if(Program.UserArgs.Get(Constants.Args.Install).GetBool() != true) // Don't check for GPU if auto-install is passed (installer runs the check later)
+            if (Program.UserArgs.Get(Constants.Args.Install).GetBool() != true) // Don't check for GPU if auto-install is passed (installer runs the check later)
                 Task.Run(() => MainUi.GetCudaGpus());
 
             Task.Run(() => MainUi.PrintVersion());

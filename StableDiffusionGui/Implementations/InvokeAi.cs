@@ -12,23 +12,31 @@ using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace StableDiffusionGui.Implementations
 {
-    internal class InvokeAi
+    internal class InvokeAi : IImplementation
     {
-        public static int Pid = -1;
+        public List<string> LastMessages { get => _lastMessages; }
+        private List<string> _lastMessages = new List<string>();
+        private static bool _invokeAiLastModelCached = false;
+        public enum HiresFixStatus { NotUpscaling, WaitingForStart, Upscaling }
+        private static HiresFixStatus _hiresFixStatus;
+        private bool _hasErrored = false;
+
+        public int Pid = -1;
 
         public enum FixAction { Upscale, FaceRestoration }
 
         public static Dictionary<string, string> PostProcessMovePaths = new Dictionary<string, string>();
         public static EasyDict<string, string> EmbeddingsFilesTriggers = new EasyDict<string, string>(); // Key = Filename without ext, Value = Trigger
 
-        private static OperationOrder _opOrder = new OperationOrder();
-        private static Action<OperationOrder.LoopAction> _loopIterations, _loopPrompts, _loopScales, _loopSteps, _loopInits, _loopInitStrengths, _loopLoraWeights;
+        private OperationOrder _opOrder = new OperationOrder();
+        private Action<OperationOrder.LoopAction> _loopIterations, _loopPrompts, _loopScales, _loopSteps, _loopInits, _loopInitStrengths, _loopLoraWeights;
 
-        public static async Task Run(TtiSettings s, string outPath)
+        public async Task Run(TtiSettings s, string outPath)
         {
             try
             {
@@ -58,7 +66,7 @@ namespace StableDiffusionGui.Implementations
                 args["hiresFix"] = s.HiresFix ? "--hires_fix" : "";
                 args["perlin"] = s.Perlin > 0f ? $"--perlin {s.Perlin.ToStringDot()}" : "";
                 args["threshold"] = s.Threshold > 0 ? $"--threshold {s.Threshold}" : "";
-                args["clipSegMask"] = (s.ImgMode == Enums.StableDiffusion.ImgMode.TextMask && !string.IsNullOrWhiteSpace(s.ClipSegMask)) ? $"-tm {s.ClipSegMask.Wrap()}" : "";
+                // args["clipSegMask"] = (s.ImgMode == Enums.StableDiffusion.ImgMode.TextMask && !string.IsNullOrWhiteSpace(s.ClipSegMask)) ? $"-tm {s.ClipSegMask.Wrap()}" : "";
                 args["debug"] = s.AppendArgs;
                 args["res"] = $"-W {s.Res.Width} -H {s.Res.Height}";
                 args["sampler"] = $"-A {s.Sampler.ToString().Lower()}";
@@ -222,8 +230,8 @@ namespace StableDiffusionGui.Implementations
 
                     if (!OsUtils.ShowHiddenCmd())
                     {
-                        py.OutputDataReceived += (sender, line) => { TtiProcessOutputHandler.LogOutput(line.Data); };
-                        py.ErrorDataReceived += (sender, line) => { TtiProcessOutputHandler.LogOutput(line.Data, true); };
+                        py.OutputDataReceived += (sender, line) => { HandleOutput(line.Data); };
+                        py.ErrorDataReceived += (sender, line) => { HandleOutput(line.Data); };
                     }
 
                     if (TtiProcess.CurrentProcess != null)
@@ -232,7 +240,7 @@ namespace StableDiffusionGui.Implementations
                         OsUtils.KillProcessTree(TtiProcess.CurrentProcess.Id);
                     }
 
-                    TtiProcessOutputHandler.Reset();
+                    ResetLogger();
 
                     string logMdl = modelFile.FormatIndependentName.Trunc(vae.IsNotEmpty() ? 40 : 80).Wrap();
                     string logVae = vaeFile == null ? "" : vaeFile.FormatIndependentName.Trunc(40).Wrap();
@@ -259,7 +267,7 @@ namespace StableDiffusionGui.Implementations
                 }
                 else
                 {
-                    TtiProcessOutputHandler.Reset();
+                    ResetLogger();
                     await SetModel(modelFile, vaeFile);
                     TextToImage.CurrentTask.Processes.Add(TtiProcess.CurrentProcess);
                 }
@@ -290,7 +298,7 @@ namespace StableDiffusionGui.Implementations
             }
         }
 
-        static void RunNextLoopAction(OperationOrder.LoopAction previousAction, Action doneAction)
+        void RunNextLoopAction(OperationOrder.LoopAction previousAction, Action doneAction)
         {
             int actionIndex = _opOrder.LoopOrder.IndexOf(previousAction);
 
@@ -300,7 +308,7 @@ namespace StableDiffusionGui.Implementations
                 doneAction(); // End
         }
 
-        static void RunLoopAction(OperationOrder.LoopAction a)
+        void RunLoopAction(OperationOrder.LoopAction a)
         {
             if (a == OperationOrder.LoopAction.Prompt) _loopPrompts(a);
             if (a == OperationOrder.LoopAction.Iteration) _loopIterations(a);
@@ -311,7 +319,7 @@ namespace StableDiffusionGui.Implementations
             if (a == OperationOrder.LoopAction.LoraWeight) _loopLoraWeights(a);
         }
 
-        public static string GetImageCountLogString(OrderedDictionary initImages, float[] initStrengths, string[] prompts, int iterations, int[] steps, float[] scales, List<EasyDict<string, string>> argLists)
+        public string GetImageCountLogString(OrderedDictionary initImages, float[] initStrengths, string[] prompts, int iterations, int[] steps, float[] scales, List<EasyDict<string, string>> argLists)
         {
             string initsStr = initImages != null ? $" and {initImages.Count} Image{(initImages.Count != 1 ? "s" : "")} Using {initStrengths.Length} Strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
             string log = $"{prompts.Length} Prompt{(prompts.Length != 1 ? "s" : "")} * {iterations} Image{(iterations != 1 ? "s" : "")} * {steps.Length} Step Value{(steps.Length != 1 ? "s" : "")} * {scales.Length} Scale{(scales.Length != 1 ? "s" : "")}{initsStr} = {argLists.Count} Images Total";
@@ -418,7 +426,7 @@ namespace StableDiffusionGui.Implementations
             }
         }
 
-        public static async Task SetModel(Model mdl, Model vae, bool initial = false)
+        public async Task SetModel(Model mdl, Model vae, bool initial = false)
         {
             if (mdl.Format == Enums.Models.Format.Diffusers)
                 Models.SetDiffusersClipSkip(mdl, Config.Instance.ClipSkip);
@@ -430,7 +438,7 @@ namespace StableDiffusionGui.Implementations
             await TtiProcess.WriteStdIn($"!switch {InvokeAiUtils.GetMdlNameForYaml(mdl, vae)}");
         }
 
-        public static async Task Cancel()
+        public async Task Cancel()
         {
             List<string> lastLogLines = Logger.GetLastLines(Constants.Lognames.Sd, 15);
 
@@ -440,13 +448,177 @@ namespace StableDiffusionGui.Implementations
                 TtiProcess.KillAll();
         }
 
-        public static void SendCtrlC()
+        public void SendCtrlC()
         {
             if (Pid >= 0)
                 OsUtils.SendCtrlC(Pid);
         }
 
-        private static async Task WaitForCancel()
+        public void HandleOutput(string line)
+        {
+            if (TextToImage.Canceled || TextToImage.CurrentTaskSettings == null || line == null)
+                return;
+
+            Logger.Log(line, true, false, Constants.Lognames.Sd);
+            TtiProcessOutputHandler.LastMessages.Insert(0, line);
+
+            bool ellipsis = Program.MainForm.LogText.EndsWith("...");
+            string errMsg = "";
+            bool replace = ellipsis || Logger.LastUiLine.MatchesWildcard("*Generated*image*in*");
+
+            if (!TextToImage.Canceled && line.StartsWith(">> Retrieving model "))
+                _invokeAiLastModelCached = true;
+            else if (!TextToImage.Canceled && line.StartsWith(">> Loading ") && line.Contains(" from "))
+                _invokeAiLastModelCached = false;
+
+            if (!TextToImage.Canceled && _hiresFixStatus == HiresFixStatus.WaitingForStart && line.Remove(" ").MatchesWildcard(@"0%||0/*[00:00<?,?it/s]*"))
+            {
+                _hiresFixStatus = HiresFixStatus.Upscaling;
+            }
+
+            if (!TextToImage.Canceled && line.Remove(" ") == @"Generating:0%||0/1[00:00<?,?it/s]")
+            {
+                ImageExport.TimeSinceLastImage.Restart();
+                _hiresFixStatus = HiresFixStatus.NotUpscaling;
+            }
+
+            if (!TextToImage.Canceled && line.StartsWith(">> Interpolating from"))
+            {
+                _hiresFixStatus = _hiresFixStatus = HiresFixStatus.WaitingForStart;
+            }
+
+            if (!TextToImage.Canceled && line.MatchesWildcard("*%|*|*/*") && !line.Lower().Contains("downloading") && !line.Contains("Loading pipeline components"))
+            {
+                string progStr = line.Split('|')[2].Trim().Split(' ')[0].Trim(); // => e.g. "3/50"
+
+                if (!Logger.LastUiLine.MatchesWildcard("*Generated*image*in*"))
+                    Logger.LogIfLastLineDoesNotContainMsg($"Generating...", false, ellipsis);
+
+                try
+                {
+                    int progressDivisor = TextToImage.CurrentTaskSettings.HiresFix ? 2 : 1;
+                    int[] stepsCurrentTarget = progStr.Split('/').Select(x => x.GetInt()).ToArray();
+                    int percent = ((((float)stepsCurrentTarget[0] / stepsCurrentTarget[1]) * 100f) / progressDivisor).RoundToInt();
+
+                    if (TextToImage.CurrentTaskSettings.HiresFix && _hiresFixStatus == HiresFixStatus.Upscaling)
+                        percent += 50;
+
+                    if (percent > 0 && percent <= 100)
+                        Program.MainForm.SetProgressImg(percent);
+                }
+                catch { }
+            }
+
+            if (!TextToImage.Canceled && line.StartsWith("[") && !line.Contains(".png: !fix "))
+            {
+                string outPath = Path.Combine(Paths.GetSessionDataPath(), "out").Replace('\\', '/');
+
+                if (line.Contains(outPath) && new Regex(@"\[\d+(\.\d+)?\] [A-Z]:\/").Matches(line.Trim()).Count >= 1)
+                {
+                    string path = outPath + line.Split(outPath)[1].Split(':')[0];
+                    ImageExport.Export(path);
+                }
+            }
+
+            if (line.Contains(".png: !fix "))
+            {
+                try
+                {
+                    if (LastMessages.Take(5).Any(x => x.Contains("ESRGAN is disabled.")))
+                    {
+                        Logger.Log($"Post-Processing is disabled, can't run enhancement.");
+                    }
+                    else
+                    {
+                        string pathSource = line.Split(": !fix ")[1].Split(".png ")[0] + ".png";
+                        string pathOut = line.Substring(line.IndexOf("] ") + 2).Split(": !fix ")[0];
+                        TtiUtils.ExportPostprocessedImage(pathSource, pathOut);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.Log($"Error parsing !fix log message: {ex.Message}\n{ex.StackTrace}", true);
+                }
+            }
+
+            if (line.Trim().StartsWith("invoke_pid="))
+            {
+                Pid = line.Split('=')[1].GetInt();
+            }
+
+            if (line.Trim().StartsWith(Constants.LogMsgs.Invoke.TiTriggers))
+            {
+                Logger.Log($"Model {(_invokeAiLastModelCached ? " retrieved from RAM cache" : "loaded")}.", false, ellipsis);
+            }
+
+            if (line.Trim().StartsWith(">> Preparing tokens for textual inversion"))
+            {
+                Logger.Log("Loading textual inversion...", false, ellipsis);
+            }
+
+            // if (line.Trim().StartsWith(">> Embedding not found:"))
+            // {
+            //     string emb = line.Split(": ").Last();
+            //     Logger.Log($"Warning: No compatible embedding with trigger '{emb}' found!", false, ellipsis);
+            // }
+
+            if (line.Trim().StartsWith(">> Converting legacy checkpoint"))
+            {
+                Logger.Log($"Warning: Model is not in Diffusers format, this makes loading slower due to conversion. For a speedup, convert it to a Diffusers model.", false, ellipsis);
+            }
+
+            if (line.Contains("is not a known model name. Cannot change"))
+            {
+                Logger.Log($"No model with this name and VAE found. Can't change model.", false, ellipsis);
+            }
+
+            if (!_hasErrored && line.Contains("An error occurred while processing your prompt"))
+            {
+                Logger.Log(line);
+                _hasErrored = true;
+            }
+
+            if (!_hasErrored && line.Trim().EndsWith(" is not a known model name. Please check your models.yaml file"))
+            {
+                errMsg = $"Failed to switch models.\n\nPossibly you tried to load an incompatible model.";
+                _hasErrored = true;
+            }
+
+            if (!_hasErrored && line.Trim().StartsWith("** model ") && line.Contains("could not be loaded:"))
+            {
+                errMsg = $"Failed to load model.";
+
+                if (line.Contains("state_dict"))
+                    errMsg += $"\n\nThe model appears to be incompatible.";
+
+                if (line.Contains("pytorch_model.bin"))
+                {
+                    errMsg += "\n\nCache seems to be corrupted and has been cleared. Please try again.";
+                    IoUtils.TryDeleteIfExists(Path.Combine(Environment.ExpandEnvironmentVariables("%USERPROFILE%"), ".cache", "huggingface", "transformers"));
+                    IoUtils.TryDeleteIfExists(Path.Combine(Paths.GetDataPath(), Constants.Dirs.Cache.Root, Constants.Dirs.Cache.Hf));
+                }
+
+                _hasErrored = true;
+            }
+
+            if (line.MatchesWildcard("Added terms: *, *"))
+            {
+                if (line.MatchesWildcard("*, <*>"))
+                    Logger.Log($"Concept keyword: {line.Split("Added terms: *, ").LastOrDefault()}", false, ellipsis);
+                else
+                    Logger.Log($"Concept keyword: <{line.Split("Added terms: *, ").LastOrDefault()}>", false, ellipsis);
+            }
+
+            TtiProcessOutputHandler.HandleLogGeneric(this, line, _hasErrored);
+        }
+
+        public void ResetLogger()
+        {
+            _hasErrored = false;
+            LastMessages.Clear();
+        }
+
+        private async Task WaitForCancel()
         {
             Program.MainForm.runBtn.SetEnabled(false);
 

@@ -1512,10 +1512,10 @@ namespace StableDiffusionGui.Forms
             0,
             0});
             this.sliderRefinerStart.ActualMinimum = new decimal(new int[] {
-            1,
             0,
             0,
-            65536});
+            0,
+            0});
             this.sliderRefinerStart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.sliderRefinerStart.BorderRoundRectSize = new System.Drawing.Size(12, 12);
             this.sliderRefinerStart.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -1530,7 +1530,6 @@ namespace StableDiffusionGui.Forms
             this.sliderRefinerStart.Location = new System.Drawing.Point(0, 0);
             this.sliderRefinerStart.Margin = new System.Windows.Forms.Padding(0);
             this.sliderRefinerStart.Maximum = 20;
-            this.sliderRefinerStart.Minimum = 2;
             this.sliderRefinerStart.Name = "sliderRefinerStart";
             this.sliderRefinerStart.OverlayColor = System.Drawing.Color.White;
             this.sliderRefinerStart.Size = new System.Drawing.Size(308, 25);
@@ -2375,9 +2374,9 @@ namespace StableDiffusionGui.Forms
             this.label25.Location = new System.Drawing.Point(0, 4);
             this.label25.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(113, 13);
+            this.label25.Size = new System.Drawing.Size(181, 13);
             this.label25.TabIndex = 90;
-            this.label25.Text = "Image Refine Strength";
+            this.label25.Text = "Image Refine Strength (0 = Disabled)";
             // 
             // tableLayoutPanel3
             // 

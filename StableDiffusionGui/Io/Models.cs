@@ -102,7 +102,7 @@ namespace StableDiffusionGui.Io
             models = models.Where(m => m.Type == type && supportedFormats.Contains(m.Format));
 
             if(implementation == Implementation.SdXl)
-                models = models.Where(m => m.Size > 5 * 1024 * 1024 * 1024L && m.Name.Lower().Contains("xl") && !m.Name.Lower().Contains("refine"));
+                models = models.Where(m => m.Size > 5 * 1024 * 1024 * 1024L && m.Name.Lower().Contains("xl"));
             else
                 models = models.Where(m => (m.Size > 5 * 1024 * 1024 * 1024L && m.Name.Lower().Contains("xl")) == false);
 
@@ -213,6 +213,9 @@ namespace StableDiffusionGui.Io
 
                 if (parentDirName == Constants.Dirs.Models.Loras)
                     return Enums.Models.Type.Lora;
+
+                if(Path.GetFileName(modelPath).Lower().Contains("refine"))
+                    return Enums.Models.Type.Refiner;
 
                 return Enums.Models.Type.Normal;
             }

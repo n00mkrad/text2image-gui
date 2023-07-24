@@ -4,13 +4,11 @@ using StableDiffusionGui.Implementations;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
-using StableDiffusionGui.Properties;
 using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
@@ -22,8 +20,10 @@ namespace StableDiffusionGui.Main
         public static TtiTaskInfo CurrentTask { get; set; } = null;
         public static TtiSettings CurrentTaskSettings { get; set; } = null;
         public static Implementation LastImplementation { get; set; } = (Implementation)(-1);
+        public static IImplementation LastInstance { get; set; } = null;
         public static long PreviousSeed = -1;
         public static bool Canceled = false;
+        public static bool Canceling = false;
 
         public static bool IsRunningQueue = false;
         public static List<TtiTaskInfo> CompletedTasks = new List<TtiTaskInfo>();
@@ -92,13 +92,13 @@ namespace StableDiffusionGui.Main
 
                 switch (s.Implementation)
                 {
-                    case Implementation.InvokeAi: tasks.Add(InvokeAi.Run(s, tempOutDir)); break;
-                    case Implementation.OptimizedSd: tasks.Add(OptimizedSd.Run(s, tempOutDir)); break;
-                    case Implementation.DiffusersOnnx: tasks.Add(SdOnnx.Run(s, tempOutDir)); break;
-                    case Implementation.InstructPixToPix: tasks.Add(InstructPixToPix.Run(s, tempOutDir)); break;
-                    case Implementation.SdXl: tasks.Add(SdXl.Run(s, tempOutDir)); break;
+                    case Implementation.InvokeAi: LastInstance = (IImplementation)new InvokeAi(); break;
+                    case Implementation.DiffusersOnnx: LastInstance = (IImplementation)new SdOnnx(); break;
+                    case Implementation.InstructPixToPix: LastInstance = (IImplementation)new InstructPixToPix(); break;
+                    case Implementation.SdXl: LastInstance = (IImplementation)new SdXl(); break;
                 }
 
+                tasks.Add(LastInstance.Run(s, tempOutDir));
                 ImageExport.Init(!fromQueue || (fromQueue && iteration == 1));
 
                 if (s.Implementation != Implementation.InvokeAi)
@@ -190,39 +190,53 @@ namespace StableDiffusionGui.Main
             if (Canceled)
                 return;
 
-            Canceled = true;
+            Canceling = true;
 
-            bool manual = reason.Lower().Contains("manually.");
-            bool forceKill = manual && InputUtils.IsHoldingShift; // Shift force-kills the process
-
-            Logger.Log($"Canceling. Reason: {(string.IsNullOrWhiteSpace(reason) ? "None" : reason)} - Implementation: {(CurrentTaskSettings != null ? CurrentTaskSettings.Implementation.ToString() : "None")} - Force Kill: {forceKill}", true);
-
-            if (cancelMode == CancelMode.ForceKill || (CurrentTaskSettings != null && !CurrentTaskSettings.Implementation.Supports(ImplementationInfo.Feature.InteractiveCli)))
-                forceKill = true;
-
-            if (cancelMode != CancelMode.DoNotKill)
+            try
             {
-                if (!forceKill && TtiProcess.IsAiProcessRunning)
-                {
-                    if (CurrentTaskSettings.Implementation == Implementation.InvokeAi)
-                        await InvokeAi.Cancel(); // TODO: Make an interface IImplementation to avoid duplicate lines for each implementation
+                bool manual = reason.Lower().Contains("manually.");
+                bool forceKill = manual && InputUtils.IsHoldingShift; // Shift force-kills the process
 
-                    if (CurrentTaskSettings.Implementation == Implementation.InstructPixToPix)
-                        await InstructPixToPix.Cancel(); // TODO: Make an interface IImplementation to avoid duplicate lines for each implementation
-                }
-                else
+                Logger.Log($"Canceling. Reason: {(string.IsNullOrWhiteSpace(reason) ? "None" : reason)} - Implementation: {(CurrentTaskSettings != null ? CurrentTaskSettings.Implementation.ToString() : "None")} - Force Kill: {forceKill}", true);
+
+                if (cancelMode == CancelMode.ForceKill || (CurrentTaskSettings != null && !CurrentTaskSettings.Implementation.Supports(ImplementationInfo.Feature.InteractiveCli)))
+                    forceKill = true;
+
+                if (cancelMode != CancelMode.DoNotKill)
                 {
-                    TtiProcess.KillAll();
+                    if (!forceKill && TtiProcess.IsAiProcessRunning)
+                    {
+                        await LastInstance.Cancel();
+                    }
+                    else
+                    {
+                        TtiProcess.KillAll();
+                    }
                 }
+
+                Logger.LogIfLastLineDoesNotContainMsg(showMsgBox || manual ? "Canceled." : $"Canceled: {reason.Replace("\n", " ").Trunc(200)}");
+
+                if (!string.IsNullOrWhiteSpace(reason) && showMsgBox)
+                    Task.Run(() => UiUtils.ShowMessageBox($"Canceled:\n\n{reason}"));
+
+                if (Program.State == Program.BusyState.PostProcessing)
+                    Program.SetState(Program.BusyState.Standby);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogException(ex);
             }
 
-            Logger.LogIfLastLineDoesNotContainMsg(showMsgBox || manual ? "Canceled." : $"Canceled: {reason.Replace("\n", " ").Trunc(200)}");
+            Canceling = false;
+            Canceled = true;
+        }
 
-            if (!string.IsNullOrWhiteSpace(reason) && showMsgBox)
-                Task.Run(() => UiUtils.ShowMessageBox($"Canceled:\n\n{reason}"));
+        public static T GetInstance<T>() where T : class
+        {
+            if (LastInstance is T)
+                return LastInstance as T;
 
-            if (Program.State == Program.BusyState.PostProcessing)
-                Program.SetState(Program.BusyState.Standby);
+            return null;
         }
     }
 }

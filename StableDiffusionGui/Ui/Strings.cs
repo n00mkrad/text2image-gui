@@ -25,7 +25,7 @@ namespace StableDiffusionGui.Ui
         {
             { Enums.StableDiffusion.ImgMode.InitializationImage.ToString(), "Initialization Image (Img2Img)" },
             { Enums.StableDiffusion.ImgMode.ImageMask.ToString(), "Inpainting with Mask" },
-            { Enums.StableDiffusion.ImgMode.TextMask.ToString(), "Inpainting with Text Description" },
+            // { Enums.StableDiffusion.ImgMode.TextMask.ToString(), "Inpainting with Text Description" },
         };
 
         public static Dictionary<string, string> Samplers = new Dictionary<string, string>
