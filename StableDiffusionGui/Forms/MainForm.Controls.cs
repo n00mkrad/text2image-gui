@@ -195,10 +195,8 @@ namespace StableDiffusionGui.Forms
 
             var exclusionList = new List<Enums.Models.SdArch>();
 
-            if (Config.Instance.Implementation != Implementation.InvokeAi)
+            if (Config.Instance.Implementation != Implementation.InvokeAi || mdl.Format == Enums.Models.Format.Diffusers || mdl.Format == Enums.Models.Format.DiffusersOnnx)
                 exclusionList = Enum.GetValues(typeof(Enums.Models.SdArch)).Cast<Enums.Models.SdArch>().Skip(1).ToList();
-            else
-                exclusionList = formats.Contains(mdl.Format) ? new List<Enums.Models.SdArch>() : Enum.GetValues(typeof(Enums.Models.SdArch)).Cast<Enums.Models.SdArch>().Take(1).ToList();
 
             comboxModelArch.FillFromEnum<Enums.Models.SdArch>(Strings.SdModelArch, 0, exclusionList);
 

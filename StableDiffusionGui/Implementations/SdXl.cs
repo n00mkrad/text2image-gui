@@ -258,7 +258,7 @@ namespace StableDiffusionGui.Implementations
                 if (!Logger.LastUiLine.MatchesWildcard("*Generated*image*in*"))
                     Logger.LogIfLastLineDoesNotContainMsg($"Generating...");
 
-                int percent = 0;
+                int percent;
                 int prog = line.Split("%|")[0].GetInt();
 
                 if (_genState == GenerationState.Base)
