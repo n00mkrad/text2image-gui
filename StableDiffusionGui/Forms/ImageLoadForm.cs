@@ -74,6 +74,11 @@ namespace StableDiffusionGui.Forms
                     textboxInfo.Text += $"{n}Generated Resolution:{n}{CurrentMetadata.GeneratedResolution.Width}x{CurrentMetadata.GeneratedResolution.Height}{n}";
                     textboxInfo.Text += $"{n}Sampler:{n}{Strings.Samplers.Get(CurrentMetadata.Sampler, true, true)}{n}";
 
+                    if (CurrentMetadata.RefineStrength > 0.001f)
+                    {
+                        textboxInfo.Text += $"{n}Image Refine Strength:{n}{CurrentMetadata.RefineStrength}{n}";
+                    }
+
                     if (CurrentMetadata.InitImgName.IsNotEmpty())
                     {
                         textboxInfo.Text += $"{n}Init Image:{n}{CurrentMetadata.InitImgName}{n}";

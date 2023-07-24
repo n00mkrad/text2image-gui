@@ -8,7 +8,6 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using static StableDiffusionGui.Implementations.InvokeAiMetadata;
 
 namespace StableDiffusionGui.Data
 {
@@ -21,7 +20,6 @@ namespace StableDiffusionGui.Data
         public string ParsedText = "";
         public string Prompt = "";
         public string NegativePrompt = "";
-        public string CombinedPrompt { get { return InvokeAiUtils.GetCombinedPrompt(Prompt, NegativePrompt); } }
         public int Steps = -1;
         public int BatchSize = 1;
         public Size GeneratedResolution = new Size();
@@ -31,11 +29,13 @@ namespace StableDiffusionGui.Data
         public long Seed = -1;
         public string InitImgName = "";
         public float InitStrength = 0f;
+        public float RefineStrength = 0f;
         public string Model = "";
         public EasyDict<string, float> Loras = new EasyDict<string, float>();
         public Enums.StableDiffusion.SeamlessMode SeamlessMode = Enums.StableDiffusion.SeamlessMode.Disabled;
         public Enums.Utils.FaceTool FaceTool = (Enums.Utils.FaceTool)(-1);
         public bool HiResFix = false;
+        public string CombinedPrompt { get { return InvokeAiUtils.GetCombinedPrompt(Prompt, NegativePrompt, Loras); } }
 
         private readonly Dictionary<MetadataType, string> _tags = new Dictionary<MetadataType, string>() {
             { MetadataType.InvokeJson, "sd-metadata: " },
@@ -269,7 +269,6 @@ namespace StableDiffusionGui.Data
         public void LoadInfoNmkdiffusers(string info)
         {
             ParsedText = info;
-
             Dictionary<string, string> dict = info.FromJson<Dictionary<string, string>>();
 
             foreach (var pair in dict)
@@ -282,8 +281,10 @@ namespace StableDiffusionGui.Data
                     case "initStrength": InitStrength = pair.Value.GetFloat(); break;
                     case "steps": Steps = pair.Value.GetInt(); break;
                     case "seed": Seed = pair.Value.GetInt(); break;
+                    case "sampler": Sampler = pair.Value; break;
                     case "scaleTxt": Scale = pair.Value.GetFloat(); break;
                     case "scaleImg": ScaleImg = pair.Value.GetFloat(); break;
+                    case "refineFrac": RefineStrength = 1f - pair.Value.GetFloat(); break;
                     case "w": GeneratedResolution = new Size(pair.Value.GetInt(), GeneratedResolution.Height); break;
                     case "h": GeneratedResolution = new Size(GeneratedResolution.Width, pair.Value.GetInt()); break;
                     default: continue;

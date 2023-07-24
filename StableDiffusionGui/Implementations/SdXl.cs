@@ -259,11 +259,12 @@ namespace StableDiffusionGui.Implementations
                     Logger.LogIfLastLineDoesNotContainMsg($"Generating...");
 
                 int percent = 0;
+                int prog = line.Split("%|")[0].GetInt();
 
                 if (_genState == GenerationState.Base)
-                    percent = (line.Split("%|")[0].GetInt() * _refineFrac).RoundToInt();
+                    percent = (prog * _refineFrac).RoundToInt();
                 else
-                    percent = (line.Split("%|")[0].GetInt() * 1.0f - _refineFrac).RoundToInt() + (100 * _refineFrac).RoundToInt();
+                    percent = (prog * (1.0f - _refineFrac)).RoundToInt() + (100 * _refineFrac).RoundToInt();
 
                 if (percent >= 0 && percent < 100)
                     Program.MainForm.SetProgressImg(percent);

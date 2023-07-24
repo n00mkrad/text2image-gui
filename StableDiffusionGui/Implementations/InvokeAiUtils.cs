@@ -238,6 +238,17 @@ namespace StableDiffusionGui.Implementations
         }
 
         /// <summary> Combines regular prompt, negative prompt, and LoRAs into single InvokeAI prompt </summary>
+        public static string GetCombinedPrompt(string prompt, string negPrompt, EasyDict<string, float> loras = null)
+        {
+            var newDict = new EasyDict<string, List<float>>();
+
+            foreach(var pair in loras)
+                newDict.Add(pair.Key, pair.Value.AsList());
+
+            return GetCombinedPrompt(prompt, negPrompt, newDict);
+        }
+
+        /// <summary> Combines regular prompt, negative prompt, and LoRAs into single InvokeAI prompt </summary>
         public static string GetCombinedPrompt(string prompt, string negPrompt, EasyDict<string, List<float>> loras = null)
         {
             prompt = prompt.Trim();

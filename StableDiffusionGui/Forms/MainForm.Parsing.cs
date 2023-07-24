@@ -30,6 +30,7 @@ namespace StableDiffusionGui.Forms
                 comboxResW.Text = meta.GeneratedResolution.Width.ToString();
                 comboxResH.Text = meta.GeneratedResolution.Height.ToString();
                 checkboxHiresFix.Checked = meta.HiResFix;
+                sliderRefinerStart.ActualValue = (decimal)meta.RefineStrength;
                 upDownSeed.Value = meta.Seed;
                 comboxSampler.SetWithText(meta.Sampler, true, Strings.Samplers);
                 // MainUi.CurrentInitImgPaths = new[] { meta.InitImgName }.Where(x => string.IsNullOrWhiteSpace(x)).ToList(); // Does this even work if we only store the temp path?
@@ -58,15 +59,15 @@ namespace StableDiffusionGui.Forms
 
         public void LoadTtiSettingsIntoUi(TtiSettings s)
         {
-            textboxPrompt.Text = string.Join(Environment.NewLine, s.Prompts);
-            textboxPromptNeg.Text = s.NegativePrompt;
-            upDownIterations.Value = s.Iterations;
-
             ((Action)(() =>
             {
+                textboxPrompt.Text = string.Join(Environment.NewLine, s.Prompts);
+                textboxPromptNeg.Text = s.NegativePrompt;
+                upDownIterations.Value = s.Iterations;
                 SetSliderValues(s.Steps, sliderSteps, textboxExtraSteps);
                 SetSliderValues(s.ScalesTxt, false, sliderScale, textboxExtraScales);
                 SetSliderValues(s.ScalesImg, false, sliderScaleImg, textboxExtraScalesImg);
+                SetSliderValues(s.RefinerStrengths, false, sliderRefinerStart, textboxExtraRefinerValues);
                 MainUi.CurrentInitImgPaths = s.InitImgs.ToList();
                 comboxResW.Text = s.Res.Width.ToString();
                 comboxResH.Text = s.Res.Height.ToString();
