@@ -211,7 +211,6 @@ namespace StableDiffusionGui.Implementations
                     if (TextToImage.Canceled) return;
 
                     Logger.Log($"(Re)starting InvokeAI. Process running: {TtiProcess.IsAiProcessRunning} - Prev startup string: '{TtiProcess.LastStartupSettings}' - New startup string: '{newStartupSettings}'", true);
-
                     TtiProcess.LastStartupSettings = newStartupSettings;
 
                     string invokeExePath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdVenv, "Scripts", "invokeai.exe");

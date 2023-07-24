@@ -191,8 +191,6 @@ namespace StableDiffusionGui.Forms
                 return;
 
             _prevSelectedModel = mdl.FullName;
-            var formats = new List<Enums.Models.Format> { Enums.Models.Format.Pytorch, Enums.Models.Format.Safetensors };
-
             var exclusionList = new List<Enums.Models.SdArch>();
 
             if (Config.Instance.Implementation != Implementation.InvokeAi || mdl.Format == Enums.Models.Format.Diffusers || mdl.Format == Enums.Models.Format.DiffusersOnnx)

@@ -107,22 +107,29 @@ namespace StableDiffusionGui.Implementations
                 string initsStr = initImages != null ? $" and {initImages.Count} image{(initImages.Count != 1 ? "s" : "")} using {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
                 Logger.Log($"{s.Prompts.Length} prompt{(s.Prompts.Length != 1 ? "s" : "")} * {s.Iterations} image{(s.Iterations != 1 ? "s" : "")} * {s.Steps.Length} step value{(s.Steps.Length != 1 ? "s" : "")} * {s.ScalesTxt.Length} scale{(s.ScalesTxt.Length != 1 ? "s" : "")}{initsStr} = {argLists.Count} images total.");
 
-                if (!TtiProcess.IsAiProcessRunning)
+                string mode = "txt2img";
+                bool inpaintingMdl = model.Name.EndsWith(Constants.SuffixesPrefixes.InpaintingMdlSuf);
+
+                if (s.InitImgs != null && s.InitImgs.Length > 0)
                 {
+                    mode = "img2img";
+
+                    if (inpaintingMdl && s.ImgMode != ImgMode.InitializationImage)
+                        mode = "inpaint";
+                }
+
+                string newStartupSettings = $"{mode}{model.FullName}{outPath}";
+
+                if (!TtiProcess.IsAiProcessRunning || (TtiProcess.IsAiProcessRunning && TtiProcess.LastStartupSettings != newStartupSettings))
+                {
+                    if (TextToImage.Canceled) return;
+
+                    Logger.Log($"(Re)starting Nmkdiffusers. Process running: {TtiProcess.IsAiProcessRunning} - Prev startup string: '{TtiProcess.LastStartupSettings}' - New startup string: '{newStartupSettings}'", true);
+                    TtiProcess.LastStartupSettings = newStartupSettings;
+
                     Process py = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
                     py.StartInfo.RedirectStandardInput = true;
                     TextToImage.CurrentTask.Processes.Add(py);
-
-                    string mode = "txt2img";
-                    bool inpaintingMdl = model.Name.EndsWith(Constants.SuffixesPrefixes.InpaintingMdlSuf);
-
-                    if (s.InitImgs != null && s.InitImgs.Length > 0)
-                    {
-                        mode = "img2img";
-
-                        if (inpaintingMdl && s.ImgMode != ImgMode.InitializationImage)
-                            mode = "inpaint";
-                    }
 
                     var scriptArgs = new List<string>
                     {
