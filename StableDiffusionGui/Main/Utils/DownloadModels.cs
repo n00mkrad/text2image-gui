@@ -49,7 +49,7 @@ namespace StableDiffusionGui.Main.Utils
                 nameSafe += $"-{rev}";
 
             string cachePath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.Cache.Root, $"{nameSafe.Trunc(30, false)}.tmp");
-            string savePath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.Models.Root, nameSafe);
+            string savePath = Path.Combine(Paths.GetExeDir(), Constants.Dirs.Models.Root, Constants.Dirs.Models.Ckpts, nameSafe);
             savePath = IoUtils.GetAvailablePath(savePath);
 
             float diskSpace = IoUtils.GetFreeDiskSpaceGb(savePath);
@@ -62,7 +62,7 @@ namespace StableDiffusionGui.Main.Utils
 
             Logger.Log($"Downloading {(fp16 ? "FP16 " : "")}model to {savePath.Wrap()}. Estimated size: {(fp16 ? "2" : "4")} GB.");
             string args = $"/C title Downloading {repoId} - Do not close this window! && cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand(true, Paths.GetDataPath())} && {Constants.Files.VenvActivate} && " +
-                $"python {Constants.Dirs.SdRepo}\\scripts\\download_model.py -r {repoId.Wrap()} -c {cachePath.Wrap()} -s {savePath.Wrap()} --revision {rev} && timeout 3";
+                $"python \"{Constants.Dirs.SdRepo}\\scripts\\download_model.py\" -r {repoId.Wrap()} -c {cachePath.Wrap()} -s {savePath.Wrap()} --revision {rev} && timeout 3";
             Logger.Log($"cmd {args}", true);
             Process.Start("cmd", args);
         }
