@@ -55,16 +55,6 @@ namespace StableDiffusionGui.Os
             return isAdmin;
         }
 
-        public static Process SetStartInfo(Process proc, bool hidden, string filename = "cmd.exe")
-        {
-            proc.StartInfo.UseShellExecute = !hidden;
-            proc.StartInfo.RedirectStandardOutput = hidden;
-            proc.StartInfo.RedirectStandardError = hidden;
-            proc.StartInfo.CreateNoWindow = hidden;
-            proc.StartInfo.FileName = filename;
-            return proc;
-        }
-
         public static bool IsProcessHidden(Process proc)
         {
             bool defaultVal = true;
@@ -93,10 +83,23 @@ namespace StableDiffusionGui.Os
             }
         }
 
-        public static Process NewProcess(bool hidden, string filename = "cmd.exe")
+        public static Process NewProcess(bool hidden, string filename = "cmd.exe", Action<string> logAction = null, bool redirectStdin = false)
         {
-            Process proc = new Process();
-            return SetStartInfo(proc, hidden, filename);
+            Process p = new Process();
+            p.StartInfo.UseShellExecute = !hidden;
+            p.StartInfo.RedirectStandardOutput = hidden;
+            p.StartInfo.RedirectStandardError = hidden;
+            p.StartInfo.CreateNoWindow = hidden;
+            p.StartInfo.FileName = filename;
+            p.StartInfo.RedirectStandardInput = redirectStdin;
+
+            if(logAction != null)
+            {
+                p.OutputDataReceived += (sender, line) => { logAction(line.Data); };
+                p.ErrorDataReceived += (sender, line) => { logAction(line.Data); };
+            }
+
+            return p;
         }
 
         public static void KillProcessTree(int pid)

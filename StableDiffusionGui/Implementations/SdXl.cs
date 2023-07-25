@@ -36,10 +36,23 @@ namespace StableDiffusionGui.Implementations
                 long startSeed = s.Seed;
                 bool refine = s.RefinerStrengths.All(rs => rs >= 0.05f);
 
-                List<Dictionary<string, string>> argLists = new List<Dictionary<string, string>>(); // List of all args for each command
-                Dictionary<string, string> args = new Dictionary<string, string>(); // List of args for current command
+                string mode = "txt2img";
+                bool inpaintingMdl = model.Name.EndsWith(Constants.SuffixesPrefixes.InpaintingMdlSuf);
+
+                if (s.InitImgs != null && s.InitImgs.Length > 0)
+                {
+                    mode = "img2img";
+
+                    if (inpaintingMdl && s.ImgMode != ImgMode.InitializationImage)
+                        mode = "inpaint";
+                }
+
+                var argLists = new List<Dictionary<string, string>>(); // List of all args for each command
+                var args = new Dictionary<string, string>(); // List of args for current command
+                args["mode"] = mode;
+                args["model"] = model.FullName;
+                args["modelRefiner"] = GetRefineModelPath(refine, model);
                 args["prompt"] = "";
-                args["default"] = "";
 
                 foreach (string prompt in s.Prompts)
                 {
@@ -107,18 +120,18 @@ namespace StableDiffusionGui.Implementations
                 string initsStr = initImages != null ? $" and {initImages.Count} image{(initImages.Count != 1 ? "s" : "")} using {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
                 Logger.Log($"{s.Prompts.Length} prompt{(s.Prompts.Length != 1 ? "s" : "")} * {s.Iterations} image{(s.Iterations != 1 ? "s" : "")} * {s.Steps.Length} step value{(s.Steps.Length != 1 ? "s" : "")} * {s.ScalesTxt.Length} scale{(s.ScalesTxt.Length != 1 ? "s" : "")}{initsStr} = {argLists.Count} images total.");
 
-                string mode = "txt2img";
-                bool inpaintingMdl = model.Name.EndsWith(Constants.SuffixesPrefixes.InpaintingMdlSuf);
-
-                if (s.InitImgs != null && s.InitImgs.Length > 0)
+                var scriptArgs = new List<string>
                 {
-                    mode = "img2img";
+                    $"-p SdXl",
+                    $"-o {outPath.Wrap(true)}"
+                };
 
-                    if (inpaintingMdl && s.ImgMode != ImgMode.InitializationImage)
-                        mode = "inpaint";
+                if (Config.Instance.SdXlOptimize)
+                {
+                    scriptArgs.Add("--sdxl_optimize");
                 }
 
-                string newStartupSettings = $"{mode}{model.FullName}{outPath}";
+                string newStartupSettings = string.Join(" ", scriptArgs).Remove(" ");
 
                 if (!TtiProcess.IsAiProcessRunning || (TtiProcess.IsAiProcessRunning && TtiProcess.LastStartupSettings != newStartupSettings))
                 {
@@ -127,60 +140,11 @@ namespace StableDiffusionGui.Implementations
                     Logger.Log($"(Re)starting Nmkdiffusers. Process running: {TtiProcess.IsAiProcessRunning} - Prev startup string: '{TtiProcess.LastStartupSettings}' - New startup string: '{newStartupSettings}'", true);
                     TtiProcess.LastStartupSettings = newStartupSettings;
 
-                    Process py = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
-                    py.StartInfo.RedirectStandardInput = true;
+                    Process py = OsUtils.NewProcess(true, logAction: HandleOutput, redirectStdin: true);
                     TextToImage.CurrentTask.Processes.Add(py);
-
-                    var scriptArgs = new List<string>
-                    {
-                        $"-p SdXl",
-                        $"-g {mode}",
-                        $"-m {model.FullName.Wrap()}",
-                        $"-o {outPath.Wrap(true)}"
-                    };
-
-                    string refineModelName = model.Name.Replace("base", "refiner");
-                    string refinePath = Path.Combine(model.Directory.FullName, refineModelName);
-
-                    if(refine)
-                    {
-                        if (refinePath != model.FullName && IoUtils.IsPathValid(refinePath))
-                        {
-                            Logger.Log($"Using Refiner Model '{refineModelName}'.");
-                            scriptArgs.Add($"-m2 {refinePath.Wrap()}");
-                        }
-                        else
-                        {
-                            var refinersAll = Models.GetModels(Enums.Models.Type.Refiner, Implementation.SdXl);
-                            var refinersDiffFirst = refinersAll.Where(m => m.Format == Enums.Models.Format.Diffusers).ToList();
-                            refinersDiffFirst.AddRange(refinersAll.Where(m => m.Format == Enums.Models.Format.Safetensors).ToList());
-
-                            if (refinersDiffFirst.Any())
-                            {
-                                string refineName = refineModelName != model.Name ? $"'{refineModelName}' " : "";
-                                Logger.Log($"No corresponding refiner model {refineName}found, using '{refinersDiffFirst.First().Name}' instead.");
-                                scriptArgs.Add($"-m2 {refinersDiffFirst.First().FullName.Wrap()}");
-                            }
-                            else
-                            {
-                                Logger.Log("Warning: No refiner model found.");
-                            }
-                        }
-                    }
-
-                    if (Config.Instance.SdXlOptimize)
-                    {
-                        scriptArgs.Add($"--sdxl_optimize");
-                    }
 
                     py.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand()} && {Constants.Files.VenvActivate} && python {Constants.Dirs.SdRepo}/nmkdiff/nmkdiffusers.py {string.Join(" ", scriptArgs)}";
                     Logger.Log("cmd.exe " + py.StartInfo.Arguments, true);
-
-                    if (!OsUtils.ShowHiddenCmd())
-                    {
-                        py.OutputDataReceived += (sender, line) => { HandleOutput(line.Data); };
-                        py.ErrorDataReceived += (sender, line) => { HandleOutput(line.Data); };
-                    }
 
                     if (TtiProcess.CurrentProcess != null)
                     {
@@ -224,6 +188,40 @@ namespace StableDiffusionGui.Implementations
             }
         }
 
+        private string GetRefineModelPath (bool doRefine, Model model)
+        {
+            if (!doRefine)
+                return "";
+
+            string refineModelName = model.Name.Replace("base", "refiner");
+            string refinePath = Path.Combine(model.Directory.FullName, refineModelName);
+
+            if (refinePath != model.FullName && IoUtils.IsPathValid(refinePath))
+            {
+                Logger.Log($"Using Refiner Model '{refineModelName}'.");
+                return refinePath;
+            }
+            else
+            {
+                var refinersAll = Models.GetModels(Enums.Models.Type.Refiner, Implementation.SdXl);
+                var refinersDiffFirst = refinersAll.Where(m => m.Format == Enums.Models.Format.Diffusers).ToList();
+                refinersDiffFirst.AddRange(refinersAll.Where(m => m.Format == Enums.Models.Format.Safetensors).ToList());
+
+                if (refinersDiffFirst.Any())
+                {
+                    string refineName = refineModelName != model.Name ? $"'{refineModelName}' " : "";
+                    Logger.Log($"No corresponding refiner model {refineName}found, using '{refinersDiffFirst.First().Name}' instead.");
+                    return refinersDiffFirst.First().FullName;
+                }
+                else
+                {
+                    Logger.Log("Warning: No refiner model found.");
+                }
+            }
+
+            return "";
+        }
+
         public enum GenerationState { Base, Refiner }
         private GenerationState _genState = GenerationState.Base;
         private float _refineFrac = 0.7f;
@@ -239,10 +237,14 @@ namespace StableDiffusionGui.Implementations
             bool ellipsis = Program.MainForm.LogText.EndsWith("...");
             // bool replace = ellipsis || Logger.LastUiLine.MatchesWildcard("*Image*generated*in*");
 
-            if (line.StartsWith("Model loaded"))
+            if (line.Contains("Loading base model"))
             {
-                Logger.Log($"{line}", false, ellipsis);
-                ImageExport.TimeSinceLastImage.Restart();
+                Logger.Log($"Loading base model...", replaceLastLine: ellipsis);
+            }
+
+            if (line.Contains("Loading refiner model"))
+            {
+                Logger.Log($"Loading refiner model...", replaceLastLine: ellipsis);
             }
 
             if (line.Contains("refine_frac = "))
@@ -263,7 +265,7 @@ namespace StableDiffusionGui.Implementations
             if (line.MatchesWildcard("*%|*| *") && !line.Contains("Loading"))
             {
                 if (!Logger.LastUiLine.MatchesWildcard("*Generated*image*in*"))
-                    Logger.LogIfLastLineDoesNotContainMsg($"Generating...");
+                    Logger.LogIfLastLineDoesNotContainMsg($"Generating...", replaceLastLine: ellipsis);
 
                 int percent;
                 int prog = line.Split("%|")[0].GetInt();
