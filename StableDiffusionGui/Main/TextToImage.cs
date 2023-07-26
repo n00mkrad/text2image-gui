@@ -199,7 +199,7 @@ namespace StableDiffusionGui.Main
 
                 Logger.Log($"Canceling. Reason: {(string.IsNullOrWhiteSpace(reason) ? "None" : reason)} - Implementation: {(CurrentTaskSettings != null ? CurrentTaskSettings.Implementation.ToString() : "None")} - Force Kill: {forceKill}", true);
 
-                if (cancelMode == CancelMode.ForceKill || (CurrentTaskSettings != null && !CurrentTaskSettings.Implementation.Supports(ImplementationInfo.Feature.InteractiveCli)))
+                if (cancelMode == CancelMode.ForceKill)
                     forceKill = true;
 
                 if (cancelMode != CancelMode.DoNotKill)

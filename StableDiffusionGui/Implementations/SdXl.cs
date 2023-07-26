@@ -105,6 +105,7 @@ namespace StableDiffusionGui.Implementations
                         s.Seed = startSeed;
                 }
 
+                Logger.ClearLogBox();
                 Logger.Log($"Running Stable Diffusion - {s.Iterations} Iterations, {s.Steps.Length} Steps, Scales {(s.ScalesTxt.Length < 4 ? string.Join(", ", s.ScalesTxt.Select(x => x.ToStringDot())) : $"{s.ScalesTxt.First()}->{s.ScalesTxt.Last()}")}, {s.Res.Width}x{s.Res.Height}, Starting Seed: {startSeed}");
 
                 string initsStr = initImages != null ? $" and {initImages.Count} image{(initImages.Count != 1 ? "s" : "")} using {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
@@ -244,6 +245,9 @@ namespace StableDiffusionGui.Implementations
 
             if (line.Contains("Running base model"))
             {
+                if (!Logger.LastUiLine.MatchesWildcard("*Generated*image*in*"))
+                    Logger.LogIfLastLineDoesNotContainMsg($"Generating...", replaceLastLine: ellipsis);
+
                 _genState = GenerationState.Base;
             }
 
