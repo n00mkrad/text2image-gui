@@ -30,7 +30,7 @@ namespace StableDiffusionGui.Main
         public static async Task<OrderedDictionary> CreateResizedInitImagesIfNeeded(List<string> initImgPaths, Size targetSize, Gravity extendGravity = (Gravity)(-1))
         {
             ImportBusy = true;
-            Logger.Log($"Importing initialization images...", false, Logger.LastUiLine.EndsWith("..."));
+            Logger.Log($"Importing base images...", false, Logger.LastUiLine.EndsWith("..."));
 
             var sourceAndImportedPaths = new ConcurrentDictionary<string, string>(initImgPaths.ToDictionary(x => x, x => ""));
             int imgsSucessful = 0;
@@ -102,7 +102,7 @@ namespace StableDiffusionGui.Main
             if (removed > 0)
             {
                 MainUi.CurrentInitImgPaths = modifiedList;
-                Logger.Log($"{removed} initialization images were removed because the files no longer exist.");
+                Logger.Log($"{removed} base images were removed because the files no longer exist.");
             }
 
             return removed;

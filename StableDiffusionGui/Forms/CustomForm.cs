@@ -1,4 +1,7 @@
 ﻿using StableDiffusionGui.Extensions;
+using StableDiffusionGui.Io;
+using StableDiffusionGui.MiscUtils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
@@ -50,13 +53,23 @@ namespace StableDiffusionGui.Forms
             _tabOrderedControls.First().Focus();
         }
 
+        private DateTime _timeLastTab = DateTime.MinValue;
+
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             if (keyData == Keys.Escape && AllowEscClose)
                 Close();
 
-            if (keyData == Keys.Tab && !(FocusedControl is TextBox && AllowTextboxTab))
-                TabOrderNext();
+            if (keyData == Keys.Tab)
+            {
+                double msSinceLastTab = (DateTime.Now - _timeLastTab).TotalMilliseconds;
+
+                if (msSinceLastTab >= 10.0d && !(FocusedControl is TextBox && AllowTextboxTab))
+                {
+                    _timeLastTab = DateTime.Now;
+                    TabOrderNext();
+                }
+            }
 
             return base.ProcessCmdKey(ref msg, keyData);
         }

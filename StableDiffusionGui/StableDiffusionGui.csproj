@@ -307,6 +307,7 @@
     <Compile Include="Implementations\InstructPixToPix.cs" />
     <Compile Include="Implementations\InvokeAiMetadata.cs" />
     <Compile Include="Implementations\InvokePatcher235.cs" />
+    <Compile Include="Implementations\NmkdiffUtils.cs" />
     <Compile Include="Implementations\OperationOrder.cs" />
     <Compile Include="Implementations\SdOnnx.cs" />
     <Compile Include="Implementations\SdXl.cs" />

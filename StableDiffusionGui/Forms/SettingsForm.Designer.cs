@@ -515,7 +515,7 @@
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(304, 13);
             this.label19.TabIndex = 85;
-            this.label19.Text = "Retain Aspect Ratio of Initialization Image (If It Needs Resizing)";
+            this.label19.Text = "Retain Aspect Ratio of Base Image (If It Needs Resizing)";
             // 
             // panelAutoSetResForInitImg
             // 
@@ -581,7 +581,7 @@
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(366, 13);
             this.label18.TabIndex = 85;
-            this.label18.Text = "Automatically Set Generation Resolution After Loading an Initialization Image";
+            this.label18.Text = "Automatically Set Generation Resolution After Loading an Base Image";
             // 
             // panel1
             // 

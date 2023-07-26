@@ -35,7 +35,9 @@ namespace StableDiffusionGui.Implementations
 
                 List<Dictionary<string, string>> argLists = new List<Dictionary<string, string>>(); // List of all args for each command
                 Dictionary<string, string> args = new Dictionary<string, string>(); // List of args for current command
+                args["model"] = "";
                 args["prompt"] = "";
+                args["sampler"] = s.Sampler.ToString().Lower();
 
                 foreach (string prompt in s.Prompts)
                 {

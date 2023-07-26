@@ -457,7 +457,7 @@ namespace StableDiffusionGui.Forms
             // 
             this.useAsInitImageToolStripMenuItem.Name = "useAsInitImageToolStripMenuItem";
             this.useAsInitImageToolStripMenuItem.Size = new System.Drawing.Size(284, 22);
-            this.useAsInitImageToolStripMenuItem.Text = "Use as Initialization Image";
+            this.useAsInitImageToolStripMenuItem.Text = "Use as Base Image";
             this.useAsInitImageToolStripMenuItem.Click += new System.EventHandler(this.useAsInitImageToolStripMenuItem_Click);
             // 
             // postProcessImageToolStripMenuItem
@@ -836,7 +836,7 @@ namespace StableDiffusionGui.Forms
             this.btnInitImgBrowse.TabIndex = 1;
             this.btnInitImgBrowse.TabStop = false;
             this.btnInitImgBrowse.Text = "Load Image";
-            this.toolTip.SetToolTip(this.btnInitImgBrowse, "Load initialization image");
+            this.toolTip.SetToolTip(this.btnInitImgBrowse, "Load base image");
             this.btnInitImgBrowse.Click += new System.EventHandler(this.btnInitImgBrowse_Click);
             // 
             // textboxPromptNeg

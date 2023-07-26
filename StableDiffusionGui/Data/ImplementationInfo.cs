@@ -42,7 +42,7 @@ namespace StableDiffusionGui.Data
             else if (imp == Enums.StableDiffusion.Implementation.InstructPixToPix)
             {
                 Backend = Enums.Ai.Backend.Cuda;
-                SupportedFeatures = new List<Feature> { Feature.InteractiveCli, Feature.NegPrompts, Feature.Img2Img };
+                SupportedFeatures = new List<Feature> { Feature.InteractiveCli, Feature.NegPrompts, Feature.Img2Img, Feature.MultipleSamplers };
             }
             else if (imp == Enums.StableDiffusion.Implementation.SdXl)
             {

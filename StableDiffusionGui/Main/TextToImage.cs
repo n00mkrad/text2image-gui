@@ -139,7 +139,7 @@ namespace StableDiffusionGui.Main
 
             if (invalidInitImgs.Any())
             {
-                Logger.Log($"Missing initialization images:\n{string.Join("\n", invalidInitImgs.Select(i => Path.GetFileName(i)))}");
+                Logger.Log($"Missing base images:\n{string.Join("\n", invalidInitImgs.Select(i => Path.GetFileName(i)))}");
                 return false;
             }
 

@@ -23,7 +23,7 @@ namespace StableDiffusionGui.Ui
 
         public static Dictionary<string, string> InpaintMode = new Dictionary<string, string>
         {
-            { Enums.StableDiffusion.ImgMode.InitializationImage.ToString(), "Initialization Image (Img2Img)" },
+            { Enums.StableDiffusion.ImgMode.InitializationImage.ToString(), "Base Image (Img2Img)" },
             { Enums.StableDiffusion.ImgMode.ImageMask.ToString(), "Inpainting with Mask" },
             // { Enums.StableDiffusion.ImgMode.TextMask.ToString(), "Inpainting with Text Description" },
         };

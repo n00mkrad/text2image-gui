@@ -26,19 +26,21 @@ namespace StableDiffusionGui.Implementations
             {
                 float[] initStrengths = s.InitStrengths.Select(n => 1f - n).ToArray();
                 var cachedModels = Models.GetModels(Enums.Models.Type.Normal, Implementation.DiffusersOnnx);
-                Model modelDir = TtiUtils.CheckIfModelExists(s.Model, Implementation.DiffusersOnnx);
+                Model model = TtiUtils.CheckIfModelExists(s.Model, Implementation.DiffusersOnnx);
 
-                if (modelDir == null)
+                if (model == null)
                     return;
 
                 OrderedDictionary initImages = s.InitImgs != null && s.InitImgs.Length > 0 ? await TtiUtils.CreateResizedInitImagesIfNeeded(s.InitImgs.ToList(), s.Res) : null;
-
                 long startSeed = s.Seed;
+                string mode = NmkdiffUtils.GetGenerationMode(s, model);
 
                 List<Dictionary<string, string>> argLists = new List<Dictionary<string, string>>(); // List of all args for each command
                 Dictionary<string, string> args = new Dictionary<string, string>(); // List of args for current command
+                args["mode"] = mode;
+                args["model"] = model.FullName;
                 args["prompt"] = "";
-                args["default"] = "";
+                args["sampler"] = s.Sampler.ToString().Lower();
 
                 foreach (string prompt in s.Prompts)
                 {
@@ -55,7 +57,6 @@ namespace StableDiffusionGui.Implementations
                         args["w"] = $"{s.Res.Width}";
                         args["h"] = $"{s.Res.Height}";
                         args["seed"] = $"{s.Seed}";
-                        args["sampler"] = s.Sampler.ToString().Lower();
 
                         foreach (float scale in s.ScalesTxt)
                         {
@@ -106,20 +107,9 @@ namespace StableDiffusionGui.Implementations
                     Process py = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
                     TextToImage.CurrentTask.Processes.Add(py);
 
-                    string mode = "txt2img";
-                    bool inpaintingMdl = modelDir.Name.EndsWith(Constants.SuffixesPrefixes.InpaintingMdlSuf);
-
-                    if (s.InitImgs != null && s.InitImgs.Length > 0)
-                    {
-                        mode = "img2img";
-
-                        if (inpaintingMdl && s.ImgMode != ImgMode.InitializationImage)
-                            mode = "inpaint";
-                    }
-
                     py.StartInfo.RedirectStandardInput = true;
                     py.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand()} && {Constants.Files.VenvActivate} && " +
-                        $"python \"{Constants.Dirs.SdRepo}/nmkdiff/nmkdiffusers.py\" -p SdOnnx -g {mode} -m {modelDir.FullName.Wrap(true)} -o {outPath.Wrap(true)}";
+                        $"python \"{Constants.Dirs.SdRepo}/nmkdiff/nmkdiffusers.py\" -p SdOnnx -g {mode} -m {model.FullName.Wrap(true)} -o {outPath.Wrap(true)}";
 
                     Logger.Log("cmd.exe " + py.StartInfo.Arguments, true);
 

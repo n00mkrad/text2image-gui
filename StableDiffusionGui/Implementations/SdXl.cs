@@ -35,17 +35,7 @@ namespace StableDiffusionGui.Implementations
                 OrderedDictionary initImages = s.InitImgs != null && s.InitImgs.Length > 0 ? await TtiUtils.CreateResizedInitImagesIfNeeded(s.InitImgs.ToList(), s.Res) : null;
                 long startSeed = s.Seed;
                 bool refine = s.RefinerStrengths.All(rs => rs >= 0.05f);
-
-                string mode = "txt2img";
-                bool inpaintingMdl = model.Name.EndsWith(Constants.SuffixesPrefixes.InpaintingMdlSuf);
-
-                if (s.InitImgs != null && s.InitImgs.Length > 0)
-                {
-                    mode = "img2img";
-
-                    if (inpaintingMdl && s.ImgMode != ImgMode.InitializationImage)
-                        mode = "inpaint";
-                }
+                string mode = NmkdiffUtils.GetGenerationMode(s, model);
 
                 var argLists = new List<Dictionary<string, string>>(); // List of all args for each command
                 var args = new Dictionary<string, string>(); // List of args for current command

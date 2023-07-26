@@ -97,7 +97,7 @@ namespace StableDiffusionGui.Forms
             {
                 if (clipboardImg.Size != pictBox.Image.Size)
                 {
-                    UiUtils.ShowMessageBox($"The pasted mask ({clipboardImg.Width}x{clipboardImg.Height}) needs to have the same dimensions as the initialization image ({pictBox.Image.Width}x{pictBox.Image.Height}).");
+                    UiUtils.ShowMessageBox($"The pasted mask ({clipboardImg.Width}x{clipboardImg.Height}) needs to have the same dimensions as the base image ({pictBox.Image.Width}x{pictBox.Image.Height}).");
                     return;
                 }
 

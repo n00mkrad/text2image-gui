@@ -39,7 +39,7 @@ namespace StableDiffusionGui.Ui
 
                 if (value != null && value.Count() > 0)
                 {
-                    Logger.Log(value.Count() == 1 ? $"Now using initialization image {Path.GetFileName(value[0]).Wrap()}." : $"Now using {value.Count()} initialization images.");
+                    Logger.Log(value.Count() == 1 ? $"Now using base image {Path.GetFileName(value[0]).Wrap()}." : $"Now using {value.Count()} base images.");
 
                     first = ImageCache.GetOrLoadAndStore(value[0], f => IoUtils.GetImage(value[0], allowCacheStore: true)); // Load and cache first image since we need it more often in the UI
 
@@ -247,7 +247,7 @@ namespace StableDiffusionGui.Ui
 
                 if (validImagesInPathList.Any())
                 {
-                    DialogResult dialogResult = noConfirmations ? DialogResult.Yes : UiUtils.ShowMessageBox($"Do you want to load these images as initialization images?", $"Dropped {paths.Length} Images", MessageBoxButtons.YesNo);
+                    DialogResult dialogResult = noConfirmations ? DialogResult.Yes : UiUtils.ShowMessageBox($"Do you want to load these images as base images?", $"Dropped {paths.Length} Images", MessageBoxButtons.YesNo);
 
                     if (dialogResult == DialogResult.Yes)
                         AddInitImages(paths.ToList());
