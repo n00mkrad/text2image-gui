@@ -1,4 +1,5 @@
 ﻿using StableDiffusionGui.Io;
+using StableDiffusionGui.MiscUtils;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -48,21 +49,21 @@ namespace StableDiffusionGui.Main.Utils
             if (rev != _main)
                 nameSafe += $"-{rev}";
 
-            string cachePath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.Cache.Root, $"{nameSafe.Trunc(30, false)}.tmp");
+            string cachePath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.Cache.Root, $"{FormatUtils.GetUnixTimestamp()}.tmp");
             string savePath = Path.Combine(Paths.GetExeDir(), Constants.Dirs.Models.Root, Constants.Dirs.Models.Ckpts, nameSafe);
             savePath = IoUtils.GetAvailablePath(savePath);
 
             float diskSpace = IoUtils.GetFreeDiskSpaceGb(savePath);
 
-            if (diskSpace < 5f)
+            if (diskSpace < (repoId.Lower().Contains("xl") ? 10f : 5f))
             {
                 Logger.Log($"Can't download model: Not enough disk space on {Path.GetPathRoot(savePath)} ({diskSpace.ToString("0.#")} GB).");
                 return;
             }
 
-            Logger.Log($"Downloading {(fp16 ? "FP16 " : "")}model to {savePath.Wrap()}. Estimated size: {(fp16 ? "2" : "4")} GB.");
+            Logger.Log($"Downloading {(fp16 ? "FP16 " : "")}model to {savePath.Wrap()}.");
             string args = $"/C title Downloading {repoId} - Do not close this window! && cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand(true, Paths.GetDataPath())} && {Constants.Files.VenvActivate} && " +
-                $"python \"{Constants.Dirs.SdRepo}\\scripts\\download_model.py\" -r {repoId.Wrap()} -c {cachePath.Wrap()} -s {savePath.Wrap()} --revision {rev} && timeout 3";
+                $"python \"{Constants.Dirs.SdRepo}\\scripts\\download_model.py\" -r {repoId.Wrap()} -c {cachePath.Wrap()} -s {savePath.Wrap()} --revision {rev} && timeout 5";
             Logger.Log($"cmd {args}", true);
             Process.Start("cmd", args);
         }

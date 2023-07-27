@@ -227,6 +227,11 @@ namespace StableDiffusionGui.Forms
             this.flowPanelImgButtons = new System.Windows.Forms.FlowLayoutPanel();
             this.btnSaveMode = new System.Windows.Forms.Button();
             this.separator = new System.Windows.Forms.Button();
+            this.downloadStableDiffusionModelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sD15ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sDXL10ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sDXL10RefinerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sD15ONNXToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStripOutputImg.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.upDownSeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
@@ -666,7 +671,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderScale.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScale.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScale.Location = new System.Drawing.Point(308, 2);
+            this.textboxSliderScale.Location = new System.Drawing.Point(308, 4);
             this.textboxSliderScale.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScale.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScale.Name = "textboxSliderScale";
@@ -810,7 +815,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderInitStrength.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderInitStrength.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderInitStrength.Location = new System.Drawing.Point(308, 2);
+            this.textboxSliderInitStrength.Location = new System.Drawing.Point(308, 4);
             this.textboxSliderInitStrength.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderInitStrength.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderInitStrength.Name = "textboxSliderInitStrength";
@@ -1005,7 +1010,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderScaleImg.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScaleImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScaleImg.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScaleImg.Location = new System.Drawing.Point(308, 2);
+            this.textboxSliderScaleImg.Location = new System.Drawing.Point(308, 4);
             this.textboxSliderScaleImg.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScaleImg.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScaleImg.Name = "textboxSliderScaleImg";
@@ -1555,7 +1560,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderRefineStart.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderRefineStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderRefineStart.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderRefineStart.Location = new System.Drawing.Point(308, 2);
+            this.textboxSliderRefineStart.Location = new System.Drawing.Point(308, 4);
             this.textboxSliderRefineStart.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderRefineStart.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderRefineStart.Name = "textboxSliderRefineStart";
@@ -1761,10 +1766,11 @@ namespace StableDiffusionGui.Forms
             this.openModelMergeToolToolStripMenuItem,
             this.openModelPruningTrimmingToolToolStripMenuItem,
             this.convertModelsToolStripMenuItem,
-            this.downloadHuggingfaceModelToolStripMenuItem});
+            this.downloadHuggingfaceModelToolStripMenuItem,
+            this.downloadStableDiffusionModelToolStripMenuItem});
             this.menuStripDevTools.Name = "menuStripDevTools";
             this.menuStripDevTools.ShowImageMargin = false;
-            this.menuStripDevTools.Size = new System.Drawing.Size(234, 136);
+            this.menuStripDevTools.Size = new System.Drawing.Size(234, 180);
             // 
             // openCliToolStripMenuItem
             // 
@@ -2445,7 +2451,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderSteps.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderSteps.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderSteps.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderSteps.Location = new System.Drawing.Point(308, 2);
+            this.textboxSliderSteps.Location = new System.Drawing.Point(308, 4);
             this.textboxSliderSteps.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderSteps.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderSteps.Name = "textboxSliderSteps";
@@ -3101,6 +3107,45 @@ namespace StableDiffusionGui.Forms
             this.separator.TabStop = false;
             this.separator.UseVisualStyleBackColor = false;
             // 
+            // downloadStableDiffusionModelToolStripMenuItem
+            // 
+            this.downloadStableDiffusionModelToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.sD15ToolStripMenuItem,
+            this.sD15ONNXToolStripMenuItem,
+            this.sDXL10ToolStripMenuItem,
+            this.sDXL10RefinerToolStripMenuItem});
+            this.downloadStableDiffusionModelToolStripMenuItem.Name = "downloadStableDiffusionModelToolStripMenuItem";
+            this.downloadStableDiffusionModelToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
+            this.downloadStableDiffusionModelToolStripMenuItem.Text = "Download Stable Diffusion Model";
+            // 
+            // sD15ToolStripMenuItem
+            // 
+            this.sD15ToolStripMenuItem.Name = "sD15ToolStripMenuItem";
+            this.sD15ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.sD15ToolStripMenuItem.Text = "SD 1.5";
+            this.sD15ToolStripMenuItem.Click += new System.EventHandler(this.sD15ToolStripMenuItem_Click);
+            // 
+            // sDXL10ToolStripMenuItem
+            // 
+            this.sDXL10ToolStripMenuItem.Name = "sDXL10ToolStripMenuItem";
+            this.sDXL10ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.sDXL10ToolStripMenuItem.Text = "SD XL 1.0 Base";
+            this.sDXL10ToolStripMenuItem.Click += new System.EventHandler(this.sDXL10ToolStripMenuItem_Click);
+            // 
+            // sDXL10RefinerToolStripMenuItem
+            // 
+            this.sDXL10RefinerToolStripMenuItem.Name = "sDXL10RefinerToolStripMenuItem";
+            this.sDXL10RefinerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.sDXL10RefinerToolStripMenuItem.Text = "SD XL 1.0 Refiner";
+            this.sDXL10RefinerToolStripMenuItem.Click += new System.EventHandler(this.sDXL10RefinerToolStripMenuItem_Click);
+            // 
+            // sD15ONNXToolStripMenuItem
+            // 
+            this.sD15ONNXToolStripMenuItem.Name = "sD15ONNXToolStripMenuItem";
+            this.sD15ONNXToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.sD15ONNXToolStripMenuItem.Text = "SD 1.5 ONNX";
+            this.sD15ONNXToolStripMenuItem.Click += new System.EventHandler(this.sD15ONNXToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AllowDrop = true;
@@ -3425,6 +3470,11 @@ namespace StableDiffusionGui.Forms
         public CustomTextbox textboxExtraRefinerValues;
         private System.Windows.Forms.TextBox textboxSliderRefineStart;
         public CustomSlider sliderRefinerStart;
+        private System.Windows.Forms.ToolStripMenuItem downloadStableDiffusionModelToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sD15ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sDXL10ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sDXL10RefinerToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sD15ONNXToolStripMenuItem;
     }
 }
 

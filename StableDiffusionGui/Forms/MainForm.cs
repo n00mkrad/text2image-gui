@@ -4,6 +4,7 @@ using StableDiffusionGui.Implementations;
 using StableDiffusionGui.Installation;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
+using StableDiffusionGui.Main.Utils;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
@@ -562,6 +563,26 @@ namespace StableDiffusionGui.Forms
         private void btnSaveMode_Click(object sender, EventArgs e)
         {
             ToggleSaveMode();
+        }
+
+        private void sD15ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DownloadModels.DownloadModel("nmkd/stable-diffusion-1.5-fp16");
+        }
+
+        private void sD15ONNXToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DownloadModels.DownloadModel("nmkd/stable-diffusion-1.5-onnx-fp16");
+        }
+
+        private void sDXL10ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DownloadModels.DownloadModel("nmkd/stable-diffusion-xl-base-1.0");
+        }
+
+        private void sDXL10RefinerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DownloadModels.DownloadModel("nmkd/stable-diffusion-xl-refiner-1.0");
         }
     }
 }
