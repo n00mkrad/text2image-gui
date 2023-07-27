@@ -35,6 +35,8 @@ namespace StableDiffusionGui.Ui
             { Enums.StableDiffusion.Sampler.K_Euler.ToString(), "Euler Karras" },
             { Enums.StableDiffusion.Sampler.Dpmpp_2M.ToString(), "DPM++ 2M" },
             { Enums.StableDiffusion.Sampler.K_Dpmpp_2M.ToString(), "DPM++ 2M Karras" },
+            { Enums.StableDiffusion.Sampler.Dpmpp_2M_Sde.ToString(), "DPM++ 2M SDE" },
+            { Enums.StableDiffusion.Sampler.K_Dpmpp_2M_Sde.ToString(), "DPM++ 2M SDE Karras" },
             { Enums.StableDiffusion.Sampler.Lms.ToString(), "LMS" },
             { Enums.StableDiffusion.Sampler.Ddim.ToString(), "DDIM" },
             { Enums.StableDiffusion.Sampler.Plms.ToString(), "PLMS" },
