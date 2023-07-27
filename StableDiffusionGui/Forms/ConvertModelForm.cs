@@ -45,7 +45,7 @@ namespace StableDiffusionGui.Forms
             ((Action)(() =>
             {
                 panelDiffSafetensors.SetVisible(_currentOutFormat == Enums.Models.Format.Diffusers);
-                panelFp16.SetVisible(!(_currentOutFormat == Enums.Models.Format.DiffusersOnnx && GpuUtils.CachedGpus.Count <= 0)); // ONNX FP16 conversion currently requires CUDA
+                panelFp16.SetVisible(_currentOutFormat != Enums.Models.Format.DiffusersOnnx); // ONNX FP16 conversion works, but currently produces blank images
                 panelModelArch.SetVisible(_currentInFormat == Enums.Models.Format.Pytorch || _currentInFormat == Enums.Models.Format.Safetensors); // Not needed for Diffusers models
             })).RunWithUiStopped(this);
         }

@@ -572,7 +572,7 @@ namespace StableDiffusionGui.Forms
 
         private void sD15ONNXToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DownloadModels.DownloadModel("nmkd/stable-diffusion-1.5-onnx-fp16");
+            DownloadModels.DownloadModel("nmkd/stable-diffusion-1.5-onnx");
         }
 
         private void sDXL10ToolStripMenuItem_Click(object sender, EventArgs e)
