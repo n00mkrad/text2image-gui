@@ -32,9 +32,12 @@ namespace StableDiffusionGui.Implementations
                 if (model == null)
                     return;
 
+                if (s.Res.Width < 1024 && s.Res.Height < 1024)
+                    Logger.Log($"Warning: The resolution {s.Res.Width}x{s.Res.Height} might lead to low quality results, as the default resolution of SDXL is 1024x1024.");
+
                 OrderedDictionary initImages = s.InitImgs != null && s.InitImgs.Length > 0 ? await TtiUtils.CreateResizedInitImagesIfNeeded(s.InitImgs.ToList(), s.Res) : null;
                 long startSeed = s.Seed;
-                bool refine = s.RefinerStrengths.All(rs => rs >= 0.05f);
+                bool refine = s.RefinerStrengths.Any(rs => rs >= 0.05f);
                 string mode = NmkdiffUtils.GetGenerationMode(s, model);
 
                 var argLists = new List<Dictionary<string, string>>(); // List of all args for each command
@@ -106,7 +109,7 @@ namespace StableDiffusionGui.Implementations
                 }
 
                 Logger.ClearLogBox();
-                Logger.Log($"Running Stable Diffusion - {s.Iterations} Iterations, {s.Steps.Length} Steps, Scales {(s.ScalesTxt.Length < 4 ? string.Join(", ", s.ScalesTxt.Select(x => x.ToStringDot())) : $"{s.ScalesTxt.First()}->{s.ScalesTxt.Last()}")}, {s.Res.Width}x{s.Res.Height}, Starting Seed: {startSeed}");
+                Logger.Log($"Running Stable Diffusion - {s.Res.Width}x{s.Res.Height}, Starting Seed: {startSeed}");
 
                 string initsStr = initImages != null ? $" and {initImages.Count} image{(initImages.Count != 1 ? "s" : "")} using {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
                 Logger.Log($"{s.Prompts.Length} prompt{(s.Prompts.Length != 1 ? "s" : "")} * {s.Iterations} image{(s.Iterations != 1 ? "s" : "")} * {s.Steps.Length} step value{(s.Steps.Length != 1 ? "s" : "")} * {s.ScalesTxt.Length} scale{(s.ScalesTxt.Length != 1 ? "s" : "")}{initsStr} = {argLists.Count} images total.");

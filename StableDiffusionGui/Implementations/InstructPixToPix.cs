@@ -87,7 +87,7 @@ namespace StableDiffusionGui.Implementations
                 }
 
                 Logger.ClearLogBox();
-                Logger.Log($"Running Stable Diffusion - {s.Iterations} Iterations, {s.Steps.Length} Steps, Scales {(s.ScalesTxt.Length < 4 ? string.Join(", ", s.ScalesTxt.Select(x => x.ToStringDot())) : $"{s.ScalesTxt.First()}->{s.ScalesTxt.Last()}")}, Starting Seed: {startSeed}");
+                Logger.Log($"Running Stable Diffusion (InstructPix2Pix) - {s.Res.Width}x{s.Res.Height}, Starting Seed: {startSeed}");
 
                 string initsStr = initImages != null ? $" and {initImages.Count} image{(initImages.Count != 1 ? "s" : "")} using {s.InitStrengths.Length} strength{(s.InitStrengths.Length != 1 ? "s" : "")}" : "";
                 Logger.Log(GetImageCountLogString(initImages, s.Prompts.Length, s.Iterations, s.Steps.Length, s.ScalesTxt.Length, s.ScalesImg.Length, argLists.Count));

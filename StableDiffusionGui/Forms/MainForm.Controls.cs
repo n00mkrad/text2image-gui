@@ -30,6 +30,7 @@ namespace StableDiffusionGui.Forms
         public bool IsUsingInpaintingModel { get { return Path.ChangeExtension(Config.Instance.Model, null).EndsWith(Constants.SuffixesPrefixes.InpaintingMdlSuf); } }
         public bool AnyInits { get { return MainUi.CurrentInitImgPaths.Any(); } }
         private Dictionary<Panel, int> _panelHeights = new Dictionary<Panel, int>();
+        private Implementation _lastImplementation = (Implementation)(-1);
 
         public void InitializeControls()
         {
@@ -56,7 +57,7 @@ namespace StableDiffusionGui.Forms
             CategoryPanels.Add(btnCollapseDebug, new List<Panel> { panelDebugAppendArgs, panelDebugSendStdin, panelDebugPerlinThresh, panelDebugLoopback });
 
             // Expand default categories
-            _expandedCategories = new List<Control> { btnCollapsePrompt, btnCollapseRendering, btnCollapseGeneration };
+            _expandedCategories = new List<Control> { btnCollapseImplementation, btnCollapsePrompt, btnCollapseRendering, btnCollapseGeneration };
             CategoryPanels.Keys.ToList().ForEach(c => c.Click += (s, e) => CollapseToggle((Control)s));
             CategoryPanels.Keys.ToList().ForEach(c => CollapseToggle(c, _expandedCategories.Contains(c)));
 
@@ -162,6 +163,26 @@ namespace StableDiffusionGui.Forms
             CategoryPanels.Keys.ToList().ForEach(btn => btn.Parent.SetVisible(CategoryPanels[btn].Any(p => p.Visible))); // Hide collapse buttons if their category has 0 visible panels
 
             #endregion
+
+            if (imp != _lastImplementation)
+            {
+                var res = new System.Drawing.Size();
+
+                if (imp == Implementation.SdXl)
+                    res = new System.Drawing.Size(1024, 1024);
+                else if (imp == Implementation.DiffusersOnnx)
+                    res = new System.Drawing.Size(512, 512);
+                else if (imp == Implementation.InvokeAi)
+                    res = comboxModelArch.Text.Contains("768") ? new System.Drawing.Size(768, 768) : new System.Drawing.Size(512, 512);
+
+                if (!res.IsEmpty)
+                {
+                    comboxResW.Text = res.Width.ToString();
+                    comboxResH.Text = res.Height.ToString();
+                }
+            }
+
+            _lastImplementation = imp;
         }
 
         private void ValidateCustomRes (ComboBox box = null)

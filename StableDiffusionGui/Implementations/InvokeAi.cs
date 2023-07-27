@@ -194,7 +194,7 @@ namespace StableDiffusionGui.Implementations
                 RunLoopAction(_opOrder.LoopOrder.First());
 
                 Logger.ClearLogBox();
-                Logger.Log($"Running Stable Diffusion - {s.Iterations} Iterations, {s.Steps.Length} Steps, Scales {(s.ScalesTxt.Length < 4 ? string.Join(", ", s.ScalesTxt.Select(x => x.ToStringDot())) : $"{s.ScalesTxt.First()}->{s.ScalesTxt.Last()}")}, {s.Res.AsString()}, Starting Seed: {startSeed}", false, Logger.LastUiLine.EndsWith("..."));
+                Logger.Log($"Running Stable Diffusion - {s.Res.Width}x{s.Res.Height}, Starting Seed: {startSeed}");
 
                 string modelsChecksumStartup = InvokeAiUtils.GetModelsHash(cachedModels);
                 string argsStartup = Args.InvokeAi.GetArgsStartup(cachedModels);
