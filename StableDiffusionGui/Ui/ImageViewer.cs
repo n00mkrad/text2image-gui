@@ -91,11 +91,14 @@ namespace StableDiffusionGui.Ui
             if (meta.Steps >= 0)
                 infos.Add($"{meta.Steps} Steps");
 
+            if (meta.RefineStrength > 0)
+                infos.Add($"Refine {meta.RefineStrength.ToStringDot("0.###")}");
+
             if (meta.Scale >= 0)
-                infos.Add($"Scale {meta.Scale.ToStringDot()}");
+                infos.Add($"Scale {meta.Scale.ToStringDot("0.###")}");
 
             if (meta.ScaleImg >= 0)
-                infos.Add($"Img Scale {meta.ScaleImg.ToStringDot()}");
+                infos.Add($"Img Scale {meta.ScaleImg.ToStringDot("0.###")}");
 
             Size res = Program.MainForm.pictBoxImgViewer.GetImageSafe().Size;
 
@@ -105,7 +108,7 @@ namespace StableDiffusionGui.Ui
                 infos.Add($"{meta.GeneratedResolution.Width}x{meta.GeneratedResolution.Height}{(meta.GeneratedResolution == res ? "" : $" => {res.Width}x{res.Height}")}");
 
             if (meta.InitStrength > 0.0001f && meta.InitStrength < 1.0f)
-                infos.Add($"Strength {meta.InitStrength.ToStringDot()}");
+                infos.Add($"Strength {meta.InitStrength.ToStringDot("0.###")}");
 
             if (!string.IsNullOrWhiteSpace(meta.Sampler))
                 infos.Add(Strings.Samplers.Get(meta.Sampler, true, true));

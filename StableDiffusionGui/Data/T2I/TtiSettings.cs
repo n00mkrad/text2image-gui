@@ -56,15 +56,16 @@ namespace StableDiffusionGui.Data
 
         public int GetTargetImgCount(ConfigInstance config = null)
         {
-            int count = 0;
+            int count;
 
             try
             {
                 int iniImgMult = (InitImgs == null || InitImgs.Length < 1) ? 1 : InitImgs.Length * InitStrengths.Length.Clamp(1, int.MaxValue); // 1 if no inits, otherwise init count
                 int scalesMult = ScalesTxt.Length.Clamp(1, int.MaxValue) * ScalesImg.Length.Clamp(1, int.MaxValue); // Use 1 instead of 0 for empty lists
                 int lorasMult = Loras != null && Loras.Count == 1 ? Loras.First().Value.Count : 1;
+                int refineMult = RefinerStrengths.Length.Clamp(1, int.MaxValue);
 
-                count = Prompts.Length * Iterations * scalesMult * Steps.Length * iniImgMult * lorasMult * RefinerStrengths.Length;
+                count = Prompts.Length * Iterations * scalesMult * Steps.Length * iniImgMult * lorasMult * refineMult;
 
                 if (ConfigParser.UpscaleAndSaveOriginals(config))
                     count *= 2;
