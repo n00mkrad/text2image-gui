@@ -1,6 +1,4 @@
 ﻿using StableDiffusionGui.Extensions;
-using StableDiffusionGui.Io;
-using StableDiffusionGui.MiscUtils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
