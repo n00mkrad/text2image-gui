@@ -1,5 +1,12 @@
 [
 {
+	"version": "1.12.0b2",
+	"channel": "beta",
+	"date": "2023-07-27",
+	"hashBasefiles": "7fdca6308bf1cffbdf77b1b30723611868b466a0",
+	"hashRepo": "ea6808888dd7efae6cbcb148000df3de0c9ad63c",
+},
+{
 	"version": "1.12.0b1",
 	"channel": "beta",
 	"date": "2023-07-26",
