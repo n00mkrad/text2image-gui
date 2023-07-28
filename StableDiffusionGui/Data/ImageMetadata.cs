@@ -275,6 +275,7 @@ namespace StableDiffusionGui.Data
             {
                 switch (pair.Key)
                 {
+                    case "model": Model = pair.Value; break;
                     case "prompt": Prompt = pair.Value; break;
                     case "promptNeg": NegativePrompt = pair.Value; break;
                     case "initImg": InitImgName = pair.Value; break;
