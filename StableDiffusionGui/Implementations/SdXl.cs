@@ -30,9 +30,8 @@ namespace StableDiffusionGui.Implementations
                 var baseModels = cachedModels.Where(m => m.Type == Enums.Models.Type.Normal).ToList();
                 var refinerModels = cachedModels.Where(m => m.Type == Enums.Models.Type.Refiner).ToList();
                 Model model = TtiUtils.CheckIfModelExists(s.Model, Implementation.SdXl, baseModels);
-                Model refineModel = TtiUtils.CheckIfModelExists(s.ModelAux, Implementation.SdXl, refinerModels);
 
-                if (model == null || refineModel == null)
+                if (model == null)
                     return;
 
                 if (s.Res.Width < 1024 && s.Res.Height < 1024)
@@ -42,6 +41,11 @@ namespace StableDiffusionGui.Implementations
                 long startSeed = s.Seed;
                 bool refine = s.RefinerStrengths.Any(rs => rs >= 0.05f);
                 string mode = NmkdiffUtils.GetGenerationMode(s, model);
+
+                Model refineModel = refine ? TtiUtils.CheckIfModelExists(s.ModelAux, Implementation.SdXl, refinerModels) : null;
+
+                if (refine && refineModel == null)
+                    return;
 
                 var argLists = new List<Dictionary<string, string>>(); // List of all args for each command
                 var args = new Dictionary<string, string>(); // List of args for current command
@@ -199,13 +203,14 @@ namespace StableDiffusionGui.Implementations
 
             bool ellipsis = Program.MainForm.LogText.EndsWith("...");
             // bool replace = ellipsis || Logger.LastUiLine.MatchesWildcard("*Image*generated*in*");
+            bool lastLineGeneratedText = Logger.LastUiLine.MatchesWildcard("*Generated*image*in*");
 
-            if (line.Contains("Loading base model"))
+            if (line.Contains("Loading base model") && !lastLineGeneratedText)
             {
                 Logger.Log($"Loading base model...", replaceLastLine: ellipsis);
             }
 
-            if (line.Contains("Loading refiner model"))
+            if (line.Contains("Loading refiner model") && !lastLineGeneratedText)
             {
                 Logger.Log($"Loading refiner model...", replaceLastLine: ellipsis);
             }
@@ -217,7 +222,7 @@ namespace StableDiffusionGui.Implementations
 
             if (line.Contains("Running base model"))
             {
-                if (!Logger.LastUiLine.MatchesWildcard("*Generated*image*in*"))
+                if (!lastLineGeneratedText)
                     Logger.LogIfLastLineDoesNotContainMsg($"Generating...", replaceLastLine: ellipsis);
 
                 _genState = GenerationState.Base;
@@ -230,7 +235,7 @@ namespace StableDiffusionGui.Implementations
 
             if (line.MatchesWildcard("*%|*| *") && !line.Contains("Loading"))
             {
-                if (!Logger.LastUiLine.MatchesWildcard("*Generated*image*in*"))
+                if (!lastLineGeneratedText)
                     Logger.LogIfLastLineDoesNotContainMsg($"Generating...", replaceLastLine: ellipsis);
 
                 int percent;

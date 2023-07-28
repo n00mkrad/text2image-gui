@@ -1,4 +1,5 @@
 ﻿using StableDiffusionGui.Data;
+using StableDiffusionGui.Extensions;
 using StableDiffusionGui.Forms;
 using StableDiffusionGui.Implementations;
 using StableDiffusionGui.Io;
@@ -165,7 +166,7 @@ namespace StableDiffusionGui.Main
                 Logger.Log($"No images generated.");
 
             Program.SetState(Program.BusyState.Standby);
-            Program.MainForm.runBtn.Enabled = true;
+            Program.MainForm.runBtn.SetEnabled(true);
 
             NotifyMode notifyMode = (NotifyMode)Config.Instance.NotifyModeIdx;
 
@@ -192,7 +193,7 @@ namespace StableDiffusionGui.Main
                 return;
 
             Canceling = true;
-            Program.MainForm.runBtn.Enabled = false;
+            Program.MainForm.runBtn.SetEnabled(false);
 
             try
             {
