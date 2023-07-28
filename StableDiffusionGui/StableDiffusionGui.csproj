@@ -304,6 +304,7 @@
     </Compile>
     <Compile Include="Implementations\IImplementation.cs" />
     <Compile Include="Implementations\IInvokePatcher.cs" />
+    <Compile Include="Implementations\ImplementationBase.cs" />
     <Compile Include="Implementations\InstructPixToPix.cs" />
     <Compile Include="Implementations\InvokeAiMetadata.cs" />
     <Compile Include="Implementations\InvokePatcher235.cs" />

@@ -165,6 +165,7 @@ namespace StableDiffusionGui.Main
                 Logger.Log($"No images generated.");
 
             Program.SetState(Program.BusyState.Standby);
+            Program.MainForm.runBtn.Enabled = true;
 
             NotifyMode notifyMode = (NotifyMode)Config.Instance.NotifyModeIdx;
 
@@ -187,10 +188,11 @@ namespace StableDiffusionGui.Main
 
         public static async void Cancel(string reason, bool showMsgBox, CancelMode cancelMode = CancelMode.SoftKill)
         {
-            if (Canceled)
+            if (Canceled || Canceling)
                 return;
 
             Canceling = true;
+            Program.MainForm.runBtn.Enabled = false;
 
             try
             {

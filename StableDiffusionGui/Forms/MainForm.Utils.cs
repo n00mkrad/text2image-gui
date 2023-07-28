@@ -93,9 +93,7 @@ namespace StableDiffusionGui.Forms
             SetProgress(0);
 
             bool imageGen = Program.State == Program.BusyState.ImageGeneration;
-
-            runBtn.Text = imageGen ? "Cancel" : "Generate!";
-            runBtn.ForeColor = imageGen ? Color.IndianRed : Color.White;
+            UpdateRunBtnState(imageGen);
             Control[] controlsToDisable = new Control[] { };
             Control[] controlsToHide = new Control[] { };
             progressCircle.SetVisible(Program.State != Program.BusyState.Standby);

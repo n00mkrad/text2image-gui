@@ -12,6 +12,7 @@ using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -183,6 +184,15 @@ namespace StableDiffusionGui.Forms
             }
 
             _lastImplementation = imp;
+        }
+
+        public void UpdateRunBtnState (bool? busy = null)
+        {
+            if(busy == null)
+                busy = Program.State == Program.BusyState.ImageGeneration;
+
+            runBtn.Text = busy == true ? "Cancel" : "Generate!";
+            runBtn.ForeColor = busy == true ? Color.IndianRed : Color.White;
         }
 
         private void ValidateCustomRes (ComboBox box = null)

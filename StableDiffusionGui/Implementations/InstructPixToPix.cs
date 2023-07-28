@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace StableDiffusionGui.Implementations
 {
-    internal class InstructPixToPix : IImplementation
+    internal class InstructPixToPix : ImplementationBase, IImplementation
     {
         public List<string> LastMessages { get => _lastMessages; }
         private List<string> _lastMessages = new List<string>();
@@ -204,34 +204,7 @@ namespace StableDiffusionGui.Implementations
 
         public async Task Cancel()
         {
-            Program.MainForm.runBtn.Enabled = false;
-
-            await TtiProcess.WriteStdIn("stop", 0, true);
-
-            await Task.Delay(100);
-
-            while (true)
-            {
-                var entries = Logger.GetLastEntries(Constants.Lognames.Sd, 5);
-                Dictionary<string, TimeSpan> linesWithAge = new Dictionary<string, TimeSpan>();
-
-                foreach (Logger.Entry entry in entries)
-                    linesWithAge[entry.Message] = DateTime.Now - entry.TimeDequeue;
-
-                linesWithAge = linesWithAge.Where(x => x.Value.TotalMilliseconds >= 0).ToDictionary(p => p.Key, p => p.Value);
-
-                if (linesWithAge.Count > 0)
-                {
-                    var lastLine = linesWithAge.Last();
-
-                    if (lastLine.Value.TotalMilliseconds > 2000)
-                        break;
-                }
-
-                await Task.Delay(100);
-            }
-
-            Program.MainForm.runBtn.Enabled = true;
+            await CancelNmkdiffusers();
         }
     }
 }
