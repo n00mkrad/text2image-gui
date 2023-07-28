@@ -180,7 +180,7 @@ namespace StableDiffusionGui.Implementations
                 ImageExport.TimeSinceLastImage.Restart();
             }
 
-            if (!TextToImage.Canceled && line.MatchesWildcard("*%|*| *") && !line.Contains("Fetching ") && !line.Contains("Downloading "))
+            if (!TextToImage.Canceled && line.MatchesWildcard("*%|*| *") && !line.Contains("Fetching ") && !line.Contains("Downloading ") && !line.Contains("Loading pipeline"))
             {
                 if (!Logger.LastUiLine.MatchesWildcard("*Generated*image*in*") && !line.Contains("B/s"))
                     Logger.LogIfLastLineDoesNotContainMsg($"Generating...");
