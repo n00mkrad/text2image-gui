@@ -25,8 +25,8 @@ SD GUI 1.10.0 Changelog:
 - New: Image generation symmetry options
 - New: Utility to directly download Huggingface Diffusers models (no need for git clone etc.)
 - New: Option to skip last CLIP layers ("CLIP Skip") which can improve quality with some models
-- New: Chroma key aka "Greenscreen" option when loading an image (e.g. turn black pixels transparent)
-- New additional config file "settings.ini" where power users can adjust certain limits (e.g. max res)
+- New: Chroma key option when loading an image (e.g. turn black pixels transparent)
+- New additional config file "settings.ini" where power users can adjust certain values
 - Improved: Loading transparent images from clipboard is now possible
 - Improved: Any model format can now be loaded directly, Diffusers (fastest), Safetensors, Ckpt
 - Improved: Prompts can now be longer than 77 tokens (experimental)
