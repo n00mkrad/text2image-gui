@@ -99,9 +99,10 @@ namespace StableDiffusionGui.Io
             var sw = Program.Debug ? new NmkdStopwatch() : null;
             IEnumerable<Model> models = GetModelsAll();
             Format[] supportedFormats = implementation.GetInfo().SupportedModelFormats;
+            models = models.Where(m => supportedFormats.Contains(m.Format));
 
             if (type != (Enums.Models.Type)(-1))
-                models = models.Where(m => m.Type == type && supportedFormats.Contains(m.Format));
+                models = models.Where(m => m.Type == type);
 
             if (implementation == Implementation.SdXl)
                 models = models.Where(m => m.Size > 5 * 1024 * 1024 * 1024L && m.Name.Lower().Contains("xl"));

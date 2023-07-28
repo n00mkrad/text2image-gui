@@ -186,18 +186,18 @@ namespace StableDiffusionGui.Forms
             _lastImplementation = imp;
         }
 
-        public void UpdateRunBtnState (bool? busy = null)
+        public void UpdateRunBtnState(bool? busy = null)
         {
-            if(busy == null)
+            if (busy == null)
                 busy = Program.State == Program.BusyState.ImageGeneration;
 
             runBtn.Text = busy == true ? "Cancel" : "Generate!";
             runBtn.ForeColor = busy == true ? Color.IndianRed : Color.White;
         }
 
-        private void ValidateCustomRes (ComboBox box = null)
+        private void ValidateCustomRes(ComboBox box = null)
         {
-            if(box == null || box == comboxResW)
+            if (box == null || box == comboxResW)
             {
                 int w = comboxResW.Text.GetInt();
                 w = w.Clamp(256, 8192).RoundMod(MainUi.CurrentModulo);
@@ -238,7 +238,7 @@ namespace StableDiffusionGui.Forms
             {
                 string preferredRefinerName = comboxModel.Text.Lower().Replace("base", "refiner");
 
-                if(comboxModel2.Items.Cast<Model>().Any(m => m.ToString().Lower() == preferredRefinerName))
+                if (comboxModel2.Items.Cast<Model>().Any(m => m.ToString().Lower() == preferredRefinerName))
                     comboxModel2.Text = preferredRefinerName;
             }
         }
@@ -494,7 +494,9 @@ namespace StableDiffusionGui.Forms
 
             IEnumerable<Model> models = Models.GetModels((Enums.Models.Type)(-1), imp);
             comboxModel.SetItems(models.Where(m => m.Type == Enums.Models.Type.Normal), UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.None);
-            comboxModel2.SetItems(models.Where(m => m.Type == Enums.Models.Type.Refiner), UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.None);
+
+            if (imp == Implementation.SdXl)
+                comboxModel2.SetItems(models.Where(m => m.Type == Enums.Models.Type.Refiner), UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.None);
         }
 
         private void SetLoraPanelSize(PromptFieldSizeMode sizeMode = PromptFieldSizeMode.Toggle)
