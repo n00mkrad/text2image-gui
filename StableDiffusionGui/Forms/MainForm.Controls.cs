@@ -67,7 +67,6 @@ namespace StableDiffusionGui.Forms
             // Events
             comboxBackend.SelectedIndexChanged += (s, e) => { Config.Instance.Implementation = ParseUtils.GetEnum<Implementation>(comboxBackend.Text, true, Strings.Implementation); TryRefreshUiState(); }; // Implementation change
             comboxModel.SelectedIndexChanged += (s, e) => ModelChanged();
-            comboxModel2.SelectedIndexChanged += (s, e) => { Config.Instance.ModelAux = comboxModel2.Text; };
             comboxModel.DropDown += (s, e) => ReloadModelsCombox();
             comboxModel.DropDownClosed += (s, e) => panelSettings.Focus();
             comboxResW.SelectedIndexChanged += (s, e) => ResolutionChanged(); // Resolution change

@@ -116,7 +116,11 @@ namespace StableDiffusionGui.Io
         public static Model GetModel(List<Model> cachedModels, string filename, Enums.Models.Type type = Enums.Models.Type.Normal, Implementation imp = Implementation.InvokeAi)
         {
             Format[] supportedFormats = imp.GetInfo().SupportedModelFormats;
-            return cachedModels.Where(m => m.Name == filename && m.Type == type && supportedFormats.Contains(m.Format)).FirstOrDefault();
+
+            if (type == (Enums.Models.Type)(-1))
+                return cachedModels.Where(m => m.Name == filename && supportedFormats.Contains(m.Format)).FirstOrDefault();
+            else
+                return cachedModels.Where(m => m.Name == filename && m.Type == type && supportedFormats.Contains(m.Format)).FirstOrDefault();
         }
 
         public static Model GetModel(string filename, Enums.Models.Type type = Enums.Models.Type.Normal, Implementation imp = Implementation.InvokeAi)

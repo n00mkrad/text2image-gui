@@ -2911,6 +2911,7 @@ namespace StableDiffusionGui.Forms
             // 
             // comboxModel2
             // 
+            this.comboxModel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.comboxModel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.comboxModel2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboxModel2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;

@@ -42,7 +42,8 @@ namespace StableDiffusionGui.Implementations
                 bool refine = s.RefinerStrengths.Any(rs => rs >= 0.05f);
                 string mode = NmkdiffUtils.GetGenerationMode(s, model);
 
-                Model refineModel = refine ? TtiUtils.CheckIfModelExists(s.ModelAux, Implementation.SdXl, refinerModels) : null;
+                string missingRefinerMsg = "No Refiner model file has been set.\nPlease set one or disable image refining.";
+                Model refineModel = refine ? TtiUtils.CheckIfModelExists(s.ModelAux, Implementation.SdXl, refinerModels, missingRefinerMsg) : null;
 
                 if (refine && refineModel == null)
                     return;
@@ -127,10 +128,11 @@ namespace StableDiffusionGui.Implementations
                     $"-o {outPath.Wrap(true)}"
                 };
 
-                if (Config.Instance.SdXlOptimize)
-                {
-                    scriptArgs.Add("--sdxl_optimize");
-                }
+                if (Config.Instance.NmkdiffOffload)
+                    scriptArgs.Add("--offload");
+
+                if (Config.Instance.NmkdiffSdXLSequential)
+                    scriptArgs.Add("--sdxl_sequential");
 
                 string newStartupSettings = string.Join(" ", scriptArgs).Remove(" ");
 

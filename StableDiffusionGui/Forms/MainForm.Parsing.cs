@@ -111,6 +111,8 @@ namespace StableDiffusionGui.Forms
 
         public TtiSettings GetCurrentTtiSettings()
         {
+            Config.Instance.ModelAux = comboxModel2.Text;
+
             TtiSettings settings = new TtiSettings
             {
                 Implementation = Config.Instance.Implementation,

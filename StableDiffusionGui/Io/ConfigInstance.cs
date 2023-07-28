@@ -86,7 +86,8 @@ namespace StableDiffusionGui.Io
         public bool DontClearPipCache;
         public bool AlwaysClearInpaintMask;
         public int ImageCacheMaxSizeMb;
-        public bool SdXlOptimize;
+        public bool NmkdiffOffload;
+        public bool NmkdiffSdXLSequential;
         public float SdXlRefinerStrength;
 
         public ConfigInstance()
@@ -129,8 +130,9 @@ namespace StableDiffusionGui.Io
             if (ramGb > 14f) ImageCacheMaxSizeMb = 128;
             if (ramGb > 22f) ImageCacheMaxSizeMb = 256;
 
-            SdXlOptimize = true;
             SdXlRefinerStrength = 0.2f;
+            NmkdiffOffload = true;
+            NmkdiffSdXLSequential = false;
         }
 
         public ConfigInstance Clone()

@@ -124,23 +124,26 @@ namespace StableDiffusionGui.Main
 
         /// <summary> Checks if Stable Diffusion model exists </summary>
         /// <returns> Model ZlpFileInfo if it exists - null if not </returns>
-        public static Model CheckIfModelExists(string modelName = null, Implementation imp = (Implementation)(-1), List<Model> cachedModels = null)
+        public static Model CheckIfModelExists(string modelName = null, Implementation imp = (Implementation)(-1), List<Model> cachedModels = null, string overrideUnsetMsg = "")
         {
             if (modelName == null)
                 modelName = Config.Instance.Model;
 
             if (modelName.IsEmpty())
             {
-                TextToImage.Cancel($"No Stable Diffusion model file has been set.\nPlease set one in the settings, or quick-switch with Ctrl+M.", true);
+                string msg = "No model file has been set.\nPlease select one or quick-switch with Ctrl+M.";
+
+                if(overrideUnsetMsg.IsNotEmpty())
+                    msg = overrideUnsetMsg;
+
+                TextToImage.Cancel(msg, true);
                 return null;
             }
             else
             {
-                Model model;
-
-                if (!ModelExists(out model, modelName, imp))
+                if (!ModelExists(out Model model, modelName, imp, cachedModels))
                 {
-                    TextToImage.Cancel($"Stable Diffusion model file {modelName.Wrap()} not found.\nPossibly it was moved, renamed, or deleted.", true);
+                    TextToImage.Cancel($"Model file {modelName.Wrap()} not found.\nPossibly it was moved, renamed, or deleted.", true);
                     return null;
                 }
                 else
