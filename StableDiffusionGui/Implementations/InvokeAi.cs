@@ -17,16 +17,16 @@ using System.Threading.Tasks;
 
 namespace StableDiffusionGui.Implementations
 {
-    internal class InvokeAi : IImplementation
+    internal class InvokeAi : ImplementationBase, IImplementation
     {
         public List<string> LastMessages { get => _lastMessages; }
         private List<string> _lastMessages = new List<string>();
-        private static bool _invokeAiLastModelCached = false;
+        private static bool _lastModelCached = false;
         public enum HiresFixStatus { NotUpscaling, WaitingForStart, Upscaling }
         private static HiresFixStatus _hiresFixStatus;
         private bool _hasErrored = false;
 
-        public int Pid = -1;
+        public static int Pid = -1;
 
         public enum FixAction { Upscale, FaceRestoration }
 
@@ -467,9 +467,9 @@ namespace StableDiffusionGui.Implementations
             bool replace = ellipsis || Logger.LastUiLine.MatchesWildcard("*Generated*image*in*");
 
             if (!TextToImage.Canceled && line.StartsWith(">> Retrieving model "))
-                _invokeAiLastModelCached = true;
+                _lastModelCached = true;
             else if (!TextToImage.Canceled && line.StartsWith(">> Loading ") && line.Contains(" from "))
-                _invokeAiLastModelCached = false;
+                _lastModelCached = false;
 
             if (!TextToImage.Canceled && _hiresFixStatus == HiresFixStatus.WaitingForStart && line.Remove(" ").MatchesWildcard(@"0%||0/*[00:00<?,?it/s]*"))
             {
@@ -487,7 +487,7 @@ namespace StableDiffusionGui.Implementations
                 _hiresFixStatus = _hiresFixStatus = HiresFixStatus.WaitingForStart;
             }
 
-            if (!TextToImage.Canceled && line.MatchesWildcard("*%|*|*/*") && !line.Lower().Contains("downloading") && !line.Contains("Loading pipeline components"))
+            if (!TextToImage.Canceled && !TextToImage.Canceling && line.MatchesWildcard("*%|*|*/*") && !line.Lower().Contains("downloading") && !line.Contains("Loading pipeline components"))
             {
                 string progStr = line.Split('|')[2].Trim().Split(' ')[0].Trim(); // => e.g. "3/50"
 
@@ -548,7 +548,7 @@ namespace StableDiffusionGui.Implementations
 
             if (line.Trim().StartsWith(Constants.LogMsgs.Invoke.TiTriggers))
             {
-                Logger.Log($"Model {(_invokeAiLastModelCached ? " retrieved from RAM cache" : "loaded")}.", false, ellipsis);
+                Logger.Log($"Model {(_lastModelCached ? " retrieved from RAM cache" : "loaded")}.", false, ellipsis);
             }
 
             if (line.Trim().StartsWith(">> Preparing tokens for textual inversion"))
@@ -620,8 +620,6 @@ namespace StableDiffusionGui.Implementations
 
         private async Task WaitForCancel()
         {
-            Program.MainForm.runBtn.SetEnabled(false);
-
             SendCtrlC();
             SendCtrlC();
             await Task.Delay(500);
@@ -647,8 +645,6 @@ namespace StableDiffusionGui.Implementations
 
                 await Task.Delay(200);
             }
-
-            Program.MainForm.runBtn.SetEnabled(true);
         }
     }
 }
