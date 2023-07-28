@@ -183,6 +183,8 @@ namespace StableDiffusionGui.Forms
             ConfigParser.LoadGuiElement(checkboxUnloadModel, ref Config.Instance.UnloadModel);
             ConfigParser.LoadGuiElement(checkboxAutoSetResForInitImg, ref Config.Instance.AutoSetResForInitImg);
             ConfigParser.LoadGuiElement(checkboxInitImageRetainAspectRatio, ref Config.Instance.InitImageRetainAspectRatio);
+            ConfigParser.LoadGuiElement(checkboxDiffusersOffload, ref Config.Instance.NmkdiffOffload);
+            ConfigParser.LoadGuiElement(checkboxSdXlSequential, ref Config.Instance.NmkdiffSdXLSequential);
         }
 
         void SaveSettings()
@@ -217,6 +219,8 @@ namespace StableDiffusionGui.Forms
             ConfigParser.SaveGuiElement(checkboxUnloadModel, ref Config.Instance.UnloadModel);
             ConfigParser.SaveGuiElement(checkboxAutoSetResForInitImg, ref Config.Instance.AutoSetResForInitImg);
             ConfigParser.SaveGuiElement(checkboxInitImageRetainAspectRatio, ref Config.Instance.InitImageRetainAspectRatio);
+            ConfigParser.SaveGuiElement(checkboxDiffusersOffload, ref Config.Instance.NmkdiffOffload);
+            ConfigParser.SaveGuiElement(checkboxSdXlSequential, ref Config.Instance.NmkdiffSdXLSequential);
 
             Config.Save();
         }
@@ -268,7 +272,8 @@ namespace StableDiffusionGui.Forms
             {
                 Config.Instance.Implementation = CurrImplementation;
                 panelFullPrecision.SetVisible(CurrImplementation.Supports(ImplementationInfo.Feature.HalfPrecisionToggle));
-                panelUnloadModel.SetVisible(CurrImplementation.Supports(ImplementationInfo.Feature.InteractiveCli));
+                panelUnloadModel.SetVisible(false); // Temporary
+                // panelUnloadModel.SetVisible(CurrImplementation.Supports(ImplementationInfo.Feature.InteractiveCli));
                 panelCudaDevice.SetVisible(CurrImplementation.Supports(ImplementationInfo.Feature.DeviceSelection));
                 panelSdModel.SetVisible(CurrImplementation.Supports(ImplementationInfo.Feature.CustomModels));
                 panelEmbeddingsPath.SetVisible(CurrImplementation.Supports(ImplementationInfo.Feature.Embeddings));
@@ -276,6 +281,7 @@ namespace StableDiffusionGui.Forms
                 panelVae.SetVisible(CurrImplementation.Supports(ImplementationInfo.Feature.CustomVae));
                 panelAdvancedOptsInvoke.SetVisible(CurrImplementation == Implementation.InvokeAi);
                 panelModelCaching.SetVisible(CurrImplementation == Implementation.InvokeAi);
+                panelSdXlOpt.SetVisible(CurrImplementation == Implementation.SdXl);
 
                 LoadModels();
                 LoadVaes();

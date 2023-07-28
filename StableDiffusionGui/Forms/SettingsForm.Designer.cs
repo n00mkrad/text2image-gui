@@ -79,6 +79,12 @@
             this.btnFavsPathBrowse = new HTAlt.WinForms.HTButton();
             this.panel35 = new System.Windows.Forms.Panel();
             this.label16 = new System.Windows.Forms.Label();
+            this.panelSdXlOpt = new System.Windows.Forms.TableLayoutPanel();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.checkboxSdXlSequential = new System.Windows.Forms.CheckBox();
+            this.checkboxDiffusersOffload = new System.Windows.Forms.CheckBox();
+            this.panel6 = new System.Windows.Forms.Panel();
+            this.label8 = new System.Windows.Forms.Label();
             this.panelPromptInFilename = new System.Windows.Forms.Panel();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.panel19 = new System.Windows.Forms.Panel();
@@ -208,6 +214,9 @@
             this.tableLayoutPanel13.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel35.SuspendLayout();
+            this.panelSdXlOpt.SuspendLayout();
+            this.panel3.SuspendLayout();
+            this.panel6.SuspendLayout();
             this.panelPromptInFilename.SuspendLayout();
             this.tableLayoutPanel5.SuspendLayout();
             this.panel19.SuspendLayout();
@@ -297,6 +306,7 @@
             this.parentPanel.Controls.Add(this.panelCudaDevice);
             this.parentPanel.Controls.Add(this.panelAdvancedOptsInvoke);
             this.parentPanel.Controls.Add(this.panelModelCaching);
+            this.parentPanel.Controls.Add(this.panelSdXlOpt);
             this.parentPanel.Controls.Add(this.panelLoras);
             this.parentPanel.Controls.Add(this.panelEmbeddingsPath);
             this.parentPanel.Controls.Add(this.panelVae);
@@ -315,7 +325,7 @@
             // 
             this.panelNotify.Controls.Add(this.notificationPanel);
             this.panelNotify.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelNotify.Location = new System.Drawing.Point(0, 785);
+            this.panelNotify.Location = new System.Drawing.Point(0, 820);
             this.panelNotify.Name = "panelNotify";
             this.panelNotify.Size = new System.Drawing.Size(843, 35);
             this.panelNotify.TabIndex = 22;
@@ -389,7 +399,7 @@
             // 
             this.panelAdvancedMode.Controls.Add(this.tableLayoutPanel4);
             this.panelAdvancedMode.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelAdvancedMode.Location = new System.Drawing.Point(0, 750);
+            this.panelAdvancedMode.Location = new System.Drawing.Point(0, 785);
             this.panelAdvancedMode.Name = "panelAdvancedMode";
             this.panelAdvancedMode.Size = new System.Drawing.Size(843, 35);
             this.panelAdvancedMode.TabIndex = 15;
@@ -455,7 +465,7 @@
             // 
             this.panelInitImageRetainAspectRatio.Controls.Add(this.tableLayoutPanel15);
             this.panelInitImageRetainAspectRatio.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelInitImageRetainAspectRatio.Location = new System.Drawing.Point(0, 715);
+            this.panelInitImageRetainAspectRatio.Location = new System.Drawing.Point(0, 750);
             this.panelInitImageRetainAspectRatio.Name = "panelInitImageRetainAspectRatio";
             this.panelInitImageRetainAspectRatio.Size = new System.Drawing.Size(843, 35);
             this.panelInitImageRetainAspectRatio.TabIndex = 29;
@@ -513,7 +523,7 @@
             this.label19.Location = new System.Drawing.Point(2, 11);
             this.label19.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(304, 13);
+            this.label19.Size = new System.Drawing.Size(274, 13);
             this.label19.TabIndex = 85;
             this.label19.Text = "Retain Aspect Ratio of Base Image (If It Needs Resizing)";
             // 
@@ -521,7 +531,7 @@
             // 
             this.panelAutoSetResForInitImg.Controls.Add(this.tableLayoutPanel14);
             this.panelAutoSetResForInitImg.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelAutoSetResForInitImg.Location = new System.Drawing.Point(0, 680);
+            this.panelAutoSetResForInitImg.Location = new System.Drawing.Point(0, 715);
             this.panelAutoSetResForInitImg.Name = "panelAutoSetResForInitImg";
             this.panelAutoSetResForInitImg.Size = new System.Drawing.Size(843, 35);
             this.panelAutoSetResForInitImg.TabIndex = 28;
@@ -579,7 +589,7 @@
             this.label18.Location = new System.Drawing.Point(2, 11);
             this.label18.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(366, 13);
+            this.label18.Size = new System.Drawing.Size(336, 13);
             this.label18.TabIndex = 85;
             this.label18.Text = "Automatically Set Generation Resolution After Loading an Base Image";
             // 
@@ -587,7 +597,7 @@
             // 
             this.panel1.Controls.Add(this.label17);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Location = new System.Drawing.Point(0, 640);
+            this.panel1.Location = new System.Drawing.Point(0, 675);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(843, 40);
             this.panel1.TabIndex = 27;
@@ -607,7 +617,7 @@
             // 
             this.panelSaveUnprocessedImages.Controls.Add(this.panel29);
             this.panelSaveUnprocessedImages.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSaveUnprocessedImages.Location = new System.Drawing.Point(0, 605);
+            this.panelSaveUnprocessedImages.Location = new System.Drawing.Point(0, 640);
             this.panelSaveUnprocessedImages.Name = "panelSaveUnprocessedImages";
             this.panelSaveUnprocessedImages.Size = new System.Drawing.Size(843, 35);
             this.panelSaveUnprocessedImages.TabIndex = 23;
@@ -691,7 +701,7 @@
             // 
             this.panelImgSaveMode.Controls.Add(this.tableLayoutPanel20);
             this.panelImgSaveMode.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelImgSaveMode.Location = new System.Drawing.Point(0, 570);
+            this.panelImgSaveMode.Location = new System.Drawing.Point(0, 605);
             this.panelImgSaveMode.Name = "panelImgSaveMode";
             this.panelImgSaveMode.Size = new System.Drawing.Size(843, 35);
             this.panelImgSaveMode.TabIndex = 34;
@@ -763,7 +773,7 @@
             // 
             this.panelFavsDir.Controls.Add(this.tableLayoutPanel13);
             this.panelFavsDir.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelFavsDir.Location = new System.Drawing.Point(0, 535);
+            this.panelFavsDir.Location = new System.Drawing.Point(0, 570);
             this.panelFavsDir.Name = "panelFavsDir";
             this.panelFavsDir.Size = new System.Drawing.Size(843, 35);
             this.panelFavsDir.TabIndex = 26;
@@ -850,11 +860,79 @@
             this.label16.TabIndex = 85;
             this.label16.Text = "Favorites Folder";
             // 
+            // panelSdXlOpt
+            // 
+            this.panelSdXlOpt.ColumnCount = 2;
+            this.panelSdXlOpt.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.panelSdXlOpt.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
+            this.panelSdXlOpt.Controls.Add(this.panel3, 1, 0);
+            this.panelSdXlOpt.Controls.Add(this.panel6, 0, 0);
+            this.panelSdXlOpt.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelSdXlOpt.Location = new System.Drawing.Point(0, 285);
+            this.panelSdXlOpt.Name = "panelSdXlOpt";
+            this.panelSdXlOpt.RowCount = 1;
+            this.panelSdXlOpt.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.panelSdXlOpt.Size = new System.Drawing.Size(843, 35);
+            this.panelSdXlOpt.TabIndex = 35;
+            // 
+            // panel3
+            // 
+            this.panel3.Controls.Add(this.checkboxSdXlSequential);
+            this.panel3.Controls.Add(this.checkboxDiffusersOffload);
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel3.Location = new System.Drawing.Point(410, 0);
+            this.panel3.Margin = new System.Windows.Forms.Padding(0);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(433, 35);
+            this.panel3.TabIndex = 86;
+            // 
+            // checkboxSdXlSequential
+            // 
+            this.checkboxSdXlSequential.AutoSize = true;
+            this.checkboxSdXlSequential.Location = new System.Drawing.Point(117, 10);
+            this.checkboxSdXlSequential.Name = "checkboxSdXlSequential";
+            this.checkboxSdXlSequential.Size = new System.Drawing.Size(231, 17);
+            this.checkboxSdXlSequential.TabIndex = 87;
+            this.checkboxSdXlSequential.Text = "Unload Base Model When Running Refiner";
+            this.checkboxSdXlSequential.UseVisualStyleBackColor = true;
+            // 
+            // checkboxDiffusersOffload
+            // 
+            this.checkboxDiffusersOffload.AutoSize = true;
+            this.checkboxDiffusersOffload.Location = new System.Drawing.Point(5, 10);
+            this.checkboxDiffusersOffload.Name = "checkboxDiffusersOffload";
+            this.checkboxDiffusersOffload.Size = new System.Drawing.Size(106, 17);
+            this.checkboxDiffusersOffload.TabIndex = 86;
+            this.checkboxDiffusersOffload.Text = "Model Offloading";
+            this.checkboxDiffusersOffload.UseVisualStyleBackColor = true;
+            // 
+            // panel6
+            // 
+            this.panel6.Controls.Add(this.label8);
+            this.panel6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel6.Location = new System.Drawing.Point(0, 0);
+            this.panel6.Margin = new System.Windows.Forms.Padding(0);
+            this.panel6.Name = "panel6";
+            this.panel6.Size = new System.Drawing.Size(410, 35);
+            this.panel6.TabIndex = 85;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.ForeColor = System.Drawing.Color.White;
+            this.label8.Location = new System.Drawing.Point(2, 11);
+            this.label8.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(162, 13);
+            this.label8.TabIndex = 84;
+            this.label8.Text = "Stable Diffusion XL Optimizations";
+            // 
             // panelPromptInFilename
             // 
             this.panelPromptInFilename.Controls.Add(this.tableLayoutPanel5);
             this.panelPromptInFilename.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelPromptInFilename.Location = new System.Drawing.Point(0, 500);
+            this.panelPromptInFilename.Location = new System.Drawing.Point(0, 535);
             this.panelPromptInFilename.Name = "panelPromptInFilename";
             this.panelPromptInFilename.Size = new System.Drawing.Size(843, 35);
             this.panelPromptInFilename.TabIndex = 16;
@@ -989,7 +1067,7 @@
             // 
             this.panelPromptSubfolders.Controls.Add(this.tableLayoutPanel2);
             this.panelPromptSubfolders.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelPromptSubfolders.Location = new System.Drawing.Point(0, 465);
+            this.panelPromptSubfolders.Location = new System.Drawing.Point(0, 500);
             this.panelPromptSubfolders.Name = "panelPromptSubfolders";
             this.panelPromptSubfolders.Size = new System.Drawing.Size(843, 35);
             this.panelPromptSubfolders.TabIndex = 12;
@@ -1085,7 +1163,7 @@
             // 
             this.panelOutPath.Controls.Add(this.tableLayoutPanel7);
             this.panelOutPath.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelOutPath.Location = new System.Drawing.Point(0, 430);
+            this.panelOutPath.Location = new System.Drawing.Point(0, 465);
             this.panelOutPath.Name = "panelOutPath";
             this.panelOutPath.Size = new System.Drawing.Size(843, 35);
             this.panelOutPath.TabIndex = 13;
@@ -1176,7 +1254,7 @@
             // 
             this.panel5.Controls.Add(this.label5);
             this.panel5.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel5.Location = new System.Drawing.Point(0, 390);
+            this.panel5.Location = new System.Drawing.Point(0, 425);
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(843, 40);
             this.panel5.TabIndex = 14;
@@ -1196,7 +1274,7 @@
             // 
             this.panelCudaDevice.Controls.Add(this.tableLayoutPanel9);
             this.panelCudaDevice.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelCudaDevice.Location = new System.Drawing.Point(0, 355);
+            this.panelCudaDevice.Location = new System.Drawing.Point(0, 390);
             this.panelCudaDevice.Name = "panelCudaDevice";
             this.panelCudaDevice.Size = new System.Drawing.Size(843, 35);
             this.panelCudaDevice.TabIndex = 21;
@@ -1265,7 +1343,7 @@
             // 
             this.panelAdvancedOptsInvoke.Controls.Add(this.tableLayoutPanel16);
             this.panelAdvancedOptsInvoke.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelAdvancedOptsInvoke.Location = new System.Drawing.Point(0, 320);
+            this.panelAdvancedOptsInvoke.Location = new System.Drawing.Point(0, 355);
             this.panelAdvancedOptsInvoke.Name = "panelAdvancedOptsInvoke";
             this.panelAdvancedOptsInvoke.Size = new System.Drawing.Size(843, 35);
             this.panelAdvancedOptsInvoke.TabIndex = 30;
@@ -1339,7 +1417,7 @@
             // 
             this.panelModelCaching.Controls.Add(this.tableLayoutPanel17);
             this.panelModelCaching.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelModelCaching.Location = new System.Drawing.Point(0, 285);
+            this.panelModelCaching.Location = new System.Drawing.Point(0, 320);
             this.panelModelCaching.Name = "panelModelCaching";
             this.panelModelCaching.Size = new System.Drawing.Size(843, 35);
             this.panelModelCaching.TabIndex = 31;
@@ -2105,6 +2183,11 @@
             this.panel2.PerformLayout();
             this.panel35.ResumeLayout(false);
             this.panel35.PerformLayout();
+            this.panelSdXlOpt.ResumeLayout(false);
+            this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
+            this.panel6.ResumeLayout(false);
+            this.panel6.PerformLayout();
             this.panelPromptInFilename.ResumeLayout(false);
             this.tableLayoutPanel5.ResumeLayout(false);
             this.panel19.ResumeLayout(false);
@@ -2335,5 +2418,11 @@
         private System.Windows.Forms.ComboBox comboxImgSaveMode;
         private System.Windows.Forms.Panel panel50;
         private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.TableLayoutPanel panelSdXlOpt;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.CheckBox checkboxDiffusersOffload;
+        private System.Windows.Forms.Panel panel6;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.CheckBox checkboxSdXlSequential;
     }
 }

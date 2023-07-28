@@ -69,6 +69,7 @@ namespace StableDiffusionGui.Forms
             comboxModel.SelectedIndexChanged += (s, e) => ModelChanged();
             comboxModel.DropDown += (s, e) => ReloadModelsCombox();
             comboxModel.DropDownClosed += (s, e) => panelSettings.Focus();
+            comboxModel2.DropDown += (s, e) => ReloadModelsCombox();
             comboxResW.SelectedIndexChanged += (s, e) => ResolutionChanged(); // Resolution change
             comboxResH.SelectedIndexChanged += (s, e) => ResolutionChanged(); // Resolution change
             ImageViewer.OnImageChanged += () => UpdateImgViewerBtns(); // Image change
