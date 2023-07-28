@@ -1,3 +1,43 @@
+SD GUI 1.11.0 Changelog:
+- New: LoRA and LyCORIS support
+- New: LoRA training GUI (replaces Dreambooth, works with 8 GB GPUs)
+- New: Option to auto-delete generated images afterwards (if they weren't copied to favs)
+- Improved: Updater is much more stable now, and only re-installs updated/new packages
+- Improved: External VAEs now also work with Diffusers models
+- Improved: Image progress bar now takes high-res fix into account instead of running twice
+- Improved: Max seed increased from 4294967295 to 9223372036854775807 (int64 max)
+- Improved: VAE folders are now separate from model folders (again)
+- Improved: Embeddings folder path can now be changed
+- Improved: Progress bar and ETA now accounts for queued tasks instead of running per-task
+- Improved: Image Viewer buttons (e.g. prev/next) are now disabled when there are no images to show
+- Improved: Various UI/UX improvements
+- Fixed issues caused by moving the installation folder, this should now work without problems
+- Fixed: Applying CLIP Skip to a model would make it impossible to disable it again
+- Fixed: Inpainting model name check is no longer case-sensitive and no longer requires a hyphen
+- Fixed: "Append To Prompt" button for embeddings will no longer add a comma if there already is one
+
+
+SD GUI 1.10.0 Changelog:
+- New: Support for Stable Diffusion 2.x models
+- New: Added outpainting (expanding images into any direction)
+- New: Built-in Self-Updater (experimental)
+- New: Added Karras samplers, including DPM++ 2M Karras
+- New: Image generation symmetry options
+- New: Utility to directly download Huggingface Diffusers models (no need for git clone etc.)
+- New: Option to skip last CLIP layers ("CLIP Skip") which can improve quality with some models
+- New: Chroma key aka "Greenscreen" option when loading an image (e.g. turn black pixels transparent)
+- New additional config file "settings.ini" where power users can adjust certain limits (e.g. max res)
+- Improved: Loading transparent images from clipboard is now possible
+- Improved: Any model format can now be loaded directly, Diffusers (fastest), Safetensors, Ckpt
+- Improved: Prompts can now be longer than 77 tokens (experimental)
+- Improved: Textual Inversion embeddings are now properly integrated, newer formats supported
+- Improved: InstructPix2Pix and SD ONNX no longer need to reload the model on each run
+- Improved: Maximum resolution and prompt history limit have been increased
+- Improved: UI is now split into categories that can be collapsed
+- Improved: A wide range of UI/UX performance improvements, reduced flickering, etc
+- Too many bug fixes to list
+
+
 SD GUI 1.9.1 Changelog:
 - New: Resolution can now also be adjusted in InstructPix2Pix mode (resizes input image)
 - New: Resulting aspect ratio is shown next to resolution option
@@ -30,104 +70,3 @@ SD GUI 1.9.0 Changelog:
 - Fixed: Minor PNG metadata parsing issues
 - Fixed: Various of other minor fixes
 
-
-
-SD GUI 1.8.1 Changelog:
-- New: RunwayML inpainting now also works with ONNX implementation
-- New: Version now checks for the latest version on startup (no updater yet)
-- Improved: High-Res Fix can now be enabled if any axis is >512px instead of both
-- Improved: High-Res Fix option is saved/loaded when closing and re-opening GUI
-- Improved: Inpainting Mask Blur is now automatically disabled when using RunwayML inpainting
-- Improved: In Installer, a custom git commit can now be used (for developers)
-- Fixed: Upscalers were disabled by default on <=6GB GPUs
-- Fixed: Model loading would fail without an internet connection
-- Fixed: ONNX seeding did not work
-- Fixed: CFG Scale <=1 didn't work or would fallback to default value
-- Fixed: Inpainting mask was saved with irreversible blur, making editing harder
-- Fixed: Init image import would ignore stretch/pad setting
-- Fixed: Saved inpainting mask wouldn't get cleared properly when resetting it
-- Fixed: Various minor bugs
-
-
-
-SD GUI 1.8.0 Changelog:
-- New: Stable Diffusion DirectML implementation, enables image generation on AMD GPUs
-- New: Inpainting models are now supported, providing much better quality than the old method
-- New: Models are cached in RAM when switching. Switching back loads a model in ~2 seconds
-- New: Text-based masking - Describe what you want to mask instead of drawing the mask
-- New: Initialization image can be previewed by Shift+Hovering over the filename in the GUI
-- New: Generation resolution is automatically set to init image size if it doesn't match
-- New: Pop-Up Image Viewer now has an option to enable Slideshow Mode by default
-- New: Model converter (Dev Tools) to convert between Pytorch, Diffusers, ONNX, Safetensors
-- New: Image Import window has a new option to use metadata plus the image itself as init image
-- Improved: Image Viewer now has hotkeys Ctrl+Left/Ctrl+Right for previous/next image
-- Improved: Image Viewer hotkeys (copy, open, etc.) now also work in pop-up viewer
-- Improved: Mask Editor can be resized, is no longer locked to the init image size
-- Improved: Mask Editor now has paste, invert, save, load, and undo functionality
-- Improved: Inpainting mask can now be edited without having to clear it first
-- Improved: Prompt History will not save a new entry if it's identical to the previous one
-- Improved: Prompt History now has a limit of 500 entries to avoid long loading times
-- Improved: Prompt Queue now behaves like a queue, not like a stack (FIFO)
-- Improved: Welcome Screen (MOTD) can now be disabled after it's been shown once per version
-- Improved: Image Import window now shows resolution, import actions are a dropdown to avoid clutter
-- Improved: Mask Editor performance is better now, blur is only applied after releasing mouse
-- Improved: User can now ignore the Dreambooth VRAM warning
-- Fixed: Post-processing after generation would cause a soft-lock
-- Fixed: Loading settings from prompt history sets incorrect values
-- Fixed: Broken or malicious model files would cause an unhandled exception
-- Fixed: Using a concept with <Name> syntax would show warning about missing placeholder
-- Fixed: InvokeAI CLI wouldn't open if GUI image generation was cancelled before
-- Fixed: Unhandled error when trying to use init images that no longer exist
-- Fixed: GUI would freeze if no model files exist in models folder(s)
-
-
-
-SD GUI 1.7.2 Changelog:
-- Improved prompt syntax converter (converts A1111 or pre-1.7 weighting to new syntax)
-- VAE Model selection now also lists .pt files (same format as ckpt, just different extension)
-- Fixed init images being in random order after importing
-- Fixed idle CPU usage
-- Fixed an issue with having the same model filename in multiple model folders
-- Fixed issue where k_diffusion module was not imported properly
-- If a config YAML exists next to a model file it will be used instead of the default (e.g. model.ckpt.yaml)
-
-
-
-SD GUI 1.7.1 Changelog:
-- Added DPM++2 and DPM++2A samplers
-- Added advanced syntax for step count (run same image with different step counts)
-- New prompt attention syntax - Use (text)++ instead of ((text)), etc.
-- Added automatic conversion of old attention syntax to new syntax
-- Security: Added pickle malware scanner (checks model files automatically)
-- Minor UI improvements, DreamBooth now has a dedicated button
-- Fixed issues with pytorch not working correctly (No CUDA GPU detected)
-- Fixed issues with post-processing after generation
-- Fixed negative prompt input being visible when using Low Memory Mode
-- Fixed certain sliders loading invalid values after restarting the program
-- Reduced installation size and optimized code
-
-
-
-SD GUI 1.7.0 Changelog:
-- Added support for running multiple init images at once, e.g. for animation frames
-- Added support for wildcards (insert words/phrases into prompt dynamically)
-- Added "Hi-res Fix" which allows better results at higher (>512px) resolutions
-- Added support for loading custom VAE models (can improve image quality)
-- Added support for running upscaling or face restoration manually
-- Added support for all samplers when using an init image (not just DDIM)
-- Added button to resize the window to fit the currently displayed image
-- Added option to save output images in a subfolder per session
-- Added options to use seamless mode only on one axis (horizontal or vertical)
-- Added a label that displays the current image's prompt
-- Added hotkeys: Quick-switch VAE, copy current image, copy image to favorites
-- Added new developer tool: Open CMD in SD Conda environment
-- DreamBooth training: Images can now be automatically resized if they are not 512x512
-- DreamBooth training: Added slider for steps multiplier (0.5x-2x)
-- GUI improvements, prompt and negative prompt are now separate
-- Image viewer now also shows "actual" image resolution (for upscaled images)
-- Sliders now also allow you to type a value instead of dragging the handle
-- Loading image metadata now also works for images generated with automatic1111
-- "Delete All Current Images" now requires a confirmation
-- Improved prompt history/queue UI (show full prompt on hover, and more)
-- Improved GUI rendering, should have less flickering now
-- Fixed bug where model pruning would say "Failed..." even if it was successful
