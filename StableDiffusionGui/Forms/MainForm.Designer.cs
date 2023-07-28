@@ -126,6 +126,11 @@ namespace StableDiffusionGui.Forms
             this.openModelPruningTrimmingToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.convertModelsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.downloadHuggingfaceModelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.downloadStableDiffusionModelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sD15ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sD15ONNXToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sDXL10ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sDXL10RefinerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStripPostProcess = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.upscaleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.faceRestorationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -206,6 +211,9 @@ namespace StableDiffusionGui.Forms
             this.panelPrompt = new System.Windows.Forms.Panel();
             this.panelCollapsePrompt = new System.Windows.Forms.Panel();
             this.btnCollapsePrompt = new HTAlt.WinForms.HTButton();
+            this.panelModel2 = new System.Windows.Forms.Panel();
+            this.comboxModel2 = new System.Windows.Forms.ComboBox();
+            this.label26 = new System.Windows.Forms.Label();
             this.panelModel = new System.Windows.Forms.Panel();
             this.comboxModel = new System.Windows.Forms.ComboBox();
             this.label23 = new System.Windows.Forms.Label();
@@ -227,11 +235,6 @@ namespace StableDiffusionGui.Forms
             this.flowPanelImgButtons = new System.Windows.Forms.FlowLayoutPanel();
             this.btnSaveMode = new System.Windows.Forms.Button();
             this.separator = new System.Windows.Forms.Button();
-            this.downloadStableDiffusionModelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.sD15ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.sDXL10ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.sDXL10RefinerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.sD15ONNXToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStripOutputImg.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.upDownSeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
@@ -275,6 +278,7 @@ namespace StableDiffusionGui.Forms
             this.panelPromptNeg.SuspendLayout();
             this.panelPrompt.SuspendLayout();
             this.panelCollapsePrompt.SuspendLayout();
+            this.panelModel2.SuspendLayout();
             this.panelModel.SuspendLayout();
             this.panelBackend.SuspendLayout();
             this.panelCollapseImplementation.SuspendLayout();
@@ -1770,7 +1774,7 @@ namespace StableDiffusionGui.Forms
             this.downloadStableDiffusionModelToolStripMenuItem});
             this.menuStripDevTools.Name = "menuStripDevTools";
             this.menuStripDevTools.ShowImageMargin = false;
-            this.menuStripDevTools.Size = new System.Drawing.Size(234, 180);
+            this.menuStripDevTools.Size = new System.Drawing.Size(234, 158);
             // 
             // openCliToolStripMenuItem
             // 
@@ -1814,6 +1818,45 @@ namespace StableDiffusionGui.Forms
             this.downloadHuggingfaceModelToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
             this.downloadHuggingfaceModelToolStripMenuItem.Text = "Download Huggingface Model";
             this.downloadHuggingfaceModelToolStripMenuItem.Click += new System.EventHandler(this.downloadHuggingfaceModelToolStripMenuItem_Click);
+            // 
+            // downloadStableDiffusionModelToolStripMenuItem
+            // 
+            this.downloadStableDiffusionModelToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.sD15ToolStripMenuItem,
+            this.sD15ONNXToolStripMenuItem,
+            this.sDXL10ToolStripMenuItem,
+            this.sDXL10RefinerToolStripMenuItem});
+            this.downloadStableDiffusionModelToolStripMenuItem.Name = "downloadStableDiffusionModelToolStripMenuItem";
+            this.downloadStableDiffusionModelToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
+            this.downloadStableDiffusionModelToolStripMenuItem.Text = "Download Stable Diffusion Model";
+            // 
+            // sD15ToolStripMenuItem
+            // 
+            this.sD15ToolStripMenuItem.Name = "sD15ToolStripMenuItem";
+            this.sD15ToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.sD15ToolStripMenuItem.Text = "SD 1.5";
+            this.sD15ToolStripMenuItem.Click += new System.EventHandler(this.sD15ToolStripMenuItem_Click);
+            // 
+            // sD15ONNXToolStripMenuItem
+            // 
+            this.sD15ONNXToolStripMenuItem.Name = "sD15ONNXToolStripMenuItem";
+            this.sD15ONNXToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.sD15ONNXToolStripMenuItem.Text = "SD 1.5 ONNX";
+            this.sD15ONNXToolStripMenuItem.Click += new System.EventHandler(this.sD15ONNXToolStripMenuItem_Click);
+            // 
+            // sDXL10ToolStripMenuItem
+            // 
+            this.sDXL10ToolStripMenuItem.Name = "sDXL10ToolStripMenuItem";
+            this.sDXL10ToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.sDXL10ToolStripMenuItem.Text = "SD XL 1.0 Base";
+            this.sDXL10ToolStripMenuItem.Click += new System.EventHandler(this.sDXL10ToolStripMenuItem_Click);
+            // 
+            // sDXL10RefinerToolStripMenuItem
+            // 
+            this.sDXL10RefinerToolStripMenuItem.Name = "sDXL10RefinerToolStripMenuItem";
+            this.sDXL10RefinerToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.sDXL10RefinerToolStripMenuItem.Text = "SD XL 1.0 Refiner";
+            this.sDXL10RefinerToolStripMenuItem.Click += new System.EventHandler(this.sDXL10RefinerToolStripMenuItem_Click);
             // 
             // menuStripPostProcess
             // 
@@ -1879,6 +1922,7 @@ namespace StableDiffusionGui.Forms
             this.panelSettings.Controls.Add(this.panelPromptNeg);
             this.panelSettings.Controls.Add(this.panelPrompt);
             this.panelSettings.Controls.Add(this.panelCollapsePrompt);
+            this.panelSettings.Controls.Add(this.panelModel2);
             this.panelSettings.Controls.Add(this.panelModel);
             this.panelSettings.Controls.Add(this.panelBackend);
             this.panelSettings.Controls.Add(this.panelCollapseImplementation);
@@ -1897,7 +1941,7 @@ namespace StableDiffusionGui.Forms
             this.panelDebugLoopback.Controls.Add(this.checkboxLoopback);
             this.panelDebugLoopback.Controls.Add(this.label16);
             this.panelDebugLoopback.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelDebugLoopback.Location = new System.Drawing.Point(0, 1060);
+            this.panelDebugLoopback.Location = new System.Drawing.Point(0, 1095);
             this.panelDebugLoopback.Name = "panelDebugLoopback";
             this.panelDebugLoopback.Size = new System.Drawing.Size(651, 35);
             this.panelDebugLoopback.TabIndex = 19;
@@ -1934,7 +1978,7 @@ namespace StableDiffusionGui.Forms
             this.panelDebugPerlinThresh.Controls.Add(this.label13);
             this.panelDebugPerlinThresh.Controls.Add(this.textboxPerlin);
             this.panelDebugPerlinThresh.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelDebugPerlinThresh.Location = new System.Drawing.Point(0, 1025);
+            this.panelDebugPerlinThresh.Location = new System.Drawing.Point(0, 1060);
             this.panelDebugPerlinThresh.Name = "panelDebugPerlinThresh";
             this.panelDebugPerlinThresh.Size = new System.Drawing.Size(651, 35);
             this.panelDebugPerlinThresh.TabIndex = 18;
@@ -2005,7 +2049,7 @@ namespace StableDiffusionGui.Forms
             this.panelDebugSendStdin.Controls.Add(this.label12);
             this.panelDebugSendStdin.Controls.Add(this.textboxCliTest);
             this.panelDebugSendStdin.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelDebugSendStdin.Location = new System.Drawing.Point(0, 990);
+            this.panelDebugSendStdin.Location = new System.Drawing.Point(0, 1025);
             this.panelDebugSendStdin.Name = "panelDebugSendStdin";
             this.panelDebugSendStdin.Size = new System.Drawing.Size(651, 35);
             this.panelDebugSendStdin.TabIndex = 14;
@@ -2043,7 +2087,7 @@ namespace StableDiffusionGui.Forms
             this.panelDebugAppendArgs.Controls.Add(this.label18);
             this.panelDebugAppendArgs.Controls.Add(this.textboxDebugAppendArgs);
             this.panelDebugAppendArgs.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelDebugAppendArgs.Location = new System.Drawing.Point(0, 955);
+            this.panelDebugAppendArgs.Location = new System.Drawing.Point(0, 990);
             this.panelDebugAppendArgs.Name = "panelDebugAppendArgs";
             this.panelDebugAppendArgs.Size = new System.Drawing.Size(651, 35);
             this.panelDebugAppendArgs.TabIndex = 21;
@@ -2078,7 +2122,7 @@ namespace StableDiffusionGui.Forms
             // 
             this.panelCollapseDebug.Controls.Add(this.btnCollapseDebug);
             this.panelCollapseDebug.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelCollapseDebug.Location = new System.Drawing.Point(0, 920);
+            this.panelCollapseDebug.Location = new System.Drawing.Point(0, 955);
             this.panelCollapseDebug.Name = "panelCollapseDebug";
             this.panelCollapseDebug.Size = new System.Drawing.Size(651, 35);
             this.panelCollapseDebug.TabIndex = 117;
@@ -2088,7 +2132,7 @@ namespace StableDiffusionGui.Forms
             this.panelSymmetry.Controls.Add(this.comboxSymmetry);
             this.panelSymmetry.Controls.Add(this.label19);
             this.panelSymmetry.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSymmetry.Location = new System.Drawing.Point(0, 885);
+            this.panelSymmetry.Location = new System.Drawing.Point(0, 920);
             this.panelSymmetry.Name = "panelSymmetry";
             this.panelSymmetry.Size = new System.Drawing.Size(651, 35);
             this.panelSymmetry.TabIndex = 111;
@@ -2110,7 +2154,7 @@ namespace StableDiffusionGui.Forms
             this.panelSeamless.Controls.Add(this.comboxSeamless);
             this.panelSeamless.Controls.Add(this.label8);
             this.panelSeamless.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSeamless.Location = new System.Drawing.Point(0, 850);
+            this.panelSeamless.Location = new System.Drawing.Point(0, 885);
             this.panelSeamless.Name = "panelSeamless";
             this.panelSeamless.Size = new System.Drawing.Size(651, 35);
             this.panelSeamless.TabIndex = 9;
@@ -2131,7 +2175,7 @@ namespace StableDiffusionGui.Forms
             // 
             this.panelCollapseSymmetry.Controls.Add(this.btnCollapseSymmetry);
             this.panelCollapseSymmetry.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelCollapseSymmetry.Location = new System.Drawing.Point(0, 815);
+            this.panelCollapseSymmetry.Location = new System.Drawing.Point(0, 850);
             this.panelCollapseSymmetry.Name = "panelCollapseSymmetry";
             this.panelCollapseSymmetry.Size = new System.Drawing.Size(651, 35);
             this.panelCollapseSymmetry.TabIndex = 118;
@@ -2141,7 +2185,7 @@ namespace StableDiffusionGui.Forms
             this.panelSampler.Controls.Add(this.label7);
             this.panelSampler.Controls.Add(this.comboxSampler);
             this.panelSampler.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSampler.Location = new System.Drawing.Point(0, 780);
+            this.panelSampler.Location = new System.Drawing.Point(0, 815);
             this.panelSampler.Name = "panelSampler";
             this.panelSampler.Size = new System.Drawing.Size(651, 35);
             this.panelSampler.TabIndex = 6;
@@ -2169,7 +2213,7 @@ namespace StableDiffusionGui.Forms
             this.panelRes.Controls.Add(this.label6);
             this.panelRes.Controls.Add(this.label9);
             this.panelRes.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelRes.Location = new System.Drawing.Point(0, 745);
+            this.panelRes.Location = new System.Drawing.Point(0, 780);
             this.panelRes.Name = "panelRes";
             this.panelRes.Size = new System.Drawing.Size(651, 35);
             this.panelRes.TabIndex = 5;
@@ -2249,7 +2293,7 @@ namespace StableDiffusionGui.Forms
             // 
             this.panelCollapseRendering.Controls.Add(this.btnCollapseRendering);
             this.panelCollapseRendering.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelCollapseRendering.Location = new System.Drawing.Point(0, 710);
+            this.panelCollapseRendering.Location = new System.Drawing.Point(0, 745);
             this.panelCollapseRendering.Name = "panelCollapseRendering";
             this.panelCollapseRendering.Size = new System.Drawing.Size(651, 35);
             this.panelCollapseRendering.TabIndex = 119;
@@ -2262,7 +2306,7 @@ namespace StableDiffusionGui.Forms
             this.panelSeed.Controls.Add(this.label5);
             this.panelSeed.Controls.Add(this.upDownSeed);
             this.panelSeed.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSeed.Location = new System.Drawing.Point(0, 675);
+            this.panelSeed.Location = new System.Drawing.Point(0, 710);
             this.panelSeed.Name = "panelSeed";
             this.panelSeed.Size = new System.Drawing.Size(651, 35);
             this.panelSeed.TabIndex = 4;
@@ -2284,7 +2328,7 @@ namespace StableDiffusionGui.Forms
             this.panelScaleImg.Controls.Add(this.label17);
             this.panelScaleImg.Controls.Add(this.tableLayoutPanel2);
             this.panelScaleImg.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelScaleImg.Location = new System.Drawing.Point(0, 640);
+            this.panelScaleImg.Location = new System.Drawing.Point(0, 675);
             this.panelScaleImg.Name = "panelScaleImg";
             this.panelScaleImg.Size = new System.Drawing.Size(651, 35);
             this.panelScaleImg.TabIndex = 20;
@@ -2325,7 +2369,7 @@ namespace StableDiffusionGui.Forms
             this.panelScale.Controls.Add(this.label4);
             this.panelScale.Controls.Add(this.tableLayoutPanel1);
             this.panelScale.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelScale.Location = new System.Drawing.Point(0, 605);
+            this.panelScale.Location = new System.Drawing.Point(0, 640);
             this.panelScale.Name = "panelScale";
             this.panelScale.Size = new System.Drawing.Size(651, 35);
             this.panelScale.TabIndex = 3;
@@ -2366,7 +2410,7 @@ namespace StableDiffusionGui.Forms
             this.panelRefineStart.Controls.Add(this.label25);
             this.panelRefineStart.Controls.Add(this.tableLayoutPanel3);
             this.panelRefineStart.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelRefineStart.Location = new System.Drawing.Point(0, 570);
+            this.panelRefineStart.Location = new System.Drawing.Point(0, 605);
             this.panelRefineStart.Name = "panelRefineStart";
             this.panelRefineStart.Size = new System.Drawing.Size(651, 35);
             this.panelRefineStart.TabIndex = 124;
@@ -2408,7 +2452,7 @@ namespace StableDiffusionGui.Forms
             this.panelSteps.Controls.Add(this.label3);
             this.panelSteps.Controls.Add(this.tableLayoutPanel6);
             this.panelSteps.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSteps.Location = new System.Drawing.Point(0, 535);
+            this.panelSteps.Location = new System.Drawing.Point(0, 570);
             this.panelSteps.Name = "panelSteps";
             this.panelSteps.Size = new System.Drawing.Size(651, 35);
             this.panelSteps.TabIndex = 2;
@@ -2507,7 +2551,7 @@ namespace StableDiffusionGui.Forms
             this.panelIterations.Controls.Add(this.label1);
             this.panelIterations.Controls.Add(this.upDownIterations);
             this.panelIterations.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelIterations.Location = new System.Drawing.Point(0, 500);
+            this.panelIterations.Location = new System.Drawing.Point(0, 535);
             this.panelIterations.Name = "panelIterations";
             this.panelIterations.Size = new System.Drawing.Size(651, 35);
             this.panelIterations.TabIndex = 1;
@@ -2529,7 +2573,7 @@ namespace StableDiffusionGui.Forms
             this.panelInitImgStrength.Controls.Add(this.label11);
             this.panelInitImgStrength.Controls.Add(this.tableLayoutPanel4);
             this.panelInitImgStrength.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelInitImgStrength.Location = new System.Drawing.Point(0, 465);
+            this.panelInitImgStrength.Location = new System.Drawing.Point(0, 500);
             this.panelInitImgStrength.Name = "panelInitImgStrength";
             this.panelInitImgStrength.Size = new System.Drawing.Size(651, 35);
             this.panelInitImgStrength.TabIndex = 8;
@@ -2575,7 +2619,7 @@ namespace StableDiffusionGui.Forms
             this.panelInpainting.Controls.Add(this.btnResetMask);
             this.panelInpainting.Controls.Add(this.label10);
             this.panelInpainting.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelInpainting.Location = new System.Drawing.Point(0, 430);
+            this.panelInpainting.Location = new System.Drawing.Point(0, 465);
             this.panelInpainting.Name = "panelInpainting";
             this.panelInpainting.Size = new System.Drawing.Size(651, 35);
             this.panelInpainting.TabIndex = 12;
@@ -2632,7 +2676,7 @@ namespace StableDiffusionGui.Forms
             // 
             this.panelCollapseGeneration.Controls.Add(this.btnCollapseGeneration);
             this.panelCollapseGeneration.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelCollapseGeneration.Location = new System.Drawing.Point(0, 395);
+            this.panelCollapseGeneration.Location = new System.Drawing.Point(0, 430);
             this.panelCollapseGeneration.Name = "panelCollapseGeneration";
             this.panelCollapseGeneration.Size = new System.Drawing.Size(651, 35);
             this.panelCollapseGeneration.TabIndex = 120;
@@ -2644,7 +2688,7 @@ namespace StableDiffusionGui.Forms
             this.panelBaseImg.Controls.Add(this.labelCurrentImage);
             this.panelBaseImg.Controls.Add(this.btnInitImgBrowse);
             this.panelBaseImg.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelBaseImg.Location = new System.Drawing.Point(0, 360);
+            this.panelBaseImg.Location = new System.Drawing.Point(0, 395);
             this.panelBaseImg.Name = "panelBaseImg";
             this.panelBaseImg.Size = new System.Drawing.Size(651, 35);
             this.panelBaseImg.TabIndex = 17;
@@ -2680,7 +2724,7 @@ namespace StableDiffusionGui.Forms
             this.panelLoras.Controls.Add(this.gridLoras);
             this.panelLoras.Controls.Add(this.label24);
             this.panelLoras.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelLoras.Location = new System.Drawing.Point(0, 290);
+            this.panelLoras.Location = new System.Drawing.Point(0, 325);
             this.panelLoras.Name = "panelLoras";
             this.panelLoras.Size = new System.Drawing.Size(651, 70);
             this.panelLoras.TabIndex = 123;
@@ -2753,7 +2797,7 @@ namespace StableDiffusionGui.Forms
             this.panelEmbeddings.Controls.Add(this.comboxEmbeddingList);
             this.panelEmbeddings.Controls.Add(this.label20);
             this.panelEmbeddings.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelEmbeddings.Location = new System.Drawing.Point(0, 255);
+            this.panelEmbeddings.Location = new System.Drawing.Point(0, 290);
             this.panelEmbeddings.Name = "panelEmbeddings";
             this.panelEmbeddings.Size = new System.Drawing.Size(651, 35);
             this.panelEmbeddings.TabIndex = 112;
@@ -2809,7 +2853,7 @@ namespace StableDiffusionGui.Forms
             this.panelPromptNeg.Controls.Add(this.btnExpandPromptNegField);
             this.panelPromptNeg.Controls.Add(this.textboxPromptNeg);
             this.panelPromptNeg.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelPromptNeg.Location = new System.Drawing.Point(0, 210);
+            this.panelPromptNeg.Location = new System.Drawing.Point(0, 245);
             this.panelPromptNeg.Name = "panelPromptNeg";
             this.panelPromptNeg.Padding = new System.Windows.Forms.Padding(3);
             this.panelPromptNeg.Size = new System.Drawing.Size(651, 45);
@@ -2820,7 +2864,7 @@ namespace StableDiffusionGui.Forms
             this.panelPrompt.Controls.Add(this.textboxPrompt);
             this.panelPrompt.Controls.Add(this.btnExpandPromptField);
             this.panelPrompt.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelPrompt.Location = new System.Drawing.Point(0, 140);
+            this.panelPrompt.Location = new System.Drawing.Point(0, 175);
             this.panelPrompt.Name = "panelPrompt";
             this.panelPrompt.Padding = new System.Windows.Forms.Padding(3);
             this.panelPrompt.Size = new System.Drawing.Size(651, 70);
@@ -2830,7 +2874,7 @@ namespace StableDiffusionGui.Forms
             // 
             this.panelCollapsePrompt.Controls.Add(this.btnCollapsePrompt);
             this.panelCollapsePrompt.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelCollapsePrompt.Location = new System.Drawing.Point(0, 105);
+            this.panelCollapsePrompt.Location = new System.Drawing.Point(0, 140);
             this.panelCollapsePrompt.Name = "panelCollapsePrompt";
             this.panelCollapsePrompt.Size = new System.Drawing.Size(651, 35);
             this.panelCollapsePrompt.TabIndex = 121;
@@ -2854,6 +2898,39 @@ namespace StableDiffusionGui.Forms
             this.btnCollapsePrompt.Size = new System.Drawing.Size(649, 22);
             this.btnCollapsePrompt.TabIndex = 116;
             this.btnCollapsePrompt.TabStop = false;
+            // 
+            // panelModel2
+            // 
+            this.panelModel2.Controls.Add(this.comboxModel2);
+            this.panelModel2.Controls.Add(this.label26);
+            this.panelModel2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelModel2.Location = new System.Drawing.Point(0, 105);
+            this.panelModel2.Name = "panelModel2";
+            this.panelModel2.Size = new System.Drawing.Size(651, 35);
+            this.panelModel2.TabIndex = 125;
+            // 
+            // comboxModel2
+            // 
+            this.comboxModel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.comboxModel2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboxModel2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboxModel2.ForeColor = System.Drawing.Color.White;
+            this.comboxModel2.Location = new System.Drawing.Point(233, 0);
+            this.comboxModel2.Name = "comboxModel2";
+            this.comboxModel2.Size = new System.Drawing.Size(415, 21);
+            this.comboxModel2.TabIndex = 110;
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label26.ForeColor = System.Drawing.Color.White;
+            this.label26.Location = new System.Drawing.Point(0, 4);
+            this.label26.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(73, 13);
+            this.label26.TabIndex = 105;
+            this.label26.Text = "Refiner Model";
             // 
             // panelModel
             // 
@@ -2885,9 +2962,9 @@ namespace StableDiffusionGui.Forms
             this.label23.Location = new System.Drawing.Point(0, 4);
             this.label23.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(135, 13);
+            this.label23.Size = new System.Drawing.Size(104, 13);
             this.label23.TabIndex = 105;
-            this.label23.Text = "Model Name / Architecture";
+            this.label23.Text = "Model / Architecture";
             // 
             // panelBackend
             // 
@@ -3107,45 +3184,6 @@ namespace StableDiffusionGui.Forms
             this.separator.TabStop = false;
             this.separator.UseVisualStyleBackColor = false;
             // 
-            // downloadStableDiffusionModelToolStripMenuItem
-            // 
-            this.downloadStableDiffusionModelToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.sD15ToolStripMenuItem,
-            this.sD15ONNXToolStripMenuItem,
-            this.sDXL10ToolStripMenuItem,
-            this.sDXL10RefinerToolStripMenuItem});
-            this.downloadStableDiffusionModelToolStripMenuItem.Name = "downloadStableDiffusionModelToolStripMenuItem";
-            this.downloadStableDiffusionModelToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
-            this.downloadStableDiffusionModelToolStripMenuItem.Text = "Download Stable Diffusion Model";
-            // 
-            // sD15ToolStripMenuItem
-            // 
-            this.sD15ToolStripMenuItem.Name = "sD15ToolStripMenuItem";
-            this.sD15ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.sD15ToolStripMenuItem.Text = "SD 1.5";
-            this.sD15ToolStripMenuItem.Click += new System.EventHandler(this.sD15ToolStripMenuItem_Click);
-            // 
-            // sDXL10ToolStripMenuItem
-            // 
-            this.sDXL10ToolStripMenuItem.Name = "sDXL10ToolStripMenuItem";
-            this.sDXL10ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.sDXL10ToolStripMenuItem.Text = "SD XL 1.0 Base";
-            this.sDXL10ToolStripMenuItem.Click += new System.EventHandler(this.sDXL10ToolStripMenuItem_Click);
-            // 
-            // sDXL10RefinerToolStripMenuItem
-            // 
-            this.sDXL10RefinerToolStripMenuItem.Name = "sDXL10RefinerToolStripMenuItem";
-            this.sDXL10RefinerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.sDXL10RefinerToolStripMenuItem.Text = "SD XL 1.0 Refiner";
-            this.sDXL10RefinerToolStripMenuItem.Click += new System.EventHandler(this.sDXL10RefinerToolStripMenuItem_Click);
-            // 
-            // sD15ONNXToolStripMenuItem
-            // 
-            this.sD15ONNXToolStripMenuItem.Name = "sD15ONNXToolStripMenuItem";
-            this.sD15ONNXToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.sD15ONNXToolStripMenuItem.Text = "SD 1.5 ONNX";
-            this.sD15ONNXToolStripMenuItem.Click += new System.EventHandler(this.sD15ONNXToolStripMenuItem_Click);
-            // 
             // MainForm
             // 
             this.AllowDrop = true;
@@ -3257,6 +3295,8 @@ namespace StableDiffusionGui.Forms
             this.panelPrompt.ResumeLayout(false);
             this.panelPrompt.PerformLayout();
             this.panelCollapsePrompt.ResumeLayout(false);
+            this.panelModel2.ResumeLayout(false);
+            this.panelModel2.PerformLayout();
             this.panelModel.ResumeLayout(false);
             this.panelModel.PerformLayout();
             this.panelBackend.ResumeLayout(false);
@@ -3475,6 +3515,9 @@ namespace StableDiffusionGui.Forms
         private System.Windows.Forms.ToolStripMenuItem sDXL10ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sDXL10RefinerToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sD15ONNXToolStripMenuItem;
+        public System.Windows.Forms.Panel panelModel2;
+        public System.Windows.Forms.ComboBox comboxModel2;
+        private System.Windows.Forms.Label label26;
     }
 }
 

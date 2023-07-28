@@ -35,7 +35,7 @@ namespace StableDiffusionGui.Io
             return GetModelsAll(true, dirs, Enums.Models.Type.Vae);
         }
 
-        public static List<Model> GetEmbeddings ()
+        public static List<Model> GetEmbeddings()
         {
             string path = Config.Instance == null ? Paths.GetEmbeddingsPath() : Config.Instance.EmbeddingsDir;
             var fileList = IoUtils.GetFileInfosSorted(path, false, "*.*pt").Where(f => f.Length < 1024 * 1024);
@@ -99,9 +99,11 @@ namespace StableDiffusionGui.Io
             var sw = Program.Debug ? new NmkdStopwatch() : null;
             IEnumerable<Model> models = GetModelsAll();
             Format[] supportedFormats = implementation.GetInfo().SupportedModelFormats;
-            models = models.Where(m => m.Type == type && supportedFormats.Contains(m.Format));
 
-            if(implementation == Implementation.SdXl)
+            if (type != (Enums.Models.Type)(-1))
+                models = models.Where(m => m.Type == type && supportedFormats.Contains(m.Format));
+
+            if (implementation == Implementation.SdXl)
                 models = models.Where(m => m.Size > 5 * 1024 * 1024 * 1024L && m.Name.Lower().Contains("xl"));
             else
                 models = models.Where(m => (m.Size > 5 * 1024 * 1024 * 1024L && m.Name.Lower().Contains("xl")) == false);
@@ -214,7 +216,7 @@ namespace StableDiffusionGui.Io
                 if (parentDirName == Constants.Dirs.Models.Loras)
                     return Enums.Models.Type.Lora;
 
-                if(Path.GetFileName(modelPath).Lower().Contains("refine"))
+                if (Path.GetFileName(modelPath).Lower().Contains("refine"))
                     return Enums.Models.Type.Refiner;
 
                 return Enums.Models.Type.Normal;
@@ -229,7 +231,7 @@ namespace StableDiffusionGui.Io
 
         public static void SetDiffusersClipSkip(Model model, int layersToSkip = 1)
         {
-            if(layersToSkip > 0 && model.Format != Format.Diffusers)
+            if (layersToSkip > 0 && model.Format != Format.Diffusers)
             {
                 Logger.Log($"Warning: Cannot apply CLIP Skip to this model because it is not a Diffusers model.");
                 return;
@@ -274,7 +276,7 @@ namespace StableDiffusionGui.Io
 
                 File.WriteAllLines(jsonPath, lines);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logger.LogException(ex);
             }
@@ -303,12 +305,12 @@ namespace StableDiffusionGui.Io
             }
         }
 
-        public static bool HasAnyInpaintingModels (IEnumerable<Model> models = null, Implementation imp = (Implementation)(-1))
+        public static bool HasAnyInpaintingModels(IEnumerable<Model> models = null, Implementation imp = (Implementation)(-1))
         {
             if (models == null)
                 models = GetModelsAll();
 
-            if(imp != (Implementation)(-1))
+            if (imp != (Implementation)(-1))
             {
                 Format[] supportedFormats = imp.GetInfo().SupportedModelFormats;
                 models = models.Where(m => supportedFormats.Contains(m.Format));

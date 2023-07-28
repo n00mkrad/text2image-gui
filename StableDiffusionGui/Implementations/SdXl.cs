@@ -26,10 +26,13 @@ namespace StableDiffusionGui.Implementations
             try
             {
                 float[] initStrengths = s.InitStrengths.Select(n => 1f - n).ToArray();
-                var cachedModels = Models.GetModels(Enums.Models.Type.Normal, Implementation.SdXl);
-                Model model = TtiUtils.CheckIfModelExists(s.Model, Implementation.SdXl, cachedModels);
+                var cachedModels = Models.GetModels((Enums.Models.Type)(-1), Implementation.SdXl);
+                var baseModels = cachedModels.Where(m => m.Type == Enums.Models.Type.Normal).ToList();
+                var refinerModels = cachedModels.Where(m => m.Type == Enums.Models.Type.Refiner).ToList();
+                Model model = TtiUtils.CheckIfModelExists(s.Model, Implementation.SdXl, baseModels);
+                Model refineModel = TtiUtils.CheckIfModelExists(s.ModelAux, Implementation.SdXl, refinerModels);
 
-                if (model == null)
+                if (model == null || refineModel == null)
                     return;
 
                 if (s.Res.Width < 1024 && s.Res.Height < 1024)
@@ -44,7 +47,7 @@ namespace StableDiffusionGui.Implementations
                 var args = new Dictionary<string, string>(); // List of args for current command
                 args["mode"] = mode;
                 args["model"] = model.FullName;
-                args["modelRefiner"] = GetRefineModelPath(refine, model);
+                args["modelRefiner"] = refineModel.FullName;
                 args["prompt"] = "";
 
                 foreach (string prompt in s.Prompts)
@@ -180,40 +183,6 @@ namespace StableDiffusionGui.Implementations
                 Logger.Log($"Unhandled Stable Diffusion Error: {ex.Message}");
                 Logger.Log(ex.StackTrace, true);
             }
-        }
-
-        private string GetRefineModelPath (bool doRefine, Model model)
-        {
-            if (!doRefine)
-                return "";
-
-            string refineModelName = model.Name.Replace("base", "refiner");
-            string refinePath = Path.Combine(model.Directory.FullName, refineModelName);
-
-            if (refinePath != model.FullName && IoUtils.IsPathValid(refinePath))
-            {
-                Logger.Log($"Using Refiner Model '{refineModelName}'.");
-                return refinePath;
-            }
-            else
-            {
-                var refinersAll = Models.GetModels(Enums.Models.Type.Refiner, Implementation.SdXl);
-                var refinersDiffFirst = refinersAll.Where(m => m.Format == Enums.Models.Format.Diffusers).ToList();
-                refinersDiffFirst.AddRange(refinersAll.Where(m => m.Format == Enums.Models.Format.Safetensors).ToList());
-
-                if (refinersDiffFirst.Any())
-                {
-                    string refineName = refineModelName != model.Name ? $"'{refineModelName}' " : "";
-                    Logger.Log($"No corresponding refiner model {refineName}found, using '{refinersDiffFirst.First().Name}' instead.");
-                    return refinersDiffFirst.First().FullName;
-                }
-                else
-                {
-                    Logger.Log("Warning: No refiner model found.");
-                }
-            }
-
-            return "";
         }
 
         public enum GenerationState { Base, Refiner }

@@ -67,6 +67,7 @@ namespace StableDiffusionGui.Forms
             // Events
             comboxBackend.SelectedIndexChanged += (s, e) => { Config.Instance.Implementation = ParseUtils.GetEnum<Implementation>(comboxBackend.Text, true, Strings.Implementation); TryRefreshUiState(); }; // Implementation change
             comboxModel.SelectedIndexChanged += (s, e) => ModelChanged();
+            comboxModel2.SelectedIndexChanged += (s, e) => { Config.Instance.ModelAux = comboxModel2.Text; };
             comboxModel.DropDown += (s, e) => ReloadModelsCombox();
             comboxModel.DropDownClosed += (s, e) => panelSettings.Focus();
             comboxResW.SelectedIndexChanged += (s, e) => ResolutionChanged(); // Resolution change
@@ -135,7 +136,7 @@ namespace StableDiffusionGui.Forms
 
             // Panel visibility
             SetVisibility(new Control[] { panelBaseImg, panelPromptNeg, panelEmbeddings, panelRefineStart, panelInitImgStrength, panelInpainting, panelScaleImg, panelRes, panelSampler, panelSeamless, panelSymmetry, checkboxHiresFix,
-                textboxClipsegMask, panelResizeGravity, labelResChange, btnResetRes, checkboxShowInitImg, panelModel, panelLoras }, imp);
+                textboxClipsegMask, panelResizeGravity, labelResChange, btnResetRes, checkboxShowInitImg, panelModel, panelLoras, panelModel2 }, imp);
 
             bool adv = Config.Instance.AdvancedUi;
             upDownIterations.Maximum = !adv ? Config.IniInstance.IterationsMax : Config.IniInstance.IterationsMax * 10;
@@ -233,6 +234,14 @@ namespace StableDiffusionGui.Forms
                 comboxModelArch.SetWithText(Config.Instance.ModelArchs[mdl.FullName].ToString(), false, Strings.SdModelArch);
 
             ConfigParser.SaveGuiElement(comboxModel, ref Config.Instance.Model);
+
+            if (comboxModel2.Visible)
+            {
+                string preferredRefinerName = comboxModel.Text.Lower().Replace("base", "refiner");
+
+                if(comboxModel2.Items.Cast<Model>().Any(m => m.ToString().Lower() == preferredRefinerName))
+                    comboxModel2.Text = preferredRefinerName;
+            }
         }
 
         private string _lastEmbeddings = "";
@@ -453,7 +462,7 @@ namespace StableDiffusionGui.Forms
             Text = string.Join(" - ", new[] { $"Stable Diffusion GUI {Program.Version}", MainUi.GpuInfo, busyText }.Where(s => s.IsNotEmpty()));
         }
 
-        public void UpdateModel(bool reloadList = false, Implementation imp = (Implementation)(-1))
+        public void UpdateModel(Implementation imp = (Implementation)(-1))
         {
             if (!comboxModel.Visible)
                 return;
@@ -464,12 +473,19 @@ namespace StableDiffusionGui.Forms
             if (imp == (Implementation)(-1))
                 return;
 
-            string currentModel = Config.Instance.Model;
             ReloadModelsCombox(imp);
-            comboxModel.Text = currentModel;
+            comboxModel.Text = Config.Instance.Model;
 
             if (comboxModel.SelectedIndex < 0 && comboxModel.Items.Count > 0)
                 comboxModel.SelectedIndex = 0;
+
+            if (comboxModel2.Visible)
+            {
+                comboxModel2.Text = Config.Instance.ModelAux;
+
+                if (comboxModel2.SelectedIndex < 0 && comboxModel2.Items.Count > 0)
+                    comboxModel2.SelectedIndex = 0;
+            }
         }
 
         public void ReloadModelsCombox(Implementation imp = (Implementation)(-1))
@@ -477,8 +493,9 @@ namespace StableDiffusionGui.Forms
             if (imp == (Implementation)(-1))
                 imp = Config.Instance.Implementation;
 
-            IEnumerable<Model> models = Models.GetModels(Enums.Models.Type.Normal, imp);
-            comboxModel.SetItems(models, UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.None);
+            IEnumerable<Model> models = Models.GetModels((Enums.Models.Type)(-1), imp);
+            comboxModel.SetItems(models.Where(m => m.Type == Enums.Models.Type.Normal), UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.None);
+            comboxModel2.SetItems(models.Where(m => m.Type == Enums.Models.Type.Refiner), UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.None);
         }
 
         private void SetLoraPanelSize(PromptFieldSizeMode sizeMode = PromptFieldSizeMode.Toggle)

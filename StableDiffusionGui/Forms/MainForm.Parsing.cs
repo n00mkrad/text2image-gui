@@ -126,6 +126,7 @@ namespace StableDiffusionGui.Forms
                 Sampler = ParseUtils.GetEnum<Sampler>(comboxSampler.Text, true, Strings.Samplers),
                 Res = new Size(comboxResW.Text.GetInt(), comboxResH.Text.GetInt()),
                 Model = Config.Instance.Model,
+                ModelAux = Config.Instance.ModelAux,
                 Vae = Config.Instance.ModelVae,
                 LockSeed = checkboxLockSeed.Checked,
                 ClipSegMask = textboxClipsegMask.Text.Trim(),

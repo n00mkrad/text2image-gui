@@ -22,6 +22,7 @@ namespace StableDiffusionGui.Io
         public string FavsPath = "";
         public int Iterations;
         public string Model = "";
+        public string ModelAux = "";
         public string ModelVae = "";
         public bool EnablePromptHistory;
         public float CodeformerFidelity;

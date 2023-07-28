@@ -158,7 +158,7 @@ namespace StableDiffusionGui.Main
                 return false;
             }
 
-            model = cachedModels == null ? Models.GetModel(modelName, Enums.Models.Type.Normal, imp) : Models.GetModel(cachedModels, modelName, Enums.Models.Type.Normal, imp);
+            model = cachedModels == null ? Models.GetModel(modelName, (Enums.Models.Type)(-1), imp) : Models.GetModel(cachedModels, modelName, (Enums.Models.Type)(-1), imp);
             return model != null;
         }
 
@@ -285,7 +285,7 @@ namespace StableDiffusionGui.Main
             if (mdl.Format == Enums.Models.Format.Diffusers || mdl.Format == Enums.Models.Format.DiffusersOnnx)
                 return "";
 
-            if(Config.Instance.ModelArchs.ContainsKey(mdl.FullName))
+            if (Config.Instance.ModelArchs.ContainsKey(mdl.FullName))
                 mdl.LoadArchitecture = Config.Instance.ModelArchs[mdl.FullName];
 
             if (mdl.LoadArchitecture == Enums.Models.SdArch.Automatic)

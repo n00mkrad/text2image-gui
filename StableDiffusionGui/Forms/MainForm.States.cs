@@ -82,6 +82,9 @@ namespace StableDiffusionGui.Forms
             if (control == panelRefineStart)
                 return implementation == Implementation.SdXl;
 
+            if (control == panelModel2 && comboxModel.Items.Count > 0)
+                return implementation == Implementation.SdXl;
+
             return false;
         }
 
