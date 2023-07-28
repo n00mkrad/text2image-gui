@@ -47,7 +47,7 @@ namespace StableDiffusionGui.Implementations
                 var args = new Dictionary<string, string>(); // List of args for current command
                 args["mode"] = mode;
                 args["model"] = model.FullName;
-                args["modelRefiner"] = refineModel.FullName;
+                args["modelRefiner"] = refine ? refineModel.FullName : "";
                 args["prompt"] = "";
 
                 foreach (string prompt in s.Prompts)
