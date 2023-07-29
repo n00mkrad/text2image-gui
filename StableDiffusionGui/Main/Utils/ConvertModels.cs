@@ -197,8 +197,15 @@ namespace StableDiffusionGui.Main.Utils
 
         private static async Task ConvSafetensorsDiffusers(string inPath, string outPath, bool deleteInput = false, bool fp16 = true)
         {
-            await RunPython($"python repo/scripts/diff/convert_original_stable_diffusion_to_diffusers.py --from_safetensors --checkpoint_path {inPath.Wrap(true)} --dump_path {outPath.Wrap(true)} " +
-                        $"--original_config_file {_ckptConfigPath.Wrap(true)} --to_safetensors {(fp16 ? "--half" : "")}");
+            if(Path.GetFileNameWithoutExtension(inPath).Lower().Contains("xl") && IoUtils.GetFilesize(inPath) > 5 * 1024 * 1024 * 1024L)
+            {
+                await RunPython($"python repo/scripts/diff/convert_sdxl_safetensors_to_diffusers.py --checkpoint_path {inPath.Wrap(true)} --dump_path {outPath.Wrap(true)} --to_safetensors {(fp16 ? "--half" : "")}");
+            }
+            else
+            {
+                await RunPython($"python repo/scripts/diff/convert_original_stable_diffusion_to_diffusers.py --from_safetensors --checkpoint_path {inPath.Wrap(true)} --dump_path {outPath.Wrap(true)} " +
+                       $"--original_config_file {_ckptConfigPath.Wrap(true)} --to_safetensors {(fp16 ? "--half" : "")}");
+            }
 
             if (deleteInput)
                 IoUtils.TryDeleteIfExists(inPath);

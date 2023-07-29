@@ -279,7 +279,7 @@ namespace StableDiffusionGui.Data
                     case "prompt": Prompt = pair.Value; break;
                     case "promptNeg": NegativePrompt = pair.Value; break;
                     case "initImg": InitImgName = pair.Value; break;
-                    case "initStrength": InitStrength = pair.Value.GetFloat(); break;
+                    case "initStrength": InitStrength = 1f - pair.Value.GetFloat(); break;
                     case "steps": Steps = pair.Value.GetInt(); break;
                     case "seed": Seed = pair.Value.GetInt(); break;
                     case "sampler": Sampler = pair.Value; break;
