@@ -140,6 +140,7 @@ namespace StableDiffusionGui.Implementations
                 {
                     if (TextToImage.Canceled) return;
 
+                    PatchUtils.PatchDiffusers();
                     Logger.Log($"(Re)starting Nmkdiffusers. Process running: {TtiProcess.IsAiProcessRunning} - Prev startup string: '{TtiProcess.LastStartupSettings}' - New startup string: '{newStartupSettings}'", true);
                     TtiProcess.LastStartupSettings = newStartupSettings;
 

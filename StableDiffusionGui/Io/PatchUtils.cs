@@ -13,10 +13,11 @@ namespace StableDiffusionGui.Io
             PatchLycoris();
         }
 
-        public static void PatchDiffusers() // Compatible as of Stax124/diffusers@5d41b5383c6a0421a24b17f4520d71a1834c1dac 
+        public static void PatchDiffusers() // Compatible as of 0.19.0
         {
             string diffRootPath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdVenv, "lib", "site-packages", "diffusers");
             ((Action)(() => PatchDiffusersConvCkpt(diffRootPath))).RunInTryCatch("Patch Diffusers Exception:");
+            ((Action)(() => PatchDiffusersPipelineUtils(diffRootPath))).RunInTryCatch("Patch Diffusers Exception:");
         }
 
         public static void PatchHuggingfaceHub() // Compatible as of 0.13.3
@@ -45,7 +46,24 @@ namespace StableDiffusionGui.Io
                 return;
 
             File.WriteAllText(scriptPath, textNew);
-            Logger.LogHidden("Patched diffusers package");
+            Logger.LogHidden($"Patched diffusers script: {scriptPath}");
+        }
+
+        private static void PatchDiffusersPipelineUtils(string root)
+        {
+            string scriptPath = Path.Combine(root, "pipelines", "pipeline_utils.py");
+
+            if (!File.Exists(scriptPath))
+                return;
+
+            string textOld = File.ReadAllText(scriptPath);
+            string textNew = textOld.Replace("if pipeline_is_offloaded and torch.device(torch_device).type == \"cuda\":", "if False:");
+
+            if (textNew == textOld)
+                return;
+
+            File.WriteAllText(scriptPath, textNew);
+            Logger.LogHidden($"Patched diffusers script: {scriptPath}");
         }
 
         private static void PatchHfDownloader(string root)
