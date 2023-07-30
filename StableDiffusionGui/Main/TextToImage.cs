@@ -37,6 +37,9 @@ namespace StableDiffusionGui.Main
             bool fromQueue = settings == null;
             int iteration = 0;
 
+            if (config.AutoDeleteImgs)
+                ImageViewer.DeleteAll(false);
+
             do
             {
                 IsRunningQueue = fromQueue;

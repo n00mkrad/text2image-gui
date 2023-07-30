@@ -458,9 +458,9 @@ namespace StableDiffusionGui.Ui
         {
             Size outputImgSize = new Size();
 
-            if (Program.MainForm.pictBoxImgViewer.Image == null)
+            if (Program.MainForm.pictBoxImgViewer.GetImageSafe() == null)
             {
-                if (Program.MainForm.pictBoxInitImg.Image == null)
+                if (Program.MainForm.pictBoxInitImg.GetImageSafe() == null)
                     return Size.Empty;
                 else
                     outputImgSize = Program.MainForm.pictBoxInitImg.GetImageSafe().Size;

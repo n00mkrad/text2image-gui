@@ -42,6 +42,10 @@ namespace StableDiffusionGui.Main
             {
                 var pair = sourceAndImportedPaths.ElementAt(i);
                 int index = initImgPaths.IndexOf(pair.Key);
+
+                if(!File.Exists(pair.Key))
+                    return;
+
                 MagickImage img = new MagickImage(pair.Key) { Format = extendGravity != (Gravity)(-1) ? MagickFormat.Png32 : MagickFormat.Png24, Quality = 30 };
 
                 if (targetSize.IsEmpty || (img.Width == targetSize.Width && img.Height == targetSize.Height)) // Size already matches

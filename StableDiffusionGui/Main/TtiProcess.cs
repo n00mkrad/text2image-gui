@@ -30,7 +30,7 @@ namespace StableDiffusionGui.Main
         {
             try
             {
-                if (!ignoreCanceled && TextToImage.Canceled)
+                if (!ignoreCanceled && (TextToImage.Canceled || TextToImage.Canceling))
                     return false;
 
                 if (CurrentStdInWriter == null || !CurrentStdInWriter.IsRunning)

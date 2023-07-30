@@ -37,12 +37,7 @@ namespace StableDiffusionGui.Main
             TimeSinceLastImage.Restart();
 
             if (clearImages)
-            {
                 _outImgs.Clear();
-
-                if (_config.AutoDeleteImgs)
-                    ImageViewer.DeleteAll(false);
-            }
         }
 
         public static async Task ExportLoop(string imagesDir, int startingImgCount, int targetImgCount)

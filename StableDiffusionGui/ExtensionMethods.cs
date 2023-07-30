@@ -688,5 +688,20 @@ namespace StableDiffusionGui
         {
             return s?.IndexOf(toCheck, comp) >= 0;
         }
+
+        public static bool IsDisposed(this Image image)
+        {
+            try
+            {
+                if(image == null)
+                    return true;
+
+                return image.PixelFormat == System.Drawing.Imaging.PixelFormat.DontCare;
+            }
+            catch (ObjectDisposedException)
+            {
+                return true;
+            }
+        }
     }
 }

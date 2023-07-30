@@ -16,7 +16,7 @@ namespace StableDiffusionGui.Installation
     {
         private static readonly string _gitFile = "n00mkrad/stable-diffusion-cust.git";
         private static readonly string _gitBranch = "main";
-        public static readonly string GitCommit = "0e4cc8ff40d2759b9d7b9fe3da1b3ad093819e79";
+        public static readonly string GitCommit = "f8493670b6b882286b9f45cfab4377fbb4316019";
 
         public static async Task Install(bool force = false, bool forceUpdateDeps = false, bool installUpscalers = true)
         {

@@ -236,8 +236,19 @@ namespace StableDiffusionGui.Extensions
         {
             if (pictureBox.InvokeRequired)
                 return (Image)pictureBox.Invoke(new Func<Image>(() => pictureBox.GetImageSafe()));
-            else
-                return (Image)pictureBox.Image.Clone();
+
+            try
+            {
+                if (pictureBox.Image.IsDisposed())
+                    pictureBox.Image = null;
+
+                var img = pictureBox.Image == null ? null : (Image)pictureBox.Image.Clone();
+                return img;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         public static void SetTextSafe(this Control control, string text)
