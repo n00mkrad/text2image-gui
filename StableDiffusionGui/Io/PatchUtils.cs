@@ -57,7 +57,7 @@ namespace StableDiffusionGui.Io
                 return;
 
             string textOld = File.ReadAllText(scriptPath);
-            string textNew = textOld.Replace("if pipeline_is_offloaded and torch.device(torch_device).type == \"cuda\":", "if False:");
+            string textNew = textOld.Replace("if pipeline_is_offloaded and torch.device(torch_device).type == \"cuda\":", "if pipeline_is_offloaded and torch_device and torch.device(torch_device).type == \"cuda\":");
 
             if (textNew == textOld)
                 return;
