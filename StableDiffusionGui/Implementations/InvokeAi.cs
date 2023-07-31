@@ -25,7 +25,6 @@ namespace StableDiffusionGui.Implementations
         public enum HiresFixStatus { NotUpscaling, WaitingForStart, Upscaling }
         private static HiresFixStatus _hiresFixStatus;
         private bool _hasErrored = false;
-
         public static int Pid = -1;
 
         public enum FixAction { Upscale, FaceRestoration }
@@ -66,7 +65,6 @@ namespace StableDiffusionGui.Implementations
                 args["hiresFix"] = s.HiresFix ? "--hires_fix" : "";
                 args["perlin"] = s.Perlin > 0f ? $"--perlin {s.Perlin.ToStringDot()}" : "";
                 args["threshold"] = s.Threshold > 0 ? $"--threshold {s.Threshold}" : "";
-                // args["clipSegMask"] = (s.ImgMode == Enums.StableDiffusion.ImgMode.TextMask && !string.IsNullOrWhiteSpace(s.ClipSegMask)) ? $"-tm {s.ClipSegMask.Wrap()}" : "";
                 args["debug"] = s.AppendArgs;
                 args["res"] = $"-W {s.Res.Width} -H {s.Res.Height}";
                 args["sampler"] = $"-A {s.Sampler.ToString().Lower()}";
