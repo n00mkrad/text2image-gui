@@ -1,4 +1,5 @@
 ﻿using StableDiffusionGui.Main;
+using StableDiffusionGui.MiscUtils;
 using System;
 using System.IO;
 
@@ -6,12 +7,14 @@ namespace StableDiffusionGui.Io
 {
     internal class Paths
     {
+        public static long SessionTimestampUnix;
         public static string SessionTimestamp;
         public static long SessionClipboardIndex = 0;
 
         public static void Init()
         {
             var n = DateTime.Now;
+            SessionTimestampUnix = FormatUtils.GetUnixTime();
             SessionTimestamp = $"{n.Year}-{n.Month.ToString().PadLeft(2, '0')}-{n.Day.ToString().PadLeft(2, '0')}-{n.Hour.ToString().PadLeft(2, '0')}-{n.Minute.ToString().PadLeft(2, '0')}-{n.Second.ToString().PadLeft(2, '0')}";
         }
 

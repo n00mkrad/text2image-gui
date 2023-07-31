@@ -227,9 +227,14 @@ namespace StableDiffusionGui.MiscUtils
             return originalString.ToList().Where(c => !asciiString.Contains(c)).ToList();
         }
 
+        public static long GetUnixTime()
+        {
+            return ((long)(DateTime.Now - new DateTime(1970, 1, 1)).TotalMilliseconds);
+        }
+
         public static string GetUnixTimestamp ()
         {
-            return ((long)(DateTime.Now - new DateTime(1970, 1, 1)).TotalMilliseconds).ToString();
+            return GetUnixTime().ToString();
         }
     }
 }

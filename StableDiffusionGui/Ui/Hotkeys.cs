@@ -1,6 +1,7 @@
 ﻿using StableDiffusionGui.Extensions;
 using StableDiffusionGui.Forms;
 using StableDiffusionGui.Implementations;
+using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
@@ -130,7 +131,19 @@ namespace StableDiffusionGui.Ui
                 return;
             }
 
-            // if (keys == Keys.F10) // Hotkey: UI TEST
+            if (keys == Keys.F8 && Program.Debug)
+            {
+                new ComfyPatcher().Run();
+                return;
+            }
+
+            if (keys == Keys.F9 && Program.Debug)
+            {
+                new Comfy().Run(Program.MainForm.GetCurrentTtiSettings(), Config.Instance.OutPath);
+                return;
+            }
+
+            // if (keys == Keys.F10 && Program.Debug) // Hotkey: UI TEST
             // {
             //     UiConstruction.CreateMainWindowOption();
             //     return;

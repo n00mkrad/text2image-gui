@@ -30,6 +30,10 @@ namespace StableDiffusionGui.Io
                     if (Program.Debug)
                         Logger.Log($"Loading image: {path}{(allowCacheLoad && ImageCache.Contains(path) ? " [Cached]" : "")}", true);
 
+
+                    return new MagickImage(path).ToBitmap();
+
+                    // TEMPORARY DISABLE DUE TO DISPOSE BUGS
                     if (allowCacheLoad && allowCacheStore)
                         return ImageCache.GetOrLoadAndStore(path, p => new MagickImage(path).ToBitmap());
                     else if (allowCacheLoad)
