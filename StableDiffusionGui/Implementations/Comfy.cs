@@ -3,10 +3,12 @@ using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Os;
+using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -23,11 +25,11 @@ namespace StableDiffusionGui.Implementations
         private bool _hasErrored = false;
         public static int Pid = -1;
 
-        public static readonly int ComfyPort = 8188;
+        public static readonly int ComfyPort = 8189;
         private static readonly HttpClient _webClient = new HttpClient();
 
-        private OperationOrder _opOrder = new OperationOrder(new List<OperationOrder.LoopAction> { OperationOrder.LoopAction.Prompt, OperationOrder.LoopAction.Iteration, OperationOrder.LoopAction.Scale, OperationOrder.LoopAction.Step });
-        private Action<OperationOrder.LoopAction> _loopIterations, _loopPrompts, _loopScales, _loopSteps/*, _loopInits, _loopInitStrengths, _loopLoraWeights*/;
+        private OperationOrder _opOrder = new OperationOrder(new List<OperationOrder.LoopAction> { OperationOrder.LoopAction.Prompt, OperationOrder.LoopAction.Iteration, OperationOrder.LoopAction.Scale, OperationOrder.LoopAction.Step, OperationOrder.LoopAction.RefineStrength });
+        private Action<OperationOrder.LoopAction> _loopIterations, _loopPrompts, _loopScales, _loopSteps, _loopRefinerStrengths /*, _loopInits, _loopInitStrengths, _loopLoraWeights*/;
 
         public async Task Run(TtiSettings s, string outPath)
         {
@@ -36,6 +38,8 @@ namespace StableDiffusionGui.Implementations
             var baseModels = cachedModels.Where(m => m.Type == Enums.Models.Type.Normal).ToList();
             var refinerModels = cachedModels.Where(m => m.Type == Enums.Models.Type.Refiner).ToList();
             Model model = TtiUtils.CheckIfModelExists(s.Model, Implementation.SdXl, baseModels);
+            string vaeName = s.Vae.NullToEmpty().Replace("None", ""); // VAE model name
+            Model vae = Models.GetModel(Models.GetVaes(), vaeName);
 
             if (model == null)
                 return;
@@ -63,8 +67,9 @@ namespace StableDiffusionGui.Implementations
 
             var scriptArgs = new List<string>
             {
-                $"--normalvram",
+                GetVramArg(),
                 $"--output-directory {outPath.Wrap(true)}",
+                $"--preview-method none",
                 $"--port {ComfyPort}",
             };
 
@@ -147,12 +152,15 @@ namespace StableDiffusionGui.Implementations
                 //     foreach (var lora in s.Loras)
                 //         currPrompt = currPrompt.Replace($"{lora.Key}Weight", currentLoraWeight.ToStringDot("0.0###"));
 
+                generations.Last().LatentUpscale = s.HiresFix;
                 generations.Last().Width = s.Res.Width;
                 generations.Last().Height = s.Res.Height;
                 generations.Last().Prompt = currPrompt;
                 generations.Last().NegativePrompt = s.NegativePrompt;
                 generations.Last().Model = model;
                 generations.Last().ModelRefiner = refineModel;
+                generations.Last().Vae = vae;
+                generations.Last().Sampler = s.Sampler;
                 generations.Add(new GenerationInfo());
             }
 
@@ -192,6 +200,15 @@ namespace StableDiffusionGui.Implementations
                 foreach (int stepCount in s.Steps)
                 {
                     generations.Last().Steps = stepCount;
+                    NextAction(thisAction);
+                }
+            };
+
+            _loopRefinerStrengths = (thisAction) =>
+            {
+                foreach (float strength in s.RefinerStrengths)
+                {
+                    generations.Last().RefinerStrength = strength;
                     NextAction(thisAction);
                 }
             };
@@ -246,10 +263,11 @@ namespace StableDiffusionGui.Implementations
             wf = wf.Trim().TrimStart('{').TrimEnd('}');
             var nodes = ComfyWorkflow.GetNodes(wf).OrderBy(n => n.Type).ThenBy(n => n.Title).ToList().ToList();
             // GenerationInfo test = new GenerationInfo { Model = model, ModelRefiner = refineModel, Prompt = s.Prompts[0], NegativePrompt = s.NegativePrompt, Steps = s.Steps[0], Seed = s.Seed, Scale = s.ScalesTxt[0], RefinerStrength = s.RefinerStrengths[0], Width = s.Res.Width, Height = s.Res.Height };
-            
-            foreach(var genInfo in generations.Where(g => g.Model != null))
+
+            foreach (var genInfo in generations.Where(g => g.Model != null))
             {
-                string req = $"{{\"client_id\":\"{Paths.SessionTimestampUnix}\",\"prompt\":{{{ComfyWorkflow.BuildPrompt(genInfo, nodes)}}},\"extra_data\":{{\"extra_pnginfo\":{{\"workflow\":{{{wf}}}}}}}}}";
+                string meta = genInfo.GetMetadataDict().ToJson();
+                string req = $"{{\"client_id\":\"{Paths.SessionTimestampUnix}\",\"prompt\":{{{ComfyWorkflow.BuildPrompt(genInfo, nodes)}}},\"extra_data\":{{\"extra_pnginfo\":{{\"workflow\":{{{wf}}},\"Nmkdiffusers\":{meta}}}}}}}";
                 await ApiPost(req);
             }
         }
@@ -260,9 +278,9 @@ namespace StableDiffusionGui.Implementations
         {
             System.Net.ServicePointManager.Expect100Continue = false;
             var stringContent = data.IsEmpty() ? null : new StringContent(data, Encoding.UTF8, "application/json");
-            string baseUrl = $"http://127.0.0.1:8188/{endpoint.ToString().Lower()}";
+            string baseUrl = $"http://127.0.0.1:{ComfyPort}/{endpoint.ToString().Lower()}";
             var response = await _webClient.PostAsync(baseUrl, stringContent);
-            Logger.Log($"{baseUrl} - {stringContent}", true, filename: "api");
+            Logger.Log($"{baseUrl} - {data.Trunc(150)}", true, filename: "api");
             return await response.Content.ReadAsStringAsync();
         }
 
@@ -282,9 +300,21 @@ namespace StableDiffusionGui.Implementations
             if (a == OperationOrder.LoopAction.Iteration) _loopIterations(a);
             if (a == OperationOrder.LoopAction.Scale) _loopScales(a);
             if (a == OperationOrder.LoopAction.Step) _loopSteps(a);
+            if (a == OperationOrder.LoopAction.RefineStrength) _loopRefinerStrengths(a);
             // if (a == OperationOrder.LoopAction.InitImg) _loopInits(a);
             // if (a == OperationOrder.LoopAction.InitStrengths) _loopInitStrengths(a);
             // if (a == OperationOrder.LoopAction.LoraWeight) _loopLoraWeights(a);
+        }
+
+        private string GetVramArg()
+        {
+            var preset = ParseUtils.GetEnum<Enums.Comfy.VramPreset>(Config.Instance.ComfyVramPreset.ToString(), true, Strings.ComfyVramPresets);
+            if (preset == Enums.Comfy.VramPreset.GpuOnly) return "--gpu-only";
+            if (preset == Enums.Comfy.VramPreset.HighVram) return "--highvram";
+            if (preset == Enums.Comfy.VramPreset.NormalVram) return "--normalvram";
+            if (preset == Enums.Comfy.VramPreset.LowVram) return "--lowvram";
+            if (preset == Enums.Comfy.VramPreset.NoVram) return "--novram";
+            return "";
         }
 
         public async Task Cancel()
@@ -305,11 +335,32 @@ namespace StableDiffusionGui.Implementations
             if (TextToImage.CurrentTaskSettings == null || line == null)
                 return;
 
+            if (line.Contains("Setting up MemoryEfficientCrossAttention"))
+                return;
+
+            if (line.Trim().StartsWith("left over keys:"))
+                line = "left over keys: dict_keys([...])";
+
+            if (line.StartsWith("PREVIEW:b'")) // Decode base64 encoded JPEG preview
+            {
+                byte[] imageBytes = Convert.FromBase64String(line.Split('\'')[1]);
+                Console.WriteLine($"Received preview {(imageBytes.Length / 1024f).RoundToInt()}k");
+
+                using (var ms = new MemoryStream(imageBytes, 0, imageBytes.Length))
+                {
+                    Image image = Image.FromStream(ms, true);
+                    Program.MainForm.pictBoxImgViewer.Image = image;
+                }
+
+                return;
+            }
+
             Logger.Log(line, true, false, Constants.Lognames.Sd);
             TtiProcessOutputHandler.LastMessages.Insert(0, line);
 
             if (TextToImage.Canceled)
                 return;
+
 
             bool ellipsis = Program.MainForm.LogText.EndsWith("...");
             string errMsg = "";
@@ -318,6 +369,9 @@ namespace StableDiffusionGui.Implementations
 
             if (!TextToImage.Canceled && line.Trim() == "got prompt")
             {
+                if (!lastLineGeneratedText)
+                    Logger.LogIfLastLineDoesNotContainMsg($"Generating...", replaceLastLine: ellipsis);
+
                 ImageExport.TimeSinceLastImage.Restart();
             }
 
@@ -346,6 +400,7 @@ namespace StableDiffusionGui.Implementations
         {
             public Model Model;
             public Model ModelRefiner;
+            public Model Vae;
             public string Prompt;
             public string NegativePrompt;
             public int Steps;
@@ -356,7 +411,27 @@ namespace StableDiffusionGui.Implementations
             public float InitStrength;
             public int Width;
             public int Height;
-            public bool LatentUpscale = true;
+            public bool LatentUpscale;
+            public Sampler Sampler;
+
+            public Dictionary<string, dynamic> GetMetadataDict()
+            {
+                return new Dictionary<string, dynamic>
+                {
+                    { "prompt", Prompt },
+                    { "promptNeg" , NegativePrompt },
+                    { "initImg" , InitImg },
+                    { "initStrength", InitStrength },
+                    { "w" , Width },
+                    { "h" , Height },
+                    { "steps" , Steps },
+                    { "seed", Seed },
+                    { "scaleTxt", Scale },
+                    { "inpaintMask" , "" },
+                    { "sampler" , Sampler.ToString().Lower() },
+                    { "refineFrac", (1f - RefinerStrength) },
+                };
+            }
         }
     }
 }

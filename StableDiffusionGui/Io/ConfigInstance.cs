@@ -89,6 +89,7 @@ namespace StableDiffusionGui.Io
         public bool NmkdiffOffload;
         public bool NmkdiffSdXLSequential;
         public float SdXlRefinerStrength;
+        public Enums.Comfy.VramPreset ComfyVramPreset;
 
         public ConfigInstance()
         {

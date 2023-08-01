@@ -39,7 +39,7 @@ namespace StableDiffusionGui.Ui
             { Enums.StableDiffusion.Sampler.K_Dpmpp_2M_Sde.ToString(), "DPM++ 2M SDE Karras" },
             { Enums.StableDiffusion.Sampler.Lms.ToString(), "LMS" },
             { Enums.StableDiffusion.Sampler.Ddim.ToString(), "DDIM" },
-            { Enums.StableDiffusion.Sampler.Plms.ToString(), "PLMS" },
+            // { Enums.StableDiffusion.Sampler.Plms.ToString(), "PLMS" },
             { Enums.StableDiffusion.Sampler.Heun.ToString(), "Heun" },
             { Enums.StableDiffusion.Sampler.Dpm_2.ToString(), "DPM 2" },
             { Enums.StableDiffusion.Sampler.Dpm_2_A.ToString(), "DPM 2 Ancestral" },
@@ -151,6 +151,15 @@ namespace StableDiffusionGui.Ui
         {
             { KohyaSettings.NetworkType.LoCon.ToString(), "LoRA (Vanilla)" },
             { KohyaSettings.NetworkType.LoHa.ToString(), "LoHa (LyCORIS)" },
+        };
+
+        public static Dictionary<string, string> ComfyVramPresets = new Dictionary<string, string>
+        {
+            { Enums.Comfy.VramPreset.GpuOnly.ToString(), "Max (Keep All Data on Gpu - Not Recommended!)" },
+            { Enums.Comfy.VramPreset.HighVram.ToString(), "High (Don’t Offload Models to CPU)" },
+            { Enums.Comfy.VramPreset.NormalVram.ToString(), "Normal (Dynamically Offload Models to CPU)" },
+            { Enums.Comfy.VramPreset.LowVram.ToString(), "Low (Slower)" },
+            { Enums.Comfy.VramPreset.NoVram.ToString(), "Very Low (Slowest)" },
         };
     }
 }

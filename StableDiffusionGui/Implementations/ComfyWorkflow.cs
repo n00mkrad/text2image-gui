@@ -2,14 +2,20 @@
 using StableDiffusionGui.Implementations;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 
 namespace StableDiffusionGui.Implementations
 {
     public class ComfyWorkflow
     {
-        public enum NodeType { CheckpointLoaderSimple, VAELoader, CLIPTextEncode, KSampler, KSamplerAdvanced, VAEDecode, EmptyLatentImage, SaveImage, PrimitiveNode, LatentUpscaleBy, CRLatentInputSwitch, NmkdIntegerConstant, NmkdFloatConstant, NmkdStringConstant }
+        public enum NodeType
+        {
+            CheckpointLoaderSimple, VAELoader, CLIPTextEncode, KSampler, KSamplerAdvanced, VAEDecode, EmptyLatentImage, SaveImage, PrimitiveNode, LatentUpscale, LatentUpscaleBy, CRLatentInputSwitch, Reroute,
+            NmkdIntegerConstant, NmkdFloatConstant, NmkdStringConstant, NmkdCheckpointLoader
+        }
 
         public class Node
         {
@@ -33,6 +39,8 @@ namespace StableDiffusionGui.Implementations
             }
         }
 
+        private enum Axis { Width, Height }
+
         public static string BuildPrompt(Comfy.GenerationInfo g, List<Node> nodes)
         {
             string prompt = "";
@@ -40,18 +48,40 @@ namespace StableDiffusionGui.Implementations
             var nodesDict = new EasyDict<string, Node>();
             bool refine = g.RefinerStrength > 0.001f;
             int baseSteps = (g.Steps * (1f - g.RefinerStrength)).RoundToInt();
+            int baseWidth = g.Width;
+            int baseHeight = g.Height;
+
+            if (g.LatentUpscale)
+            {
+                Axis shorterAxis = g.Width < g.Height ? Axis.Width : Axis.Height;
+                int oldShorterAxisLength = shorterAxis == Axis.Width ? g.Width : g.Height;
+                int newShorterAxisLength = ((shorterAxis == Axis.Width ? g.Width : g.Height) * 0.5f).Clamp(512f, 2048f).RoundToInt();
+                float factor = (float)newShorterAxisLength / oldShorterAxisLength;
+                baseWidth = (g.Width * factor).RoundToInt().RoundMod(8);
+                baseHeight = (g.Height * factor).RoundToInt().RoundMod(8);
+
+                if(baseWidth < 1024 && baseHeight < 1024)
+                {
+                    Size s = ImgMaths.FitIntoFrame(new Size(baseWidth, baseHeight), new Size(1024, 1024));
+                    baseWidth = s.Width;
+                    baseHeight = s.Height;
+                }
+
+                baseWidth = baseWidth.RoundMod(16);
+                baseHeight = baseHeight.RoundMod(16);
+                Logger.Log($"Final latent upscaling size: {baseWidth}x{baseHeight}", true);
+            }
 
             foreach (var node in nodes)
                 nodesDict[node.Title.Remove(" ")] = node;
 
-            var modelNodes = nodes.Where(n => n.Type == NodeType.CheckpointLoaderSimple).ToList();
-            var promptNodes = nodes.Where(n => n.Type == NodeType.NmkdStringConstant && n.Title.Lower().StartsWith("prompt")).ToList();
-
-            bool useExternalVae = true;
-
             foreach (var node in nodes)
             {
                 if (node == null)
+                {
+                    continue;
+                }
+                else if (node.Type == NodeType.Reroute)
                 {
                     continue;
                 }
@@ -64,8 +94,8 @@ namespace StableDiffusionGui.Implementations
                 }
                 else if (node.Type == NodeType.NmkdIntegerConstant)
                 {
-                    int val = 0;
-                    if (node.Title == "Seed") val = (int)g.Seed; // TODO: USE LONG
+                    long val = 0;
+                    if (node.Title == "Seed") val = g.Seed;
                     if (node.Title == "Steps") val = g.Steps;
                     if (node.Title == "StepsBase") val = baseSteps;
                     if (node.Title == "StepsSkip") val = 0;
@@ -85,9 +115,16 @@ namespace StableDiffusionGui.Implementations
                     if (node.Title == "Model2") ckptName = g.ModelRefiner != null ? g.ModelRefiner.Name : g.Model.Name;
                     node.Class = new ComfyNodes.CheckpointLoaderSimple() { CkptName = ckptName };
                 }
+                else if (node.Type == NodeType.NmkdCheckpointLoader)
+                {
+                    if (node.Title == "Model1")
+                        node.Class = new ComfyNodes.NmkdCheckpointLoader() { ModelPath = g.Model.FullName, LoadVae = true, VaePath = g.Vae != null ? g.Vae.FullName : "" };
+                    if (node.Title == "Model2")
+                        node.Class = new ComfyNodes.NmkdCheckpointLoader() { ModelPath = g.ModelRefiner == null ? g.Model.FullName : g.ModelRefiner.FullName, LoadVae = false };
+                }
                 else if (node.Type == NodeType.VAELoader)
                 {
-                    node.Class = new ComfyNodes.VAELoader() { VaeName = "sdxl_vae.safetensors" };
+                    node.Class = new ComfyNodes.VAELoader() { };
                 }
                 else if (node.Type == NodeType.KSampler)
                 {
@@ -106,14 +143,15 @@ namespace StableDiffusionGui.Implementations
                 {
                     bool baseSampler = !node.Title.Lower().Contains("refine");
                     var latentsNode = nodesDict["EmptyLatentImage"];
+                    if (node.Title == "SamplerHires" && !g.LatentUpscale) continue;
                     if (node.Title == "SamplerHires") latentsNode = nodesDict["UpscaleLatent"];
                     if (node.Title == "SamplerRefiner") latentsNode = g.LatentUpscale ? nodesDict["SamplerHires"] : nodesDict["SamplerBase"];
 
                     node.Class = new ComfyNodes.KSamplerAdvanced()
                     {
                         AddNoise = baseSampler,
-                        SamplerName = baseSampler ? "dpmpp_2m" : "euler",
-                        Scheduler = node.Title.Contains("Hires") ? "simple" : "normal",
+                        SamplerName = baseSampler ? GetComfySampler(g.Sampler) : "euler",
+                        Scheduler = baseSampler ? (node.Title.Contains("Hires") ? "simple" : GetComfyScheduler(g.Sampler)) : "normal", // Base = From Sampler, Hires = Simple, Refiner = Normal
                         IdSeed = nodesDict["Seed"].Id,
                         IdSteps = nodesDict["Steps"].Id,
                         IdCfg = nodesDict["Cfg"].Id,
@@ -134,7 +172,11 @@ namespace StableDiffusionGui.Implementations
                 }
                 else if (node.Type == NodeType.EmptyLatentImage)
                 {
-                    node.Class = new ComfyNodes.EmptyLatentImage() { Width = g.Width, Height = g.Height, BatchSize = 1 };
+                    node.Class = new ComfyNodes.EmptyLatentImage() { Width = baseWidth, Height = baseHeight, BatchSize = 1 };
+                }
+                else if (node.Type == NodeType.LatentUpscale)
+                {
+                    node.Class = new ComfyNodes.LatentUpscale() { Width = g.Width, Height = g.Height, IdLatents = nodesDict["SamplerBase"].Id };
                 }
                 else if (node.Type == NodeType.LatentUpscaleBy)
                 {
@@ -147,9 +189,7 @@ namespace StableDiffusionGui.Implementations
                 }
                 else if (node.Type == NodeType.VAEDecode)
                 {
-                    int idVae = useExternalVae ? nodesDict["LoadExtVae"].Id : nodesDict["Model1"].Id;
-                    int vaeIndex = useExternalVae ? 0 : 2;
-                    node.Class = new ComfyNodes.VAEDecode() { IdLatents = nodesDict["SamplerRefiner"].Id, IdVae = idVae, IdVaeIndex = vaeIndex };
+                    node.Class = new ComfyNodes.VAEDecode() { IdLatents = nodesDict["SamplerRefiner"].Id, IdVae = nodesDict["Model1"].Id, IdVaeIndex = 2 };
                 }
                 else if (node.Type == NodeType.SaveImage)
                 {
@@ -190,6 +230,32 @@ namespace StableDiffusionGui.Implementations
             }
 
             return nodesList;
+        }
+
+        public static string GetComfySampler(Enums.StableDiffusion.Sampler s)
+        {
+            switch (s)
+            {
+                case Enums.StableDiffusion.Sampler.Dpmpp_2M: return "dpmpp_2m";
+                case Enums.StableDiffusion.Sampler.K_Dpmpp_2M: return "dpmpp_2m";
+                case Enums.StableDiffusion.Sampler.Dpmpp_2M_Sde: return "dpmpp_2m_sde";
+                case Enums.StableDiffusion.Sampler.K_Dpmpp_2M_Sde: return "dpmpp_2m_sde";
+                case Enums.StableDiffusion.Sampler.Euler_A: return "euler_ancestral";
+                case Enums.StableDiffusion.Sampler.Euler: return "euler";
+                case Enums.StableDiffusion.Sampler.K_Euler: return "euler";
+                case Enums.StableDiffusion.Sampler.Ddim: return "ddim";
+                case Enums.StableDiffusion.Sampler.Lms: return "lms";
+                case Enums.StableDiffusion.Sampler.Heun: return "heun";
+                case Enums.StableDiffusion.Sampler.Dpm_2: return "dpm_2";
+                case Enums.StableDiffusion.Sampler.Dpm_2_A: return "dpm_2_ancestral";
+                case Enums.StableDiffusion.Sampler.UniPc: return "uni_pc";
+                default: return "dpmpp_2m";
+            }
+        }
+
+        public static string GetComfyScheduler(Enums.StableDiffusion.Sampler s)
+        {
+            return s.ToString().Lower().StartsWith("k_") ? "karras" : "normal";
         }
     }
 }

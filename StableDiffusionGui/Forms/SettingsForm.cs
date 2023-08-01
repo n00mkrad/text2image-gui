@@ -50,6 +50,7 @@ namespace StableDiffusionGui.Forms
         {
             Refresh();
             comboxTimestampInFilename.FillFromEnum<Enums.Export.FilenameTimestamp>(Strings.TimestampModes);
+            comboxComfyVram.FillFromEnum<Enums.Comfy.VramPreset>(Strings.ComfyVramPresets);
             LoadSettings();
 
             TabOrderInit(new List<Control>() {
@@ -60,6 +61,7 @@ namespace StableDiffusionGui.Forms
                 comboxSdModelVae, btnRefreshModelsDropdownVae, btnOpenModelsFolderVae,
                 textboxEmbeddingsDir,
                 textboxLorasDir,
+                comboxComfyVram,
                 comboxClipSkip,
                 comboxCudaDevice,
                 textboxOutPath, btnOutPathBrowse,
@@ -183,8 +185,7 @@ namespace StableDiffusionGui.Forms
             ConfigParser.LoadGuiElement(checkboxUnloadModel, ref Config.Instance.UnloadModel);
             ConfigParser.LoadGuiElement(checkboxAutoSetResForInitImg, ref Config.Instance.AutoSetResForInitImg);
             ConfigParser.LoadGuiElement(checkboxInitImageRetainAspectRatio, ref Config.Instance.InitImageRetainAspectRatio);
-            ConfigParser.LoadGuiElement(checkboxDiffusersOffload, ref Config.Instance.NmkdiffOffload);
-            ConfigParser.LoadGuiElement(checkboxSdXlSequential, ref Config.Instance.NmkdiffSdXLSequential);
+            ConfigParser.LoadComboxIndex(comboxComfyVram, ref Config.Instance.ComfyVramPreset);
         }
 
         void SaveSettings()
@@ -219,8 +220,7 @@ namespace StableDiffusionGui.Forms
             ConfigParser.SaveGuiElement(checkboxUnloadModel, ref Config.Instance.UnloadModel);
             ConfigParser.SaveGuiElement(checkboxAutoSetResForInitImg, ref Config.Instance.AutoSetResForInitImg);
             ConfigParser.SaveGuiElement(checkboxInitImageRetainAspectRatio, ref Config.Instance.InitImageRetainAspectRatio);
-            ConfigParser.SaveGuiElement(checkboxDiffusersOffload, ref Config.Instance.NmkdiffOffload);
-            ConfigParser.SaveGuiElement(checkboxSdXlSequential, ref Config.Instance.NmkdiffSdXLSequential);
+            ConfigParser.SaveComboxIndex(comboxComfyVram, ref Config.Instance.ComfyVramPreset);
 
             Config.Save();
         }
@@ -281,7 +281,7 @@ namespace StableDiffusionGui.Forms
                 panelVae.SetVisible(CurrImplementation.Supports(ImplementationInfo.Feature.CustomVae));
                 panelAdvancedOptsInvoke.SetVisible(CurrImplementation == Implementation.InvokeAi);
                 panelModelCaching.SetVisible(CurrImplementation == Implementation.InvokeAi);
-                panelSdXlOpt.SetVisible(CurrImplementation == Implementation.SdXl);
+                panelComfyVram.SetVisible(CurrImplementation == Implementation.SdXl);
 
                 LoadModels();
                 LoadVaes();

@@ -235,6 +235,7 @@ namespace StableDiffusionGui.Forms
             this.flowPanelImgButtons = new System.Windows.Forms.FlowLayoutPanel();
             this.btnSaveMode = new System.Windows.Forms.Button();
             this.separator = new System.Windows.Forms.Button();
+            this.checkboxTestLatUpscale = new System.Windows.Forms.CheckBox();
             this.menuStripOutputImg.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.upDownSeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
@@ -2901,6 +2902,7 @@ namespace StableDiffusionGui.Forms
             // 
             // panelModel2
             // 
+            this.panelModel2.Controls.Add(this.checkboxTestLatUpscale);
             this.panelModel2.Controls.Add(this.comboxModel2);
             this.panelModel2.Controls.Add(this.label26);
             this.panelModel2.Dock = System.Windows.Forms.DockStyle.Top;
@@ -3184,6 +3186,18 @@ namespace StableDiffusionGui.Forms
             this.separator.TabIndex = 75;
             this.separator.TabStop = false;
             this.separator.UseVisualStyleBackColor = false;
+            // 
+            // checkboxTestLatUpscale
+            // 
+            this.checkboxTestLatUpscale.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkboxTestLatUpscale.ForeColor = System.Drawing.Color.Silver;
+            this.checkboxTestLatUpscale.Location = new System.Drawing.Point(112, 6);
+            this.checkboxTestLatUpscale.Name = "checkboxTestLatUpscale";
+            this.checkboxTestLatUpscale.Size = new System.Drawing.Size(115, 23);
+            this.checkboxTestLatUpscale.TabIndex = 111;
+            this.checkboxTestLatUpscale.Text = "Latent Upscaling";
+            this.checkboxTestLatUpscale.UseVisualStyleBackColor = true;
+            this.checkboxTestLatUpscale.Visible = false;
             // 
             // MainForm
             // 
@@ -3519,6 +3533,7 @@ namespace StableDiffusionGui.Forms
         public System.Windows.Forms.Panel panelModel2;
         public System.Windows.Forms.ComboBox comboxModel2;
         private System.Windows.Forms.Label label26;
+        public System.Windows.Forms.CheckBox checkboxTestLatUpscale;
     }
 }
 

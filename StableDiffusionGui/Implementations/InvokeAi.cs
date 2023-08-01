@@ -70,7 +70,7 @@ namespace StableDiffusionGui.Implementations
                 args["sampler"] = $"-A {s.Sampler.ToString().Lower()}";
 
                 if (initImages == null || initImages.Count <= 0)
-                    _opOrder.LoopOrder.Remove(OperationOrder.LoopAction.InitStrengths);
+                    _opOrder.LoopOrder.Remove(OperationOrder.LoopAction.InitStrength);
 
                 if (!s.Loras.Any())
                     _opOrder.LoopOrder.Remove(OperationOrder.LoopAction.LoraWeight);
@@ -313,7 +313,7 @@ namespace StableDiffusionGui.Implementations
             if (a == OperationOrder.LoopAction.Scale) _loopScales(a);
             if (a == OperationOrder.LoopAction.Step) _loopSteps(a);
             if (a == OperationOrder.LoopAction.InitImg) _loopInits(a);
-            if (a == OperationOrder.LoopAction.InitStrengths) _loopInitStrengths(a);
+            if (a == OperationOrder.LoopAction.InitStrength) _loopInitStrengths(a);
             if (a == OperationOrder.LoopAction.LoraWeight) _loopLoraWeights(a);
         }
 

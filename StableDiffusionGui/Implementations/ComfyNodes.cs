@@ -17,7 +17,7 @@ namespace StableDiffusionGui.Implementations
 
         public class NmkdIntegerConstant : IComfyNode
         {
-            public int Value;
+            public long Value;
 
             public string GetString()
             {
@@ -169,6 +169,28 @@ namespace StableDiffusionGui.Implementations
             }
         }
 
+        public class LatentUpscale : IComfyNode
+        {
+            public string UpscaleMethod = "nearest-exact";
+            public int Width;
+            public int Height;
+            public int IdLatents;
+
+            public string GetString()
+            {
+                var dict = new Dictionary<string, string>()
+                {
+                    { "upscale_method", UpscaleMethod.Wrap() },
+                    { "width", Width.ToString() },
+                    { "height", Height.ToString() },
+                    { "crop", "disabled".Wrap() },
+                    { "samples", $"[{IdLatents.ToString().Wrap()},0]" },
+                };
+
+                return GetPropertiesString(dict, "LatentUpscale");
+            }
+        }
+
         public class CRLatentInputSwitch : IComfyNode
         {
             public int Selection;
@@ -218,11 +240,35 @@ namespace StableDiffusionGui.Implementations
             public string GetString()
             {
                 return $"\"inputs\":{{" +
-                    $"\"filename_prefix\":" +
-                    $"\"{Prefix}\"," +
+                    $"\"filename_prefix\":\"{Prefix}\"," +
                     $"\"images\":[\"{IdImages}\",0]}}," +
                     $"\"class_type\":\"SaveImage\"";
             }
+        }
+
+        public class NmkdCheckpointLoader : IComfyNode
+        {
+            public string ModelPath;
+            public bool LoadVae;
+            public string VaePath;
+
+            public string GetString()
+            {
+                var dict = new Dictionary<string, string>()
+                {
+                    { "mdl_path", ModelPath.Wrap(true) },
+                    { "load_vae", (LoadVae ? "enable" : "disable").Wrap() },
+                    { "vae_path", VaePath.Wrap(true) },
+                };
+
+                return GetPropertiesString(dict, "NmkdCheckpointLoader");
+            }
+        }
+
+
+        private static string GetPropertiesString(Dictionary<string, string> dict, string classType)
+        {
+            return $"\"inputs\":{{{string.Join(",", dict.Select(pair => $"{pair.Key.Wrap()}:{pair.Value}"))}}},\"class_type\":\"{classType}\"";
         }
     }
 }
