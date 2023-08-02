@@ -97,6 +97,7 @@ namespace StableDiffusionGui.Forms
                 sliderScale, textboxSliderScale,
                 upDownSeed, checkboxLockSeed,
                 comboxResW, comboxResH, checkboxHiresFix,
+                updownUpscaleFactor, updownUpscaleResultW, updownUpscaleResultH,
                 comboxSampler,
                 comboxSeamless,
                 comboxSymmetry,
@@ -447,7 +448,7 @@ namespace StableDiffusionGui.Forms
         private void btnDreambooth_Click(object sender, EventArgs e)
         {
             new DreamboothForm().ShowDialogForm();
-            RefreshUiState();
+            TryRefreshUiState();
         }
 
         private void comboxInpaintMode_SelectedIndexChanged(object sender, EventArgs e)

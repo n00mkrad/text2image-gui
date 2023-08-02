@@ -161,5 +161,11 @@ namespace StableDiffusionGui.Ui
             { Enums.Comfy.VramPreset.LowVram.ToString(), "Low (Slower)" },
             { Enums.Comfy.VramPreset.NoVram.ToString(), "Very Low (Slowest)" },
         };
+
+        public static Dictionary<string, string> UpscaleModes = new Dictionary<string, string>
+        {
+            { Enums.StableDiffusion.LatentUpscaleMode.Factor.ToString(), "Set Factor" },
+            { Enums.StableDiffusion.LatentUpscaleMode.TargetRes.ToString(), "Set Resolution" },
+        };
     }
 }

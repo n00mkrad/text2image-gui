@@ -13,7 +13,7 @@ namespace StableDiffusionGui.Data
 {
     public class ImageMetadata
     {
-        public enum MetadataType { InvokeDream, InvokeJson, Auto1111, Nmkdiffusers, Unknown }
+        public enum MetadataType { InvokeDream, InvokeJson, Auto1111, Nmkdiffusers, GenerationInfo, Unknown }
         public MetadataType Type = MetadataType.Unknown;
         public string Path = "";
         public string AllText = "";
@@ -23,6 +23,7 @@ namespace StableDiffusionGui.Data
         public int Steps = -1;
         public int BatchSize = 1;
         public Size GeneratedResolution = new Size();
+        public Size UpscaleResolution = new Size();
         public float Scale = -1;
         public float ScaleImg = -1;
         public string Sampler = "";
@@ -41,6 +42,7 @@ namespace StableDiffusionGui.Data
             { MetadataType.InvokeJson, "sd-metadata: " },
             { MetadataType.InvokeDream, "Dream: " },
             { MetadataType.Nmkdiffusers, "Nmkdiffusers:" },
+            { MetadataType.GenerationInfo, "GenerationInfo:" },
             { MetadataType.Auto1111, "parameters:" },
         };
 
@@ -90,6 +92,12 @@ namespace StableDiffusionGui.Data
                     if (tag.Description.Contains(_tags[MetadataType.Nmkdiffusers]))
                     {
                         LoadInfoNmkdiffusers(tag.Description.Split(_tags[MetadataType.Nmkdiffusers]).Last());
+                        return;
+                    }
+
+                    if (tag.Description.Contains(_tags[MetadataType.GenerationInfo]))
+                    {
+                        LoadInfoNmkdiffusers(tag.Description.Split(_tags[MetadataType.GenerationInfo]).Last());
                         return;
                     }
                 }
@@ -288,6 +296,8 @@ namespace StableDiffusionGui.Data
                     case "refineFrac": RefineStrength = 1f - pair.Value.GetFloat(); break;
                     case "w": GeneratedResolution = new Size(pair.Value.GetInt(), GeneratedResolution.Height); break;
                     case "h": GeneratedResolution = new Size(GeneratedResolution.Width, pair.Value.GetInt()); break;
+                    case "upscaleW": UpscaleResolution = new Size(pair.Value.GetInt(), UpscaleResolution.Height); break;
+                    case "upscaleH": UpscaleResolution = new Size(UpscaleResolution.Width, pair.Value.GetInt()); break;
                     default: continue;
                 }
             }

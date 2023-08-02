@@ -329,7 +329,10 @@ namespace StableDiffusionGui.Ui
         public static string SanitizePrompt(string prompt)
         {
             prompt = prompt.Remove("\""); // Don't allow "
-            prompt = InvokeAiUtils.ConvertAttentionSyntax(prompt); // Convert old (multi-bracket) emphasis/attention syntax to new one (with +/-)
+
+            if(Config.Instance.Implementation == Implementation.InvokeAi)
+                prompt = InvokeAiUtils.ConvertAttentionSyntax(prompt); // Convert old (multi-bracket) emphasis/attention syntax to new one (with +/-)
+
             return prompt;
         }
 

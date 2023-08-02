@@ -172,6 +172,9 @@
     <Compile Include="Controls\CustomTextbox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Controls\CustomUpDown.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Data\EasyDict.cs" />
     <Compile Include="Data\Gpu.cs" />
     <Compile Include="Data\ImageMetadata.cs" />

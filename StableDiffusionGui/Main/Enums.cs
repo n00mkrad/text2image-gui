@@ -29,6 +29,7 @@ namespace StableDiffusionGui.Main
             public enum SeamlessMode { Disabled, SeamlessBoth, SeamlessVert, SeamlessHor }
             public enum SymmetryMode { Disabled, SymVert, SymHor, SymBoth }
             public enum ImgMode { InitializationImage, ImageMask, Outpainting }
+            public enum LatentUpscaleMode { Disabled, Factor, TargetRes }
         }
 
         public class Comfy

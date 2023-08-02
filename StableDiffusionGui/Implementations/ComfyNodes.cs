@@ -95,7 +95,7 @@ namespace StableDiffusionGui.Implementations
             }
         }
 
-        public class KSamplerAdvanced : IComfyNode
+        public class NmkdKSampler : IComfyNode
         {
             public bool AddNoise;
             // public long Seed;
@@ -106,34 +106,39 @@ namespace StableDiffusionGui.Implementations
             // public int StartStep;
             // public int EndStep;
             public bool ReturnLeftoverNoise;
+            public float Denoise = 1f;
 
-            public int IdModel;
-            public int IdPositive;
-            public int IdNegative;
-            public int IdLatentImage;
-            public int IdSeed;
-            public int IdSteps;
-            public int IdStartStep;
-            public int IdEndStep;
-            public int IdCfg;
+            public ComfyWorkflow.Node NodeModel;
+            public ComfyWorkflow.Node NodePositive;
+            public ComfyWorkflow.Node NodeNegative;
+            public ComfyWorkflow.Node NodeLatentImage;
+            public ComfyWorkflow.Node NodeSeed;
+            public ComfyWorkflow.Node NodeSteps;
+            public ComfyWorkflow.Node NodeStartStep;
+            public ComfyWorkflow.Node NodeEndStep;
+            public ComfyWorkflow.Node NodeCfg;
+
+            public string DebugString = "";
 
             public string GetString()
             {
                 return $"\"inputs\":{{" +
                     $"\"add_noise\":{(AddNoise ? "enable" : "disable").Wrap()}," +
-                    $"\"noise_seed\":[\"{IdSeed}\",0]," +
-                    $"\"steps\":[\"{IdSteps}\",0]," +
-                    $"\"cfg\":[\"{IdCfg}\",0]," +
+                    $"\"noise_seed\":[\"{NodeSeed.Id}\",0]," +
+                    $"\"steps\":[\"{NodeSteps.Id}\",0]," +
+                    $"\"cfg\":[\"{NodeCfg.Id}\",0]," +
                     $"\"sampler_name\":\"{SamplerName}\"," +
                     $"\"scheduler\":\"{Scheduler}\"," +
-                    $"\"start_at_step\":[\"{IdStartStep}\",0]," +
-                    $"\"end_at_step\":[\"{IdEndStep}\",0]," +
+                    $"\"start_at_step\":[\"{NodeStartStep.Id}\",0]," +
+                    $"\"end_at_step\":[\"{NodeEndStep.Id}\",0]," +
                     $"\"return_with_leftover_noise\":{(ReturnLeftoverNoise ? "enable" : "disable").Wrap()}," +
-                    $"\"model\":[\"{IdModel}\",0]," +
-                    $"\"positive\":[\"{IdPositive}\",0]," +
-                    $"\"negative\":[\"{IdNegative}\",0]," +
-                    $"\"latent_image\":[\"{IdLatentImage}\",0]" +
-                    $"}},\"class_type\":\"KSamplerAdvanced\"";
+                    $"\"denoise\":{Denoise.ToStringDot("0.######")}," +
+                    $"\"model\":[\"{NodeModel.Id}\",0]," +
+                    $"\"positive\":[\"{NodePositive.Id}\",0]," +
+                    $"\"negative\":[\"{NodeNegative.Id}\",0]," +
+                    $"\"latent_image\":[\"{NodeLatentImage.Id}\",0]," +
+                    $"\"debug_string\":\"{DebugString}\"" +
+                    $"}},\"class_type\":\"NmkdKSampler\"";
             }
         }
 
@@ -205,30 +210,65 @@ namespace StableDiffusionGui.Implementations
 
         public class CLIPTextEncode : IComfyNode
         {
-            public int IdText;
-            public int IdClip;
+            public ComfyWorkflow.Node TextNode;
+            public ComfyWorkflow.Node ClipNode;
 
             public string GetString()
             {
+                int clipNodeOutIndex = 0;
+                if (ClipNode.Type == ComfyWorkflow.NodeType.NmkdCheckpointLoader) clipNodeOutIndex = 1;
+
                 return $"\"inputs\":{{" +
-                    $"\"text\":[\"{IdText}\",0]," +
-                    $"\"clip\":[\"{IdClip}\",1]" +
+                    $"\"text\":[\"{TextNode.Id}\",0]," +
+                    $"\"clip\":[\"{ClipNode.Id}\",{clipNodeOutIndex}]" +
                     $"}},\"class_type\":\"CLIPTextEncode\"";
+            }
+
+            public override string ToString()
+            {
+                return $"CLIPTextEncode - Text Node: '{TextNode}' - CLIP Node: '{ClipNode}'";
             }
         }
 
         public class VAEDecode : IComfyNode
         {
-            public int IdLatents;
-            public int IdVae;
-            public int IdVaeIndex;
+            public ComfyWorkflow.Node LatentsNode;
+            public ComfyWorkflow.Node VaeNode;
 
             public string GetString()
             {
+                int vaeNodeOutIndex = 0;
+                if (VaeNode.Type == ComfyWorkflow.NodeType.NmkdCheckpointLoader) vaeNodeOutIndex = 2;
+
                 return $"\"inputs\":{{" +
-                    $"\"samples\":[\"{IdLatents}\",0]," +
-                    $"\"vae\":[\"{IdVae}\",{IdVaeIndex}]}}," +
+                    $"\"samples\":[\"{LatentsNode.Id}\",0]," +
+                    $"\"vae\":[\"{VaeNode.Id}\",{vaeNodeOutIndex}]}}," +
                     $"\"class_type\":\"VAEDecode\"";
+            }
+
+            public override string ToString()
+            {
+                return $"VAEDecode - Latents Node: '{LatentsNode}' - VAE Node: '{VaeNode}'";
+            }
+        }
+
+        public class VAEEncode : IComfyNode
+        {
+            public ComfyWorkflow.Node ImageNode;
+            public ComfyWorkflow.Node VaeNode;
+
+            public string GetString()
+            {
+                int vaeNodeOutIndex = 0;
+                if (VaeNode.Type == ComfyWorkflow.NodeType.NmkdCheckpointLoader) vaeNodeOutIndex = 2;
+
+                var dict = new Dictionary<string, string>()
+                {
+                    { "pixels", $"[{ImageNode.Id.ToString().Wrap()},0]" },
+                    { "vae", $"[{VaeNode.Id.ToString().Wrap()},{vaeNodeOutIndex}]" },
+                };
+
+                return GetPropertiesString(dict, "VAEEncode");
             }
         }
 
@@ -263,12 +303,53 @@ namespace StableDiffusionGui.Implementations
 
                 return GetPropertiesString(dict, "NmkdCheckpointLoader");
             }
+
+            public override string ToString()
+            {
+                return $"NmkdCheckpointLoader - Model: {ModelPath} - Load VAE: {LoadVae} - VAE: {VaePath}";
+            }
         }
 
+        public class NmkdImageLoader : IComfyNode
+        {
+            public string ImagePath;
+
+            public string GetString()
+            {
+                var dict = new Dictionary<string, string>()
+                {
+                    { "image_path", ImagePath.Wrap(true) },
+                };
+
+                return GetPropertiesString(dict, "NmkdImageLoader");
+            }
+        }
+
+        public class CLIPSetLastLayer : IComfyNode
+        {
+            public int Skip = -1;
+            public ComfyWorkflow.Node ClipNode;
+
+            public string GetString()
+            {
+                int clipNodeIndex = 0;
+
+                if (ClipNode.Type == ComfyWorkflow.NodeType.NmkdCheckpointLoader || ClipNode.Type == ComfyWorkflow.NodeType.CheckpointLoaderSimple) clipNodeIndex = 1;
+
+                var dict = new Dictionary<string, string>()
+                {
+                    { "stop_at_clip_layer", Skip.ToString() },
+                    { "clip", $"[{ClipNode.Id.ToString().Wrap()},{clipNodeIndex}]" },
+                };
+
+                return GetPropertiesString(dict, "CLIPSetLastLayer");
+            }
+        }
 
         private static string GetPropertiesString(Dictionary<string, string> dict, string classType)
         {
             return $"\"inputs\":{{{string.Join(",", dict.Select(pair => $"{pair.Key.Wrap()}:{pair.Value}"))}}},\"class_type\":\"{classType}\"";
         }
+
     }
 }

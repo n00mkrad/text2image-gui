@@ -28,8 +28,17 @@ namespace StableDiffusionGui.Implementations
         public static readonly int ComfyPort = 8189;
         private static readonly HttpClient _webClient = new HttpClient();
 
-        private OperationOrder _opOrder = new OperationOrder(new List<OperationOrder.LoopAction> { OperationOrder.LoopAction.Prompt, OperationOrder.LoopAction.Iteration, OperationOrder.LoopAction.Scale, OperationOrder.LoopAction.Step, OperationOrder.LoopAction.RefineStrength });
-        private Action<OperationOrder.LoopAction> _loopIterations, _loopPrompts, _loopScales, _loopSteps, _loopRefinerStrengths /*, _loopInits, _loopInitStrengths, _loopLoraWeights*/;
+        private OperationOrder _opOrder = new OperationOrder(new List<OperationOrder.LoopAction> {
+            OperationOrder.LoopAction.Prompt,
+            OperationOrder.LoopAction.InitImg,
+            OperationOrder.LoopAction.InitStrength,
+            OperationOrder.LoopAction.Iteration, 
+            /* OperationOrder.LoopAction.LoraWeight, */
+            OperationOrder.LoopAction.Scale,
+            OperationOrder.LoopAction.RefineStrength,
+            OperationOrder.LoopAction.Step,
+        });
+        private Action<OperationOrder.LoopAction> _loopIterations, _loopPrompts, _loopScales, _loopSteps, _loopRefinerStrengths, _loopInits, _loopInitStrengths/*, _loopLoraWeights*/;
 
         public async Task Run(TtiSettings s, string outPath)
         {
@@ -58,12 +67,149 @@ namespace StableDiffusionGui.Implementations
             if (refine && refineModel == null)
                 return;
 
+            var generations = new List<GenerationInfo>() { new GenerationInfo() };
+
+            var currentGeneration = new GenerationInfo
+            {
+                BaseResolution = s.Res,
+                TargetResolution = s.UpscaleTargetRes,
+                NegativePrompt = s.NegativePrompt,
+                Model = model.FullName,
+                ModelRefiner = refineModel == null ? "" : refineModel.FullName,
+                Vae = vae == null ? "" : vae.FullName,
+                Sampler = s.Sampler
+            };
+
+            List<string> processedPrompts = null;
+            TextToImage.CurrentTaskSettings.ProcessedAndRawPrompts = new EasyDict<string, string>();
+
+            int currentIteration = 0;
+            float currentLoraWeight = 1.0f;
+
+            void NextAction(OperationOrder.LoopAction thisAction)
+            {
+                if (_opOrder.SeedResetActions.Contains(thisAction))
+                    s.Seed = startSeed;
+
+                // if (_opOrder.SeedIncrementActions.Contains(thisAction) && !s.LockSeed)
+                //     s.Seed++;
+
+                RunNextLoopAction(thisAction, () => FinalAction());
+            }
+
+            void FinalAction()
+            {
+                string currPrompt = processedPrompts[currentIteration];
+
+                // if (s.Loras != null && s.Loras.Count == 1)
+                //     foreach (var lora in s.Loras)
+                //         currPrompt = currPrompt.Replace($"{lora.Key}Weight", currentLoraWeight.ToStringDot("0.0###"));
+
+                currentGeneration.Prompt = currPrompt;
+                generations.Add(currentGeneration.ToJson().FromJson<GenerationInfo>());
+            }
+
+            _loopPrompts = (thisAction) =>
+            {
+                foreach (string prompt in s.Prompts)
+                {
+                    processedPrompts = PromptWildcardUtils.ApplyWildcardsAll(prompt, s.Iterations, false);
+                    TextToImage.CurrentTaskSettings.ProcessedAndRawPrompts = new EasyDict<string, string>(processedPrompts.Distinct().ToDictionary(x => x, x => prompt));
+                    NextAction(thisAction);
+                }
+            };
+
+            _loopIterations = (thisAction) =>
+            {
+                currentIteration = 0;
+
+                for (int i = 0; i < s.Iterations; i++)
+                {
+                    currentGeneration.Seed = s.Seed;
+                    NextAction(thisAction);
+                    currentIteration++;
+
+                    if (_opOrder.SeedIncrementActions.Contains(thisAction) && s.Iterations > 1 && !s.LockSeed)
+                        s.Seed++;
+                }
+            };
+
+            _loopScales = (thisAction) =>
+            {
+                foreach (float scale in s.ScalesTxt)
+                {
+                    currentGeneration.Scale = scale.Clamp(0.01f, 1000f);
+                    NextAction(thisAction);
+                }
+            };
+
+            _loopSteps = (thisAction) =>
+            {
+                foreach (int stepCount in s.Steps)
+                {
+                    currentGeneration.Steps = stepCount;
+                    NextAction(thisAction);
+                }
+            };
+
+            _loopRefinerStrengths = (thisAction) =>
+            {
+                foreach (float strength in s.RefinerStrengths)
+                {
+                    currentGeneration.RefinerStrength = strength;
+                    NextAction(thisAction);
+                }
+            };
+
+            _loopInits = (thisAction) =>
+            {
+                if (initImages == null) // No init image(s)
+                {
+                    NextAction(thisAction);
+                }
+                else // With init image(s)
+                {
+                    foreach (string initImg in initImages.Values)
+                    {
+                        currentGeneration.InitImg = initImg;
+                        NextAction(thisAction);
+                    }
+                }
+            };
+
+            _loopInitStrengths = (thisAction) =>
+            {
+                foreach (float strength in s.InitStrengthsReverse)
+                {
+                    currentGeneration.InitStrength = s.ImgMode != Enums.StableDiffusion.ImgMode.InitializationImage ? 1f : strength; // Lock to 1.0 when using inpainting (OBSOLETE WITH COMFY?)
+
+                    if (s.ImgMode == Enums.StableDiffusion.ImgMode.ImageMask)
+                        currentGeneration.MaskPath = Inpainting.MaskedImagePath;
+                    // else if (s.ImgMode == Enums.StableDiffusion.ImgMode.Outpainting)
+                    //     args["inpaintMask"] = "--force_outpaint";
+                    // else
+                    //     args["inpaintMask"] = "";
+
+                    NextAction(thisAction);
+                }
+            };
+            // 
+            // _loopLoraWeights = (thisAction) =>
+            // {
+            //     foreach (float weight in s.Loras.First().Value)
+            //     {
+            //         currentLoraWeight = weight;
+            //         NextAction(thisAction);
+            //     }
+            // };
+
+            RunLoopAction(_opOrder.LoopOrder.First());
 
             Logger.ClearLogBox();
             Logger.Log($"Running Stable Diffusion - {s.Res.Width}x{s.Res.Height}, Starting Seed: {startSeed}");
 
             string initsStr = initImages != null ? $" and {initImages.Count} image{(initImages.Count != 1 ? "s" : "")} using {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
-            Logger.Log($"{s.Prompts.Length} prompt{(s.Prompts.Length != 1 ? "s" : "")} * {s.Iterations} image(s) * {s.Steps.Length} step value(s) * {s.ScalesTxt.Length} scale value(s) * {s.RefinerStrengths.Length} refine value(s){initsStr} = {999} images total.");
+            Logger.Log($"{s.Prompts.Length} prompt{(s.Prompts.Length != 1 ? "s" : "")} * {s.Iterations} image(s) * {s.Steps.Length} step value(s) * {s.ScalesTxt.Length} scale value(s) * {s.RefinerStrengths.Length} refine value(s){initsStr} = {generations.Count} image(s) total.");
 
             var scriptArgs = new List<string>
             {
@@ -122,153 +268,21 @@ namespace StableDiffusionGui.Implementations
                 TextToImage.CurrentTask.Processes.Add(TtiProcess.CurrentProcess);
             }
 
-            //foreach (var argList in argLists)
-            //    await TtiProcess.WriteStdIn($"generate {argList.ToJson()}", 200, true);
-
-            var generations = new List<GenerationInfo>() { new GenerationInfo() };
-
-            List<string> processedPrompts = null;
-            TextToImage.CurrentTaskSettings.ProcessedAndRawPrompts = new EasyDict<string, string>();
-
-            int currentIteration = 0;
-            float currentLoraWeight = 1.0f;
-
-            void NextAction(OperationOrder.LoopAction thisAction)
-            {
-                if (_opOrder.SeedResetActions.Contains(thisAction))
-                    s.Seed = startSeed;
-
-                if (_opOrder.SeedIncrementActions.Contains(thisAction) && !s.LockSeed)
-                    s.Seed++;
-
-                RunNextLoopAction(thisAction, () => FinalAction());
-            }
-
-            void FinalAction()
-            {
-                string currPrompt = processedPrompts[currentIteration];
-
-                // if (s.Loras != null && s.Loras.Count == 1)
-                //     foreach (var lora in s.Loras)
-                //         currPrompt = currPrompt.Replace($"{lora.Key}Weight", currentLoraWeight.ToStringDot("0.0###"));
-
-                generations.Last().LatentUpscale = s.HiresFix;
-                generations.Last().Width = s.Res.Width;
-                generations.Last().Height = s.Res.Height;
-                generations.Last().Prompt = currPrompt;
-                generations.Last().NegativePrompt = s.NegativePrompt;
-                generations.Last().Model = model;
-                generations.Last().ModelRefiner = refineModel;
-                generations.Last().Vae = vae;
-                generations.Last().Sampler = s.Sampler;
-                generations.Add(new GenerationInfo());
-            }
-
-            _loopPrompts = (thisAction) =>
-            {
-                foreach (string prompt in s.Prompts)
-                {
-                    processedPrompts = PromptWildcardUtils.ApplyWildcardsAll(prompt, s.Iterations, false);
-                    TextToImage.CurrentTaskSettings.ProcessedAndRawPrompts = new EasyDict<string, string>(processedPrompts.Distinct().ToDictionary(x => x, x => prompt));
-                    NextAction(thisAction);
-                }
-            };
-
-            _loopIterations = (thisAction) =>
-            {
-                currentIteration = 0;
-
-                for (int i = 0; i < s.Iterations; i++)
-                {
-                    generations.Last().Seed = s.Seed;
-                    NextAction(thisAction);
-                    currentIteration++;
-                }
-            };
-
-            _loopScales = (thisAction) =>
-            {
-                foreach (float scale in s.ScalesTxt)
-                {
-                    generations.Last().Scale = scale.Clamp(0.01f, 1000f);
-                    NextAction(thisAction);
-                }
-            };
-
-            _loopSteps = (thisAction) =>
-            {
-                foreach (int stepCount in s.Steps)
-                {
-                    generations.Last().Steps = stepCount;
-                    NextAction(thisAction);
-                }
-            };
-
-            _loopRefinerStrengths = (thisAction) =>
-            {
-                foreach (float strength in s.RefinerStrengths)
-                {
-                    generations.Last().RefinerStrength = strength;
-                    NextAction(thisAction);
-                }
-            };
-
-            // _loopInits = (thisAction) =>
-            // {
-            //     if (initImages == null) // No init image(s)
-            //     {
-            //         args["initImg"] = "";
-            //         args["initStrength"] = "";
-            //         NextAction(thisAction);
-            //     }
-            //     else // With init image(s)
-            //     {
-            //         foreach (string initImg in initImages.Values)
-            //         {
-            //             args["initImg"] = $"-I {initImg.Wrap()}";
-            //             NextAction(thisAction);
-            //         }
-            //     }
-            // };
-            // 
-            // _loopInitStrengths = (thisAction) =>
-            // {
-            //     foreach (float strength in s.InitStrengthsReverse)
-            //     {
-            //         args["initStrength"] = s.ImgMode != Enums.StableDiffusion.ImgMode.InitializationImage ? "-f 1.0" : $"-f {strength.ToStringDot("0.###")}"; // Lock to 1.0 when using inpainting
-            // 
-            //         if (s.ImgMode == Enums.StableDiffusion.ImgMode.ImageMask)
-            //             args["inpaintMask"] = $"-M {Inpainting.MaskedImagePath.Wrap()}";
-            //         else if (s.ImgMode == Enums.StableDiffusion.ImgMode.Outpainting)
-            //             args["inpaintMask"] = "--force_outpaint";
-            //         else
-            //             args["inpaintMask"] = "";
-            // 
-            //         NextAction(thisAction);
-            //     }
-            // };
-            // 
-            // _loopLoraWeights = (thisAction) =>
-            // {
-            //     foreach (float weight in s.Loras.First().Value)
-            //     {
-            //         currentLoraWeight = weight;
-            //         NextAction(thisAction);
-            //     }
-            // };
-
-            RunLoopAction(_opOrder.LoopOrder.First());
-
             string wf = File.ReadAllText(Path.Combine(Paths.GetDataPath(), "comfy", "wf", "workflow.json"));
             wf = wf.Trim().TrimStart('{').TrimEnd('}');
             var nodes = ComfyWorkflow.GetNodes(wf).OrderBy(n => n.Type).ThenBy(n => n.Title).ToList().ToList();
             // GenerationInfo test = new GenerationInfo { Model = model, ModelRefiner = refineModel, Prompt = s.Prompts[0], NegativePrompt = s.NegativePrompt, Steps = s.Steps[0], Seed = s.Seed, Scale = s.ScalesTxt[0], RefinerStrength = s.RefinerStrengths[0], Width = s.Res.Width, Height = s.Res.Height };
 
-            foreach (var genInfo in generations.Where(g => g.Model != null))
+            foreach (var genInfo in generations.Where(g => g.Model.IsNotEmpty()))
             {
                 string meta = genInfo.GetMetadataDict().ToJson();
                 string req = $"{{\"client_id\":\"{Paths.SessionTimestampUnix}\",\"prompt\":{{{ComfyWorkflow.BuildPrompt(genInfo, nodes)}}},\"extra_data\":{{\"extra_pnginfo\":{{\"workflow\":{{{wf}}},\"Nmkdiffusers\":{meta}}}}}}}";
-                await ApiPost(req);
+                string resp = await ApiPost(req);
+
+                if (resp.IsEmpty())
+                    break;
+
+                // File.WriteAllText(IoUtils.GetAvailablePath(Path.Combine(Paths.GetLogPath(), "req.txt")), req);
             }
         }
 
@@ -276,12 +290,22 @@ namespace StableDiffusionGui.Implementations
 
         private async Task<string> ApiPost(string data = "", ComfyEndpoint endpoint = ComfyEndpoint.Prompt)
         {
-            System.Net.ServicePointManager.Expect100Continue = false;
-            var stringContent = data.IsEmpty() ? null : new StringContent(data, Encoding.UTF8, "application/json");
-            string baseUrl = $"http://127.0.0.1:{ComfyPort}/{endpoint.ToString().Lower()}";
-            var response = await _webClient.PostAsync(baseUrl, stringContent);
-            Logger.Log($"{baseUrl} - {data.Trunc(150)}", true, filename: "api");
-            return await response.Content.ReadAsStringAsync();
+            try
+            {
+                System.Net.ServicePointManager.Expect100Continue = false;
+                var stringContent = data.IsEmpty() ? null : new StringContent(data, Encoding.UTF8, "application/json");
+                string baseUrl = $"http://127.0.0.1:{ComfyPort}/{endpoint.ToString().Lower()}";
+                var response = await _webClient.PostAsync(baseUrl, stringContent);
+                Logger.Log($"{baseUrl} - {data.Trunc(150)}", true, filename: "api");
+                return await response.Content.ReadAsStringAsync();
+            }
+            catch(Exception ex)
+            {
+                Logger.Log($"API Error: {ex.Message}");
+                Logger.Log(ex.StackTrace, true);
+            }
+
+            return "";
         }
 
         void RunNextLoopAction(OperationOrder.LoopAction previousAction, Action doneAction)
@@ -301,8 +325,8 @@ namespace StableDiffusionGui.Implementations
             if (a == OperationOrder.LoopAction.Scale) _loopScales(a);
             if (a == OperationOrder.LoopAction.Step) _loopSteps(a);
             if (a == OperationOrder.LoopAction.RefineStrength) _loopRefinerStrengths(a);
-            // if (a == OperationOrder.LoopAction.InitImg) _loopInits(a);
-            // if (a == OperationOrder.LoopAction.InitStrengths) _loopInitStrengths(a);
+            if (a == OperationOrder.LoopAction.InitImg) _loopInits(a);
+            if (a == OperationOrder.LoopAction.InitStrength) _loopInitStrengths(a);
             // if (a == OperationOrder.LoopAction.LoraWeight) _loopLoraWeights(a);
         }
 
@@ -375,7 +399,7 @@ namespace StableDiffusionGui.Implementations
                 ImageExport.TimeSinceLastImage.Restart();
             }
 
-            if (!TextToImage.Canceled && line.MatchesWildcard("*%|*| *"))
+            if (!TextToImage.Canceled && line.MatchesWildcard("*%|*| *") && !line.Contains("B/s"))
             {
                 if (!lastLineGeneratedText)
                     Logger.LogIfLastLineDoesNotContainMsg($"Generating...", replaceLastLine: ellipsis);
@@ -398,9 +422,9 @@ namespace StableDiffusionGui.Implementations
 
         public class GenerationInfo
         {
-            public Model Model;
-            public Model ModelRefiner;
-            public Model Vae;
+            public string Model;
+            public string ModelRefiner;
+            public string Vae;
             public string Prompt;
             public string NegativePrompt;
             public int Steps;
@@ -409,27 +433,32 @@ namespace StableDiffusionGui.Implementations
             public float RefinerStrength;
             public string InitImg;
             public float InitStrength;
-            public int Width;
-            public int Height;
-            public bool LatentUpscale;
+            public string MaskPath;
+            public Size BaseResolution;
+            public Size TargetResolution;
             public Sampler Sampler;
+            public int ClipSkip = -1;
 
             public Dictionary<string, dynamic> GetMetadataDict()
             {
                 return new Dictionary<string, dynamic>
                 {
+                    { "model", Path.GetFileName(Model) },
+                    { "modelRefiner", Path.GetFileName(ModelRefiner) },
                     { "prompt", Prompt },
-                    { "promptNeg" , NegativePrompt },
-                    { "initImg" , InitImg },
+                    { "promptNeg", NegativePrompt },
+                    { "initImg", InitImg },
                     { "initStrength", InitStrength },
-                    { "w" , Width },
-                    { "h" , Height },
-                    { "steps" , Steps },
+                    { "w", BaseResolution.Width },
+                    { "h", BaseResolution.Height },
+                    { "steps", Steps },
                     { "seed", Seed },
                     { "scaleTxt", Scale },
-                    { "inpaintMask" , "" },
-                    { "sampler" , Sampler.ToString().Lower() },
+                    { "inpaintMask", MaskPath },
+                    { "sampler", Sampler.ToString().Lower() },
                     { "refineFrac", (1f - RefinerStrength) },
+                    { "upscaleW", TargetResolution.Width },
+                    { "upscaleH", TargetResolution.Height },
                 };
             }
         }

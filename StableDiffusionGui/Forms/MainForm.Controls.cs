@@ -37,6 +37,7 @@ namespace StableDiffusionGui.Forms
         {
             // Fill data
             comboxSampler.FillFromEnum<Sampler>(Strings.Samplers, 0);
+            comboxUpscaleMode.FillFromEnum<LatentUpscaleMode>(Strings.UpscaleModes, 0);
             comboxSeamless.FillFromEnum<SeamlessMode>(Strings.SeamlessMode, 0);
             comboxSymmetry.FillFromEnum<SymmetryMode>(Strings.SymmetryMode, 0);
             comboxInpaintMode.FillFromEnum<ImgMode>(Strings.InpaintMode, 0);
@@ -50,10 +51,10 @@ namespace StableDiffusionGui.Forms
             comboxModelArch.FillFromEnum<Enums.Models.SdArch>(Strings.SdModelArch, 0);
 
             // Set categories
-            CategoryPanels.Add(btnCollapseImplementation, new List<Panel> { panelBackend, panelModel });
+            CategoryPanels.Add(btnCollapseImplementation, new List<Panel> { panelBackend, panelModel, panelModel2 });
             CategoryPanels.Add(btnCollapsePrompt, new List<Panel> { panelPrompt, panelPromptNeg, panelEmbeddings, panelLoras, panelBaseImg });
             CategoryPanels.Add(btnCollapseGeneration, new List<Panel> { panelInpainting, panelInitImgStrength, panelIterations, panelSteps, panelRefineStart, panelScale, panelScaleImg, panelSeed });
-            CategoryPanels.Add(btnCollapseRendering, new List<Panel> { panelRes, panelSampler });
+            CategoryPanels.Add(btnCollapseRendering, new List<Panel> { panelRes, panelUpscaling, panelSampler });
             CategoryPanels.Add(btnCollapseSymmetry, new List<Panel> { panelSeamless, panelSymmetry });
             CategoryPanels.Add(btnCollapseDebug, new List<Panel> { panelDebugAppendArgs, panelDebugSendStdin, panelDebugPerlinThresh, panelDebugLoopback });
 
@@ -83,8 +84,10 @@ namespace StableDiffusionGui.Forms
                 gridLoras.EndEdit();
                 BeginInvoke(new MethodInvoker(() => { SortLoras(); }));
             };
-            comboxResH.LostFocus += (s, e) => { ValidateCustomRes(comboxResH); };
-            comboxResW.LostFocus += (s, e) => { ValidateCustomRes(comboxResW); };
+            comboxResH.LostFocus += (s, e) => { ValidateResolution(comboxResH); };
+            comboxResW.LostFocus += (s, e) => { ValidateResolution(comboxResW); };
+            comboxUpscaleMode.SelectedIndexChanged += (s, e) => { RefreshUpscaleUi(); };
+            updownUpscaleFactor.ValueChanged += (s, e) => { ValidateResolution(); };
         }
 
         public void LoadControls()
@@ -136,7 +139,7 @@ namespace StableDiffusionGui.Forms
 
             // Panel visibility
             SetVisibility(new Control[] { panelBaseImg, panelPromptNeg, panelEmbeddings, panelRefineStart, panelInitImgStrength, panelInpainting, panelScaleImg, panelRes, panelSampler, panelSeamless, panelSymmetry, checkboxHiresFix,
-                textboxClipsegMask, panelResizeGravity, labelResChange, btnResetRes, checkboxShowInitImg, panelModel, panelLoras, panelModel2 }, imp);
+                textboxClipsegMask, panelResizeGravity, labelResChange, btnResetRes, checkboxShowInitImg, panelModel, panelLoras, panelModel2, panelUpscaling }, imp);
 
             bool adv = Config.Instance.AdvancedUi;
             upDownIterations.Maximum = !adv ? Config.IniInstance.IterationsMax : Config.IniInstance.IterationsMax * 10;
@@ -162,6 +165,7 @@ namespace StableDiffusionGui.Forms
             ModelChanged();
             ReloadLoras();
             ReloadEmbeddings();
+            RefreshUpscaleUi();
             CategoryPanels.Keys.ToList().ForEach(btn => btn.Parent.SetVisible(CategoryPanels[btn].Any(p => p.Visible))); // Hide collapse buttons if their category has 0 visible panels
 
             #endregion
@@ -196,7 +200,7 @@ namespace StableDiffusionGui.Forms
             runBtn.ForeColor = busy == true ? Color.IndianRed : Color.White;
         }
 
-        private void ValidateCustomRes(ComboBox box = null)
+        private void ValidateResolution(ComboBox box = null)
         {
             if (box == null || box == comboxResW)
             {
@@ -211,6 +215,10 @@ namespace StableDiffusionGui.Forms
                 h = h.Clamp(256, 8192).RoundMod(MainUi.CurrentModulo);
                 comboxResH.Text = h.ToString();
             }
+
+            float factor = (float)updownUpscaleFactor.Value;
+            updownUpscaleResultH.Value = (comboxResH.GetInt() * factor).RoundToInt().RoundMod(MainUi.CurrentModulo);
+            updownUpscaleResultW.Value = (comboxResW.GetInt() * factor).RoundToInt().RoundMod(MainUi.CurrentModulo);
         }
 
         private string _prevSelectedModel = "";
@@ -332,6 +340,8 @@ namespace StableDiffusionGui.Forms
                 string ratioText = $"{w / gcd}:{h / gcd}";
                 labelAspectRatio.Text = ratioText.Length <= 5 ? $"Ratio {ratioText.Replace("8:5", "8:5 (16:10)").Replace("7:3", "7:3 (21:9)")}" : "";
             }
+
+            RefreshUpscaleUi();
         }
 
         private int GreatestCommonDivisor(int a, int b)
@@ -575,5 +585,44 @@ namespace StableDiffusionGui.Forms
             }
         }
 
+        public Size GetUpscaleTargetSize ()
+        {
+            int w = comboxResW.GetInt();
+            int h = comboxResH.GetInt();
+
+            if (updownUpscaleFactor.Visible)
+            {
+                w = (w * (float)updownUpscaleFactor.Value).RoundToInt().RoundMod(CurrentModulo);
+                h = (h * (float)updownUpscaleFactor.Value).RoundToInt().RoundMod(CurrentModulo);
+            }
+            else
+            {
+                w = (int)updownUpscaleResultW.Value;
+                h = (int)updownUpscaleResultH.Value;
+            }
+
+            return new Size(w, h);
+        }
+
+        private void RefreshUpscaleUi (bool stopUi = false)
+        {
+            if(stopUi)
+                this.StopRendering();
+
+            try
+            {
+                LatentUpscaleMode mode = ParseUtils.GetEnum<LatentUpscaleMode>(comboxUpscaleMode.Text, true, Strings.UpscaleModes);
+                labelUpscale.Text = mode == LatentUpscaleMode.Factor ? "Factor:" : "Target Resolution:";
+                updownUpscaleFactor.SetVisible(mode == LatentUpscaleMode.Factor);
+                labelUpscaleEquals.SetVisible(mode == LatentUpscaleMode.Factor);
+                updownUpscaleResultW.Enabled = mode == LatentUpscaleMode.TargetRes;
+                updownUpscaleResultH.Enabled = mode == LatentUpscaleMode.TargetRes;
+                ValidateResolution();
+            }
+            catch { }
+
+            if(stopUi)
+                this.ResumeRendering();
+        }
     }
 }

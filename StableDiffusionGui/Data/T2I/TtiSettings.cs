@@ -28,6 +28,7 @@ namespace StableDiffusionGui.Data
         public long Seed { get; set; } = 0;
         public Sampler Sampler { get; set; } = (Sampler)(-1);
         public Size Res { get; set; } = new Size();
+        public Size UpscaleTargetRes { get; set; } = new Size();
         public string Model { get; set; } = "";
         public string ModelAux { get; set; } = "";
         public string Vae { get; set; } = "";

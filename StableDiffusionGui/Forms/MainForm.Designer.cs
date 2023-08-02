@@ -57,11 +57,11 @@ namespace StableDiffusionGui.Forms
             this.checkboxLockSeed = new System.Windows.Forms.CheckBox();
             this.btnSeedResetToRandom = new HTAlt.WinForms.HTButton();
             this.btnSeedUsePrevious = new HTAlt.WinForms.HTButton();
-            this.upDownSeed = new System.Windows.Forms.NumericUpDown();
+            this.upDownSeed = new CustomUpDown();
             this.sliderScale = new StableDiffusionGui.Controls.CustomSlider();
             this.textboxSliderScale = new System.Windows.Forms.TextBox();
             this.textboxExtraScales = new StableDiffusionGui.Controls.CustomTextbox();
-            this.upDownIterations = new System.Windows.Forms.NumericUpDown();
+            this.upDownIterations = new CustomUpDown();
             this.btnResetMask = new HTAlt.WinForms.HTButton();
             this.textboxExtraInitStrengths = new StableDiffusionGui.Controls.CustomTextbox();
             this.sliderInitStrength = new StableDiffusionGui.Controls.CustomSlider();
@@ -103,6 +103,9 @@ namespace StableDiffusionGui.Forms
             this.textboxExtraRefinerValues = new StableDiffusionGui.Controls.CustomTextbox();
             this.sliderRefinerStart = new StableDiffusionGui.Controls.CustomSlider();
             this.textboxSliderRefineStart = new System.Windows.Forms.TextBox();
+            this.updownUpscaleFactor = new CustomUpDown();
+            this.updownUpscaleResultW = new CustomUpDown();
+            this.updownUpscaleResultH = new CustomUpDown();
             this.btnCollapseDebug = new HTAlt.WinForms.HTButton();
             this.btnCollapseSymmetry = new HTAlt.WinForms.HTButton();
             this.btnCollapseRendering = new HTAlt.WinForms.HTButton();
@@ -159,6 +162,13 @@ namespace StableDiffusionGui.Forms
             this.panelCollapseSymmetry = new System.Windows.Forms.Panel();
             this.panelSampler = new System.Windows.Forms.Panel();
             this.label7 = new System.Windows.Forms.Label();
+            this.panelUpscaling = new System.Windows.Forms.TableLayoutPanel();
+            this.label27 = new System.Windows.Forms.Label();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.comboxUpscaleMode = new System.Windows.Forms.ComboBox();
+            this.labelUpscale = new System.Windows.Forms.Label();
+            this.labelUpscaleEquals = new System.Windows.Forms.Label();
+            this.label30 = new System.Windows.Forms.Label();
             this.panelRes = new System.Windows.Forms.Panel();
             this.labelResChange = new System.Windows.Forms.Label();
             this.labelAspectRatio = new System.Windows.Forms.Label();
@@ -212,6 +222,7 @@ namespace StableDiffusionGui.Forms
             this.panelCollapsePrompt = new System.Windows.Forms.Panel();
             this.btnCollapsePrompt = new HTAlt.WinForms.HTButton();
             this.panelModel2 = new System.Windows.Forms.Panel();
+            this.checkboxTestLatUpscale = new System.Windows.Forms.CheckBox();
             this.comboxModel2 = new System.Windows.Forms.ComboBox();
             this.label26 = new System.Windows.Forms.Label();
             this.panelModel = new System.Windows.Forms.Panel();
@@ -235,10 +246,12 @@ namespace StableDiffusionGui.Forms
             this.flowPanelImgButtons = new System.Windows.Forms.FlowLayoutPanel();
             this.btnSaveMode = new System.Windows.Forms.Button();
             this.separator = new System.Windows.Forms.Button();
-            this.checkboxTestLatUpscale = new System.Windows.Forms.CheckBox();
             this.menuStripOutputImg.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.upDownSeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.updownUpscaleFactor)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.updownUpscaleResultW)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.updownUpscaleResultH)).BeginInit();
             this.menuStripLogs.SuspendLayout();
             this.menuStripRunQueue.SuspendLayout();
             this.menuStripAddToQueue.SuspendLayout();
@@ -255,6 +268,8 @@ namespace StableDiffusionGui.Forms
             this.panelSeamless.SuspendLayout();
             this.panelCollapseSymmetry.SuspendLayout();
             this.panelSampler.SuspendLayout();
+            this.panelUpscaling.SuspendLayout();
+            this.flowLayoutPanel1.SuspendLayout();
             this.panelRes.SuspendLayout();
             this.panelCollapseRendering.SuspendLayout();
             this.panelSeed.SuspendLayout();
@@ -1573,6 +1588,100 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderRefineStart.TabIndex = 94;
             this.textboxSliderRefineStart.Text = "0,1";
             // 
+            // updownUpscaleFactor
+            // 
+            this.updownUpscaleFactor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.updownUpscaleFactor.DecimalPlaces = 3;
+            this.updownUpscaleFactor.ForeColor = System.Drawing.Color.White;
+            this.updownUpscaleFactor.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.updownUpscaleFactor.Location = new System.Drawing.Point(152, 0);
+            this.updownUpscaleFactor.Margin = new System.Windows.Forms.Padding(0, 0, 6, 3);
+            this.updownUpscaleFactor.Maximum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.updownUpscaleFactor.Minimum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            65536});
+            this.updownUpscaleFactor.Name = "updownUpscaleFactor";
+            this.updownUpscaleFactor.Size = new System.Drawing.Size(57, 20);
+            this.updownUpscaleFactor.TabIndex = 110;
+            this.toolTip.SetToolTip(this.updownUpscaleFactor, "Latent Upscaling Factor");
+            this.updownUpscaleFactor.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            // 
+            // updownUpscaleResultW
+            // 
+            this.updownUpscaleResultW.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.updownUpscaleResultW.Enabled = false;
+            this.updownUpscaleResultW.ForeColor = System.Drawing.Color.White;
+            this.updownUpscaleResultW.Increment = new decimal(new int[] {
+            8,
+            0,
+            0,
+            0});
+            this.updownUpscaleResultW.Location = new System.Drawing.Point(234, 0);
+            this.updownUpscaleResultW.Margin = new System.Windows.Forms.Padding(0, 0, 6, 3);
+            this.updownUpscaleResultW.Maximum = new decimal(new int[] {
+            4096,
+            0,
+            0,
+            0});
+            this.updownUpscaleResultW.Minimum = new decimal(new int[] {
+            512,
+            0,
+            0,
+            0});
+            this.updownUpscaleResultW.Name = "updownUpscaleResultW";
+            this.updownUpscaleResultW.Size = new System.Drawing.Size(50, 20);
+            this.updownUpscaleResultW.TabIndex = 111;
+            this.updownUpscaleResultW.Value = new decimal(new int[] {
+            1024,
+            0,
+            0,
+            0});
+            // 
+            // updownUpscaleResultH
+            // 
+            this.updownUpscaleResultH.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.updownUpscaleResultH.Enabled = false;
+            this.updownUpscaleResultH.ForeColor = System.Drawing.Color.White;
+            this.updownUpscaleResultH.Increment = new decimal(new int[] {
+            8,
+            0,
+            0,
+            0});
+            this.updownUpscaleResultH.Location = new System.Drawing.Point(308, 0);
+            this.updownUpscaleResultH.Margin = new System.Windows.Forms.Padding(0, 0, 6, 3);
+            this.updownUpscaleResultH.Maximum = new decimal(new int[] {
+            4096,
+            0,
+            0,
+            0});
+            this.updownUpscaleResultH.Minimum = new decimal(new int[] {
+            512,
+            0,
+            0,
+            0});
+            this.updownUpscaleResultH.Name = "updownUpscaleResultH";
+            this.updownUpscaleResultH.Size = new System.Drawing.Size(50, 20);
+            this.updownUpscaleResultH.TabIndex = 112;
+            this.updownUpscaleResultH.Value = new decimal(new int[] {
+            1024,
+            0,
+            0,
+            0});
+            // 
             // btnCollapseDebug
             // 
             this.btnCollapseDebug.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -1906,6 +2015,7 @@ namespace StableDiffusionGui.Forms
             this.panelSettings.Controls.Add(this.panelSeamless);
             this.panelSettings.Controls.Add(this.panelCollapseSymmetry);
             this.panelSettings.Controls.Add(this.panelSampler);
+            this.panelSettings.Controls.Add(this.panelUpscaling);
             this.panelSettings.Controls.Add(this.panelRes);
             this.panelSettings.Controls.Add(this.panelCollapseRendering);
             this.panelSettings.Controls.Add(this.panelSeed);
@@ -1942,7 +2052,7 @@ namespace StableDiffusionGui.Forms
             this.panelDebugLoopback.Controls.Add(this.checkboxLoopback);
             this.panelDebugLoopback.Controls.Add(this.label16);
             this.panelDebugLoopback.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelDebugLoopback.Location = new System.Drawing.Point(0, 1095);
+            this.panelDebugLoopback.Location = new System.Drawing.Point(0, 1130);
             this.panelDebugLoopback.Name = "panelDebugLoopback";
             this.panelDebugLoopback.Size = new System.Drawing.Size(651, 35);
             this.panelDebugLoopback.TabIndex = 19;
@@ -1979,7 +2089,7 @@ namespace StableDiffusionGui.Forms
             this.panelDebugPerlinThresh.Controls.Add(this.label13);
             this.panelDebugPerlinThresh.Controls.Add(this.textboxPerlin);
             this.panelDebugPerlinThresh.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelDebugPerlinThresh.Location = new System.Drawing.Point(0, 1060);
+            this.panelDebugPerlinThresh.Location = new System.Drawing.Point(0, 1095);
             this.panelDebugPerlinThresh.Name = "panelDebugPerlinThresh";
             this.panelDebugPerlinThresh.Size = new System.Drawing.Size(651, 35);
             this.panelDebugPerlinThresh.TabIndex = 18;
@@ -2050,7 +2160,7 @@ namespace StableDiffusionGui.Forms
             this.panelDebugSendStdin.Controls.Add(this.label12);
             this.panelDebugSendStdin.Controls.Add(this.textboxCliTest);
             this.panelDebugSendStdin.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelDebugSendStdin.Location = new System.Drawing.Point(0, 1025);
+            this.panelDebugSendStdin.Location = new System.Drawing.Point(0, 1060);
             this.panelDebugSendStdin.Name = "panelDebugSendStdin";
             this.panelDebugSendStdin.Size = new System.Drawing.Size(651, 35);
             this.panelDebugSendStdin.TabIndex = 14;
@@ -2088,7 +2198,7 @@ namespace StableDiffusionGui.Forms
             this.panelDebugAppendArgs.Controls.Add(this.label18);
             this.panelDebugAppendArgs.Controls.Add(this.textboxDebugAppendArgs);
             this.panelDebugAppendArgs.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelDebugAppendArgs.Location = new System.Drawing.Point(0, 990);
+            this.panelDebugAppendArgs.Location = new System.Drawing.Point(0, 1025);
             this.panelDebugAppendArgs.Name = "panelDebugAppendArgs";
             this.panelDebugAppendArgs.Size = new System.Drawing.Size(651, 35);
             this.panelDebugAppendArgs.TabIndex = 21;
@@ -2123,7 +2233,7 @@ namespace StableDiffusionGui.Forms
             // 
             this.panelCollapseDebug.Controls.Add(this.btnCollapseDebug);
             this.panelCollapseDebug.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelCollapseDebug.Location = new System.Drawing.Point(0, 955);
+            this.panelCollapseDebug.Location = new System.Drawing.Point(0, 990);
             this.panelCollapseDebug.Name = "panelCollapseDebug";
             this.panelCollapseDebug.Size = new System.Drawing.Size(651, 35);
             this.panelCollapseDebug.TabIndex = 117;
@@ -2133,7 +2243,7 @@ namespace StableDiffusionGui.Forms
             this.panelSymmetry.Controls.Add(this.comboxSymmetry);
             this.panelSymmetry.Controls.Add(this.label19);
             this.panelSymmetry.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSymmetry.Location = new System.Drawing.Point(0, 920);
+            this.panelSymmetry.Location = new System.Drawing.Point(0, 955);
             this.panelSymmetry.Name = "panelSymmetry";
             this.panelSymmetry.Size = new System.Drawing.Size(651, 35);
             this.panelSymmetry.TabIndex = 111;
@@ -2155,7 +2265,7 @@ namespace StableDiffusionGui.Forms
             this.panelSeamless.Controls.Add(this.comboxSeamless);
             this.panelSeamless.Controls.Add(this.label8);
             this.panelSeamless.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSeamless.Location = new System.Drawing.Point(0, 885);
+            this.panelSeamless.Location = new System.Drawing.Point(0, 920);
             this.panelSeamless.Name = "panelSeamless";
             this.panelSeamless.Size = new System.Drawing.Size(651, 35);
             this.panelSeamless.TabIndex = 9;
@@ -2176,7 +2286,7 @@ namespace StableDiffusionGui.Forms
             // 
             this.panelCollapseSymmetry.Controls.Add(this.btnCollapseSymmetry);
             this.panelCollapseSymmetry.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelCollapseSymmetry.Location = new System.Drawing.Point(0, 850);
+            this.panelCollapseSymmetry.Location = new System.Drawing.Point(0, 885);
             this.panelCollapseSymmetry.Name = "panelCollapseSymmetry";
             this.panelCollapseSymmetry.Size = new System.Drawing.Size(651, 35);
             this.panelCollapseSymmetry.TabIndex = 118;
@@ -2186,7 +2296,7 @@ namespace StableDiffusionGui.Forms
             this.panelSampler.Controls.Add(this.label7);
             this.panelSampler.Controls.Add(this.comboxSampler);
             this.panelSampler.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSampler.Location = new System.Drawing.Point(0, 815);
+            this.panelSampler.Location = new System.Drawing.Point(0, 850);
             this.panelSampler.Name = "panelSampler";
             this.panelSampler.Size = new System.Drawing.Size(651, 35);
             this.panelSampler.TabIndex = 6;
@@ -2202,6 +2312,102 @@ namespace StableDiffusionGui.Forms
             this.label7.Size = new System.Drawing.Size(45, 13);
             this.label7.TabIndex = 104;
             this.label7.Text = "Sampler";
+            // 
+            // panelUpscaling
+            // 
+            this.panelUpscaling.ColumnCount = 2;
+            this.panelUpscaling.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 233F));
+            this.panelUpscaling.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.panelUpscaling.Controls.Add(this.label27, 0, 0);
+            this.panelUpscaling.Controls.Add(this.flowLayoutPanel1, 1, 0);
+            this.panelUpscaling.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelUpscaling.Location = new System.Drawing.Point(0, 815);
+            this.panelUpscaling.Margin = new System.Windows.Forms.Padding(0);
+            this.panelUpscaling.Name = "panelUpscaling";
+            this.panelUpscaling.RowCount = 1;
+            this.panelUpscaling.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.panelUpscaling.Size = new System.Drawing.Size(651, 35);
+            this.panelUpscaling.TabIndex = 109;
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label27.ForeColor = System.Drawing.Color.White;
+            this.label27.Location = new System.Drawing.Point(0, 4);
+            this.label27.Margin = new System.Windows.Forms.Padding(0, 4, 0, 0);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(187, 13);
+            this.label27.TabIndex = 109;
+            this.label27.Text = "Latent Upscaling (High-Resolution Fix)";
+            // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.Controls.Add(this.comboxUpscaleMode);
+            this.flowLayoutPanel1.Controls.Add(this.labelUpscale);
+            this.flowLayoutPanel1.Controls.Add(this.updownUpscaleFactor);
+            this.flowLayoutPanel1.Controls.Add(this.labelUpscaleEquals);
+            this.flowLayoutPanel1.Controls.Add(this.updownUpscaleResultW);
+            this.flowLayoutPanel1.Controls.Add(this.label30);
+            this.flowLayoutPanel1.Controls.Add(this.updownUpscaleResultH);
+            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(233, 0);
+            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(418, 35);
+            this.flowLayoutPanel1.TabIndex = 110;
+            // 
+            // comboxUpscaleMode
+            // 
+            this.comboxUpscaleMode.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.comboxUpscaleMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboxUpscaleMode.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboxUpscaleMode.ForeColor = System.Drawing.Color.White;
+            this.comboxUpscaleMode.FormattingEnabled = true;
+            this.comboxUpscaleMode.Items.AddRange(new object[] {
+            "By Factor",
+            "To Resolution"});
+            this.comboxUpscaleMode.Location = new System.Drawing.Point(0, 0);
+            this.comboxUpscaleMode.Margin = new System.Windows.Forms.Padding(0, 0, 6, 3);
+            this.comboxUpscaleMode.Name = "comboxUpscaleMode";
+            this.comboxUpscaleMode.Size = new System.Drawing.Size(100, 21);
+            this.comboxUpscaleMode.TabIndex = 108;
+            // 
+            // labelUpscale
+            // 
+            this.labelUpscale.AutoSize = true;
+            this.labelUpscale.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelUpscale.ForeColor = System.Drawing.Color.White;
+            this.labelUpscale.Location = new System.Drawing.Point(106, 3);
+            this.labelUpscale.Margin = new System.Windows.Forms.Padding(0, 3, 6, 3);
+            this.labelUpscale.Name = "labelUpscale";
+            this.labelUpscale.Size = new System.Drawing.Size(40, 13);
+            this.labelUpscale.TabIndex = 109;
+            this.labelUpscale.Text = "Factor:";
+            // 
+            // labelUpscaleEquals
+            // 
+            this.labelUpscaleEquals.AutoSize = true;
+            this.labelUpscaleEquals.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelUpscaleEquals.ForeColor = System.Drawing.Color.White;
+            this.labelUpscaleEquals.Location = new System.Drawing.Point(215, 3);
+            this.labelUpscaleEquals.Margin = new System.Windows.Forms.Padding(0, 3, 6, 3);
+            this.labelUpscaleEquals.Name = "labelUpscaleEquals";
+            this.labelUpscaleEquals.Size = new System.Drawing.Size(13, 13);
+            this.labelUpscaleEquals.TabIndex = 113;
+            this.labelUpscaleEquals.Text = "=";
+            // 
+            // label30
+            // 
+            this.label30.AutoSize = true;
+            this.label30.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label30.ForeColor = System.Drawing.Color.White;
+            this.label30.Location = new System.Drawing.Point(290, 3);
+            this.label30.Margin = new System.Windows.Forms.Padding(0, 3, 6, 3);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(12, 13);
+            this.label30.TabIndex = 98;
+            this.label30.Text = "x";
             // 
             // panelRes
             // 
@@ -2911,6 +3117,18 @@ namespace StableDiffusionGui.Forms
             this.panelModel2.Size = new System.Drawing.Size(651, 35);
             this.panelModel2.TabIndex = 125;
             // 
+            // checkboxTestLatUpscale
+            // 
+            this.checkboxTestLatUpscale.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkboxTestLatUpscale.ForeColor = System.Drawing.Color.Silver;
+            this.checkboxTestLatUpscale.Location = new System.Drawing.Point(112, 6);
+            this.checkboxTestLatUpscale.Name = "checkboxTestLatUpscale";
+            this.checkboxTestLatUpscale.Size = new System.Drawing.Size(115, 23);
+            this.checkboxTestLatUpscale.TabIndex = 111;
+            this.checkboxTestLatUpscale.Text = "Latent Upscaling";
+            this.checkboxTestLatUpscale.UseVisualStyleBackColor = true;
+            this.checkboxTestLatUpscale.Visible = false;
+            // 
             // comboxModel2
             // 
             this.comboxModel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
@@ -3187,18 +3405,6 @@ namespace StableDiffusionGui.Forms
             this.separator.TabStop = false;
             this.separator.UseVisualStyleBackColor = false;
             // 
-            // checkboxTestLatUpscale
-            // 
-            this.checkboxTestLatUpscale.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.checkboxTestLatUpscale.ForeColor = System.Drawing.Color.Silver;
-            this.checkboxTestLatUpscale.Location = new System.Drawing.Point(112, 6);
-            this.checkboxTestLatUpscale.Name = "checkboxTestLatUpscale";
-            this.checkboxTestLatUpscale.Size = new System.Drawing.Size(115, 23);
-            this.checkboxTestLatUpscale.TabIndex = 111;
-            this.checkboxTestLatUpscale.Text = "Latent Upscaling";
-            this.checkboxTestLatUpscale.UseVisualStyleBackColor = true;
-            this.checkboxTestLatUpscale.Visible = false;
-            // 
             // MainForm
             // 
             this.AllowDrop = true;
@@ -3243,6 +3449,9 @@ namespace StableDiffusionGui.Forms
             this.menuStripOutputImg.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.upDownSeed)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.updownUpscaleFactor)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.updownUpscaleResultW)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.updownUpscaleResultH)).EndInit();
             this.menuStripLogs.ResumeLayout(false);
             this.menuStripRunQueue.ResumeLayout(false);
             this.menuStripAddToQueue.ResumeLayout(false);
@@ -3266,6 +3475,10 @@ namespace StableDiffusionGui.Forms
             this.panelCollapseSymmetry.ResumeLayout(false);
             this.panelSampler.ResumeLayout(false);
             this.panelSampler.PerformLayout();
+            this.panelUpscaling.ResumeLayout(false);
+            this.panelUpscaling.PerformLayout();
+            this.flowLayoutPanel1.ResumeLayout(false);
+            this.flowLayoutPanel1.PerformLayout();
             this.panelRes.ResumeLayout(false);
             this.panelRes.PerformLayout();
             this.panelCollapseRendering.ResumeLayout(false);
@@ -3381,9 +3594,9 @@ namespace StableDiffusionGui.Forms
         private System.Windows.Forms.Label label13;
         public System.Windows.Forms.ComboBox comboxSampler;
         public CustomTextbox textboxPrompt;
-        public System.Windows.Forms.NumericUpDown upDownIterations;
+        public CustomUpDown upDownIterations;
         public CustomSlider sliderScale;
-        public System.Windows.Forms.NumericUpDown upDownSeed;
+        public CustomUpDown upDownSeed;
         public HTAlt.WinForms.HTButton btnInitImgBrowse;
         public CustomSlider sliderInitStrength;
         public HTAlt.WinForms.HTButton btnSeedUsePrevious;
@@ -3534,6 +3747,16 @@ namespace StableDiffusionGui.Forms
         public System.Windows.Forms.ComboBox comboxModel2;
         private System.Windows.Forms.Label label26;
         public System.Windows.Forms.CheckBox checkboxTestLatUpscale;
+        private System.Windows.Forms.Label label30;
+        public System.Windows.Forms.ComboBox comboxUpscaleMode;
+        private System.Windows.Forms.TableLayoutPanel panelUpscaling;
+        private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.Label labelUpscale;
+        public CustomUpDown updownUpscaleFactor;
+        private System.Windows.Forms.Label labelUpscaleEquals;
+        public CustomUpDown updownUpscaleResultW;
+        public CustomUpDown updownUpscaleResultH;
     }
 }
 
