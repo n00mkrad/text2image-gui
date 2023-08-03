@@ -373,7 +373,7 @@ namespace StableDiffusionGui.Implementations
                 using (var ms = new MemoryStream(imageBytes, 0, imageBytes.Length))
                 {
                     Image image = Image.FromStream(ms, true);
-                    Program.MainForm.pictBoxImgViewer.Image = image;
+                    Program.MainForm.pictBoxPreview.Image = image;
                 }
 
                 return;

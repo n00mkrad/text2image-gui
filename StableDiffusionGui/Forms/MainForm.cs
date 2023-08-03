@@ -585,5 +585,10 @@ namespace StableDiffusionGui.Forms
         {
             DownloadModels.DownloadModel("nmkd/stable-diffusion-xl-refiner-1.0");
         }
+
+        private void checkboxPreview_CheckedChanged(object sender, EventArgs e)
+        {
+            pictBoxPreview.Visible = checkboxPreview.Checked;
+        }
     }
 }

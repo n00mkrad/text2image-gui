@@ -194,6 +194,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderSteps = new System.Windows.Forms.TextBox();
             this.sliderSteps = new StableDiffusionGui.Controls.CustomSlider();
             this.panelIterations = new System.Windows.Forms.Panel();
+            this.checkboxPreview = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.panelInitImgStrength = new System.Windows.Forms.Panel();
             this.label11 = new System.Windows.Forms.Label();
@@ -222,7 +223,6 @@ namespace StableDiffusionGui.Forms
             this.panelCollapsePrompt = new System.Windows.Forms.Panel();
             this.btnCollapsePrompt = new HTAlt.WinForms.HTButton();
             this.panelModel2 = new System.Windows.Forms.Panel();
-            this.checkboxTestLatUpscale = new System.Windows.Forms.CheckBox();
             this.comboxModel2 = new System.Windows.Forms.ComboBox();
             this.label26 = new System.Windows.Forms.Label();
             this.panelModel = new System.Windows.Forms.Panel();
@@ -235,6 +235,7 @@ namespace StableDiffusionGui.Forms
             this.btnCollapseImplementation = new HTAlt.WinForms.HTButton();
             this.tableLayoutPanelImgViewers = new System.Windows.Forms.TableLayoutPanel();
             this.panelImgViewerParent = new System.Windows.Forms.Panel();
+            this.pictBoxPreview = new System.Windows.Forms.PictureBox();
             this.pictBoxImgViewer = new System.Windows.Forms.PictureBox();
             this.pictBoxInitImg = new System.Windows.Forms.PictureBox();
             this.menuStripInstall = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -300,6 +301,7 @@ namespace StableDiffusionGui.Forms
             this.panelCollapseImplementation.SuspendLayout();
             this.tableLayoutPanelImgViewers.SuspendLayout();
             this.panelImgViewerParent.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictBoxPreview)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictBoxImgViewer)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictBoxInitImg)).BeginInit();
             this.menuStripInstall.SuspendLayout();
@@ -691,7 +693,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderScale.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScale.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScale.Location = new System.Drawing.Point(308, 2);
+            this.textboxSliderScale.Location = new System.Drawing.Point(308, 4);
             this.textboxSliderScale.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScale.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScale.Name = "textboxSliderScale";
@@ -835,7 +837,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderInitStrength.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderInitStrength.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderInitStrength.Location = new System.Drawing.Point(308, 2);
+            this.textboxSliderInitStrength.Location = new System.Drawing.Point(308, 4);
             this.textboxSliderInitStrength.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderInitStrength.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderInitStrength.Name = "textboxSliderInitStrength";
@@ -1030,7 +1032,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderScaleImg.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScaleImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScaleImg.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScaleImg.Location = new System.Drawing.Point(308, 2);
+            this.textboxSliderScaleImg.Location = new System.Drawing.Point(308, 4);
             this.textboxSliderScaleImg.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScaleImg.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScaleImg.Name = "textboxSliderScaleImg";
@@ -1580,7 +1582,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderRefineStart.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderRefineStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderRefineStart.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderRefineStart.Location = new System.Drawing.Point(308, 2);
+            this.textboxSliderRefineStart.Location = new System.Drawing.Point(308, 4);
             this.textboxSliderRefineStart.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderRefineStart.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderRefineStart.Name = "textboxSliderRefineStart";
@@ -2702,7 +2704,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderSteps.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderSteps.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderSteps.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderSteps.Location = new System.Drawing.Point(308, 2);
+            this.textboxSliderSteps.Location = new System.Drawing.Point(308, 4);
             this.textboxSliderSteps.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderSteps.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderSteps.Name = "textboxSliderSteps";
@@ -2755,6 +2757,7 @@ namespace StableDiffusionGui.Forms
             // 
             // panelIterations
             // 
+            this.panelIterations.Controls.Add(this.checkboxPreview);
             this.panelIterations.Controls.Add(this.label1);
             this.panelIterations.Controls.Add(this.upDownIterations);
             this.panelIterations.Dock = System.Windows.Forms.DockStyle.Top;
@@ -2762,6 +2765,19 @@ namespace StableDiffusionGui.Forms
             this.panelIterations.Name = "panelIterations";
             this.panelIterations.Size = new System.Drawing.Size(651, 35);
             this.panelIterations.TabIndex = 1;
+            // 
+            // checkboxPreview
+            // 
+            this.checkboxPreview.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkboxPreview.ForeColor = System.Drawing.Color.Silver;
+            this.checkboxPreview.Location = new System.Drawing.Point(339, 0);
+            this.checkboxPreview.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
+            this.checkboxPreview.Name = "checkboxPreview";
+            this.checkboxPreview.Size = new System.Drawing.Size(125, 23);
+            this.checkboxPreview.TabIndex = 94;
+            this.checkboxPreview.Text = "Show Preview";
+            this.checkboxPreview.UseVisualStyleBackColor = true;
+            this.checkboxPreview.CheckedChanged += new System.EventHandler(this.checkboxPreview_CheckedChanged);
             // 
             // label1
             // 
@@ -3108,7 +3124,6 @@ namespace StableDiffusionGui.Forms
             // 
             // panelModel2
             // 
-            this.panelModel2.Controls.Add(this.checkboxTestLatUpscale);
             this.panelModel2.Controls.Add(this.comboxModel2);
             this.panelModel2.Controls.Add(this.label26);
             this.panelModel2.Dock = System.Windows.Forms.DockStyle.Top;
@@ -3116,18 +3131,6 @@ namespace StableDiffusionGui.Forms
             this.panelModel2.Name = "panelModel2";
             this.panelModel2.Size = new System.Drawing.Size(651, 35);
             this.panelModel2.TabIndex = 125;
-            // 
-            // checkboxTestLatUpscale
-            // 
-            this.checkboxTestLatUpscale.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.checkboxTestLatUpscale.ForeColor = System.Drawing.Color.Silver;
-            this.checkboxTestLatUpscale.Location = new System.Drawing.Point(112, 6);
-            this.checkboxTestLatUpscale.Name = "checkboxTestLatUpscale";
-            this.checkboxTestLatUpscale.Size = new System.Drawing.Size(115, 23);
-            this.checkboxTestLatUpscale.TabIndex = 111;
-            this.checkboxTestLatUpscale.Text = "Latent Upscaling";
-            this.checkboxTestLatUpscale.UseVisualStyleBackColor = true;
-            this.checkboxTestLatUpscale.Visible = false;
             // 
             // comboxModel2
             // 
@@ -3270,6 +3273,7 @@ namespace StableDiffusionGui.Forms
             // 
             // panelImgViewerParent
             // 
+            this.panelImgViewerParent.Controls.Add(this.pictBoxPreview);
             this.panelImgViewerParent.Controls.Add(this.pictBoxImgViewer);
             this.panelImgViewerParent.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelImgViewerParent.Location = new System.Drawing.Point(0, 0);
@@ -3277,6 +3281,21 @@ namespace StableDiffusionGui.Forms
             this.panelImgViewerParent.Name = "panelImgViewerParent";
             this.panelImgViewerParent.Size = new System.Drawing.Size(512, 512);
             this.panelImgViewerParent.TabIndex = 0;
+            // 
+            // pictBoxPreview
+            // 
+            this.pictBoxPreview.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictBoxPreview.BackgroundImage = global::StableDiffusionGui.Properties.Resources.checkerboard_darkened;
+            this.pictBoxPreview.Location = new System.Drawing.Point(0, 0);
+            this.pictBoxPreview.Margin = new System.Windows.Forms.Padding(0);
+            this.pictBoxPreview.Name = "pictBoxPreview";
+            this.pictBoxPreview.Size = new System.Drawing.Size(512, 512);
+            this.pictBoxPreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictBoxPreview.TabIndex = 114;
+            this.pictBoxPreview.TabStop = false;
+            this.pictBoxPreview.Visible = false;
             // 
             // pictBoxImgViewer
             // 
@@ -3532,6 +3551,7 @@ namespace StableDiffusionGui.Forms
             this.panelCollapseImplementation.ResumeLayout(false);
             this.tableLayoutPanelImgViewers.ResumeLayout(false);
             this.panelImgViewerParent.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictBoxPreview)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictBoxImgViewer)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictBoxInitImg)).EndInit();
             this.menuStripInstall.ResumeLayout(false);
@@ -3746,7 +3766,6 @@ namespace StableDiffusionGui.Forms
         public System.Windows.Forms.Panel panelModel2;
         public System.Windows.Forms.ComboBox comboxModel2;
         private System.Windows.Forms.Label label26;
-        public System.Windows.Forms.CheckBox checkboxTestLatUpscale;
         private System.Windows.Forms.Label labelUpscaleX;
         public System.Windows.Forms.ComboBox comboxUpscaleMode;
         private System.Windows.Forms.TableLayoutPanel panelUpscaling;
@@ -3757,6 +3776,8 @@ namespace StableDiffusionGui.Forms
         private System.Windows.Forms.Label labelUpscaleEquals;
         public CustomUpDown updownUpscaleResultW;
         public CustomUpDown updownUpscaleResultH;
+        public System.Windows.Forms.CheckBox checkboxPreview;
+        public System.Windows.Forms.PictureBox pictBoxPreview;
     }
 }
 
