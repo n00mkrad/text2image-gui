@@ -57,11 +57,11 @@ namespace StableDiffusionGui.Forms
             this.checkboxLockSeed = new System.Windows.Forms.CheckBox();
             this.btnSeedResetToRandom = new HTAlt.WinForms.HTButton();
             this.btnSeedUsePrevious = new HTAlt.WinForms.HTButton();
-            this.upDownSeed = new CustomUpDown();
+            this.upDownSeed = new StableDiffusionGui.Controls.CustomUpDown();
             this.sliderScale = new StableDiffusionGui.Controls.CustomSlider();
             this.textboxSliderScale = new System.Windows.Forms.TextBox();
             this.textboxExtraScales = new StableDiffusionGui.Controls.CustomTextbox();
-            this.upDownIterations = new CustomUpDown();
+            this.upDownIterations = new StableDiffusionGui.Controls.CustomUpDown();
             this.btnResetMask = new HTAlt.WinForms.HTButton();
             this.textboxExtraInitStrengths = new StableDiffusionGui.Controls.CustomTextbox();
             this.sliderInitStrength = new StableDiffusionGui.Controls.CustomSlider();
@@ -103,9 +103,9 @@ namespace StableDiffusionGui.Forms
             this.textboxExtraRefinerValues = new StableDiffusionGui.Controls.CustomTextbox();
             this.sliderRefinerStart = new StableDiffusionGui.Controls.CustomSlider();
             this.textboxSliderRefineStart = new System.Windows.Forms.TextBox();
-            this.updownUpscaleFactor = new CustomUpDown();
-            this.updownUpscaleResultW = new CustomUpDown();
-            this.updownUpscaleResultH = new CustomUpDown();
+            this.updownUpscaleFactor = new StableDiffusionGui.Controls.CustomUpDown();
+            this.updownUpscaleResultW = new StableDiffusionGui.Controls.CustomUpDown();
+            this.updownUpscaleResultH = new StableDiffusionGui.Controls.CustomUpDown();
             this.btnCollapseDebug = new HTAlt.WinForms.HTButton();
             this.btnCollapseSymmetry = new HTAlt.WinForms.HTButton();
             this.btnCollapseRendering = new HTAlt.WinForms.HTButton();
@@ -168,7 +168,7 @@ namespace StableDiffusionGui.Forms
             this.comboxUpscaleMode = new System.Windows.Forms.ComboBox();
             this.labelUpscale = new System.Windows.Forms.Label();
             this.labelUpscaleEquals = new System.Windows.Forms.Label();
-            this.label30 = new System.Windows.Forms.Label();
+            this.labelUpscaleX = new System.Windows.Forms.Label();
             this.panelRes = new System.Windows.Forms.Panel();
             this.labelResChange = new System.Windows.Forms.Label();
             this.labelAspectRatio = new System.Windows.Forms.Label();
@@ -691,7 +691,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderScale.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScale.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScale.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderScale.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderScale.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScale.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScale.Name = "textboxSliderScale";
@@ -835,7 +835,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderInitStrength.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderInitStrength.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderInitStrength.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderInitStrength.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderInitStrength.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderInitStrength.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderInitStrength.Name = "textboxSliderInitStrength";
@@ -1030,7 +1030,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderScaleImg.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScaleImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScaleImg.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScaleImg.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderScaleImg.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderScaleImg.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScaleImg.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScaleImg.Name = "textboxSliderScaleImg";
@@ -1580,7 +1580,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderRefineStart.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderRefineStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderRefineStart.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderRefineStart.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderRefineStart.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderRefineStart.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderRefineStart.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderRefineStart.Name = "textboxSliderRefineStart";
@@ -1615,10 +1615,10 @@ namespace StableDiffusionGui.Forms
             this.updownUpscaleFactor.TabIndex = 110;
             this.toolTip.SetToolTip(this.updownUpscaleFactor, "Latent Upscaling Factor");
             this.updownUpscaleFactor.Value = new decimal(new int[] {
-            2,
+            15,
             0,
             0,
-            0});
+            65536});
             // 
             // updownUpscaleResultW
             // 
@@ -2348,7 +2348,7 @@ namespace StableDiffusionGui.Forms
             this.flowLayoutPanel1.Controls.Add(this.updownUpscaleFactor);
             this.flowLayoutPanel1.Controls.Add(this.labelUpscaleEquals);
             this.flowLayoutPanel1.Controls.Add(this.updownUpscaleResultW);
-            this.flowLayoutPanel1.Controls.Add(this.label30);
+            this.flowLayoutPanel1.Controls.Add(this.labelUpscaleX);
             this.flowLayoutPanel1.Controls.Add(this.updownUpscaleResultH);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(233, 0);
@@ -2397,17 +2397,17 @@ namespace StableDiffusionGui.Forms
             this.labelUpscaleEquals.TabIndex = 113;
             this.labelUpscaleEquals.Text = "=";
             // 
-            // label30
+            // labelUpscaleX
             // 
-            this.label30.AutoSize = true;
-            this.label30.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label30.ForeColor = System.Drawing.Color.White;
-            this.label30.Location = new System.Drawing.Point(290, 3);
-            this.label30.Margin = new System.Windows.Forms.Padding(0, 3, 6, 3);
-            this.label30.Name = "label30";
-            this.label30.Size = new System.Drawing.Size(12, 13);
-            this.label30.TabIndex = 98;
-            this.label30.Text = "x";
+            this.labelUpscaleX.AutoSize = true;
+            this.labelUpscaleX.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelUpscaleX.ForeColor = System.Drawing.Color.White;
+            this.labelUpscaleX.Location = new System.Drawing.Point(290, 3);
+            this.labelUpscaleX.Margin = new System.Windows.Forms.Padding(0, 3, 6, 3);
+            this.labelUpscaleX.Name = "labelUpscaleX";
+            this.labelUpscaleX.Size = new System.Drawing.Size(12, 13);
+            this.labelUpscaleX.TabIndex = 98;
+            this.labelUpscaleX.Text = "x";
             // 
             // panelRes
             // 
@@ -2702,7 +2702,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderSteps.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderSteps.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderSteps.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderSteps.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderSteps.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderSteps.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderSteps.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderSteps.Name = "textboxSliderSteps";
@@ -3747,7 +3747,7 @@ namespace StableDiffusionGui.Forms
         public System.Windows.Forms.ComboBox comboxModel2;
         private System.Windows.Forms.Label label26;
         public System.Windows.Forms.CheckBox checkboxTestLatUpscale;
-        private System.Windows.Forms.Label label30;
+        private System.Windows.Forms.Label labelUpscaleX;
         public System.Windows.Forms.ComboBox comboxUpscaleMode;
         private System.Windows.Forms.TableLayoutPanel panelUpscaling;
         private System.Windows.Forms.Label label27;

@@ -29,6 +29,7 @@ namespace StableDiffusionGui.Forms
                 sliderScaleImg.ActualValue = (decimal)meta.ScaleImg;
                 comboxResW.Text = meta.GeneratedResolution.Width.ToString();
                 comboxResH.Text = meta.GeneratedResolution.Height.ToString();
+                SetUpscaleRes(meta.UpscaleResolution, meta.GeneratedResolution);
                 checkboxHiresFix.Checked = meta.HiResFix;
                 sliderRefinerStart.ActualValue = (decimal)meta.RefineStrength;
                 upDownSeed.Value = meta.Seed;
@@ -71,6 +72,7 @@ namespace StableDiffusionGui.Forms
                 MainUi.CurrentInitImgPaths = s.InitImgs.ToList();
                 comboxResW.Text = s.Res.Width.ToString();
                 comboxResH.Text = s.Res.Height.ToString();
+                SetUpscaleRes(s.UpscaleTargetRes, s.Res);
                 upDownSeed.Value = s.Seed;
                 comboxSampler.SetWithText(s.Sampler.ToString(), true, Strings.Samplers);
                 SetSliderValues(s.InitStrengths, false, sliderInitStrength, textboxExtraInitStrengths);
@@ -87,6 +89,31 @@ namespace StableDiffusionGui.Forms
             })).RunWithUiStopped(this, "Error loading image generation settings:", true);
 
             TryRefreshUiState();
+        }
+
+        private void SetUpscaleRes (Size resUpscale, Size resGenerated)
+        {
+            if (resUpscale != resGenerated && resUpscale.Width > resGenerated.Width && resUpscale.Height > resGenerated.Height)
+            {
+                string factorW = (resUpscale.Width / (float)resGenerated.Width).ToStringDot("0.###");
+                string factorH = (resUpscale.Height / (float)resGenerated.Height).ToStringDot("0.###");
+
+                if (factorW == factorH && factorW.Length <= 4) // Check if factor is the same on both axes & max 4 decimal places
+                {
+                    comboxUpscaleMode.SetWithEnum(LatentUpscaleMode.Factor, stringMap: Strings.UpscaleModes);
+                    updownUpscaleFactor.Value = (decimal)factorW.GetFloat();
+                }
+                else
+                {
+                    comboxUpscaleMode.SetWithEnum(LatentUpscaleMode.TargetRes, stringMap: Strings.UpscaleModes);
+                    updownUpscaleResultW.Value = resUpscale.Width;
+                    updownUpscaleResultH.Value = resUpscale.Height;
+                }
+            }
+            else
+            {
+                comboxUpscaleMode.SetWithEnum(LatentUpscaleMode.Disabled, stringMap: Strings.UpscaleModes);
+            }
         }
 
         /// <summary> Set values that have a single slider value and optionally an advanced syntax entry textbox </summary>

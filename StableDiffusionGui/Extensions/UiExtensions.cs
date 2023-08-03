@@ -93,6 +93,13 @@ namespace StableDiffusionGui.Extensions
             return list;
         }
 
+        /// <summary> Sets the visibility of controls while avoiding unnecessary setter calls.  </summary>
+        public static void SetVisible(this IEnumerable<Control> c, bool targetState)
+        {
+            foreach(var control in c)
+                control.SetVisible(targetState);
+        }
+
         /// <summary> Sets the visibility of a control while avoiding unnecessary setter calls.  </summary>
         public static void SetVisible(this Control c, bool targetState)
         {

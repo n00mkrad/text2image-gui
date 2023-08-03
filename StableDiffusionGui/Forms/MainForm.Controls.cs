@@ -86,7 +86,7 @@ namespace StableDiffusionGui.Forms
             };
             comboxResH.LostFocus += (s, e) => { ValidateResolution(comboxResH); };
             comboxResW.LostFocus += (s, e) => { ValidateResolution(comboxResW); };
-            comboxUpscaleMode.SelectedIndexChanged += (s, e) => { RefreshUpscaleUi(); };
+            comboxUpscaleMode.SelectedIndexChanged += (s, e) => { RefreshUpscaleUi(true); };
             updownUpscaleFactor.ValueChanged += (s, e) => { ValidateResolution(); };
         }
 
@@ -216,9 +216,12 @@ namespace StableDiffusionGui.Forms
                 comboxResH.Text = h.ToString();
             }
 
-            float factor = (float)updownUpscaleFactor.Value;
-            updownUpscaleResultH.Value = (comboxResH.GetInt() * factor).RoundToInt().RoundMod(MainUi.CurrentModulo);
-            updownUpscaleResultW.Value = (comboxResW.GetInt() * factor).RoundToInt().RoundMod(MainUi.CurrentModulo);
+            if(updownUpscaleFactor.Visible)
+            {
+                float factor = (float)updownUpscaleFactor.Value;
+                updownUpscaleResultH.Value = (comboxResH.GetInt() * factor).RoundToInt().RoundMod(MainUi.CurrentModulo);
+                updownUpscaleResultW.Value = (comboxResW.GetInt() * factor).RoundToInt().RoundMod(MainUi.CurrentModulo);
+            }
         }
 
         private string _prevSelectedModel = "";
@@ -590,6 +593,9 @@ namespace StableDiffusionGui.Forms
             int w = comboxResW.GetInt();
             int h = comboxResH.GetInt();
 
+            if(comboxUpscaleMode.SelectedIndex <= 0) // Upscaling disabled
+                return new Size(w, h);
+
             if (updownUpscaleFactor.Visible)
             {
                 w = (w * (float)updownUpscaleFactor.Value).RoundToInt().RoundMod(CurrentModulo);
@@ -606,18 +612,27 @@ namespace StableDiffusionGui.Forms
 
         private void RefreshUpscaleUi (bool stopUi = false)
         {
-            if(stopUi)
+            stopUi = stopUi & this.IsRendering();
+
+            if (stopUi)
                 this.StopRendering();
 
             try
             {
                 LatentUpscaleMode mode = ParseUtils.GetEnum<LatentUpscaleMode>(comboxUpscaleMode.Text, true, Strings.UpscaleModes);
+                new Control[] { labelUpscale, updownUpscaleResultW, updownUpscaleResultH, labelUpscaleX }.SetVisible(mode != LatentUpscaleMode.Disabled);
                 labelUpscale.Text = mode == LatentUpscaleMode.Factor ? "Factor:" : "Target Resolution:";
                 updownUpscaleFactor.SetVisible(mode == LatentUpscaleMode.Factor);
                 labelUpscaleEquals.SetVisible(mode == LatentUpscaleMode.Factor);
                 updownUpscaleResultW.Enabled = mode == LatentUpscaleMode.TargetRes;
                 updownUpscaleResultH.Enabled = mode == LatentUpscaleMode.TargetRes;
                 ValidateResolution();
+
+                if(mode == LatentUpscaleMode.Disabled)
+                {
+                    updownUpscaleResultW.Value = comboxResW.GetInt().Clamp((int)updownUpscaleResultW.Minimum, (int)updownUpscaleResultW.Maximum);
+                    updownUpscaleResultH.Value = comboxResH.GetInt().Clamp((int)updownUpscaleResultW.Minimum, (int)updownUpscaleResultW.Maximum);
+                }
             }
             catch { }
 

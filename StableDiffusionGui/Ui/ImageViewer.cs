@@ -89,23 +89,23 @@ namespace StableDiffusionGui.Ui
                 infos.Add($"Seed {meta.Seed}");
 
             if (meta.Steps >= 0)
-                infos.Add($"{meta.Steps} Steps");
+                infos.Add($"Steps {meta.Steps}");
 
             if (meta.RefineStrength > 0)
                 infos.Add($"Refine {meta.RefineStrength.ToStringDot("0.###")}");
 
             if (meta.Scale >= 0)
-                infos.Add($"Scale {meta.Scale.ToStringDot("0.###")}");
+                infos.Add($"CFG {meta.Scale.ToStringDot("0.###")}");
 
             if (meta.ScaleImg >= 0)
-                infos.Add($"Img Scale {meta.ScaleImg.ToStringDot("0.###")}");
+                infos.Add($"Image CFG {meta.ScaleImg.ToStringDot("0.###")}");
 
             Size res = Program.MainForm.pictBoxImgViewer.GetImageSafe().Size;
 
             if (meta.GeneratedResolution.IsEmpty)
-                infos.Add($"{res.Width}x{res.Height}");
+                infos.Add(res.AsString());
             else
-                infos.Add($"{meta.GeneratedResolution.Width}x{meta.GeneratedResolution.Height}{(meta.GeneratedResolution == res ? "" : $" => {res.Width}x{res.Height}")}");
+                infos.Add($"{meta.GeneratedResolution.AsString()}{(meta.GeneratedResolution == res ? "" : $" => {res.AsString()}")}");
 
             if (meta.InitStrength > 0.0001f && meta.InitStrength < 1.0f)
                 infos.Add($"Strength {meta.InitStrength.ToStringDot("0.###")}");
