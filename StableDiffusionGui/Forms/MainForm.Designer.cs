@@ -2777,6 +2777,7 @@ namespace StableDiffusionGui.Forms
             this.checkboxPreview.TabIndex = 94;
             this.checkboxPreview.Text = "Show Preview";
             this.checkboxPreview.UseVisualStyleBackColor = true;
+            this.checkboxPreview.Visible = false;
             this.checkboxPreview.CheckedChanged += new System.EventHandler(this.checkboxPreview_CheckedChanged);
             // 
             // label1

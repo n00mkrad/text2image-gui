@@ -9,6 +9,11 @@ namespace StableDiffusionGui.Implementations
 {
     public class ImplementationBase
     {
+        public virtual string GetEmbeddingStringFormat ()
+        {
+            return "<{0}>";
+        }
+
         public static async Task CancelNmkdiffusers()
         {
             await TtiProcess.WriteStdIn("stop", 0, true);

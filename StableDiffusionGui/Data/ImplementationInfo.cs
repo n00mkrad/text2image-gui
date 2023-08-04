@@ -44,11 +44,11 @@ namespace StableDiffusionGui.Data
                 Backend = Enums.Ai.Backend.Cuda;
                 SupportedFeatures = new List<Feature> { Feature.InteractiveCli, Feature.NegPrompts, Feature.Img2Img, Feature.MultipleSamplers };
             }
-            else if (imp == Enums.StableDiffusion.Implementation.SdXl)
+            else if (imp == Enums.StableDiffusion.Implementation.Comfy)
             {
                 Backend = Enums.Ai.Backend.Cuda;
                 SupportedModelFormats = new Format[] { Format.Safetensors, Format.Diffusers };
-                SupportedFeatures = new List<Feature> { Feature.InteractiveCli, Feature.CustomModels, Feature.NegPrompts, Feature.MultipleSamplers, Feature.Img2Img, Feature.HiresFix, Feature.CustomVae };
+                SupportedFeatures = new List<Feature> { Feature.InteractiveCli, Feature.CustomModels, Feature.NegPrompts, Feature.MultipleSamplers, Feature.Img2Img, Feature.HiresFix, Feature.CustomVae, Feature.Lora, Feature.Embeddings };
             }
         }
     }

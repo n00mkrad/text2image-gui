@@ -174,7 +174,7 @@ namespace StableDiffusionGui.Forms
             {
                 var res = new System.Drawing.Size();
 
-                if (imp == Implementation.SdXl)
+                if (imp == Implementation.Comfy)
                     res = new System.Drawing.Size(1024, 1024);
                 else if (imp == Implementation.DiffusersOnnx)
                     res = new System.Drawing.Size(512, 512);
@@ -509,7 +509,7 @@ namespace StableDiffusionGui.Forms
             IEnumerable<Model> models = Models.GetModels((Enums.Models.Type)(-1), imp);
             comboxModel.SetItems(models.Where(m => m.Type == Enums.Models.Type.Normal), UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.None);
 
-            if (imp == Implementation.SdXl)
+            if (imp == Implementation.Comfy)
                 comboxModel2.SetItems(models.Where(m => m.Type == Enums.Models.Type.Refiner), UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.None);
         }
 

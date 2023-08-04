@@ -43,10 +43,10 @@ namespace StableDiffusionGui.Implementations
         public async Task Run(TtiSettings s, string outPath)
         {
             float[] initStrengths = s.InitStrengths.Select(n => 1f - n).ToArray();
-            var cachedModels = Models.GetModels((Enums.Models.Type)(-1), Implementation.SdXl);
+            var cachedModels = Models.GetModels((Enums.Models.Type)(-1), Implementation.Comfy);
             var baseModels = cachedModels.Where(m => m.Type == Enums.Models.Type.Normal).ToList();
             var refinerModels = cachedModels.Where(m => m.Type == Enums.Models.Type.Refiner).ToList();
-            Model model = TtiUtils.CheckIfModelExists(s.Model, Implementation.SdXl, baseModels);
+            Model model = TtiUtils.CheckIfModelExists(s.Model, Implementation.Comfy, baseModels);
             string vaeName = s.Vae.NullToEmpty().Replace("None", ""); // VAE model name
             Model vae = Models.GetModel(Models.GetVaes(), vaeName);
 
@@ -62,7 +62,7 @@ namespace StableDiffusionGui.Implementations
             string mode = NmkdiffUtils.GetGenerationMode(s, model);
 
             string missingRefinerMsg = "No Refiner model file has been set.\nPlease set one or disable image refining.";
-            Model refineModel = refine ? TtiUtils.CheckIfModelExists(s.ModelAux, Implementation.SdXl, refinerModels, missingRefinerMsg) : null;
+            Model refineModel = refine ? TtiUtils.CheckIfModelExists(s.ModelAux, Implementation.Comfy, refinerModels, missingRefinerMsg) : null;
 
             if (refine && refineModel == null)
                 return;
@@ -79,6 +79,9 @@ namespace StableDiffusionGui.Implementations
                 Vae = vae == null ? "" : vae.FullName,
                 Sampler = s.Sampler
             };
+
+            foreach (var lora in s.Loras)
+                currentGeneration.Loras.Add(lora.Key, lora.Value.First());
 
             List<string> processedPrompts = null;
             TextToImage.CurrentTaskSettings.ProcessedAndRawPrompts = new EasyDict<string, string>();
@@ -299,7 +302,7 @@ namespace StableDiffusionGui.Implementations
                 Logger.Log($"{baseUrl} - {data.Trunc(150)}", true, filename: "api");
                 return await response.Content.ReadAsStringAsync();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logger.Log($"API Error: {ex.Message}");
                 Logger.Log(ex.StackTrace, true);
@@ -419,14 +422,20 @@ namespace StableDiffusionGui.Implementations
             LastMessages.Clear();
         }
 
+        public override string GetEmbeddingStringFormat()
+        {
+            return "embedding:{0}";
+        }
 
         public class GenerationInfo
         {
             public string Model;
             public string ModelRefiner;
             public string Vae;
+            public string Upscaler;
             public string Prompt;
             public string NegativePrompt;
+            public EasyDict<string, float> Loras = new EasyDict<string, float>();
             public int Steps;
             public long Seed;
             public float Scale;
@@ -445,6 +454,7 @@ namespace StableDiffusionGui.Implementations
                 {
                     { "model", Path.GetFileName(Model) },
                     { "modelRefiner", Path.GetFileName(ModelRefiner) },
+                    { "upscaler", Path.GetFileName(Upscaler) },
                     { "prompt", Prompt },
                     { "promptNeg", NegativePrompt },
                     { "initImg", InitImg },

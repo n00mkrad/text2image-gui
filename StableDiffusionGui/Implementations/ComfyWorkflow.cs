@@ -1,5 +1,4 @@
 ﻿using StableDiffusionGui.Data;
-using StableDiffusionGui.Implementations;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
 using System;
@@ -13,8 +12,8 @@ namespace StableDiffusionGui.Implementations
     {
         public enum NodeType
         {
-            CheckpointLoaderSimple, VAELoader, CLIPTextEncode, KSampler, NmkdKSampler, VAEDecode, EmptyLatentImage, SaveImage, PrimitiveNode, LatentUpscale, LatentUpscaleBy, CRLatentInputSwitch, Reroute,
-            NmkdIntegerConstant, NmkdFloatConstant, NmkdStringConstant, NmkdCheckpointLoader, CLIPSetLastLayer, NmkdImageLoader, VAEEncode
+            CheckpointLoaderSimple, VAELoader, CLIPTextEncode, KSampler, NmkdKSampler, VAEDecode, VAEEncode, EmptyLatentImage, SaveImage, PrimitiveNode, LatentUpscale, LatentUpscaleBy, CRLatentInputSwitch, Reroute,
+            NmkdIntegerConstant, NmkdFloatConstant, NmkdStringConstant, NmkdCheckpointLoader, CLIPSetLastLayer, NmkdImageLoader, NmkdImageUpscale, NmkdMultiLoraLoader
         }
 
         public class Node
@@ -122,9 +121,17 @@ namespace StableDiffusionGui.Implementations
                     if (node.Title == "Model2")
                         node.Class = new ComfyNodes.NmkdCheckpointLoader() { ModelPath = g.ModelRefiner == null ? g.Model : g.ModelRefiner, LoadVae = false };
                 }
+                else if (node.Type == NodeType.NmkdMultiLoraLoader)
+                {
+                    node.Class = new ComfyNodes.NmkdMultiLoraLoader() { Loras = g.Loras.Keys.ToList(), Weights = g.Loras.Values.ToList(), ModelNode = nodesDict["Model1"], ClipNode = nodesDict["ClipSkipModel1"] };
+                }
                 else if (node.Type == NodeType.NmkdImageLoader)
                 {
                     node.Class = new ComfyNodes.NmkdImageLoader() { ImagePath = g.InitImg };
+                }
+                else if (node.Type == NodeType.NmkdImageUpscale)
+                {
+                    node.Class = new ComfyNodes.NmkdImageUpscale() { UpscaleModelPath = g.Upscaler, ImageNode = nodesDict["VAEDecode"] };
                 }
                 else if (node.Type == NodeType.VAELoader)
                 {
@@ -132,16 +139,7 @@ namespace StableDiffusionGui.Implementations
                 }
                 else if (node.Type == NodeType.KSampler)
                 {
-                    node.Class = new ComfyNodes.KSampler()
-                    {
-                        Seed = g.Seed,
-                        Steps = g.Steps,
-                        Cfg = g.Scale,
-                        IdModel = nodesDict["Model1"].Id,
-                        IdPositivePrompt = nodesDict["PromptPos"].Id,
-                        IdNegativePrompt = nodesDict["PromptNeg"].Id,
-                        IdLatentImage = nodesDict["EmptyLatentImage"].Id
-                    };
+                    continue;
                 }
                 else if (node.Type == NodeType.NmkdKSampler)
                 {
@@ -163,7 +161,7 @@ namespace StableDiffusionGui.Implementations
                         NodeEndStep = baseSampler ? nodesDict["StepsBase"] : nodesDict["StepsMax"],
                         ReturnLeftoverNoise = baseSampler & refine,
                         Denoise = node.Title == "SamplerBase" && g.InitImg.IsNotEmpty() ? g.InitStrength : 1f,
-                        NodeModel = baseSampler ? nodesDict["Model1"] : nodesDict["Model2"],
+                        NodeModel = baseSampler ? nodesDict["LoraLoader1"] : nodesDict["Model2"],
                         NodePositive = baseSampler ? nodesDict["EncodePosPromptBase"] : nodesDict["EncodePosPromptRefiner"],
                         NodeNegative = baseSampler ? nodesDict["EncodeNegPromptBase"] : nodesDict["EncodeNegPromptRefiner"],
                         NodeLatentImage = latentsNode,
@@ -173,7 +171,7 @@ namespace StableDiffusionGui.Implementations
                 else if (node.Type == NodeType.CLIPTextEncode)
                 {
                     var textNode = nodesDict[node.Title.Contains("Pos") ? "PromptPos" : "PromptNeg"];
-                    var clipSkipNode = nodesDict[node.Title.Contains("Refine") ? "ClipSkipModel2" : "ClipSkipModel1"];
+                    var clipSkipNode = nodesDict[node.Title.Contains("Refine") ? "ClipSkipModel2" : "LoraLoader1"];
                     node.Class = new ComfyNodes.CLIPTextEncode() { TextNode = textNode, ClipNode = clipSkipNode };
                 }
                 else if (node.Type == NodeType.CLIPSetLastLayer)
@@ -211,7 +209,7 @@ namespace StableDiffusionGui.Implementations
                 }
                 else if (node.Type == NodeType.SaveImage)
                 {
-                    node.Class = new ComfyNodes.SaveImage() { IdImages = nodesDict["VAEDecode"].Id };
+                    node.Class = new ComfyNodes.SaveImage() { Prefix = $"nmkd{FormatUtils.GetUnixTimestamp()}", ImageNode = nodesDict["VAEDecode"] };
                 }
                 else
                 {

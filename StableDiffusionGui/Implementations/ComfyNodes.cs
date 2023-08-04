@@ -1,9 +1,12 @@
 ﻿using HTAlt;
+using StableDiffusionGui.Io;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static StableDiffusionGui.Implementations.ComfyNodes;
 using static StableDiffusionGui.Implementations.InvokeAiMetadata;
 
 namespace StableDiffusionGui.Implementations
@@ -217,6 +220,7 @@ namespace StableDiffusionGui.Implementations
             {
                 int clipNodeOutIndex = 0;
                 if (ClipNode.Type == ComfyWorkflow.NodeType.NmkdCheckpointLoader) clipNodeOutIndex = 1;
+                if (ClipNode.Type == ComfyWorkflow.NodeType.NmkdMultiLoraLoader) clipNodeOutIndex = 1;
 
                 return $"\"inputs\":{{" +
                     $"\"text\":[\"{TextNode.Id}\",0]," +
@@ -275,14 +279,17 @@ namespace StableDiffusionGui.Implementations
         public class SaveImage : IComfyNode
         {
             public string Prefix = "nmkd";
-            public int IdImages;
+            public ComfyWorkflow.Node ImageNode;
 
             public string GetString()
             {
-                return $"\"inputs\":{{" +
-                    $"\"filename_prefix\":\"{Prefix}\"," +
-                    $"\"images\":[\"{IdImages}\",0]}}," +
-                    $"\"class_type\":\"SaveImage\"";
+                var dict = new Dictionary<string, string>()
+                {
+                    { "filename_prefix", Prefix.Wrap() },
+                    { "images", $"[{ImageNode.Id.ToString().Wrap()},0]" },
+                };
+
+                return GetPropertiesString(dict, "SaveImage");
             }
         }
 
@@ -310,6 +317,35 @@ namespace StableDiffusionGui.Implementations
             }
         }
 
+        public class NmkdMultiLoraLoader : IComfyNode
+        {
+            public List<string> Loras;
+            public List<float> Weights;
+            public ComfyWorkflow.Node ModelNode;
+            public ComfyWorkflow.Node ClipNode;
+
+            public string GetString()
+            {
+                int clipNodeIndex = 0;
+                if (ClipNode.Type == ComfyWorkflow.NodeType.NmkdCheckpointLoader || ClipNode.Type == ComfyWorkflow.NodeType.CheckpointLoaderSimple) clipNodeIndex = 1;
+
+                var dict = new Dictionary<string, string>()
+                {
+                    { "model", $"[{ModelNode.Id.ToString().Wrap()},0]" },
+                    { "clip", $"[{ClipNode.Id.ToString().Wrap()},{clipNodeIndex}]" },
+                    { "lora_paths", string.Join(",", Loras.Select(l => Path.Combine(Paths.GetLorasPath(false), l + ".safetensors"))).Replace(@"\", @"\\").Wrap() },
+                    { "lora_strengths", string.Join(",", Weights.Select(w => w.ToStringDot("0.#####"))).Wrap() },
+                };
+
+                return GetPropertiesString(dict, "NmkdMultiLoraLoader");
+            }
+
+            public override string ToString()
+            {
+                return $"NmkdMultiLoraLoader - {Loras.Count} LoRAs - ModelNode: '{ModelNode}' - ClipNode: '{ClipNode}'";
+            }
+        }
+
         public class NmkdImageLoader : IComfyNode
         {
             public string ImagePath;
@@ -325,6 +361,23 @@ namespace StableDiffusionGui.Implementations
             }
         }
 
+        public class NmkdImageUpscale : IComfyNode
+        {
+            public string UpscaleModelPath;
+            public ComfyWorkflow.Node ImageNode;
+
+            public string GetString()
+            {
+                var dict = new Dictionary<string, string>()
+                {
+                    { "model_path", UpscaleModelPath.Wrap(true) },
+                    { "image", $"[{ImageNode.Id.ToString().Wrap()},0]" },
+                };
+
+                return GetPropertiesString(dict, "NmkdImageUpscale");
+            }
+        }
+
         public class CLIPSetLastLayer : IComfyNode
         {
             public int Skip = -1;
@@ -333,7 +386,6 @@ namespace StableDiffusionGui.Implementations
             public string GetString()
             {
                 int clipNodeIndex = 0;
-
                 if (ClipNode.Type == ComfyWorkflow.NodeType.NmkdCheckpointLoader || ClipNode.Type == ComfyWorkflow.NodeType.CheckpointLoaderSimple) clipNodeIndex = 1;
 
                 var dict = new Dictionary<string, string>()

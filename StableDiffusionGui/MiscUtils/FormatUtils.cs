@@ -1,4 +1,5 @@
-﻿using StableDiffusionGui.Main;
+﻿using StableDiffusionGui.Implementations;
+using StableDiffusionGui.Main;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -235,6 +236,16 @@ namespace StableDiffusionGui.MiscUtils
         public static string GetUnixTimestamp ()
         {
             return GetUnixTime().ToString();
+        }
+
+        public static string GetEmbeddingFormat (Enums.StableDiffusion.Implementation imp)
+        {
+            if (imp == Enums.StableDiffusion.Implementation.InvokeAi)
+                return new InvokeAi().GetEmbeddingStringFormat();
+            else if (imp == Enums.StableDiffusion.Implementation.Comfy)
+                return new Comfy().GetEmbeddingStringFormat();
+
+            return "";
         }
     }
 }

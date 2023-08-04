@@ -64,7 +64,7 @@ namespace StableDiffusionGui.Ui
 
         public static ConcurrentQueue<TtiSettings> Queue = new ConcurrentQueue<TtiSettings>();
         public static string GpuInfo = "";
-        public static int CurrentModulo { get { return Config.Instance.Implementation == Implementation.InstructPixToPix || Config.Instance.Implementation == Implementation.SdXl ? 8 : 64; } }
+        public static int CurrentModulo { get { return Config.Instance.Implementation == Implementation.InstructPixToPix || Config.Instance.Implementation == Implementation.Comfy ? 8 : 64; } }
 
         public static List<int> GetResolutions(int min, int max)
         {

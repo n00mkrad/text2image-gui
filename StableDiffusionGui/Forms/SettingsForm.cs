@@ -281,7 +281,7 @@ namespace StableDiffusionGui.Forms
                 panelVae.SetVisible(CurrImplementation.Supports(ImplementationInfo.Feature.CustomVae));
                 panelAdvancedOptsInvoke.SetVisible(CurrImplementation == Implementation.InvokeAi);
                 panelModelCaching.SetVisible(CurrImplementation == Implementation.InvokeAi);
-                panelComfyVram.SetVisible(CurrImplementation == Implementation.SdXl);
+                panelComfyVram.SetVisible(CurrImplementation == Implementation.Comfy);
 
                 LoadModels();
                 LoadVaes();

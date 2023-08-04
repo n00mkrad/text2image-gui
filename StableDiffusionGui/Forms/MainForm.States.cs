@@ -80,13 +80,13 @@ namespace StableDiffusionGui.Forms
                 return implementation.Supports(Feature.Lora) && gridLoras.Rows.Count > 0;
 
             if (control == panelRefineStart)
-                return implementation == Implementation.SdXl;
+                return implementation == Implementation.Comfy;
 
             if (control == panelModel2 && comboxModel.Items.Count > 0)
-                return implementation == Implementation.SdXl;
+                return implementation == Implementation.Comfy;
 
             if (control == panelUpscaling)
-                return implementation == Implementation.SdXl && !AnyInits;
+                return implementation == Implementation.Comfy && !AnyInits;
 
             return false;
         }
@@ -134,7 +134,7 @@ namespace StableDiffusionGui.Forms
 
         private bool HiresFixAvailable(Implementation imp)
         {
-            if (imp == Implementation.SdXl)
+            if (imp == Implementation.Comfy)
                 return false;
 
             bool compatible = imp.Supports(Feature.HiresFix);

@@ -99,7 +99,7 @@ namespace StableDiffusionGui.Main
                     case Implementation.InvokeAi: LastInstance = (IImplementation)new InvokeAi(); break;
                     case Implementation.DiffusersOnnx: LastInstance = (IImplementation)new SdOnnx(); break;
                     case Implementation.InstructPixToPix: LastInstance = (IImplementation)new InstructPixToPix(); break;
-                    case Implementation.SdXl: LastInstance = new Comfy(); break; // (IImplementation)new SdXl(); break;
+                    case Implementation.Comfy: LastInstance = new Comfy(); break; // (IImplementation)new SdXl(); break;
                 }
 
                 tasks.Add(LastInstance.Run(s, tempOutDir));

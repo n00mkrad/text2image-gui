@@ -26,10 +26,10 @@ namespace StableDiffusionGui.Implementations
             try
             {
                 float[] initStrengths = s.InitStrengths.Select(n => 1f - n).ToArray();
-                var cachedModels = Models.GetModels((Enums.Models.Type)(-1), Implementation.SdXl);
+                var cachedModels = Models.GetModels((Enums.Models.Type)(-1), Implementation.Comfy);
                 var baseModels = cachedModels.Where(m => m.Type == Enums.Models.Type.Normal).ToList();
                 var refinerModels = cachedModels.Where(m => m.Type == Enums.Models.Type.Refiner).ToList();
-                Model model = TtiUtils.CheckIfModelExists(s.Model, Implementation.SdXl, baseModels);
+                Model model = TtiUtils.CheckIfModelExists(s.Model, Implementation.Comfy, baseModels);
 
                 if (model == null)
                     return;
@@ -43,7 +43,7 @@ namespace StableDiffusionGui.Implementations
                 string mode = NmkdiffUtils.GetGenerationMode(s, model);
 
                 string missingRefinerMsg = "No Refiner model file has been set.\nPlease set one or disable image refining.";
-                Model refineModel = refine ? TtiUtils.CheckIfModelExists(s.ModelAux, Implementation.SdXl, refinerModels, missingRefinerMsg) : null;
+                Model refineModel = refine ? TtiUtils.CheckIfModelExists(s.ModelAux, Implementation.Comfy, refinerModels, missingRefinerMsg) : null;
 
                 if (refine && refineModel == null)
                     return;

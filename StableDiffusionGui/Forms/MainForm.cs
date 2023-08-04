@@ -523,7 +523,8 @@ namespace StableDiffusionGui.Forms
         {
             TextBox textbox = InputUtils.IsHoldingShift ? textboxPromptNeg : textboxPrompt;
             textbox.Focus();
-            textbox.Text = textbox.Text.Append($"<{comboxEmbeddingList.Text}>", true);
+            string format = FormatUtils.GetEmbeddingFormat(Config.Instance.Implementation);
+            textbox.Text = textbox.Text.Append(string.Format(format, comboxEmbeddingList.Text), true);
             btnEmbeddingAppend.Focus();
         }
 
