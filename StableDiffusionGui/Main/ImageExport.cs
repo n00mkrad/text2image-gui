@@ -53,9 +53,7 @@ namespace StableDiffusionGui.Main
                     var files = IoUtils.GetFileInfosSorted(imagesDir, false, "*.png");
                     bool running = TtiProcess.CurrentProcess != null && !TtiProcess.CurrentProcess.HasExited;
 
-                    if (_currSettings.Implementation == Enums.StableDiffusion.Implementation.OptimizedSd)
-                        running = IoUtils.GetFileInfosSorted(Paths.GetSessionDataPath(), false, "prompts*.*").Any();
-                    else if (_currSettings.Implementation.Supports(ImplementationInfo.Feature.InteractiveCli))
+                    if (_currSettings.Implementation.Supports(ImplementationInfo.Feature.InteractiveCli))
                         running = (_currTask.ImgCount - startingImgCount) < targetImgCount;
 
                     if (!running && !TtiUtils.ImportBusy && !files.Any())

@@ -152,7 +152,7 @@ namespace StableDiffusionGui.Forms
                 return;
 
             comboxImplementation.Items.Clear();
-            comboxImplementation.FillFromEnum<Implementation>(Strings.Implementation, -1, Implementation.OptimizedSd.AsList());
+            comboxImplementation.FillFromEnum<Implementation>(Strings.Implementation, -1);
             comboxImplementation.Text = Strings.Implementation.Get(Config.Instance.Implementation.ToString());
             _initialImplementationLoad = false;
         }

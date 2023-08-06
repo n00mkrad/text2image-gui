@@ -58,7 +58,6 @@ namespace StableDiffusionGui.Ui
         public static Dictionary<string, string> Implementation = new Dictionary<string, string>
         {
             { Enums.StableDiffusion.Implementation.InvokeAi.ToString(), "Stable Diffusion (InvokeAI - CUDA - Most Features)" },
-            { Enums.StableDiffusion.Implementation.OptimizedSd.ToString(), "Stable Diffusion (OptimizedSD - CUDA - Low Memory Mode)" },
             { Enums.StableDiffusion.Implementation.DiffusersOnnx.ToString(), "Stable Diffusion (ONNX - DirectML - For AMD GPUs)" },
             { Enums.StableDiffusion.Implementation.InstructPixToPix.ToString(), "InstructPix2Pix (Diffusers - CUDA)" },
             { Enums.StableDiffusion.Implementation.Comfy.ToString(), "Stable Diffusion XL (Diffusers - CUDA)" },

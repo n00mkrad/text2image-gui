@@ -26,13 +26,6 @@ namespace StableDiffusionGui.Data
                 SupportedFeatures = new List<Feature> { Feature.InteractiveCli, Feature.CustomModels, Feature.CustomVae, Feature.HalfPrecisionToggle, Feature.NegPrompts, Feature.Img2Img, Feature.NativeInpainting, Feature.DeviceSelection,
                     Feature.MultipleSamplers, Feature.Embeddings, Feature.SeamlessMode, Feature.SymmetricMode, Feature.HiresFix, Feature.Lora };
             }
-            else if (imp == Enums.StableDiffusion.Implementation.OptimizedSd)
-            {
-                Backend = Enums.Ai.Backend.Cuda;
-                SupportedModelFormats = new Format[] { Format.Pytorch };
-                ValidModelExts = new string[] { ".ckpt" };
-                SupportedFeatures = new List<Feature> { Feature.CustomModels, Feature.HalfPrecisionToggle, Feature.DeviceSelection, Feature.Img2Img };
-            }
             else if (imp == Enums.StableDiffusion.Implementation.DiffusersOnnx)
             {
                 Backend = Enums.Ai.Backend.DirectMl;
@@ -47,7 +40,7 @@ namespace StableDiffusionGui.Data
             else if (imp == Enums.StableDiffusion.Implementation.Comfy)
             {
                 Backend = Enums.Ai.Backend.Cuda;
-                SupportedModelFormats = new Format[] { Format.Safetensors, Format.Diffusers };
+                SupportedModelFormats = new Format[] { Format.Safetensors, Format.Pytorch };
                 SupportedFeatures = new List<Feature> { Feature.InteractiveCli, Feature.CustomModels, Feature.NegPrompts, Feature.MultipleSamplers, Feature.Img2Img, Feature.HiresFix, Feature.CustomVae, Feature.Lora, Feature.Embeddings, Feature.NativeInpainting };
             }
         }
