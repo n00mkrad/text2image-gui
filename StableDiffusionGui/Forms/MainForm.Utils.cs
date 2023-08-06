@@ -77,7 +77,7 @@ namespace StableDiffusionGui.Forms
         public void TryOpenPostProcessingSettings()
         {
             var imp = Config.Instance.Implementation;
-            var supportedImps = new List<Implementation> { Implementation.InvokeAi };
+            var supportedImps = new List<Implementation> { Implementation.InvokeAi, Implementation.Comfy };
 
             if (!supportedImps.Contains(imp))
             {

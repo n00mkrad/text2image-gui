@@ -14,6 +14,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using static StableDiffusionGui.Implementations.ComfyWorkflow;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
 namespace StableDiffusionGui.Implementations
@@ -77,7 +78,8 @@ namespace StableDiffusionGui.Implementations
                 Model = model.FullName,
                 ModelRefiner = refineModel == null ? "" : refineModel.FullName,
                 Vae = vae == null ? "" : vae.FullName,
-                Sampler = s.Sampler
+                Sampler = s.Sampler,
+                Upscaler = Config.Instance.UpscaleEnable ? Program.MainForm.textboxTestUpscaler.Text : "",
             };
 
             foreach (var lora in s.Loras)
@@ -273,7 +275,7 @@ namespace StableDiffusionGui.Implementations
 
             string wf = File.ReadAllText(Path.Combine(Paths.GetDataPath(), "comfy", "wf", "workflow.json"));
             wf = wf.Trim().TrimStart('{').TrimEnd('}');
-            var nodes = ComfyWorkflow.GetNodes(wf).OrderBy(n => n.Type).ThenBy(n => n.Title).ToList().ToList();
+            var nodes = ComfyWorkflow.GetNodes(wf).OrderBy(n => nameof(n)).ThenBy(n => ((Node)n).Title).ToList().ToList();
             // GenerationInfo test = new GenerationInfo { Model = model, ModelRefiner = refineModel, Prompt = s.Prompts[0], NegativePrompt = s.NegativePrompt, Steps = s.Steps[0], Seed = s.Seed, Scale = s.ScalesTxt[0], RefinerStrength = s.RefinerStrengths[0], Width = s.Res.Width, Height = s.Res.Height };
 
             foreach (var genInfo in generations.Where(g => g.Model.IsNotEmpty()))

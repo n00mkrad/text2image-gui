@@ -5,229 +5,206 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Windows.Media.Media3D;
+using static StableDiffusionGui.Implementations.ComfyNodes;
 
 namespace StableDiffusionGui.Implementations
 {
     public class ComfyWorkflow
     {
-        public enum NodeType
-        {
-            CheckpointLoaderSimple, VAELoader, CLIPTextEncode, KSampler, NmkdKSampler, VAEDecode, VAEEncode, EmptyLatentImage, SaveImage, PrimitiveNode, LatentUpscale, LatentUpscaleBy, CRLatentInputSwitch, Reroute,
-            NmkdIntegerConstant, NmkdFloatConstant, NmkdStringConstant, NmkdCheckpointLoader, CLIPSetLastLayer, NmkdImageLoader, NmkdImageUpscale, NmkdMultiLoraLoader
-        }
-
         public class Node
         {
-            public int Id;
-            public NodeType Type;
-            public string Title = "";
-            public ComfyNodes.IComfyNode Class;
+            public int Id { get; set; }
+            public string Title { get; set; } = "";
 
             public Node() { }
 
-            public Node(int id, NodeType type, string title = "")
+            public Node(int id, string title = "")
             {
                 Id = id;
-                Type = type;
                 Title = title;
             }
 
             public override string ToString()
             {
-                return $"#{Id} - {Type}{(Title.IsNotEmpty() ? $" - {Title}" : "")}";
+                return $"#{Id} {(Title.IsNotEmpty() ? $" - {Title}" : "")}";
             }
         }
 
         private enum Axis { Width, Height }
 
-        public static string BuildPrompt(Comfy.GenerationInfo g, List<Node> nodes)
+        public static string BuildPrompt(Comfy.GenerationInfo g, List<INode> nodes)
         {
             string prompt = "";
-            var nodeCounts = new EasyDict<NodeType, int>();
-            var nodesDict = new EasyDict<string, Node>();
+            var nodeCounts = new EasyDict<string, int>();
+            var nodesDict = new EasyDict<string, INode>();
             bool refine = g.RefinerStrength > 0.001f;
             bool upscale = !g.TargetResolution.IsEmpty && g.TargetResolution != g.BaseResolution;
             int baseSteps = (g.Steps * (1f - g.RefinerStrength)).RoundToInt();
             int baseWidth = g.BaseResolution.Width;
             int baseHeight = g.BaseResolution.Height;
 
-            if (upscale)
-            {
-                // Axis shorterAxis = g.Width < g.Height ? Axis.Width : Axis.Height;
-                // int oldShorterAxisLength = shorterAxis == Axis.Width ? g.Width : g.Height;
-                // int newShorterAxisLength = ((shorterAxis == Axis.Width ? g.Width : g.Height) * 0.5f).Clamp(512f, 2048f).RoundToInt();
-                // float factor = (float)newShorterAxisLength / oldShorterAxisLength;
-                // baseWidth = (g.Width * factor).RoundToInt().RoundMod(8);
-                // baseHeight = (g.Height * factor).RoundToInt().RoundMod(8);
-                // 
-                // if(baseWidth < 1024 && baseHeight < 1024)
-                // {
-                //     Size s = ImgMaths.FitIntoFrame(new Size(baseWidth, baseHeight), new Size(1024, 1024));
-                //     baseWidth = s.Width;
-                //     baseHeight = s.Height;
-                // }
-                // 
-                // baseWidth = baseWidth.RoundMod(16);
-                // baseHeight = baseHeight.RoundMod(16);
-                // Logger.Log($"Final latent upscaling size: {baseWidth}x{baseHeight}", true);
-            }
-
             nodes = nodes.OrderBy(n => n.Id).ToList();
 
             foreach (var node in nodes)
                 nodesDict[node.Title.Remove(" ")] = node;
 
-            foreach (var node in nodes)
+            var promptPos = (NmkdStringConstant)nodesDict["PromptPos"]; // Positive Prompt
+            promptPos.Text = g.Prompt;
+
+            var promptNeg = (NmkdStringConstant)nodesDict["PromptNeg"]; // Negative Prompt
+            promptNeg.Text = g.NegativePrompt;
+
+            var seed = (NmkdIntegerConstant)nodesDict["Seed"]; // Seed
+            seed.Value = g.Seed;
+
+            var steps =  (NmkdIntegerConstant)nodesDict["Steps"]; // Seed
+            steps.Value = g.Steps;
+
+            var stepsBase = (NmkdIntegerConstant)nodesDict["StepsBase"]; // Base Model Steps
+            stepsBase.Value = baseSteps;
+
+            var stepsSkip = (NmkdIntegerConstant)nodesDict["StepsSkip"]; // Skip Steps (Start at)
+            stepsSkip.Value = 0;
+
+            var stepsMax = (NmkdIntegerConstant)nodesDict["StepsMax"]; // Max Steps
+            stepsMax.Value = 1000;
+
+            var cfg = (NmkdFloatConstant)nodesDict["Cfg"]; // CFG Scale
+            cfg.Value = g.Scale;
+
+            var model1 = (NmkdCheckpointLoader)nodesDict["Model1"]; // Base Model
+            model1.ModelPath = g.Model;
+            model1.LoadVae = true;
+            model1.VaePath = g.Vae ?? "";
+
+            var model2 = (NmkdCheckpointLoader)nodesDict["Model2"]; // Aux Model (Refiner etc)
+            model2.ModelPath = g.ModelRefiner == null ? g.Model : g.ModelRefiner;
+            model2.LoadVae = false;
+
+            var clipSkipModel1 = (CLIPSetLastLayer)nodesDict["ClipSkipModel1"]; // CLIP Skip Model 1
+            var clipSkipModel2 = (CLIPSetLastLayer)nodesDict["ClipSkipModel2"]; // CLIP Skip Model 2
+            clipSkipModel1.Skip = g.ClipSkip;
+            clipSkipModel1.ClipNode = model1;
+            clipSkipModel2.Skip = g.ClipSkip;
+            clipSkipModel2.ClipNode = model2;
+
+            var loraLoader = (NmkdMultiLoraLoader)nodesDict["LoraLoader1"]; // LoRA Loader
+            loraLoader.Loras = g.Loras.Keys.ToList();
+            loraLoader.Weights = g.Loras.Values.ToList();
+            loraLoader.ModelNode = model1;
+            loraLoader.ClipNode = model1;
+
+            var encodePosPromptBase = (CLIPTextEncode)nodesDict["EncodePosPromptBase"]; // CLIP Encode Positive Prompt Base
+            var encodeNegPromptBase = (CLIPTextEncode)nodesDict["EncodeNegPromptBase"]; // CLIP Encode Negative Prompt Base
+            var encodePosPromptRefiner = (CLIPTextEncode)nodesDict["EncodePosPromptRefiner"]; // CLIP Encode Positive Prompt Refiner
+            var encodeNegPromptRefiner = (CLIPTextEncode)nodesDict["EncodeNegPromptRefiner"]; // CLIP Encode Negative Prompt Refiner
+            encodePosPromptBase.TextNode = nodesDict["PromptPos"];
+            encodeNegPromptBase.TextNode = nodesDict["PromptNeg"];
+            encodePosPromptRefiner.TextNode = nodesDict["PromptPos"];
+            encodeNegPromptRefiner.TextNode = nodesDict["PromptNeg"];
+            encodePosPromptBase.ClipNode = loraLoader;
+            encodeNegPromptBase.ClipNode = loraLoader;
+            encodePosPromptRefiner.ClipNode = clipSkipModel2;
+            encodeNegPromptRefiner.ClipNode = clipSkipModel2;
+
+            var emptyLatentImg = (EmptyLatentImage)nodesDict["EmptyLatentImage"]; // Empty Latent Image (T2I)
+            emptyLatentImg.Width = baseWidth;
+            emptyLatentImg.Height = baseHeight;
+
+            var loadInitImg = (NmkdImageLoader)nodesDict["InitImg"]; // Load Init Image
+            loadInitImg.ImagePath = g.InitImg;
+
+            var encodeInitImg = (VAEEncode)nodesDict["InitImgEncode"]; // Encode Init Image (I2I)
+            encodeInitImg.ImageNode = loadInitImg;
+            encodeInitImg.VaeNode = model1;
+
+            var samplerBase = (NmkdKSampler)nodesDict["SamplerBase"]; // Sampler Base
+            samplerBase.AddNoise = true;
+            samplerBase.NodeModel = loraLoader;
+            samplerBase.NodePositive = encodePosPromptBase;
+            samplerBase.NodeNegative = encodeNegPromptBase;
+            samplerBase.NodeLatentImage = g.InitImg.IsNotEmpty() ? (INode)encodeInitImg : (INode)emptyLatentImg;
+            samplerBase.SamplerName = GetComfySampler(g.Sampler);
+            samplerBase.Scheduler = GetComfyScheduler(g);
+            samplerBase.NodeSeed = seed;
+            samplerBase.NodeSteps = steps;
+            samplerBase.NodeCfg = cfg;
+            samplerBase.NodeStartStep = stepsSkip;
+            samplerBase.NodeEndStep = stepsBase;
+            samplerBase.ReturnLeftoverNoise = refine;
+            samplerBase.Denoise = g.InitImg.IsNotEmpty() ? g.InitStrength :  1.0f;
+
+            var latentUpscale = (LatentUpscale)nodesDict["UpscaleLatent"]; // Latent Upscale
+            latentUpscale.Width = g.TargetResolution.Width;
+            latentUpscale.Height = g.TargetResolution.Height;
+            latentUpscale.LatentsNode = samplerBase;
+
+            var samplerHires = (NmkdKSampler)nodesDict["SamplerHires"]; // Sampler Hi-Res
+            samplerHires.AddNoise = true;
+            samplerHires.NodeModel = loraLoader;
+            samplerHires.NodePositive = encodePosPromptBase;
+            samplerHires.NodeNegative = encodeNegPromptBase;
+            samplerHires.NodeLatentImage = latentUpscale;
+            samplerHires.SamplerName = GetComfySampler(g.Sampler);
+            samplerHires.Scheduler = "simple"; // TODO: CHECK IN UI IF THIS IS NEEDED OR NOT
+            samplerHires.NodeSeed = seed;
+            samplerHires.NodeSteps = steps;
+            samplerHires.NodeCfg = cfg;
+            samplerHires.NodeStartStep = stepsSkip;
+            samplerHires.NodeEndStep = stepsBase;
+            samplerHires.ReturnLeftoverNoise = refine;
+
+            var samplerRefiner = (NmkdKSampler)nodesDict["SamplerRefiner"]; // Sampler Refiner
+            samplerRefiner.AddNoise = false;
+            samplerRefiner.NodeModel = model2;
+            samplerRefiner.NodePositive = encodePosPromptRefiner;
+            samplerRefiner.NodeNegative = encodeNegPromptRefiner;
+            samplerRefiner.NodeLatentImage = upscale ? (INode)samplerHires : (INode)samplerBase;
+            samplerRefiner.SamplerName = "euler";
+            samplerRefiner.Scheduler = "normal";
+            samplerRefiner.NodeSeed = seed;
+            samplerRefiner.NodeSteps = steps;
+            samplerRefiner.NodeCfg = cfg;
+            samplerRefiner.NodeStartStep = stepsBase;
+            samplerRefiner.NodeEndStep = stepsMax;
+            samplerRefiner.ReturnLeftoverNoise = false;
+
+            var vaeDecode = (VAEDecode)nodesDict["VAEDecode"]; // Final VAE Decode
+            vaeDecode.VaeNode = model1;
+            vaeDecode.LatentsNode = samplerBase;
+            if (refine) vaeDecode.LatentsNode = samplerRefiner;
+            if (!refine && upscale) vaeDecode.LatentsNode = samplerHires;
+
+            var upscaler = (NmkdImageUpscale)nodesDict["ImageUpscale"]; // Upscale Image
+            upscaler.UpscaleModelPath = g.Upscaler;
+            upscaler.ImageNode = vaeDecode;
+
+            var saveImage = (SaveImage)nodesDict["Save"]; // Save Image
+            saveImage.Prefix = $"nmkd{FormatUtils.GetUnixTimestamp()}";
+            saveImage.ImageNode = upscaler;
+
+            var nodeStrings = new List<string>();
+
+            foreach(INode node in nodes.Where(n => n != null))
             {
-                if (node == null)
+                try
                 {
-                    continue;
+                    nodeStrings.Add($"\"{node.Id}\":{{{node.GetString()}}}");
                 }
-                else if (node.Type == NodeType.Reroute)
+                catch
                 {
-                    continue;
+                    Logger.Log($"Warning: Failed to parse node {node.Id} {node.Title}");
                 }
-                else if (node.Type == NodeType.NmkdStringConstant)
-                {
-                    string str = "";
-                    if (node.Title == "PromptPos") str = g.Prompt;
-                    if (node.Title == "PromptNeg") str = g.NegativePrompt;
-                    node.Class = new ComfyNodes.NmkdStringConstant() { Text = str };
-                }
-                else if (node.Type == NodeType.NmkdIntegerConstant)
-                {
-                    long val = 0;
-                    if (node.Title == "Seed") val = g.Seed;
-                    if (node.Title == "Steps") val = g.Steps;
-                    if (node.Title == "StepsBase") val = baseSteps;
-                    if (node.Title == "StepsSkip") val = 0;
-                    if (node.Title == "StepsMax") val = 1000;
-                    node.Class = new ComfyNodes.NmkdIntegerConstant() { Value = val };
-                }
-                else if (node.Type == NodeType.NmkdFloatConstant)
-                {
-                    float val = 0f;
-                    if (node.Title == "Cfg") val = g.Scale;
-                    node.Class = new ComfyNodes.NmkdFloatConstant() { Value = val };
-                }
-                else if (node.Type == NodeType.CheckpointLoaderSimple)
-                {
-                    node.Class = new ComfyNodes.CheckpointLoaderSimple();
-                }
-                else if (node.Type == NodeType.NmkdCheckpointLoader)
-                {
-                    if (node.Title == "Model1")
-                        node.Class = new ComfyNodes.NmkdCheckpointLoader() { ModelPath = g.Model, LoadVae = true, VaePath = g.Vae != null ? g.Vae : "" };
-                    if (node.Title == "Model2")
-                        node.Class = new ComfyNodes.NmkdCheckpointLoader() { ModelPath = g.ModelRefiner == null ? g.Model : g.ModelRefiner, LoadVae = false };
-                }
-                else if (node.Type == NodeType.NmkdMultiLoraLoader)
-                {
-                    node.Class = new ComfyNodes.NmkdMultiLoraLoader() { Loras = g.Loras.Keys.ToList(), Weights = g.Loras.Values.ToList(), ModelNode = nodesDict["Model1"], ClipNode = nodesDict["ClipSkipModel1"] };
-                }
-                else if (node.Type == NodeType.NmkdImageLoader)
-                {
-                    node.Class = new ComfyNodes.NmkdImageLoader() { ImagePath = g.InitImg };
-                }
-                else if (node.Type == NodeType.NmkdImageUpscale)
-                {
-                    node.Class = new ComfyNodes.NmkdImageUpscale() { UpscaleModelPath = g.Upscaler, ImageNode = nodesDict["VAEDecode"] };
-                }
-                else if (node.Type == NodeType.VAELoader)
-                {
-                    node.Class = new ComfyNodes.VAELoader();
-                }
-                else if (node.Type == NodeType.KSampler)
-                {
-                    continue;
-                }
-                else if (node.Type == NodeType.NmkdKSampler)
-                {
-                    bool baseSampler = !node.Title.Lower().Contains("refine") || !refine;
-                    var latentsNode = nodesDict[g.InitImg.IsNotEmpty() ? "InitImgEncode" : "EmptyLatentImage"];
-                    if (node.Title == "SamplerHires" && !upscale) continue;
-                    if (node.Title == "SamplerHires") latentsNode = nodesDict["UpscaleLatent"];
-                    if (node.Title == "SamplerRefiner") latentsNode = upscale ? nodesDict["SamplerHires"] : nodesDict["SamplerBase"];
-
-                    node.Class = new ComfyNodes.NmkdKSampler()
-                    {
-                        AddNoise = baseSampler,
-                        SamplerName = baseSampler ? GetComfySampler(g.Sampler) : "euler",
-                        Scheduler = baseSampler ? (node.Title.Contains("Hires") ? "simple" : GetComfyScheduler(g)) : "normal", // Base = From Sampler, Hires = Simple, Refiner = Normal
-                        NodeSeed = nodesDict["Seed"],
-                        NodeSteps = nodesDict["Steps"],
-                        NodeCfg = nodesDict["Cfg"],
-                        NodeStartStep = baseSampler ? nodesDict["StepsSkip"] : nodesDict["StepsBase"],
-                        NodeEndStep = baseSampler ? nodesDict["StepsBase"] : nodesDict["StepsMax"],
-                        ReturnLeftoverNoise = baseSampler & refine,
-                        Denoise = node.Title == "SamplerBase" && g.InitImg.IsNotEmpty() ? g.InitStrength : 1f,
-                        NodeModel = baseSampler ? nodesDict["LoraLoader1"] : nodesDict["Model2"],
-                        NodePositive = baseSampler ? nodesDict["EncodePosPromptBase"] : nodesDict["EncodePosPromptRefiner"],
-                        NodeNegative = baseSampler ? nodesDict["EncodeNegPromptBase"] : nodesDict["EncodeNegPromptRefiner"],
-                        NodeLatentImage = latentsNode,
-                        DebugString = node.Title,
-                    };
-                }
-                else if (node.Type == NodeType.CLIPTextEncode)
-                {
-                    var textNode = nodesDict[node.Title.Contains("Pos") ? "PromptPos" : "PromptNeg"];
-                    var clipSkipNode = nodesDict[node.Title.Contains("Refine") ? "ClipSkipModel2" : "LoraLoader1"];
-                    node.Class = new ComfyNodes.CLIPTextEncode() { TextNode = textNode, ClipNode = clipSkipNode };
-                }
-                else if (node.Type == NodeType.CLIPSetLastLayer)
-                {
-                    var clipNode = (node.Title.Contains("Model1") || !refine) ? nodesDict["Model1"] : nodesDict["Model2"];
-                    node.Class = new ComfyNodes.CLIPSetLastLayer() { Skip = g.ClipSkip, ClipNode = clipNode };
-                }
-                else if (node.Type == NodeType.EmptyLatentImage)
-                {
-                    node.Class = new ComfyNodes.EmptyLatentImage() { Width = baseWidth, Height = baseHeight, BatchSize = 1 };
-                }
-                else if (node.Type == NodeType.LatentUpscale)
-                {
-                    node.Class = new ComfyNodes.LatentUpscale() { Width = g.TargetResolution.Width, Height = g.TargetResolution.Height, IdLatents = nodesDict["SamplerBase"].Id };
-                }
-                else if (node.Type == NodeType.LatentUpscaleBy)
-                {
-                    node.Class = new ComfyNodes.LatentUpscaleBy() { ScaleFactor = 1.5f, IdLatents = nodesDict["SamplerBase"].Id };
-                }
-                else if (node.Type == NodeType.CRLatentInputSwitch)
-                {
-                    if (node.Title == "HiResSwitch")
-                        node.Class = new ComfyNodes.CRLatentInputSwitch() { IdLatents1 = nodesDict["SamplerBase"].Id, IdLatents2 = nodesDict["SamplerHires"].Id };
-                }
-                else if (node.Type == NodeType.VAEDecode)
-                {
-                    string latentsNode = "SamplerBase";
-                    if (refine) latentsNode = "SamplerRefiner";
-                    if (!refine && upscale) latentsNode = "SamplerHires";
-                    node.Class = new ComfyNodes.VAEDecode() { LatentsNode = nodesDict[latentsNode], VaeNode = nodesDict["Model1"] };
-                }
-                else if (node.Type == NodeType.VAEEncode)
-                {
-                    node.Class = new ComfyNodes.VAEEncode() { ImageNode = nodesDict["InitImg"], VaeNode = nodesDict["Model1"] };
-                }
-                else if (node.Type == NodeType.SaveImage)
-                {
-                    node.Class = new ComfyNodes.SaveImage() { Prefix = $"nmkd{FormatUtils.GetUnixTimestamp()}", ImageNode = nodesDict["VAEDecode"] };
-                }
-                else
-                {
-                    Logger.Log($"Warning: No node class found for node with type '{node.Type}' and title '{node.Title}'", true);
-                    continue;
-                }
-
-                nodeCounts.GetPopulate(node.Type, 0);
-                nodeCounts[node.Type] = nodeCounts[node.Type] + 1;
             }
 
-            prompt += string.Join(",", nodes.Where(n => n.Class != null).Select(n => $"\"{n.Id}\":{{{n.Class.GetString()}}}"));
+            prompt += string.Join(",", nodeStrings);
             return prompt;
         }
 
-        public static List<Node> GetNodes(string comfyPrompt)
+        public static List<INode> GetNodes(string comfyPrompt)
         {
-            var nodesList = new List<Node>();
+            var nodesList = new List<INode>();
             comfyPrompt = "\"nodes\": [" + comfyPrompt.Split("\"nodes\": [")[1]; // Cut off everything before nodes
             comfyPrompt = comfyPrompt.Split("\n  ],")[0];
 
@@ -240,8 +217,38 @@ namespace StableDiffusionGui.Implementations
                     int id = lines[i].GetInt();
                     string type = lines[i + 1].Split("\"type\":")[1].Trim().Trim(',').Trim('\"');
                     string title = (i + 2 < lines.Count) && lines[i + 2].Trim().StartsWith("\"title\":") ? lines[i + 2].Split("\"title\":")[1].Trim().Trim(',').Trim('\"') : "";
-                    var enumType = ParseUtils.GetEnum<NodeType>(type.Remove(" "), false);
-                    nodesList.Add(new Node() { Id = id, Type = enumType, Title = title });
+                    // var enumType = ParseUtils.GetEnum<NodeType>(type.Remove(" "), false);
+
+                    INode newNode = null;
+
+                    if (type == "CheckpointLoaderSimple") newNode = new CheckpointLoaderSimple();
+                    if (type == "VAELoader") newNode = new VAELoader();
+                    if (type == "CLIPTextEncode") newNode = new CLIPTextEncode();
+                    if (type == "KSampler") newNode = new KSampler();
+                    if (type == "NmkdKSampler") newNode = new NmkdKSampler();
+                    if (type == "VAEDecode") newNode = new VAEDecode();
+                    if (type == "VAEEncode") newNode = new VAEEncode();
+                    if (type == "EmptyLatentImage") newNode = new EmptyLatentImage();
+                    if (type == "SaveImage") newNode = new SaveImage();
+                    if (type == "LatentUpscale") newNode = new LatentUpscale();
+                    if (type == "LatentUpscaleBy") newNode = new LatentUpscaleBy();
+                    if (type == "CRLatentInputSwitch") newNode = new CRLatentInputSwitch();
+                    if (type == "NmkdIntegerConstant") newNode = new NmkdIntegerConstant();
+                    if (type == "NmkdFloatConstant") newNode = new NmkdFloatConstant();
+                    if (type == "NmkdStringConstant") newNode = new NmkdStringConstant();
+                    if (type == "NmkdCheckpointLoader") newNode = new NmkdCheckpointLoader();
+                    if (type == "CLIPSetLastLayer") newNode = new CLIPSetLastLayer();
+                    if (type == "NmkdImageLoader") newNode = new NmkdImageLoader();
+                    if (type == "NmkdImageUpscale") newNode = new NmkdImageUpscale();
+                    if (type == "NmkdMultiLoraLoader") newNode = new NmkdMultiLoraLoader();
+
+                    if (newNode == null)
+                        continue;
+
+                    ((Node)newNode).Id = id;
+                    ((Node)newNode).Title = title;
+
+                    nodesList.Add(newNode);
                 }
             }
 

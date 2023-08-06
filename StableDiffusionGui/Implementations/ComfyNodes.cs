@@ -7,18 +7,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static StableDiffusionGui.Implementations.ComfyNodes;
-using static StableDiffusionGui.Implementations.InvokeAiMetadata;
+using static StableDiffusionGui.Implementations.ComfyWorkflow;
 
 namespace StableDiffusionGui.Implementations
 {
     public class ComfyNodes
     {
-        public interface IComfyNode
+        public interface INode
         {
+            int Id { get; set; }
+            string Title { get; set; }
             string GetString();
         }
 
-        public class NmkdIntegerConstant : IComfyNode
+        public class NmkdIntegerConstant : Node, INode
         {
             public long Value;
 
@@ -28,7 +30,7 @@ namespace StableDiffusionGui.Implementations
             }
         }
 
-        public class NmkdFloatConstant : IComfyNode
+        public class NmkdFloatConstant : Node, INode
         {
             public float Value;
 
@@ -38,7 +40,7 @@ namespace StableDiffusionGui.Implementations
             }
         }
 
-        public class NmkdStringConstant : IComfyNode
+        public class NmkdStringConstant : Node, INode
         {
             public string Text;
 
@@ -48,7 +50,7 @@ namespace StableDiffusionGui.Implementations
             }
         }
 
-        public class CheckpointLoaderSimple : IComfyNode
+        public class CheckpointLoaderSimple : Node, INode
         {
             public string CkptName = "";
 
@@ -58,7 +60,7 @@ namespace StableDiffusionGui.Implementations
             }
         }
 
-        public class VAELoader : IComfyNode
+        public class VAELoader : Node, INode
         {
             public string VaeName;
 
@@ -68,7 +70,7 @@ namespace StableDiffusionGui.Implementations
             }
         }
 
-        public class KSampler : IComfyNode
+        public class KSampler : Node, INode
         {
             public long Seed;
             public int Steps;
@@ -98,9 +100,9 @@ namespace StableDiffusionGui.Implementations
             }
         }
 
-        public class NmkdKSampler : IComfyNode
+        public class NmkdKSampler : Node, INode
         {
-            public bool AddNoise;
+            public bool AddNoise = true;
             // public long Seed;
             // public int Steps;
             // public float Cfg;
@@ -111,20 +113,23 @@ namespace StableDiffusionGui.Implementations
             public bool ReturnLeftoverNoise;
             public float Denoise = 1f;
 
-            public ComfyWorkflow.Node NodeModel;
-            public ComfyWorkflow.Node NodePositive;
-            public ComfyWorkflow.Node NodeNegative;
-            public ComfyWorkflow.Node NodeLatentImage;
-            public ComfyWorkflow.Node NodeSeed;
-            public ComfyWorkflow.Node NodeSteps;
-            public ComfyWorkflow.Node NodeStartStep;
-            public ComfyWorkflow.Node NodeEndStep;
-            public ComfyWorkflow.Node NodeCfg;
+            public INode NodeModel;
+            public INode NodePositive;
+            public INode NodeNegative;
+            public INode NodeLatentImage;
+            public INode NodeSeed;
+            public INode NodeSteps;
+            public INode NodeStartStep;
+            public INode NodeEndStep;
+            public INode NodeCfg;
 
             public string DebugString = "";
 
             public string GetString()
             {
+                if (DebugString.IsEmpty())
+                    DebugString = Title;
+
                 return $"\"inputs\":{{" +
                     $"\"add_noise\":{(AddNoise ? "enable" : "disable").Wrap()}," +
                     $"\"noise_seed\":[\"{NodeSeed.Id}\",0]," +
@@ -145,7 +150,7 @@ namespace StableDiffusionGui.Implementations
             }
         }
 
-        public class EmptyLatentImage : IComfyNode
+        public class EmptyLatentImage : Node, INode
         {
             public int Width;
             public int Height;
@@ -161,7 +166,7 @@ namespace StableDiffusionGui.Implementations
             }
         }
 
-        public class LatentUpscaleBy : IComfyNode
+        public class LatentUpscaleBy : Node, INode
         {
             public string UpscaleMethod = "nearest-exact";
             public float ScaleFactor = 1.5f;
@@ -177,12 +182,12 @@ namespace StableDiffusionGui.Implementations
             }
         }
 
-        public class LatentUpscale : IComfyNode
+        public class LatentUpscale : Node, INode
         {
             public string UpscaleMethod = "nearest-exact";
             public int Width;
             public int Height;
-            public int IdLatents;
+            public INode LatentsNode;
 
             public string GetString()
             {
@@ -192,14 +197,14 @@ namespace StableDiffusionGui.Implementations
                     { "width", Width.ToString() },
                     { "height", Height.ToString() },
                     { "crop", "disabled".Wrap() },
-                    { "samples", $"[{IdLatents.ToString().Wrap()},0]" },
+                    { "samples", $"[{LatentsNode.Id.ToString().Wrap()},0]" },
                 };
 
                 return GetPropertiesString(dict, "LatentUpscale");
             }
         }
 
-        public class CRLatentInputSwitch : IComfyNode
+        public class CRLatentInputSwitch : Node, INode
         {
             public int Selection;
             public int IdLatents1;
@@ -211,16 +216,16 @@ namespace StableDiffusionGui.Implementations
             }
         }
 
-        public class CLIPTextEncode : IComfyNode
+        public class CLIPTextEncode : Node, INode
         {
-            public ComfyWorkflow.Node TextNode;
-            public ComfyWorkflow.Node ClipNode;
+            public INode TextNode;
+            public INode ClipNode;
 
             public string GetString()
             {
                 int clipNodeOutIndex = 0;
-                if (ClipNode.Type == ComfyWorkflow.NodeType.NmkdCheckpointLoader) clipNodeOutIndex = 1;
-                if (ClipNode.Type == ComfyWorkflow.NodeType.NmkdMultiLoraLoader) clipNodeOutIndex = 1;
+                if (ClipNode is NmkdCheckpointLoader) clipNodeOutIndex = 1;
+                if (ClipNode is NmkdMultiLoraLoader) clipNodeOutIndex = 1;
 
                 return $"\"inputs\":{{" +
                     $"\"text\":[\"{TextNode.Id}\",0]," +
@@ -230,19 +235,19 @@ namespace StableDiffusionGui.Implementations
 
             public override string ToString()
             {
-                return $"CLIPTextEncode - Text Node: '{TextNode}' - CLIP Node: '{ClipNode}'";
+                return $"CLIPTextEncode - '{Title}' - Text Node: '{TextNode}' - CLIP Node: '{ClipNode}'";
             }
         }
 
-        public class VAEDecode : IComfyNode
+        public class VAEDecode : Node, INode
         {
-            public ComfyWorkflow.Node LatentsNode;
-            public ComfyWorkflow.Node VaeNode;
+            public INode LatentsNode;
+            public INode VaeNode;
 
             public string GetString()
             {
                 int vaeNodeOutIndex = 0;
-                if (VaeNode.Type == ComfyWorkflow.NodeType.NmkdCheckpointLoader) vaeNodeOutIndex = 2;
+                if (VaeNode is NmkdCheckpointLoader) vaeNodeOutIndex = 2;
 
                 return $"\"inputs\":{{" +
                     $"\"samples\":[\"{LatentsNode.Id}\",0]," +
@@ -256,15 +261,15 @@ namespace StableDiffusionGui.Implementations
             }
         }
 
-        public class VAEEncode : IComfyNode
+        public class VAEEncode : Node, INode
         {
-            public ComfyWorkflow.Node ImageNode;
-            public ComfyWorkflow.Node VaeNode;
+            public INode ImageNode;
+            public INode VaeNode;
 
             public string GetString()
             {
                 int vaeNodeOutIndex = 0;
-                if (VaeNode.Type == ComfyWorkflow.NodeType.NmkdCheckpointLoader) vaeNodeOutIndex = 2;
+                if (VaeNode is NmkdCheckpointLoader) vaeNodeOutIndex = 2;
 
                 var dict = new Dictionary<string, string>()
                 {
@@ -276,10 +281,10 @@ namespace StableDiffusionGui.Implementations
             }
         }
 
-        public class SaveImage : IComfyNode
+        public class SaveImage : Node, INode
         {
             public string Prefix = "nmkd";
-            public ComfyWorkflow.Node ImageNode;
+            public INode ImageNode;
 
             public string GetString()
             {
@@ -293,7 +298,7 @@ namespace StableDiffusionGui.Implementations
             }
         }
 
-        public class NmkdCheckpointLoader : IComfyNode
+        public class NmkdCheckpointLoader : Node, INode
         {
             public string ModelPath;
             public bool LoadVae;
@@ -317,17 +322,17 @@ namespace StableDiffusionGui.Implementations
             }
         }
 
-        public class NmkdMultiLoraLoader : IComfyNode
+        public class NmkdMultiLoraLoader : Node, INode
         {
             public List<string> Loras;
             public List<float> Weights;
-            public ComfyWorkflow.Node ModelNode;
-            public ComfyWorkflow.Node ClipNode;
+            public INode ModelNode;
+            public INode ClipNode;
 
             public string GetString()
             {
                 int clipNodeIndex = 0;
-                if (ClipNode.Type == ComfyWorkflow.NodeType.NmkdCheckpointLoader || ClipNode.Type == ComfyWorkflow.NodeType.CheckpointLoaderSimple) clipNodeIndex = 1;
+                if (ClipNode is NmkdCheckpointLoader || ClipNode is CheckpointLoaderSimple) clipNodeIndex = 1;
 
                 var dict = new Dictionary<string, string>()
                 {
@@ -346,7 +351,7 @@ namespace StableDiffusionGui.Implementations
             }
         }
 
-        public class NmkdImageLoader : IComfyNode
+        public class NmkdImageLoader : Node, INode
         {
             public string ImagePath;
 
@@ -361,10 +366,10 @@ namespace StableDiffusionGui.Implementations
             }
         }
 
-        public class NmkdImageUpscale : IComfyNode
+        public class NmkdImageUpscale : Node, INode
         {
             public string UpscaleModelPath;
-            public ComfyWorkflow.Node ImageNode;
+            public INode ImageNode;
 
             public string GetString()
             {
@@ -378,15 +383,15 @@ namespace StableDiffusionGui.Implementations
             }
         }
 
-        public class CLIPSetLastLayer : IComfyNode
+        public class CLIPSetLastLayer : Node, INode
         {
             public int Skip = -1;
-            public ComfyWorkflow.Node ClipNode;
+            public INode ClipNode;
 
             public string GetString()
             {
                 int clipNodeIndex = 0;
-                if (ClipNode.Type == ComfyWorkflow.NodeType.NmkdCheckpointLoader || ClipNode.Type == ComfyWorkflow.NodeType.CheckpointLoaderSimple) clipNodeIndex = 1;
+                if (ClipNode is NmkdCheckpointLoader || ClipNode is CheckpointLoaderSimple) clipNodeIndex = 1;
 
                 var dict = new Dictionary<string, string>()
                 {
