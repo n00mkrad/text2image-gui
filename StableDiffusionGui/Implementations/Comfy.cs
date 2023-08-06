@@ -14,7 +14,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using static StableDiffusionGui.Implementations.ComfyWorkflow;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
 namespace StableDiffusionGui.Implementations
@@ -252,6 +251,7 @@ namespace StableDiffusionGui.Implementations
 
                 Logger.Log($"Loading Stable Diffusion with model {s.Model.Trunc(80).Wrap()}...");
 
+                var sw = new NmkdStopwatch();
                 TtiProcess.ProcessExistWasIntentional = false;
                 py.Start();
                 TtiProcess.CurrentProcess = py;
@@ -266,6 +266,7 @@ namespace StableDiffusionGui.Implementations
                 Task.Run(() => TtiProcess.CheckStillRunning());
 
                 await Logger.WaitForMessageAsync("To see the GUI go to:", contains: true);
+                Logger.Log($"Comfy startup time: {sw.ElapsedMs} ms", true);
             }
             else
             {
@@ -274,15 +275,15 @@ namespace StableDiffusionGui.Implementations
             }
 
             string wf = File.ReadAllText(Path.Combine(Paths.GetDataPath(), "comfy", "wf", "workflow.json"));
-            wf = wf.Trim().TrimStart('{').TrimEnd('}');
-            var nodes = ComfyWorkflow.GetNodes(wf).OrderBy(n => nameof(n)).ThenBy(n => ((Node)n).Title).ToList().ToList();
-            // GenerationInfo test = new GenerationInfo { Model = model, ModelRefiner = refineModel, Prompt = s.Prompts[0], NegativePrompt = s.NegativePrompt, Steps = s.Steps[0], Seed = s.Seed, Scale = s.ScalesTxt[0], RefinerStrength = s.RefinerStrengths[0], Width = s.Res.Width, Height = s.Res.Height };
+            var nodes = ComfyWorkflow.GetNodes(wf).OrderBy(n => nameof(n)).ThenBy(n => n.Title).ToList().ToList();
 
             foreach (var genInfo in generations.Where(g => g.Model.IsNotEmpty()))
             {
-                string meta = genInfo.GetMetadataDict().ToJson();
-                string req = $"{{\"client_id\":\"{Paths.SessionTimestampUnix}\",\"prompt\":{{{ComfyWorkflow.BuildPrompt(genInfo, nodes)}}},\"extra_data\":{{\"extra_pnginfo\":{{\"workflow\":{{{wf}}},\"Nmkdiffusers\":{meta}}}}}}}";
-                string resp = await ApiPost(req);
+                var promptItems = ComfyWorkflow.GetPromptInfos(genInfo, nodes);
+                var req = new ComfyWorkflow.PromptRequest() { ClientId = Paths.SessionTimestampUnix.ToString(), Prompt = promptItems };
+                req.ExtraData.ExtraPnginfo["GenerationInfo"] = genInfo.GetMetadataDict();
+                string reqString = req.ToString();
+                string resp = await ApiPost(reqString);
 
                 if (resp.IsEmpty())
                     break;

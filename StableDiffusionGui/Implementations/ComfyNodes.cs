@@ -1,12 +1,10 @@
-﻿using HTAlt;
-using StableDiffusionGui.Io;
+﻿using StableDiffusionGui.Io;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static StableDiffusionGui.Implementations.ComfyNodes;
+using static Microsoft.WindowsAPICodePack.Shell.PropertySystem.SystemProperties.System;
+using System.Reflection;
 using static StableDiffusionGui.Implementations.ComfyWorkflow;
 
 namespace StableDiffusionGui.Implementations
@@ -17,16 +15,28 @@ namespace StableDiffusionGui.Implementations
         {
             int Id { get; set; }
             string Title { get; set; }
-            string GetString();
+            NodeInfo GetNodeInfo();
         }
 
         public class NmkdIntegerConstant : Node, INode
         {
             public long Value;
 
-            public string GetString()
+            public NodeInfo GetNodeInfo()
             {
-                return $"\"inputs\":{{\"value\":{Value}}},\"class_type\":\"NmkdIntegerConstant\"";
+                return new NodeInfo
+                {
+                    Inputs = new Dictionary<string, object>
+                    {
+                        ["value"] = Value
+                    },
+                    ClassType = nameof(NmkdIntegerConstant)
+                };
+            }
+
+            public override string ToString()
+            {
+                return ToStringNode(this);
             }
         }
 
@@ -34,9 +44,21 @@ namespace StableDiffusionGui.Implementations
         {
             public float Value;
 
-            public string GetString()
+            public NodeInfo GetNodeInfo()
             {
-                return $"\"inputs\":{{\"value\":{Value.ToStringDot("0.#####")}}},\"class_type\":\"NmkdFloatConstant\"";
+                return new NodeInfo
+                {
+                    Inputs = new Dictionary<string, object>
+                    {
+                        ["value"] = Value
+                    },
+                    ClassType = nameof(NmkdFloatConstant)
+                };
+            }
+
+            public override string ToString()
+            {
+                return ToStringNode(this);
             }
         }
 
@@ -44,9 +66,21 @@ namespace StableDiffusionGui.Implementations
         {
             public string Text;
 
-            public string GetString()
+            public NodeInfo GetNodeInfo()
             {
-                return $"\"inputs\":{{\"value\":{Text.Wrap()}}},\"class_type\":\"NmkdStringConstant\"";
+                return new NodeInfo
+                {
+                    Inputs = new Dictionary<string, object>
+                    {
+                        ["value"] = Text
+                    },
+                    ClassType = nameof(NmkdStringConstant)
+                };
+            }
+
+            public override string ToString()
+            {
+                return ToStringNode(this);
             }
         }
 
@@ -54,9 +88,21 @@ namespace StableDiffusionGui.Implementations
         {
             public string CkptName = "";
 
-            public string GetString()
+            public NodeInfo GetNodeInfo()
             {
-                return $"\"inputs\":{{\"ckpt_name\":{CkptName.Wrap()}}},\"class_type\":\"CheckpointLoaderSimple\"";
+                return new NodeInfo
+                {
+                    Inputs = new Dictionary<string, object>
+                    {
+                        ["ckpt_name"] = CkptName
+                    },
+                    ClassType = nameof(CheckpointLoaderSimple)
+                };
+            }
+
+            public override string ToString()
+            {
+                return ToStringNode(this);
             }
         }
 
@@ -64,9 +110,18 @@ namespace StableDiffusionGui.Implementations
         {
             public string VaeName;
 
-            public string GetString()
+            public NodeInfo GetNodeInfo()
             {
-                return $"\"inputs\":{{\"vae_name\":{VaeName.Wrap()}}},\"class_type\":\"VAELoader\"";
+                return new NodeInfo
+                {
+                    Inputs = { ["vae_name"] = VaeName },
+                    ClassType = nameof(VAELoader)
+                };
+            }
+
+            public override string ToString()
+            {
+                return ToStringNode(this);
             }
         }
 
@@ -78,38 +133,42 @@ namespace StableDiffusionGui.Implementations
             public string SamplerName = "dpmpp_2m";
             public string Scheduler = "normal";
             public float Denoise = 1.0f;
-            public int IdModel;
-            public int IdPositivePrompt;
-            public int IdNegativePrompt;
-            public int IdLatentImage;
+            public int ModelNode;
+            public int PosPromptNode;
+            public int NegPromptNode;
+            public int LatentImageNode;
 
-            public string GetString()
+            public NodeInfo GetNodeInfo()
             {
-                return $"\"inputs\":{{" +
-                    $"\"seed\":{Seed}," +
-                    $"\"steps\":{Steps}," +
-                    $"\"cfg\":{Cfg.ToStringDot("0.####")}," +
-                    $"\"sampler_name\":\"{SamplerName}\"," +
-                    $"\"scheduler\":\"{Scheduler}\"," +
-                    $"\"denoise\":{Denoise}," +
-                    $"\"model\":[\"{IdModel}\",0]," +
-                    $"\"positive\":[\"{IdPositivePrompt}\",0]," +
-                    $"\"negative\":[\"{IdNegativePrompt}\",0]," +
-                    $"\"latent_image\":[\"{IdLatentImage}\",0]" +
-                    $"}},\"class_type\":\"KSamplerAdvanced\"";
+                return new NodeInfo()
+                {
+                    Inputs = {
+                        ["seed"] = Seed,
+                        ["steps"] = Steps,
+                        ["cfg"] = Cfg,
+                        ["sampler_name"] = SamplerName,
+                        ["scheduler"] = Scheduler,
+                        ["denoise"] = Denoise,
+                        ["model"] = new object[] { ModelNode.ToString(), 0 },
+                        ["positive"] = new object[] { PosPromptNode.ToString(), 0 },
+                        ["negative"] = new object[] { NegPromptNode.ToString(), 0 },
+                        ["latent_image"] = new object[] { LatentImageNode.ToString(), 0 }
+                    },
+                    ClassType = "KSamplerAdvanced"
+                };
+            }
+
+            public override string ToString()
+            {
+                return ToStringNode(this);
             }
         }
 
         public class NmkdKSampler : Node, INode
         {
             public bool AddNoise = true;
-            // public long Seed;
-            // public int Steps;
-            // public float Cfg;
             public string SamplerName = "dpmpp_2m";
             public string Scheduler = "normal";
-            // public int StartStep;
-            // public int EndStep;
             public bool ReturnLeftoverNoise;
             public float Denoise = 1f;
 
@@ -125,28 +184,37 @@ namespace StableDiffusionGui.Implementations
 
             public string DebugString = "";
 
-            public string GetString()
+            public NodeInfo GetNodeInfo()
             {
                 if (DebugString.IsEmpty())
                     DebugString = Title;
 
-                return $"\"inputs\":{{" +
-                    $"\"add_noise\":{(AddNoise ? "enable" : "disable").Wrap()}," +
-                    $"\"noise_seed\":[\"{NodeSeed.Id}\",0]," +
-                    $"\"steps\":[\"{NodeSteps.Id}\",0]," +
-                    $"\"cfg\":[\"{NodeCfg.Id}\",0]," +
-                    $"\"sampler_name\":\"{SamplerName}\"," +
-                    $"\"scheduler\":\"{Scheduler}\"," +
-                    $"\"start_at_step\":[\"{NodeStartStep.Id}\",0]," +
-                    $"\"end_at_step\":[\"{NodeEndStep.Id}\",0]," +
-                    $"\"return_with_leftover_noise\":{(ReturnLeftoverNoise ? "enable" : "disable").Wrap()}," +
-                    $"\"denoise\":{Denoise.ToStringDot("0.######")}," +
-                    $"\"model\":[\"{NodeModel.Id}\",0]," +
-                    $"\"positive\":[\"{NodePositive.Id}\",0]," +
-                    $"\"negative\":[\"{NodeNegative.Id}\",0]," +
-                    $"\"latent_image\":[\"{NodeLatentImage.Id}\",0]," +
-                    $"\"debug_string\":\"{DebugString}\"" +
-                    $"}},\"class_type\":\"NmkdKSampler\"";
+                return new NodeInfo()
+                {
+                    Inputs = {
+                        ["add_noise"] = AddNoise ? "enable" : "disable",
+                        ["noise_seed"] = new object[] { NodeSeed.Id.ToString(), 0 },
+                        ["steps"] = new object[] { NodeSteps.Id.ToString(), 0 },
+                        ["cfg"] = new object[] { NodeCfg.Id.ToString(), 0 },
+                        ["sampler_name"] = SamplerName,
+                        ["scheduler"] = Scheduler,
+                        ["start_at_step"] = new object[] { NodeStartStep.Id.ToString(), 0 },
+                        ["end_at_step"] = new object[] { NodeEndStep.Id.ToString(), 0 },
+                        ["return_with_leftover_noise"] = ReturnLeftoverNoise ? "enable" : "disable",
+                        ["denoise"] = Denoise,
+                        ["model"] = new object[] { NodeModel.Id.ToString(), 0 },
+                        ["positive"] = new object[] { NodePositive.Id.ToString(), 0 },
+                        ["negative"] = new object[] { NodeNegative.Id.ToString(), 0 },
+                        ["latent_image"] = new object[] { NodeLatentImage.Id.ToString(), 0 },
+                        ["debug_string"] = DebugString
+                    },
+                    ClassType = nameof(NmkdKSampler),
+                };
+            }
+
+            public override string ToString()
+            {
+                return ToStringNode(this);
             }
         }
 
@@ -156,13 +224,22 @@ namespace StableDiffusionGui.Implementations
             public int Height;
             public int BatchSize = 1;
 
-            public string GetString()
+            public NodeInfo GetNodeInfo()
             {
-                return $"\"inputs\":{{" +
-                    $"\"width\":{Width}," +
-                    $"\"height\":{Height}," +
-                    $"\"batch_size\":1" +
-                    $"}},\"class_type\":\"EmptyLatentImage\"";
+                return new NodeInfo
+                {
+                    Inputs = {
+                        ["width"] = Width,
+                        ["height"] = Height,
+                        ["batch_size"] = 1
+                    },
+                    ClassType = nameof(EmptyLatentImage)
+                };
+            }
+
+            public override string ToString()
+            {
+                return ToStringNode(this);
             }
         }
 
@@ -172,13 +249,23 @@ namespace StableDiffusionGui.Implementations
             public float ScaleFactor = 1.5f;
             public int IdLatents;
 
-            public string GetString()
+            public NodeInfo GetNodeInfo()
             {
-                return $"\"inputs\":{{" +
-                    $"\"upscale_method\":\"{UpscaleMethod}\"," +
-                    $"\"scale_by\":{ScaleFactor.ToStringDot("0.######")}," +
-                    $"\"samples\":[\"{IdLatents}\",0]" +
-                    $"}},\"class_type\":\"LatentUpscaleBy\"";
+                return new NodeInfo
+                {
+                    Inputs = new Dictionary<string, object>
+                    {
+                        ["upscale_method"] = UpscaleMethod,
+                        ["scale_by"] = ScaleFactor,
+                        ["samples"] = new object[] { IdLatents, 0 }
+                    },
+                    ClassType = nameof(LatentUpscaleBy)
+                };
+            }
+
+            public override string ToString()
+            {
+                return ToStringNode(this);
             }
         }
 
@@ -189,30 +276,25 @@ namespace StableDiffusionGui.Implementations
             public int Height;
             public INode LatentsNode;
 
-            public string GetString()
+            public NodeInfo GetNodeInfo()
             {
-                var dict = new Dictionary<string, string>()
+                return new NodeInfo
                 {
-                    { "upscale_method", UpscaleMethod.Wrap() },
-                    { "width", Width.ToString() },
-                    { "height", Height.ToString() },
-                    { "crop", "disabled".Wrap() },
-                    { "samples", $"[{LatentsNode.Id.ToString().Wrap()},0]" },
+                    Inputs = new Dictionary<string, object>
+                    {
+                        { "upscale_method", UpscaleMethod },
+                        { "width", Width },
+                        { "height", Height },
+                        { "crop", "disabled" },
+                        { "samples", new object[] { LatentsNode.Id.ToString(), 0 } }
+                    },
+                    ClassType = nameof(LatentUpscale)
                 };
-
-                return GetPropertiesString(dict, "LatentUpscale");
             }
-        }
 
-        public class CRLatentInputSwitch : Node, INode
-        {
-            public int Selection;
-            public int IdLatents1;
-            public int IdLatents2;
-
-            public string GetString()
+            public override string ToString()
             {
-                return $"\"inputs\": {{\"Input\": {Selection + 1}, \"latent1\": [\"{IdLatents1}\", 0], \"latent2\": [\"{IdLatents2}\", 0]}}, \"class_type\": \"CR Latent Input Switch\"";
+                return ToStringNode(this);
             }
         }
 
@@ -221,21 +303,25 @@ namespace StableDiffusionGui.Implementations
             public INode TextNode;
             public INode ClipNode;
 
-            public string GetString()
+            public NodeInfo GetNodeInfo()
             {
                 int clipNodeOutIndex = 0;
                 if (ClipNode is NmkdCheckpointLoader) clipNodeOutIndex = 1;
                 if (ClipNode is NmkdMultiLoraLoader) clipNodeOutIndex = 1;
 
-                return $"\"inputs\":{{" +
-                    $"\"text\":[\"{TextNode.Id}\",0]," +
-                    $"\"clip\":[\"{ClipNode.Id}\",{clipNodeOutIndex}]" +
-                    $"}},\"class_type\":\"CLIPTextEncode\"";
+                return new NodeInfo
+                {
+                    Inputs = {
+                        ["text"] = new object[] { TextNode.Id.ToString(), 0 },
+                        ["clip"] = new object[] { ClipNode.Id.ToString(), clipNodeOutIndex }
+                    },
+                    ClassType = nameof(CLIPTextEncode)
+                };
             }
 
             public override string ToString()
             {
-                return $"CLIPTextEncode - '{Title}' - Text Node: '{TextNode}' - CLIP Node: '{ClipNode}'";
+                return ToStringNode(this);
             }
         }
 
@@ -244,20 +330,25 @@ namespace StableDiffusionGui.Implementations
             public INode LatentsNode;
             public INode VaeNode;
 
-            public string GetString()
+            public NodeInfo GetNodeInfo()
             {
                 int vaeNodeOutIndex = 0;
                 if (VaeNode is NmkdCheckpointLoader) vaeNodeOutIndex = 2;
 
-                return $"\"inputs\":{{" +
-                    $"\"samples\":[\"{LatentsNode.Id}\",0]," +
-                    $"\"vae\":[\"{VaeNode.Id}\",{vaeNodeOutIndex}]}}," +
-                    $"\"class_type\":\"VAEDecode\"";
+                return new NodeInfo
+                {
+                    Inputs = new Dictionary<string, object>
+                    {
+                        ["samples"] = new object[] { LatentsNode.Id.ToString(), 0 },
+                        ["vae"] = new object[] { VaeNode.Id.ToString(), vaeNodeOutIndex }
+                    },
+                    ClassType = nameof(VAEDecode)
+                };
             }
 
             public override string ToString()
             {
-                return $"VAEDecode - Latents Node: '{LatentsNode}' - VAE Node: '{VaeNode}'";
+                return ToStringNode(this);
             }
         }
 
@@ -266,18 +357,27 @@ namespace StableDiffusionGui.Implementations
             public INode ImageNode;
             public INode VaeNode;
 
-            public string GetString()
+            public NodeInfo GetNodeInfo()
             {
                 int vaeNodeOutIndex = 0;
                 if (VaeNode is NmkdCheckpointLoader) vaeNodeOutIndex = 2;
 
-                var dict = new Dictionary<string, string>()
+                var inputs = new Dictionary<string, object>()
                 {
-                    { "pixels", $"[{ImageNode.Id.ToString().Wrap()},0]" },
-                    { "vae", $"[{VaeNode.Id.ToString().Wrap()},{vaeNodeOutIndex}]" },
+                    { "pixels", new object[] { ImageNode.Id.ToString(), 0 } },
+                    { "vae", new object[] { VaeNode.Id.ToString(), vaeNodeOutIndex } },
                 };
 
-                return GetPropertiesString(dict, "VAEEncode");
+                return new NodeInfo
+                {
+                    Inputs = inputs,
+                    ClassType = nameof(VAEEncode)
+                };
+            }
+
+            public override string ToString()
+            {
+                return ToStringNode(this);
             }
         }
 
@@ -286,15 +386,24 @@ namespace StableDiffusionGui.Implementations
             public string Prefix = "nmkd";
             public INode ImageNode;
 
-            public string GetString()
+            public NodeInfo GetNodeInfo()
             {
-                var dict = new Dictionary<string, string>()
+                var inputs = new Dictionary<string, object>()
                 {
-                    { "filename_prefix", Prefix.Wrap() },
-                    { "images", $"[{ImageNode.Id.ToString().Wrap()},0]" },
+                    { "filename_prefix", Prefix },
+                    { "images", new object[] { ImageNode.Id.ToString(), 0 } }
                 };
 
-                return GetPropertiesString(dict, "SaveImage");
+                return new NodeInfo
+                {
+                    Inputs = inputs,
+                    ClassType = nameof(SaveImage)
+                };
+            }
+
+            public override string ToString()
+            {
+                return ToStringNode(this);
             }
         }
 
@@ -304,21 +413,25 @@ namespace StableDiffusionGui.Implementations
             public bool LoadVae;
             public string VaePath;
 
-            public string GetString()
+            public NodeInfo GetNodeInfo()
             {
-                var dict = new Dictionary<string, string>()
+                var dict = new Dictionary<string, object>()
                 {
-                    { "mdl_path", ModelPath.Wrap(true) },
-                    { "load_vae", (LoadVae ? "enable" : "disable").Wrap() },
-                    { "vae_path", VaePath.Wrap(true) },
+                    { "mdl_path", ModelPath },
+                    { "load_vae", LoadVae ? "enable" : "disable" },
+                    { "vae_path", VaePath },
                 };
 
-                return GetPropertiesString(dict, "NmkdCheckpointLoader");
+                return new NodeInfo
+                {
+                    Inputs = dict,
+                    ClassType = nameof(NmkdCheckpointLoader)
+                };
             }
 
             public override string ToString()
             {
-                return $"NmkdCheckpointLoader - Model: {ModelPath} - Load VAE: {LoadVae} - VAE: {VaePath}";
+                return ToStringNode(this);
             }
         }
 
@@ -329,25 +442,30 @@ namespace StableDiffusionGui.Implementations
             public INode ModelNode;
             public INode ClipNode;
 
-            public string GetString()
+            public NodeInfo GetNodeInfo()
             {
                 int clipNodeIndex = 0;
-                if (ClipNode is NmkdCheckpointLoader || ClipNode is CheckpointLoaderSimple) clipNodeIndex = 1;
+                if (ClipNode is NmkdCheckpointLoader || ClipNode is CheckpointLoaderSimple)
+                    clipNodeIndex = 1;
 
-                var dict = new Dictionary<string, string>()
+                var inputsDict = new Dictionary<string, object>()
                 {
-                    { "model", $"[{ModelNode.Id.ToString().Wrap()},0]" },
-                    { "clip", $"[{ClipNode.Id.ToString().Wrap()},{clipNodeIndex}]" },
-                    { "lora_paths", string.Join(",", Loras.Select(l => Path.Combine(Paths.GetLorasPath(false), l + ".safetensors"))).Replace(@"\", @"\\").Wrap() },
-                    { "lora_strengths", string.Join(",", Weights.Select(w => w.ToStringDot("0.#####"))).Wrap() },
+                    { "model", new object[] { ModelNode.Id.ToString(), 0 } },
+                    { "clip", new object[] { ClipNode.Id.ToString(), clipNodeIndex } },
+                    { "lora_paths", string.Join(",", Loras.Select(l => Path.Combine(Paths.GetLorasPath(false), l + ".safetensors"))) },
+                    { "lora_strengths", string.Join(",", Weights.Select(w => w.ToStringDot())) }
                 };
 
-                return GetPropertiesString(dict, "NmkdMultiLoraLoader");
+                return new NodeInfo
+                {
+                    Inputs = inputsDict,
+                    ClassType = nameof(NmkdMultiLoraLoader)
+                };
             }
 
             public override string ToString()
             {
-                return $"NmkdMultiLoraLoader - {Loras.Count} LoRAs - ModelNode: '{ModelNode}' - ClipNode: '{ClipNode}'";
+                return ToStringNode(this);
             }
         }
 
@@ -355,14 +473,23 @@ namespace StableDiffusionGui.Implementations
         {
             public string ImagePath;
 
-            public string GetString()
+            public NodeInfo GetNodeInfo()
             {
-                var dict = new Dictionary<string, string>()
+                var dict = new Dictionary<string, object>
                 {
-                    { "image_path", ImagePath.Wrap(true) },
+                    { "image_path", ImagePath }
                 };
 
-                return GetPropertiesString(dict, "NmkdImageLoader");
+                return new NodeInfo
+                {
+                    Inputs = dict,
+                    ClassType = nameof(NmkdImageLoader)
+                };
+            }
+
+            public override string ToString()
+            {
+                return ToStringNode(this);
             }
         }
 
@@ -371,15 +498,22 @@ namespace StableDiffusionGui.Implementations
             public string UpscaleModelPath;
             public INode ImageNode;
 
-            public string GetString()
+            public NodeInfo GetNodeInfo()
             {
-                var dict = new Dictionary<string, string>()
+                return new NodeInfo
                 {
-                    { "model_path", UpscaleModelPath.Wrap(true) },
-                    { "image", $"[{ImageNode.Id.ToString().Wrap()},0]" },
+                    Inputs = new Dictionary<string, object>
+                    {
+                        ["model_path"] = UpscaleModelPath,
+                        ["image"] = new object[] { ImageNode.Id.ToString(), 0 }
+                    },
+                    ClassType = nameof(NmkdImageUpscale)
                 };
+            }
 
-                return GetPropertiesString(dict, "NmkdImageUpscale");
+            public override string ToString()
+            {
+                return ToStringNode(this);
             }
         }
 
@@ -388,25 +522,51 @@ namespace StableDiffusionGui.Implementations
             public int Skip = -1;
             public INode ClipNode;
 
-            public string GetString()
+            public NodeInfo GetNodeInfo()
             {
                 int clipNodeIndex = 0;
                 if (ClipNode is NmkdCheckpointLoader || ClipNode is CheckpointLoaderSimple) clipNodeIndex = 1;
 
-                var dict = new Dictionary<string, string>()
+                var inputs = new Dictionary<string, object>
                 {
-                    { "stop_at_clip_layer", Skip.ToString() },
-                    { "clip", $"[{ClipNode.Id.ToString().Wrap()},{clipNodeIndex}]" },
+                    { "stop_at_clip_layer", Skip },
+                    { "clip", new object[] { ClipNode.Id.ToString(), clipNodeIndex } }
                 };
 
-                return GetPropertiesString(dict, "CLIPSetLastLayer");
+                return new NodeInfo
+                {
+                    Inputs = inputs,
+                    ClassType = nameof(CLIPSetLastLayer)
+                };
+            }
+
+            public override string ToString()
+            {
+                return ToStringNode(this);
             }
         }
 
-        private static string GetPropertiesString(Dictionary<string, string> dict, string classType)
+        public static string ToStringNode (INode node)
         {
-            return $"\"inputs\":{{{string.Join(",", dict.Select(pair => $"{pair.Key.Wrap()}:{pair.Value}"))}}},\"class_type\":\"{classType}\"";
-        }
+            var baseKeys = new Node().GetPublicVariableValues().Select(kvp => kvp.Key).ToList();
 
+            List<KeyValuePair<string, object>> variables = new List<KeyValuePair<string, object>>();
+
+            var fields = node.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
+            foreach (var field in fields)
+            {
+                var s = field.FieldType.IsPrimitive ? field.GetValue(node) : (object)(field.GetValue(node) != null ? $"#{node.Id}" : "null");
+                variables.Add(new KeyValuePair<string, object>(field.Name, s));
+            }
+
+            var properties = node.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(p => p.CanRead);  // Ensure property can be read
+            foreach (var property in properties)
+            {
+                var s = property.PropertyType.IsPrimitive ? property.GetValue(node) : (object)(property.GetValue(node) != null ? $"#{node.Id}" : "null");
+                variables.Add(new KeyValuePair<string, object>(property.Name, s));
+            }
+
+            return $"[{node.Id}] {node.GetType().Name} '{node.Title}' - {string.Join(", ", variables.Where(kvp => !baseKeys.Contains(kvp.Key)).Select(v => $"{v.Key}: {v.Value}"))}";
+        }
     }
 }

@@ -1,11 +1,13 @@
-﻿using StableDiffusionGui.Data;
+﻿using ImageMagick;
+using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json;
+using StableDiffusionGui.Data;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Windows.Media.Media3D;
 using static StableDiffusionGui.Implementations.ComfyNodes;
 
 namespace StableDiffusionGui.Implementations
@@ -25,17 +27,40 @@ namespace StableDiffusionGui.Implementations
                 Title = title;
             }
 
+            // public override string ToString()
+            // {
+            //     return $"#{Id} {(Title.IsNotEmpty() ? $" - {Title}" : "")}";
+            // }
+        }
+
+        public class PromptRequest
+        {
+            public string ClientId { get; set; }
+            public EasyDict<string, NodeInfo> Prompt { get; set; } = new EasyDict<string, NodeInfo>();
+            public ExtraDataClass ExtraData { get; set; } = new ExtraDataClass();
+
+            public class ExtraDataClass
+            {
+                public EasyDict<string, object> ExtraPnginfo { get; set; } = new EasyDict<string, object>();
+            }
+
             public override string ToString()
             {
-                return $"#{Id} {(Title.IsNotEmpty() ? $" - {Title}" : "")}";
+                return JsonConvert.SerializeObject(this, Formatting.None, new JsonSerializerSettings { ContractResolver = new DefaultContractResolver { NamingStrategy = new SnakeCaseNamingStrategy() } });
             }
+        }
+
+        public class NodeInfo
+        {
+            public Dictionary<string, object> Inputs { get; set; } = new Dictionary<string, object>();
+            public string ClassType { get; set; }
         }
 
         private enum Axis { Width, Height }
 
-        public static string BuildPrompt(Comfy.GenerationInfo g, List<INode> nodes)
+        public static EasyDict<string, NodeInfo> GetPromptInfos(Comfy.GenerationInfo g, List<INode> nodes)
         {
-            string prompt = "";
+            var nodeInfos = new EasyDict<string, NodeInfo>();
             var nodeCounts = new EasyDict<string, int>();
             var nodesDict = new EasyDict<string, INode>();
             bool refine = g.RefinerStrength > 0.001f;
@@ -58,7 +83,7 @@ namespace StableDiffusionGui.Implementations
             var seed = (NmkdIntegerConstant)nodesDict["Seed"]; // Seed
             seed.Value = g.Seed;
 
-            var steps =  (NmkdIntegerConstant)nodesDict["Steps"]; // Seed
+            var steps = (NmkdIntegerConstant)nodesDict["Steps"]; // Seed
             steps.Value = g.Steps;
 
             var stepsBase = (NmkdIntegerConstant)nodesDict["StepsBase"]; // Base Model Steps
@@ -133,7 +158,7 @@ namespace StableDiffusionGui.Implementations
             samplerBase.NodeStartStep = stepsSkip;
             samplerBase.NodeEndStep = stepsBase;
             samplerBase.ReturnLeftoverNoise = refine;
-            samplerBase.Denoise = g.InitImg.IsNotEmpty() ? g.InitStrength :  1.0f;
+            samplerBase.Denoise = g.InitImg.IsNotEmpty() ? g.InitStrength : 1.0f;
 
             var latentUpscale = (LatentUpscale)nodesDict["UpscaleLatent"]; // Latent Upscale
             latentUpscale.Width = g.TargetResolution.Width;
@@ -160,7 +185,7 @@ namespace StableDiffusionGui.Implementations
             samplerRefiner.NodeModel = model2;
             samplerRefiner.NodePositive = encodePosPromptRefiner;
             samplerRefiner.NodeNegative = encodeNegPromptRefiner;
-            samplerRefiner.NodeLatentImage = upscale ? (INode)samplerHires : (INode)samplerBase;
+            samplerRefiner.NodeLatentImage = upscale ? samplerHires : samplerBase;
             samplerRefiner.SamplerName = "euler";
             samplerRefiner.Scheduler = "normal";
             samplerRefiner.NodeSeed = seed;
@@ -184,13 +209,12 @@ namespace StableDiffusionGui.Implementations
             saveImage.Prefix = $"nmkd{FormatUtils.GetUnixTimestamp()}";
             saveImage.ImageNode = upscaler;
 
-            var nodeStrings = new List<string>();
-
-            foreach(INode node in nodes.Where(n => n != null))
+            foreach (INode node in nodes.Where(n => n != null))
             {
                 try
                 {
-                    nodeStrings.Add($"\"{node.Id}\":{{{node.GetString()}}}");
+                    nodeInfos[node.Id.ToString()] = node.GetNodeInfo();
+                    // Logger.Log(node.ToString(), true);
                 }
                 catch
                 {
@@ -198,13 +222,13 @@ namespace StableDiffusionGui.Implementations
                 }
             }
 
-            prompt += string.Join(",", nodeStrings);
-            return prompt;
+            return nodeInfos;
         }
 
         public static List<INode> GetNodes(string comfyPrompt)
         {
             var nodesList = new List<INode>();
+
             comfyPrompt = "\"nodes\": [" + comfyPrompt.Split("\"nodes\": [")[1]; // Cut off everything before nodes
             comfyPrompt = comfyPrompt.Split("\n  ],")[0];
 
@@ -217,41 +241,39 @@ namespace StableDiffusionGui.Implementations
                     int id = lines[i].GetInt();
                     string type = lines[i + 1].Split("\"type\":")[1].Trim().Trim(',').Trim('\"');
                     string title = (i + 2 < lines.Count) && lines[i + 2].Trim().StartsWith("\"title\":") ? lines[i + 2].Split("\"title\":")[1].Trim().Trim(',').Trim('\"') : "";
-                    // var enumType = ParseUtils.GetEnum<NodeType>(type.Remove(" "), false);
 
                     INode newNode = null;
-
-                    if (type == "CheckpointLoaderSimple") newNode = new CheckpointLoaderSimple();
-                    if (type == "VAELoader") newNode = new VAELoader();
-                    if (type == "CLIPTextEncode") newNode = new CLIPTextEncode();
-                    if (type == "KSampler") newNode = new KSampler();
-                    if (type == "NmkdKSampler") newNode = new NmkdKSampler();
-                    if (type == "VAEDecode") newNode = new VAEDecode();
-                    if (type == "VAEEncode") newNode = new VAEEncode();
-                    if (type == "EmptyLatentImage") newNode = new EmptyLatentImage();
-                    if (type == "SaveImage") newNode = new SaveImage();
-                    if (type == "LatentUpscale") newNode = new LatentUpscale();
-                    if (type == "LatentUpscaleBy") newNode = new LatentUpscaleBy();
-                    if (type == "CRLatentInputSwitch") newNode = new CRLatentInputSwitch();
-                    if (type == "NmkdIntegerConstant") newNode = new NmkdIntegerConstant();
-                    if (type == "NmkdFloatConstant") newNode = new NmkdFloatConstant();
-                    if (type == "NmkdStringConstant") newNode = new NmkdStringConstant();
-                    if (type == "NmkdCheckpointLoader") newNode = new NmkdCheckpointLoader();
-                    if (type == "CLIPSetLastLayer") newNode = new CLIPSetLastLayer();
-                    if (type == "NmkdImageLoader") newNode = new NmkdImageLoader();
-                    if (type == "NmkdImageUpscale") newNode = new NmkdImageUpscale();
-                    if (type == "NmkdMultiLoraLoader") newNode = new NmkdMultiLoraLoader();
+                    if (type == "Reroute") continue;
+                    else if (type == "CheckpointLoaderSimple") newNode = new CheckpointLoaderSimple();
+                    else if (type == "VAELoader") newNode = new VAELoader();
+                    else if (type == "CLIPTextEncode") newNode = new CLIPTextEncode();
+                    else if (type == "KSampler") newNode = new KSampler();
+                    else if (type == "NmkdKSampler") newNode = new NmkdKSampler();
+                    else if (type == "VAEDecode") newNode = new VAEDecode();
+                    else if (type == "VAEEncode") newNode = new VAEEncode();
+                    else if (type == "EmptyLatentImage") newNode = new EmptyLatentImage();
+                    else if (type == "SaveImage") newNode = new SaveImage();
+                    else if (type == "LatentUpscale") newNode = new LatentUpscale();
+                    else if (type == "LatentUpscaleBy") newNode = new LatentUpscaleBy();
+                    else if (type == "NmkdIntegerConstant") newNode = new NmkdIntegerConstant();
+                    else if (type == "NmkdFloatConstant") newNode = new NmkdFloatConstant();
+                    else if (type == "NmkdStringConstant") newNode = new NmkdStringConstant();
+                    else if (type == "NmkdCheckpointLoader") newNode = new NmkdCheckpointLoader();
+                    else if (type == "CLIPSetLastLayer") newNode = new CLIPSetLastLayer();
+                    else if (type == "NmkdImageLoader") newNode = new NmkdImageLoader();
+                    else if (type == "NmkdImageUpscale") newNode = new NmkdImageUpscale();
+                    else if (type == "NmkdMultiLoraLoader") newNode = new NmkdMultiLoraLoader();
+                    else Logger.Log($"Comfy Nodes Parser: No class found for {type}.", true);
 
                     if (newNode == null)
                         continue;
 
-                    ((Node)newNode).Id = id;
-                    ((Node)newNode).Title = title;
+                    newNode.Id = id;
+                    newNode.Title = title;
 
                     nodesList.Add(newNode);
                 }
             }
-
             return nodesList;
         }
 

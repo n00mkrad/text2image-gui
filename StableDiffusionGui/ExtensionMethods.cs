@@ -15,6 +15,7 @@ using ZetaLongPaths;
 using StableDiffusionGui.Data;
 using Newtonsoft.Json.Converters;
 using System.Collections.Concurrent;
+using System.Reflection;
 
 namespace StableDiffusionGui
 {
@@ -702,6 +703,40 @@ namespace StableDiffusionGui
             {
                 return true;
             }
+        }
+
+        public static List<KeyValuePair<string, object>> GetPublicVariableValues (this object obj, bool basic = true)
+        {
+            List<KeyValuePair<string, object>> variables = new List<KeyValuePair<string, object>>();
+
+            // Retrieve all public instance fields
+            var fields = obj.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
+            foreach (var field in fields)
+            {
+                var s = basic && !field.FieldType.IsPrimitive ? (object)(field.GetValue(obj) != null ? "..." : "null") : field.GetValue(obj);
+                variables.Add(new KeyValuePair<string, object>(field.Name, s));
+            }
+
+            // Retrieve all public instance properties
+            var properties = obj.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(p => p.CanRead);  // Ensure property can be read
+            foreach (var property in properties)
+            {
+                var s = basic && !property.PropertyType.IsPrimitive ? (object)(property.GetValue(obj) != null ? "..." : "null") : property.GetValue(obj);
+                variables.Add(new KeyValuePair<string, object>(property.Name, s));
+            }
+
+            return variables;
+        }
+
+        public static string GetPublicVariablesString(this object obj, bool includeClassName = true)
+        {
+            var variables = obj.GetPublicVariableValues();
+            string variablesString = string.Join(", ", variables.Select(v => $"{v.Key}: {v.Value}"));
+
+            if (includeClassName)
+                return $"{obj.GetType().Name}: {variablesString}";
+            else
+                return variablesString;
         }
     }
 }
