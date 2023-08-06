@@ -352,10 +352,12 @@ namespace StableDiffusionGui.Implementations
             }
         }
 
-        public class VAEEncode : Node, INode
+        public class NmkdVaeEncode : Node, INode
         {
             public INode ImageNode;
             public INode VaeNode;
+            public bool LoadMask = false;
+            public int MaskGrowPixels = 6;
 
             public NodeInfo GetNodeInfo()
             {
@@ -366,12 +368,18 @@ namespace StableDiffusionGui.Implementations
                 {
                     { "pixels", new object[] { ImageNode.Id.ToString(), 0 } },
                     { "vae", new object[] { VaeNode.Id.ToString(), vaeNodeOutIndex } },
+                    { "grow_mask_by", MaskGrowPixels },
                 };
+
+                if (LoadMask)
+                {
+                    inputs["mask"] = new object[] { ImageNode.Id.ToString(), 1 };
+                }
 
                 return new NodeInfo
                 {
                     Inputs = inputs,
-                    ClassType = nameof(VAEEncode)
+                    ClassType = nameof(NmkdVaeEncode)
                 };
             }
 
@@ -438,7 +446,7 @@ namespace StableDiffusionGui.Implementations
         public class NmkdMultiLoraLoader : Node, INode
         {
             public List<string> Loras;
-            public List<float> Weights;
+            public List<float> Strengths;
             public INode ModelNode;
             public INode ClipNode;
 
@@ -450,10 +458,10 @@ namespace StableDiffusionGui.Implementations
 
                 var inputsDict = new Dictionary<string, object>()
                 {
+                    { "lora_paths", string.Join(",", Loras.Select(l => Path.Combine(Paths.GetLorasPath(false), l + ".safetensors"))) },
+                    { "lora_strengths", string.Join(",", Strengths.Select(w => w.ToStringDot())) },
                     { "model", new object[] { ModelNode.Id.ToString(), 0 } },
                     { "clip", new object[] { ClipNode.Id.ToString(), clipNodeIndex } },
-                    { "lora_paths", string.Join(",", Loras.Select(l => Path.Combine(Paths.GetLorasPath(false), l + ".safetensors"))) },
-                    { "lora_strengths", string.Join(",", Weights.Select(w => w.ToStringDot())) }
                 };
 
                 return new NodeInfo
@@ -546,7 +554,7 @@ namespace StableDiffusionGui.Implementations
             }
         }
 
-        public static string ToStringNode (INode node)
+        public static string ToStringNode(INode node)
         {
             var baseKeys = new Node().GetPublicVariableValues().Select(kvp => kvp.Key).ToList();
 

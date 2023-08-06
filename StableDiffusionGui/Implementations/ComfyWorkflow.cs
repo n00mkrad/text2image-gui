@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using static StableDiffusionGui.Implementations.ComfyNodes;
+using System.IO;
 
 namespace StableDiffusionGui.Implementations
 {
@@ -114,9 +115,9 @@ namespace StableDiffusionGui.Implementations
             clipSkipModel2.Skip = g.ClipSkip;
             clipSkipModel2.ClipNode = model2;
 
-            var loraLoader = (NmkdMultiLoraLoader)nodesDict["LoraLoader1"]; // LoRA Loader
+            var loraLoader = (NmkdMultiLoraLoader)nodesDict["LoraLoader"]; // LoRA Loader
             loraLoader.Loras = g.Loras.Keys.ToList();
-            loraLoader.Weights = g.Loras.Values.ToList();
+            loraLoader.Strengths = g.Loras.Values.ToList();
             loraLoader.ModelNode = model1;
             loraLoader.ClipNode = model1;
 
@@ -138,11 +139,12 @@ namespace StableDiffusionGui.Implementations
             emptyLatentImg.Height = baseHeight;
 
             var loadInitImg = (NmkdImageLoader)nodesDict["InitImg"]; // Load Init Image
-            loadInitImg.ImagePath = g.InitImg;
+            loadInitImg.ImagePath = File.Exists(g.MaskPath) ? g.MaskPath : g.InitImg;
 
-            var encodeInitImg = (VAEEncode)nodesDict["InitImgEncode"]; // Encode Init Image (I2I)
+            var encodeInitImg = (NmkdVaeEncode)nodesDict["InitImgEncode"]; // Encode Init Image (I2I)
             encodeInitImg.ImageNode = loadInitImg;
             encodeInitImg.VaeNode = model1;
+            encodeInitImg.LoadMask = File.Exists(g.MaskPath);
 
             var samplerBase = (NmkdKSampler)nodesDict["SamplerBase"]; // Sampler Base
             samplerBase.AddNoise = true;
@@ -250,7 +252,7 @@ namespace StableDiffusionGui.Implementations
                     else if (type == "KSampler") newNode = new KSampler();
                     else if (type == "NmkdKSampler") newNode = new NmkdKSampler();
                     else if (type == "VAEDecode") newNode = new VAEDecode();
-                    else if (type == "VAEEncode") newNode = new VAEEncode();
+                    else if (type == "NmkdVaeEncode") newNode = new NmkdVaeEncode();
                     else if (type == "EmptyLatentImage") newNode = new EmptyLatentImage();
                     else if (type == "SaveImage") newNode = new SaveImage();
                     else if (type == "LatentUpscale") newNode = new LatentUpscale();
