@@ -55,7 +55,7 @@ namespace StableDiffusionGui.Implementations
             // if (s.Res.Width < 1024 && s.Res.Height < 1024)
             //     Logger.Log($"Warning: The resolution {s.Res.Width}x{s.Res.Height} might lead to low quality results, as the default resolution of SDXL is 1024x1024.");
 
-            OrderedDictionary initImages = s.InitImgs != null && s.InitImgs.Length > 0 ? await TtiUtils.CreateResizedInitImagesIfNeeded(s.InitImgs.ToList(), s.Res, s.ResizeGravity) : null;
+            OrderedDictionary initImages = s.InitImgs != null && s.InitImgs.Length > 0 ? await TtiUtils.CreateResizedInitImagesIfNeeded(s.InitImgs.ToList(), s.Res, s.ResizeGravity, true) : null;
             long startSeed = s.Seed;
             bool refine = s.RefinerStrengths.Any(rs => rs >= 0.05f);
             string mode = NmkdiffUtils.GetGenerationMode(s, model);

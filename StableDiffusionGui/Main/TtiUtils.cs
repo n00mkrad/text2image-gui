@@ -27,7 +27,7 @@ namespace StableDiffusionGui.Main
         public static bool ImportBusy;
 
         /// <summary> Resizes init images to <paramref name="targetSize"/>. If <paramref name="extendGravity"/> is specified, cropping/extending will be used instead of scaling. </summary>
-        public static async Task<OrderedDictionary> CreateResizedInitImagesIfNeeded(List<string> initImgPaths, Size targetSize, Gravity extendGravity = (Gravity)(-1))
+        public static async Task<OrderedDictionary> CreateResizedInitImagesIfNeeded(List<string> initImgPaths, Size targetSize, Gravity extendGravity = (Gravity)(-1), bool allowEdgeFade = false)
         {
             ImportBusy = true;
             Logger.Log($"Importing base images...", false, Logger.LastUiLine.EndsWith("..."));
@@ -62,6 +62,12 @@ namespace StableDiffusionGui.Main
 
                         if (extendGravity != (Gravity)(-1)) // Extend/Crop
                         {
+                            if (allowEdgeFade && (targetSize.Width > img.Width || targetSize.Height > img.Height))
+                            {
+                                img.HasAlpha = true;
+                                img = ImgUtils.GetMagickImage(ImgUtils.EdgeAlphaFade(img.ToBitmap()));
+                            }
+
                             img = ImgUtils.ResizeCanvas(img, targetSize, extendGravity);
                         }
                         else // Resize (Fit)

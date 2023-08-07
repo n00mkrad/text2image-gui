@@ -301,6 +301,40 @@ namespace StableDiffusionGui.MiscUtils
             return img;
         }
 
+        public static unsafe Image EdgeAlphaFade(Image img, int distance = 16)
+        {
+            var width = img.Width;
+            var height = img.Height;
+
+            var result = (Bitmap)img.Clone();
+
+            var data = result.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+
+            byte* ptr = (byte*)data.Scan0;
+
+            Parallel.For(0, height, y =>
+            {
+                byte* row = ptr + (y * data.Stride);
+                for (int x = 0; x < width; x++)
+                {
+                    int nearestEdgeDistance = Math.Min(Math.Min(x, width - x - 1), Math.Min(y, height - y - 1));
+
+                    if (nearestEdgeDistance < distance)
+                    {
+                        float normalizedDistance = (float)nearestEdgeDistance / distance;
+                        float quadraticAlpha = normalizedDistance * normalizedDistance;
+                        int alpha = (int)(255 * quadraticAlpha);
+
+                        int pixelIdx = x * 4;
+                        row[pixelIdx + 3] = (byte)((row[pixelIdx + 3] * alpha) / 255);
+                    }
+                }
+            });
+
+            result.UnlockBits(data);
+            return result;
+        }
+
         public static bool IsPartiallyTransparent(Bitmap bitmap)
         {
             try
