@@ -23,7 +23,6 @@ namespace StableDiffusionGui.Implementations
         public List<string> LastMessages { get => _lastMessages; }
         private List<string> _lastMessages = new List<string>();
         private bool _hasErrored = false;
-        public static int Pid = -1;
 
         public static readonly int ComfyPort = 8189;
         private static readonly HttpClient _webClient = new HttpClient();
@@ -56,7 +55,7 @@ namespace StableDiffusionGui.Implementations
             // if (s.Res.Width < 1024 && s.Res.Height < 1024)
             //     Logger.Log($"Warning: The resolution {s.Res.Width}x{s.Res.Height} might lead to low quality results, as the default resolution of SDXL is 1024x1024.");
 
-            OrderedDictionary initImages = s.InitImgs != null && s.InitImgs.Length > 0 ? await TtiUtils.CreateResizedInitImagesIfNeeded(s.InitImgs.ToList(), s.Res) : null;
+            OrderedDictionary initImages = s.InitImgs != null && s.InitImgs.Length > 0 ? await TtiUtils.CreateResizedInitImagesIfNeeded(s.InitImgs.ToList(), s.Res, s.ResizeGravity) : null;
             long startSeed = s.Seed;
             bool refine = s.RefinerStrengths.Any(rs => rs >= 0.05f);
             string mode = NmkdiffUtils.GetGenerationMode(s, model);
@@ -281,16 +280,29 @@ namespace StableDiffusionGui.Implementations
 
             foreach (var genInfo in generations.Where(g => g.Model.IsNotEmpty()))
             {
-                var promptItems = ComfyWorkflow.GetPromptInfos(genInfo, nodes);
-                var req = new ComfyWorkflow.PromptRequest() { ClientId = Paths.SessionTimestampUnix.ToString(), Prompt = promptItems };
-                req.ExtraData.ExtraPnginfo["GenerationInfo"] = genInfo.GetMetadataDict();
-                string reqString = req.ToString();
+                string reqString = "";
+
+                try
+                {
+                    var promptItems = ComfyWorkflow.GetPromptInfos(genInfo, nodes);
+                    var req = new ComfyWorkflow.PromptRequest() { ClientId = Paths.SessionTimestampUnix.ToString(), Prompt = promptItems };
+                    req.ExtraData.ExtraPnginfo["GenerationInfo"] = genInfo.GetMetadataDict();
+                    reqString = req.ToString();
+
+                    if (Program.Debug)
+                        File.WriteAllText(IoUtils.GetAvailablePath(Path.Combine(Paths.GetLogPath(), "req.json")), req.ToStringAdvanced(true));
+                }
+                catch (Exception ex)
+                {
+                    Logger.Log($"Error creating request: {ex.Message}");
+                    Logger.Log(ex.StackTrace, true);
+                }
+
+                if (reqString.IsEmpty())
+                    continue;
+
                 string resp = await ApiPost(reqString);
-
-                if (resp.IsEmpty())
-                    break;
-
-                // File.WriteAllText(IoUtils.GetAvailablePath(Path.Combine(Paths.GetLogPath(), "req.txt")), req);
+                Logger.Log($"[<-] {resp}", true, filename: Constants.Lognames.Api);
             }
         }
 
@@ -304,7 +316,7 @@ namespace StableDiffusionGui.Implementations
                 var stringContent = data.IsEmpty() ? null : new StringContent(data, Encoding.UTF8, "application/json");
                 string baseUrl = $"http://127.0.0.1:{ComfyPort}/{endpoint.ToString().Lower()}";
                 var response = await _webClient.PostAsync(baseUrl, stringContent);
-                Logger.Log($"{baseUrl} - {data.Trunc(150)}", true, filename: "api");
+                Logger.Log($"[->] {baseUrl} - {data.Trunc(150)}", true, filename: Constants.Lognames.Api);
                 return await response.Content.ReadAsStringAsync();
             }
             catch (Exception ex)

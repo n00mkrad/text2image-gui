@@ -20,6 +20,7 @@
             public const string Convert = "convert";
             public const string Training = "training";
             public const string Serialization = "serialization";
+            public const string Api = "api";
         }
 
         public class Dirs

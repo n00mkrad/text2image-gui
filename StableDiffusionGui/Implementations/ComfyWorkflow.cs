@@ -47,7 +47,13 @@ namespace StableDiffusionGui.Implementations
 
             public override string ToString()
             {
-                return JsonConvert.SerializeObject(this, Formatting.None, new JsonSerializerSettings { ContractResolver = new DefaultContractResolver { NamingStrategy = new SnakeCaseNamingStrategy() } });
+                return ToStringAdvanced();
+            }
+
+            public string ToStringAdvanced(bool indent = false)
+            {
+                var format = indent ? Formatting.Indented : Formatting.None;
+                return JsonConvert.SerializeObject(this, format, new JsonSerializerSettings { ContractResolver = new DefaultContractResolver { NamingStrategy = new SnakeCaseNamingStrategy() } });
             }
         }
 
@@ -66,6 +72,7 @@ namespace StableDiffusionGui.Implementations
             var nodesDict = new EasyDict<string, INode>();
             bool refine = g.RefinerStrength > 0.001f;
             bool upscale = !g.TargetResolution.IsEmpty && g.TargetResolution != g.BaseResolution;
+            bool inpaint = g.MaskPath.IsNotEmpty();
             int baseSteps = (g.Steps * (1f - g.RefinerStrength)).RoundToInt();
             int baseWidth = g.BaseResolution.Width;
             int baseHeight = g.BaseResolution.Height;
@@ -214,14 +221,13 @@ namespace StableDiffusionGui.Implementations
 
             var saveImage = (SaveImage)nodesDict["Save"]; // Save Image
             saveImage.Prefix = $"nmkd{FormatUtils.GetUnixTimestamp()}";
-            saveImage.ImageNode = compositeImgs;
+            saveImage.ImageNode = inpaint ? (INode)compositeImgs : (INode)upscaler;
 
             foreach (INode node in nodes.Where(n => n != null))
             {
                 try
                 {
                     nodeInfos[node.Id.ToString()] = node.GetNodeInfo();
-                    // Logger.Log(node.ToString(), true);
                 }
                 catch
                 {
