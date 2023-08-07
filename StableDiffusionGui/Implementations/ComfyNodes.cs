@@ -366,14 +366,14 @@ namespace StableDiffusionGui.Implementations
 
                 var inputs = new Dictionary<string, object>()
                 {
+                    { "grow_mask_by", MaskGrowPixels },
                     { "pixels", new object[] { ImageNode.Id.ToString(), 0 } },
                     { "vae", new object[] { VaeNode.Id.ToString(), vaeNodeOutIndex } },
-                    { "grow_mask_by", MaskGrowPixels },
                 };
 
                 if (LoadMask)
                 {
-                    inputs["mask"] = new object[] { ImageNode.Id.ToString(), 1 };
+                    inputs["mask"] = new object[] { ImageNode.Id.ToString(), 2 };
                 }
 
                 return new NodeInfo
@@ -545,6 +545,34 @@ namespace StableDiffusionGui.Implementations
                 {
                     Inputs = inputs,
                     ClassType = nameof(CLIPSetLastLayer)
+                };
+            }
+
+            public override string ToString()
+            {
+                return ToStringNode(this);
+            }
+        }
+
+        public class NmkdImageMaskComposite : Node, INode
+        {
+            public INode ImageToNode;
+            public INode ImageFromNode;
+            public INode MaskNode;
+
+            public NodeInfo GetNodeInfo()
+            {
+                var inputs = new Dictionary<string, object>
+                {
+                    { "image_to", new object[] { ImageToNode.Id.ToString(), 0 } },
+                    { "image_from", new object[] { ImageFromNode.Id.ToString(), 0 } },
+                    { "mask", new object[] { MaskNode.Id.ToString(), 2 } },
+                };
+
+                return new NodeInfo
+                {
+                    Inputs = inputs,
+                    ClassType = nameof(NmkdImageMaskComposite)
                 };
             }
 

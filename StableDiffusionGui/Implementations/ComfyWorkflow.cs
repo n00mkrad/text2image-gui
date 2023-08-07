@@ -139,12 +139,12 @@ namespace StableDiffusionGui.Implementations
             emptyLatentImg.Height = baseHeight;
 
             var loadInitImg = (NmkdImageLoader)nodesDict["InitImg"]; // Load Init Image
-            loadInitImg.ImagePath = File.Exists(g.MaskPath) ? g.MaskPath : g.InitImg;
+            loadInitImg.ImagePath = g.MaskPath.IsNotEmpty() ? g.MaskPath : g.InitImg;
 
             var encodeInitImg = (NmkdVaeEncode)nodesDict["InitImgEncode"]; // Encode Init Image (I2I)
             encodeInitImg.ImageNode = loadInitImg;
             encodeInitImg.VaeNode = model1;
-            encodeInitImg.LoadMask = File.Exists(g.MaskPath);
+            encodeInitImg.LoadMask = g.MaskPath.IsNotEmpty();
 
             var samplerBase = (NmkdKSampler)nodesDict["SamplerBase"]; // Sampler Base
             samplerBase.AddNoise = true;
@@ -207,9 +207,14 @@ namespace StableDiffusionGui.Implementations
             upscaler.UpscaleModelPath = g.Upscaler;
             upscaler.ImageNode = vaeDecode;
 
+            var compositeImgs = (NmkdImageMaskComposite)nodesDict["InpaintImageComposite"]; // Composite Images
+            compositeImgs.ImageToNode = upscaler;
+            compositeImgs.ImageFromNode = loadInitImg;
+            compositeImgs.MaskNode = loadInitImg;
+
             var saveImage = (SaveImage)nodesDict["Save"]; // Save Image
             saveImage.Prefix = $"nmkd{FormatUtils.GetUnixTimestamp()}";
-            saveImage.ImageNode = upscaler;
+            saveImage.ImageNode = compositeImgs;
 
             foreach (INode node in nodes.Where(n => n != null))
             {
@@ -265,6 +270,7 @@ namespace StableDiffusionGui.Implementations
                     else if (type == "NmkdImageLoader") newNode = new NmkdImageLoader();
                     else if (type == "NmkdImageUpscale") newNode = new NmkdImageUpscale();
                     else if (type == "NmkdMultiLoraLoader") newNode = new NmkdMultiLoraLoader();
+                    else if (type == "NmkdImageMaskComposite") newNode = new NmkdImageMaskComposite();
                     else Logger.Log($"Comfy Nodes Parser: No class found for {type}.", true);
 
                     if (newNode == null)
@@ -272,7 +278,6 @@ namespace StableDiffusionGui.Implementations
 
                     newNode.Id = id;
                     newNode.Title = title;
-
                     nodesList.Add(newNode);
                 }
             }
@@ -306,11 +311,11 @@ namespace StableDiffusionGui.Implementations
             bool upscale = !g.TargetResolution.IsEmpty && g.TargetResolution != g.BaseResolution;
             bool noThreeStage = !(upscale && g.RefinerStrength > 0f);
 
-            if (noThreeStage && g.Sampler.ToString().Contains("2M"))
-            {
-                sched = "simple";
-                Logger.Log($"Warning: Scheduler was overwritten to '{sched}' due to Comfy issues when using 2M samplers in final denoising stage.", true);
-            }
+            // if (noThreeStage && g.Sampler.ToString().Contains("2M"))
+            // {
+            //     sched = "simple";
+            //     Logger.Log($"Warning: Scheduler was overwritten to '{sched}' due to Comfy issues when using 2M samplers in final denoising stage.", true);
+            // }
 
             return sched;
         }

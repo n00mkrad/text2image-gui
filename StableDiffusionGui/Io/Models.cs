@@ -104,10 +104,10 @@ namespace StableDiffusionGui.Io
             if (type != (Enums.Models.Type)(-1))
                 models = models.Where(m => m.Type == type);
 
-            if (implementation == Implementation.Comfy)
-                models = models.Where(m => m.Size > 5 * 1024 * 1024 * 1024L && m.Name.Lower().Contains("xl"));
-            else
-                models = models.Where(m => (m.Size > 5 * 1024 * 1024 * 1024L && m.Name.Lower().Contains("xl")) == false);
+            // if (implementation == Implementation.Comfy)
+            //     models = models.Where(m => m.Size > 5 * 1024 * 1024 * 1024L && m.Name.Lower().Contains("xl"));
+            // else
+            //     models = models.Where(m => (m.Size > 5 * 1024 * 1024 * 1024L && m.Name.Lower().Contains("xl")) == false);
 
             List<Model> distinctOrderedList = models.DistinctBy(x => x.Name).OrderBy(x => x.FormatIndependentName).ToList();
             if (Program.Debug) Logger.Log($"GetModels took {sw.ElapsedMilliseconds} ms", true);

@@ -187,8 +187,10 @@ namespace StableDiffusionGui.Implementations
                 {
                     currentGeneration.InitStrength = s.ImgMode != Enums.StableDiffusion.ImgMode.InitializationImage ? 1f : strength; // Lock to 1.0 when using inpainting (OBSOLETE WITH COMFY?)
 
-                    if (s.ImgMode == Enums.StableDiffusion.ImgMode.ImageMask)
+                    if (s.ImgMode == ImgMode.ImageMask)
                         currentGeneration.MaskPath = Inpainting.MaskedImagePath;
+                    else if (s.ImgMode == ImgMode.Outpainting)
+                        currentGeneration.MaskPath = currentGeneration.InitImg;
                     // else if (s.ImgMode == Enums.StableDiffusion.ImgMode.Outpainting)
                     //     args["inpaintMask"] = "--force_outpaint";
                     // else

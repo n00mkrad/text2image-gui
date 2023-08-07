@@ -62,7 +62,7 @@ namespace StableDiffusionGui.Main
 
                         if (extendGravity != (Gravity)(-1)) // Extend/Crop
                         {
-                            img = ImgUtils.ResizeCanvas(img, targetSize, extendGravity); // TODO: Gravity needs to be a variable passed from UI
+                            img = ImgUtils.ResizeCanvas(img, targetSize, extendGravity);
                         }
                         else // Resize (Fit)
                         {
