@@ -240,9 +240,7 @@ namespace StableDiffusionGui.Implementations
                 Process py = OsUtils.NewProcess(true, logAction: HandleOutput);
                 TextToImage.CurrentTask.Processes.Add(py);
 
-                string comfyPath = "D:\\AI\\ComfyUI\\";
-                py.StartInfo.Arguments = $"/C cd /D {comfyPath} && .\\python_embeded\\python.exe -s ComfyUI\\main.py {string.Join(" ", scriptArgs)}";
-                // py.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand()} && {Constants.Files.VenvActivate} && python {Constants.Dirs.SdRepo}/nmkdiff/nmkdiffusers.py {string.Join(" ", scriptArgs)}";
+                py.StartInfo.Arguments = $"/C cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand()} && {Constants.Files.VenvActivate} && python comfy/comfyui/main.py {string.Join(" ", scriptArgs)}";
                 Logger.Log("cmd.exe " + py.StartInfo.Arguments, true);
 
                 if (TtiProcess.CurrentProcess != null)
@@ -306,6 +304,9 @@ namespace StableDiffusionGui.Implementations
 
                 string resp = await ApiPost(reqString);
                 Logger.Log($"[<-] {resp}", true, filename: Constants.Lognames.Api);
+
+                if(resp.IsEmpty())
+                    break;
             }
         }
 
@@ -326,6 +327,7 @@ namespace StableDiffusionGui.Implementations
             {
                 Logger.Log($"API Error: {ex.Message}");
                 Logger.Log(ex.StackTrace, true);
+                TextToImage.Cancel("API Error.", false, TextToImage.CancelMode.SoftKill);
             }
 
             return "";
@@ -407,7 +409,6 @@ namespace StableDiffusionGui.Implementations
 
             if (TextToImage.Canceled)
                 return;
-
 
             bool ellipsis = Program.MainForm.LogText.EndsWith("...");
             string errMsg = "";

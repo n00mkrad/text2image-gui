@@ -146,8 +146,8 @@ namespace StableDiffusionGui.Main
                 return false;
             }
 
-            if (s.ImgMode != ImgMode.InitializationImage && !s.Model.Lower().Contains("inpainting"))
-                Logger.Log($"Warning: Inpainting is enabled, but '{s.Model}' does not appear to be an inpainting model. Quality will be degraded.");
+            if (new[] { ImgMode.ImageMask, ImgMode.InitializationImage }.Contains(s.ImgMode) && !s.Model.Lower().Contains("inpainting"))
+                Logger.Log($"Warning: Inpainting/Outpainting is enabled, but '{s.Model}' does not appear to be an inpainting model. Quality will be degraded.");
 
             if (s.Seed >= 0)
                 PreviousSeed = s.Seed;
