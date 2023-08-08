@@ -26,7 +26,7 @@ namespace StableDiffusionGui.Forms
         public Dictionary<Control, List<Panel>> CategoryPanels = new Dictionary<Control, List<Panel>>(); // Key: Collapse Button - Value: Child Panels
         private List<Control> _expandedCategories = new List<Control>();
 
-        private List<Control> _debugControls { get { return new List<Control> { panelDebugLoopback }; } }
+        private List<Control> _debugControls { get { return new List<Control> { panelDebugLoopback, checkboxPreview }; } }
 
         public bool IsUsingInpaintingModel { get { return Path.ChangeExtension(Config.Instance.Model, null).EndsWith(Constants.SuffixesPrefixes.InpaintingMdlSuf); } }
         public bool AnyInits { get { return MainUi.CurrentInitImgPaths.Any(); } }
@@ -49,6 +49,7 @@ namespace StableDiffusionGui.Forms
             // ReloadEmbeddings();
             // ReloadLoras();
             comboxModelArch.FillFromEnum<Enums.Models.SdArch>(Strings.SdModelArch, 0);
+            comboxPreprocessor.FillFromEnum<ImagePreprocessor>(Strings.ImagePreprocessors, 0);
 
             // Set categories
             CategoryPanels.Add(btnCollapseImplementation, new List<Panel> { panelBackend, panelModel, panelModel2 });

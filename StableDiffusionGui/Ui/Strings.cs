@@ -26,7 +26,7 @@ namespace StableDiffusionGui.Ui
             { Enums.StableDiffusion.ImgMode.InitializationImage.ToString(), "Base Image (Img2Img)" },
             { Enums.StableDiffusion.ImgMode.ImageMask.ToString(), "Inpainting with Mask" },
             { Enums.StableDiffusion.ImgMode.Outpainting.ToString(), "Outpainting / Fill Transparency" },
-            { Enums.StableDiffusion.ImgMode.ControlnetRaw.ToString(), "ControlNet (Direct Input)" },
+            { Enums.StableDiffusion.ImgMode.Controlnet.ToString(), "ControlNet" },
             // { Enums.StableDiffusion.ImgMode.TextMask.ToString(), "Inpainting with Text Description" },
         };
 
@@ -167,6 +167,18 @@ namespace StableDiffusionGui.Ui
         {
             { Enums.StableDiffusion.LatentUpscaleMode.Factor.ToString(), "Set Factor" },
             { Enums.StableDiffusion.LatentUpscaleMode.TargetRes.ToString(), "Set Resolution" },
+        };
+
+        public static Dictionary<string, string> ImagePreprocessors = new Dictionary<string, string>()
+        {
+             { Enums.StableDiffusion.ImagePreprocessor.Canny.ToString(), "Edge Detection (Fine - Canny)" },
+             { Enums.StableDiffusion.ImagePreprocessor.LineArtHed.ToString(), "Edge Detection (Soft - HED)" },
+             // { Enums.StableDiffusion.ImagePreprocessor.Scribble.ToString(), "Scribble Art" },
+             { Enums.StableDiffusion.ImagePreprocessor.LineArt.ToString(), "Line Art" },
+             { Enums.StableDiffusion.ImagePreprocessor.LineArtAnime.ToString(), "Line Art (Anime)" },
+             { Enums.StableDiffusion.ImagePreprocessor.LineArtMangaAnime.ToString(), "Line Art (Anime, Softer)" },
+             { Enums.StableDiffusion.ImagePreprocessor.DepthMap.ToString(), "Depth Map (3D Effect)" },
+             { Enums.StableDiffusion.ImagePreprocessor.Blur.ToString(), "Blur (For Tile Model)" },
         };
     }
 }

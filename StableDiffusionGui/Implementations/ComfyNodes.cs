@@ -1,9 +1,8 @@
 ﻿using StableDiffusionGui.Io;
-using System;
+using StableDiffusionGui.Main;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using static Microsoft.WindowsAPICodePack.Shell.PropertySystem.SystemProperties.System;
 using System.Reflection;
 using static StableDiffusionGui.Implementations.ComfyWorkflow;
 
@@ -13,7 +12,7 @@ namespace StableDiffusionGui.Implementations
     {
         public interface INode
         {
-            int Id { get; set; }
+            string Id { get; set; }
             string Title { get; set; }
             NodeInfo GetNodeInfo();
         }
@@ -604,6 +603,68 @@ namespace StableDiffusionGui.Implementations
                     Inputs = inputs,
                     ClassType = nameof(NmkdControlNet)
                 };
+            }
+
+            public override string ToString()
+            {
+                return ToStringNode(this);
+            }
+        }
+
+        public class GenericImagePreprocessor : Node, INode
+        {
+            public INode ImageNode;
+            public Enums.StableDiffusion.ImagePreprocessor Preprocessor;
+
+            public NodeInfo GetNodeInfo()
+            {
+                var inputs = new Dictionary<string, object>
+                {
+                    { "image", new object[] { ImageNode.Id.ToString(), 0 } },
+                };
+
+                string classType = "";
+
+                // if (Preprocessor == Enums.StableDiffusion.ImagePreprocessor.Scribble)
+                //     classType = "ScribblePreprocessor";
+
+                if (Preprocessor == Enums.StableDiffusion.ImagePreprocessor.DepthMap)
+                    classType = "Zoe-DepthMapPreprocessor";
+
+                if (Preprocessor == Enums.StableDiffusion.ImagePreprocessor.LineArtAnime)
+                    classType = "AnimeLineArtPreprocessor";
+
+                if (Preprocessor == Enums.StableDiffusion.ImagePreprocessor.LineArtMangaAnime)
+                    classType = "Manga2Anime-LineArtPreprocessor";
+
+                if (Preprocessor == Enums.StableDiffusion.ImagePreprocessor.LineArt)
+                {
+                    classType = "LineArtPreprocessor";
+                    inputs["coarse"] = "disable";
+                }
+
+                if (Preprocessor == Enums.StableDiffusion.ImagePreprocessor.LineArtHed)
+                {
+                    classType = "HEDPreprocessor";
+                    inputs["version"] = "v1.1";
+                    inputs["safe"] = "enable";
+                }
+
+                if (Preprocessor == Enums.StableDiffusion.ImagePreprocessor.Canny)
+                {
+                    classType = "Canny";
+                    inputs["low_threshold"] = 0.1f;
+                    inputs["high_threshold"] = 0.2f;
+                }
+
+                if (Preprocessor == Enums.StableDiffusion.ImagePreprocessor.Blur)
+                {
+                    classType = "ImageBlur";
+                    inputs["blur_radius"] = 15;
+                    inputs["sigma"] = 1f;
+                }
+
+                return new NodeInfo { Inputs = inputs, ClassType = classType };
             }
 
             public override string ToString()

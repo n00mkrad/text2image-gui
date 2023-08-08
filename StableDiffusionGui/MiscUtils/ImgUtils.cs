@@ -26,6 +26,12 @@ namespace StableDiffusionGui.MiscUtils
             return image;
         }
 
+        public static MagickImage GetMagickImage(string base64)
+        {
+            var magick = MagickImage.FromBase64(base64);
+            return (MagickImage)magick;
+        }
+
         public static Image ResizeImage(Image image, Size size)
         {
             return ResizeImage(image, size.Width, size.Height);
@@ -51,6 +57,11 @@ namespace StableDiffusionGui.MiscUtils
             MagickImage magickImage = GetMagickImage(image);
             magickImage.Negate();
             return magickImage.ToBitmap();
+        }
+
+        public static Image ToBitmap (MagickImage image)
+        {
+            return image.ToBitmap();
         }
 
         public static MagickImage AlphaMask(MagickImage image, MagickImage mask, bool invert)

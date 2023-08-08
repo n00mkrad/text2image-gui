@@ -34,6 +34,7 @@ namespace StableDiffusionGui.Data
         public string Vae { get; set; } = "";
         public string ControlnetModel { get; set; } = "";
         public float ControlnetStrength { get; set; } = 0f;
+        public ImagePreprocessor ImagePreprocessor { get; set; } = (ImagePreprocessor)(-1);
         public bool LockSeed { get; set; } = false;
         public string AppendArgs { get; set; } = "";
 

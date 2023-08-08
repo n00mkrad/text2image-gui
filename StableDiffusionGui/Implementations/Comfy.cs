@@ -81,6 +81,7 @@ namespace StableDiffusionGui.Implementations
                 Upscaler = Config.Instance.UpscaleEnable ? Config.Instance.EsrganModel : "",
                 ControlnetModel = controlnetMdl == null ? "" : controlnetMdl.FullName,
                 ControlnetStrength = s.ControlnetStrength,
+                ImagePreprocessor = s.ImagePreprocessor,
             };
 
             foreach (var lora in s.Loras)
@@ -390,7 +391,7 @@ namespace StableDiffusionGui.Implementations
             if (line.Trim().StartsWith("left over keys:"))
                 line = "left over keys: dict_keys([...])";
 
-            if (line.StartsWith("PREVIEW:b'")) // Decode base64 encoded JPEG preview
+            if (line.StartsWith("PREVIEW_JPEG:b'")) // Decode base64 encoded JPEG preview
             {
                 byte[] imageBytes = Convert.FromBase64String(line.Split('\'')[1]);
                 Console.WriteLine($"Received preview {(imageBytes.Length / 1024f).RoundToInt()}k");
@@ -401,6 +402,14 @@ namespace StableDiffusionGui.Implementations
                     Program.MainForm.pictBoxPreview.Image = image;
                 }
 
+                return;
+            }
+
+            if (line.StartsWith("PREVIEW_WEBP:b'")) // Decode base64 encoded WEBP preview
+            {
+                Console.WriteLine($"Received WEBP preview {((line.Length * sizeof(Char)) / 1024f).RoundToInt()}k");
+                var magick = ImgUtils.GetMagickImage(line.Split('\'')[1]);
+                Program.MainForm.pictBoxImgViewer.Image = ImgUtils.ToBitmap(magick);
                 return;
             }
 
@@ -459,6 +468,7 @@ namespace StableDiffusionGui.Implementations
             public EasyDict<string, float> Loras = new EasyDict<string, float>();
             public string ControlnetModel;
             public float ControlnetStrength = 1f;
+            public ImagePreprocessor ImagePreprocessor;
             public int Steps;
             public long Seed;
             public float Scale;

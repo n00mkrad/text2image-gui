@@ -89,7 +89,7 @@ namespace StableDiffusionGui.Forms
                 return implementation == Implementation.Comfy && !AnyInits;
 
             if(control == panelControlnet)
-                return implementation == Implementation.Comfy && (ImgMode)comboxInpaintMode.SelectedIndex == ImgMode.ControlnetRaw && comboxControlnet.Items.Count > 0;
+                return ControlnetAvailable(implementation) && (ImgMode)comboxInpaintMode.SelectedIndex == ImgMode.Controlnet && comboxControlnet.Items.Count > 0;
 
             return false;
         }
@@ -128,6 +128,19 @@ namespace StableDiffusionGui.Forms
 
             bool img2img = MainUi.CurrentInitImgPaths.Any();
             bool inpaintCompat = imp.Supports(Feature.NativeInpainting);
+
+            if (img2img && inpaintCompat)
+                available = true;
+
+            return available;
+        }
+
+        private static bool ControlnetAvailable(Implementation imp)
+        {
+            bool available = false;
+
+            bool img2img = MainUi.CurrentInitImgPaths.Any();
+            bool inpaintCompat = imp.Supports(Feature.Controlnet);
 
             if (img2img && inpaintCompat)
                 available = true;

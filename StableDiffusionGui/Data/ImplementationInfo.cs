@@ -6,7 +6,7 @@ namespace StableDiffusionGui.Data
 {
     public class ImplementationInfo
     {
-        public enum Feature { InteractiveCli, CustomModels, CustomVae, HalfPrecisionToggle, NegPrompts, Img2Img, NativeInpainting, DeviceSelection, MultipleSamplers, Embeddings, SeamlessMode, SymmetricMode, HiresFix, Lora }
+        public enum Feature { InteractiveCli, CustomModels, CustomVae, HalfPrecisionToggle, NegPrompts, Img2Img, NativeInpainting, DeviceSelection, MultipleSamplers, Embeddings, SeamlessMode, SymmetricMode, HiresFix, Lora, Controlnet }
         public List<Feature> SupportedFeatures = new List<Feature>();
         public Enums.Ai.Backend Backend { get; set; } = Enums.Ai.Backend.Cuda;
         public string[] ValidModelExts { get; set; } = new string[0];
@@ -41,7 +41,7 @@ namespace StableDiffusionGui.Data
             {
                 Backend = Enums.Ai.Backend.Cuda;
                 SupportedModelFormats = new Format[] { Format.Safetensors, Format.Pytorch };
-                SupportedFeatures = new List<Feature> { Feature.InteractiveCli, Feature.CustomModels, Feature.NegPrompts, Feature.MultipleSamplers, Feature.Img2Img, Feature.HiresFix, Feature.CustomVae, Feature.Lora, Feature.Embeddings, Feature.NativeInpainting };
+                SupportedFeatures = new List<Feature> { Feature.InteractiveCli, Feature.CustomModels, Feature.NegPrompts, Feature.MultipleSamplers, Feature.Img2Img, Feature.HiresFix, Feature.CustomVae, Feature.Lora, Feature.Embeddings, Feature.NativeInpainting, Feature.Controlnet };
             }
         }
     }

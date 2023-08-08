@@ -28,8 +28,9 @@ namespace StableDiffusionGui.Main
             public enum Sampler { K_Dpmpp_2M, Dpmpp_2M, K_Dpmpp_2M_Sde, Dpmpp_2M_Sde, K_Euler, Euler_A, Euler, Ddim, Lms, Heun, Dpm_2, Dpm_2_A, UniPc }
             public enum SeamlessMode { Disabled, SeamlessBoth, SeamlessVert, SeamlessHor }
             public enum SymmetryMode { Disabled, SymVert, SymHor, SymBoth }
-            public enum ImgMode { InitializationImage, ImageMask, Outpainting, ControlnetRaw }
+            public enum ImgMode { InitializationImage, ImageMask, Outpainting, Controlnet }
             public enum LatentUpscaleMode { Disabled, Factor, TargetRes }
+            public enum ImagePreprocessor { None, Canny, LineArtHed, LineArt, LineArtAnime, LineArtMangaAnime, DepthMap, Blur }
         }
 
         public class Comfy

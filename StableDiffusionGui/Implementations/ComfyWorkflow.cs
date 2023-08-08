@@ -17,12 +17,12 @@ namespace StableDiffusionGui.Implementations
     {
         public class Node
         {
-            public int Id { get; set; }
+            public string Id { get; set; }
             public string Title { get; set; } = "";
 
             public Node() { }
 
-            public Node(int id, string title = "")
+            public Node(string id, string title = "")
             {
                 Id = id;
                 Title = title;
@@ -155,11 +155,23 @@ namespace StableDiffusionGui.Implementations
             encodeInitImg.VaeNode = model1;
             encodeInitImg.LoadMask = g.MaskPath.IsNotEmpty();
 
+            INode preProcessor = null;
+
+            if (g.ImagePreprocessor != Enums.StableDiffusion.ImagePreprocessor.None)
+                preProcessor = new GenericImagePreprocessor { ImageNode = loadInitImg, Preprocessor = g.ImagePreprocessor };
+
+            if (preProcessor != null)
+            {
+                preProcessor.Id = g.ImagePreprocessor.ToString();
+                preProcessor.Title = "ImgPreprocessor";
+                nodes.Add(preProcessor);
+            }
+
             var controlNet = (NmkdControlNet)nodesDict["ControlNet"]; // ControlNet
             controlNet.ModelPath = g.ControlnetModel;
             controlNet.Strength = g.ControlnetStrength;
             controlNet.ConditioningNode = encodePosPromptBase;
-            controlNet.ImageNode = loadInitImg;
+            controlNet.ImageNode = preProcessor ?? loadInitImg;
 
             var samplerBase = (NmkdKSampler)nodesDict["SamplerBase"]; // Sampler Base
             samplerBase.AddNoise = true;
@@ -259,9 +271,9 @@ namespace StableDiffusionGui.Implementations
             {
                 if (lines[i].StartsWith("      \"id\":"))
                 {
-                    int id = lines[i].GetInt();
                     string type = lines[i + 1].Split("\"type\":")[1].Trim().Trim(',').Trim('\"');
                     string title = (i + 2 < lines.Count) && lines[i + 2].Trim().StartsWith("\"title\":") ? lines[i + 2].Split("\"title\":")[1].Trim().Trim(',').Trim('\"') : "";
+                    string id = $"{type}{lines[i].GetInt()}";
 
                     INode newNode = null;
                     if (type == "Reroute") continue;
@@ -281,7 +293,7 @@ namespace StableDiffusionGui.Implementations
                     else if (type == "NmkdStringConstant") newNode = new NmkdStringConstant();
                     else if (type == "NmkdCheckpointLoader") newNode = new NmkdCheckpointLoader();
                     else if (type == "CLIPSetLastLayer") newNode = new CLIPSetLastLayer();
-                    else if (type == "NmkdImageLoader") newNode = new NmkdImageLoader();
+                    else if (type == "NmkdImageLoader") newNode = new NmkdImageLoader() { Id = FormatUtils.GetUnixTimestamp() };
                     else if (type == "NmkdImageUpscale") newNode = new NmkdImageUpscale();
                     else if (type == "NmkdMultiLoraLoader") newNode = new NmkdMultiLoraLoader();
                     else if (type == "NmkdImageMaskComposite") newNode = new NmkdImageMaskComposite();
@@ -291,13 +303,26 @@ namespace StableDiffusionGui.Implementations
                     if (newNode == null)
                         continue;
 
-                    newNode.Id = id;
+                    if (newNode.Id.IsEmpty())
+                        newNode.Id = id + newNode.Id;
+
                     newNode.Title = title;
                     nodesList.Add(newNode);
                 }
             }
             return nodesList;
         }
+
+        // private static int GetAvailableId(List<INode> nodes)
+        // {
+        //     List<int> ids = nodes.Select(n => n.Id.GetInt()).ToList();
+        //     int id = (int)FormatUtils.GetUnixTime();
+        // 
+        //     while (ids.Contains(id))
+        //         id++;
+        // 
+        //     return id;
+        // }
 
         public static string GetComfySampler(Enums.StableDiffusion.Sampler s)
         {
