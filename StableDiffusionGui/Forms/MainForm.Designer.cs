@@ -32,8 +32,8 @@ namespace StableDiffusionGui.Forms
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.runBtn = new System.Windows.Forms.Button();
             this.titleLabel = new System.Windows.Forms.Label();
             this.logBox = new StableDiffusionGui.Controls.CustomTextbox();
@@ -145,18 +145,6 @@ namespace StableDiffusionGui.Forms
             this.panelDebugLoopback = new System.Windows.Forms.Panel();
             this.checkboxLoopback = new System.Windows.Forms.CheckBox();
             this.label16 = new System.Windows.Forms.Label();
-            this.panelDebugPerlinThresh = new System.Windows.Forms.Panel();
-            this.textboxThresh = new System.Windows.Forms.TextBox();
-            this.label15 = new System.Windows.Forms.Label();
-            this.label14 = new System.Windows.Forms.Label();
-            this.label13 = new System.Windows.Forms.Label();
-            this.textboxPerlin = new System.Windows.Forms.TextBox();
-            this.panelDebugSendStdin = new System.Windows.Forms.Panel();
-            this.label12 = new System.Windows.Forms.Label();
-            this.textboxCliTest = new System.Windows.Forms.TextBox();
-            this.panelDebugAppendArgs = new System.Windows.Forms.Panel();
-            this.label18 = new System.Windows.Forms.Label();
-            this.textboxDebugAppendArgs = new System.Windows.Forms.TextBox();
             this.panelCollapseDebug = new System.Windows.Forms.Panel();
             this.panelSymmetry = new System.Windows.Forms.Panel();
             this.label19 = new System.Windows.Forms.Label();
@@ -165,7 +153,6 @@ namespace StableDiffusionGui.Forms
             this.panelCollapseSymmetry = new System.Windows.Forms.Panel();
             this.panelSampler = new System.Windows.Forms.Panel();
             this.label7 = new System.Windows.Forms.Label();
-            this.textboxTestUpscaler = new System.Windows.Forms.TextBox();
             this.panelUpscaling = new System.Windows.Forms.TableLayoutPanel();
             this.label27 = new System.Windows.Forms.Label();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
@@ -268,9 +255,6 @@ namespace StableDiffusionGui.Forms
             this.menuStripPostProcess.SuspendLayout();
             this.panelSettings.SuspendLayout();
             this.panelDebugLoopback.SuspendLayout();
-            this.panelDebugPerlinThresh.SuspendLayout();
-            this.panelDebugSendStdin.SuspendLayout();
-            this.panelDebugAppendArgs.SuspendLayout();
             this.panelCollapseDebug.SuspendLayout();
             this.panelSymmetry.SuspendLayout();
             this.panelSeamless.SuspendLayout();
@@ -702,7 +686,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderScale.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScale.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScale.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderScale.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderScale.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScale.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScale.Name = "textboxSliderScale";
@@ -846,7 +830,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderInitStrength.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderInitStrength.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderInitStrength.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderInitStrength.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderInitStrength.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderInitStrength.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderInitStrength.Name = "textboxSliderInitStrength";
@@ -1041,7 +1025,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderScaleImg.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScaleImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScaleImg.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScaleImg.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderScaleImg.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderScaleImg.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScaleImg.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScaleImg.Name = "textboxSliderScaleImg";
@@ -1591,7 +1575,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderRefineStart.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderRefineStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderRefineStart.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderRefineStart.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderRefineStart.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderRefineStart.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderRefineStart.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderRefineStart.Name = "textboxSliderRefineStart";
@@ -2032,9 +2016,6 @@ namespace StableDiffusionGui.Forms
             | System.Windows.Forms.AnchorStyles.Left)));
             this.panelSettings.AutoScroll = true;
             this.panelSettings.Controls.Add(this.panelDebugLoopback);
-            this.panelSettings.Controls.Add(this.panelDebugPerlinThresh);
-            this.panelSettings.Controls.Add(this.panelDebugSendStdin);
-            this.panelSettings.Controls.Add(this.panelDebugAppendArgs);
             this.panelSettings.Controls.Add(this.panelCollapseDebug);
             this.panelSettings.Controls.Add(this.panelSymmetry);
             this.panelSettings.Controls.Add(this.panelSeamless);
@@ -2078,7 +2059,7 @@ namespace StableDiffusionGui.Forms
             this.panelDebugLoopback.Controls.Add(this.checkboxLoopback);
             this.panelDebugLoopback.Controls.Add(this.label16);
             this.panelDebugLoopback.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelDebugLoopback.Location = new System.Drawing.Point(0, 1165);
+            this.panelDebugLoopback.Location = new System.Drawing.Point(0, 1060);
             this.panelDebugLoopback.Name = "panelDebugLoopback";
             this.panelDebugLoopback.Size = new System.Drawing.Size(651, 35);
             this.panelDebugLoopback.TabIndex = 19;
@@ -2106,154 +2087,6 @@ namespace StableDiffusionGui.Forms
             this.label16.Size = new System.Drawing.Size(164, 13);
             this.label16.TabIndex = 105;
             this.label16.Text = "Enable Loopback Img2Img Mode";
-            // 
-            // panelDebugPerlinThresh
-            // 
-            this.panelDebugPerlinThresh.Controls.Add(this.textboxThresh);
-            this.panelDebugPerlinThresh.Controls.Add(this.label15);
-            this.panelDebugPerlinThresh.Controls.Add(this.label14);
-            this.panelDebugPerlinThresh.Controls.Add(this.label13);
-            this.panelDebugPerlinThresh.Controls.Add(this.textboxPerlin);
-            this.panelDebugPerlinThresh.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelDebugPerlinThresh.Location = new System.Drawing.Point(0, 1130);
-            this.panelDebugPerlinThresh.Name = "panelDebugPerlinThresh";
-            this.panelDebugPerlinThresh.Size = new System.Drawing.Size(651, 35);
-            this.panelDebugPerlinThresh.TabIndex = 18;
-            this.panelDebugPerlinThresh.Visible = false;
-            // 
-            // textboxThresh
-            // 
-            this.textboxThresh.AllowDrop = true;
-            this.textboxThresh.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.textboxThresh.ForeColor = System.Drawing.Color.White;
-            this.textboxThresh.Location = new System.Drawing.Point(470, 0);
-            this.textboxThresh.MinimumSize = new System.Drawing.Size(4, 21);
-            this.textboxThresh.Name = "textboxThresh";
-            this.textboxThresh.Size = new System.Drawing.Size(100, 20);
-            this.textboxThresh.TabIndex = 108;
-            this.textboxThresh.Text = "0";
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label15.ForeColor = System.Drawing.Color.White;
-            this.label15.Location = new System.Drawing.Point(410, 4);
-            this.label15.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(54, 13);
-            this.label15.TabIndex = 107;
-            this.label15.Text = "Threshold";
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label14.ForeColor = System.Drawing.Color.White;
-            this.label14.Location = new System.Drawing.Point(230, 4);
-            this.label14.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(63, 13);
-            this.label14.TabIndex = 106;
-            this.label14.Text = "Perlin Noise";
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.ForeColor = System.Drawing.Color.White;
-            this.label13.Location = new System.Drawing.Point(2, 4);
-            this.label13.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(144, 13);
-            this.label13.TabIndex = 105;
-            this.label13.Text = "Set Perlin Noise + Threshold ";
-            // 
-            // textboxPerlin
-            // 
-            this.textboxPerlin.AllowDrop = true;
-            this.textboxPerlin.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.textboxPerlin.ForeColor = System.Drawing.Color.White;
-            this.textboxPerlin.Location = new System.Drawing.Point(299, 0);
-            this.textboxPerlin.MinimumSize = new System.Drawing.Size(4, 21);
-            this.textboxPerlin.Name = "textboxPerlin";
-            this.textboxPerlin.Size = new System.Drawing.Size(100, 20);
-            this.textboxPerlin.TabIndex = 4;
-            this.textboxPerlin.Text = "0.0";
-            // 
-            // panelDebugSendStdin
-            // 
-            this.panelDebugSendStdin.Controls.Add(this.label12);
-            this.panelDebugSendStdin.Controls.Add(this.textboxCliTest);
-            this.panelDebugSendStdin.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelDebugSendStdin.Location = new System.Drawing.Point(0, 1095);
-            this.panelDebugSendStdin.Name = "panelDebugSendStdin";
-            this.panelDebugSendStdin.Size = new System.Drawing.Size(651, 35);
-            this.panelDebugSendStdin.TabIndex = 14;
-            this.panelDebugSendStdin.Visible = false;
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.ForeColor = System.Drawing.Color.White;
-            this.label12.Location = new System.Drawing.Point(0, 4);
-            this.label12.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(155, 13);
-            this.label12.TabIndex = 105;
-            this.label12.Text = "Send Stdin to Running Process";
-            // 
-            // textboxCliTest
-            // 
-            this.textboxCliTest.AllowDrop = true;
-            this.textboxCliTest.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textboxCliTest.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.textboxCliTest.ForeColor = System.Drawing.Color.White;
-            this.textboxCliTest.Location = new System.Drawing.Point(233, 0);
-            this.textboxCliTest.MinimumSize = new System.Drawing.Size(4, 21);
-            this.textboxCliTest.Name = "textboxCliTest";
-            this.textboxCliTest.Size = new System.Drawing.Size(415, 21);
-            this.textboxCliTest.TabIndex = 4;
-            this.textboxCliTest.Text = "0,1";
-            this.textboxCliTest.DoubleClick += new System.EventHandler(this.textboxCliTest_DoubleClick);
-            // 
-            // panelDebugAppendArgs
-            // 
-            this.panelDebugAppendArgs.Controls.Add(this.label18);
-            this.panelDebugAppendArgs.Controls.Add(this.textboxDebugAppendArgs);
-            this.panelDebugAppendArgs.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelDebugAppendArgs.Location = new System.Drawing.Point(0, 1060);
-            this.panelDebugAppendArgs.Name = "panelDebugAppendArgs";
-            this.panelDebugAppendArgs.Size = new System.Drawing.Size(651, 35);
-            this.panelDebugAppendArgs.TabIndex = 21;
-            this.panelDebugAppendArgs.Visible = false;
-            // 
-            // label18
-            // 
-            this.label18.AutoSize = true;
-            this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label18.ForeColor = System.Drawing.Color.White;
-            this.label18.Location = new System.Drawing.Point(0, 4);
-            this.label18.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(158, 13);
-            this.label18.TabIndex = 105;
-            this.label18.Text = "Append Args to Each Command";
-            // 
-            // textboxDebugAppendArgs
-            // 
-            this.textboxDebugAppendArgs.AllowDrop = true;
-            this.textboxDebugAppendArgs.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textboxDebugAppendArgs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.textboxDebugAppendArgs.ForeColor = System.Drawing.Color.White;
-            this.textboxDebugAppendArgs.Location = new System.Drawing.Point(233, 0);
-            this.textboxDebugAppendArgs.MinimumSize = new System.Drawing.Size(4, 21);
-            this.textboxDebugAppendArgs.Name = "textboxDebugAppendArgs";
-            this.textboxDebugAppendArgs.Size = new System.Drawing.Size(415, 21);
-            this.textboxDebugAppendArgs.TabIndex = 4;
             // 
             // panelCollapseDebug
             // 
@@ -2321,7 +2154,6 @@ namespace StableDiffusionGui.Forms
             // 
             this.panelSampler.Controls.Add(this.label7);
             this.panelSampler.Controls.Add(this.comboxSampler);
-            this.panelSampler.Controls.Add(this.textboxTestUpscaler);
             this.panelSampler.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelSampler.Location = new System.Drawing.Point(0, 885);
             this.panelSampler.Name = "panelSampler";
@@ -2339,19 +2171,6 @@ namespace StableDiffusionGui.Forms
             this.label7.Size = new System.Drawing.Size(45, 13);
             this.label7.TabIndex = 104;
             this.label7.Text = "Sampler";
-            // 
-            // textboxTestUpscaler
-            // 
-            this.textboxTestUpscaler.AllowDrop = true;
-            this.textboxTestUpscaler.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textboxTestUpscaler.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.textboxTestUpscaler.ForeColor = System.Drawing.Color.White;
-            this.textboxTestUpscaler.Location = new System.Drawing.Point(442, 3);
-            this.textboxTestUpscaler.MinimumSize = new System.Drawing.Size(4, 21);
-            this.textboxTestUpscaler.Name = "textboxTestUpscaler";
-            this.textboxTestUpscaler.Size = new System.Drawing.Size(206, 21);
-            this.textboxTestUpscaler.TabIndex = 114;
             // 
             // panelUpscaling
             // 
@@ -2742,7 +2561,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderSteps.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderSteps.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderSteps.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderSteps.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderSteps.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderSteps.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderSteps.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderSteps.Name = "textboxSliderSteps";
@@ -3053,27 +2872,27 @@ namespace StableDiffusionGui.Forms
             this.gridLoras.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.gridLoras.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.gridLoras.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.Disable;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.gridLoras.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gridLoras.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.gridLoras.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.gridLoras.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColEnabled,
             this.ColName,
             this.ColWeight});
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.gridLoras.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.gridLoras.DefaultCellStyle = dataGridViewCellStyle4;
             this.gridLoras.Location = new System.Drawing.Point(233, -1);
             this.gridLoras.MultiSelect = false;
             this.gridLoras.Name = "gridLoras";
@@ -3585,12 +3404,6 @@ namespace StableDiffusionGui.Forms
             this.panelSettings.ResumeLayout(false);
             this.panelDebugLoopback.ResumeLayout(false);
             this.panelDebugLoopback.PerformLayout();
-            this.panelDebugPerlinThresh.ResumeLayout(false);
-            this.panelDebugPerlinThresh.PerformLayout();
-            this.panelDebugSendStdin.ResumeLayout(false);
-            this.panelDebugSendStdin.PerformLayout();
-            this.panelDebugAppendArgs.ResumeLayout(false);
-            this.panelDebugAppendArgs.PerformLayout();
             this.panelCollapseDebug.ResumeLayout(false);
             this.panelSymmetry.ResumeLayout(false);
             this.panelSymmetry.PerformLayout();
@@ -3710,16 +3523,12 @@ namespace StableDiffusionGui.Forms
         private System.Windows.Forms.TextBox textboxSliderScale;
         private System.Windows.Forms.TextBox textboxSliderInitStrength;
         public System.Windows.Forms.ToolStripMenuItem fitWindowSizeToImageSizeToolStripMenuItem;
-        private System.Windows.Forms.Label label12;
         public System.Windows.Forms.ToolStripMenuItem openCmdInPythonEnvironmentToolStripMenuItem;
         public System.Windows.Forms.ToolStripMenuItem copyToFavoritesToolStripMenuItem;
         public System.Windows.Forms.ToolStripMenuItem upscaleToolStripMenuItem;
         public System.Windows.Forms.ToolStripMenuItem faceRestorationToolStripMenuItem;
         public System.Windows.Forms.ToolStripMenuItem applyAllToolStripMenuItem;
         public System.Windows.Forms.ToolStripMenuItem postProcessImageToolStripMenuItem;
-        private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.Label label13;
         public System.Windows.Forms.ComboBox comboxSampler;
         public CustomTextbox textboxPrompt;
         public CustomUpDown upDownIterations;
@@ -3738,13 +3547,10 @@ namespace StableDiffusionGui.Forms
         public System.Windows.Forms.Label labelImgPromptNeg;
         public System.Windows.Forms.TextBox textboxClipsegMask;
         public System.Windows.Forms.ComboBox comboxInpaintMode;
-        public System.Windows.Forms.TextBox textboxCliTest;
         public System.Windows.Forms.ComboBox comboxResH;
         public System.Windows.Forms.ComboBox comboxResW;
         public System.Windows.Forms.CheckBox checkboxHiresFix;
         public System.Windows.Forms.ComboBox comboxSeamless;
-        public System.Windows.Forms.TextBox textboxThresh;
-        public System.Windows.Forms.TextBox textboxPerlin;
         public System.Windows.Forms.Button runBtn;
         public System.Windows.Forms.Button installerBtn;
         public CustomTextbox logBox;
@@ -3780,9 +3586,7 @@ namespace StableDiffusionGui.Forms
         public System.Windows.Forms.Panel panelSeamless;
         public System.Windows.Forms.Panel panelInitImgStrength;
         public System.Windows.Forms.Panel panelInpainting;
-        public System.Windows.Forms.Panel panelDebugSendStdin;
         public System.Windows.Forms.Panel panelBaseImg;
-        public System.Windows.Forms.Panel panelDebugPerlinThresh;
         public System.Windows.Forms.Panel panelPromptNeg;
         public System.Windows.Forms.Panel panelPrompt;
         public System.Windows.Forms.Label labelCurrentImage;
@@ -3811,9 +3615,6 @@ namespace StableDiffusionGui.Forms
         private System.Windows.Forms.ContextMenuStrip menuStripInstall;
         private System.Windows.Forms.ToolStripMenuItem manageInstallationToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem installUpdatesToolStripMenuItem;
-        public System.Windows.Forms.Panel panelDebugAppendArgs;
-        private System.Windows.Forms.Label label18;
-        public System.Windows.Forms.TextBox textboxDebugAppendArgs;
         public System.Windows.Forms.ComboBox comboxResizeGravity;
         public HTAlt.WinForms.HTButton btnCollapseDebug;
         public HTAlt.WinForms.HTButton btnCollapseSymmetry;
@@ -3886,7 +3687,6 @@ namespace StableDiffusionGui.Forms
         public CustomUpDown updownUpscaleResultH;
         public System.Windows.Forms.CheckBox checkboxPreview;
         public System.Windows.Forms.PictureBox pictBoxPreview;
-        public System.Windows.Forms.TextBox textboxTestUpscaler;
         public System.Windows.Forms.Panel panelControlnet;
         public CustomUpDown updownControlnetStrength;
         public System.Windows.Forms.ComboBox comboxControlnet;

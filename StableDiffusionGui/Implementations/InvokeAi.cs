@@ -63,8 +63,6 @@ namespace StableDiffusionGui.Implementations
                 args["seamless"] = Args.InvokeAi.GetSeamlessArg(s.SeamlessMode);
                 args["symmetry"] = Args.InvokeAi.GetSymmetryArg(s.SymmetryMode);
                 args["hiresFix"] = s.HiresFix ? "--hires_fix" : "";
-                args["perlin"] = s.Perlin > 0f ? $"--perlin {s.Perlin.ToStringDot()}" : "";
-                args["threshold"] = s.Threshold > 0 ? $"--threshold {s.Threshold}" : "";
                 args["debug"] = s.AppendArgs;
                 args["res"] = $"-W {s.Res.Width} -H {s.Res.Height}";
                 args["sampler"] = $"-A {s.Sampler.ToString().Lower()}";

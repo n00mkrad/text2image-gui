@@ -315,12 +315,6 @@ namespace StableDiffusionGui.Forms
             Inpainting.ClearMask();
         }
 
-        private void textboxCliTest_DoubleClick(object sender, EventArgs e)
-        {
-            TtiProcess.WriteStdIn(textboxCliTest.Text, 0, true);
-            textboxCliTest.Text = "";
-        }
-
         private void addCurrentSettingsToQueueToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var settings = GetCurrentTtiSettings();

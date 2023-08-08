@@ -78,7 +78,7 @@ namespace StableDiffusionGui.Implementations
                 ModelRefiner = refineModel == null ? "" : refineModel.FullName,
                 Vae = vae == null ? "" : vae.FullName,
                 Sampler = s.Sampler,
-                Upscaler = Config.Instance.UpscaleEnable ? Program.MainForm.textboxTestUpscaler.Text : "",
+                Upscaler = Config.Instance.UpscaleEnable ? Config.Instance.EsrganModel : "",
                 ControlnetModel = controlnetMdl == null ? "" : controlnetMdl.FullName,
                 ControlnetStrength = s.ControlnetStrength,
             };

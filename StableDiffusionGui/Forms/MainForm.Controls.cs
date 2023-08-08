@@ -26,7 +26,7 @@ namespace StableDiffusionGui.Forms
         public Dictionary<Control, List<Panel>> CategoryPanels = new Dictionary<Control, List<Panel>>(); // Key: Collapse Button - Value: Child Panels
         private List<Control> _expandedCategories = new List<Control>();
 
-        private List<Control> _debugControls { get { return new List<Control> { panelDebugLoopback, panelDebugPerlinThresh, panelDebugSendStdin, panelDebugAppendArgs }; } }
+        private List<Control> _debugControls { get { return new List<Control> { panelDebugLoopback }; } }
 
         public bool IsUsingInpaintingModel { get { return Path.ChangeExtension(Config.Instance.Model, null).EndsWith(Constants.SuffixesPrefixes.InpaintingMdlSuf); } }
         public bool AnyInits { get { return MainUi.CurrentInitImgPaths.Any(); } }
@@ -56,7 +56,7 @@ namespace StableDiffusionGui.Forms
             CategoryPanels.Add(btnCollapseGeneration, new List<Panel> { panelControlnet, panelInpainting, panelInitImgStrength, panelIterations, panelSteps, panelRefineStart, panelScale, panelScaleImg, panelSeed });
             CategoryPanels.Add(btnCollapseRendering, new List<Panel> { panelRes, panelUpscaling, panelSampler });
             CategoryPanels.Add(btnCollapseSymmetry, new List<Panel> { panelSeamless, panelSymmetry });
-            CategoryPanels.Add(btnCollapseDebug, new List<Panel> { panelDebugAppendArgs, panelDebugSendStdin, panelDebugPerlinThresh, panelDebugLoopback });
+            CategoryPanels.Add(btnCollapseDebug, new List<Panel> { panelDebugLoopback });
 
             // Expand default categories
             _expandedCategories = new List<Control> { btnCollapseImplementation, btnCollapsePrompt, btnCollapseRendering, btnCollapseGeneration };

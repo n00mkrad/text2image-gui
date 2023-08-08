@@ -92,6 +92,7 @@ namespace StableDiffusionGui.Io
         public bool NmkdiffSdXLSequential;
         public float SdXlRefinerStrength;
         public Enums.Comfy.VramPreset ComfyVramPreset;
+        public string EsrganModel;
 
         public ConfigInstance()
         {

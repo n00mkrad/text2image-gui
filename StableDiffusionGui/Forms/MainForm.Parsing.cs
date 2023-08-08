@@ -168,10 +168,7 @@ namespace StableDiffusionGui.Forms
                 SeamlessMode = comboxSeamless.Visible ? ((SeamlessMode)comboxSeamless.SelectedIndex) : SeamlessMode.Disabled,
                 SymmetryMode = comboxSymmetry.Visible ? ((SymmetryMode)comboxSymmetry.SelectedIndex) : SymmetryMode.Disabled,
                 HiresFix = checkboxHiresFix.Visible && checkboxHiresFix.Checked,
-                Perlin = textboxPerlin.GetFloat(),
-                Threshold = textboxThresh.GetInt(),
                 ImgMode = comboxInpaintMode.Visible ? ((ImgMode)comboxInpaintMode.SelectedIndex) : ImgMode.InitializationImage,
-                AppendArgs = textboxDebugAppendArgs.Text,
                 ScalesImg = MainUi.GetExtraValues(textboxExtraScalesImg.Text, sliderScaleImg.ActualValueFloat).ToArray(),
                 Loras = GetLoras(),
             };

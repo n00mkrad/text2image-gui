@@ -44,8 +44,6 @@ namespace StableDiffusionGui.Data
         public SeamlessMode SeamlessMode { get; set; } = SeamlessMode.Disabled;
         public SymmetryMode SymmetryMode { get; set; } = SymmetryMode.Disabled;
         public bool HiresFix { get; set; } = false;
-        public float Perlin { get; set; } = 0f;
-        public int Threshold { get; set; } = 0;
         public ImgMode ImgMode { get; set; } = ImgMode.InitializationImage;
         [JsonConverter(typeof(EasyDictValueToListConverter<string, float>))]
         public EasyDict<string, List<float>> Loras { get; set; } = new EasyDict<string, List<float>>();
@@ -143,8 +141,6 @@ namespace StableDiffusionGui.Data
                    SeamlessMode == other.SeamlessMode &&
                    SymmetryMode == other.SymmetryMode &&
                    HiresFix == other.HiresFix &&
-                   Perlin == other.Perlin &&
-                   Threshold == other.Threshold &&
                    ImgMode == other.ImgMode;
         }
 
@@ -188,10 +184,7 @@ namespace StableDiffusionGui.Data
                 hash = hash * 31 + SeamlessMode.GetHashCode();
                 hash = hash * 31 + SymmetryMode.GetHashCode();
                 hash = hash * 31 + HiresFix.GetHashCode();
-                hash = hash * 31 + Perlin.GetHashCode();
-                hash = hash * 31 + Threshold.GetHashCode();
                 hash = hash * 31 + ImgMode.GetHashCode();
-
                 return hash;
             }
         }
@@ -234,8 +227,6 @@ namespace StableDiffusionGui.Data
                    SeamlessMode == other.SeamlessMode &&
                    SymmetryMode == other.SymmetryMode &&
                    HiresFix == other.HiresFix &&
-                   Perlin == other.Perlin &&
-                   Threshold == other.Threshold &&
                    ImgMode == other.ImgMode;
         }
     }
