@@ -390,7 +390,7 @@ namespace StableDiffusionGui.Ui
             }
             else if (!string.IsNullOrWhiteSpace(text))
             {
-                values = text.Split(",").Select(x => x.GetFloat()).Where(x => x >= 0.05f).ToList();
+                values = text.Split(",").Select(x => x.GetFloat()).ToList();
             }
 
             return values;

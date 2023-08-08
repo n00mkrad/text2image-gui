@@ -24,9 +24,9 @@ namespace StableDiffusionGui
         public static string TrimNumbers(this string s, bool allowDotComma = false, bool allowScientific = false)
         {
             if (!allowDotComma)
-                s = Regex.Replace(s, $"[^0-9{(allowScientific ? "e" : "")}]", "");
+                s = Regex.Replace(s, $"[^0-9.{(allowScientific ? "e" : "")}]", "");
             else
-                s = Regex.Replace(s, $"[^.,0-9{(allowScientific ? "e" : "")}]", "");
+                s = Regex.Replace(s, $"[^.,0-9-{(allowScientific ? "e" : "")}]", "");
 
             return s.Trim();
         }
