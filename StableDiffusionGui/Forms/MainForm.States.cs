@@ -88,6 +88,9 @@ namespace StableDiffusionGui.Forms
             if (control == panelUpscaling)
                 return implementation == Implementation.Comfy && !AnyInits;
 
+            if(control == panelControlnet)
+                return implementation == Implementation.Comfy && (ImgMode)comboxInpaintMode.SelectedIndex == ImgMode.ControlnetRaw && comboxControlnet.Items.Count > 0;
+
             return false;
         }
 

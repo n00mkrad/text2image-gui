@@ -78,6 +78,8 @@ namespace StableDiffusionGui.Implementations
                 Vae = vae == null ? "" : vae.FullName,
                 Sampler = s.Sampler,
                 Upscaler = Config.Instance.UpscaleEnable ? Program.MainForm.textboxTestUpscaler.Text : "",
+                ControlnetModel = s.ControlnetModel,
+                ControlnetStrength = s.ControlnetStrength,
             };
 
             foreach (var lora in s.Loras)
@@ -453,6 +455,8 @@ namespace StableDiffusionGui.Implementations
             public string Prompt;
             public string NegativePrompt;
             public EasyDict<string, float> Loras = new EasyDict<string, float>();
+            public string ControlnetModel;
+            public float ControlnetStrength = 1f;
             public int Steps;
             public long Seed;
             public float Scale;

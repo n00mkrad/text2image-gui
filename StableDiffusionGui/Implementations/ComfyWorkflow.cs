@@ -73,6 +73,8 @@ namespace StableDiffusionGui.Implementations
             bool refine = g.RefinerStrength > 0.001f;
             bool upscale = !g.TargetResolution.IsEmpty && g.TargetResolution != g.BaseResolution;
             bool inpaint = g.MaskPath.IsNotEmpty();
+            bool controlnet = g.ControlnetModel.IsNotEmpty() && g.ControlnetStrength > 0.001f;
+            bool img2img = g.InitImg.IsNotEmpty() && !controlnet;
             int baseSteps = (g.Steps * (1f - g.RefinerStrength)).RoundToInt();
             int baseWidth = g.BaseResolution.Width;
             int baseHeight = g.BaseResolution.Height;
@@ -153,12 +155,18 @@ namespace StableDiffusionGui.Implementations
             encodeInitImg.VaeNode = model1;
             encodeInitImg.LoadMask = g.MaskPath.IsNotEmpty();
 
+            var controlNet = (NmkdControlNet)nodesDict["ControlNet"]; // ControlNet
+            controlNet.ModelPath = g.ControlnetModel;
+            controlNet.Strength = g.ControlnetStrength;
+            controlNet.ConditioningNode = encodePosPromptBase;
+            controlNet.ImageNode = loadInitImg;
+
             var samplerBase = (NmkdKSampler)nodesDict["SamplerBase"]; // Sampler Base
             samplerBase.AddNoise = true;
             samplerBase.NodeModel = loraLoader;
-            samplerBase.NodePositive = encodePosPromptBase;
+            samplerBase.NodePositive = controlnet ? (INode)controlNet : (INode)encodePosPromptBase;
             samplerBase.NodeNegative = encodeNegPromptBase;
-            samplerBase.NodeLatentImage = g.InitImg.IsNotEmpty() ? (INode)encodeInitImg : (INode)emptyLatentImg;
+            samplerBase.NodeLatentImage = img2img ? (INode)encodeInitImg : (INode)emptyLatentImg;
             samplerBase.SamplerName = GetComfySampler(g.Sampler);
             samplerBase.Scheduler = GetComfyScheduler(g);
             samplerBase.NodeSeed = seed;
@@ -167,7 +175,7 @@ namespace StableDiffusionGui.Implementations
             samplerBase.NodeStartStep = stepsSkip;
             samplerBase.NodeEndStep = stepsBase;
             samplerBase.ReturnLeftoverNoise = refine;
-            samplerBase.Denoise = g.InitImg.IsNotEmpty() ? g.InitStrength : 1.0f;
+            samplerBase.Denoise = img2img ? g.InitStrength : 1.0f;
 
             var latentUpscale = (LatentUpscale)nodesDict["UpscaleLatent"]; // Latent Upscale
             latentUpscale.Width = g.TargetResolution.Width;
@@ -177,7 +185,7 @@ namespace StableDiffusionGui.Implementations
             var samplerHires = (NmkdKSampler)nodesDict["SamplerHires"]; // Sampler Hi-Res
             samplerHires.AddNoise = true;
             samplerHires.NodeModel = loraLoader;
-            samplerHires.NodePositive = encodePosPromptBase;
+            samplerHires.NodePositive = controlnet ? (INode)controlNet : (INode)encodePosPromptBase;
             samplerHires.NodeNegative = encodeNegPromptBase;
             samplerHires.NodeLatentImage = latentUpscale;
             samplerHires.SamplerName = GetComfySampler(g.Sampler);
@@ -277,6 +285,7 @@ namespace StableDiffusionGui.Implementations
                     else if (type == "NmkdImageUpscale") newNode = new NmkdImageUpscale();
                     else if (type == "NmkdMultiLoraLoader") newNode = new NmkdMultiLoraLoader();
                     else if (type == "NmkdImageMaskComposite") newNode = new NmkdImageMaskComposite();
+                    else if (type == "NmkdControlNet") newNode = new NmkdControlNet();
                     else Logger.Log($"Comfy Nodes Parser: No class found for {type}.", true);
 
                     if (newNode == null)

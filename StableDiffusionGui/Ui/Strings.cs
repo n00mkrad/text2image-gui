@@ -25,6 +25,8 @@ namespace StableDiffusionGui.Ui
         {
             { Enums.StableDiffusion.ImgMode.InitializationImage.ToString(), "Base Image (Img2Img)" },
             { Enums.StableDiffusion.ImgMode.ImageMask.ToString(), "Inpainting with Mask" },
+            { Enums.StableDiffusion.ImgMode.Outpainting.ToString(), "Outpainting / Fill Transparency" },
+            { Enums.StableDiffusion.ImgMode.ControlnetRaw.ToString(), "ControlNet (Direct Input)" },
             // { Enums.StableDiffusion.ImgMode.TextMask.ToString(), "Inpainting with Text Description" },
         };
 

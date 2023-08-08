@@ -48,6 +48,7 @@
                 public const string Vae = "VAEs";
                 public const string Embeddings = "Embeddings";
                 public const string Loras = "LoRAs";
+                public const string Controlnets = "ControlNet";
             }
 
             public class Cache

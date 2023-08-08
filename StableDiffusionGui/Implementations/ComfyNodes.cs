@@ -512,8 +512,8 @@ namespace StableDiffusionGui.Implementations
                 {
                     Inputs = new Dictionary<string, object>
                     {
-                        ["model_path"] = UpscaleModelPath,
-                        ["image"] = new object[] { ImageNode.Id.ToString(), 0 }
+                        { "model_path", UpscaleModelPath },
+                        { "image", new object[] { ImageNode.Id.ToString(), 0 } }
                     },
                     ClassType = nameof(NmkdImageUpscale)
                 };
@@ -573,6 +573,36 @@ namespace StableDiffusionGui.Implementations
                 {
                     Inputs = inputs,
                     ClassType = nameof(NmkdImageMaskComposite)
+                };
+            }
+
+            public override string ToString()
+            {
+                return ToStringNode(this);
+            }
+        }
+
+        public class NmkdControlNet : Node, INode
+        {
+            public string ModelPath;
+            public float Strength = 1.0f;
+            public INode ConditioningNode;
+            public INode ImageNode;
+
+            public NodeInfo GetNodeInfo()
+            {
+                var inputs = new Dictionary<string, object>
+                {
+                    { "controlnet_path", ModelPath },
+                    { "strength", Strength },
+                    { "conditioning", new object[] { ConditioningNode.Id.ToString(), 0 } },
+                    { "image", new object[] { ImageNode.Id.ToString(), 0 } },
+                };
+
+                return new NodeInfo
+                {
+                    Inputs = inputs,
+                    ClassType = nameof(NmkdControlNet)
                 };
             }
 

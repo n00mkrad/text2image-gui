@@ -24,6 +24,7 @@ namespace StableDiffusionGui.Io
         public string Model = "";
         public string ModelAux = "";
         public string ModelVae = "";
+        public string ModelControlnet = "";
         public bool EnablePromptHistory;
         public float CodeformerFidelity;
         public int ResW;
@@ -76,6 +77,7 @@ namespace StableDiffusionGui.Io
         public float EsrganDenoise;
         public string EmbeddingsDir;
         public string LorasDir;
+        public string ControlNetsDir;
         public bool AutoDeleteImgs;
         public EasyDict<string, List<float>> LoraWeights = new EasyDict<string, List<float>>();
         public string LastTrainingBaseModel;
@@ -125,6 +127,7 @@ namespace StableDiffusionGui.Io
             EsrganDenoise = 0.0f;
             EmbeddingsDir = Paths.GetEmbeddingsPath();
             LorasDir = Paths.GetLorasPath();
+            ControlNetsDir = Paths.GetControlNetsPath();
 
             float ramGb = HwInfo.GetTotalRamGb;
             ImageCacheMaxSizeMb = 64;

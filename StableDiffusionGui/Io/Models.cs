@@ -49,6 +49,14 @@ namespace StableDiffusionGui.Io
             return fileList.Select(f => new Model(f, Format.Safetensors, Enums.Models.Type.Lora)).ToList();
         }
 
+        public static List<Model> GetControlNets()
+        {
+            string path = Config.Instance == null ? Paths.GetControlNetsPath() : Config.Instance.ControlNetsDir;
+            path = IoUtils.EnsureAbsPath(path);
+            var fileList = IoUtils.GetFileInfosSorted(path, false, "*.safetensors");
+            return fileList.Select(f => new Model(f, Format.Safetensors, Enums.Models.Type.ControlNet)).ToList();
+        }
+
         public static List<Model> GetModelsAll(bool removeUnknownModels = true, List<string> overridePaths = null, Enums.Models.Type overrideType = (Enums.Models.Type)(-1))
         {
             List<Model> list = new List<Model>();

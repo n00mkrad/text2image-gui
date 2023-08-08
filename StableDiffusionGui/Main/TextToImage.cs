@@ -25,7 +25,6 @@ namespace StableDiffusionGui.Main
         public static long PreviousSeed = -1;
         public static bool Canceled = false;
         public static bool Canceling = false;
-
         public static bool IsRunningQueue = false;
         public static List<TtiTaskInfo> CompletedTasks = new List<TtiTaskInfo>();
 
@@ -99,7 +98,7 @@ namespace StableDiffusionGui.Main
                     case Implementation.InvokeAi: LastInstance = (IImplementation)new InvokeAi(); break;
                     case Implementation.DiffusersOnnx: LastInstance = (IImplementation)new SdOnnx(); break;
                     case Implementation.InstructPixToPix: LastInstance = (IImplementation)new InstructPixToPix(); break;
-                    case Implementation.Comfy: LastInstance = new Comfy(); break; // (IImplementation)new SdXl(); break;
+                    case Implementation.Comfy: LastInstance = new Comfy(); break;
                 }
 
                 tasks.Add(LastInstance.Run(s, tempOutDir));

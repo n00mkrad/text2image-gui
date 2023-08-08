@@ -738,7 +738,7 @@ namespace StableDiffusionGui.Io
                 {
                     Logger.Log($"Path '{pathOrString}' is directory! Returning empty hash.", true);
                     return hashStr;
-                } 
+                }
 
                 var stream = validPath && File.Exists(pathOrString) ? File.OpenRead(pathOrString) : StringToStream(pathOrString);
 
@@ -972,6 +972,16 @@ namespace StableDiffusionGui.Io
             }
 
             return Directory.CreateDirectory(path);
+        }
+
+        public static string EnsureAbsPath(string path)
+        {
+            bool rel = path[1] != ':';
+
+            if (rel)
+                return Path.GetFullPath(path);
+            else
+                return path;
         }
     }
 }

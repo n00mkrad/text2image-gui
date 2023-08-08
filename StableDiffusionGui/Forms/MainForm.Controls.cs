@@ -44,16 +44,16 @@ namespace StableDiffusionGui.Forms
             comboxResizeGravity.FillFromEnum<ImageMagick.Gravity>(Strings.ImageGravity, 4, new List<ImageMagick.Gravity> { ImageMagick.Gravity.Undefined });
             comboxBackend.FillFromEnum<Implementation>(Strings.Implementation, -1);
             comboxBackend.Text = Strings.Implementation.Get(Config.Instance.Implementation.ToString());
-            ReloadModelsCombox();
-            UpdateModel();
-            ReloadEmbeddings();
-            ReloadLoras();
+            // ReloadModelsCombox();
+            // UpdateModel();
+            // ReloadEmbeddings();
+            // ReloadLoras();
             comboxModelArch.FillFromEnum<Enums.Models.SdArch>(Strings.SdModelArch, 0);
 
             // Set categories
             CategoryPanels.Add(btnCollapseImplementation, new List<Panel> { panelBackend, panelModel, panelModel2 });
             CategoryPanels.Add(btnCollapsePrompt, new List<Panel> { panelPrompt, panelPromptNeg, panelEmbeddings, panelLoras, panelBaseImg });
-            CategoryPanels.Add(btnCollapseGeneration, new List<Panel> { panelInpainting, panelInitImgStrength, panelIterations, panelSteps, panelRefineStart, panelScale, panelScaleImg, panelSeed });
+            CategoryPanels.Add(btnCollapseGeneration, new List<Panel> { panelControlnet, panelInpainting, panelInitImgStrength, panelIterations, panelSteps, panelRefineStart, panelScale, panelScaleImg, panelSeed });
             CategoryPanels.Add(btnCollapseRendering, new List<Panel> { panelRes, panelUpscaling, panelSampler });
             CategoryPanels.Add(btnCollapseSymmetry, new List<Panel> { panelSeamless, panelSymmetry });
             CategoryPanels.Add(btnCollapseDebug, new List<Panel> { panelDebugAppendArgs, panelDebugSendStdin, panelDebugPerlinThresh, panelDebugLoopback });
@@ -75,6 +75,7 @@ namespace StableDiffusionGui.Forms
             comboxResH.SelectedIndexChanged += (s, e) => ResolutionChanged(); // Resolution change
             ImageViewer.OnImageChanged += () => UpdateImgViewerBtns(); // Image change
             comboxEmbeddingList.DropDown += (s, e) => ReloadEmbeddings(); // Reload embeddings
+            comboxControlnet.DropDown += (s, e) => ReloadControlnets(); // Reload controlnets
             gridLoras.KeyUp += (s, e) => { if (e.KeyCode == Keys.Enter) GridMoveUp(gridLoras); };
             gridLoras.CurrentCellDirtyStateChanged += (s, e) =>
             {
@@ -139,7 +140,7 @@ namespace StableDiffusionGui.Forms
 
             // Panel visibility
             SetVisibility(new Control[] { panelBaseImg, panelPromptNeg, panelEmbeddings, panelRefineStart, panelInitImgStrength, panelInpainting, panelScaleImg, panelRes, panelSampler, panelSeamless, panelSymmetry, checkboxHiresFix,
-                textboxClipsegMask, panelResizeGravity, labelResChange, btnResetRes, checkboxShowInitImg, panelModel, panelLoras, panelModel2, panelUpscaling }, imp);
+                textboxClipsegMask, panelResizeGravity, labelResChange, btnResetRes, checkboxShowInitImg, panelModel, panelLoras, panelModel2, panelUpscaling, panelControlnet }, imp);
 
             bool adv = Config.Instance.AdvancedUi;
             upDownIterations.Maximum = !adv ? Config.IniInstance.IterationsMax : Config.IniInstance.IterationsMax * 10;
@@ -165,6 +166,7 @@ namespace StableDiffusionGui.Forms
             ModelChanged();
             ReloadLoras();
             ReloadEmbeddings();
+            ReloadControlnets();
             RefreshUpscaleUi();
             CategoryPanels.Keys.ToList().ForEach(btn => btn.Parent.SetVisible(CategoryPanels[btn].Any(p => p.Visible))); // Hide collapse buttons if their category has 0 visible panels
 
@@ -276,7 +278,6 @@ namespace StableDiffusionGui.Forms
         public void ReloadLoras()
         {
             string defaultStrength = Constants.Ui.DefaultLoraStrength.ToString("0.0##");
-            // gridLoras.Rows.Cast<DataGridViewRow>().Where(row => row.Cells[2].Value.ToString().GetFloat() <= 0f).ToList().ForEach(row => row.Cells[2].Value = defaultStrength);
             var selection = GetLoras(); // Save current selection
             List<Model> loras = Models.GetLoras();
             string currLoras = loras.Select(l => l.FormatIndependentName).AsString();
@@ -315,6 +316,22 @@ namespace StableDiffusionGui.Forms
 
             gridLoras.Rows.Clear();
             newRowValues.ForEach(row => gridLoras.Rows.Add((bool)row[0], (string)row[1], (string)row[2]));
+        }
+
+        private string _lastControlnets = "";
+
+        public void ReloadControlnets()
+        {
+            var controlnets = Models.GetControlNets();
+            string currEmbeddings = controlnets.Select(l => l.FormatIndependentName).AsString();
+            IEnumerable<string> embeddingNames = controlnets.Select(m => m.FormatIndependentName);
+            comboxControlnet.SetItems(embeddingNames, UiExtensions.SelectMode.Retain);
+
+            // if (currEmbeddings != _lastControlnets)
+            //     controlnets = ValidateEmbeddingNames(controlnets);
+
+            _lastControlnets = controlnets.Select(l => l.FormatIndependentName).AsString();
+            SetVisibility(panelEmbeddings);
         }
 
         private void ResolutionChanged()
