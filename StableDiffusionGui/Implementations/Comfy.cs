@@ -48,6 +48,7 @@ namespace StableDiffusionGui.Implementations
             Model model = TtiUtils.CheckIfModelExists(s.Model, Implementation.Comfy, baseModels);
             string vaeName = s.Vae.NullToEmpty().Replace("None", ""); // VAE model name
             Model vae = Models.GetModel(Models.GetVaes(), vaeName);
+            var controlnetMdl = Models.GetControlNets().Where(m => m.FormatIndependentName == s.ControlnetModel).FirstOrDefault();
 
             if (model == null)
                 return;
@@ -78,7 +79,7 @@ namespace StableDiffusionGui.Implementations
                 Vae = vae == null ? "" : vae.FullName,
                 Sampler = s.Sampler,
                 Upscaler = Config.Instance.UpscaleEnable ? Program.MainForm.textboxTestUpscaler.Text : "",
-                ControlnetModel = s.ControlnetModel,
+                ControlnetModel = controlnetMdl == null ? "" : controlnetMdl.FullName,
                 ControlnetStrength = s.ControlnetStrength,
             };
 

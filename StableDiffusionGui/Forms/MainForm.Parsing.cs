@@ -85,6 +85,7 @@ namespace StableDiffusionGui.Forms
                     comboxResizeGravity.SetWithText(s.ResizeGravity.ToString(), true, Strings.ImageGravity);
 
                 SetLoras(s.Loras);
+                comboxControlnet.SetWithText(s.ControlnetModel, true);
 
             })).RunWithUiStopped(this, "Error loading image generation settings:", true);
 
@@ -139,7 +140,6 @@ namespace StableDiffusionGui.Forms
         public TtiSettings GetCurrentTtiSettings()
         {
             Config.Instance.ModelAux = comboxModel2.Text;
-            var controlnetMdl = Models.GetControlNets().Where(m => m.FormatIndependentName == comboxControlnet.Text).FirstOrDefault();
 
             TtiSettings settings = new TtiSettings
             {
@@ -159,7 +159,7 @@ namespace StableDiffusionGui.Forms
                 Model = Config.Instance.Model,
                 ModelAux = Config.Instance.ModelAux,
                 Vae = Config.Instance.ModelVae,
-                ControlnetModel = controlnetMdl == null ? "" : controlnetMdl.FullName,
+                ControlnetModel = comboxControlnet.Text,
                 ControlnetStrength = (float)updownControlnetStrength.Value,
                 LockSeed = checkboxLockSeed.Checked,
                 ClipSegMask = textboxClipsegMask.Text.Trim(),
