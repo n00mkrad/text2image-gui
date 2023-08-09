@@ -31,7 +31,7 @@ namespace StableDiffusionGui.Main
             public enum SymmetryMode { Disabled, SymVert, SymHor, SymBoth }
             public enum ImgMode { InitializationImage, ImageMask, Outpainting, Controlnet }
             public enum LatentUpscaleMode { Disabled, Factor, TargetRes }
-            public enum ImagePreprocessor { None, Canny, LineArtHed, LineArt, LineArtAnime, LineArtMangaAnime, DepthMap, Blur }
+            public enum ImagePreprocessor { None, Canny, LineArtHed, LineArt, LineArtAnime, LineArtMangaAnime, DepthMap, Blur, Pixelate }
         }
 
         public class Comfy

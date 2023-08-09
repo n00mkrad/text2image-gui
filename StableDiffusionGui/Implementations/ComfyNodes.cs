@@ -666,6 +666,12 @@ namespace StableDiffusionGui.Implementations
                     inputs["sigma"] = 1f;
                 }
 
+                if (Preprocessor == Enums.StableDiffusion.ImagePreprocessor.Pixelate)
+                {
+                    classType = "NmkdColorPreprocessor";
+                    inputs["divisor"] = 64;
+                }
+
                 return new NodeInfo { Inputs = inputs, ClassType = classType };
             }
 

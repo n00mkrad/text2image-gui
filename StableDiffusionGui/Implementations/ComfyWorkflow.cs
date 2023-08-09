@@ -74,7 +74,7 @@ namespace StableDiffusionGui.Implementations
             bool refine = g.RefinerStrength > 0.001f;
             bool upscale = !g.TargetResolution.IsEmpty && g.TargetResolution != g.BaseResolution;
             bool inpaint = g.MaskPath.IsNotEmpty();
-            bool controlnet = g.ControlnetModel.IsNotEmpty() && g.ControlnetStrength > 0.001f;
+            bool controlnet = g.Controlnets.Any(c => c.ModelPath.IsNotEmpty() && c.Strength > 0.001f);
             bool img2img = g.InitImg.IsNotEmpty() && !controlnet;
             int baseSteps = (g.Steps * (1f - g.RefinerStrength)).RoundToInt();
             int baseWidth = g.BaseResolution.Width;
@@ -158,28 +158,31 @@ namespace StableDiffusionGui.Implementations
             encodeInitImg.VaeNode = model1;
             encodeInitImg.LoadMask = g.MaskPath.IsNotEmpty();
 
-            INode preProcessor = null;
+            INode finalConditioningNode = encodePosPromptBase; // Keep track of the final conditioning node for sampling
 
-            if (g.ImagePreprocessor != Enums.StableDiffusion.ImagePreprocessor.None)
-                preProcessor = new GenericImagePreprocessor { ImageNode = loadInitImg, Preprocessor = g.ImagePreprocessor };
-
-            if (preProcessor != null)
+            for(int i = 0; i < g.Controlnets.Count; i++) // Apply ControlNets
             {
-                preProcessor.Id = g.ImagePreprocessor.ToString();
-                preProcessor.Title = "ImgPreprocessor";
-                nodes.Add(preProcessor);
-            }
+                Comfy.ControlnetInfo ci = g.Controlnets[i];
 
-            var controlNet = (NmkdControlNet)nodesDict["ControlNet"]; // ControlNet
-            controlNet.ModelPath = g.ControlnetModel;
-            controlNet.Strength = g.ControlnetStrength;
-            controlNet.ConditioningNode = encodePosPromptBase;
-            controlNet.ImageNode = preProcessor ?? loadInitImg;
+                if (ci.Preprocessor != Enums.StableDiffusion.ImagePreprocessor.None)
+                    nodes.Add(new GenericImagePreprocessor { ImageNode = loadInitImg, Preprocessor = ci.Preprocessor, Id = $"Preproc{i}" });
+
+                nodes.Add(new NmkdControlNet
+                {
+                    ModelPath = ci.ModelPath,
+                    Strength = ci.Strength,
+                    ConditioningNode = finalConditioningNode,
+                    ImageNode = ci.Preprocessor != Enums.StableDiffusion.ImagePreprocessor.None ? nodes.Last() : loadInitImg,
+                    Id = $"ControlNet{i}",
+                });
+
+                finalConditioningNode = nodes.Last();
+            }
 
             var samplerBase = (NmkdKSampler)nodesDict["SamplerBase"]; // Sampler Base
             samplerBase.AddNoise = true;
             samplerBase.NodeModel = loraLoader;
-            samplerBase.NodePositive = controlnet ? (INode)controlNet : (INode)encodePosPromptBase;
+            samplerBase.NodePositive = finalConditioningNode;
             samplerBase.NodeNegative = encodeNegPromptBase;
             samplerBase.NodeLatentImage = img2img ? (INode)encodeInitImg : (INode)emptyLatentImg;
             samplerBase.SamplerName = GetComfySampler(g.Sampler);
@@ -200,7 +203,7 @@ namespace StableDiffusionGui.Implementations
             var samplerHires = (NmkdKSampler)nodesDict["SamplerHires"]; // Sampler Hi-Res
             samplerHires.AddNoise = true;
             samplerHires.NodeModel = loraLoader;
-            samplerHires.NodePositive = controlnet ? (INode)controlNet : (INode)encodePosPromptBase;
+            samplerHires.NodePositive = finalConditioningNode;
             samplerHires.NodeNegative = encodeNegPromptBase;
             samplerHires.NodeLatentImage = latentUpscale;
             samplerHires.SamplerName = GetComfySampler(g.Sampler);
@@ -300,7 +303,7 @@ namespace StableDiffusionGui.Implementations
                     else if (type == "NmkdImageUpscale") newNode = new NmkdImageUpscale();
                     else if (type == "NmkdMultiLoraLoader") newNode = new NmkdMultiLoraLoader();
                     else if (type == "NmkdImageMaskComposite") newNode = new NmkdImageMaskComposite();
-                    else if (type == "NmkdControlNet") newNode = new NmkdControlNet();
+                    // else if (type == "NmkdControlNet") newNode = new NmkdControlNet();
                     else Logger.Log($"Comfy Nodes Parser: No class found for {type}.", true);
 
                     if (newNode == null)

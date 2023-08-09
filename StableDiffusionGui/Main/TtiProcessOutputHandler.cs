@@ -13,7 +13,7 @@ namespace StableDiffusionGui.Main
         public static List<string> LastMessages { get { return TextToImage.LastInstance == null ? new List<string>() : TextToImage.LastInstance.LastMessages; } }
         private static List<string> _forceKillErrors = new List<string> { "RuntimeError", "ImportError", "OSError", "KeyError", "ModuleNotFoundError", "NameError" };
 
-        public static void HandleLogGeneric(IImplementation implementation, string line, bool hasErrored = false)
+        public static void HandleLogGeneric(IImplementation implementation, string line, bool hasErrored = false, bool forceKillOnPyErr = true)
         {
             bool ellipsis = Program.MainForm.LogText.EndsWith("...");
             string errMsg = "";
@@ -53,12 +53,14 @@ namespace StableDiffusionGui.Main
             {
                 hasErrored = true;
                 errMsg = $"Python Error:\n\n{line}";
-                cancelMode = TextToImage.CancelMode.ForceKill;
+
+                if (forceKillOnPyErr)
+                    cancelMode = TextToImage.CancelMode.ForceKill;
             }
 
             if (hasErrored)
             {
-                TextToImage.Cancel($"Process has errored: {errMsg}", false, cancelMode);
+                TextToImage.Cancel($"Error: {errMsg}", false, cancelMode);
 
                 if (!string.IsNullOrWhiteSpace(errMsg))
                     Task.Run(() => UiUtils.ShowMessageBox(errMsg, UiUtils.MessageType.Error));

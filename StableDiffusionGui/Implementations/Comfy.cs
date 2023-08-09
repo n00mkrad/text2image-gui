@@ -79,10 +79,9 @@ namespace StableDiffusionGui.Implementations
                 Vae = vae == null ? "" : vae.FullName,
                 Sampler = s.Sampler,
                 Upscaler = Config.Instance.UpscaleEnable ? Config.Instance.EsrganModel : "",
-                ControlnetModel = controlnetMdl == null ? "" : controlnetMdl.FullName,
-                ControlnetStrength = s.ControlnetStrength,
-                ImagePreprocessor = s.ImagePreprocessor,
             };
+
+            currentGeneration.Controlnets.Add(new ControlnetInfo { ModelPath = controlnetMdl == null ? "" : controlnetMdl.FullName, Preprocessor = s.ImagePreprocessor, Strength = s.ControlnetStrength });
 
             foreach (var lora in s.Loras)
                 currentGeneration.Loras.Add(lora.Key, lora.Value.First());
@@ -443,6 +442,7 @@ namespace StableDiffusionGui.Implementations
                     Program.MainForm.SetProgressImg(percent);
             }
 
+            // Info: Model type
             if (!TextToImage.Canceled && line.Trim().StartsWith("MODEL INFO:"))
             {
                 var split = line.Split('|');
@@ -453,18 +453,26 @@ namespace StableDiffusionGui.Implementations
                 Logger.Log($"Loaded '{filename.Trunc(100)}' - {Strings.ModelArch.Get(mdlArch.ToString(), true)}", false, Logger.LastUiLine.Contains(filename));
             }
 
+            // Warning: Missing embedding
             if (!TextToImage.Canceled && line.Trim().StartsWith("warning, embedding:") && line.Trim().EndsWith("does not exist, ignoring"))
             {
                 string embName = line.Split("embedding:")[1].Split(' ')[0];
                 Logger.Log($"Warning: Embedding '{embName}' not found!");
             }
 
+            // Warning: Incompatible embedding
             if (!TextToImage.Canceled && line.Trim().StartsWith("WARNING: shape mismatch when trying to apply embedding"))
             {
                 Logger.Log($"Warning: One or more embeddings were ignored because they are not compatible with the selected model.");
             }
 
-            TtiProcessOutputHandler.HandleLogGeneric(this, line, _hasErrored);
+            // Error: Port in use
+            if (!_hasErrored && !TextToImage.Canceled && line.Trim().StartsWith("OSError: [Errno 10048]"))
+            {
+                Logger.Log($"Port is already in use. Are you running ComfyUI on port {ComfyPort}?");
+            }
+
+            TtiProcessOutputHandler.HandleLogGeneric(this, line, _hasErrored, true);
         }
 
         public void ResetLogger()
@@ -478,6 +486,14 @@ namespace StableDiffusionGui.Implementations
             return "embedding:{0}";
         }
 
+        public class ControlnetInfo
+        {
+            public string ModelPath;
+            public ImagePreprocessor Preprocessor;
+            public float Strength;
+            public ControlnetInfo() { }
+        }
+
         public class GenerationInfo
         {
             public string Model;
@@ -487,9 +503,7 @@ namespace StableDiffusionGui.Implementations
             public string Prompt;
             public string NegativePrompt;
             public EasyDict<string, float> Loras = new EasyDict<string, float>();
-            public string ControlnetModel;
-            public float ControlnetStrength = 1f;
-            public ImagePreprocessor ImagePreprocessor;
+            public List<ControlnetInfo> Controlnets = new List<ControlnetInfo>();
             public int Steps;
             public long Seed;
             public float Scale;
