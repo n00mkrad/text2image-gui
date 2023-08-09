@@ -665,14 +665,21 @@ namespace StableDiffusionGui.Forms
 
         public Comfy.ControlnetInfo[] Controlnets = new Comfy.ControlnetInfo[Constants.Ui.ControlnetSlots];
         private int _previousControlnetSlot = 0;
+        private bool _ignoreControlnetSlotChanged = false;
 
         private void ControlnetSlotChanged(bool allowSaving = true)
         {
+            if (_ignoreControlnetSlotChanged)
+            {
+                _ignoreControlnetSlotChanged = false;
+                return;
+            }
+
             int idxOld = _previousControlnetSlot;
             int idxNew = comboxControlnetSlot.SelectedIndex;
 
             // Store settings in current slot
-            if (allowSaving && comboxControlnet.SelectedIndex != 0)
+            if (allowSaving)
             {
                 var preproc = ParseUtils.GetEnum<ImagePreprocessor>(comboxPreprocessor.Text, stringMap: Strings.ImagePreprocessors);
                 Controlnets[idxOld] = new Comfy.ControlnetInfo { Model = comboxControlnet.Text, Preprocessor = preproc, Strength = (float)updownControlnetStrength.Value };
@@ -691,8 +698,12 @@ namespace StableDiffusionGui.Forms
                 updownControlnetStrength.Value = (decimal)Constants.Ui.DefaultControlnetStrength;
             }
 
-            comboxControlnetSlot.SetItems(Enumerable.Range(1, Controlnets.Length).Select(i => $"Slot {i}{(Controlnets[i-1] == null ? "" : $": {Controlnets[i-1].Model}")}"), comboxControlnetSlot.SelectedIndex);
             _previousControlnetSlot = idxNew;
+
+            var newStrings = Enumerable.Range(1, Controlnets.Length).Select(i => $"Slot {i}{(Controlnets[i - 1] == null ? "" : $": {Controlnets[i - 1].Model}")}");
+            var oldStrings = comboxControlnetSlot.Items.Cast<string>();
+            _ignoreControlnetSlotChanged = string.Join("", newStrings) != string.Join("", oldStrings); // If old and new string lists mismatch, ControlnetSlotChanged() will be triggered, and we need to ignore it once
+            comboxControlnetSlot.SetItems(newStrings, comboxControlnetSlot.SelectedIndex);
         }
     }
 }
