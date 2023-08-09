@@ -34,12 +34,12 @@ namespace StableDiffusionGui.Io
                     return new MagickImage(path).ToBitmap();
 
                     // TEMPORARY DISABLE DUE TO DISPOSE BUGS
-                    if (allowCacheLoad && allowCacheStore)
-                        return ImageCache.GetOrLoadAndStore(path, p => new MagickImage(path).ToBitmap());
-                    else if (allowCacheLoad)
-                        return ImageCache.GetOrLoad(path, p => new MagickImage(path).ToBitmap());
-                    else
-                        return new MagickImage(path).ToBitmap();
+                    // if (allowCacheLoad && allowCacheStore)
+                    //     return ImageCache.GetOrLoadAndStore(path, p => new MagickImage(path).ToBitmap());
+                    // else if (allowCacheLoad)
+                    //     return ImageCache.GetOrLoad(path, p => new MagickImage(path).ToBitmap());
+                    // else
+                    //     return new MagickImage(path).ToBitmap();
                 }
             }
             catch (Exception ex)

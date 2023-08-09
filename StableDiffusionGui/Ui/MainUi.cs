@@ -40,8 +40,7 @@ namespace StableDiffusionGui.Ui
                 if (value != null && value.Count() > 0)
                 {
                     Logger.Log(value.Count() == 1 ? $"Now using base image {Path.GetFileName(value[0]).Wrap()}." : $"Now using {value.Count()} base images.");
-
-                    first = ImageCache.GetOrLoadAndStore(value[0], f => IoUtils.GetImage(value[0], allowCacheStore: true)); // Load and cache first image since we need it more often in the UI
+                    first = IoUtils.GetImage(value[0]);
 
                     if (Config.Instance.AutoSetResForInitImg)
                     {
