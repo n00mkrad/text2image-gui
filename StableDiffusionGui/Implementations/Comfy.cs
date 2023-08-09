@@ -79,6 +79,7 @@ namespace StableDiffusionGui.Implementations
                 Vae = vae == null ? "" : vae.FullName,
                 Sampler = s.Sampler,
                 Upscaler = Config.Instance.UpscaleEnable ? Config.Instance.EsrganModel : "",
+                ClipSkip = (Config.Instance.ClipSkip * -1) - 1,
             };
 
             foreach(ControlnetInfo cnet in s.Controlnets)
