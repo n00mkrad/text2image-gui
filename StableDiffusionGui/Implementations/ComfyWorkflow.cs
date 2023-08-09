@@ -74,7 +74,7 @@ namespace StableDiffusionGui.Implementations
             bool refine = g.RefinerStrength > 0.001f;
             bool upscale = !g.TargetResolution.IsEmpty && g.TargetResolution != g.BaseResolution;
             bool inpaint = g.MaskPath.IsNotEmpty();
-            bool controlnet = g.Controlnets.Any(c => c.ModelPath.IsNotEmpty() && c.Strength > 0.001f);
+            bool controlnet = g.Controlnets.Any(c => c.Model.IsNotEmpty() && c.Strength > 0.001f);
             bool img2img = g.InitImg.IsNotEmpty() && !controlnet;
             int baseSteps = (g.Steps * (1f - g.RefinerStrength)).RoundToInt();
             int baseWidth = g.BaseResolution.Width;
@@ -169,7 +169,7 @@ namespace StableDiffusionGui.Implementations
 
                 nodes.Add(new NmkdControlNet
                 {
-                    ModelPath = ci.ModelPath,
+                    ModelPath = ci.Model,
                     Strength = ci.Strength,
                     ConditioningNode = finalConditioningNode,
                     ImageNode = ci.Preprocessor != Enums.StableDiffusion.ImagePreprocessor.None ? nodes.Last() : loadInitImg,

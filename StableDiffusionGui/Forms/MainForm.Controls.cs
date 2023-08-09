@@ -3,6 +3,7 @@ using HTAlt.WinForms;
 using Microsoft.WindowsAPICodePack.Taskbar;
 using StableDiffusionGui.Data;
 using StableDiffusionGui.Extensions;
+using StableDiffusionGui.Implementations;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
@@ -50,6 +51,7 @@ namespace StableDiffusionGui.Forms
             // ReloadLoras();
             comboxModelArch.FillFromEnum<Enums.Models.SdArchInvoke>(Strings.SdModelArch, 0);
             comboxPreprocessor.FillFromEnum<ImagePreprocessor>(Strings.ImagePreprocessors, 0);
+            comboxControlnetSlot.SetItems(Enumerable.Range(1, Controlnets.Length).Select(i => $"Slot {i}"), 0);
 
             // Set categories
             CategoryPanels.Add(btnCollapseImplementation, new List<Panel> { panelBackend, panelModel, panelModel2 });
@@ -90,6 +92,7 @@ namespace StableDiffusionGui.Forms
             comboxResW.LostFocus += (s, e) => { ValidateResolution(comboxResW); };
             comboxUpscaleMode.SelectedIndexChanged += (s, e) => { RefreshUpscaleUi(true); };
             updownUpscaleFactor.ValueChanged += (s, e) => { ValidateResolution(); };
+            comboxControlnetSlot.SelectedIndexChanged += (s, e) => ControlnetSlotChanged();
         }
 
         public void LoadControls()
@@ -109,6 +112,8 @@ namespace StableDiffusionGui.Forms
 
         public void SaveControls()
         {
+            ControlnetSlotChanged();
+
             ConfigParser.SaveGuiElement(upDownIterations, ref Config.Instance.Iterations);
             ConfigParser.SaveGuiElement(sliderSteps, ref Config.Instance.Steps);
             ConfigParser.SaveGuiElement(sliderRefinerStart, ref Config.Instance.SdXlRefinerStrength);
@@ -219,7 +224,7 @@ namespace StableDiffusionGui.Forms
                 comboxResH.Text = h.ToString();
             }
 
-            if(updownUpscaleFactor.Visible)
+            if (updownUpscaleFactor.Visible)
             {
                 float factor = (float)updownUpscaleFactor.Value;
                 updownUpscaleResultH.Value = (comboxResH.GetInt() * factor).RoundToInt().RoundMod(MainUi.CurrentModulo);
@@ -325,8 +330,8 @@ namespace StableDiffusionGui.Forms
         {
             var controlnets = Models.GetControlNets();
             string currEmbeddings = controlnets.Select(l => l.FormatIndependentName).AsString();
-            IEnumerable<string> embeddingNames = controlnets.Select(m => m.FormatIndependentName);
-            comboxControlnet.SetItems(embeddingNames, UiExtensions.SelectMode.Retain);
+            IEnumerable<string> names = controlnets.Select(m => m.FormatIndependentName);
+            comboxControlnet.SetItems(new[] { "None" }.Concat(names), UiExtensions.SelectMode.Retain);
 
             // if (currEmbeddings != _lastControlnets)
             //     controlnets = ValidateEmbeddingNames(controlnets);
@@ -606,12 +611,12 @@ namespace StableDiffusionGui.Forms
             }
         }
 
-        public Size GetUpscaleTargetSize ()
+        public Size GetUpscaleTargetSize()
         {
             int w = comboxResW.GetInt();
             int h = comboxResH.GetInt();
 
-            if(comboxUpscaleMode.SelectedIndex <= 0) // Upscaling disabled
+            if (comboxUpscaleMode.SelectedIndex <= 0) // Upscaling disabled
                 return new Size(w, h);
 
             if (updownUpscaleFactor.Visible)
@@ -628,7 +633,7 @@ namespace StableDiffusionGui.Forms
             return new Size(w, h);
         }
 
-        private void RefreshUpscaleUi (bool stopUi = false)
+        private void RefreshUpscaleUi(bool stopUi = false)
         {
             stopUi = stopUi & this.IsRendering();
 
@@ -646,7 +651,7 @@ namespace StableDiffusionGui.Forms
                 updownUpscaleResultH.Enabled = mode == LatentUpscaleMode.TargetRes;
                 ValidateResolution();
 
-                if(mode == LatentUpscaleMode.Disabled)
+                if (mode == LatentUpscaleMode.Disabled)
                 {
                     updownUpscaleResultW.Value = comboxResW.GetInt().Clamp((int)updownUpscaleResultW.Minimum, (int)updownUpscaleResultW.Maximum);
                     updownUpscaleResultH.Value = comboxResH.GetInt().Clamp((int)updownUpscaleResultW.Minimum, (int)updownUpscaleResultW.Maximum);
@@ -654,8 +659,40 @@ namespace StableDiffusionGui.Forms
             }
             catch { }
 
-            if(stopUi)
+            if (stopUi)
                 this.ResumeRendering();
+        }
+
+        public Comfy.ControlnetInfo[] Controlnets = new Comfy.ControlnetInfo[Constants.Ui.ControlnetSlots];
+        private int _previousControlnetSlot = 0;
+
+        private void ControlnetSlotChanged(bool allowSaving = true)
+        {
+            int idxOld = _previousControlnetSlot;
+            int idxNew = comboxControlnetSlot.SelectedIndex;
+
+            // Store settings in current slot
+            if (allowSaving && comboxControlnet.SelectedIndex != 0)
+            {
+                var preproc = ParseUtils.GetEnum<ImagePreprocessor>(comboxPreprocessor.Text, stringMap: Strings.ImagePreprocessors);
+                Controlnets[idxOld] = new Comfy.ControlnetInfo { Model = comboxControlnet.Text, Preprocessor = preproc, Strength = (float)updownControlnetStrength.Value };
+            }
+
+            if (Controlnets[idxNew] != null) // Load from slot if it's not empty
+            {
+                comboxControlnet.Text = Controlnets[idxNew].Model;
+                comboxPreprocessor.SetWithText(Controlnets[idxNew].Preprocessor.ToString(), stringMap: Strings.ImagePreprocessors);
+                updownControlnetStrength.Value = (decimal)Controlnets[idxNew].Strength;
+            }
+            else // Reset if slot empty
+            {
+                comboxControlnet.SelectedIndex = 0;
+                comboxPreprocessor.SelectedIndex = 0;
+                updownControlnetStrength.Value = (decimal)Constants.Ui.DefaultControlnetStrength;
+            }
+
+            comboxControlnetSlot.SetItems(Enumerable.Range(1, Controlnets.Length).Select(i => $"Slot {i}{(Controlnets[i-1] == null ? "" : $": {Controlnets[i-1].Model}")}"), comboxControlnetSlot.SelectedIndex);
+            _previousControlnetSlot = idxNew;
         }
     }
 }

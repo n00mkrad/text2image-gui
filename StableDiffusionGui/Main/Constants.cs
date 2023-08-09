@@ -109,6 +109,8 @@
         public class Ui
         {
             public const float DefaultLoraStrength = 1.0f;
+            public const float DefaultControlnetStrength = 1.0f;
+            public const int ControlnetSlots = 5;
         }
     }
 }

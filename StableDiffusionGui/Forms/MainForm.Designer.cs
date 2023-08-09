@@ -198,6 +198,7 @@ namespace StableDiffusionGui.Forms
             this.label11 = new System.Windows.Forms.Label();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.panelInpainting = new System.Windows.Forms.Panel();
+            this.comboxControlnetSlot = new System.Windows.Forms.ComboBox();
             this.panelResizeGravity = new System.Windows.Forms.Panel();
             this.label21 = new System.Windows.Forms.Label();
             this.comboxInpaintMode = new System.Windows.Forms.ComboBox();
@@ -690,7 +691,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderScale.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScale.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScale.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderScale.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderScale.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScale.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScale.Name = "textboxSliderScale";
@@ -834,7 +835,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderInitStrength.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderInitStrength.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderInitStrength.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderInitStrength.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderInitStrength.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderInitStrength.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderInitStrength.Name = "textboxSliderInitStrength";
@@ -1029,7 +1030,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderScaleImg.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScaleImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScaleImg.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScaleImg.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderScaleImg.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderScaleImg.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScaleImg.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScaleImg.Name = "textboxSliderScaleImg";
@@ -1579,7 +1580,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderRefineStart.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderRefineStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderRefineStart.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderRefineStart.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderRefineStart.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderRefineStart.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderRefineStart.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderRefineStart.Name = "textboxSliderRefineStart";
@@ -2581,7 +2582,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderSteps.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderSteps.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderSteps.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderSteps.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderSteps.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderSteps.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderSteps.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderSteps.Name = "textboxSliderSteps";
@@ -2802,6 +2803,7 @@ namespace StableDiffusionGui.Forms
             // 
             // panelInpainting
             // 
+            this.panelInpainting.Controls.Add(this.comboxControlnetSlot);
             this.panelInpainting.Controls.Add(this.panelResizeGravity);
             this.panelInpainting.Controls.Add(this.textboxClipsegMask);
             this.panelInpainting.Controls.Add(this.comboxInpaintMode);
@@ -2814,6 +2816,19 @@ namespace StableDiffusionGui.Forms
             this.panelInpainting.Size = new System.Drawing.Size(651, 35);
             this.panelInpainting.TabIndex = 12;
             this.panelInpainting.Visible = false;
+            // 
+            // comboxControlnetSlot
+            // 
+            this.comboxControlnetSlot.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboxControlnetSlot.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.comboxControlnetSlot.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboxControlnetSlot.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboxControlnetSlot.ForeColor = System.Drawing.Color.White;
+            this.comboxControlnetSlot.FormattingEnabled = true;
+            this.comboxControlnetSlot.Location = new System.Drawing.Point(439, 0);
+            this.comboxControlnetSlot.Name = "comboxControlnetSlot";
+            this.comboxControlnetSlot.Size = new System.Drawing.Size(210, 21);
+            this.comboxControlnetSlot.TabIndex = 116;
             // 
             // panelResizeGravity
             // 
@@ -3754,6 +3769,7 @@ namespace StableDiffusionGui.Forms
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label12;
+        public System.Windows.Forms.ComboBox comboxControlnetSlot;
     }
 }
 

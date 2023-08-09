@@ -85,7 +85,8 @@ namespace StableDiffusionGui.Forms
                     comboxResizeGravity.SetWithText(s.ResizeGravity.ToString(), true, Strings.ImageGravity);
 
                 SetLoras(s.Loras);
-                comboxControlnet.SetWithText(s.ControlnetModel, true);
+                Controlnets = s.Controlnets.ToArray();
+                ControlnetSlotChanged(false); // Explicitly call function to load Controlnets into GUI
 
             })).RunWithUiStopped(this, "Error loading image generation settings:", true);
 
@@ -159,9 +160,7 @@ namespace StableDiffusionGui.Forms
                 Model = Config.Instance.Model,
                 ModelAux = Config.Instance.ModelAux,
                 Vae = Config.Instance.ModelVae,
-                ControlnetModel = comboxControlnet.Visible ? comboxControlnet.Text : "",
-                ControlnetStrength = (float)updownControlnetStrength.Value,
-                ImagePreprocessor = ParseUtils.GetEnum<ImagePreprocessor>(comboxPreprocessor.Text, true, Strings.ImagePreprocessors),
+                Controlnets = Controlnets.Where(c => c != null && c.Model.IsNotEmpty()).ToList(),
                 LockSeed = checkboxLockSeed.Checked,
                 ClipSegMask = textboxClipsegMask.Text.Trim(),
                 ResizeGravity = comboxResizeGravity.Visible ? ParseUtils.GetEnum<ImageMagick.Gravity>(comboxResizeGravity.Text, true, Strings.ImageGravity) : (ImageMagick.Gravity)(-1),

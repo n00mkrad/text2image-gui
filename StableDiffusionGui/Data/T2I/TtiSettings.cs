@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using System.Drawing;
 using StableDiffusionGui.Ui;
 using static StableDiffusionGui.Serialization.JsonUtils;
+using StableDiffusionGui.Implementations;
 
 namespace StableDiffusionGui.Data
 {
@@ -32,9 +33,7 @@ namespace StableDiffusionGui.Data
         public string Model { get; set; } = "";
         public string ModelAux { get; set; } = "";
         public string Vae { get; set; } = "";
-        public string ControlnetModel { get; set; } = "";
-        public float ControlnetStrength { get; set; } = 0f;
-        public ImagePreprocessor ImagePreprocessor { get; set; } = (ImagePreprocessor)(-1);
+        public List<Comfy.ControlnetInfo> Controlnets { get; set; } = new List<Comfy.ControlnetInfo>();
         public bool LockSeed { get; set; } = false;
         public string AppendArgs { get; set; } = "";
 

@@ -48,7 +48,7 @@ namespace StableDiffusionGui.Implementations
             Model model = TtiUtils.CheckIfModelExists(s.Model, Implementation.Comfy, baseModels);
             string vaeName = s.Vae.NullToEmpty().Replace("None", ""); // VAE model name
             Model vae = Models.GetModel(Models.GetVaes(), vaeName);
-            var controlnetMdl = Models.GetControlNets().Where(m => m.FormatIndependentName == s.ControlnetModel).FirstOrDefault();
+            List<Model> controlnetMdls = Models.GetControlNets();
 
             if (model == null)
                 return;
@@ -81,7 +81,12 @@ namespace StableDiffusionGui.Implementations
                 Upscaler = Config.Instance.UpscaleEnable ? Config.Instance.EsrganModel : "",
             };
 
-            currentGeneration.Controlnets.Add(new ControlnetInfo { ModelPath = controlnetMdl == null ? "" : controlnetMdl.FullName, Preprocessor = s.ImagePreprocessor, Strength = s.ControlnetStrength });
+            foreach(ControlnetInfo cnet in s.Controlnets)
+            {
+                var cnetModel = controlnetMdls.Where(m => m.FormatIndependentName == cnet.Model).FirstOrDefault();
+                if(cnetModel == null) continue;
+                currentGeneration.Controlnets.Add(new ControlnetInfo { Model = cnetModel.FullName, Preprocessor = cnet.Preprocessor, Strength = cnet.Strength });
+            }
 
             foreach (var lora in s.Loras)
                 currentGeneration.Loras.Add(lora.Key, lora.Value.First());
@@ -488,7 +493,7 @@ namespace StableDiffusionGui.Implementations
 
         public class ControlnetInfo
         {
-            public string ModelPath;
+            public string Model;
             public ImagePreprocessor Preprocessor;
             public float Strength;
             public ControlnetInfo() { }
