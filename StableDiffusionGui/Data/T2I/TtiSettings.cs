@@ -41,7 +41,7 @@ namespace StableDiffusionGui.Data
         #region InvokeAI-specific
         public string ClipSegMask { get; set; } = "";
         public ImageMagick.Gravity ResizeGravity { get; set; } = (ImageMagick.Gravity)(-1);
-        public Enums.Models.SdArch ModelArch { get; set; } = Enums.Models.SdArch.Automatic;
+        public Enums.Models.SdArchInvoke ModelArch { get; set; } = Enums.Models.SdArchInvoke.Automatic;
         public SeamlessMode SeamlessMode { get; set; } = SeamlessMode.Disabled;
         public SymmetryMode SymmetryMode { get; set; } = SymmetryMode.Disabled;
         public bool HiresFix { get; set; } = false;

@@ -82,7 +82,7 @@ namespace StableDiffusionGui.Forms
             if (control == panelRefineStart)
                 return implementation == Implementation.Comfy;
 
-            if (control == panelModel2 && comboxModel.Items.Count > 0)
+            if (control == panelModel2)
                 return implementation == Implementation.Comfy;
 
             if (control == panelUpscaling)

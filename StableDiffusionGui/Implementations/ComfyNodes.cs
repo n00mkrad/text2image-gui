@@ -93,7 +93,7 @@ namespace StableDiffusionGui.Implementations
                 {
                     Inputs = new Dictionary<string, object>
                     {
-                        ["ckpt_name"] = CkptName
+                        ["ckpt_name"] = CkptName,
                     },
                     ClassType = nameof(CheckpointLoaderSimple)
                 };
@@ -419,6 +419,7 @@ namespace StableDiffusionGui.Implementations
             public string ModelPath;
             public bool LoadVae;
             public string VaePath;
+            public string EmbeddingsDir;
 
             public NodeInfo GetNodeInfo()
             {
@@ -427,6 +428,7 @@ namespace StableDiffusionGui.Implementations
                     { "mdl_path", ModelPath },
                     { "load_vae", LoadVae ? "enable" : "disable" },
                     { "vae_path", VaePath },
+                    { "embeddings_dir", EmbeddingsDir },
                 };
 
                 return new NodeInfo

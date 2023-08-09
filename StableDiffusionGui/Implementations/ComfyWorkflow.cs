@@ -10,6 +10,7 @@ using System.Drawing;
 using System.Linq;
 using static StableDiffusionGui.Implementations.ComfyNodes;
 using System.IO;
+using StableDiffusionGui.Io;
 
 namespace StableDiffusionGui.Implementations
 {
@@ -112,10 +113,12 @@ namespace StableDiffusionGui.Implementations
             model1.ModelPath = g.Model;
             model1.LoadVae = true;
             model1.VaePath = g.Vae ?? "";
+            model1.EmbeddingsDir = Io.Paths.ReturnDir(Config.Instance.EmbeddingsDir, true, true);
 
             var model2 = (NmkdCheckpointLoader)nodesDict["Model2"]; // Aux Model (Refiner etc)
             model2.ModelPath = g.ModelRefiner == null ? g.Model : g.ModelRefiner;
             model2.LoadVae = false;
+            model2.EmbeddingsDir = Io.Paths.ReturnDir(Config.Instance.EmbeddingsDir, true, true);
 
             var clipSkipModel1 = (CLIPSetLastLayer)nodesDict["ClipSkipModel1"]; // CLIP Skip Model 1
             var clipSkipModel2 = (CLIPSetLastLayer)nodesDict["ClipSkipModel2"]; // CLIP Skip Model 2
@@ -351,11 +354,11 @@ namespace StableDiffusionGui.Implementations
             bool upscale = !g.TargetResolution.IsEmpty && g.TargetResolution != g.BaseResolution;
             bool noThreeStage = !(upscale && g.RefinerStrength > 0f);
 
-            // if (noThreeStage && g.Sampler.ToString().Contains("2M"))
-            // {
-            //     sched = "simple";
-            //     Logger.Log($"Warning: Scheduler was overwritten to '{sched}' due to Comfy issues when using 2M samplers in final denoising stage.", true);
-            // }
+            if (noThreeStage && g.Sampler.ToString().Contains("2M"))
+            {
+                sched = "simple";
+                Logger.Log($"Warning: Scheduler was overwritten to '{sched}' due to Comfy issues when using 2M samplers in final denoising stage.", true);
+            }
 
             return sched;
         }

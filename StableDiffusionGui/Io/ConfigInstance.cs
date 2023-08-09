@@ -11,7 +11,7 @@ namespace StableDiffusionGui.Io
 {
     public class ConfigInstance
     {
-        public EasyDict<string, Enums.Models.SdArch> ModelArchs = new EasyDict<string, Enums.Models.SdArch>();
+        public EasyDict<string, Enums.Models.SdArchInvoke> ModelArchs = new EasyDict<string, Enums.Models.SdArchInvoke>();
         public int CmdDebugMode;
         public bool MultiPromptsSameSeed;
         public int SamplerIdx;
@@ -147,7 +147,7 @@ namespace StableDiffusionGui.Io
 
         public void Clean()
         {
-            ModelArchs.ToList().Where(pair => pair.Value == Enums.Models.SdArch.Automatic || !File.Exists(pair.Key)).ToList().ForEach(pair => ModelArchs.Remove(pair.Key));
+            ModelArchs.ToList().Where(pair => pair.Value == Enums.Models.SdArchInvoke.Automatic || !File.Exists(pair.Key)).ToList().ForEach(pair => ModelArchs.Remove(pair.Key));
         }
     }
 }

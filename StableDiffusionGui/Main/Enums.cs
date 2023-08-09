@@ -19,11 +19,12 @@ namespace StableDiffusionGui.Main
             public enum Precision { Fp16, Fp32 }
             public enum Format { Diffusers, Pytorch, Safetensors, DiffusersOnnx }
             public enum Type { Normal, Vae, Refiner, Embedding, Lora, ControlNet }
-            public enum SdArch { Automatic, V1, V2, V2V }
+            public enum SdArchInvoke { Automatic, V1, V2, V2V }
         }
 
         public class StableDiffusion
         {
+            public enum ModelArch { Sd1, Sd1Inpaint, Sd2, Sd2Inpaint, Sd2V, SdXlBase, SdXlRefine, Unknown }
             public enum Implementation { InvokeAi, DiffusersOnnx, InstructPixToPix, Comfy }
             public enum Sampler { K_Dpmpp_2M, Dpmpp_2M, K_Dpmpp_2M_Sde, Dpmpp_2M_Sde, K_Euler, Euler_A, Euler, Ddim, Lms, Heun, Dpm_2, Dpm_2_A, UniPc }
             public enum SeamlessMode { Disabled, SeamlessBoth, SeamlessVert, SeamlessHor }

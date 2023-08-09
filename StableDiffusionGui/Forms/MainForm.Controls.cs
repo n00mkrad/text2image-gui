@@ -48,7 +48,7 @@ namespace StableDiffusionGui.Forms
             // UpdateModel();
             // ReloadEmbeddings();
             // ReloadLoras();
-            comboxModelArch.FillFromEnum<Enums.Models.SdArch>(Strings.SdModelArch, 0);
+            comboxModelArch.FillFromEnum<Enums.Models.SdArchInvoke>(Strings.SdModelArch, 0);
             comboxPreprocessor.FillFromEnum<ImagePreprocessor>(Strings.ImagePreprocessors, 0);
 
             // Set categories
@@ -120,7 +120,7 @@ namespace StableDiffusionGui.Forms
             ConfigParser.SaveGuiElement(checkboxHiresFix, ref Config.Instance.HiresFix);
 
             if (Config.Instance != null && comboxModel.SelectedIndex >= 0)
-                Config.Instance.ModelArchs[((Model)comboxModel.SelectedItem).FullName] = ParseUtils.GetEnum<Enums.Models.SdArch>(comboxModelArch.Text, true, Strings.SdModelArch);
+                Config.Instance.ModelArchs[((Model)comboxModel.SelectedItem).FullName] = ParseUtils.GetEnum<Enums.Models.SdArchInvoke>(comboxModelArch.Text, true, Strings.SdModelArch);
 
             Config.Instance.LoraWeights = new EasyDict<string, List<float>>(GetLoras(false).Where(x => x.Value.Count != 1 || x.Value[0] != Constants.Ui.DefaultLoraStrength).ToDictionary(p => p.Key, p => p.Value));
             Config.Save();
@@ -237,12 +237,12 @@ namespace StableDiffusionGui.Forms
                 return;
 
             _prevSelectedModel = mdl.FullName;
-            var exclusionList = new List<Enums.Models.SdArch>();
+            var exclusionList = new List<Enums.Models.SdArchInvoke>();
 
             if (Config.Instance.Implementation != Implementation.InvokeAi || mdl.Format == Enums.Models.Format.Diffusers || mdl.Format == Enums.Models.Format.DiffusersOnnx)
-                exclusionList = Enum.GetValues(typeof(Enums.Models.SdArch)).Cast<Enums.Models.SdArch>().Skip(1).ToList();
+                exclusionList = Enum.GetValues(typeof(Enums.Models.SdArchInvoke)).Cast<Enums.Models.SdArchInvoke>().Skip(1).ToList();
 
-            comboxModelArch.FillFromEnum<Enums.Models.SdArch>(Strings.SdModelArch, 0, exclusionList);
+            comboxModelArch.FillFromEnum<Enums.Models.SdArchInvoke>(Strings.SdModelArch, 0, exclusionList);
 
             if (Config.Instance.ModelArchs.ContainsKey(mdl.FullName))
                 comboxModelArch.SetWithText(Config.Instance.ModelArchs[mdl.FullName].ToString(), false, Strings.SdModelArch);

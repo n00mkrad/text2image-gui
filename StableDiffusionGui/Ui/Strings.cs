@@ -128,9 +128,9 @@ namespace StableDiffusionGui.Ui
 
         public static Dictionary<string, string> SdModelArch = new Dictionary<string, string>()
         {
-            { Enums.Models.SdArch.V1.ToString(), "SD 1.x" },
-            { Enums.Models.SdArch.V2.ToString(), "SD 2.x (512 px)" },
-            { Enums.Models.SdArch.V2V.ToString(), "SD 2.x (768 px)" },
+            { Enums.Models.SdArchInvoke.V1.ToString(), "SD 1.x" },
+            { Enums.Models.SdArchInvoke.V2.ToString(), "SD 2.x (512 px)" },
+            { Enums.Models.SdArchInvoke.V2V.ToString(), "SD 2.x (768 px)" },
         };
 
         public static Dictionary<string, string> LoraSizes = new Dictionary<string, string>
@@ -179,6 +179,17 @@ namespace StableDiffusionGui.Ui
              { Enums.StableDiffusion.ImagePreprocessor.LineArtMangaAnime.ToString(), "Line Art (Anime, Softer)" },
              { Enums.StableDiffusion.ImagePreprocessor.DepthMap.ToString(), "Depth Map (3D Effect)" },
              { Enums.StableDiffusion.ImagePreprocessor.Blur.ToString(), "Blur (For Tile Model)" },
+        };
+
+        public static Dictionary<string, string> ModelArch = new Dictionary<string, string>
+        {
+            { Enums.StableDiffusion.ModelArch.Sd1.ToString(), "SD 1.X (512px)" },
+            { Enums.StableDiffusion.ModelArch.Sd1Inpaint.ToString(), "SD 1.X Inpainting (512px)" },
+            { Enums.StableDiffusion.ModelArch.Sd2.ToString(), "SD 2.0 (512px)" },
+            { Enums.StableDiffusion.ModelArch.Sd2Inpaint.ToString(), "SD 2.0 Inpainting (512px)" },
+            { Enums.StableDiffusion.ModelArch.Sd2V.ToString(), "SD 2.X V (768px)" },
+            { Enums.StableDiffusion.ModelArch.SdXlBase.ToString(), "SD XL Base (1024px)" },
+            { Enums.StableDiffusion.ModelArch.SdXlRefine.ToString(), "SD XL Refiner (1024px)" },
         };
     }
 }

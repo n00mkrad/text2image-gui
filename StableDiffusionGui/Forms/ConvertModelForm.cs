@@ -106,7 +106,7 @@ namespace StableDiffusionGui.Forms
             ConfigParser.SaveGuiElement(checkboxDeleteInput, ref Config.Instance.ConvertModelsDeleteInput);
 
             if (Config.Instance != null && comboxModel.SelectedIndex >= 0)
-                Config.Instance.ModelArchs[((Model)comboxModel.SelectedItem).FullName] = ParseUtils.GetEnum<Enums.Models.SdArch>(comboxModelArch.Text, true, Strings.SdModelArch);
+                Config.Instance.ModelArchs[((Model)comboxModel.SelectedItem).FullName] = ParseUtils.GetEnum<Enums.Models.SdArchInvoke>(comboxModelArch.Text, true, Strings.SdModelArch);
 
             Config.Save();
         }
@@ -130,7 +130,7 @@ namespace StableDiffusionGui.Forms
             Refresh();
             comboxInFormat.FillFromEnum<Enums.Models.Format>(Strings.ModelFormats, 0, Enums.Models.Format.DiffusersOnnx.AsList());
             ConfigParser.LoadGuiElement(checkboxDeleteInput, ref Config.Instance.ConvertModelsDeleteInput);
-            comboxModelArch.FillFromEnum<Enums.Models.SdArch>(Strings.SdModelArch, 0);
+            comboxModelArch.FillFromEnum<Enums.Models.SdArchInvoke>(Strings.SdModelArch, 0);
             comboxInFormat.SetWithEnum(Enums.Models.Format.Safetensors, true, Strings.ModelFormats);
             TabOrderInit(new List<Control>() { comboxInFormat, comboxModel, comboxOutFormat, checkboxDeleteInput, btnRun }, 0);
             await Task.Delay(1);

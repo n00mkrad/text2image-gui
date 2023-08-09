@@ -1,4 +1,6 @@
-﻿using StableDiffusionGui.Data;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using StableDiffusionGui.Data;
 using StableDiffusionGui.Implementations;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
@@ -8,6 +10,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
 using ZetaLongPaths;
 using static StableDiffusionGui.Main.Enums.Models;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
@@ -330,6 +333,70 @@ namespace StableDiffusionGui.Io
             }
 
             return models.Any(m => m.FormatIndependentName.Lower().EndsWith("inpainting"));
+        }
+
+        public class UnetConfig
+        {
+            public bool UseCheckpoint { get; set; }
+            public int ImageSize { get; set; }
+            public int OutChannels { get; set; }
+            public bool UseSpatialTransformer { get; set; }
+            public bool Legacy { get; set; }
+            public string NumClasses { get; set; }
+            public int AdmInChannels { get; set; }
+            public bool UseFp16 { get; set; }
+            public int InChannels { get; set; }
+            public int ModelChannels { get; set; }
+            public int NumResBlocks { get; set; }
+            public List<int> AttentionResolutions { get; set; }
+            public List<int> TransformerDepth { get; set; }
+            public List<int> ChannelMult { get; set; }
+            public int TransformerDepthMiddle { get; set; }
+            public bool UseLinearInTransformer { get; set; }
+            public int ContextDim { get; set; }
+            public int NumHeads { get; set; }
+            public int NumHeadChannels { get; set; }
+        }
+
+        public static ModelArch DetectModelType(string modelType, string unetConfigJson)
+        {
+            JsonSerializerSettings settings = new JsonSerializerSettings
+            {
+                ContractResolver = new DefaultContractResolver
+                {
+                    NamingStrategy = new SnakeCaseNamingStrategy { ProcessDictionaryKeys = true }
+                },
+                MissingMemberHandling = MissingMemberHandling.Ignore
+            };
+
+            unetConfigJson = unetConfigJson.Replace("True", "true").Replace("False", "false").Replace("None", "-1");
+            UnetConfig config = JsonConvert.DeserializeObject<UnetConfig>(unetConfigJson, settings);
+
+            if(config.AttentionResolutions != null && config.AttentionResolutions.Count == 2 && config.AdmInChannels > 0) // Must be SD XL
+            {
+                if (config.ContextDim >= 2048)
+                    return ModelArch.SdXlBase;
+                else
+                    return ModelArch.SdXlRefine;
+            }
+            else if (modelType == "EPS" && config.ContextDim == 768 && !config.UseLinearInTransformer) // Must be SD 1.x
+            {
+                if (config.InChannels == 4)
+                    return ModelArch.Sd1;
+                else if (config.InChannels == 9)
+                    return ModelArch.Sd1Inpaint;
+            }
+            else if (config.ContextDim == 1024 && config.UseLinearInTransformer) // Must be SD 2.x
+            {
+                if (modelType == "V_PREDICTION")
+                    return ModelArch.Sd2V;
+                else if (config.InChannels == 4)
+                    return ModelArch.Sd2;
+                else if (config.InChannels == 9)
+                    return ModelArch.Sd2Inpaint;
+            }
+
+            return ModelArch.Unknown;
         }
     }
 }

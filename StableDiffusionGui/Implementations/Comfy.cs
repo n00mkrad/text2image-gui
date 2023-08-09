@@ -252,7 +252,7 @@ namespace StableDiffusionGui.Implementations
 
                 ResetLogger();
 
-                Logger.Log($"Loading Stable Diffusion with model {s.Model.Trunc(80).Wrap()}...");
+                Logger.Log($"Loading Stable Diffusion with model {s.Model.Trunc(80).Wrap()}{(refineModel != null ? $" and {s.ModelAux.Trunc(80).Wrap()}" : "")}...");
 
                 var sw = new NmkdStopwatch();
                 TtiProcess.ProcessExistWasIntentional = false;
@@ -426,8 +426,8 @@ namespace StableDiffusionGui.Implementations
 
             if (!TextToImage.Canceled && line.Trim() == "got prompt")
             {
-                if (!lastLineGeneratedText)
-                    Logger.LogIfLastLineDoesNotContainMsg($"Generating...", replaceLastLine: ellipsis);
+                // if (!lastLineGeneratedText)
+                //     Logger.LogIfLastLineDoesNotContainMsg($"Generating...", replaceLastLine: ellipsis);
 
                 ImageExport.TimeSinceLastImage.Restart();
             }
@@ -441,6 +441,27 @@ namespace StableDiffusionGui.Implementations
 
                 if (percent >= 0 && percent <= 100)
                     Program.MainForm.SetProgressImg(percent);
+            }
+
+            if (!TextToImage.Canceled && line.Trim().StartsWith("MODEL INFO:"))
+            {
+                var split = line.Split('|');
+                string filename = split[0].Split("MODEL INFO:")[1].Trim();
+                string modelType = split[1].Trim();
+                string unetConfigJson = split[2].Trim();
+                var mdlArch = Models.DetectModelType(modelType, unetConfigJson);
+                Logger.Log($"Loaded '{filename.Trunc(100)}' - {Strings.ModelArch.Get(mdlArch.ToString(), true)}", false, Logger.LastUiLine.Contains(filename));
+            }
+
+            if (!TextToImage.Canceled && line.Trim().StartsWith("warning, embedding:") && line.Trim().EndsWith("does not exist, ignoring"))
+            {
+                string embName = line.Split("embedding:")[1].Split(' ')[0];
+                Logger.Log($"Warning: Embedding '{embName}' not found!");
+            }
+
+            if (!TextToImage.Canceled && line.Trim().StartsWith("WARNING: shape mismatch when trying to apply embedding"))
+            {
+                Logger.Log($"Warning: One or more embeddings were ignored because they are not compatible with the selected model.");
             }
 
             TtiProcessOutputHandler.HandleLogGeneric(this, line, _hasErrored);

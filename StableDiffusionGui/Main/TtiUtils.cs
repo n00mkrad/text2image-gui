@@ -301,7 +301,7 @@ namespace StableDiffusionGui.Main
             if (Config.Instance.ModelArchs.ContainsKey(mdl.FullName))
                 mdl.LoadArchitecture = Config.Instance.ModelArchs[mdl.FullName];
 
-            if (mdl.LoadArchitecture == Enums.Models.SdArch.Automatic)
+            if (mdl.LoadArchitecture == Enums.Models.SdArchInvoke.Automatic)
             {
                 var custConfigs = new List<string> { $"{Path.ChangeExtension(mdl.FullName, null)}.yaml", $"{mdl.FullName}.yaml", $"{Path.ChangeExtension(mdl.FullName, null)}.yml", $"{mdl.FullName}.yml" }.Where(path => File.Exists(path));
 
@@ -318,9 +318,9 @@ namespace StableDiffusionGui.Main
 
             string file = inpaint ? "v1-inpainting-inference" : "v1-inference";
 
-            if (mdl.LoadArchitecture == Enums.Models.SdArch.V2)
+            if (mdl.LoadArchitecture == Enums.Models.SdArchInvoke.V2)
                 file = "v2-inference";
-            else if (mdl.LoadArchitecture == Enums.Models.SdArch.V2V)
+            else if (mdl.LoadArchitecture == Enums.Models.SdArchInvoke.V2V)
                 file = "v2-inference-v";
 
             if (modelsYamlFormat)
