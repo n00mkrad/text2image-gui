@@ -305,13 +305,13 @@
             this.parentPanel.Controls.Add(this.panelCudaDevice);
             this.parentPanel.Controls.Add(this.panelAdvancedOptsInvoke);
             this.parentPanel.Controls.Add(this.panelComfyVram);
+            this.parentPanel.Controls.Add(this.panelFullPrecision);
             this.parentPanel.Controls.Add(this.panelModelCaching);
             this.parentPanel.Controls.Add(this.panelLoras);
             this.parentPanel.Controls.Add(this.panelEmbeddingsPath);
             this.parentPanel.Controls.Add(this.panelVae);
             this.parentPanel.Controls.Add(this.panelSdModel);
             this.parentPanel.Controls.Add(this.panelUnloadModel);
-            this.parentPanel.Controls.Add(this.panelFullPrecision);
             this.parentPanel.Controls.Add(this.panelImplementation);
             this.parentPanel.Controls.Add(this.panel11);
             this.parentPanel.Location = new System.Drawing.Point(12, 62);
@@ -1400,15 +1400,15 @@
             this.label25.Location = new System.Drawing.Point(2, 11);
             this.label25.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(72, 13);
+            this.label25.Size = new System.Drawing.Size(104, 13);
             this.label25.TabIndex = 85;
-            this.label25.Text = "VRAM Usage";
+            this.label25.Text = "VRAM Usage Profile";
             // 
             // panelModelCaching
             // 
             this.panelModelCaching.Controls.Add(this.tableLayoutPanel17);
             this.panelModelCaching.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelModelCaching.Location = new System.Drawing.Point(0, 285);
+            this.panelModelCaching.Location = new System.Drawing.Point(0, 250);
             this.panelModelCaching.Name = "panelModelCaching";
             this.panelModelCaching.Size = new System.Drawing.Size(843, 35);
             this.panelModelCaching.TabIndex = 31;
@@ -1473,7 +1473,7 @@
             // 
             this.panelLoras.Controls.Add(this.tableLayoutPanel19);
             this.panelLoras.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelLoras.Location = new System.Drawing.Point(0, 250);
+            this.panelLoras.Location = new System.Drawing.Point(0, 215);
             this.panelLoras.Name = "panelLoras";
             this.panelLoras.Size = new System.Drawing.Size(843, 35);
             this.panelLoras.TabIndex = 33;
@@ -1564,7 +1564,7 @@
             // 
             this.panelEmbeddingsPath.Controls.Add(this.tableLayoutPanel18);
             this.panelEmbeddingsPath.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelEmbeddingsPath.Location = new System.Drawing.Point(0, 215);
+            this.panelEmbeddingsPath.Location = new System.Drawing.Point(0, 180);
             this.panelEmbeddingsPath.Name = "panelEmbeddingsPath";
             this.panelEmbeddingsPath.Size = new System.Drawing.Size(843, 35);
             this.panelEmbeddingsPath.TabIndex = 32;
@@ -1655,7 +1655,7 @@
             // 
             this.panelVae.Controls.Add(this.tableLayoutPanel12);
             this.panelVae.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelVae.Location = new System.Drawing.Point(0, 180);
+            this.panelVae.Location = new System.Drawing.Point(0, 145);
             this.panelVae.Name = "panelVae";
             this.panelVae.Size = new System.Drawing.Size(843, 35);
             this.panelVae.TabIndex = 25;
@@ -1769,7 +1769,7 @@
             // 
             this.panelSdModel.Controls.Add(this.tableLayoutPanel8);
             this.panelSdModel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSdModel.Location = new System.Drawing.Point(0, 145);
+            this.panelSdModel.Location = new System.Drawing.Point(0, 110);
             this.panelSdModel.Name = "panelSdModel";
             this.panelSdModel.Size = new System.Drawing.Size(843, 35);
             this.panelSdModel.TabIndex = 20;
@@ -1883,7 +1883,7 @@
             // 
             this.panelUnloadModel.Controls.Add(this.tableLayoutPanel11);
             this.panelUnloadModel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelUnloadModel.Location = new System.Drawing.Point(0, 110);
+            this.panelUnloadModel.Location = new System.Drawing.Point(0, 75);
             this.panelUnloadModel.Name = "panelUnloadModel";
             this.panelUnloadModel.Size = new System.Drawing.Size(843, 35);
             this.panelUnloadModel.TabIndex = 24;
@@ -1948,7 +1948,7 @@
             // 
             this.panelFullPrecision.Controls.Add(this.tableLayoutPanel1);
             this.panelFullPrecision.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelFullPrecision.Location = new System.Drawing.Point(0, 75);
+            this.panelFullPrecision.Location = new System.Drawing.Point(0, 285);
             this.panelFullPrecision.Name = "panelFullPrecision";
             this.panelFullPrecision.Size = new System.Drawing.Size(843, 35);
             this.panelFullPrecision.TabIndex = 11;
@@ -2005,9 +2005,9 @@
             this.label2.Location = new System.Drawing.Point(2, 11);
             this.label2.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(376, 13);
+            this.label2.Size = new System.Drawing.Size(257, 13);
             this.label2.TabIndex = 84;
-            this.label2.Text = "Use Full Precision (FP32) - Vram-heavy but Can Fix Certain Compatibility Issues";
+            this.label2.Text = "Force Full Precision (FP32) - Increases VRAM usage!";
             // 
             // panelImplementation
             // 

@@ -272,10 +272,9 @@ namespace StableDiffusionGui.Forms
             {
                 Config.Instance.Implementation = CurrImplementation;
                 panelFullPrecision.SetVisible(CurrImplementation.Supports(ImplementationInfo.Feature.HalfPrecisionToggle));
-                panelUnloadModel.SetVisible(false); // Temporary
-                // panelUnloadModel.SetVisible(CurrImplementation.Supports(ImplementationInfo.Feature.InteractiveCli));
+                panelUnloadModel.SetVisible(false /* CurrImplementation.Supports(ImplementationInfo.Feature.InteractiveCli) */);
                 panelCudaDevice.SetVisible(CurrImplementation.Supports(ImplementationInfo.Feature.DeviceSelection));
-                panelSdModel.SetVisible(CurrImplementation.Supports(ImplementationInfo.Feature.CustomModels));
+                panelSdModel.SetVisible(false /* CurrImplementation.Supports(ImplementationInfo.Feature.CustomModels) */);
                 panelEmbeddingsPath.SetVisible(CurrImplementation.Supports(ImplementationInfo.Feature.Embeddings));
                 panelLoras.SetVisible(CurrImplementation.Supports(ImplementationInfo.Feature.Lora));
                 panelVae.SetVisible(CurrImplementation.Supports(ImplementationInfo.Feature.CustomVae));

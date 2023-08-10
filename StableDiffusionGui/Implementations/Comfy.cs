@@ -82,10 +82,10 @@ namespace StableDiffusionGui.Implementations
                 ClipSkip = (Config.Instance.ClipSkip * -1) - 1,
             };
 
-            foreach(ControlnetInfo cnet in s.Controlnets)
+            foreach (ControlnetInfo cnet in s.Controlnets)
             {
                 var cnetModel = controlnetMdls.Where(m => m.FormatIndependentName == cnet.Model).FirstOrDefault();
-                if(cnetModel == null) continue;
+                if (cnetModel == null) continue;
                 currentGeneration.Controlnets.Add(new ControlnetInfo { Model = cnetModel.FullName, Preprocessor = cnet.Preprocessor, Strength = cnet.Strength });
             }
 
@@ -227,13 +227,18 @@ namespace StableDiffusionGui.Implementations
 
             var scriptArgs = new List<string>
             {
-                GetVramArg(),
+                $"--port {ComfyPort}",
                 $"--output-directory {outPath.Wrap(true)}",
                 $"--preview-method none",
-                $"--port {ComfyPort}",
+                $"--disable-xformers", // Obselete since Pytorch 2.0
+                $"--cuda-malloc",
+                $"--{GetVramArg()}",
             };
 
-            string newStartupSettings = string.Join(" ", scriptArgs).Remove(" ");
+            if (Config.Instance.FullPrecision)
+                scriptArgs.Add("--force-fp32");
+
+            string newStartupSettings = $"{string.Join("", scriptArgs)}{Config.Instance.CudaDeviceIdx}";
 
             if (!TtiProcess.IsAiProcessRunning || (TtiProcess.IsAiProcessRunning && TtiProcess.LastStartupSettings != newStartupSettings))
             {
@@ -311,7 +316,7 @@ namespace StableDiffusionGui.Implementations
                 string resp = await ApiPost(reqString);
                 Logger.Log($"[<-] {resp}", true, filename: Constants.Lognames.Api);
 
-                if(resp.IsEmpty())
+                if (resp.IsEmpty())
                     break;
             }
         }
@@ -364,11 +369,11 @@ namespace StableDiffusionGui.Implementations
         private string GetVramArg()
         {
             var preset = ParseUtils.GetEnum<Enums.Comfy.VramPreset>(Config.Instance.ComfyVramPreset.ToString(), true, Strings.ComfyVramPresets);
-            if (preset == Enums.Comfy.VramPreset.GpuOnly) return "--gpu-only";
-            if (preset == Enums.Comfy.VramPreset.HighVram) return "--highvram";
-            if (preset == Enums.Comfy.VramPreset.NormalVram) return "--normalvram";
-            if (preset == Enums.Comfy.VramPreset.LowVram) return "--lowvram";
-            if (preset == Enums.Comfy.VramPreset.NoVram) return "--novram";
+            if (preset == Enums.Comfy.VramPreset.GpuOnly) return "gpu-only";
+            if (preset == Enums.Comfy.VramPreset.HighVram) return "highvram";
+            if (preset == Enums.Comfy.VramPreset.NormalVram) return "normalvram";
+            if (preset == Enums.Comfy.VramPreset.LowVram) return "lowvram";
+            if (preset == Enums.Comfy.VramPreset.NoVram) return "novram";
             return "";
         }
 
