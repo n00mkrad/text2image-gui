@@ -283,7 +283,7 @@ namespace StableDiffusionGui.Forms
 
         public void ReloadLoras()
         {
-            string defaultStrength = Constants.Ui.DefaultLoraStrength.ToString("0.0##");
+            string defaultStrength = Constants.Ui.DefaultLoraStrength.ToStringDot("0.0##");
             var selection = GetLoras(); // Save current selection
             List<Model> loras = Models.GetLoras();
             string currLoras = loras.Select(l => l.FormatIndependentName).AsString();
