@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
 namespace StableDiffusionGui.Implementations
@@ -40,6 +41,38 @@ namespace StableDiffusionGui.Implementations
             public Sampler Sampler;
             public int ClipSkip = -1;
 
+            public GenerationInfo GetSerializeClone ()
+            {
+                return new GenerationInfo()
+                {
+                    Model = Path.GetFileName(Model),
+                    ModelRefiner = Path.GetFileName(ModelRefiner),
+                    Vae = Path.GetFileName(Vae),
+                    Upscaler = Path.GetFileName(Upscaler),
+                    Prompt = Prompt,
+                    NegativePrompt = NegativePrompt,
+                    Loras = new EasyDict<string, float>(Loras.ToDictionary(kvp => Path.GetFileName(kvp.Key), kvp => kvp.Value)),
+                    HyperNetworks = new EasyDict<string, float>(HyperNetworks.ToDictionary(kvp => Path.GetFileName(kvp.Key), kvp => kvp.Value)),
+                    Controlnets = Controlnets.Select(c => new ControlnetInfo { Model = Path.GetFileName(c.Model), Preprocessor = c.Preprocessor, Strength = c.Strength }).ToList(),
+                    Steps = Steps,
+                    Seed = Seed,
+                    Scale = Scale,
+                    RefinerStrength = RefinerStrength,
+                    InitImg = InitImg,
+                    InitStrength = InitStrength,
+                    MaskPath = MaskPath,
+                    BaseResolution = BaseResolution,
+                    TargetResolution = TargetResolution,
+                    Sampler = Sampler,
+                    ClipSkip = ClipSkip,
+                };
+            }
+
+            public string Serialize()
+            {
+                return GetSerializeClone().ToJson();
+            }
+
             public Dictionary<string, dynamic> GetMetadataDict()
             {
                 return new Dictionary<string, dynamic>
@@ -63,6 +96,7 @@ namespace StableDiffusionGui.Implementations
                     { "upscaleH", TargetResolution.Height },
                     { "loras", Loras },
                     { "hypernetworks", HyperNetworks },
+                    { "controlnets", Controlnets },
                 };
             }
         }

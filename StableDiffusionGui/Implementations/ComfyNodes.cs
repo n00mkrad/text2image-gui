@@ -613,6 +613,30 @@ namespace StableDiffusionGui.Implementations
             }
         }
 
+        public class NmkdHypernetworkLoader : Node, INode
+        {
+            public INode ModelNode;
+            public string ModelPath;
+            public float Strength;
+
+            public NodeInfo GetNodeInfo()
+            {
+                var dict = new Dictionary<string, object>()
+                {
+                    { "model", new object[] { ModelNode.Id.ToString(), 0 } },
+                    { "hypernetwork_path", ModelPath },
+                    { "strength", Strength },
+                };
+
+                return new NodeInfo { Inputs = dict, ClassType = nameof(NmkdHypernetworkLoader) };
+            }
+
+            public override string ToString()
+            {
+                return ToStringNode(this);
+            }
+        }
+
         public class GenericImagePreprocessor : Node, INode
         {
             public INode ImageNode;

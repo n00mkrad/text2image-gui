@@ -115,6 +115,14 @@ namespace StableDiffusionGui.Implementations
             model1.VaePath = g.Vae ?? "";
             model1.EmbeddingsDir = Io.Paths.ReturnDir(Config.Instance.EmbeddingsDir, true, true);
 
+            INode finalModelNode = model1; // Keep track of the final model node to use
+
+            foreach(var hypernet in g.HyperNetworks) // Add hypernetworks
+            {
+                nodes.Add(new NmkdHypernetworkLoader() { Id = GetNewId("Hypernet", nodes), ModelNode = finalModelNode, ModelPath = hypernet.Key, Strength = hypernet.Value });
+                finalModelNode = nodes.Last();
+            }
+
             var model2 = (NmkdCheckpointLoader)nodesDict["Model2"]; // Aux Model (Refiner etc)
             model2.ModelPath = g.ModelRefiner == null ? g.Model : g.ModelRefiner;
             model2.LoadVae = false;
@@ -130,7 +138,7 @@ namespace StableDiffusionGui.Implementations
             var loraLoader = (NmkdMultiLoraLoader)nodesDict["LoraLoader"]; // LoRA Loader
             loraLoader.Loras = g.Loras.Keys.ToList();
             loraLoader.Strengths = g.Loras.Values.ToList();
-            loraLoader.ModelNode = model1;
+            loraLoader.ModelNode = finalModelNode;
             loraLoader.ClipNode = model1;
 
             var encodePosPromptBase = (CLIPTextEncode)nodesDict["EncodePosPromptBase"]; // CLIP Encode Positive Prompt Base
@@ -319,16 +327,20 @@ namespace StableDiffusionGui.Implementations
             return nodesList;
         }
 
-        // private static int GetAvailableId(List<INode> nodes)
-        // {
-        //     List<int> ids = nodes.Select(n => n.Id.GetInt()).ToList();
-        //     int id = (int)FormatUtils.GetUnixTime();
-        // 
-        //     while (ids.Contains(id))
-        //         id++;
-        // 
-        //     return id;
-        // }
+        private static string GetNewId(string preferred, List<INode> nodes)
+        {
+            List<string> existingIds = nodes.Select(n => n.Id).ToList();
+            string unique = preferred;
+            int counter = 1;
+
+            while (existingIds.Contains(unique))
+            {
+                unique = $"{preferred}{counter}";
+                counter++;
+            }
+        
+            return unique;
+        }
 
         public static string GetComfySampler(Enums.StableDiffusion.Sampler s)
         {

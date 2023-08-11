@@ -2,6 +2,7 @@
 using StableDiffusionGui.Implementations;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
+using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -13,7 +14,7 @@ namespace StableDiffusionGui.Data
 {
     public class ImageMetadata
     {
-        public enum MetadataType { InvokeDream, InvokeJson, Auto1111, Nmkdiffusers, GenerationInfo, Unknown }
+        public enum MetadataType { InvokeDream, InvokeJson, Auto1111, Nmkdiffusers, GenerationInfo, GenerationInfoJson, Unknown }
         public MetadataType Type = MetadataType.Unknown;
         public string Path = "";
         public string AllText = "";
@@ -43,6 +44,7 @@ namespace StableDiffusionGui.Data
             { MetadataType.InvokeDream, "Dream: " },
             { MetadataType.Nmkdiffusers, "Nmkdiffusers:" },
             { MetadataType.GenerationInfo, "GenerationInfo:" },
+            { MetadataType.GenerationInfoJson, "GenerationInfoJson:" },
             { MetadataType.Auto1111, "parameters:" },
         };
 
@@ -98,6 +100,12 @@ namespace StableDiffusionGui.Data
                     if (tag.Description.Contains(_tags[MetadataType.GenerationInfo]))
                     {
                         LoadInfoNmkdiffusers(tag.Description.Split(_tags[MetadataType.GenerationInfo]).Last());
+                        return;
+                    }
+
+                    if (tag.Description.Contains(_tags[MetadataType.GenerationInfoJson]))
+                    {
+                        LoadGenerationInfo(tag.Description.Split(_tags[MetadataType.GenerationInfoJson]).Last());
                         return;
                     }
                 }
@@ -274,10 +282,28 @@ namespace StableDiffusionGui.Data
             }
         }
 
+        public void LoadGenerationInfo (string info)
+        {
+            var gi = info.FromJson<ComfyData.GenerationInfo>(NullValueHandling.Ignore, DefaultValueHandling.Populate, true, true);
+            Model = gi.Model;
+            Prompt = gi.Prompt;
+            NegativePrompt= gi.NegativePrompt;
+            InitImgName = gi.InitImg;
+            InitStrength = 1f - gi.InitStrength;
+            Steps = gi.Steps;
+            Seed = gi.Seed;
+            Sampler = Sampler.Lower();
+            Scale = gi.Scale;
+            // img scale
+            RefineStrength = gi.RefinerStrength;
+            GeneratedResolution = gi.BaseResolution;
+            UpscaleResolution = gi.TargetResolution;
+        }
+
         public void LoadInfoNmkdiffusers(string info)
         {
             ParsedText = info;
-            Dictionary<string, string> dict = info.FromJson<Dictionary<string, string>>();
+            Dictionary<string, dynamic> dict = info.FromJson<Dictionary<string, dynamic>>();
 
             foreach (var pair in dict)
             {

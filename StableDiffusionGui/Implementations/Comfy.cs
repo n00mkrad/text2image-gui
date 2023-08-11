@@ -291,7 +291,7 @@ namespace StableDiffusionGui.Implementations
                 {
                     var promptItems = ComfyWorkflow.GetPromptInfos(genInfo, nodes);
                     var req = new ComfyWorkflow.PromptRequest() { ClientId = Paths.SessionTimestampUnix.ToString(), Prompt = promptItems };
-                    req.ExtraData.ExtraPnginfo["GenerationInfo"] = genInfo.GetMetadataDict();
+                    req.ExtraData.ExtraPnginfo["GenerationInfoJson"] = genInfo.GetSerializeClone();
                     reqString = req.ToString();
 
                     if (Program.Debug)
