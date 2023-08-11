@@ -5,7 +5,6 @@ using StableDiffusionGui.Main;
 using StableDiffusionGui.Os;
 using StableDiffusionGui.Ui;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -86,26 +85,13 @@ namespace StableDiffusionGui.Forms
                 string filename = $"{Path.GetFileNameWithoutExtension(model1.Name)}-{PercentModel1}-with-{Path.GetFileNameWithoutExtension(model2.Name)}-{PercentModel2}{model1.Extension}";
                 string outPath = Path.Combine(model1.Directory.FullName, filename);
 
-                Process p = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
-                p.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand()} && {Constants.Files.VenvActivate} && " +
+                Process py = OsUtils.NewProcess(true, logAction: (s) => Logger.Log(s, true, false, Constants.Lognames.Merge));
+                py.StartInfo.Arguments = $"/C cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand()} && {Constants.Files.VenvActivate} && " +
                     $"python {Constants.Dirs.SdRepo}/scripts/merge_models.py -1 {model1.FullName.Wrap()} -2 {model2.FullName.Wrap()} -w {(PercentModel2 / 100f).ToStringDot("0.0000")} -o {outPath.Wrap(true)}";
 
-                if (!OsUtils.ShowHiddenCmd())
-                {
-                    p.OutputDataReceived += (sender, line) => { Logger.Log(line?.Data, true, false, Constants.Lognames.Merge); };
-                    p.ErrorDataReceived += (sender, line) => { Logger.Log(line?.Data, true, false, Constants.Lognames.Merge); };
-                }
-
-                Logger.Log($"cmd {p.StartInfo.Arguments}", true);
-                p.Start();
-
-                if (!OsUtils.ShowHiddenCmd())
-                {
-                    p.BeginOutputReadLine();
-                    p.BeginErrorReadLine();
-                }
-
-                while (!p.HasExited) await Task.Delay(1);
+                Logger.Log($"cmd {py.StartInfo.Arguments}", true);
+                py.Start();
+                await OsUtils.WaitForProcessExit(py);
 
                 Logger.ClearLogBox();
                 return outPath;

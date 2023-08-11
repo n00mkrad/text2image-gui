@@ -12,7 +12,6 @@ namespace StableDiffusionGui.Io
     public class ConfigInstance
     {
         public EasyDict<string, Models.ModelSettings> ModelSettings = new EasyDict<string, Models.ModelSettings>();
-        public int CmdDebugMode;
         public bool MultiPromptsSameSeed;
         public int SamplerIdx;
         public float InitStrength;

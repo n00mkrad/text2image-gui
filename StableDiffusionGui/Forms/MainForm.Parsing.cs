@@ -86,7 +86,7 @@ namespace StableDiffusionGui.Forms
                     comboxResizeGravity.SetWithText(s.ResizeGravity.ToString(), true, Strings.ImageGravity);
 
                 SetLoras(s.Loras);
-                Controlnets = s.Controlnets.Concat(Enumerable.Repeat(default(Comfy.ControlnetInfo), 5)).Take(5).ToArray();
+                Controlnets = s.Controlnets.Concat(Enumerable.Repeat(default(ComfyData.ControlnetInfo), 5)).Take(5).ToArray();
                 ControlnetSlotChanged(false); // Explicitly call function to load Controlnets into GUI
 
             })).RunWithUiStopped(this, "Error loading image generation settings:", true);

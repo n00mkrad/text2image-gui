@@ -53,7 +53,6 @@ namespace StableDiffusionGui.Training
                 int repeats = (int)Math.Ceiling((double)(s.Steps * s.BatchSize) / images.Count);
 
                 TtiProcess.ProcessExistWasIntentional = true;
-                bool showCmd = _useVisibleCmdWindow || OsUtils.ShowHiddenCmd();
 
                 string timestamp = FormatUtils.GetUnixTimestamp();
                 string configPath = Path.Combine(Paths.GetSessionDataPath(), $"loraCfg{timestamp}.toml");
@@ -93,37 +92,24 @@ namespace StableDiffusionGui.Training
                 }
 
                 PatchScripts();
-                Process py = OsUtils.NewProcess(!showCmd);
-                py.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand()} && {Constants.Files.VenvActivate} && " +
+                Process py = OsUtils.NewProcess(true, logAction: Log);
+                py.StartInfo.Arguments = $"/C cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand()} && {Constants.Files.VenvActivate} && " +
                     $"python \"{Constants.Dirs.SdRepo}\\sd-scripts\\train_network.py\" {args}";
-
-                if (!showCmd)
-                {
-                    py.OutputDataReceived += (sender, line) => { Log(line?.Data); };
-                    py.ErrorDataReceived += (sender, line) => { Log(line?.Data, true); };
-                }
 
                 Logger.Log($"Starting training.\nLoading...");
 
                 DreamboothOutputHandler.Start();
                 Logger.Log($"cmd {py.StartInfo.Arguments}", true);
-                py.Start();
                 TtiProcess.CurrentProcess = py;
-                OsUtils.AttachOrphanHitman(py);
+                OsUtils.StartProcess(py, killWithParent: true);
                 StartLogging();
-
-                if (!showCmd)
-                {
-                    py.BeginOutputReadLine();
-                    py.BeginErrorReadLine();
-                }
 
                 string log = $"Base Model:\n{baseModel.FullName}\n\nSteps:\n{s.Steps}\n\nLearning Rate:\n{s.LearningRate.ToStringDot("0.########")}\n\nFull Command:\ncmd {py.StartInfo.Arguments}\n\n";
                 File.WriteAllText(Path.Combine(_currentArchivalLogDir, "info.txt"), log);
                 var sw = new NmkdStopwatch();
-                while (!py.HasExited) await Task.Delay(100);
+                await OsUtils.WaitForProcessExit(py, 100);
 
-                if(!TextToImage.Canceled)
+                if (!TextToImage.Canceled)
                 Logger.Log($"Training has finished after {FormatUtils.Time(sw.ElapsedMilliseconds)}.");
 
                 Program.MainForm.SetProgress(0);
@@ -251,7 +237,7 @@ namespace StableDiffusionGui.Training
             _hasErrored = false;
         }
 
-        public static void Log(string line, bool stdErr = false)
+        public static void Log(string line)
         {
             if (string.IsNullOrWhiteSpace(line))
                 return;

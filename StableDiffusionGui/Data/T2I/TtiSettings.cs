@@ -33,7 +33,7 @@ namespace StableDiffusionGui.Data
         public string Model { get; set; } = "";
         public string ModelAux { get; set; } = "";
         public string Vae { get; set; } = "";
-        public List<Comfy.ControlnetInfo> Controlnets { get; set; } = new List<Comfy.ControlnetInfo>();
+        public List<ComfyData.ControlnetInfo> Controlnets { get; set; } = new List<ComfyData.ControlnetInfo>();
         public bool LockSeed { get; set; } = false;
         public string AppendArgs { get; set; } = "";
 

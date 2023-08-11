@@ -66,7 +66,7 @@ namespace StableDiffusionGui.Implementations
 
         private enum Axis { Width, Height }
 
-        public static EasyDict<string, NodeInfo> GetPromptInfos(Comfy.GenerationInfo g, List<INode> nodes)
+        public static EasyDict<string, NodeInfo> GetPromptInfos(ComfyData.GenerationInfo g, List<INode> nodes)
         {
             var nodeInfos = new EasyDict<string, NodeInfo>();
             var nodeCounts = new EasyDict<string, int>();
@@ -162,7 +162,7 @@ namespace StableDiffusionGui.Implementations
 
             for(int i = 0; i < g.Controlnets.Count; i++) // Apply ControlNets
             {
-                Comfy.ControlnetInfo ci = g.Controlnets[i];
+                ComfyData.ControlnetInfo ci = g.Controlnets[i];
 
                 if (ci.Preprocessor != Enums.StableDiffusion.ImagePreprocessor.None)
                     nodes.Add(new GenericImagePreprocessor { ImageNode = loadInitImg, Preprocessor = ci.Preprocessor, Id = $"Preproc{i}" });
@@ -351,7 +351,7 @@ namespace StableDiffusionGui.Implementations
             }
         }
 
-        public static string GetComfyScheduler(Comfy.GenerationInfo g)
+        public static string GetComfyScheduler(ComfyData.GenerationInfo g)
         {
             string sched = g.Sampler.ToString().Lower().StartsWith("k_") ? "karras" : "normal";
             bool upscale = !g.TargetResolution.IsEmpty && g.TargetResolution != g.BaseResolution;

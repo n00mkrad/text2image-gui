@@ -1,10 +1,6 @@
 ﻿using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Ui;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StableDiffusionGui.Main
 {
@@ -17,7 +13,7 @@ namespace StableDiffusionGui.Main
             _hasErrored = false;
         }
 
-        public static void Log(string line, bool stdErr = false)
+        public static void Log(string line)
         {
             if (string.IsNullOrWhiteSpace(line))
                 return;

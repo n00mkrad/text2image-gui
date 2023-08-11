@@ -33,25 +33,13 @@ namespace StableDiffusionGui.Os
 
             List<string> outLines = new List<string>();
 
-            Process p = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
-            p.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand(true)} && {Constants.Files.VenvActivate} && python {Constants.Dirs.SdRepo}/scripts/check_gpus.py";
+            Process py = OsUtils.NewProcess(true, logAction: (s) => outLines.Add(s));
+            py.StartInfo.Arguments = $"/C cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand(true)} && {Constants.Files.VenvActivate} && python {Constants.Dirs.SdRepo}/scripts/check_gpus.py";
 
-            if (!OsUtils.ShowHiddenCmd())
-            {
-                p.OutputDataReceived += (sender, line) => { if (line != null && line.Data != null) outLines.Add(line.Data); };
-                p.ErrorDataReceived += (sender, line) => { if (line != null && line.Data != null) outLines.Add(line.Data); };
-            }
+            Logger.Log("cmd.exe " + py.StartInfo.Arguments, true);
+            py.Start();
 
-            Logger.Log("cmd.exe " + p.StartInfo.Arguments, true);
-            p.Start();
-
-            if (!OsUtils.ShowHiddenCmd())
-            {
-                p.BeginOutputReadLine();
-                p.BeginErrorReadLine();
-            }
-
-            while (!p.HasExited) await Task.Delay(1);
+            await OsUtils.WaitForProcessExit(py);
 
             CachedGpus = outLines.Where(x => x.MatchesWildcard("* - * - *")).Select(x => new Gpu(x)).ToList();
             return CachedGpus;

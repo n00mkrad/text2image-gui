@@ -94,20 +94,13 @@ namespace StableDiffusionGui.Implementations
 
                 if (!TtiProcess.IsAiProcessRunning)
                 {
-                    Process py = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
+                    Process py = OsUtils.NewProcess(true, logAction: HandleOutput, redirectStdin: true);
                     TextToImage.CurrentTask.Processes.Add(py);
 
-                    py.StartInfo.RedirectStandardInput = true;
-                    py.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand()} && {Constants.Files.VenvActivate} && " +
+                    py.StartInfo.Arguments = $"/C cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand()} && {Constants.Files.VenvActivate} && " +
                         $"python \"{Constants.Dirs.SdRepo}/nmkdiff/nmkdiffusers.py\" -p InstructPix2Pix -o {outPath.Wrap(true)}";
 
                     Logger.Log("cmd.exe " + py.StartInfo.Arguments, true);
-
-                    if (!OsUtils.ShowHiddenCmd())
-                    {
-                        py.OutputDataReceived += (sender, line) => { HandleOutput(line.Data); };
-                        py.ErrorDataReceived += (sender, line) => { HandleOutput(line.Data); };
-                    }
 
                     if (TtiProcess.CurrentProcess != null)
                     {
@@ -120,14 +113,7 @@ namespace StableDiffusionGui.Implementations
                     ResetLogger();
                     TtiProcess.CurrentProcess = py;
                     TtiProcess.ProcessExistWasIntentional = false;
-                    py.Start();
-                    OsUtils.AttachOrphanHitman(py);
-
-                    if (!OsUtils.ShowHiddenCmd())
-                    {
-                        py.BeginOutputReadLine();
-                        py.BeginErrorReadLine();
-                    }
+                    OsUtils.StartProcess(py, killWithParent: true);
 
                     Task.Run(() => TtiProcess.CheckStillRunning());
                     TtiProcess.CurrentStdInWriter = new NmkdStreamWriter(py);

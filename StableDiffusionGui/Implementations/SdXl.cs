@@ -147,7 +147,7 @@ namespace StableDiffusionGui.Implementations
                     Process py = OsUtils.NewProcess(true, logAction: HandleOutput, redirectStdin: true);
                     TextToImage.CurrentTask.Processes.Add(py);
 
-                    py.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand()} && {Constants.Files.VenvActivate} && python {Constants.Dirs.SdRepo}/nmkdiff/nmkdiffusers.py {string.Join(" ", scriptArgs)}";
+                    py.StartInfo.Arguments = $"/C cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand()} && {Constants.Files.VenvActivate} && python {Constants.Dirs.SdRepo}/nmkdiff/nmkdiffusers.py {string.Join(" ", scriptArgs)}";
                     Logger.Log("cmd.exe " + py.StartInfo.Arguments, true);
 
                     if (TtiProcess.CurrentProcess != null)
@@ -167,7 +167,7 @@ namespace StableDiffusionGui.Implementations
                     TtiProcess.CurrentProcess = py;
                     OsUtils.AttachOrphanHitman(py);
 
-                    if (!OsUtils.ShowHiddenCmd())
+                    if (true)
                     {
                         py.BeginOutputReadLine();
                         py.BeginErrorReadLine();

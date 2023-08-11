@@ -93,13 +93,36 @@ namespace StableDiffusionGui.Os
             p.StartInfo.FileName = filename;
             p.StartInfo.RedirectStandardInput = redirectStdin;
 
-            if(logAction != null)
+            if (hidden && logAction != null)
             {
                 p.OutputDataReceived += (sender, line) => { logAction(line.Data); };
                 p.ErrorDataReceived += (sender, line) => { logAction(line.Data); };
             }
 
             return p;
+        }
+
+        public static async Task WaitForProcessExit(Process p, int waitInLoopMs = 1, int waitBeforeStartingMs = 0)
+        {
+            if (waitBeforeStartingMs > 0)
+                await Task.Delay(waitBeforeStartingMs);
+
+            while (p.HasExited)
+                await Task.Delay(waitInLoopMs);
+        }
+
+        public static void StartProcess(Process p, bool killWithParent, bool beginReadStdout = true)
+        {
+            p.Start();
+
+            if (killWithParent)
+                AttachOrphanHitman(p);
+
+            if (beginReadStdout)
+            {
+                p.BeginOutputReadLine();
+                p.BeginErrorReadLine();
+            }
         }
 
         public static void KillProcessTree(int pid)
@@ -125,21 +148,6 @@ namespace StableDiffusionGui.Os
                     KillProcessTree(Convert.ToInt32(mo["ProcessID"])); //kill child processes(also kills childrens of childrens etc.)
                 }
             }
-        }
-
-        public static string GetCmdArg()
-        {
-            bool stayOpen = Config.Instance.CmdDebugMode == 2;
-
-            if (stayOpen)
-                return "/K";
-            else
-                return "/C";
-        }
-
-        public static bool ShowHiddenCmd()
-        {
-            return Config.Instance.CmdDebugMode > 0;
         }
 
         public static int GetFreeRamMb()

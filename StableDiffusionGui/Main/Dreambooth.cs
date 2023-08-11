@@ -35,8 +35,6 @@ namespace StableDiffusionGui.Main
                 TtiProcess.ProcessExistWasIntentional = true;
                 ProcessManager.FindAndKillOrphans($"*{Constants.Dirs.SdRepo}*.py*{Paths.SessionTimestamp}*");
 
-                bool showCmd = _useVisibleCmdWindow || OsUtils.ShowHiddenCmd();
-
                 string name = trainImgDir.Name.Trunc(25, false);
                 int cudaId = (Config.Instance.CudaDeviceIdx - 2).Clamp(0, 64);
                 string timestamp = FormatUtils.GetUnixTimestamp();
@@ -51,8 +49,8 @@ namespace StableDiffusionGui.Main
 
                 string outPath = Path.Combine(Paths.GetModelsPath(false), $"dreambooth-{className}-{CurrentTargetSteps}step-{timestamp}.diff");
 
-                Process db = OsUtils.NewProcess(!showCmd);
-                db.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand()} && {Constants.Files.VenvActivate} && python {Constants.Dirs.SdRepo}/db/main.py -t " +
+                Process py = OsUtils.NewProcess(true, logAction: DreamboothOutputHandler.Log);
+                py.StartInfo.Arguments = $"/C cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand()} && {Constants.Files.VenvActivate} && python {Constants.Dirs.SdRepo}/db/main.py -t " +
                     $"--base {configPath.Wrap(true)} " +
                     $"--actual_resume {baseModel.FullName.Wrap(true)} " +
                     $"--name {name.Wrap()} " +
@@ -62,26 +60,13 @@ namespace StableDiffusionGui.Main
                     $"--reg_data_root {trainImgDir.FullName.Wrap(true)} " +
                     $"--class_word {className.Wrap()} ";
 
-                if (!showCmd)
-                {
-                    db.OutputDataReceived += (sender, line) => { DreamboothOutputHandler.Log(line?.Data); };
-                    db.ErrorDataReceived += (sender, line) => { DreamboothOutputHandler.Log(line?.Data, true); };
-                }
-
                 Logger.Log($"Starting training on GPU {cudaId}.\nLog Folder: {logDir.Remove(Paths.GetExeDir())}\nLoading...");
 
                 DreamboothOutputHandler.Start();
-                Logger.Log($"cmd {db.StartInfo.Arguments}", true);
-                db.Start();
-                OsUtils.AttachOrphanHitman(db);
+                Logger.Log($"cmd {py.StartInfo.Arguments}", true);
+                OsUtils.StartProcess(py, killWithParent: true);
 
-                if (!showCmd)
-                {
-                    db.BeginOutputReadLine();
-                    db.BeginErrorReadLine();
-                }
-
-                while (!db.HasExited) await Task.Delay(100);
+                await OsUtils.WaitForProcessExit(py, 100);
 
                 Model finalCkpt = new Model(Path.Combine(logDir, "checkpoints", "last.ckpt"));
                 await ConvertModels.Convert(Enums.Models.Format.Pytorch, Enums.Models.Format.Diffusers, finalCkpt, true, true, outPath);

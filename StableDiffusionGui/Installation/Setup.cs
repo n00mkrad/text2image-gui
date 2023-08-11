@@ -111,23 +111,9 @@ namespace StableDiffusionGui.Installation
                 $"\n{string.Join("\n", installLines)}\n\n" +
                 $"");
 
-            Process p = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd(), batPath);
-
-            if (!OsUtils.ShowHiddenCmd())
-            {
-                p.OutputDataReceived += (sender, line) => { HandleInstallScriptOutput(line.Data, false, false); };
-                p.ErrorDataReceived += (sender, line) => { HandleInstallScriptOutput(line.Data, false, true); };
-            }
-
-            p.Start();
-
-            if (!OsUtils.ShowHiddenCmd())
-            {
-                p.BeginOutputReadLine();
-                p.BeginErrorReadLine();
-            }
-
-            while (!p.HasExited) await Task.Delay(1);
+            Process p = OsUtils.NewProcess(true, batPath, logAction: (s) => HandleInstallScriptOutput(s, false));
+            OsUtils.StartProcess(p, killWithParent: true);
+            await OsUtils.WaitForProcessExit(p);
 
             Logger.Log("Cleaning up...", false, Logger.LastUiLine.EndsWith("..."));
 
@@ -139,7 +125,7 @@ namespace StableDiffusionGui.Installation
             Logger.Log("Done.", false, Logger.LastUiLine.EndsWith("..."));
         }
 
-        private static void HandleInstallScriptOutput(string log, bool conda, bool stderr)
+        private static void HandleInstallScriptOutput(string log, bool conda)
         {
             if (string.IsNullOrWhiteSpace(log))
                 return;
@@ -234,18 +220,13 @@ namespace StableDiffusionGui.Installation
                 Directory.Delete(dir, true);
             }
 
-            string gitDir = Path.Combine(Paths.GetDataPath(), Constants.Dirs.Git, "cmd");
             string gitExe = Path.Combine(Paths.GetDataPath(), Constants.Dirs.Git, "cmd", "git.exe");
-            Process p = OsUtils.NewProcess(true);
+            Process p = OsUtils.NewProcess(true, logAction: (s) => HandleInstallScriptOutput($"[git] {s}", false));
             p.StartInfo.EnvironmentVariables["PATH"] = TtiUtils.GetEnvVarsSd(true, Paths.GetDataPath()).First().Value;
             p.StartInfo.Arguments = $"/C git clone --depth=1 --single-branch --branch {branch} {gitUrl} {dir.Wrap(true)} {(string.IsNullOrWhiteSpace(commit) ? "" : $"&& cd /D {dir.Wrap()} && git checkout {commit}")}";
             Logger.Log($"{p.StartInfo.FileName} {p.StartInfo.Arguments}", true);
-            p.OutputDataReceived += (sender, line) => { HandleInstallScriptOutput($"[git] {line.Data}", false, false); };
-            p.ErrorDataReceived += (sender, line) => { HandleInstallScriptOutput($"[git] {line.Data}", false, true); };
-            p.Start();
-            p.BeginOutputReadLine();
-            p.BeginErrorReadLine();
-            while (!p.HasExited) await Task.Delay(1);
+            OsUtils.StartProcess(p, killWithParent: true);
+            await OsUtils.WaitForProcessExit(p);
         }
 
         public static void RepoCleanup()
@@ -305,20 +286,21 @@ namespace StableDiffusionGui.Installation
                     dirs.ForEach(dir => IoUtils.DeleteIfExists(Path.Combine(Paths.GetDataPath(), "invoke", "models", dir)));
                 }
 
-                Process p = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
-                p.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand(true, Paths.GetDataPath())} && {Constants.Files.VenvActivate} && " +
-                    $"python {Constants.Dirs.SdRepo}/scripts/nmkd_install_upscalers.py";
-                p.ErrorDataReceived += (sender, line) =>
+                void HandleOutput (string s)
                 {
-                    if (line.Data != null && line.Data.Contains("%|") && line.Data.Trim().EndsWith("B/s]"))
-                        Logger.Log($"Downloading {line.Data.Trim().Split("%|")[0].Replace("  ", " ")}%", false, Logger.LastUiLine.EndsWith("%"), Constants.Lognames.Installer);
-                };
-                Logger.Log($"cmd {p.StartInfo.Arguments}", true);
-                p.Start();
-                p.BeginOutputReadLine();
-                p.BeginErrorReadLine();
+                    if (s.Contains("%|") && s.Trim().EndsWith("B/s]"))
+                        Logger.Log($"Downloading {s.Trim().Split("%|")[0].Replace("  ", " ")}%", false, Logger.LastUiLine.EndsWith("%"), Constants.Lognames.Installer);
+                }
 
-                while (!p.HasExited) await Task.Delay(1);
+                Process p = OsUtils.NewProcess(true, logAction: HandleOutput);
+
+                p.StartInfo.Arguments = $"/C cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand(true, Paths.GetDataPath())} && {Constants.Files.VenvActivate} && " +
+                    $"python {Constants.Dirs.SdRepo}/scripts/nmkd_install_upscalers.py";
+
+                Logger.Log($"cmd {p.StartInfo.Arguments}", true);
+                OsUtils.StartProcess(p, killWithParent: true);
+
+                await OsUtils.WaitForProcessExit(p);
 
                 if (InstallationStatus.HasSdUpscalers(Constants.Lognames.Installer))
                     Logger.Log($"All enhancement models downloaded.", false, true);

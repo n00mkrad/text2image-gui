@@ -671,7 +671,7 @@ namespace StableDiffusionGui.Forms
                 this.ResumeRendering();
         }
 
-        public Comfy.ControlnetInfo[] Controlnets = new Comfy.ControlnetInfo[Constants.Ui.ControlnetSlots];
+        public ComfyData.ControlnetInfo[] Controlnets = new ComfyData.ControlnetInfo[Constants.Ui.ControlnetSlots];
         private int _previousControlnetSlot = 0;
         private bool _ignoreControlnetSlotChanged = false;
 
@@ -690,7 +690,7 @@ namespace StableDiffusionGui.Forms
             if (allowSaving)
             {
                 var preproc = ParseUtils.GetEnum<ImagePreprocessor>(comboxPreprocessor.Text, stringMap: Strings.ImagePreprocessors);
-                Controlnets[idxOld] = new Comfy.ControlnetInfo { Model = comboxControlnet.Text, Preprocessor = preproc, Strength = (float)updownControlnetStrength.Value };
+                Controlnets[idxOld] = new ComfyData.ControlnetInfo { Model = comboxControlnet.Text, Preprocessor = preproc, Strength = (float)updownControlnetStrength.Value };
             }
 
             if (Controlnets[idxNew] != null) // Load from slot if it's not empty

@@ -212,10 +212,10 @@ namespace StableDiffusionGui.Implementations
                     TtiProcess.LastStartupSettings = newStartupSettings;
 
                     string invokeExePath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdVenv, "Scripts", "invokeai.exe");
-                    Process py = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd(), Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdVenv, "Scripts", "python.exe"));
+                    string pyExePath = Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdVenv, "Scripts", "python.exe");
+                    Process py = OsUtils.NewProcess(true, pyExePath, logAction: HandleOutput, redirectStdin: true);
                     py.StartInfo.EnvironmentVariables["INVOKEAI_ROOT"] = InvokeAiUtils.HomePath;
                     py.StartInfo.EnvironmentVariables["INVOKE_NMKD_HIRES_MINDIM_MULT"] = Config.IniInstance.HiresFixMinimumDimensionMultiplier.ToStringDot("0.0##");
-                    py.StartInfo.RedirectStandardInput = true;
                     py.StartInfo.WorkingDirectory = Paths.GetDataPath();
                     py.StartInfo.Arguments = $"{invokeExePath.Wrap()} --model {InvokeAiUtils.GetMdlNameForYaml(modelFile, vaeFile)} -o {outPath.Wrap(true)} {argsStartup}";
 
@@ -224,12 +224,6 @@ namespace StableDiffusionGui.Implementations
 
                     TextToImage.CurrentTask.Processes.Add(py);
                     Logger.Log($"{py.StartInfo.FileName} {py.StartInfo.Arguments}", true);
-
-                    if (!OsUtils.ShowHiddenCmd())
-                    {
-                        py.OutputDataReceived += (sender, line) => { HandleOutput(line.Data); };
-                        py.ErrorDataReceived += (sender, line) => { HandleOutput(line.Data); };
-                    }
 
                     if (TtiProcess.CurrentProcess != null)
                     {
@@ -247,15 +241,8 @@ namespace StableDiffusionGui.Implementations
                     TtiProcess.ProcessExistWasIntentional = false;
 
                     restartedInvoke = true;
-                    py.Start();
-                    OsUtils.AttachOrphanHitman(py);
+                    OsUtils.StartProcess(py, killWithParent: true);
                     TtiProcess.CurrentStdInWriter = new NmkdStreamWriter(py);
-
-                    if (!OsUtils.ShowHiddenCmd())
-                    {
-                        py.BeginOutputReadLine();
-                        py.BeginErrorReadLine();
-                    }
 
                     Task.Run(() => TtiProcess.CheckStillRunning());
 

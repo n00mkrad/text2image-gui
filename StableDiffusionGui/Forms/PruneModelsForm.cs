@@ -71,26 +71,13 @@ namespace StableDiffusionGui.Forms
 
                 List<string> outLines = new List<string>();
 
-                Process p = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
-                p.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand(true, Paths.GetDataPath())} && {Constants.Files.VenvActivate} && " +
+                Process py = OsUtils.NewProcess(true, logAction: (s) => Logger.Log(s, true, false, Constants.Lognames.Prune));
+                py.StartInfo.Arguments = $"/C cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand(true, Paths.GetDataPath())} && {Constants.Files.VenvActivate} && " +
                     $"python {Constants.Dirs.SdRepo}/scripts/prune_model.py -i {model.FullName.Wrap()} -o {outPath.Wrap(true)} {(fp16 ? "-half" : "")}";
 
-                if (!OsUtils.ShowHiddenCmd())
-                {
-                    p.OutputDataReceived += (sender, line) => { Logger.Log(line?.Data, true, false, Constants.Lognames.Prune); };
-                    p.ErrorDataReceived += (sender, line) => { Logger.Log(line?.Data, true, false, Constants.Lognames.Prune); };
-                }
-
-                Logger.Log($"cmd {p.StartInfo.Arguments}", true);
-                p.Start();
-
-                if (!OsUtils.ShowHiddenCmd())
-                {
-                    p.BeginOutputReadLine();
-                    p.BeginErrorReadLine();
-                }
-
-                while (!p.HasExited) await Task.Delay(1);
+                Logger.Log($"cmd {py.StartInfo.Arguments}", true);
+                py.Start();
+                await OsUtils.WaitForProcessExit(py);
 
                 Logger.ClearLogBox();
                 return outPath;

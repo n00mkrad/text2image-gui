@@ -227,32 +227,20 @@ namespace StableDiffusionGui.Main.Utils
         private static async Task<string> RunPython(string cmd)
         {
             string output = "";
-            Process p = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
-            p.StartInfo.Arguments = $"{OsUtils.GetCmdArg()} cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand(true, Paths.GetDataPath())} && {Constants.Files.VenvActivate} && {cmd}";
 
-            void PythonLog (DataReceivedEventArgs data)
+            void PythonLog(string log)
             {
-                Logger.Log(data?.Data, true, false, Constants.Lognames.Convert);
-                output += $"{data.Data}\n";
+                Logger.Log(log, true, false, Constants.Lognames.Convert);
+                output += $"{log.Trim('\n')}\n";
             }
 
-            if (!OsUtils.ShowHiddenCmd())
-            {
-                p.OutputDataReceived += (sender, line) => PythonLog(line);
-                p.ErrorDataReceived += (sender, line) => PythonLog(line);
-            }
+            Process py = OsUtils.NewProcess(true, logAction: PythonLog);
+            py.StartInfo.Arguments = $"/C cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand(true, Paths.GetDataPath())} && {Constants.Files.VenvActivate} && {cmd}";
 
-            Logger.Log($"cmd {p.StartInfo.Arguments}", true);
-            p.Start();
-
-            if (!OsUtils.ShowHiddenCmd())
-            {
-                p.BeginOutputReadLine();
-                p.BeginErrorReadLine();
-            }
-
-            while (!p.HasExited) await Task.Delay(1);
-            return output.Trim('\n');
+            Logger.Log($"cmd {py.StartInfo.Arguments}", true);
+            OsUtils.StartProcess(py, killWithParent: true);
+            await OsUtils.WaitForProcessExit(py);
+            return output.TrimEnd('\n');
         }
 
         private static string GetOutputPath(Model model, string extension, bool noOverwrite = true)

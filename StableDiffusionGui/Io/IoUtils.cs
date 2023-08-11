@@ -654,7 +654,7 @@ namespace StableDiffusionGui.Io
                 return;
 
             text = text.Replace("\"", "\\\""); // Escape quotation marks
-            Process p = OsUtils.NewProcess(!OsUtils.ShowHiddenCmd());
+            Process p = OsUtils.NewProcess(true);
             p.StartInfo.Arguments = $"/C cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand()} && {Constants.Files.VenvActivate} && python {Constants.Dirs.SdRepo}/addmetadata.py " +
                 $"-i {imgPath.Wrap()} -t {text.Wrap()} {(string.IsNullOrWhiteSpace(keyName) ? "" : $"-k {keyName}")}";
             p.Start();
