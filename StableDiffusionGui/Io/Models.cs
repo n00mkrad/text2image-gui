@@ -4,21 +4,25 @@ using StableDiffusionGui.Data;
 using StableDiffusionGui.Implementations;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
-using StableDiffusionGui.Os;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Runtime.Remoting.Contexts;
 using ZetaLongPaths;
 using static StableDiffusionGui.Main.Enums.Models;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
 namespace StableDiffusionGui.Io
 {
-    internal class Models
+    public class Models
     {
+        public class ModelSettings
+        {
+            public ModelArch Arch { get; set; } = ModelArch.Automatic;
+            public int ClipSkip { get; set; } = 0;
+        }
+
 
         public static List<string> GetAllModelDirs(bool includeBuiltin = true)
         {
@@ -397,7 +401,30 @@ namespace StableDiffusionGui.Io
                     return ModelArch.Sd2Inpaint;
             }
 
-            return ModelArch.Unknown;
+            return ModelArch.Automatic;
+        }
+
+        public static Size GetDefaultRes(ModelArch modelArch)
+        {
+            switch(modelArch)
+            {
+                case ModelArch.SdXlBase: return new Size(1024, 1024);
+                case ModelArch.SdXlRefine: return new Size(1024, 1024);
+                case ModelArch.Sd2V: return new Size(768, 768);
+                default: return new Size(512, 512);
+            }
+        }
+
+        public static ModelArch AssumeModelArch (string modelName)
+        {
+            modelName = modelName.Lower();
+
+            if (modelName.Contains("xl")) // xl in name => assume SDXL
+                return modelName.Contains("refine") ? ModelArch.SdXlRefine : ModelArch.SdXlBase; // refine in name => assume SDXL Refiner
+            else if (modelName.Contains("768-v")) // 768-v in name => assume SD 2 V-Prediction
+                return ModelArch.Sd2V;
+            else
+                return ModelArch.Automatic;
         }
     }
 }

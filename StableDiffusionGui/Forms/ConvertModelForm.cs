@@ -106,7 +106,10 @@ namespace StableDiffusionGui.Forms
             ConfigParser.SaveGuiElement(checkboxDeleteInput, ref Config.Instance.ConvertModelsDeleteInput);
 
             if (Config.Instance != null && comboxModel.SelectedIndex >= 0)
-                Config.Instance.ModelArchs[((Model)comboxModel.SelectedItem).FullName] = ParseUtils.GetEnum<Enums.Models.SdArchInvoke>(comboxModelArch.Text, true, Strings.SdModelArch);
+            {
+                var arch = ParseUtils.GetEnum<Enums.StableDiffusion.ModelArch>(comboxModelArch.Text, true, Strings.ModelArch);
+                Config.Instance.ModelSettings.GetPopulate(((Model)comboxModel.SelectedItem).Name, new Models.ModelSettings()).Arch = arch;
+            }
 
             Config.Save();
         }
@@ -130,7 +133,7 @@ namespace StableDiffusionGui.Forms
             Refresh();
             comboxInFormat.FillFromEnum<Enums.Models.Format>(Strings.ModelFormats, 0, Enums.Models.Format.DiffusersOnnx.AsList());
             ConfigParser.LoadGuiElement(checkboxDeleteInput, ref Config.Instance.ConvertModelsDeleteInput);
-            comboxModelArch.FillFromEnum<Enums.Models.SdArchInvoke>(Strings.SdModelArch, 0);
+            comboxModelArch.FillFromEnum<Enums.StableDiffusion.ModelArch>(Strings.ModelArch, 0);
             comboxInFormat.SetWithEnum(Enums.Models.Format.Safetensors, true, Strings.ModelFormats);
             TabOrderInit(new List<Control>() { comboxInFormat, comboxModel, comboxOutFormat, checkboxDeleteInput, btnRun }, 0);
             await Task.Delay(1);
@@ -141,8 +144,8 @@ namespace StableDiffusionGui.Forms
         {
             Model mdl = (Model)comboxModel.SelectedItem;
 
-            if (mdl != null && Config.Instance.ModelArchs.ContainsKey(mdl.FullName))
-                comboxModelArch.SetWithText(Config.Instance.ModelArchs[mdl.FullName].ToString(), false, Strings.SdModelArch);
+            if (mdl != null && Config.Instance.ModelSettings.ContainsKey(mdl.Name))
+                comboxModelArch.SetWithText(Config.Instance.ModelSettings[mdl.Name].Arch.ToString(), false, Strings.ModelArch);
             else if (comboxModelArch.Items.Count > 0)
                 comboxModelArch.SelectedIndex = 0;
         }

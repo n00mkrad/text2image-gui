@@ -126,13 +126,6 @@ namespace StableDiffusionGui.Ui
             { "btnCollapseDebug", "Debug Settings" },
         };
 
-        public static Dictionary<string, string> SdModelArch = new Dictionary<string, string>()
-        {
-            { Enums.Models.SdArchInvoke.V1.ToString(), "SD 1.x" },
-            { Enums.Models.SdArchInvoke.V2.ToString(), "SD 2.x (512 px)" },
-            { Enums.Models.SdArchInvoke.V2V.ToString(), "SD 2.x (768 px)" },
-        };
-
         public static Dictionary<string, string> LoraSizes = new Dictionary<string, string>
         {
             { Enums.Training.LoraSize.Tiny.ToString(), "Tiny (7.5 MB File)" },

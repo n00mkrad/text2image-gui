@@ -16,6 +16,7 @@ using StableDiffusionGui.Data;
 using Newtonsoft.Json.Converters;
 using System.Collections.Concurrent;
 using System.Reflection;
+using StableDiffusionGui.Extensions;
 
 namespace StableDiffusionGui
 {
@@ -435,6 +436,9 @@ namespace StableDiffusionGui
 
         public static void SetWithText(this ComboBox comboBox, string str, bool ignoreCase = true, Dictionary<string, string> stringMap = null)
         {
+            if (comboBox.RequiresInvoke(new Action<ComboBox, string, bool, Dictionary<string,string>>(SetWithText), comboBox, str, ignoreCase, stringMap))
+                return;
+
             if (stringMap == null)
                 stringMap = new Dictionary<string, string>();
 

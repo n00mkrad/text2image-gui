@@ -11,7 +11,7 @@ namespace StableDiffusionGui.Io
 {
     public class ConfigInstance
     {
-        public EasyDict<string, Enums.Models.SdArchInvoke> ModelArchs = new EasyDict<string, Enums.Models.SdArchInvoke>();
+        public EasyDict<string, Models.ModelSettings> ModelSettings = new EasyDict<string, Models.ModelSettings>();
         public int CmdDebugMode;
         public bool MultiPromptsSameSeed;
         public int SamplerIdx;
@@ -147,7 +147,11 @@ namespace StableDiffusionGui.Io
 
         public void Clean()
         {
-            ModelArchs.ToList().Where(pair => pair.Value == Enums.Models.SdArchInvoke.Automatic || !File.Exists(pair.Key)).ToList().ForEach(pair => ModelArchs.Remove(pair.Key));
+            foreach (var mdlName in ModelSettings.Keys)
+            {
+                if (ModelSettings[mdlName].Arch == Enums.StableDiffusion.ModelArch.Automatic && ModelSettings[mdlName].ClipSkip == 0)
+                    ModelSettings.Remove(mdlName);
+            }
         }
     }
 }

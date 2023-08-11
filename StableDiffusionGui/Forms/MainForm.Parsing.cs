@@ -165,7 +165,7 @@ namespace StableDiffusionGui.Forms
                 LockSeed = checkboxLockSeed.Checked,
                 ClipSegMask = textboxClipsegMask.Text.Trim(),
                 ResizeGravity = comboxResizeGravity.Visible ? ParseUtils.GetEnum<ImageMagick.Gravity>(comboxResizeGravity.Text, true, Strings.ImageGravity) : (ImageMagick.Gravity)(-1),
-                ModelArch = comboxModelArch.Visible ? ParseUtils.GetEnum<Enums.Models.SdArchInvoke>(comboxModelArch.Text, true, Strings.SdModelArch) : Enums.Models.SdArchInvoke.Automatic,
+                ModelArch = comboxModelArch.Visible ? ParseUtils.GetEnum<ModelArch>(comboxModelArch.Text, true, Strings.ModelArch) : ModelArch.Automatic,
                 SeamlessMode = comboxSeamless.Visible ? ((SeamlessMode)comboxSeamless.SelectedIndex) : SeamlessMode.Disabled,
                 SymmetryMode = comboxSymmetry.Visible ? ((SymmetryMode)comboxSymmetry.SelectedIndex) : SymmetryMode.Disabled,
                 HiresFix = checkboxHiresFix.Visible && checkboxHiresFix.Checked,

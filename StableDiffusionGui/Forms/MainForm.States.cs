@@ -1,6 +1,8 @@
 ﻿using StableDiffusionGui.Data;
 using StableDiffusionGui.Extensions;
 using StableDiffusionGui.Io;
+using StableDiffusionGui.Main;
+using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Ui;
 using System.Collections.Generic;
 using System.Linq;
@@ -80,16 +82,19 @@ namespace StableDiffusionGui.Forms
                 return implementation.Supports(Feature.Lora) && gridLoras.Rows.Count > 0;
 
             if (control == panelRefineStart)
-                return implementation == Implementation.Comfy;
+                return implementation == Implementation.Comfy && ShouldControlBeVisible(panelModel2);
 
             if (control == panelModel2)
-                return implementation == Implementation.Comfy;
+                return Model2Available(implementation);
 
             if (control == panelUpscaling)
                 return implementation == Implementation.Comfy && !AnyInits;
 
             if(control == panelControlnet)
                 return ControlnetAvailable(implementation) && (ImgMode)comboxInpaintMode.SelectedIndex == ImgMode.Controlnet && comboxControlnet.Items.Count > 0;
+
+            if (control == panelModelSettings)
+                return new[] { Implementation.InvokeAi, Implementation.Comfy }.Contains(implementation);
 
             return false;
         }
@@ -156,6 +161,15 @@ namespace StableDiffusionGui.Forms
             bool compatible = imp.Supports(Feature.HiresFix);
             bool biggerThan512 = comboxResW.GetInt() > 512 || comboxResH.GetInt() > 512;
             return compatible && biggerThan512 && !AnyInits;
+        }
+
+        private bool Model2Available (Implementation imp)
+        {
+            if (imp != Implementation.Comfy)
+                return false;
+
+            var arch = ParseUtils.GetEnum<ModelArch>(comboxModelArch.Text, stringMap: Strings.ModelArch);
+            return new[] { ModelArch.SdXlBase }.Contains(arch);
         }
     }
 }

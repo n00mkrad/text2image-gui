@@ -45,11 +45,7 @@ namespace StableDiffusionGui.Forms
             comboxResizeGravity.FillFromEnum<ImageMagick.Gravity>(Strings.ImageGravity, 4, new List<ImageMagick.Gravity> { ImageMagick.Gravity.Undefined });
             comboxBackend.FillFromEnum<Implementation>(Strings.Implementation, -1);
             comboxBackend.Text = Strings.Implementation.Get(Config.Instance.Implementation.ToString());
-            // ReloadModelsCombox();
-            // UpdateModel();
-            // ReloadEmbeddings();
-            // ReloadLoras();
-            comboxModelArch.FillFromEnum<Enums.Models.SdArchInvoke>(Strings.SdModelArch, 0);
+            comboxModelArch.FillFromEnum<ModelArch>(Strings.ModelArch, 0);
             comboxPreprocessor.FillFromEnum<ImagePreprocessor>(Strings.ImagePreprocessors, 0);
             comboxControlnetSlot.SetItems(Enumerable.Range(1, Controlnets.Length).Select(i => $"Slot {i}"), 0);
 
@@ -93,6 +89,7 @@ namespace StableDiffusionGui.Forms
             comboxUpscaleMode.SelectedIndexChanged += (s, e) => { RefreshUpscaleUi(true); };
             updownUpscaleFactor.ValueChanged += (s, e) => { ValidateResolution(); };
             comboxControlnetSlot.SelectedIndexChanged += (s, e) => ControlnetSlotChanged();
+            comboxModelArch.SelectedIndexChanged += (s, e) => { SetVisibility(new[] { panelModel2, panelRefineStart }); };
         }
 
         public void LoadControls()
@@ -125,7 +122,13 @@ namespace StableDiffusionGui.Forms
             ConfigParser.SaveGuiElement(checkboxHiresFix, ref Config.Instance.HiresFix);
 
             if (Config.Instance != null && comboxModel.SelectedIndex >= 0)
-                Config.Instance.ModelArchs[((Model)comboxModel.SelectedItem).FullName] = ParseUtils.GetEnum<Enums.Models.SdArchInvoke>(comboxModelArch.Text, true, Strings.SdModelArch);
+            {
+                var arch = ParseUtils.GetEnum<ModelArch>(comboxModelArch.Text, true, Strings.ModelArch);
+                Config.Instance.ModelSettings.GetPopulate(((Model)comboxModel.SelectedItem).Name, new Models.ModelSettings()).Arch = arch;
+                Config.Instance.ModelSettings.Get(((Model)comboxModel.SelectedItem).Name).ClipSkip = comboxClipSkip.GetInt();
+
+            }
+            //Config.Instance.ModelSettings[((Model)comboxModel.SelectedItem).Name].Arch = ParseUtils.GetEnum<ModelArch>(comboxModelArch.Text, true, Strings.ModelArch);
 
             Config.Instance.LoraWeights = new EasyDict<string, List<float>>(GetLoras(false).Where(x => x.Value.Count != 1 || x.Value[0] != Constants.Ui.DefaultLoraStrength).ToDictionary(p => p.Key, p => p.Value));
             Config.Save();
@@ -146,7 +149,7 @@ namespace StableDiffusionGui.Forms
 
             // Panel visibility
             SetVisibility(new Control[] { panelBaseImg, panelPromptNeg, panelEmbeddings, panelRefineStart, panelInitImgStrength, panelInpainting, panelScaleImg, panelRes, panelSampler, panelSeamless, panelSymmetry, checkboxHiresFix,
-                textboxClipsegMask, panelResizeGravity, labelResChange, btnResetRes, checkboxShowInitImg, panelModel, panelLoras, panelModel2, panelUpscaling, panelControlnet }, imp);
+                textboxClipsegMask, panelResizeGravity, labelResChange, btnResetRes, checkboxShowInitImg, panelModel, panelLoras, panelModel2, panelUpscaling, panelControlnet, panelModelSettings }, imp);
 
             bool adv = Config.Instance.AdvancedUi;
             upDownIterations.Maximum = !adv ? Config.IniInstance.IterationsMax : Config.IniInstance.IterationsMax * 10;
@@ -180,14 +183,14 @@ namespace StableDiffusionGui.Forms
 
             if (imp != _lastImplementation)
             {
-                var res = new System.Drawing.Size();
+                var res = new Size();
 
                 if (imp == Implementation.Comfy)
-                    res = new System.Drawing.Size(1024, 1024);
+                    res = Models.GetDefaultRes(ParseUtils.GetEnum<ModelArch>(comboxModelArch.Text, stringMap: Strings.ModelArch));
                 else if (imp == Implementation.DiffusersOnnx)
-                    res = new System.Drawing.Size(512, 512);
+                    res = new Size(512, 512);
                 else if (imp == Implementation.InvokeAi)
-                    res = comboxModelArch.Text.Contains("768") ? new System.Drawing.Size(768, 768) : new System.Drawing.Size(512, 512);
+                    res = comboxModelArch.Text.Contains("768") ? new Size(768, 768) : new Size(512, 512);
 
                 if (!res.IsEmpty)
                 {
@@ -242,15 +245,19 @@ namespace StableDiffusionGui.Forms
                 return;
 
             _prevSelectedModel = mdl.FullName;
-            var exclusionList = new List<Enums.Models.SdArchInvoke>();
+            var exclusionList = new List<ModelArch>();
 
-            if (Config.Instance.Implementation != Implementation.InvokeAi || mdl.Format == Enums.Models.Format.Diffusers || mdl.Format == Enums.Models.Format.DiffusersOnnx)
-                exclusionList = Enum.GetValues(typeof(Enums.Models.SdArchInvoke)).Cast<Enums.Models.SdArchInvoke>().Skip(1).ToList();
+            var validImpls = new[] { Implementation.InvokeAi, Implementation.Comfy }; // Only enable selection for these implementations
 
-            comboxModelArch.FillFromEnum<Enums.Models.SdArchInvoke>(Strings.SdModelArch, 0, exclusionList);
+            if (!validImpls.Contains(Config.Instance.Implementation) || mdl.Format == Enums.Models.Format.Diffusers || mdl.Format == Enums.Models.Format.DiffusersOnnx)
+                exclusionList = Enum.GetValues(typeof(ModelArch)).Cast<ModelArch>().Skip(1).ToList();
 
-            if (Config.Instance.ModelArchs.ContainsKey(mdl.FullName))
-                comboxModelArch.SetWithText(Config.Instance.ModelArchs[mdl.FullName].ToString(), false, Strings.SdModelArch);
+            comboxModelArch.FillFromEnum<ModelArch>(Strings.ModelArch, 0, exclusionList);
+
+            var modelSettings = Config.Instance.ModelSettings.GetPopulate(mdl.Name, new Models.ModelSettings() { Arch = Models.AssumeModelArch(mdl.Name) });
+            comboxModelArch.SetWithText(Config.Instance.ModelSettings[mdl.Name].Arch.ToString(), false, Strings.ModelArch);
+            comboxClipSkip.SelectedIndex = modelSettings.ClipSkip;
+            SetVisibility(panelModel2);
 
             ConfigParser.SaveGuiElement(comboxModel, ref Config.Instance.Model);
 
@@ -425,7 +432,7 @@ namespace StableDiffusionGui.Forms
                     useAsInitImageToolStripMenuItem.Visible = !Program.Busy;
                     postProcessImageToolStripMenuItem.Visible = !Program.Busy && TextToImage.CurrentTaskSettings.Implementation == Implementation.InvokeAi;
                     copyImageToClipboardToolStripMenuItem.Visible = pictBoxImgViewer.Image != null;
-                    fitWindowSizeToImageSizeToolStripMenuItem.Visible = MainUi.GetPreferredSize() != System.Drawing.Size.Empty;
+                    fitWindowSizeToImageSizeToolStripMenuItem.Visible = MainUi.GetPreferredSize() != Size.Empty;
                     copySidebySideComparisonImageToolStripMenuItem.Visible = pictBoxInitImg.Image != null && pictBoxImgViewer.Image != null;
                     menuStripOutputImg.Show(Cursor.Position);
                 }
@@ -531,6 +538,7 @@ namespace StableDiffusionGui.Forms
 
             IEnumerable<Model> models = Models.GetModels((Enums.Models.Type)(-1), imp);
             comboxModel.SetItems(models.Where(m => m.Type == Enums.Models.Type.Normal), UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.None);
+            comboxVae.SetItems(new[] { new Model() }.Concat(Models.GetVaes().Where(m => m.Type == Enums.Models.Type.Vae)), UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.First);
 
             if (imp == Implementation.Comfy)
                 comboxModel2.SetItems(models.Where(m => m.Type == Enums.Models.Type.Refiner), UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.None);

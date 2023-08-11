@@ -57,7 +57,7 @@ namespace StableDiffusionGui.Implementations
         }
 
         /// <summary> Writes all models into models.yml for InvokeAI to use </summary>
-        public static void WriteModelsYamlAll(List<Model> cachedModels = null, List<Model> cachedModelsVae = null, Enums.Models.SdArchInvoke ckptArch = Enums.Models.SdArchInvoke.Automatic, bool quiet = false)
+        public static void WriteModelsYamlAll(List<Model> cachedModels = null, List<Model> cachedModelsVae = null, ModelArch ckptArch = ModelArch.Automatic, bool quiet = false)
         {
             try
             {
@@ -84,7 +84,7 @@ namespace StableDiffusionGui.Implementations
                     if (mdl.Format != Enums.Models.Format.Diffusers)
                     {
                         string config = TtiUtils.GetCkptConfig(mdl, true);
-                        int res = mdl.LoadArchitecture == Enums.Models.SdArchInvoke.V2V ? 768 : 512;
+                        int res = mdl.LoadArchitecture == ModelArch.Sd2V ? 768 : 512;
                         ckptArgs = new List<string>() { $"width: {res}", $"height: {res}" };
 
                         if (config.IsNotEmpty())
@@ -134,7 +134,7 @@ namespace StableDiffusionGui.Implementations
 
             var models = cachedModels.Where(m => Implementation.InvokeAi.GetInfo().SupportedModelFormats.Contains(m.Format));
             models = models.Where(m => m.Type == Enums.Models.Type.Normal || m.Type == Enums.Models.Type.Vae);
-            string modelsStr = string.Join("\n", models.Select(m => $"{m.FullName}{Config.Instance.ModelArchs.Get(m.FullName, Enums.Models.SdArchInvoke.Automatic)}").OrderBy(n => n));
+            string modelsStr = string.Join("\n", models.Select(m => $"{m.FullName}{Config.Instance.ModelSettings.Get(m.Name, new Models.ModelSettings()).Arch}").OrderBy(n => n));
             return IoUtils.GetHash(modelsStr, hashType, false);
         }
 

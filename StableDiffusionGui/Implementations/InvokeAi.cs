@@ -14,6 +14,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
 namespace StableDiffusionGui.Implementations
 {
@@ -341,7 +342,7 @@ namespace StableDiffusionGui.Implementations
             if (modelFile == null)
                 return;
 
-            InvokeAiUtils.WriteModelsYamlAll(cachedModels, cachedModelsVae, Enums.Models.SdArchInvoke.Automatic, true);
+            InvokeAiUtils.WriteModelsYamlAll(cachedModels, cachedModelsVae, ModelArch.Automatic, true);
             if (TextToImage.Canceled) return;
 
             string batPath = Path.Combine(Paths.GetSessionDataPath(), "invoke.bat");

@@ -12,6 +12,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
@@ -23,6 +24,7 @@ namespace StableDiffusionGui.Implementations
         public List<string> LastMessages { get => _lastMessages; }
         private List<string> _lastMessages = new List<string>();
         private bool _hasErrored = false;
+        private TtiSettings _lastSettings = null;
 
         public static readonly int ComfyPort = 8189;
         private static readonly HttpClient _webClient = new HttpClient();
@@ -41,6 +43,7 @@ namespace StableDiffusionGui.Implementations
 
         public async Task Run(TtiSettings s, string outPath)
         {
+            _lastSettings = s;
             float[] initStrengths = s.InitStrengths.Select(n => 1f - n).ToArray();
             var cachedModels = Models.GetModels((Enums.Models.Type)(-1), Implementation.Comfy);
             var baseModels = cachedModels.Where(m => m.Type == Enums.Models.Type.Normal).ToList();
@@ -52,9 +55,6 @@ namespace StableDiffusionGui.Implementations
 
             if (model == null)
                 return;
-
-            // if (s.Res.Width < 1024 && s.Res.Height < 1024)
-            //     Logger.Log($"Warning: The resolution {s.Res.Width}x{s.Res.Height} might lead to low quality results, as the default resolution of SDXL is 1024x1024.");
 
             OrderedDictionary initImages = s.InitImgs != null && s.InitImgs.Length > 0 ? await TtiUtils.CreateResizedInitImagesIfNeeded(s.InitImgs.ToList(), s.Res, s.ResizeGravity, true) : null;
             long startSeed = s.Seed;
@@ -461,7 +461,17 @@ namespace StableDiffusionGui.Implementations
                 string modelType = split[1].Trim();
                 string unetConfigJson = split[2].Trim();
                 var mdlArch = Models.DetectModelType(modelType, unetConfigJson);
+                Config.Instance.ModelSettings.GetPopulate(filename, new Models.ModelSettings()).Arch = mdlArch;
                 Logger.Log($"Loaded '{filename.Trunc(100)}' - {Strings.ModelArch.Get(mdlArch.ToString(), true)}", false, Logger.LastUiLine.Contains(filename));
+
+                if(mdlArch != ModelArch.SdXlRefine)
+                {
+                    Program.MainForm.comboxModelArch.SetWithText(Config.Instance.ModelSettings[filename].Arch.ToString(), false, Strings.ModelArch);
+                    Size res = Models.GetDefaultRes(mdlArch);
+
+                    if (_lastSettings.Res.Width < res.Width && _lastSettings.Res.Height < res.Height)
+                        Logger.Log($"Warning: The resolution {_lastSettings.Res.Width}x{_lastSettings.Res.Height} might lead to low quality results, the native resolution of this model is {res.AsString()}.");
+                }
             }
 
             // Warning: Missing embedding
