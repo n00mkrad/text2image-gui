@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using StableDiffusionGui.Implementations;
 using StableDiffusionGui.Main;
 using StableDiffusionGui.MiscUtils;
@@ -284,7 +285,11 @@ namespace StableDiffusionGui.Data
 
         public void LoadGenerationInfo (string info)
         {
-            var gi = info.FromJson<ComfyData.GenerationInfo>(NullValueHandling.Ignore, DefaultValueHandling.Populate, true, true);
+            ParsedText = info;
+            bool assumeSnakeCase = info.Contains("negative_prompt");
+            var resolver = assumeSnakeCase ? new DefaultContractResolver { NamingStrategy = new SnakeCaseNamingStrategy { ProcessDictionaryKeys = true } } : null;
+
+            var gi = info.FromJson<ComfyData.GenerationInfo>(NullValueHandling.Ignore, DefaultValueHandling.Populate, true, true, resolver);
             Model = gi.Model;
             Prompt = gi.Prompt;
             NegativePrompt= gi.NegativePrompt;
@@ -292,7 +297,7 @@ namespace StableDiffusionGui.Data
             InitStrength = 1f - gi.InitStrength;
             Steps = gi.Steps;
             Seed = gi.Seed;
-            Sampler = Sampler.Lower();
+            Sampler = gi.Sampler.ToString().Lower();
             Scale = gi.Scale;
             // img scale
             RefineStrength = gi.RefinerStrength;
@@ -303,7 +308,7 @@ namespace StableDiffusionGui.Data
         public void LoadInfoNmkdiffusers(string info)
         {
             ParsedText = info;
-            Dictionary<string, dynamic> dict = info.FromJson<Dictionary<string, dynamic>>();
+            Dictionary<string, string> dict = info.FromJson<Dictionary<string, string>>();
 
             foreach (var pair in dict)
             {

@@ -124,6 +124,12 @@
             this.comboxComfyVram = new System.Windows.Forms.ComboBox();
             this.panel22 = new System.Windows.Forms.Panel();
             this.label25 = new System.Windows.Forms.Label();
+            this.panelFullPrecision = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.panel8 = new System.Windows.Forms.Panel();
+            this.checkboxFullPrecision = new System.Windows.Forms.CheckBox();
+            this.panel7 = new System.Windows.Forms.Panel();
+            this.label2 = new System.Windows.Forms.Label();
             this.panelModelCaching = new System.Windows.Forms.Panel();
             this.tableLayoutPanel17 = new System.Windows.Forms.TableLayoutPanel();
             this.panel43 = new System.Windows.Forms.Panel();
@@ -166,12 +172,6 @@
             this.checkboxUnloadModel = new System.Windows.Forms.CheckBox();
             this.panel21 = new System.Windows.Forms.Panel();
             this.label14 = new System.Windows.Forms.Label();
-            this.panelFullPrecision = new System.Windows.Forms.Panel();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.panel8 = new System.Windows.Forms.Panel();
-            this.checkboxFullPrecision = new System.Windows.Forms.CheckBox();
-            this.panel7 = new System.Windows.Forms.Panel();
-            this.label2 = new System.Windows.Forms.Label();
             this.panelImplementation = new System.Windows.Forms.Panel();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.panel12 = new System.Windows.Forms.Panel();
@@ -237,6 +237,10 @@
             this.panelComfyVram.SuspendLayout();
             this.panel18.SuspendLayout();
             this.panel22.SuspendLayout();
+            this.panelFullPrecision.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
+            this.panel8.SuspendLayout();
+            this.panel7.SuspendLayout();
             this.panelModelCaching.SuspendLayout();
             this.tableLayoutPanel17.SuspendLayout();
             this.panel43.SuspendLayout();
@@ -261,10 +265,6 @@
             this.tableLayoutPanel11.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel21.SuspendLayout();
-            this.panelFullPrecision.SuspendLayout();
-            this.tableLayoutPanel1.SuspendLayout();
-            this.panel8.SuspendLayout();
-            this.panel7.SuspendLayout();
             this.panelImplementation.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             this.panel12.SuspendLayout();
@@ -1404,6 +1404,71 @@
             this.label25.TabIndex = 85;
             this.label25.Text = "VRAM Usage Profile";
             // 
+            // panelFullPrecision
+            // 
+            this.panelFullPrecision.Controls.Add(this.tableLayoutPanel1);
+            this.panelFullPrecision.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelFullPrecision.Location = new System.Drawing.Point(0, 285);
+            this.panelFullPrecision.Name = "panelFullPrecision";
+            this.panelFullPrecision.Size = new System.Drawing.Size(843, 35);
+            this.panelFullPrecision.TabIndex = 11;
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.ColumnCount = 2;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
+            this.tableLayoutPanel1.Controls.Add(this.panel8, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.panel7, 0, 0);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 1;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(843, 35);
+            this.tableLayoutPanel1.TabIndex = 0;
+            // 
+            // panel8
+            // 
+            this.panel8.Controls.Add(this.checkboxFullPrecision);
+            this.panel8.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel8.Location = new System.Drawing.Point(410, 0);
+            this.panel8.Margin = new System.Windows.Forms.Padding(0);
+            this.panel8.Name = "panel8";
+            this.panel8.Size = new System.Drawing.Size(433, 35);
+            this.panel8.TabIndex = 86;
+            // 
+            // checkboxFullPrecision
+            // 
+            this.checkboxFullPrecision.AutoSize = true;
+            this.checkboxFullPrecision.Location = new System.Drawing.Point(5, 10);
+            this.checkboxFullPrecision.Name = "checkboxFullPrecision";
+            this.checkboxFullPrecision.Size = new System.Drawing.Size(15, 14);
+            this.checkboxFullPrecision.TabIndex = 86;
+            this.checkboxFullPrecision.UseVisualStyleBackColor = true;
+            // 
+            // panel7
+            // 
+            this.panel7.Controls.Add(this.label2);
+            this.panel7.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel7.Location = new System.Drawing.Point(0, 0);
+            this.panel7.Margin = new System.Windows.Forms.Padding(0);
+            this.panel7.Name = "panel7";
+            this.panel7.Size = new System.Drawing.Size(410, 35);
+            this.panel7.TabIndex = 85;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.Color.White;
+            this.label2.Location = new System.Drawing.Point(2, 11);
+            this.label2.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(257, 13);
+            this.label2.TabIndex = 84;
+            this.label2.Text = "Force Full Precision (FP32) - Increases VRAM usage!";
+            // 
             // panelModelCaching
             // 
             this.panelModelCaching.Controls.Add(this.tableLayoutPanel17);
@@ -1944,71 +2009,6 @@
             this.label14.TabIndex = 84;
             this.label14.Text = "Unload Model After Each Generation (No Idle RAM Usage)";
             // 
-            // panelFullPrecision
-            // 
-            this.panelFullPrecision.Controls.Add(this.tableLayoutPanel1);
-            this.panelFullPrecision.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelFullPrecision.Location = new System.Drawing.Point(0, 285);
-            this.panelFullPrecision.Name = "panelFullPrecision";
-            this.panelFullPrecision.Size = new System.Drawing.Size(843, 35);
-            this.panelFullPrecision.TabIndex = 11;
-            // 
-            // tableLayoutPanel1
-            // 
-            this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
-            this.tableLayoutPanel1.Controls.Add(this.panel8, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.panel7, 0, 0);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 1;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(843, 35);
-            this.tableLayoutPanel1.TabIndex = 0;
-            // 
-            // panel8
-            // 
-            this.panel8.Controls.Add(this.checkboxFullPrecision);
-            this.panel8.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel8.Location = new System.Drawing.Point(410, 0);
-            this.panel8.Margin = new System.Windows.Forms.Padding(0);
-            this.panel8.Name = "panel8";
-            this.panel8.Size = new System.Drawing.Size(433, 35);
-            this.panel8.TabIndex = 86;
-            // 
-            // checkboxFullPrecision
-            // 
-            this.checkboxFullPrecision.AutoSize = true;
-            this.checkboxFullPrecision.Location = new System.Drawing.Point(5, 10);
-            this.checkboxFullPrecision.Name = "checkboxFullPrecision";
-            this.checkboxFullPrecision.Size = new System.Drawing.Size(15, 14);
-            this.checkboxFullPrecision.TabIndex = 86;
-            this.checkboxFullPrecision.UseVisualStyleBackColor = true;
-            // 
-            // panel7
-            // 
-            this.panel7.Controls.Add(this.label2);
-            this.panel7.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel7.Location = new System.Drawing.Point(0, 0);
-            this.panel7.Margin = new System.Windows.Forms.Padding(0);
-            this.panel7.Name = "panel7";
-            this.panel7.Size = new System.Drawing.Size(410, 35);
-            this.panel7.TabIndex = 85;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(2, 11);
-            this.label2.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(257, 13);
-            this.label2.TabIndex = 84;
-            this.label2.Text = "Force Full Precision (FP32) - Increases VRAM usage!";
-            // 
             // panelImplementation
             // 
             this.panelImplementation.Controls.Add(this.tableLayoutPanel3);
@@ -2208,6 +2208,12 @@
             this.panel18.ResumeLayout(false);
             this.panel22.ResumeLayout(false);
             this.panel22.PerformLayout();
+            this.panelFullPrecision.ResumeLayout(false);
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.panel8.ResumeLayout(false);
+            this.panel8.PerformLayout();
+            this.panel7.ResumeLayout(false);
+            this.panel7.PerformLayout();
             this.panelModelCaching.ResumeLayout(false);
             this.tableLayoutPanel17.ResumeLayout(false);
             this.panel43.ResumeLayout(false);
@@ -2242,12 +2248,6 @@
             this.panel4.PerformLayout();
             this.panel21.ResumeLayout(false);
             this.panel21.PerformLayout();
-            this.panelFullPrecision.ResumeLayout(false);
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.panel8.ResumeLayout(false);
-            this.panel8.PerformLayout();
-            this.panel7.ResumeLayout(false);
-            this.panel7.PerformLayout();
             this.panelImplementation.ResumeLayout(false);
             this.tableLayoutPanel3.ResumeLayout(false);
             this.panel12.ResumeLayout(false);

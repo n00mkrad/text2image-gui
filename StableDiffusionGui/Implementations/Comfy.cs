@@ -23,7 +23,7 @@ namespace StableDiffusionGui.Implementations
     {
         public List<string> LastMessages { get => _lastMessages; }
         private List<string> _lastMessages = new List<string>();
-        private bool _hasErrored = false;
+        private static bool _hasErrored = false;
         private TtiSettings _lastSettings = null;
 
         public static readonly int ComfyPort = 8189;
@@ -49,7 +49,7 @@ namespace StableDiffusionGui.Implementations
             var baseModels = cachedModels.Where(m => m.Type == Enums.Models.Type.Normal).ToList();
             var refinerModels = cachedModels.Where(m => m.Type == Enums.Models.Type.Refiner).ToList();
             Model model = TtiUtils.CheckIfModelExists(s.Model, Implementation.Comfy, baseModels);
-            string vaeName = s.Vae.NullToEmpty().Replace("None", ""); // VAE model name
+            string vaeName = s.Vae.NullToEmpty().Replace(Constants.NoneMdl, ""); // VAE model name
             Model vae = Models.GetModel(Models.GetVaes(), vaeName);
             List<Model> controlnetMdls = Models.GetControlNets();
 
@@ -78,11 +78,11 @@ namespace StableDiffusionGui.Implementations
                 ModelRefiner = refineModel == null ? "" : refineModel.FullName,
                 Vae = vae == null ? "" : vae.FullName,
                 Sampler = s.Sampler,
-                Upscaler = Config.Instance.UpscaleEnable ? Config.Instance.EsrganModel : "",
+                Upscaler = Config.Instance.UpscaleEnable ? Models.GetUpscalers().Where(m => m.Name == Config.Instance.EsrganModel).FirstOrDefault().FullName : "",
                 ClipSkip = (Config.Instance.ClipSkip * -1) - 1,
             };
 
-            foreach (ControlnetInfo cnet in s.Controlnets)
+            foreach (ControlnetInfo cnet in s.Controlnets.Where(cn => cn != null && cn.Strength > 0.001f && cn.Model != Constants.NoneMdl))
             {
                 var cnetModel = controlnetMdls.Where(m => m.FormatIndependentName == cnet.Model).FirstOrDefault();
                 if (cnetModel == null) continue;
@@ -426,6 +426,7 @@ namespace StableDiffusionGui.Implementations
             string errMsg = "";
             bool replace = ellipsis || Logger.LastUiLine.MatchesWildcard("*Generated*image*in*");
             bool lastLineGeneratedText = Logger.LastUiLine.MatchesWildcard("*Generated*image*in*");
+            TextToImage.CancelMode cancelMode = TextToImage.CancelMode.SoftKill;
 
             if (!TextToImage.Canceled && line.Trim() == "got prompt")
             {
@@ -457,6 +458,14 @@ namespace StableDiffusionGui.Implementations
                 Config.Instance.ModelSettings.GetPopulate(filename, new Models.ModelSettings()).Arch = mdlArch;
                 Logger.Log($"Loaded '{filename.Trunc(100)}' - {Strings.ModelArch.Get(mdlArch.ToString(), true)}", false, Logger.LastUiLine.Contains(filename));
 
+                if(_lastSettings.Controlnets.Any(cn => Models.AssumeControlnetArch(cn.Model) != mdlArch))
+                {
+                    _hasErrored = true;
+                    errMsg = $"One or more enabled ControlNet models are incompatible with your current Stable Diffusion model ({Strings.ModelArch.Get(mdlArch.ToString())})." +
+                        $"\nPlease make sure all enabled ControlNet models were trained for this model type.";
+                    cancelMode = TextToImage.CancelMode.ForceKill;
+                }
+
                 if(mdlArch != ModelArch.SdXlRefine)
                 {
                     Program.MainForm.comboxModelArch.SetWithText(Config.Instance.ModelSettings[filename].Arch.ToString(), false, Strings.ModelArch);
@@ -480,13 +489,21 @@ namespace StableDiffusionGui.Implementations
                 Logger.Log($"Warning: One or more embeddings were ignored because they are not compatible with the selected model.");
             }
 
+            // Warning: Upscaling failure
+            if (!TextToImage.Canceled && line.Contains("Upscaling failed!"))
+            {
+                Logger.Log($"Warning: Image upscaling failed. Maybe your model is incompatible?");
+            }
+
             // Error: Port in use
             if (!_hasErrored && !TextToImage.Canceled && line.Trim().StartsWith("OSError: [Errno 10048]"))
             {
-                Logger.Log($"Port is already in use. Are you running ComfyUI on port {ComfyPort}?");
+                errMsg = $"Port is already in use. Are you running ComfyUI on port {ComfyPort}?";
+                _hasErrored = true;
+                cancelMode = TextToImage.CancelMode.ForceKill;
             }
 
-            TtiProcessOutputHandler.HandleLogGeneric(this, line, _hasErrored, true);
+            TtiProcessOutputHandler.HandleLogGeneric(this, line, _hasErrored, cancelMode, errMsg, true);
         }
 
         public void ResetLogger()

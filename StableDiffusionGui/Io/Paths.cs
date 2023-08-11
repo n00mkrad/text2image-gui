@@ -90,6 +90,12 @@ namespace StableDiffusionGui.Io
             return ReturnDir(path, create, !relative);
         }
 
+        public static string GetUpscalersPath(bool relative = true, bool create = true)
+        {
+            string path = Path.Combine(Constants.Dirs.Models.Root, Constants.Dirs.Models.Upscalers);
+            return ReturnDir(path, create, !relative);
+        }
+
         public static string GetSessionDataPath()
         {
             return ReturnDir(Path.Combine(GetSessionsPath(), SessionTimestamp));

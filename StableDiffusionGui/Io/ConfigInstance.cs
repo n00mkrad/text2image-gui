@@ -77,6 +77,7 @@ namespace StableDiffusionGui.Io
         public string EmbeddingsDir;
         public string LorasDir;
         public string ControlNetsDir;
+        public string UpscalersDir;
         public bool AutoDeleteImgs;
         public EasyDict<string, List<float>> LoraWeights = new EasyDict<string, List<float>>();
         public string LastTrainingBaseModel;
@@ -128,6 +129,7 @@ namespace StableDiffusionGui.Io
             EmbeddingsDir = Paths.GetEmbeddingsPath();
             LorasDir = Paths.GetLorasPath();
             ControlNetsDir = Paths.GetControlNetsPath();
+            UpscalersDir = Paths.GetUpscalersPath();
 
             float ramGb = HwInfo.GetTotalRamGb;
             ImageCacheMaxSizeMb = 64;
@@ -146,11 +148,15 @@ namespace StableDiffusionGui.Io
 
         public void Clean()
         {
+            var newModelSettings = new EasyDict<string, Models.ModelSettings>();
+
             foreach (var mdlName in ModelSettings.Keys)
             {
-                if (ModelSettings[mdlName].Arch == Enums.StableDiffusion.ModelArch.Automatic && ModelSettings[mdlName].ClipSkip == 0)
-                    ModelSettings.Remove(mdlName);
+                if (ModelSettings[mdlName].Arch != Enums.StableDiffusion.ModelArch.Automatic && ModelSettings[mdlName].ClipSkip != 0)
+                    newModelSettings.Add(mdlName, ModelSettings[mdlName]);
             }
+
+            ModelSettings = newModelSettings;
         }
     }
 }

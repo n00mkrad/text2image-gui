@@ -65,6 +65,15 @@ namespace StableDiffusionGui.Io
             return fileList.Select(f => new Model(f, f.Extension.Lower() == ".safetensors" ? Format.Safetensors : Format.Pytorch, Enums.Models.Type.ControlNet)).ToList();
         }
 
+        public static List<Model> GetUpscalers()
+        {
+            string path = Config.Instance == null ? Paths.GetUpscalersPath() : Config.Instance.UpscalersDir;
+            path = IoUtils.EnsureAbsPath(path);
+            var validExts = new[] { ".ckpt", ".pt", ".bin", ".pth", ".safetensors" };
+            var fileList = IoUtils.GetFileInfosSorted(path, false, "*.*").Where(f => validExts.Contains(f.Extension.Lower()));
+            return fileList.Select(f => new Model(f, (Format)(-1), Enums.Models.Type.Upscaler)).ToList();
+        }
+
         public static List<Model> GetModelsAll(bool removeUnknownModels = true, List<string> overridePaths = null, Enums.Models.Type overrideType = (Enums.Models.Type)(-1))
         {
             List<Model> list = new List<Model>();
@@ -367,14 +376,11 @@ namespace StableDiffusionGui.Io
         {
             JsonSerializerSettings settings = new JsonSerializerSettings
             {
-                ContractResolver = new DefaultContractResolver
-                {
-                    NamingStrategy = new SnakeCaseNamingStrategy { ProcessDictionaryKeys = true }
-                },
+                ContractResolver = new DefaultContractResolver { NamingStrategy = new SnakeCaseNamingStrategy { ProcessDictionaryKeys = true } },
                 MissingMemberHandling = MissingMemberHandling.Ignore
             };
 
-            unetConfigJson = unetConfigJson.Replace("True", "true").Replace("False", "false").Replace("None", "-1");
+            unetConfigJson = unetConfigJson.Replace("True", "true").Replace("False", "false").Replace(Constants.NoneMdl, "-1");
             UnetConfig config = JsonConvert.DeserializeObject<UnetConfig>(unetConfigJson, settings);
 
             if(config.AttentionResolutions != null && config.AttentionResolutions.Count == 2 && config.AdmInChannels > 0) // Must be SD XL
@@ -415,16 +421,33 @@ namespace StableDiffusionGui.Io
             }
         }
 
-        public static ModelArch AssumeModelArch (string modelName)
+        public static ModelArch AssumeModelArch (string modelName, ModelArch fallback = ModelArch.Automatic)
         {
             modelName = modelName.Lower();
 
             if (modelName.Contains("xl")) // xl in name => assume SDXL
                 return modelName.Contains("refine") ? ModelArch.SdXlRefine : ModelArch.SdXlBase; // refine in name => assume SDXL Refiner
-            else if (modelName.Contains("768-v")) // 768-v in name => assume SD 2 V-Prediction
+
+            if (modelName.Contains("768-v")) // 768-v in name => assume SD 2 V-Prediction
                 return ModelArch.Sd2V;
             else
-                return ModelArch.Automatic;
+                return fallback;
+        }
+
+        public static ModelArch AssumeControlnetArch(string modelName, ModelArch fallback = (ModelArch)(-1))
+        {
+            modelName = modelName.Lower();
+
+            if (modelName.Contains("sd15") || modelName.Contains("sd14"))
+                return ModelArch.Sd1;
+
+            if (modelName.Contains("xl"))
+                return ModelArch.SdXlBase;
+
+            if (modelName.Contains("768-v")) // I don't think SD2V controlnets exist, but who knows
+                return ModelArch.Sd2V;
+
+            return fallback;
         }
     }
 }

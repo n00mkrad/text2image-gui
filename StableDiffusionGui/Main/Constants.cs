@@ -2,6 +2,8 @@
 {
     public class Constants
     {
+        public static string NoneMdl = "None";
+
         public class Args
         {
             public const string Install = "install";
@@ -49,6 +51,7 @@
                 public const string Embeddings = "Embeddings";
                 public const string Loras = "LoRAs";
                 public const string Controlnets = "ControlNet";
+                public const string Upscalers = "Upscalers";
             }
 
             public class Cache

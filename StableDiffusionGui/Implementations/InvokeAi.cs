@@ -40,7 +40,7 @@ namespace StableDiffusionGui.Implementations
         {
             try
             {
-                string vae = s.Vae.NullToEmpty().Replace("None", ""); // VAE model name
+                string vae = s.Vae.NullToEmpty().Replace(Constants.NoneMdl, ""); // VAE model name
                 var allModels = Models.GetModelsAll();
                 var cachedModels = allModels.Where(m => m.Type == Enums.Models.Type.Normal).ToList();
                 var cachedModelsVae = Models.GetVaes();

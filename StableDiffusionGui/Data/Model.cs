@@ -15,7 +15,7 @@ namespace StableDiffusionGui.Data
         public Enums.Models.Format Format { get; set; } = (Enums.Models.Format)(-1);
         public Enums.Models.Type Type { get; set; } = (Enums.Models.Type)(-1);
         public Enums.StableDiffusion.ModelArch LoadArchitecture { get; set; } = Enums.StableDiffusion.ModelArch.Automatic;
-        public string Name { get { return _file == null ? (_dir == null ? "None" : _dir.Name) : _file.Name; } }
+        public string Name { get { return _file == null ? (_dir == null ? Constants.NoneMdl : _dir.Name) : _file.Name; } }
         public string FullName { get { return _file == null ? _dir.FullName : _file.FullName; } }
         public string FormatIndependentName { get { return Path.ChangeExtension(Name, null); } }
         public ZlpDirectoryInfo Directory { get { return _file == null ? _dir.Parent : _file.Directory; } }

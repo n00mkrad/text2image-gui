@@ -277,7 +277,7 @@ namespace StableDiffusionGui.Forms
             var embeddings = Models.GetEmbeddings();
             string currEmbeddings = embeddings.Select(l => l.FormatIndependentName).AsString();
             IEnumerable<string> embeddingNames = embeddings.Select(m => m.FormatIndependentName);
-            comboxEmbeddingList.SetItems(new[] { "None" }.Concat(embeddingNames), UiExtensions.SelectMode.Retain);
+            comboxEmbeddingList.SetItems(new[] { Constants.NoneMdl }.Concat(embeddingNames), UiExtensions.SelectMode.Retain);
 
             if (currEmbeddings != _lastEmbeddings)
                 embeddings = ValidateEmbeddingNames(embeddings);
@@ -338,7 +338,7 @@ namespace StableDiffusionGui.Forms
             var controlnets = Models.GetControlNets();
             string currEmbeddings = controlnets.Select(l => l.FormatIndependentName).AsString();
             IEnumerable<string> names = controlnets.Select(m => m.FormatIndependentName);
-            comboxControlnet.SetItems(new[] { "None" }.Concat(names), UiExtensions.SelectMode.Retain);
+            comboxControlnet.SetItems(new[] { Constants.NoneMdl }.Concat(names), UiExtensions.SelectMode.Retain);
 
             // if (currEmbeddings != _lastControlnets)
             //     controlnets = ValidateEmbeddingNames(controlnets);

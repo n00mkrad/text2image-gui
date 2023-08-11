@@ -161,7 +161,7 @@ namespace StableDiffusionGui.Forms
                 Model = Config.Instance.Model,
                 ModelAux = Config.Instance.ModelAux,
                 Vae = Config.Instance.ModelVae,
-                Controlnets = Controlnets.Where(c => c != null && c.Model.IsNotEmpty()).ToList(),
+                Controlnets = Controlnets.Where(c => c != null && c.Model.IsNotEmpty() && c.Model != Constants.NoneMdl).ToList(),
                 LockSeed = checkboxLockSeed.Checked,
                 ClipSegMask = textboxClipsegMask.Text.Trim(),
                 ResizeGravity = comboxResizeGravity.Visible ? ParseUtils.GetEnum<ImageMagick.Gravity>(comboxResizeGravity.Text, true, Strings.ImageGravity) : (ImageMagick.Gravity)(-1),

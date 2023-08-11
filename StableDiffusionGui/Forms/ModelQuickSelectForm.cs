@@ -48,7 +48,7 @@ namespace StableDiffusionGui.Forms
 
             if (_modelType == Enums.Models.Type.Vae)
             {
-                comboxModel.Items.Add("None");
+                comboxModel.Items.Add(Constants.NoneMdl);
                 Models.GetVaes().ForEach(x => comboxModel.Items.Add(x.Name));
             }
             else
@@ -79,7 +79,7 @@ namespace StableDiffusionGui.Forms
 
         private bool IsModelValid()
         {
-            if (comboxModel.Text == "None")
+            if (comboxModel.Text == Constants.NoneMdl)
                 return true;
 
             if (_modelType == Enums.Models.Type.Vae)

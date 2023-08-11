@@ -11,6 +11,7 @@ using System.Linq;
 using static StableDiffusionGui.Implementations.ComfyNodes;
 using System.IO;
 using StableDiffusionGui.Io;
+using Newtonsoft.Json.Converters;
 
 namespace StableDiffusionGui.Implementations
 {
@@ -54,7 +55,9 @@ namespace StableDiffusionGui.Implementations
             public string ToStringAdvanced(bool indent = false)
             {
                 var format = indent ? Formatting.Indented : Formatting.None;
-                return JsonConvert.SerializeObject(this, format, new JsonSerializerSettings { ContractResolver = new DefaultContractResolver { NamingStrategy = new SnakeCaseNamingStrategy() } });
+                var settings = new JsonSerializerSettings { ContractResolver = new DefaultContractResolver { NamingStrategy = new SnakeCaseNamingStrategy() } };
+                settings.Converters.Add(new StringEnumConverter());
+                return JsonConvert.SerializeObject(this, format, settings);
             }
         }
 

@@ -30,6 +30,7 @@ namespace StableDiffusionGui.Forms
             Refresh();
             comboxUpscale.FillFromEnum<UpscaleOption>(Strings.PostProcSettingsUiStrings);
             comboxFaceRestoration.FillFromEnum<Enums.Utils.FaceTool>(Strings.PostProcSettingsUiStrings);
+            comboxUpscaler.SetItems(Models.GetUpscalers(), 0);
             LoadSettings();
             UpdateVisibility();
             TabOrderInit(new List<Control>() { checkboxUpscaleEnable, comboxUpscale, checkboxFaceRestorationEnable, comboxFaceRestoration, sliderFaceRestoreStrength, sliderCodeformerFidelity });
@@ -61,7 +62,7 @@ namespace StableDiffusionGui.Forms
         {
             ConfigParser.LoadGuiElement(checkboxUpscaleEnable, ref Config.Instance.UpscaleEnable);
             ConfigParser.LoadComboxIndex(comboxUpscale, ref Config.Instance.UpscaleIdx);
-            ConfigParser.LoadGuiElement(sliderUpscaleStrength, ref Config.Instance.UpscaleStrength);
+            ConfigParser.LoadGuiElement(comboxUpscaler, ref Config.Instance.EsrganModel);
             ConfigParser.LoadGuiElement(checkboxFaceRestorationEnable, ref Config.Instance.FaceRestoreEnable);
             ConfigParser.LoadComboxIndex(comboxFaceRestoration, ref Config.Instance.FaceRestoreIdx);
             ConfigParser.LoadGuiElement(sliderFaceRestoreStrength, ref Config.Instance.FaceRestoreStrength);
@@ -72,7 +73,7 @@ namespace StableDiffusionGui.Forms
         {
             ConfigParser.SaveGuiElement(checkboxUpscaleEnable, ref Config.Instance.UpscaleEnable);
             ConfigParser.SaveComboxIndex(comboxUpscale, ref Config.Instance.UpscaleIdx);
-            ConfigParser.SaveGuiElement(sliderUpscaleStrength, ref Config.Instance.UpscaleStrength);
+            ConfigParser.SaveGuiElement(comboxUpscaler, ref Config.Instance.EsrganModel);
             ConfigParser.SaveGuiElement(checkboxFaceRestorationEnable, ref Config.Instance.FaceRestoreEnable);
             ConfigParser.SaveComboxIndex(comboxFaceRestoration, ref Config.Instance.FaceRestoreIdx);
             ConfigParser.SaveGuiElement(sliderFaceRestoreStrength, ref Config.Instance.FaceRestoreStrength);

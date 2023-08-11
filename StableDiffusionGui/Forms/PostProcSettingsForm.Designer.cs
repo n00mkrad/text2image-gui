@@ -64,9 +64,8 @@
             this.label8 = new System.Windows.Forms.Label();
             this.panelUpscaleStrength = new System.Windows.Forms.TableLayoutPanel();
             this.panel17 = new System.Windows.Forms.Panel();
-            this.tableLayoutPanel10 = new System.Windows.Forms.TableLayoutPanel();
-            this.textboxSliderUpscaleStrength = new System.Windows.Forms.TextBox();
-            this.sliderUpscaleStrength = new StableDiffusionGui.Controls.CustomSlider();
+            this.panel12 = new System.Windows.Forms.Panel();
+            this.comboxUpscaler = new System.Windows.Forms.ComboBox();
             this.panel18 = new System.Windows.Forms.Panel();
             this.label9 = new System.Windows.Forms.Label();
             this.panelUpscaling = new System.Windows.Forms.Panel();
@@ -106,7 +105,7 @@
             this.panel2.SuspendLayout();
             this.panelUpscaleStrength.SuspendLayout();
             this.panel17.SuspendLayout();
-            this.tableLayoutPanel10.SuspendLayout();
+            this.panel12.SuspendLayout();
             this.panel18.SuspendLayout();
             this.panelUpscaling.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -216,7 +215,7 @@
             this.textboxSliderCodeformerFidelity.Name = "textboxSliderCodeformerFidelity";
             this.textboxSliderCodeformerFidelity.Size = new System.Drawing.Size(45, 17);
             this.textboxSliderCodeformerFidelity.TabIndex = 0;
-            this.textboxSliderCodeformerFidelity.Text = "0,4";
+            this.textboxSliderCodeformerFidelity.Text = "0,2";
             // 
             // sliderCodeformerFidelity
             // 
@@ -230,16 +229,16 @@
             0,
             0,
             0});
-            this.sliderCodeformerFidelity.ActualValue = new decimal(new int[] {
-            4,
-            0,
-            0,
-            65536});
             this.sliderCodeformerFidelity.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.sliderCodeformerFidelity.BorderRoundRectSize = new System.Drawing.Size(12, 12);
             this.sliderCodeformerFidelity.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sliderCodeformerFidelity.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
             this.sliderCodeformerFidelity.ForeColor = System.Drawing.Color.Black;
+            this.sliderCodeformerFidelity.InitValue = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
             this.sliderCodeformerFidelity.LargeChange = ((uint)(4u));
             this.sliderCodeformerFidelity.Location = new System.Drawing.Point(0, 0);
             this.sliderCodeformerFidelity.Margin = new System.Windows.Forms.Padding(0);
@@ -253,6 +252,7 @@
             this.sliderCodeformerFidelity.ThumbSize = new System.Drawing.Size(14, 14);
             this.toolTip.SetToolTip(this.sliderCodeformerFidelity, "0 produces high quality but low accuracy. 1 produces high accuracy but low qualit" +
         "y.");
+            this.sliderCodeformerFidelity.Value = 2;
             this.sliderCodeformerFidelity.ValueBox = this.textboxSliderCodeformerFidelity;
             this.sliderCodeformerFidelity.ValueStep = new decimal(new int[] {
             1,
@@ -346,7 +346,7 @@
             this.textboxSliderFaceRestoreStrength.Name = "textboxSliderFaceRestoreStrength";
             this.textboxSliderFaceRestoreStrength.Size = new System.Drawing.Size(45, 17);
             this.textboxSliderFaceRestoreStrength.TabIndex = 0;
-            this.textboxSliderFaceRestoreStrength.Text = "0,2";
+            this.textboxSliderFaceRestoreStrength.Text = "0,05";
             // 
             // sliderFaceRestoreStrength
             // 
@@ -360,16 +360,16 @@
             0,
             0,
             0});
-            this.sliderFaceRestoreStrength.ActualValue = new decimal(new int[] {
-            2,
-            0,
-            0,
-            65536});
             this.sliderFaceRestoreStrength.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.sliderFaceRestoreStrength.BorderRoundRectSize = new System.Drawing.Size(12, 12);
             this.sliderFaceRestoreStrength.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sliderFaceRestoreStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
             this.sliderFaceRestoreStrength.ForeColor = System.Drawing.Color.Black;
+            this.sliderFaceRestoreStrength.InitValue = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
             this.sliderFaceRestoreStrength.LargeChange = ((uint)(4u));
             this.sliderFaceRestoreStrength.Location = new System.Drawing.Point(0, 0);
             this.sliderFaceRestoreStrength.Margin = new System.Windows.Forms.Padding(0);
@@ -382,6 +382,7 @@
             this.sliderFaceRestoreStrength.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
             this.sliderFaceRestoreStrength.ThumbSize = new System.Drawing.Size(14, 14);
             this.toolTip.SetToolTip(this.sliderFaceRestoreStrength, "0 = Off, 1 = Full Restoration");
+            this.sliderFaceRestoreStrength.Value = 1;
             this.sliderFaceRestoreStrength.ValueBox = this.textboxSliderFaceRestoreStrength;
             this.sliderFaceRestoreStrength.ValueStep = new decimal(new int[] {
             5,
@@ -438,9 +439,10 @@
             // 
             this.panel3.Controls.Add(this.comboxFaceRestoration);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel3.Location = new System.Drawing.Point(283, 3);
+            this.panel3.Location = new System.Drawing.Point(280, 0);
+            this.panel3.Margin = new System.Windows.Forms.Padding(0);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(274, 29);
+            this.panel3.Size = new System.Drawing.Size(280, 35);
             this.panel3.TabIndex = 0;
             // 
             // comboxFaceRestoration
@@ -452,7 +454,7 @@
             this.comboxFaceRestoration.FormattingEnabled = true;
             this.comboxFaceRestoration.Location = new System.Drawing.Point(0, 5);
             this.comboxFaceRestoration.Name = "comboxFaceRestoration";
-            this.comboxFaceRestoration.Size = new System.Drawing.Size(150, 21);
+            this.comboxFaceRestoration.Size = new System.Drawing.Size(274, 21);
             this.comboxFaceRestoration.TabIndex = 0;
             this.comboxFaceRestoration.SelectedIndexChanged += new System.EventHandler(this.comboxFaceRestoration_SelectedIndexChanged);
             // 
@@ -578,87 +580,34 @@
             // 
             // panel17
             // 
-            this.panel17.Controls.Add(this.tableLayoutPanel10);
+            this.panel17.Controls.Add(this.panel12);
             this.panel17.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel17.Location = new System.Drawing.Point(283, 3);
             this.panel17.Name = "panel17";
             this.panel17.Size = new System.Drawing.Size(274, 29);
             this.panel17.TabIndex = 0;
             // 
-            // tableLayoutPanel10
+            // panel12
             // 
-            this.tableLayoutPanel10.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel10.ColumnCount = 2;
-            this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 45F));
-            this.tableLayoutPanel10.Controls.Add(this.textboxSliderUpscaleStrength, 0, 0);
-            this.tableLayoutPanel10.Controls.Add(this.sliderUpscaleStrength, 0, 0);
-            this.tableLayoutPanel10.Location = new System.Drawing.Point(3, 6);
-            this.tableLayoutPanel10.Margin = new System.Windows.Forms.Padding(6);
-            this.tableLayoutPanel10.Name = "tableLayoutPanel10";
-            this.tableLayoutPanel10.RowCount = 1;
-            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 21F));
-            this.tableLayoutPanel10.Size = new System.Drawing.Size(268, 21);
-            this.tableLayoutPanel10.TabIndex = 0;
+            this.panel12.Controls.Add(this.comboxUpscaler);
+            this.panel12.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel12.Location = new System.Drawing.Point(0, 0);
+            this.panel12.Margin = new System.Windows.Forms.Padding(0);
+            this.panel12.Name = "panel12";
+            this.panel12.Size = new System.Drawing.Size(274, 29);
+            this.panel12.TabIndex = 2;
             // 
-            // textboxSliderUpscaleStrength
+            // comboxUpscaler
             // 
-            this.textboxSliderUpscaleStrength.AllowDrop = true;
-            this.textboxSliderUpscaleStrength.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.textboxSliderUpscaleStrength.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textboxSliderUpscaleStrength.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textboxSliderUpscaleStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textboxSliderUpscaleStrength.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderUpscaleStrength.Location = new System.Drawing.Point(223, 1);
-            this.textboxSliderUpscaleStrength.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
-            this.textboxSliderUpscaleStrength.MinimumSize = new System.Drawing.Size(4, 21);
-            this.textboxSliderUpscaleStrength.Name = "textboxSliderUpscaleStrength";
-            this.textboxSliderUpscaleStrength.Size = new System.Drawing.Size(45, 17);
-            this.textboxSliderUpscaleStrength.TabIndex = 0;
-            this.textboxSliderUpscaleStrength.Text = "0,2";
-            // 
-            // sliderUpscaleStrength
-            // 
-            this.sliderUpscaleStrength.ActualMaximum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.sliderUpscaleStrength.ActualMinimum = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.sliderUpscaleStrength.ActualValue = new decimal(new int[] {
-            2,
-            0,
-            0,
-            65536});
-            this.sliderUpscaleStrength.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.sliderUpscaleStrength.BorderRoundRectSize = new System.Drawing.Size(12, 12);
-            this.sliderUpscaleStrength.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.sliderUpscaleStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
-            this.sliderUpscaleStrength.ForeColor = System.Drawing.Color.Black;
-            this.sliderUpscaleStrength.LargeChange = ((uint)(4u));
-            this.sliderUpscaleStrength.Location = new System.Drawing.Point(0, 0);
-            this.sliderUpscaleStrength.Margin = new System.Windows.Forms.Padding(0);
-            this.sliderUpscaleStrength.Maximum = 20;
-            this.sliderUpscaleStrength.Name = "sliderUpscaleStrength";
-            this.sliderUpscaleStrength.OverlayColor = System.Drawing.Color.White;
-            this.sliderUpscaleStrength.Size = new System.Drawing.Size(223, 21);
-            this.sliderUpscaleStrength.SmallChange = ((uint)(1u));
-            this.sliderUpscaleStrength.TabIndex = 1;
-            this.sliderUpscaleStrength.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
-            this.sliderUpscaleStrength.ThumbSize = new System.Drawing.Size(14, 14);
-            this.toolTip.SetToolTip(this.sliderUpscaleStrength, "0 = No Effect, 1 = Full Effect");
-            this.sliderUpscaleStrength.ValueBox = this.textboxSliderUpscaleStrength;
-            this.sliderUpscaleStrength.ValueStep = new decimal(new int[] {
-            5,
-            0,
-            0,
-            131072});
+            this.comboxUpscaler.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.comboxUpscaler.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboxUpscaler.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboxUpscaler.ForeColor = System.Drawing.Color.White;
+            this.comboxUpscaler.FormattingEnabled = true;
+            this.comboxUpscaler.Location = new System.Drawing.Point(0, 5);
+            this.comboxUpscaler.Name = "comboxUpscaler";
+            this.comboxUpscaler.Size = new System.Drawing.Size(274, 21);
+            this.comboxUpscaler.TabIndex = 1;
             // 
             // panel18
             // 
@@ -677,9 +626,9 @@
             this.label9.Location = new System.Drawing.Point(5, 8);
             this.label9.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(97, 13);
+            this.label9.Size = new System.Drawing.Size(86, 13);
             this.label9.TabIndex = 0;
-            this.label9.Text = "Upscaling Strength";
+            this.label9.Text = "Upscaling Model";
             // 
             // panelUpscaling
             // 
@@ -727,7 +676,7 @@
             "4x"});
             this.comboxUpscale.Location = new System.Drawing.Point(0, 5);
             this.comboxUpscale.Name = "comboxUpscale";
-            this.comboxUpscale.Size = new System.Drawing.Size(150, 21);
+            this.comboxUpscale.Size = new System.Drawing.Size(100, 21);
             this.comboxUpscale.TabIndex = 0;
             // 
             // panel7
@@ -892,8 +841,7 @@
             this.panel2.PerformLayout();
             this.panelUpscaleStrength.ResumeLayout(false);
             this.panel17.ResumeLayout(false);
-            this.tableLayoutPanel10.ResumeLayout(false);
-            this.tableLayoutPanel10.PerformLayout();
+            this.panel12.ResumeLayout(false);
             this.panel18.ResumeLayout(false);
             this.panel18.PerformLayout();
             this.panelUpscaling.ResumeLayout(false);
@@ -965,10 +913,9 @@
         private System.Windows.Forms.TextBox textboxSliderFaceRestoreStrength;
         private System.Windows.Forms.TableLayoutPanel panelUpscaleStrength;
         private System.Windows.Forms.Panel panel17;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel10;
-        private System.Windows.Forms.TextBox textboxSliderUpscaleStrength;
-        private Controls.CustomSlider sliderUpscaleStrength;
         private System.Windows.Forms.Panel panel18;
         private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Panel panel12;
+        private System.Windows.Forms.ComboBox comboxUpscaler;
     }
 }

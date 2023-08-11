@@ -17,6 +17,7 @@ using Newtonsoft.Json.Converters;
 using System.Collections.Concurrent;
 using System.Reflection;
 using StableDiffusionGui.Extensions;
+using Newtonsoft.Json.Serialization;
 
 namespace StableDiffusionGui
 {
@@ -519,7 +520,7 @@ namespace StableDiffusionGui
             }
         }
 
-        public static T FromJson<T>(this string s, NullValueHandling nullHandling, DefaultValueHandling defHandling, bool useTolerantEnumConv, bool useNullToEmptyStringConv)
+        public static T FromJson<T>(this string s, NullValueHandling nullHandling, DefaultValueHandling defHandling, bool useTolerantEnumConv, bool useNullToEmptyStringConv, IContractResolver contractResolver = null)
         {
             try
             {
@@ -536,6 +537,9 @@ namespace StableDiffusionGui
 
                 settings.NullValueHandling = nullHandling;
                 settings.DefaultValueHandling = defHandling;
+
+                if(contractResolver != null)
+                    settings.ContractResolver = contractResolver;
 
                 return JsonConvert.DeserializeObject<T>(s, settings);
             }
