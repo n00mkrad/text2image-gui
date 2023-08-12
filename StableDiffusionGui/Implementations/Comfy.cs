@@ -79,7 +79,7 @@ namespace StableDiffusionGui.Implementations
                 Vae = vae == null ? "" : vae.FullName,
                 Sampler = s.Sampler,
                 Upscaler = Config.Instance.UpscaleEnable ? Models.GetUpscalers().Where(m => m.Name == Config.Instance.EsrganModel).FirstOrDefault().FullName : "",
-                ClipSkip = (Config.Instance.ClipSkip * -1) - 1,
+                ClipSkip = (Config.Instance.ModelSettings.Get(model.Name, new Models.ModelSettings()).ClipSkip * -1) - 1,
             };
 
             foreach (ControlnetInfo cnet in s.Controlnets.Where(cn => cn != null && cn.Strength > 0.001f && cn.Model != Constants.NoneMdl))
@@ -89,8 +89,7 @@ namespace StableDiffusionGui.Implementations
                 currentGeneration.Controlnets.Add(new ControlnetInfo { Model = cnetModel.FullName, Preprocessor = cnet.Preprocessor, Strength = cnet.Strength });
             }
 
-            foreach (var lora in s.Loras)
-                currentGeneration.Loras.Add(lora.Key, lora.Value.First());
+            currentGeneration.Loras = s.Loras.Select(lora => new KeyValuePair<string, float>(lora.Key, lora.Value.First())).ToList();
 
             List<string> processedPrompts = null;
             TextToImage.CurrentTaskSettings.ProcessedAndRawPrompts = new EasyDict<string, string>();
@@ -280,16 +279,13 @@ namespace StableDiffusionGui.Implementations
                 TextToImage.CurrentTask.Processes.Add(TtiProcess.CurrentProcess);
             }
 
-            string wf = File.ReadAllText(Path.Combine(Paths.GetDataPath(), "comfy", "wf", "workflow.json"));
-            var nodes = ComfyWorkflow.GetNodes(wf).OrderBy(n => nameof(n)).ThenBy(n => n.Title).ToList().ToList();
-
             foreach (var genInfo in generations.Where(g => g.Model.IsNotEmpty()))
             {
                 string reqString = "";
 
                 try
                 {
-                    var promptItems = ComfyWorkflow.GetPromptInfos(genInfo, nodes);
+                    var promptItems = ComfyWorkflow.GetPromptInfos(genInfo);
                     var req = new ComfyWorkflow.PromptRequest() { ClientId = Paths.SessionTimestampUnix.ToString(), Prompt = promptItems };
                     req.ExtraData.ExtraPnginfo["GenerationInfoJson"] = genInfo.GetSerializeClone();
                     reqString = req.ToString();

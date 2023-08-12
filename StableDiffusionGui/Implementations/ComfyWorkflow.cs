@@ -67,13 +67,16 @@ namespace StableDiffusionGui.Implementations
             public string ClassType { get; set; }
         }
 
-        private enum Axis { Width, Height }
+        private static List<INode> _currentNodes = new List<INode>();
 
-        public static EasyDict<string, NodeInfo> GetPromptInfos(ComfyData.GenerationInfo g, List<INode> nodes)
+        public static EasyDict<string, NodeInfo> GetPromptInfos(ComfyData.GenerationInfo g, List<INode> nodes = null)
         {
+            if (nodes == null)
+                nodes = new List<INode>();
+
+            _currentNodes = nodes;
             var nodeInfos = new EasyDict<string, NodeInfo>();
             var nodeCounts = new EasyDict<string, int>();
-            var nodesDict = new EasyDict<string, INode>();
             bool refine = g.RefinerStrength > 0.001f;
             bool upscale = !g.TargetResolution.IsEmpty && g.TargetResolution != g.BaseResolution;
             bool inpaint = g.MaskPath.IsNotEmpty();
@@ -83,36 +86,7 @@ namespace StableDiffusionGui.Implementations
             int baseWidth = g.BaseResolution.Width;
             int baseHeight = g.BaseResolution.Height;
 
-            nodes = nodes.OrderBy(n => n.Id).ToList();
-
-            foreach (var node in nodes)
-                nodesDict[node.Title.Remove(" ")] = node;
-
-            var promptPos = (NmkdStringConstant)nodesDict["PromptPos"]; // Positive Prompt
-            promptPos.Text = g.Prompt;
-
-            var promptNeg = (NmkdStringConstant)nodesDict["PromptNeg"]; // Negative Prompt
-            promptNeg.Text = g.NegativePrompt;
-
-            var seed = (NmkdIntegerConstant)nodesDict["Seed"]; // Seed
-            seed.Value = g.Seed;
-
-            var steps = (NmkdIntegerConstant)nodesDict["Steps"]; // Seed
-            steps.Value = g.Steps;
-
-            var stepsBase = (NmkdIntegerConstant)nodesDict["StepsBase"]; // Base Model Steps
-            stepsBase.Value = baseSteps;
-
-            var stepsSkip = (NmkdIntegerConstant)nodesDict["StepsSkip"]; // Skip Steps (Start at)
-            stepsSkip.Value = 0;
-
-            var stepsMax = (NmkdIntegerConstant)nodesDict["StepsMax"]; // Max Steps
-            stepsMax.Value = 1000;
-
-            var cfg = (NmkdFloatConstant)nodesDict["Cfg"]; // CFG Scale
-            cfg.Value = g.Scale;
-
-            var model1 = (NmkdCheckpointLoader)nodesDict["Model1"]; // Base Model
+            var model1 = AddNode<NmkdCheckpointLoader>(); // Base Model
             model1.ModelPath = g.Model;
             model1.LoadVae = true;
             model1.VaePath = g.Vae ?? "";
@@ -120,147 +94,154 @@ namespace StableDiffusionGui.Implementations
 
             INode finalModelNode = model1; // Keep track of the final model node to use
 
-            foreach(var hypernet in g.HyperNetworks) // Add hypernetworks
+            foreach (var hypernet in g.Hypernetworks) // Add hypernetworks
             {
-                nodes.Add(new NmkdHypernetworkLoader() { Id = GetNewId("Hypernet", nodes), ModelNode = finalModelNode, ModelPath = hypernet.Key, Strength = hypernet.Value });
+                nodes.Add(new NmkdHypernetworkLoader() { Id = GetNewId("Hypernet"), Model = new ComfyInput(finalModelNode, OutType.Model), ModelPath = hypernet.Key, Strength = hypernet.Value });
                 finalModelNode = nodes.Last();
             }
 
-            var model2 = (NmkdCheckpointLoader)nodesDict["Model2"]; // Aux Model (Refiner etc)
+            var model2 = AddNode<NmkdCheckpointLoader>(); // Aux Model (Refiner etc)
             model2.ModelPath = g.ModelRefiner == null ? g.Model : g.ModelRefiner;
             model2.LoadVae = false;
             model2.EmbeddingsDir = Io.Paths.ReturnDir(Config.Instance.EmbeddingsDir, true, true);
 
-            var clipSkipModel1 = (CLIPSetLastLayer)nodesDict["ClipSkipModel1"]; // CLIP Skip Model 1
-            var clipSkipModel2 = (CLIPSetLastLayer)nodesDict["ClipSkipModel2"]; // CLIP Skip Model 2
+            var clipSkipModel1 = AddNode<CLIPSetLastLayer>(); // CLIP Skip Model 1
             clipSkipModel1.Skip = g.ClipSkip;
-            clipSkipModel1.ClipNode = model1;
+            clipSkipModel1.ClipNode = new ComfyInput(model1, OutType.Clip);
+
+            var clipSkipModel2 = AddNode<CLIPSetLastLayer>(); // CLIP Skip Model 2
             clipSkipModel2.Skip = g.ClipSkip;
-            clipSkipModel2.ClipNode = model2;
+            clipSkipModel2.ClipNode = new ComfyInput(model2, OutType.Clip);
 
-            var loraLoader = (NmkdMultiLoraLoader)nodesDict["LoraLoader"]; // LoRA Loader
-            loraLoader.Loras = g.Loras.Keys.ToList();
-            loraLoader.Strengths = g.Loras.Values.ToList();
-            loraLoader.ModelNode = finalModelNode;
-            loraLoader.ClipNode = model1;
+            var loraLoader = AddNode<NmkdMultiLoraLoader>(); // LoRA Loader
+            loraLoader.Loras = g.Loras.ToList();
+            loraLoader.Model = new ComfyInput(finalModelNode, OutType.Model);
+            loraLoader.Clip = new ComfyInput(model1, OutType.Clip);
 
-            var encodePosPromptBase = (CLIPTextEncode)nodesDict["EncodePosPromptBase"]; // CLIP Encode Positive Prompt Base
-            var encodeNegPromptBase = (CLIPTextEncode)nodesDict["EncodeNegPromptBase"]; // CLIP Encode Negative Prompt Base
-            var encodePosPromptRefiner = (CLIPTextEncode)nodesDict["EncodePosPromptRefiner"]; // CLIP Encode Positive Prompt Refiner
-            var encodeNegPromptRefiner = (CLIPTextEncode)nodesDict["EncodeNegPromptRefiner"]; // CLIP Encode Negative Prompt Refiner
-            encodePosPromptBase.TextNode = nodesDict["PromptPos"];
-            encodeNegPromptBase.TextNode = nodesDict["PromptNeg"];
-            encodePosPromptRefiner.TextNode = nodesDict["PromptPos"];
-            encodeNegPromptRefiner.TextNode = nodesDict["PromptNeg"];
-            encodePosPromptBase.ClipNode = loraLoader;
-            encodeNegPromptBase.ClipNode = loraLoader;
-            encodePosPromptRefiner.ClipNode = clipSkipModel2;
-            encodeNegPromptRefiner.ClipNode = clipSkipModel2;
+            var encodePosPromptBase = AddNode<CLIPTextEncode>(); // CLIP Encode Positive Prompt Base
+            var encodeNegPromptBase = AddNode<CLIPTextEncode>(); // CLIP Encode Negative Prompt Base
+            var encodePosPromptRefiner = AddNode<CLIPTextEncode>(); // CLIP Encode Positive Prompt Refiner
+            var encodeNegPromptRefiner = AddNode<CLIPTextEncode>(); // CLIP Encode Negative Prompt Refiner
+            encodePosPromptBase.Text = new ComfyInput(g.Prompt);
+            encodeNegPromptBase.Text = new ComfyInput(g.NegativePrompt);
+            encodePosPromptRefiner.Text = new ComfyInput(g.Prompt);
+            encodeNegPromptRefiner.Text = new ComfyInput(g.NegativePrompt);
+            encodePosPromptBase.Clip = new ComfyInput(loraLoader, OutType.Clip);
+            encodeNegPromptBase.Clip = new ComfyInput(loraLoader, OutType.Clip);
+            encodePosPromptRefiner.Clip = new ComfyInput(clipSkipModel2, OutType.Clip);
+            encodeNegPromptRefiner.Clip = new ComfyInput(clipSkipModel2, OutType.Clip);
 
-            var emptyLatentImg = (EmptyLatentImage)nodesDict["EmptyLatentImage"]; // Empty Latent Image (T2I)
+            var emptyLatentImg = AddNode<EmptyLatentImage>(); // Empty Latent Image (T2I)
             emptyLatentImg.Width = baseWidth;
             emptyLatentImg.Height = baseHeight;
 
-            var loadInitImg = (NmkdImageLoader)nodesDict["InitImg"]; // Load Init Image
+            var loadInitImg = AddNode<NmkdImageLoader>(); // Load Init Image
             loadInitImg.ImagePath = g.MaskPath.IsNotEmpty() ? g.MaskPath : g.InitImg;
 
-            var encodeInitImg = (NmkdVaeEncode)nodesDict["InitImgEncode"]; // Encode Init Image (I2I)
-            encodeInitImg.ImageNode = loadInitImg;
-            encodeInitImg.VaeNode = model1;
+            var encodeInitImg = AddNode<NmkdVaeEncode>(); // Encode Init Image (I2I)
+            encodeInitImg.Image = new ComfyInput(loadInitImg, OutType.Image);
+            encodeInitImg.Vae = new ComfyInput(model1, OutType.Vae);
             encodeInitImg.LoadMask = g.MaskPath.IsNotEmpty();
 
             INode finalConditioningNode = encodePosPromptBase; // Keep track of the final conditioning node for sampling
 
-            for(int i = 0; i < g.Controlnets.Count; i++) // Apply ControlNets
+            for (int i = 0; i < g.Controlnets.Count; i++) // Apply ControlNets
             {
                 ComfyData.ControlnetInfo ci = g.Controlnets[i];
 
                 if (ci.Preprocessor != Enums.StableDiffusion.ImagePreprocessor.None)
-                    nodes.Add(new GenericImagePreprocessor { ImageNode = loadInitImg, Preprocessor = ci.Preprocessor, Id = $"Preproc{i}" });
+                    nodes.Add(new GenericImagePreprocessor { Image = new ComfyInput(loadInitImg, OutType.Image), Preprocessor = ci.Preprocessor, Id = GetNewId("Preproc") });
 
                 nodes.Add(new NmkdControlNet
                 {
                     ModelPath = ci.Model,
                     Strength = ci.Strength,
-                    ConditioningNode = finalConditioningNode,
-                    ImageNode = ci.Preprocessor != Enums.StableDiffusion.ImagePreprocessor.None ? nodes.Last() : loadInitImg,
-                    Id = $"ControlNet{i}",
+                    Conditioning = new ComfyInput(finalConditioningNode, OutType.Conditioning),
+                    ImageNode = new ComfyInput(ci.Preprocessor != Enums.StableDiffusion.ImagePreprocessor.None ? nodes.Last() : loadInitImg, OutType.Image),
+                    Id = GetNewId("ControlNet"),
                 });
 
                 finalConditioningNode = nodes.Last();
             }
 
-            var samplerBase = (NmkdKSampler)nodesDict["SamplerBase"]; // Sampler Base
+            var samplerBase = AddNode<NmkdKSampler>("SamplerBase"); // Sampler Base
             samplerBase.AddNoise = true;
-            samplerBase.NodeModel = loraLoader;
-            samplerBase.NodePositive = finalConditioningNode;
-            samplerBase.NodeNegative = encodeNegPromptBase;
-            samplerBase.NodeLatentImage = img2img ? (INode)encodeInitImg : (INode)emptyLatentImg;
+            samplerBase.Model = new ComfyInput(loraLoader, OutType.Model);
+            samplerBase.PositiveCond = new ComfyInput(finalConditioningNode, OutType.Conditioning);
+            samplerBase.NegativeCond = new ComfyInput(encodeNegPromptBase, OutType.Conditioning);
+            samplerBase.LatentImage = new ComfyInput(img2img ? (INode)encodeInitImg : (INode)emptyLatentImg, OutType.Latents);
             samplerBase.SamplerName = GetComfySampler(g.Sampler);
             samplerBase.Scheduler = GetComfyScheduler(g);
-            samplerBase.NodeSeed = seed;
-            samplerBase.NodeSteps = steps;
-            samplerBase.NodeCfg = cfg;
-            samplerBase.NodeStartStep = stepsSkip;
-            samplerBase.NodeEndStep = stepsBase;
+            samplerBase.Seed = new ComfyInput(g.Seed);
+            samplerBase.StepsTotal = new ComfyInput(g.Steps);
+            samplerBase.Cfg = new ComfyInput(g.Scale);
+            samplerBase.StartStep = new ComfyInput(0);
+            samplerBase.EndStep = new ComfyInput(baseSteps);
             samplerBase.ReturnLeftoverNoise = refine;
             samplerBase.Denoise = img2img ? g.InitStrength : 1.0f;
 
-            var latentUpscale = (LatentUpscale)nodesDict["UpscaleLatent"]; // Latent Upscale
+            INode finalLatents = samplerBase;
+
+            var latentUpscale = AddNode<LatentUpscale>(); // Latent Upscale
             latentUpscale.Width = g.TargetResolution.Width;
             latentUpscale.Height = g.TargetResolution.Height;
-            latentUpscale.LatentsNode = samplerBase;
+            latentUpscale.Latents = new ComfyInput(samplerBase, OutType.Latents);
 
-            var samplerHires = (NmkdKSampler)nodesDict["SamplerHires"]; // Sampler Hi-Res
+            var samplerHires = AddNode<NmkdKSampler>("SamplerHires"); // Sampler Hi-Res
             samplerHires.AddNoise = true;
-            samplerHires.NodeModel = loraLoader;
-            samplerHires.NodePositive = finalConditioningNode;
-            samplerHires.NodeNegative = encodeNegPromptBase;
-            samplerHires.NodeLatentImage = latentUpscale;
+            samplerHires.Model = new ComfyInput(loraLoader, OutType.Model);
+            samplerHires.PositiveCond = new ComfyInput(finalConditioningNode, OutType.Conditioning);
+            samplerHires.NegativeCond = new ComfyInput(encodeNegPromptBase, OutType.Conditioning);
+            samplerHires.LatentImage = new ComfyInput(latentUpscale, OutType.Latents);
             samplerHires.SamplerName = GetComfySampler(g.Sampler);
-            samplerHires.Scheduler = "simple"; // TODO: CHECK IN UI IF THIS IS NEEDED OR NOT
-            samplerHires.NodeSeed = seed;
-            samplerHires.NodeSteps = steps;
-            samplerHires.NodeCfg = cfg;
-            samplerHires.NodeStartStep = stepsSkip;
-            samplerHires.NodeEndStep = stepsBase;
-            samplerHires.ReturnLeftoverNoise = refine;
+            samplerHires.Scheduler = GetComfyScheduler(g);
+            samplerHires.Seed = new ComfyInput(g.Seed);
+            samplerHires.StepsTotal = new ComfyInput(g.Steps);
+            samplerHires.Cfg = new ComfyInput(g.Scale);
+            samplerHires.StartStep = new ComfyInput(0);
+            samplerHires.EndStep = new ComfyInput(baseSteps);
+            samplerHires.ReturnLeftoverNoise = false;
 
-            var samplerRefiner = (NmkdKSampler)nodesDict["SamplerRefiner"]; // Sampler Refiner
-            samplerRefiner.AddNoise = false;
-            samplerRefiner.NodeModel = model2;
-            samplerRefiner.NodePositive = encodePosPromptRefiner;
-            samplerRefiner.NodeNegative = encodeNegPromptRefiner;
-            samplerRefiner.NodeLatentImage = upscale ? samplerHires : samplerBase;
-            samplerRefiner.SamplerName = "euler";
-            samplerRefiner.Scheduler = "normal";
-            samplerRefiner.NodeSeed = seed;
-            samplerRefiner.NodeSteps = steps;
-            samplerRefiner.NodeCfg = cfg;
-            samplerRefiner.NodeStartStep = stepsBase;
-            samplerRefiner.NodeEndStep = stepsMax;
-            samplerRefiner.ReturnLeftoverNoise = false;
+            finalLatents = samplerHires;
 
-            var vaeDecode = (VAEDecode)nodesDict["VAEDecode"]; // Final VAE Decode
-            vaeDecode.VaeNode = model1;
-            vaeDecode.LatentsNode = samplerBase;
-            if (refine) vaeDecode.LatentsNode = samplerRefiner;
-            if (!refine && upscale) vaeDecode.LatentsNode = samplerHires;
+            if (refine)
+            {
+                var samplerRefiner = AddNode<NmkdKSampler>("SamplerRefiner"); // Sampler Refiner
+                samplerRefiner.AddNoise = false;
+                samplerRefiner.Model = new ComfyInput(model2, OutType.Model);
+                samplerRefiner.PositiveCond = new ComfyInput(encodePosPromptRefiner, OutType.Conditioning);
+                samplerRefiner.NegativeCond = new ComfyInput(encodeNegPromptRefiner, OutType.Conditioning);
+                samplerRefiner.LatentImage = new ComfyInput(upscale ? samplerHires : samplerBase, OutType.Latents);
+                samplerRefiner.SamplerName = GetComfySampler(g.Sampler);
+                samplerRefiner.Scheduler = GetComfyScheduler(g);
+                samplerRefiner.Seed = new ComfyInput(g.Seed);
+                samplerRefiner.StepsTotal = new ComfyInput(g.Steps);
+                samplerRefiner.Cfg = new ComfyInput(g.Scale);
+                samplerRefiner.StartStep = new ComfyInput(baseSteps);
+                samplerRefiner.EndStep = new ComfyInput(1000);
+                samplerRefiner.ReturnLeftoverNoise = false;
 
-            var upscaler = (NmkdImageUpscale)nodesDict["ImageUpscale"]; // Upscale Image
+                finalLatents = samplerRefiner;
+            }
+
+            var vaeDecode = AddNode<VAEDecode>(); // Final VAE Decode
+            vaeDecode.Vae = new ComfyInput(model1, OutType.Vae);
+            vaeDecode.Latents = new ComfyInput(finalLatents, OutType.Latents);
+
+            var upscaler = AddNode<NmkdImageUpscale>(); // Upscale Image
             upscaler.UpscaleModelPath = g.Upscaler;
-            upscaler.ImageNode = vaeDecode;
+            upscaler.Image = new ComfyInput(vaeDecode, OutType.Image);
 
-            var compositeImgs = (NmkdImageMaskComposite)nodesDict["InpaintImageComposite"]; // Composite Images
-            compositeImgs.ImageToNode = upscaler;
-            compositeImgs.ImageFromNode = loadInitImg;
-            compositeImgs.MaskNode = loadInitImg;
+            var compositeImgs = AddNode<NmkdImageMaskComposite>();
+            compositeImgs.ImageTo = new ComfyInput(upscaler, OutType.Image);
+            compositeImgs.ImageFrom = new ComfyInput(loadInitImg, OutType.Image);
+            compositeImgs.Mask = new ComfyInput(loadInitImg, OutType.Mask);
 
-            var saveImage = (SaveImage)nodesDict["Save"]; // Save Image
+            var saveImage = AddNode<SaveImage>();
             saveImage.Prefix = $"nmkd{FormatUtils.GetUnixTimestamp()}";
-            saveImage.ImageNode = inpaint ? (INode)compositeImgs : (INode)upscaler;
+            saveImage.Image = new ComfyInput(inpaint ? (INode)compositeImgs : (INode)upscaler, OutType.Image);
 
-            foreach (INode node in nodes.Where(n => n != null))
+            foreach (INode node in _currentNodes.Where(n => n != null))
             {
                 try
                 {
@@ -275,73 +256,32 @@ namespace StableDiffusionGui.Implementations
             return nodeInfos;
         }
 
-        public static List<INode> GetNodes(string comfyPrompt)
+        private static T AddNode<T>(string preferredName = "", List<INode> nodes = null) where T : INode, new()
         {
-            var nodesList = new List<INode>();
+            if (nodes == null)
+                nodes = _currentNodes;
 
-            comfyPrompt = "\"nodes\": [" + comfyPrompt.Split("\"nodes\": [")[1]; // Cut off everything before nodes
-            comfyPrompt = comfyPrompt.Split("\n  ],")[0];
-
-            var lines = comfyPrompt.SplitIntoLines().Where(l => l.StartsWith("      \"id\":") || l.StartsWith("      \"type\":") || l.StartsWith("      \"title\":")).ToList();
-
-            for (int i = 0; i < lines.Count; i++)
-            {
-                if (lines[i].StartsWith("      \"id\":"))
-                {
-                    string type = lines[i + 1].Split("\"type\":")[1].Trim().Trim(',').Trim('\"');
-                    string title = (i + 2 < lines.Count) && lines[i + 2].Trim().StartsWith("\"title\":") ? lines[i + 2].Split("\"title\":")[1].Trim().Trim(',').Trim('\"') : "";
-                    string id = $"{type}{lines[i].GetInt()}";
-
-                    INode newNode = null;
-                    if (type == "Reroute") continue;
-                    else if (type == "CheckpointLoaderSimple") newNode = new CheckpointLoaderSimple();
-                    else if (type == "VAELoader") newNode = new VAELoader();
-                    else if (type == "CLIPTextEncode") newNode = new CLIPTextEncode();
-                    else if (type == "KSampler") newNode = new KSampler();
-                    else if (type == "NmkdKSampler") newNode = new NmkdKSampler();
-                    else if (type == "VAEDecode") newNode = new VAEDecode();
-                    else if (type == "NmkdVaeEncode") newNode = new NmkdVaeEncode();
-                    else if (type == "EmptyLatentImage") newNode = new EmptyLatentImage();
-                    else if (type == "SaveImage") newNode = new SaveImage();
-                    else if (type == "LatentUpscale") newNode = new LatentUpscale();
-                    else if (type == "LatentUpscaleBy") newNode = new LatentUpscaleBy();
-                    else if (type == "NmkdIntegerConstant") newNode = new NmkdIntegerConstant();
-                    else if (type == "NmkdFloatConstant") newNode = new NmkdFloatConstant();
-                    else if (type == "NmkdStringConstant") newNode = new NmkdStringConstant();
-                    else if (type == "NmkdCheckpointLoader") newNode = new NmkdCheckpointLoader();
-                    else if (type == "CLIPSetLastLayer") newNode = new CLIPSetLastLayer();
-                    else if (type == "NmkdImageLoader") newNode = new NmkdImageLoader() { Id = FormatUtils.GetUnixTimestamp() };
-                    else if (type == "NmkdImageUpscale") newNode = new NmkdImageUpscale();
-                    else if (type == "NmkdMultiLoraLoader") newNode = new NmkdMultiLoraLoader();
-                    else if (type == "NmkdImageMaskComposite") newNode = new NmkdImageMaskComposite();
-                    // else if (type == "NmkdControlNet") newNode = new NmkdControlNet();
-                    else Logger.Log($"Comfy Nodes Parser: No class found for {type}.", true);
-
-                    if (newNode == null)
-                        continue;
-
-                    if (newNode.Id.IsEmpty())
-                        newNode.Id = id + newNode.Id;
-
-                    newNode.Title = title;
-                    nodesList.Add(newNode);
-                }
-            }
-            return nodesList;
+            string name = preferredName.IsNotEmpty() ? preferredName : typeof(T).ToString().Split('+').Last();
+            T newNode = new T() { Id = GetNewId(name, nodes) };
+            nodes.Add(newNode);
+            return newNode;
         }
 
-        private static string GetNewId(string preferred, List<INode> nodes)
+        private static string GetNewId(string preferred, List<INode> nodes = null)
         {
+            if (nodes == null)
+                nodes = _currentNodes;
+
             List<string> existingIds = nodes.Select(n => n.Id).ToList();
             string unique = preferred;
             int counter = 1;
 
-            while (existingIds.Contains(unique))
+            do
             {
                 unique = $"{preferred}{counter}";
                 counter++;
-            }
-        
+            } while (existingIds.Contains(unique));
+
             return unique;
         }
 
@@ -362,23 +302,13 @@ namespace StableDiffusionGui.Implementations
                 case Enums.StableDiffusion.Sampler.Dpm_2: return "dpm_2";
                 case Enums.StableDiffusion.Sampler.Dpm_2_A: return "dpm_2_ancestral";
                 case Enums.StableDiffusion.Sampler.UniPc: return "uni_pc";
-                default: return "dpmpp_2m";
+                default: return "dpmpp_2m_sde";
             }
         }
 
         public static string GetComfyScheduler(ComfyData.GenerationInfo g)
         {
-            string sched = g.Sampler.ToString().Lower().StartsWith("k_") ? "karras" : "normal";
-            bool upscale = !g.TargetResolution.IsEmpty && g.TargetResolution != g.BaseResolution;
-            bool noThreeStage = !(upscale && g.RefinerStrength > 0f);
-
-            if (noThreeStage && g.Sampler.ToString().Contains("2M"))
-            {
-                sched = "simple";
-                Logger.Log($"Warning: Scheduler was overwritten to '{sched}' due to Comfy issues when using 2M samplers in final denoising stage.", true);
-            }
-
-            return sched;
+            return g.Sampler.ToString().Lower().StartsWith("k_") ? "karras" : "normal";
         }
     }
 }

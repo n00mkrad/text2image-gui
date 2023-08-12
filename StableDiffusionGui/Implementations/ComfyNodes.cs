@@ -10,12 +10,60 @@ namespace StableDiffusionGui.Implementations
 {
     public class ComfyNodes
     {
+        public enum OutType { Model, Vae, Clip, Conditioning, Latents, Image, Mask }
+
         public interface INode
         {
             string Id { get; set; }
             string Title { get; set; }
             NodeInfo GetNodeInfo();
         }
+
+        public static int GetOutIndex(INode nodeClass, OutType outType)
+        {
+            if (outType == OutType.Vae)
+            {
+                if (nodeClass is NmkdCheckpointLoader) return 2;
+            }
+            else if (outType == OutType.Clip)
+            {
+                if (nodeClass is NmkdCheckpointLoader) return 1;
+                if (nodeClass is NmkdMultiLoraLoader) return 1;
+            }
+            else if (outType == OutType.Mask)
+            {
+                if (nodeClass is NmkdImageLoader) return 2;
+            }
+
+            return 0;
+        }
+
+        public class ComfyInput
+        {
+            object Value = null;
+            object[] NodeOutput = new object[0];
+
+            public ComfyInput(object value)
+            {
+                Value = value;
+            }
+
+            public ComfyInput(INode node, OutType outType = (OutType)(-1))
+            {
+                int outputIndex = outType == (OutType)(-1) ? 0 : GetOutIndex(node, outType);
+                NodeOutput = new object[] { node.Id.ToString(), outputIndex };
+            }
+
+            public object Get ()
+            {
+                if (NodeOutput.Length == 2)
+                    return NodeOutput;
+                else
+                    return Value;
+            }
+        }
+
+        #region Constants
 
         public class NmkdIntegerConstant : Node, INode
         {
@@ -83,27 +131,7 @@ namespace StableDiffusionGui.Implementations
             }
         }
 
-        public class CheckpointLoaderSimple : Node, INode
-        {
-            public string CkptName = "";
-
-            public NodeInfo GetNodeInfo()
-            {
-                return new NodeInfo
-                {
-                    Inputs = new Dictionary<string, object>
-                    {
-                        ["ckpt_name"] = CkptName,
-                    },
-                    ClassType = nameof(CheckpointLoaderSimple)
-                };
-            }
-
-            public override string ToString()
-            {
-                return ToStringNode(this);
-            }
-        }
+        #endregion
 
         public class VAELoader : Node, INode
         {
@@ -132,10 +160,10 @@ namespace StableDiffusionGui.Implementations
             public string SamplerName = "dpmpp_2m";
             public string Scheduler = "normal";
             public float Denoise = 1.0f;
-            public int ModelNode;
-            public int PosPromptNode;
-            public int NegPromptNode;
-            public int LatentImageNode;
+            public ComfyInput Model;
+            public ComfyInput PosPrompt;
+            public ComfyInput NegPrompt;
+            public ComfyInput LatentImage;
 
             public NodeInfo GetNodeInfo()
             {
@@ -148,10 +176,10 @@ namespace StableDiffusionGui.Implementations
                         ["sampler_name"] = SamplerName,
                         ["scheduler"] = Scheduler,
                         ["denoise"] = Denoise,
-                        ["model"] = new object[] { ModelNode.ToString(), 0 },
-                        ["positive"] = new object[] { PosPromptNode.ToString(), 0 },
-                        ["negative"] = new object[] { NegPromptNode.ToString(), 0 },
-                        ["latent_image"] = new object[] { LatentImageNode.ToString(), 0 }
+                        ["model"] = Model.Get(),
+                        ["positive"] = PosPrompt.Get(),
+                        ["negative"] = NegPrompt.Get(),
+                        ["latent_image"] = LatentImage.Get(),
                     },
                     ClassType = "KSamplerAdvanced"
                 };
@@ -171,15 +199,15 @@ namespace StableDiffusionGui.Implementations
             public bool ReturnLeftoverNoise;
             public float Denoise = 1f;
 
-            public INode NodeModel;
-            public INode NodePositive;
-            public INode NodeNegative;
-            public INode NodeLatentImage;
-            public INode NodeSeed;
-            public INode NodeSteps;
-            public INode NodeStartStep;
-            public INode NodeEndStep;
-            public INode NodeCfg;
+            public ComfyInput Model;
+            public ComfyInput PositiveCond;
+            public ComfyInput NegativeCond;
+            public ComfyInput LatentImage;
+            public ComfyInput Seed;
+            public ComfyInput StepsTotal;
+            public ComfyInput StartStep;
+            public ComfyInput EndStep;
+            public ComfyInput Cfg;
 
             public string DebugString = "";
 
@@ -192,19 +220,19 @@ namespace StableDiffusionGui.Implementations
                 {
                     Inputs = {
                         ["add_noise"] = AddNoise ? "enable" : "disable",
-                        ["noise_seed"] = new object[] { NodeSeed.Id.ToString(), 0 },
-                        ["steps"] = new object[] { NodeSteps.Id.ToString(), 0 },
-                        ["cfg"] = new object[] { NodeCfg.Id.ToString(), 0 },
+                        ["noise_seed"] = Seed.Get(),
+                        ["steps"] = StepsTotal.Get(),
+                        ["cfg"] = Cfg.Get(),
                         ["sampler_name"] = SamplerName,
                         ["scheduler"] = Scheduler,
-                        ["start_at_step"] = new object[] { NodeStartStep.Id.ToString(), 0 },
-                        ["end_at_step"] = new object[] { NodeEndStep.Id.ToString(), 0 },
+                        ["start_at_step"] = StartStep.Get(),
+                        ["end_at_step"] = EndStep.Get(),
                         ["return_with_leftover_noise"] = ReturnLeftoverNoise ? "enable" : "disable",
                         ["denoise"] = Denoise,
-                        ["model"] = new object[] { NodeModel.Id.ToString(), 0 },
-                        ["positive"] = new object[] { NodePositive.Id.ToString(), 0 },
-                        ["negative"] = new object[] { NodeNegative.Id.ToString(), 0 },
-                        ["latent_image"] = new object[] { NodeLatentImage.Id.ToString(), 0 },
+                        ["model"] = Model.Get(),
+                        ["positive"] = PositiveCond.Get(),
+                        ["negative"] = NegativeCond.Get(),
+                        ["latent_image"] = LatentImage.Get(),
                         ["debug_string"] = DebugString
                     },
                     ClassType = nameof(NmkdKSampler),
@@ -230,35 +258,9 @@ namespace StableDiffusionGui.Implementations
                     Inputs = {
                         ["width"] = Width,
                         ["height"] = Height,
-                        ["batch_size"] = 1
+                        ["batch_size"] = BatchSize,
                     },
                     ClassType = nameof(EmptyLatentImage)
-                };
-            }
-
-            public override string ToString()
-            {
-                return ToStringNode(this);
-            }
-        }
-
-        public class LatentUpscaleBy : Node, INode
-        {
-            public string UpscaleMethod = "nearest-exact";
-            public float ScaleFactor = 1.5f;
-            public int IdLatents;
-
-            public NodeInfo GetNodeInfo()
-            {
-                return new NodeInfo
-                {
-                    Inputs = new Dictionary<string, object>
-                    {
-                        ["upscale_method"] = UpscaleMethod,
-                        ["scale_by"] = ScaleFactor,
-                        ["samples"] = new object[] { IdLatents, 0 }
-                    },
-                    ClassType = nameof(LatentUpscaleBy)
                 };
             }
 
@@ -273,7 +275,7 @@ namespace StableDiffusionGui.Implementations
             public string UpscaleMethod = "nearest-exact";
             public int Width;
             public int Height;
-            public INode LatentsNode;
+            public ComfyInput Latents;
 
             public NodeInfo GetNodeInfo()
             {
@@ -285,7 +287,7 @@ namespace StableDiffusionGui.Implementations
                         { "width", Width },
                         { "height", Height },
                         { "crop", "disabled" },
-                        { "samples", new object[] { LatentsNode.Id.ToString(), 0 } }
+                        { "samples", Latents.Get() }
                     },
                     ClassType = nameof(LatentUpscale)
                 };
@@ -299,20 +301,16 @@ namespace StableDiffusionGui.Implementations
 
         public class CLIPTextEncode : Node, INode
         {
-            public INode TextNode;
-            public INode ClipNode;
+            public ComfyInput Text;
+            public ComfyInput Clip;
 
             public NodeInfo GetNodeInfo()
             {
-                int clipNodeOutIndex = 0;
-                if (ClipNode is NmkdCheckpointLoader) clipNodeOutIndex = 1;
-                if (ClipNode is NmkdMultiLoraLoader) clipNodeOutIndex = 1;
-
                 return new NodeInfo
                 {
                     Inputs = {
-                        ["text"] = new object[] { TextNode.Id.ToString(), 0 },
-                        ["clip"] = new object[] { ClipNode.Id.ToString(), clipNodeOutIndex }
+                        ["text"] = Text.Get(),
+                        ["clip"] = Clip.Get(),
                     },
                     ClassType = nameof(CLIPTextEncode)
                 };
@@ -326,20 +324,17 @@ namespace StableDiffusionGui.Implementations
 
         public class VAEDecode : Node, INode
         {
-            public INode LatentsNode;
-            public INode VaeNode;
+            public ComfyInput Latents;
+            public ComfyInput Vae;
 
             public NodeInfo GetNodeInfo()
             {
-                int vaeNodeOutIndex = 0;
-                if (VaeNode is NmkdCheckpointLoader) vaeNodeOutIndex = 2;
-
                 return new NodeInfo
                 {
                     Inputs = new Dictionary<string, object>
                     {
-                        ["samples"] = new object[] { LatentsNode.Id.ToString(), 0 },
-                        ["vae"] = new object[] { VaeNode.Id.ToString(), vaeNodeOutIndex }
+                        ["samples"] = Latents.Get(),
+                        ["vae"] = Vae.Get(),
                     },
                     ClassType = nameof(VAEDecode)
                 };
@@ -353,26 +348,23 @@ namespace StableDiffusionGui.Implementations
 
         public class NmkdVaeEncode : Node, INode
         {
-            public INode ImageNode;
-            public INode VaeNode;
+            public ComfyInput Image;
+            public ComfyInput Vae;
             public bool LoadMask = false;
             public int MaskGrowPixels = 6;
 
             public NodeInfo GetNodeInfo()
             {
-                int vaeNodeOutIndex = 0;
-                if (VaeNode is NmkdCheckpointLoader) vaeNodeOutIndex = 2;
-
                 var inputs = new Dictionary<string, object>()
                 {
                     { "grow_mask_by", MaskGrowPixels },
-                    { "pixels", new object[] { ImageNode.Id.ToString(), 0 } },
-                    { "vae", new object[] { VaeNode.Id.ToString(), vaeNodeOutIndex } },
+                    { "pixels", Image.Get() },
+                    { "vae", Vae.Get() },
                 };
 
                 if (LoadMask)
                 {
-                    inputs["mask"] = new object[] { ImageNode.Id.ToString(), 2 };
+                    inputs["mask"] = Image.Get();
                 }
 
                 return new NodeInfo
@@ -391,14 +383,14 @@ namespace StableDiffusionGui.Implementations
         public class SaveImage : Node, INode
         {
             public string Prefix = "nmkd";
-            public INode ImageNode;
+            public ComfyInput Image;
 
             public NodeInfo GetNodeInfo()
             {
                 var inputs = new Dictionary<string, object>()
                 {
                     { "filename_prefix", Prefix },
-                    { "images", new object[] { ImageNode.Id.ToString(), 0 } }
+                    { "images", Image.Get() }
                 };
 
                 return new NodeInfo
@@ -446,23 +438,18 @@ namespace StableDiffusionGui.Implementations
 
         public class NmkdMultiLoraLoader : Node, INode
         {
-            public List<string> Loras;
-            public List<float> Strengths;
-            public INode ModelNode;
-            public INode ClipNode;
+            public List<KeyValuePair<string,float>> Loras;
+            public ComfyInput Model;
+            public ComfyInput Clip;
 
             public NodeInfo GetNodeInfo()
             {
-                int clipNodeIndex = 0;
-                if (ClipNode is NmkdCheckpointLoader || ClipNode is CheckpointLoaderSimple)
-                    clipNodeIndex = 1;
-
                 var inputsDict = new Dictionary<string, object>()
                 {
-                    { "lora_paths", string.Join(",", Loras.Select(l => Path.Combine(Paths.GetLorasPath(false), l + ".safetensors"))) },
-                    { "lora_strengths", string.Join(",", Strengths.Select(w => w.ToStringDot())) },
-                    { "model", new object[] { ModelNode.Id.ToString(), 0 } },
-                    { "clip", new object[] { ClipNode.Id.ToString(), clipNodeIndex } },
+                    { "lora_paths", string.Join(",", Loras.Select(l => Path.Combine(Paths.GetLorasPath(false), l.Key + ".safetensors"))) },
+                    { "lora_strengths", string.Join(",", Loras.Select(w => w.Value.ToStringDot())) },
+                    { "model", Model.Get() },
+                    { "clip", Clip.Get() },
                 };
 
                 return new NodeInfo
@@ -505,7 +492,7 @@ namespace StableDiffusionGui.Implementations
         public class NmkdImageUpscale : Node, INode
         {
             public string UpscaleModelPath;
-            public INode ImageNode;
+            public ComfyInput Image;
 
             public NodeInfo GetNodeInfo()
             {
@@ -514,7 +501,7 @@ namespace StableDiffusionGui.Implementations
                     Inputs = new Dictionary<string, object>
                     {
                         { "model_path", UpscaleModelPath },
-                        { "image", new object[] { ImageNode.Id.ToString(), 0 } }
+                        { "image", Image.Get() },
                     },
                     ClassType = nameof(NmkdImageUpscale)
                 };
@@ -529,17 +516,14 @@ namespace StableDiffusionGui.Implementations
         public class CLIPSetLastLayer : Node, INode
         {
             public int Skip = -1;
-            public INode ClipNode;
+            public ComfyInput ClipNode;
 
             public NodeInfo GetNodeInfo()
             {
-                int clipNodeIndex = 0;
-                if (ClipNode is NmkdCheckpointLoader || ClipNode is CheckpointLoaderSimple) clipNodeIndex = 1;
-
                 var inputs = new Dictionary<string, object>
                 {
                     { "stop_at_clip_layer", Skip },
-                    { "clip", new object[] { ClipNode.Id.ToString(), clipNodeIndex } }
+                    { "clip", ClipNode.Get() }
                 };
 
                 return new NodeInfo
@@ -557,17 +541,17 @@ namespace StableDiffusionGui.Implementations
 
         public class NmkdImageMaskComposite : Node, INode
         {
-            public INode ImageToNode;
-            public INode ImageFromNode;
-            public INode MaskNode;
+            public ComfyInput ImageTo;
+            public ComfyInput ImageFrom;
+            public ComfyInput Mask;
 
             public NodeInfo GetNodeInfo()
             {
                 var inputs = new Dictionary<string, object>
                 {
-                    { "image_to", new object[] { ImageToNode.Id.ToString(), 0 } },
-                    { "image_from", new object[] { ImageFromNode.Id.ToString(), 0 } },
-                    { "mask", new object[] { MaskNode.Id.ToString(), 2 } },
+                    { "image_to", ImageTo.Get() },
+                    { "image_from", ImageFrom.Get() },
+                    { "mask", Mask.Get() },
                 };
 
                 return new NodeInfo
@@ -587,8 +571,8 @@ namespace StableDiffusionGui.Implementations
         {
             public string ModelPath;
             public float Strength = 1.0f;
-            public INode ConditioningNode;
-            public INode ImageNode;
+            public ComfyInput Conditioning;
+            public ComfyInput ImageNode;
 
             public NodeInfo GetNodeInfo()
             {
@@ -596,8 +580,8 @@ namespace StableDiffusionGui.Implementations
                 {
                     { "controlnet_path", ModelPath },
                     { "strength", Strength },
-                    { "conditioning", new object[] { ConditioningNode.Id.ToString(), 0 } },
-                    { "image", new object[] { ImageNode.Id.ToString(), 0 } },
+                    { "conditioning", Conditioning.Get() },
+                    { "image", ImageNode.Get() },
                 };
 
                 return new NodeInfo
@@ -615,7 +599,7 @@ namespace StableDiffusionGui.Implementations
 
         public class NmkdHypernetworkLoader : Node, INode
         {
-            public INode ModelNode;
+            public ComfyInput Model;
             public string ModelPath;
             public float Strength;
 
@@ -623,7 +607,7 @@ namespace StableDiffusionGui.Implementations
             {
                 var dict = new Dictionary<string, object>()
                 {
-                    { "model", new object[] { ModelNode.Id.ToString(), 0 } },
+                    { "model", Model.Get() },
                     { "hypernetwork_path", ModelPath },
                     { "strength", Strength },
                 };
@@ -639,14 +623,14 @@ namespace StableDiffusionGui.Implementations
 
         public class GenericImagePreprocessor : Node, INode
         {
-            public INode ImageNode;
+            public ComfyInput Image;
             public Enums.StableDiffusion.ImagePreprocessor Preprocessor;
 
             public NodeInfo GetNodeInfo()
             {
                 var inputs = new Dictionary<string, object>
                 {
-                    { "image", new object[] { ImageNode.Id.ToString(), 0 } },
+                    { "image", Image.Get() },
                 };
 
                 string classType = "";

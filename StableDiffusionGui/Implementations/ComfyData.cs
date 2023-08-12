@@ -1,6 +1,4 @@
-﻿using StableDiffusionGui.Data;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -26,8 +24,8 @@ namespace StableDiffusionGui.Implementations
             public string Upscaler;
             public string Prompt;
             public string NegativePrompt;
-            public EasyDict<string, float> Loras = new EasyDict<string, float>();
-            public EasyDict<string, float> HyperNetworks = new EasyDict<string, float>();
+            public List<KeyValuePair<string, float>> Loras = new List<KeyValuePair<string, float>>();
+            public List<KeyValuePair<string, float>> Hypernetworks = new List<KeyValuePair<string, float>>();
             public List<ControlnetInfo> Controlnets = new List<ControlnetInfo>();
             public int Steps;
             public long Seed;
@@ -51,8 +49,8 @@ namespace StableDiffusionGui.Implementations
                     Upscaler = Path.GetFileName(Upscaler),
                     Prompt = Prompt,
                     NegativePrompt = NegativePrompt,
-                    Loras = new EasyDict<string, float>(Loras.ToDictionary(kvp => Path.GetFileName(kvp.Key), kvp => kvp.Value)),
-                    HyperNetworks = new EasyDict<string, float>(HyperNetworks.ToDictionary(kvp => Path.GetFileName(kvp.Key), kvp => kvp.Value)),
+                    Loras = Loras.Select(l => new KeyValuePair<string, float>(Path.GetFileName(l.Key), l.Value)).ToList(),
+                    Hypernetworks = Hypernetworks.Select(l => new KeyValuePair<string, float>(Path.GetFileName(l.Key), l.Value)).ToList(),
                     Controlnets = Controlnets.Select(c => new ControlnetInfo { Model = Path.GetFileName(c.Model), Preprocessor = c.Preprocessor, Strength = c.Strength }).ToList(),
                     Steps = Steps,
                     Seed = Seed,
@@ -95,7 +93,7 @@ namespace StableDiffusionGui.Implementations
                     { "upscaleW", TargetResolution.Width },
                     { "upscaleH", TargetResolution.Height },
                     { "loras", Loras },
-                    { "hypernetworks", HyperNetworks },
+                    { "hypernetworks", Hypernetworks },
                     { "controlnets", Controlnets },
                 };
             }
