@@ -182,27 +182,30 @@ namespace StableDiffusionGui.Implementations
 
             INode finalLatents = samplerBase;
 
-            var latentUpscale = AddNode<LatentUpscale>(); // Latent Upscale
-            latentUpscale.Width = g.TargetResolution.Width;
-            latentUpscale.Height = g.TargetResolution.Height;
-            latentUpscale.Latents = new ComfyInput(samplerBase, OutType.Latents);
+            if (upscale)
+            {
+                var latentUpscale = AddNode<LatentUpscale>(); // Latent Upscale
+                latentUpscale.Width = g.TargetResolution.Width;
+                latentUpscale.Height = g.TargetResolution.Height;
+                latentUpscale.Latents = new ComfyInput(samplerBase, OutType.Latents);
 
-            var samplerHires = AddNode<NmkdKSampler>("SamplerHires"); // Sampler Hi-Res
-            samplerHires.AddNoise = true;
-            samplerHires.Model = new ComfyInput(loraLoader, OutType.Model);
-            samplerHires.PositiveCond = new ComfyInput(finalConditioningNode, OutType.Conditioning);
-            samplerHires.NegativeCond = new ComfyInput(encodeNegPromptBase, OutType.Conditioning);
-            samplerHires.LatentImage = new ComfyInput(latentUpscale, OutType.Latents);
-            samplerHires.SamplerName = GetComfySampler(g.Sampler);
-            samplerHires.Scheduler = GetComfyScheduler(g);
-            samplerHires.Seed = new ComfyInput(g.Seed);
-            samplerHires.StepsTotal = new ComfyInput(g.Steps);
-            samplerHires.Cfg = new ComfyInput(g.Scale);
-            samplerHires.StartStep = new ComfyInput(0);
-            samplerHires.EndStep = new ComfyInput(baseSteps);
-            samplerHires.ReturnLeftoverNoise = false;
+                var samplerHires = AddNode<NmkdKSampler>("SamplerHires"); // Sampler Hi-Res
+                samplerHires.AddNoise = true;
+                samplerHires.Model = new ComfyInput(loraLoader, OutType.Model);
+                samplerHires.PositiveCond = new ComfyInput(finalConditioningNode, OutType.Conditioning);
+                samplerHires.NegativeCond = new ComfyInput(encodeNegPromptBase, OutType.Conditioning);
+                samplerHires.LatentImage = new ComfyInput(latentUpscale, OutType.Latents);
+                samplerHires.SamplerName = GetComfySampler(g.Sampler);
+                samplerHires.Scheduler = GetComfyScheduler(g);
+                samplerHires.Seed = new ComfyInput(g.Seed);
+                samplerHires.StepsTotal = new ComfyInput(g.Steps);
+                samplerHires.Cfg = new ComfyInput(g.Scale);
+                samplerHires.StartStep = new ComfyInput(0);
+                samplerHires.EndStep = new ComfyInput(baseSteps);
+                samplerHires.ReturnLeftoverNoise = refine;
 
-            finalLatents = samplerHires;
+                finalLatents = samplerHires;
+            }
 
             if (refine)
             {
@@ -211,7 +214,7 @@ namespace StableDiffusionGui.Implementations
                 samplerRefiner.Model = new ComfyInput(model2, OutType.Model);
                 samplerRefiner.PositiveCond = new ComfyInput(encodePosPromptRefiner, OutType.Conditioning);
                 samplerRefiner.NegativeCond = new ComfyInput(encodeNegPromptRefiner, OutType.Conditioning);
-                samplerRefiner.LatentImage = new ComfyInput(upscale ? samplerHires : samplerBase, OutType.Latents);
+                samplerRefiner.LatentImage = new ComfyInput(finalLatents, OutType.Latents);
                 samplerRefiner.SamplerName = GetComfySampler(g.Sampler);
                 samplerRefiner.Scheduler = GetComfyScheduler(g);
                 samplerRefiner.Seed = new ComfyInput(g.Seed);
