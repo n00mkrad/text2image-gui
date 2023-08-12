@@ -364,9 +364,6 @@ namespace StableDiffusionGui.Ui
         {
             var values = new List<float>() { baseValue };
 
-            if(text.Contains(":"))
-                System.Diagnostics.Debugger.Break();
-
             if (text.MatchesWildcard("* > * : *"))
             {
                 var splitMinMax = text.Trim().Split(':')[0].Split('>');
