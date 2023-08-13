@@ -140,8 +140,9 @@ namespace StableDiffusionGui.Implementations
 
             var encodeInitImg = AddNode<NmkdVaeEncode>(); // Encode Init Image (I2I)
             encodeInitImg.Image = new ComfyInput(loadInitImg, OutType.Image);
+            encodeInitImg.Mask = new ComfyInput(loadInitImg, OutType.Mask);
             encodeInitImg.Vae = new ComfyInput(model1, OutType.Vae);
-            encodeInitImg.LoadMask = g.MaskPath.IsNotEmpty();
+            encodeInitImg.UseMask = g.MaskPath.IsNotEmpty();
 
             INode finalConditioningNode = encodePosPromptBase; // Keep track of the final conditioning node for sampling
 
@@ -150,14 +151,22 @@ namespace StableDiffusionGui.Implementations
                 ComfyData.ControlnetInfo ci = g.Controlnets[i];
 
                 if (ci.Preprocessor != Enums.StableDiffusion.ImagePreprocessor.None)
-                    nodes.Add(new GenericImagePreprocessor { Image = new ComfyInput(loadInitImg, OutType.Image), Preprocessor = ci.Preprocessor, Id = GetNewId("Preproc") });
+                {
+                    nodes.Add(new GenericImagePreprocessor {
+                        Image = new ComfyInput(loadInitImg, OutType.Image),
+                        Preprocessor = ci.Preprocessor,
+                        DepthUseInvertedInfernoPalette = ci.Model.Lower().Contains("xl"),
+                        Id = GetNewId("Preproc")
+                    });
+                }
 
                 nodes.Add(new NmkdControlNet
                 {
                     ModelPath = ci.Model,
                     Strength = ci.Strength,
                     Conditioning = new ComfyInput(finalConditioningNode, OutType.Conditioning),
-                    ImageNode = new ComfyInput(ci.Preprocessor != Enums.StableDiffusion.ImagePreprocessor.None ? nodes.Last() : loadInitImg, OutType.Image),
+                    Image = new ComfyInput(ci.Preprocessor != Enums.StableDiffusion.ImagePreprocessor.None ? nodes.Last() : loadInitImg, OutType.Image),
+                    Model = new ComfyInput(model1, OutType.Model),
                     Id = GetNewId("ControlNet"),
                 });
 

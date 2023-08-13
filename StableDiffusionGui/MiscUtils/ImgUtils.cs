@@ -28,8 +28,15 @@ namespace StableDiffusionGui.MiscUtils
 
         public static MagickImage GetMagickImage(string base64)
         {
-            var magick = MagickImage.FromBase64(base64);
-            return (MagickImage)magick;
+            try
+            {
+                var magick = MagickImage.FromBase64(base64);
+                return (MagickImage)magick;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         public static Image ResizeImage(Image image, Size size)

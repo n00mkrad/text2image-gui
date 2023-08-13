@@ -60,9 +60,10 @@ namespace StableDiffusionGui.Io
         {
             string path = Config.Instance == null ? Paths.GetControlNetsPath() : Config.Instance.ControlNetsDir;
             path = IoUtils.EnsureAbsPath(path);
-            var fileList = IoUtils.GetFileInfosSorted(path, false, "*.safetensors").ToList();
-            fileList = fileList.Concat(IoUtils.GetFileInfosSorted(path, false, "*.pth")).ToList();
-            return fileList.Select(f => new Model(f, f.Extension.Lower() == ".safetensors" ? Format.Safetensors : Format.Pytorch, Enums.Models.Type.ControlNet)).ToList();
+            var fileList = IoUtils.GetFileInfosSorted(path, false, "*.*").ToList();
+            var validExts = new[] { ".safetensors", ".pth", ".bin" };
+            fileList = fileList.Where(f => validExts.Contains(f.Extension.Lower())).ToList();
+            return fileList.Select(f => new Model(f, (Format)(-1), Enums.Models.Type.ControlNet)).ToList();
         }
 
         public static List<Model> GetUpscalers()

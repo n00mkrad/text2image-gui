@@ -349,8 +349,9 @@ namespace StableDiffusionGui.Implementations
         public class NmkdVaeEncode : Node, INode
         {
             public ComfyInput Image;
+            public ComfyInput Mask;
             public ComfyInput Vae;
-            public bool LoadMask = false;
+            public bool UseMask = false;
             public int MaskGrowPixels = 6;
 
             public NodeInfo GetNodeInfo()
@@ -362,9 +363,9 @@ namespace StableDiffusionGui.Implementations
                     { "vae", Vae.Get() },
                 };
 
-                if (LoadMask)
+                if (UseMask)
                 {
-                    inputs["mask"] = Image.Get();
+                    inputs["mask"] = Mask.Get();
                 }
 
                 return new NodeInfo
@@ -572,7 +573,8 @@ namespace StableDiffusionGui.Implementations
             public string ModelPath;
             public float Strength = 1.0f;
             public ComfyInput Conditioning;
-            public ComfyInput ImageNode;
+            public ComfyInput Image;
+            public ComfyInput Model;
 
             public NodeInfo GetNodeInfo()
             {
@@ -581,8 +583,13 @@ namespace StableDiffusionGui.Implementations
                     { "controlnet_path", ModelPath },
                     { "strength", Strength },
                     { "conditioning", Conditioning.Get() },
-                    { "image", ImageNode.Get() },
+                    { "image", Image.Get() },
                 };
+
+                if(Model != null)
+                {
+                    inputs["model"] = Model.Get();
+                }
 
                 return new NodeInfo
                 {
@@ -625,6 +632,7 @@ namespace StableDiffusionGui.Implementations
         {
             public ComfyInput Image;
             public Enums.StableDiffusion.ImagePreprocessor Preprocessor;
+            public bool DepthUseInvertedInfernoPalette = false;
 
             public NodeInfo GetNodeInfo()
             {
@@ -639,8 +647,11 @@ namespace StableDiffusionGui.Implementations
                 //     classType = "ScribblePreprocessor";
 
                 if (Preprocessor == Enums.StableDiffusion.ImagePreprocessor.DepthMap)
+                {
                     classType = "Zoe-DepthMapPreprocessor";
-
+                    inputs["use_inverted_inferno"] = DepthUseInvertedInfernoPalette ? "enable" : "disable";
+                }
+                    
                 if (Preprocessor == Enums.StableDiffusion.ImagePreprocessor.LineArtAnime)
                     classType = "AnimeLineArtPreprocessor";
 
@@ -678,6 +689,15 @@ namespace StableDiffusionGui.Implementations
                 {
                     classType = "NmkdColorPreprocessor";
                     inputs["divisor"] = 64;
+                }
+
+                if (Preprocessor == Enums.StableDiffusion.ImagePreprocessor.OpenPose)
+                {
+                    classType = "OpenposePreprocessor";
+                    inputs["detect_hand"] = "enable";
+                    inputs["detect_body"] = "enable";
+                    inputs["detect_face"] = "disable";
+                    inputs["version"] = "v1.1";
                 }
 
                 return new NodeInfo { Inputs = inputs, ClassType = classType };

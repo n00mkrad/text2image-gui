@@ -22,6 +22,8 @@ namespace StableDiffusionGui.Main
                 Logger.Log($"Downloading required files - {line.Trunc(80)}...", false, ellipsis);
             }
 
+            bool trace = line.Contains("|") && (line.Contains("raise ") || line.Contains("except ")); // Log line is part of a printed stack trace
+
             if (!hasErrored && line.Contains("CUDA out of memory"))
             {
                 hasErrored = true;
@@ -46,7 +48,7 @@ namespace StableDiffusionGui.Main
                 errMsg = $"Your GPU appears to be unstable! If you have an overclock enabled, please disable it!\n\n{line}";
             }
 
-            if (!hasErrored && _forceKillErrors.Any(e => line.Contains(e)))
+            if (!hasErrored && !trace && _forceKillErrors.Any(e => line.Contains(e)))
             {
                 hasErrored = true;
                 errMsg = $"Python Error:\n\n{line}";

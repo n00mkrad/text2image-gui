@@ -52,6 +52,7 @@ namespace StableDiffusionGui.Forms
 
                 if (CurrentMetadata == null || string.IsNullOrWhiteSpace(CurrentMetadata.ParsedText))
                 {
+                    
                     disabledActions.Add(ImageImportAction.LoadSettings);
                     disabledActions.Add(ImageImportAction.LoadImageAndSettings);
                     disabledActions.Add(ImageImportAction.CopyPrompt);
@@ -64,7 +65,7 @@ namespace StableDiffusionGui.Forms
                 textboxInfo.Text += $"Resolution: {pictBox.Image.Size.AsString()}{n}";
                 textboxInfo.Text += $"Pixel Format: {pictBox.Image.PixelFormat.AsString()}{n}{n}";
 
-                if (CurrentMetadata.Prompt.IsNotEmpty())
+                if (CurrentMetadata.Prompt.IsNotEmpty())    
                 {
                     textboxInfo.Text += $"{n}Prompt:{n}{CurrentMetadata.Prompt}{n}";
                     textboxInfo.Text += $"{n}Negative Prompt:{n}{CurrentMetadata.NegativePrompt}{n}";

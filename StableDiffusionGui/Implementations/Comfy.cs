@@ -408,7 +408,10 @@ namespace StableDiffusionGui.Implementations
             {
                 Console.WriteLine($"Received WEBP preview {((line.Length * sizeof(Char)) / 1024f).RoundToInt()}k");
                 var magick = ImgUtils.GetMagickImage(line.Split('\'')[1]);
-                Program.MainForm.pictBoxImgViewer.Image = ImgUtils.ToBitmap(magick);
+
+                if (magick != null)
+                    Program.MainForm.pictBoxImgViewer.Image = ImgUtils.ToBitmap(magick);
+
                 return;
             }
 
@@ -454,7 +457,7 @@ namespace StableDiffusionGui.Implementations
                 Config.Instance.ModelSettings.GetPopulate(filename, new Models.ModelSettings()).Arch = mdlArch;
                 Logger.Log($"Loaded '{filename.Trunc(100)}' - {Strings.ModelArch.Get(mdlArch.ToString(), true)}", false, Logger.LastUiLine.Contains(filename));
 
-                if(_lastSettings.Controlnets.Any(cn => Models.AssumeControlnetArch(cn.Model) != mdlArch))
+                if (_lastSettings.Controlnets.Any(cn => Models.AssumeControlnetArch(cn.Model) != mdlArch))
                 {
                     _hasErrored = true;
                     errMsg = $"One or more enabled ControlNet models are incompatible with your current Stable Diffusion model ({Strings.ModelArch.Get(mdlArch.ToString())})." +
@@ -462,7 +465,7 @@ namespace StableDiffusionGui.Implementations
                     cancelMode = TextToImage.CancelMode.ForceKill;
                 }
 
-                if(mdlArch != ModelArch.SdXlRefine)
+                if (mdlArch != ModelArch.SdXlRefine)
                 {
                     Program.MainForm.comboxModelArch.SetWithText(Config.Instance.ModelSettings[filename].Arch.ToString(), false, Strings.ModelArch);
                     Size res = Models.GetDefaultRes(mdlArch);
@@ -497,6 +500,13 @@ namespace StableDiffusionGui.Implementations
                 errMsg = $"Port is already in use. Are you running ComfyUI on port {ComfyPort}?";
                 _hasErrored = true;
                 cancelMode = TextToImage.CancelMode.ForceKill;
+            }
+
+            // Error: Shapes
+            if (!_hasErrored && !TextToImage.Canceled && line.Contains("shapes cannot be multiplied"))
+            {
+                errMsg = $"{line}\n\nThis most likely means that certain models (e.g. LoRAs) are not compatible with the selected Stable Diffusion model.";
+                _hasErrored = true;
             }
 
             TtiProcessOutputHandler.HandleLogGeneric(this, line, _hasErrored, cancelMode, errMsg, true);

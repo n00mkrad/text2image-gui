@@ -173,6 +173,7 @@ namespace StableDiffusionGui.Ui
              { Enums.StableDiffusion.ImagePreprocessor.DepthMap.ToString(), "Depth Map (3D Effect)" },
              { Enums.StableDiffusion.ImagePreprocessor.Blur.ToString(), "Blur (For Tile Model)" },
              { Enums.StableDiffusion.ImagePreprocessor.Pixelate.ToString(), "Pixelate (For Color Model)" },
+             { Enums.StableDiffusion.ImagePreprocessor.OpenPose.ToString(), "Detect Pose (OpenPose)" },
         };
 
         public static Dictionary<string, string> ModelArch = new Dictionary<string, string>
