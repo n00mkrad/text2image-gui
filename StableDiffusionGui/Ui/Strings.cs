@@ -39,13 +39,15 @@ namespace StableDiffusionGui.Ui
             { Enums.StableDiffusion.Sampler.K_Dpmpp_2M.ToString(), "DPM++ 2M Karras" },
             { Enums.StableDiffusion.Sampler.Dpmpp_2M_Sde.ToString(), "DPM++ 2M SDE" },
             { Enums.StableDiffusion.Sampler.K_Dpmpp_2M_Sde.ToString(), "DPM++ 2M SDE Karras" },
+            { Enums.StableDiffusion.Sampler.Dpmpp_3M_Sde.ToString(), "DPM++ 3M SDE" },
+            { Enums.StableDiffusion.Sampler.K_Dpmpp_3M_Sde.ToString(), "DPM++ 3M SDE Karras" },
             { Enums.StableDiffusion.Sampler.Lms.ToString(), "LMS" },
             { Enums.StableDiffusion.Sampler.Ddim.ToString(), "DDIM" },
             // { Enums.StableDiffusion.Sampler.Plms.ToString(), "PLMS" },
             { Enums.StableDiffusion.Sampler.Heun.ToString(), "Heun" },
             { Enums.StableDiffusion.Sampler.Dpm_2.ToString(), "DPM 2" },
             { Enums.StableDiffusion.Sampler.Dpm_2_A.ToString(), "DPM 2 Ancestral" },
-            { Enums.StableDiffusion.Sampler.UniPc.ToString(), "UniPC" },
+            { Enums.StableDiffusion.Sampler.Uni_Pc.ToString(), "UniPC" },
         };
 
         public static Dictionary<string, string> PostProcSettingsUiStrings = new Dictionary<string, string>

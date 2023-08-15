@@ -25,7 +25,7 @@ namespace StableDiffusionGui.Main
         {
             public enum ModelArch { Automatic, Sd1, Sd1Inpaint, Sd2, Sd2Inpaint, Sd2V, SdXlBase, SdXlRefine }
             public enum Implementation { InvokeAi, DiffusersOnnx, InstructPixToPix, Comfy }
-            public enum Sampler { K_Dpmpp_2M, Dpmpp_2M, K_Dpmpp_2M_Sde, Dpmpp_2M_Sde, K_Euler, Euler_A, Euler, Ddim, Lms, Heun, Dpm_2, Dpm_2_A, UniPc }
+            public enum Sampler { K_Dpmpp_2M, Dpmpp_2M, K_Dpmpp_2M_Sde, Dpmpp_2M_Sde, K_Dpmpp_3M_Sde, Dpmpp_3M_Sde, K_Euler, Euler_A, Euler, Ddim, Lms, Heun, Dpm_2, Dpm_2_A, Uni_Pc }
             public enum SeamlessMode { Disabled, SeamlessBoth, SeamlessVert, SeamlessHor }
             public enum SymmetryMode { Disabled, SymVert, SymHor, SymBoth }
             public enum ImgMode { InitializationImage, ImageMask, Outpainting, Controlnet }

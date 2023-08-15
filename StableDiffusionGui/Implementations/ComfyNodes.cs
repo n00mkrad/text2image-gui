@@ -632,7 +632,6 @@ namespace StableDiffusionGui.Implementations
         {
             public ComfyInput Image;
             public Enums.StableDiffusion.ImagePreprocessor Preprocessor;
-            public bool DepthUseInvertedInfernoPalette = false;
 
             public NodeInfo GetNodeInfo()
             {
@@ -647,10 +646,7 @@ namespace StableDiffusionGui.Implementations
                 //     classType = "ScribblePreprocessor";
 
                 if (Preprocessor == Enums.StableDiffusion.ImagePreprocessor.DepthMap)
-                {
                     classType = "Zoe-DepthMapPreprocessor";
-                    inputs["use_inverted_inferno"] = DepthUseInvertedInfernoPalette ? "enable" : "disable";
-                }
                     
                 if (Preprocessor == Enums.StableDiffusion.ImagePreprocessor.LineArtAnime)
                     classType = "AnimeLineArtPreprocessor";

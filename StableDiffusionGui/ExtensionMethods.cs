@@ -414,7 +414,7 @@ namespace StableDiffusionGui
                 return "";
         }
 
-        public static void FillFromEnum<TEnum>(this ComboBox comboBox, Dictionary<string, string> stringMap = null, int defaultIndex = -1, List<TEnum> exclusionList = null) where TEnum : Enum
+        public static void FillFromEnum<TEnum>(this ComboBox comboBox, Dictionary<string, string> stringMap = null, int defaultIndex = -1, IEnumerable<TEnum> exclusionList = null) where TEnum : Enum
         {
             if (stringMap == null)
                 stringMap = new Dictionary<string, string>();

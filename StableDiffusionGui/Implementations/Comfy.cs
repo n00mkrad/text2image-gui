@@ -370,13 +370,16 @@ namespace StableDiffusionGui.Implementations
         {
             List<string> lastLogLines = Logger.GetLastLines(Constants.Lognames.Sd, 15);
 
-            await ApiPost("{\"clear\":true}", ComfyEndpoint.Queue);
-            await ApiPost("", ComfyEndpoint.Interrupt);
-
-            // if (lastLogLines.Where(x => x.Contains("%|") || x.Contains("error occurred")).Any()) // Only attempt a soft cancel if we've been generating anything
-            //     await WaitForCancel();
-            // else // This condition should be true if we cancel while it's still initializing, so we can just force kill the process
-            //     TtiProcess.KillAll();
+            if(LastMessages.Any(s => s.Contains("To see the GUI go to:")))
+            {
+                var queueArgs = new Dictionary<string, bool> { { "clear", true } };
+                await ApiPost(queueArgs.ToJson(), ComfyEndpoint.Queue);
+                await ApiPost(endpoint: ComfyEndpoint.Interrupt);
+            }
+            else
+            {
+                TtiProcess.KillAll(); // Kill process if initialization was not done yet
+            }
         }
 
         public void HandleOutput(string line)
@@ -457,11 +460,12 @@ namespace StableDiffusionGui.Implementations
                 Config.Instance.ModelSettings.GetPopulate(filename, new Models.ModelSettings()).Arch = mdlArch;
                 Logger.Log($"Loaded '{filename.Trunc(100)}' - {Strings.ModelArch.Get(mdlArch.ToString(), true)}", false, Logger.LastUiLine.Contains(filename));
 
-                if (_lastSettings.Controlnets.Any(cn => Models.AssumeControlnetArch(cn.Model) != mdlArch))
+                string controlnetError = ComfyUtils.ControlnetCompatCheck(_lastSettings.Controlnets, mdlArch);
+
+                if (controlnetError.IsNotEmpty())
                 {
+                    errMsg = controlnetError;
                     _hasErrored = true;
-                    errMsg = $"One or more enabled ControlNet models are incompatible with your current Stable Diffusion model ({Strings.ModelArch.Get(mdlArch.ToString())})." +
-                        $"\nPlease make sure all enabled ControlNet models were trained for this model type.";
                     cancelMode = TextToImage.CancelMode.ForceKill;
                 }
 

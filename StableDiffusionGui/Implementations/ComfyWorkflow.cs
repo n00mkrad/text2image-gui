@@ -155,7 +155,6 @@ namespace StableDiffusionGui.Implementations
                     nodes.Add(new GenericImagePreprocessor {
                         Image = new ComfyInput(loadInitImg, OutType.Image),
                         Preprocessor = ci.Preprocessor,
-                        DepthUseInvertedInfernoPalette = ci.Model.Lower().Contains("xl"),
                         Id = GetNewId("Preproc")
                     });
                 }
@@ -305,6 +304,8 @@ namespace StableDiffusionGui.Implementations
                 case Enums.StableDiffusion.Sampler.K_Dpmpp_2M: return "dpmpp_2m";
                 case Enums.StableDiffusion.Sampler.Dpmpp_2M_Sde: return "dpmpp_2m_sde";
                 case Enums.StableDiffusion.Sampler.K_Dpmpp_2M_Sde: return "dpmpp_2m_sde";
+                case Enums.StableDiffusion.Sampler.Dpmpp_3M_Sde: return "dpmpp_3m_sde";
+                case Enums.StableDiffusion.Sampler.K_Dpmpp_3M_Sde: return "dpmpp_3m_sde";
                 case Enums.StableDiffusion.Sampler.Euler_A: return "euler_ancestral";
                 case Enums.StableDiffusion.Sampler.Euler: return "euler";
                 case Enums.StableDiffusion.Sampler.K_Euler: return "euler";
@@ -313,7 +314,7 @@ namespace StableDiffusionGui.Implementations
                 case Enums.StableDiffusion.Sampler.Heun: return "heun";
                 case Enums.StableDiffusion.Sampler.Dpm_2: return "dpm_2";
                 case Enums.StableDiffusion.Sampler.Dpm_2_A: return "dpm_2_ancestral";
-                case Enums.StableDiffusion.Sampler.UniPc: return "uni_pc";
+                case Enums.StableDiffusion.Sampler.Uni_Pc: return "uni_pc";
                 default: return "dpmpp_2m_sde";
             }
         }
