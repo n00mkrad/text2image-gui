@@ -32,8 +32,8 @@ namespace StableDiffusionGui.Forms
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.runBtn = new System.Windows.Forms.Button();
             this.titleLabel = new System.Windows.Forms.Label();
             this.logBox = new StableDiffusionGui.Controls.CustomTextbox();
@@ -698,7 +698,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderScale.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScale.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScale.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderScale.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderScale.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScale.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScale.Name = "textboxSliderScale";
@@ -842,7 +842,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderInitStrength.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderInitStrength.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderInitStrength.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderInitStrength.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderInitStrength.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderInitStrength.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderInitStrength.Name = "textboxSliderInitStrength";
@@ -1037,7 +1037,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderScaleImg.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScaleImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScaleImg.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScaleImg.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderScaleImg.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderScaleImg.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScaleImg.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScaleImg.Name = "textboxSliderScaleImg";
@@ -1586,7 +1586,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderRefineStart.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderRefineStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderRefineStart.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderRefineStart.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderRefineStart.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderRefineStart.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderRefineStart.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderRefineStart.Name = "textboxSliderRefineStart";
@@ -2607,7 +2607,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderSteps.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderSteps.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderSteps.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderSteps.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderSteps.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderSteps.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderSteps.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderSteps.Name = "textboxSliderSteps";
@@ -2971,27 +2971,27 @@ namespace StableDiffusionGui.Forms
             this.gridLoras.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.gridLoras.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.gridLoras.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.Disable;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.gridLoras.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gridLoras.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.gridLoras.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.gridLoras.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColEnabled,
             this.ColName,
             this.ColWeight});
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.gridLoras.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.gridLoras.DefaultCellStyle = dataGridViewCellStyle2;
             this.gridLoras.Location = new System.Drawing.Point(233, -1);
             this.gridLoras.MultiSelect = false;
             this.gridLoras.Name = "gridLoras";

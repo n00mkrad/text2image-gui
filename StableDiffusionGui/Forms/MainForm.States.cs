@@ -55,19 +55,19 @@ namespace StableDiffusionGui.Forms
                 return implementation.Supports(Feature.MultipleSamplers);
 
             if (control == panelSeamless)
-                return implementation.Supports(Feature.SeamlessMode) && (!comboxInpaintMode.Visible || (ImgMode)comboxInpaintMode.SelectedIndex == ImgMode.InitializationImage);
+                return implementation.Supports(Feature.SeamlessMode) && (!comboxInpaintMode.Visible || ParseUtils.GetEnum<ImgMode>(comboxInpaintMode.Text, stringMap: Strings.InpaintMode) == ImgMode.InitializationImage);
 
             if (control == panelSymmetry)
-                return implementation.Supports(Feature.SymmetricMode) && (!comboxInpaintMode.Visible || (ImgMode)comboxInpaintMode.SelectedIndex == ImgMode.InitializationImage);
+                return implementation.Supports(Feature.SymmetricMode) && (!comboxInpaintMode.Visible || ParseUtils.GetEnum<ImgMode>(comboxInpaintMode.Text, stringMap: Strings.InpaintMode) == ImgMode.InitializationImage);
 
             if (control == panelEmbeddings)
                 return implementation.Supports(Feature.Embeddings) && comboxEmbeddingList.Items.Count > 0;
 
             if (control == textboxClipsegMask)
-                return false; // return (ImgMode)comboxInpaintMode.SelectedIndex == ImgMode.TextMask;
+                return false; // return ParseUtils.GetEnum<ImgMode>(comboxInpaintMode.Text, stringMap: Strings.InpaintMode) == ImgMode.TextMask;
 
             if (control == panelResizeGravity || control == labelResChange)
-                return comboxInpaintMode.Visible && (ImgMode)comboxInpaintMode.SelectedIndex == ImgMode.Outpainting;
+                return comboxInpaintMode.Visible && ParseUtils.GetEnum<ImgMode>(comboxInpaintMode.Text, stringMap: Strings.InpaintMode) == ImgMode.Outpainting;
 
             if (control == btnResetRes)
                 return labelResChange.Visible && labelResChange.Text.IsNotEmpty();
@@ -91,10 +91,13 @@ namespace StableDiffusionGui.Forms
                 return implementation == Implementation.Comfy && !AnyInits;
 
             if(control == panelControlnet)
-                return ControlnetAvailable(implementation) && (ImgMode)comboxInpaintMode.SelectedIndex == ImgMode.Controlnet && comboxControlnet.Items.Count > 0;
+                return ControlnetAvailable(implementation) && ParseUtils.GetEnum<ImgMode>(comboxInpaintMode.Text, stringMap: Strings.InpaintMode) == ImgMode.Controlnet && comboxControlnet.Items.Count > 0;
 
             if (control == panelModelSettings)
                 return new[] { Implementation.InvokeAi, Implementation.Comfy }.Contains(implementation);
+
+            if(control == comboxControlnetSlot)
+                return comboxInpaintMode.Visible && ParseUtils.GetEnum<ImgMode>(comboxInpaintMode.Text, stringMap: Strings.InpaintMode) == ImgMode.Controlnet;
 
             return false;
         }
@@ -116,7 +119,7 @@ namespace StableDiffusionGui.Forms
             if (imp == Implementation.InstructPixToPix)
                 return false;
 
-            if ((ImgMode)comboxInpaintMode.SelectedIndex != ImgMode.InitializationImage)
+            if (ParseUtils.GetEnum<ImgMode>(comboxInpaintMode.Text, stringMap: Strings.InpaintMode) != ImgMode.InitializationImage)
                 return false;
 
             bool img2img = MainUi.CurrentInitImgPaths.Any();

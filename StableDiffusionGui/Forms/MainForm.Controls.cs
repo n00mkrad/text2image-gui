@@ -149,7 +149,7 @@ namespace StableDiffusionGui.Forms
 
             // Panel visibility
             SetVisibility(new Control[] { panelBaseImg, panelPromptNeg, panelEmbeddings, panelRefineStart, panelInitImgStrength, panelInpainting, panelScaleImg, panelRes, panelSampler, panelSeamless, panelSymmetry, checkboxHiresFix,
-                textboxClipsegMask, panelResizeGravity, labelResChange, btnResetRes, checkboxShowInitImg, panelModel, panelLoras, panelModel2, panelUpscaling, panelControlnet, panelModelSettings }, imp);
+                textboxClipsegMask, panelResizeGravity, comboxControlnetSlot, labelResChange, btnResetRes, checkboxShowInitImg, panelModel, panelLoras, panelModel2, panelUpscaling, panelControlnet, panelModelSettings }, imp);
 
             bool adv = Config.Instance.AdvancedUi;
             upDownIterations.Maximum = !adv ? Config.IniInstance.IterationsMax : Config.IniInstance.IterationsMax * 10;

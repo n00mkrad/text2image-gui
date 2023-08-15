@@ -56,6 +56,9 @@ namespace StableDiffusionGui.Io
         {
             for (int attempt = 1; attempt <= maxAttempts; attempt++)
             {
+                if (!_cache.ContainsKey(path))
+                    return false;
+
                 if (_cache.TryRemove(path, out Image image))
                 {
                     image.Dispose();
