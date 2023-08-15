@@ -89,7 +89,7 @@ namespace StableDiffusionGui.Forms
             comboxUpscaleMode.SelectedIndexChanged += (s, e) => { RefreshUpscaleUi(true); };
             updownUpscaleFactor.ValueChanged += (s, e) => { ValidateResolution(); };
             comboxControlnetSlot.SelectedIndexChanged += (s, e) => ControlnetSlotChanged();
-            comboxModelArch.SelectedIndexChanged += (s, e) => { SetVisibility(new[] { panelModel2, panelRefineStart }); };
+            comboxModelArch.SelectedIndexChanged += (s, e) => { SetVisibility(new[] { panelModel2, panelRefineStart }, Config.Instance.Implementation); };
         }
 
         public void LoadControls()
@@ -349,7 +349,7 @@ namespace StableDiffusionGui.Forms
 
         private void ResolutionChanged()
         {
-            SetVisibility(new Control[] { checkboxHiresFix, labelResChange });
+            SetVisibility(new Control[] { checkboxHiresFix, labelResChange }, Config.Instance.Implementation);
 
             int w = comboxResW.GetInt();
             int h = comboxResH.GetInt();

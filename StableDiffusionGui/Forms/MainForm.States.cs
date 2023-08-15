@@ -81,11 +81,11 @@ namespace StableDiffusionGui.Forms
             if (control == panelLoras)
                 return implementation.Supports(Feature.Lora) && gridLoras.Rows.Count > 0;
 
-            if (control == panelRefineStart)
-                return implementation == Implementation.Comfy && ShouldControlBeVisible(panelModel2);
-
             if (control == panelModel2)
                 return Model2Available(implementation);
+
+            if (control == panelRefineStart)
+                return implementation == Implementation.Comfy && ShouldControlBeVisible(panelModel2);
 
             if (control == panelUpscaling)
                 return implementation == Implementation.Comfy && !AnyInits;
