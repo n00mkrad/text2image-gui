@@ -369,17 +369,18 @@ namespace StableDiffusionGui.Implementations
 
         public async Task Cancel()
         {
-            List<string> lastLogLines = Logger.GetLastLines(Constants.Lognames.Sd, 15);
+            List<string> lastLogLines = Logger.GetLastLines(Constants.Lognames.Sd, 20);
+            bool startingUp = LastMessages.Any(s => s.Contains("Total VRAM") && !s.Contains("To see the GUI go to:"));
 
-            if(LastMessages.Any(s => s.Contains("To see the GUI go to:")))
+            if (!startingUp)
+            {
+                TtiProcess.KillAll(); // Kill process if initialization was not done yet
+            }
+            else
             {
                 var queueArgs = new Dictionary<string, bool> { { "clear", true } };
                 await ApiPost(queueArgs.ToJson(), ComfyEndpoint.Queue);
                 await ApiPost(endpoint: ComfyEndpoint.Interrupt);
-            }
-            else
-            {
-                TtiProcess.KillAll(); // Kill process if initialization was not done yet
             }
         }
 
