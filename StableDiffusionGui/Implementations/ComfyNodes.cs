@@ -54,6 +54,11 @@ namespace StableDiffusionGui.Implementations
                 NodeOutput = new object[] { node.Id.ToString(), outputIndex };
             }
 
+            public ComfyInput(INode node, int outIndex = 0)
+            {
+                NodeOutput = new object[] { node.Id.ToString(), outIndex };
+            }
+
             public object Get ()
             {
                 if (NodeOutput.Length == 2)
@@ -699,6 +704,30 @@ namespace StableDiffusionGui.Implementations
                 }
 
                 return new NodeInfo { Inputs = inputs, ClassType = classType };
+            }
+
+            public override string ToString()
+            {
+                return ToStringNode(this);
+            }
+        }
+
+        public class NmkdDualTextEncode : Node, INode
+        {
+            public string Text1;
+            public string Text2;
+            public ComfyInput Clip;
+
+            public NodeInfo GetNodeInfo()
+            {
+                var dict = new Dictionary<string, object>()
+                {
+                    { "text1", Text1 },
+                    { "text2", Text2 },
+                    { "clip", Clip.Get() },
+                };
+
+                return new NodeInfo { Inputs = dict, ClassType = nameof(NmkdDualTextEncode) };
             }
 
             public override string ToString()

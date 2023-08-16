@@ -123,26 +123,19 @@ namespace StableDiffusionGui.Implementations
                 model2.EmbeddingsDir = Io.Paths.ReturnDir(Config.Instance.EmbeddingsDir, true, true);
             }
 
-            var encodePosPromptBase = AddNode<CLIPTextEncode>(); // CLIP Encode Positive Prompt Base
-            encodePosPromptBase.Text = new ComfyInput(g.Prompt);
-            encodePosPromptBase.Clip = new ComfyInput(finalModelNode, OutType.Clip);
+            var encodePromptBase = AddNode<NmkdDualTextEncode>(); // CLIP Encode Negative Prompt Base
+            encodePromptBase.Text1 = g.Prompt;
+            encodePromptBase.Text2 = g.NegativePrompt;
+            encodePromptBase.Clip = new ComfyInput(finalModelNode, OutType.Clip);
 
-            var encodeNegPromptBase = AddNode<CLIPTextEncode>(); // CLIP Encode Negative Prompt Base
-            encodeNegPromptBase.Text = new ComfyInput(g.NegativePrompt);
-            encodeNegPromptBase.Clip = new ComfyInput(finalModelNode, OutType.Clip);
-
-            CLIPTextEncode encodePosPromptRefiner = null;
-            CLIPTextEncode encodeNegPromptRefiner = null;
+            NmkdDualTextEncode encodePromptRefiner = null;
 
             if (refine)
             {
-                encodePosPromptRefiner = AddNode<CLIPTextEncode>(); // CLIP Encode Positive Prompt Refiner
-                encodePosPromptRefiner.Text = new ComfyInput(g.Prompt);
-                encodePosPromptRefiner.Clip = new ComfyInput(model2, OutType.Clip);
-
-                encodeNegPromptRefiner = AddNode<CLIPTextEncode>(); // CLIP Encode Negative Prompt Refiner
-                encodeNegPromptRefiner.Text = new ComfyInput(g.NegativePrompt);
-                encodeNegPromptRefiner.Clip = new ComfyInput(model2, OutType.Clip);
+                encodePromptRefiner = AddNode<NmkdDualTextEncode>(); // CLIP Encode Negative Prompt Base
+                encodePromptRefiner.Text1 = g.Prompt;
+                encodePromptRefiner.Text2 = g.NegativePrompt;
+                encodePromptRefiner.Clip = new ComfyInput(model2, OutType.Clip);
             }
 
             if (g.InitImg.IsEmpty())
@@ -164,7 +157,7 @@ namespace StableDiffusionGui.Implementations
             }
 
             INode initImageNode = nodes.Last(); // Keep track of the init image to use
-            INode finalConditioningNode = encodePosPromptBase; // Keep track of the final conditioning node for sampling
+            INode finalConditioningNode = encodePromptBase; // Keep track of the final conditioning node for sampling
 
             for (int i = 0; i < g.Controlnets.Count; i++) // Apply ControlNets
             {
@@ -197,7 +190,7 @@ namespace StableDiffusionGui.Implementations
             samplerBase.AddNoise = true;
             samplerBase.Model = new ComfyInput(finalModelNode, OutType.Model);
             samplerBase.PositiveCond = new ComfyInput(finalConditioningNode, OutType.Conditioning);
-            samplerBase.NegativeCond = new ComfyInput(encodeNegPromptBase, OutType.Conditioning);
+            samplerBase.NegativeCond = new ComfyInput(encodePromptBase, 1);
             samplerBase.LatentImage = new ComfyInput(initImageNode, OutType.Latents);
             samplerBase.SamplerName = GetComfySampler(g.Sampler);
             samplerBase.Scheduler = GetComfyScheduler(g);
@@ -221,7 +214,7 @@ namespace StableDiffusionGui.Implementations
                 samplerHires.AddNoise = true;
                 samplerHires.Model = new ComfyInput(finalModelNode, OutType.Model);
                 samplerHires.PositiveCond = new ComfyInput(finalConditioningNode, OutType.Conditioning);
-                samplerHires.NegativeCond = new ComfyInput(encodeNegPromptBase, OutType.Conditioning);
+                samplerHires.NegativeCond = new ComfyInput(encodePromptBase, 1);
                 samplerHires.LatentImage = new ComfyInput(latentUpscale, OutType.Latents);
                 samplerHires.SamplerName = GetComfySampler(g.Sampler);
                 samplerHires.Scheduler = GetComfyScheduler(g);
@@ -239,8 +232,8 @@ namespace StableDiffusionGui.Implementations
                 var samplerRefiner = AddNode<NmkdKSampler>("SamplerRefiner"); // Sampler Refiner
                 samplerRefiner.AddNoise = false;
                 samplerRefiner.Model = new ComfyInput(model2, OutType.Model);
-                samplerRefiner.PositiveCond = new ComfyInput(encodePosPromptRefiner, OutType.Conditioning);
-                samplerRefiner.NegativeCond = new ComfyInput(encodeNegPromptRefiner, OutType.Conditioning);
+                samplerRefiner.PositiveCond = new ComfyInput(encodePromptRefiner, 0);
+                samplerRefiner.NegativeCond = new ComfyInput(encodePromptRefiner, 1);
                 samplerRefiner.LatentImage = new ComfyInput(finalLatents, OutType.Latents);
                 samplerRefiner.SamplerName = GetComfySampler(g.Sampler);
                 samplerRefiner.Scheduler = GetComfyScheduler(g);
