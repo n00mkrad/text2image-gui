@@ -508,6 +508,13 @@ namespace StableDiffusionGui.Implementations
                 cancelMode = TextToImage.CancelMode.ForceKill;
             }
 
+            // Error: Incompatible model
+            if (!_hasErrored && !TextToImage.Canceled && line.StartsWith("Failed to load model:"))
+            {
+                errMsg = $"{line}\n\nIt might be incompatible.";
+                _hasErrored = true;
+            }
+
             // Error: Shapes
             if (!_hasErrored && !TextToImage.Canceled && line.Contains("shapes cannot be multiplied"))
             {

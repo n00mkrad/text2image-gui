@@ -130,11 +130,6 @@ namespace StableDiffusionGui.Io
             if (type != (Enums.Models.Type)(-1))
                 models = models.Where(m => m.Type == type);
 
-            // if (implementation == Implementation.Comfy)
-            //     models = models.Where(m => m.Size > 5 * 1024 * 1024 * 1024L && m.Name.Lower().Contains("xl"));
-            // else
-            //     models = models.Where(m => (m.Size > 5 * 1024 * 1024 * 1024L && m.Name.Lower().Contains("xl")) == false);
-
             List<Model> distinctOrderedList = models.DistinctBy(x => x.Name).OrderBy(x => x.FormatIndependentName).ToList();
             if (Program.Debug) Logger.Log($"GetModels took {sw.ElapsedMilliseconds} ms", true);
             return distinctOrderedList;
@@ -375,16 +370,28 @@ namespace StableDiffusionGui.Io
 
         public static ModelArch DetectModelType(string modelType, string unetConfigJson)
         {
+
+
             JsonSerializerSettings settings = new JsonSerializerSettings
             {
                 ContractResolver = new DefaultContractResolver { NamingStrategy = new SnakeCaseNamingStrategy { ProcessDictionaryKeys = true } },
                 MissingMemberHandling = MissingMemberHandling.Ignore
             };
 
-            unetConfigJson = unetConfigJson.Replace("True", "true").Replace("False", "false").Replace(Constants.NoneMdl, "-1");
-            UnetConfig config = JsonConvert.DeserializeObject<UnetConfig>(unetConfigJson, settings);
+            unetConfigJson = unetConfigJson.Replace("True", "true").Replace("False", "false").Replace("None", "-1");
 
-            if(config.AttentionResolutions != null && config.AttentionResolutions.Count == 2 && config.AdmInChannels > 0) // Must be SD XL
+            var config = new UnetConfig();
+
+            try
+            {
+                config = JsonConvert.DeserializeObject<UnetConfig>(unetConfigJson, settings);
+            }
+            catch
+            {
+                return ModelArch.Sd1; // Assume Diffusers, which can currently only load SD1
+            }
+
+            if (config.AttentionResolutions != null && config.AttentionResolutions.Count == 2 && config.AdmInChannels > 0) // Must be SD XL
             {
                 if (config.ContextDim >= 2048)
                     return ModelArch.SdXlBase;

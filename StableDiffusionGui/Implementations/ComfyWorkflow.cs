@@ -138,25 +138,33 @@ namespace StableDiffusionGui.Implementations
                 encodePromptRefiner.Clip = new ComfyInput(model2, OutType.Clip);
             }
 
-            if (g.InitImg.IsEmpty())
+            INode initImageNode = null; // Keep track of the init image to use
+            INode finalLatentsNode = null;
+
+            if (g.InitImg.IsNotEmpty())
+            {
+                var loadInitImg = AddNode<NmkdImageLoader>(); // Load Init Image
+                loadInitImg.ImagePath = g.MaskPath.IsNotEmpty() ? g.MaskPath : g.InitImg;
+                initImageNode = loadInitImg;
+            }
+
+            if (!img2img)
             {
                 var emptyLatentImg = AddNode<EmptyLatentImage>(); // Empty Latent Image (T2I)
                 emptyLatentImg.Width = baseWidth;
                 emptyLatentImg.Height = baseHeight;
+                finalLatentsNode = emptyLatentImg;
             }
             else
             {
-                var loadInitImg = AddNode<NmkdImageLoader>(); // Load Init Image
-                loadInitImg.ImagePath = g.MaskPath.IsNotEmpty() ? g.MaskPath : g.InitImg;
-
                 var encodeInitImg = AddNode<NmkdVaeEncode>(); // Encode Init Image (I2I)
-                encodeInitImg.Image = new ComfyInput(loadInitImg, OutType.Image);
-                encodeInitImg.Mask = new ComfyInput(loadInitImg, OutType.Mask);
+                encodeInitImg.Image = new ComfyInput(initImageNode, OutType.Image);
+                encodeInitImg.Mask = new ComfyInput(initImageNode, OutType.Mask);
                 encodeInitImg.Vae = new ComfyInput(model1, OutType.Vae);
                 encodeInitImg.UseMask = g.MaskPath.IsNotEmpty();
+                finalLatentsNode = encodeInitImg;
             }
 
-            INode initImageNode = nodes.Last(); // Keep track of the init image to use
             INode finalConditioningNode = encodePromptBase; // Keep track of the final conditioning node for sampling
 
             for (int i = 0; i < g.Controlnets.Count; i++) // Apply ControlNets
@@ -191,7 +199,7 @@ namespace StableDiffusionGui.Implementations
             samplerBase.Model = new ComfyInput(finalModelNode, OutType.Model);
             samplerBase.PositiveCond = new ComfyInput(finalConditioningNode, OutType.Conditioning);
             samplerBase.NegativeCond = new ComfyInput(encodePromptBase, 1);
-            samplerBase.LatentImage = new ComfyInput(initImageNode, OutType.Latents);
+            samplerBase.LatentImage = new ComfyInput(finalLatentsNode, OutType.Latents);
             samplerBase.SamplerName = GetComfySampler(g.Sampler);
             samplerBase.Scheduler = GetComfyScheduler(g);
             samplerBase.Seed = new ComfyInput(g.Seed);
@@ -201,7 +209,7 @@ namespace StableDiffusionGui.Implementations
             samplerBase.EndStep = new ComfyInput(baseSteps);
             samplerBase.ReturnLeftoverNoise = refine;
             samplerBase.Denoise = img2img ? g.InitStrength : 1.0f;
-            INode finalLatents = samplerBase;
+            finalLatentsNode = samplerBase;
 
             if (upscale)
             {
@@ -224,7 +232,7 @@ namespace StableDiffusionGui.Implementations
                 samplerHires.StartStep = new ComfyInput(0);
                 samplerHires.EndStep = new ComfyInput(baseSteps);
                 samplerHires.ReturnLeftoverNoise = refine;
-                finalLatents = samplerHires;
+                finalLatentsNode = samplerHires;
             }
 
             if (refine)
@@ -234,7 +242,7 @@ namespace StableDiffusionGui.Implementations
                 samplerRefiner.Model = new ComfyInput(model2, OutType.Model);
                 samplerRefiner.PositiveCond = new ComfyInput(encodePromptRefiner, 0);
                 samplerRefiner.NegativeCond = new ComfyInput(encodePromptRefiner, 1);
-                samplerRefiner.LatentImage = new ComfyInput(finalLatents, OutType.Latents);
+                samplerRefiner.LatentImage = new ComfyInput(finalLatentsNode, OutType.Latents);
                 samplerRefiner.SamplerName = GetComfySampler(g.Sampler);
                 samplerRefiner.Scheduler = GetComfyScheduler(g);
                 samplerRefiner.Seed = new ComfyInput(g.Seed);
@@ -243,12 +251,12 @@ namespace StableDiffusionGui.Implementations
                 samplerRefiner.StartStep = new ComfyInput(baseSteps);
                 samplerRefiner.EndStep = new ComfyInput(1000);
                 samplerRefiner.ReturnLeftoverNoise = false;
-                finalLatents = samplerRefiner;
+                finalLatentsNode = samplerRefiner;
             }
 
             var vaeDecode = AddNode<VAEDecode>(); // Final VAE Decode
             vaeDecode.Vae = new ComfyInput(model1, OutType.Vae);
-            vaeDecode.Latents = new ComfyInput(finalLatents, OutType.Latents);
+            vaeDecode.Latents = new ComfyInput(finalLatentsNode, OutType.Latents);
 
             INode finalImageNode = vaeDecode; // Keep track of the final image output node to use
 

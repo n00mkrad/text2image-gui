@@ -40,7 +40,7 @@ namespace StableDiffusionGui.Data
             else if (imp == Enums.StableDiffusion.Implementation.Comfy)
             {
                 Backend = Enums.Ai.Backend.Cuda;
-                SupportedModelFormats = new Format[] { Format.Safetensors, Format.Pytorch };
+                SupportedModelFormats = new Format[] { Format.Safetensors, Format.Pytorch, Format.Diffusers };
                 SupportedFeatures = new List<Feature> { Feature.InteractiveCli, Feature.CustomModels, Feature.NegPrompts, Feature.MultipleSamplers, Feature.Img2Img, Feature.HiresFix, Feature.CustomVae, Feature.Lora, Feature.Embeddings, Feature.NativeInpainting, Feature.Controlnet, Feature.HalfPrecisionToggle, Feature.DeviceSelection };
             }
         }
