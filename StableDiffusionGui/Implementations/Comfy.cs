@@ -80,6 +80,7 @@ namespace StableDiffusionGui.Implementations
                 Sampler = s.Sampler,
                 Upscaler = Config.Instance.UpscaleEnable ? Models.GetUpscalers().Where(m => m.Name == Config.Instance.EsrganModel).FirstOrDefault().FullName : "",
                 ClipSkip = (Config.Instance.ModelSettings.Get(model.Name, new Models.ModelSettings()).ClipSkip * -1) - 1,
+                SaveOriginalAndUpscale = Config.Instance.SaveUnprocessedImages,
             };
 
             foreach (ControlnetInfo cnet in s.Controlnets.Where(cn => cn != null && cn.Strength > 0.001f && cn.Model != Constants.NoneMdl))

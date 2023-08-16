@@ -38,6 +38,7 @@ namespace StableDiffusionGui.Implementations
             public Size TargetResolution;
             public Sampler Sampler;
             public int ClipSkip = -1;
+            public bool SaveOriginalAndUpscale;
 
             public GenerationInfo GetSerializeClone ()
             {
@@ -63,6 +64,7 @@ namespace StableDiffusionGui.Implementations
                     TargetResolution = TargetResolution,
                     Sampler = Sampler,
                     ClipSkip = ClipSkip,
+                    SaveOriginalAndUpscale = SaveOriginalAndUpscale,
                 };
             }
 

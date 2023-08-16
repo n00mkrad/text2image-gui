@@ -32,7 +32,7 @@ namespace StableDiffusionGui.Implementations
             }
             else if (outType == OutType.Mask)
             {
-                if (nodeClass is NmkdImageLoader) return 2;
+                if (nodeClass is NmkdImageLoader) return 1;
             }
 
             return 0;
@@ -410,6 +410,7 @@ namespace StableDiffusionGui.Implementations
         public class NmkdCheckpointLoader : Node, INode
         {
             public string ModelPath;
+            public int ClipSkip;
             public bool LoadVae;
             public string VaePath;
             public string EmbeddingsDir;
@@ -422,6 +423,7 @@ namespace StableDiffusionGui.Implementations
                     { "load_vae", LoadVae ? "enable" : "disable" },
                     { "vae_path", VaePath },
                     { "embeddings_dir", EmbeddingsDir },
+                    { "clip_skip", ClipSkip },
                 };
 
                 return new NodeInfo
