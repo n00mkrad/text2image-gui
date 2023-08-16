@@ -466,6 +466,30 @@ namespace StableDiffusionGui
             }
         }
 
+        public static void SafeInvoke(this Control control, Action action)
+        {
+            if (control.InvokeRequired)
+            {
+                control.Invoke(action);
+            }
+            else
+            {
+                action();
+            }
+        }
+
+        public static string GetTextSafe(this Control control)
+        {
+            if (control.InvokeRequired)
+            {
+                return (string)control.Invoke(new Func<string>(() => control.Text));
+            }
+            else
+            {
+                return control.Text;
+            }
+        }
+
         public static EasyDict<V, K> SwapKeysValues<V, K>(this EasyDict<K, V> dict)
         {
             EasyDict<V, K> result = new EasyDict<V, K>();

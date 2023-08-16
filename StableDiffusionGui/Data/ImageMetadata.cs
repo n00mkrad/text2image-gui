@@ -290,6 +290,10 @@ namespace StableDiffusionGui.Data
             var resolver = assumeSnakeCase ? new DefaultContractResolver { NamingStrategy = new SnakeCaseNamingStrategy { ProcessDictionaryKeys = true } } : null;
 
             var gi = info.FromJson<ComfyData.GenerationInfo>(NullValueHandling.Ignore, DefaultValueHandling.Populate, true, true, resolver);
+
+            if (gi == null)
+                return;
+
             Model = gi.Model;
             Prompt = gi.Prompt;
             NegativePrompt= gi.NegativePrompt;

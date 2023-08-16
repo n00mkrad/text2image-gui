@@ -160,8 +160,9 @@ namespace StableDiffusionGui.Ui
 
         public static Dictionary<string, string> UpscaleModes = new Dictionary<string, string>
         {
-            { Enums.StableDiffusion.LatentUpscaleMode.Factor.ToString(), "Set Factor" },
-            { Enums.StableDiffusion.LatentUpscaleMode.TargetRes.ToString(), "Set Resolution" },
+            { Enums.StableDiffusion.UpscaleMode.LatentsFactor.ToString(), "Latent Upscaling Factor" },
+            { Enums.StableDiffusion.UpscaleMode.LatentsTargetRes.ToString(), "Latent Upscaling Resolution" },
+            { Enums.StableDiffusion.UpscaleMode.UltimeUpsFactor.ToString(), "Ultimate SD Upscaling Factor" },
         };
 
         public static Dictionary<string, string> ImagePreprocessors = new Dictionary<string, string>()

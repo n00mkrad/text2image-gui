@@ -152,7 +152,7 @@ namespace StableDiffusionGui.Io
 
             foreach (var mdlName in ModelSettings.Keys)
             {
-                if (ModelSettings[mdlName].Arch != Enums.StableDiffusion.ModelArch.Automatic && ModelSettings[mdlName].ClipSkip != 0)
+                if (ModelSettings[mdlName].Arch != Enums.StableDiffusion.ModelArch.Automatic || ModelSettings[mdlName].ClipSkip != 0)
                     newModelSettings.Add(mdlName, ModelSettings[mdlName]);
             }
 

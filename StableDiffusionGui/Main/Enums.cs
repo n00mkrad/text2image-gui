@@ -29,7 +29,8 @@ namespace StableDiffusionGui.Main
             public enum SeamlessMode { Disabled, SeamlessBoth, SeamlessVert, SeamlessHor }
             public enum SymmetryMode { Disabled, SymVert, SymHor, SymBoth }
             public enum ImgMode { InitializationImage, ImageMask, Outpainting, Controlnet }
-            public enum LatentUpscaleMode { Disabled, Factor, TargetRes }
+            public enum UpscaleMode { Disabled, LatentsFactor, LatentsTargetRes, UltimeUpsFactor }
+            public enum UpscaleMethod { Latent, UltimateSd }
             public enum ImagePreprocessor { None, Canny, LineArtHed, LineArt, LineArtAnime, LineArtMangaAnime, DepthMap, Blur, Pixelate, OpenPose }
         }
 

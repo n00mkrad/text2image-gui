@@ -73,6 +73,7 @@ namespace StableDiffusionGui.Implementations
             {
                 BaseResolution = s.Res,
                 TargetResolution = s.UpscaleTargetRes,
+                UpscaleMethod = s.UpscaleMethod,
                 NegativePrompt = s.NegativePrompt,
                 Model = model.FullName,
                 ModelRefiner = refineModel == null ? "" : refineModel.FullName,
@@ -372,7 +373,7 @@ namespace StableDiffusionGui.Implementations
             List<string> lastLogLines = Logger.GetLastLines(Constants.Lognames.Sd, 20);
             bool startingUp = LastMessages.Any(s => s.Contains("Total VRAM") && !s.Contains("To see the GUI go to:"));
 
-            if (!startingUp)
+            if (startingUp)
             {
                 TtiProcess.KillAll(); // Kill process if initialization was not done yet
             }
@@ -471,7 +472,7 @@ namespace StableDiffusionGui.Implementations
                     cancelMode = TextToImage.CancelMode.ForceKill;
                 }
 
-                if (mdlArch != ModelArch.SdXlRefine)
+                if (Program.MainForm.comboxModel.GetTextSafe() == filename && mdlArch != ModelArch.SdXlRefine)
                 {
                     Program.MainForm.comboxModelArch.SetWithText(Config.Instance.ModelSettings[filename].Arch.ToString(), false, Strings.ModelArch);
                     Size res = Models.GetDefaultRes(mdlArch);

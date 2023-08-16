@@ -36,6 +36,7 @@ namespace StableDiffusionGui.Implementations
             public string MaskPath;
             public Size BaseResolution;
             public Size TargetResolution;
+            public UpscaleMethod UpscaleMethod = (UpscaleMethod)(-1);
             public Sampler Sampler;
             public int ClipSkip = -1;
             public bool SaveOriginalAndUpscale;
@@ -62,6 +63,7 @@ namespace StableDiffusionGui.Implementations
                     MaskPath = MaskPath,
                     BaseResolution = BaseResolution,
                     TargetResolution = TargetResolution,
+                    UpscaleMethod = UpscaleMethod,
                     Sampler = Sampler,
                     ClipSkip = ClipSkip,
                     SaveOriginalAndUpscale = SaveOriginalAndUpscale,

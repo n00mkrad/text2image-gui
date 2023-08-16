@@ -38,7 +38,7 @@ namespace StableDiffusionGui.Forms
         {
             // Fill data
             comboxSampler.FillFromEnum<Sampler>(Strings.Samplers, 0);
-            comboxUpscaleMode.FillFromEnum<LatentUpscaleMode>(Strings.UpscaleModes, 0);
+            comboxUpscaleMode.FillFromEnum<UpscaleMode>(Strings.UpscaleModes, 0);
             comboxSeamless.FillFromEnum<SeamlessMode>(Strings.SeamlessMode, 0);
             comboxSymmetry.FillFromEnum<SymmetryMode>(Strings.SymmetryMode, 0);
             comboxInpaintMode.FillFromEnum<ImgMode>(Strings.InpaintMode, 0);
@@ -650,16 +650,17 @@ namespace StableDiffusionGui.Forms
 
             try
             {
-                LatentUpscaleMode mode = ParseUtils.GetEnum<LatentUpscaleMode>(comboxUpscaleMode.Text, true, Strings.UpscaleModes);
-                new Control[] { labelUpscale, updownUpscaleResultW, updownUpscaleResultH, labelUpscaleX }.SetVisible(mode != LatentUpscaleMode.Disabled);
-                labelUpscale.Text = mode == LatentUpscaleMode.Factor ? "Factor:" : "Target Resolution:";
-                updownUpscaleFactor.SetVisible(mode == LatentUpscaleMode.Factor);
-                labelUpscaleEquals.SetVisible(mode == LatentUpscaleMode.Factor);
-                updownUpscaleResultW.Enabled = mode == LatentUpscaleMode.TargetRes;
-                updownUpscaleResultH.Enabled = mode == LatentUpscaleMode.TargetRes;
+                UpscaleMode mode = ParseUtils.GetEnum<UpscaleMode>(comboxUpscaleMode.Text, true, Strings.UpscaleModes);
+                new Control[] { labelUpscale, updownUpscaleResultW, updownUpscaleResultH, labelUpscaleX }.SetVisible(mode != UpscaleMode.Disabled);
+                bool factor = mode == UpscaleMode.LatentsFactor || mode == UpscaleMode.UltimeUpsFactor;
+                labelUpscale.Text = factor ? "Factor:" : "Target Resolution:";
+                updownUpscaleFactor.SetVisible(factor);
+                labelUpscaleEquals.SetVisible(factor);
+                updownUpscaleResultW.Enabled = mode == UpscaleMode.LatentsTargetRes;
+                updownUpscaleResultH.Enabled = mode == UpscaleMode.LatentsTargetRes;
                 ValidateResolution();
 
-                if (mode == LatentUpscaleMode.Disabled)
+                if (mode == UpscaleMode.Disabled)
                 {
                     updownUpscaleResultW.Value = comboxResW.GetInt().Clamp((int)updownUpscaleResultW.Minimum, (int)updownUpscaleResultW.Maximum);
                     updownUpscaleResultH.Value = comboxResH.GetInt().Clamp((int)updownUpscaleResultW.Minimum, (int)updownUpscaleResultW.Maximum);

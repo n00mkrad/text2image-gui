@@ -103,19 +103,19 @@ namespace StableDiffusionGui.Forms
 
                 if (factorW == factorH && factorW.Length <= 4) // Check if factor is the same on both axes & max 4 decimal places
                 {
-                    comboxUpscaleMode.SetWithEnum(LatentUpscaleMode.Factor, stringMap: Strings.UpscaleModes);
+                    comboxUpscaleMode.SetWithEnum(UpscaleMode.LatentsFactor, stringMap: Strings.UpscaleModes);
                     updownUpscaleFactor.Value = (decimal)factorW.GetFloat();
                 }
                 else
                 {
-                    comboxUpscaleMode.SetWithEnum(LatentUpscaleMode.TargetRes, stringMap: Strings.UpscaleModes);
+                    comboxUpscaleMode.SetWithEnum(UpscaleMode.LatentsTargetRes, stringMap: Strings.UpscaleModes);
                     updownUpscaleResultW.Value = resUpscale.Width;
                     updownUpscaleResultH.Value = resUpscale.Height;
                 }
             }
             else
             {
-                comboxUpscaleMode.SetWithEnum(LatentUpscaleMode.Disabled, stringMap: Strings.UpscaleModes);
+                comboxUpscaleMode.SetWithEnum(UpscaleMode.Disabled, stringMap: Strings.UpscaleModes);
             }
         }
 
@@ -173,6 +173,9 @@ namespace StableDiffusionGui.Forms
                 ScalesImg = MainUi.GetExtraValues(textboxExtraScalesImg.Text, sliderScaleImg.ActualValueFloat).ToArray(),
                 Loras = GetLoras(),
             };
+
+            if(settings.UpscaleTargetRes != settings.Res)
+                settings.UpscaleMethod = ParseUtils.GetEnum<UpscaleMode>(comboxUpscaleMode.Text, stringMap: Strings.UpscaleModes) == UpscaleMode.UltimeUpsFactor ? UpscaleMethod.UltimateSd : UpscaleMethod.Latent;
 
             return settings;
         }

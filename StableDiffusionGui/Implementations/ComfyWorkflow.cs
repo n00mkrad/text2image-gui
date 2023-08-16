@@ -123,7 +123,7 @@ namespace StableDiffusionGui.Implementations
                 model2.EmbeddingsDir = Io.Paths.ReturnDir(Config.Instance.EmbeddingsDir, true, true);
             }
 
-            var encodePromptBase = AddNode<NmkdDualTextEncode>(); // CLIP Encode Negative Prompt Base
+            var encodePromptBase = AddNode<NmkdDualTextEncode>(); // CLIP Encode Prompt Base
             encodePromptBase.Text1 = g.Prompt;
             encodePromptBase.Text2 = g.NegativePrompt;
             encodePromptBase.Clip = new ComfyInput(finalModelNode, OutType.Clip);
@@ -132,7 +132,7 @@ namespace StableDiffusionGui.Implementations
 
             if (refine)
             {
-                encodePromptRefiner = AddNode<NmkdDualTextEncode>(); // CLIP Encode Negative Prompt Base
+                encodePromptRefiner = AddNode<NmkdDualTextEncode>(); // CLIP Encode Prompt Refiner
                 encodePromptRefiner.Text1 = g.Prompt;
                 encodePromptRefiner.Text2 = g.NegativePrompt;
                 encodePromptRefiner.Clip = new ComfyInput(model2, OutType.Clip);
@@ -194,30 +194,57 @@ namespace StableDiffusionGui.Implementations
                 finalConditioningNode = nodes.Last();
             }
 
-            var samplerBase = AddNode<NmkdKSampler>("SamplerBase"); // Sampler Base
-            samplerBase.AddNoise = true;
-            samplerBase.Model = new ComfyInput(finalModelNode, OutType.Model);
-            samplerBase.PositiveCond = new ComfyInput(finalConditioningNode, OutType.Conditioning);
-            samplerBase.NegativeCond = new ComfyInput(encodePromptBase, 1);
-            samplerBase.LatentImage = new ComfyInput(finalLatentsNode, OutType.Latents);
-            samplerBase.SamplerName = GetComfySampler(g.Sampler);
-            samplerBase.Scheduler = GetComfyScheduler(g);
-            samplerBase.Seed = new ComfyInput(g.Seed);
-            samplerBase.StepsTotal = new ComfyInput(g.Steps);
-            samplerBase.Cfg = new ComfyInput(g.Scale);
-            samplerBase.StartStep = new ComfyInput(0);
-            samplerBase.EndStep = new ComfyInput(baseSteps);
-            samplerBase.ReturnLeftoverNoise = refine;
-            samplerBase.Denoise = img2img ? g.InitStrength : 1.0f;
-            finalLatentsNode = samplerBase;
+            INode samplerNode = null;
 
-            if (upscale)
+            if (refine)
+            {
+                var samplerBase = AddNode<NmkdHybridSampler>("SamplerHybrid"); // Sampler Hybrid
+                samplerBase.AddNoise = true;
+                samplerBase.Seed = g.Seed;
+                samplerBase.Steps = g.Steps;
+                samplerBase.BaseSteps = baseSteps;
+                samplerBase.Cfg = g.Scale;
+                samplerBase.SamplerName = GetComfySampler(g.Sampler);
+                samplerBase.Scheduler = GetComfyScheduler(g);
+                samplerBase.Model = new ComfyInput(finalModelNode, OutType.Model);
+                samplerBase.ModelRefiner = new ComfyInput(model2, OutType.Model);
+                samplerBase.PositiveCond = new ComfyInput(finalConditioningNode, 0);
+                samplerBase.NegativeCond = new ComfyInput(encodePromptBase, 1);
+                samplerBase.RefinerPositiveCond = new ComfyInput(encodePromptRefiner, 0);
+                samplerBase.RefinerNegativeCond = new ComfyInput(encodePromptRefiner, 1);
+                samplerBase.LatentImage = new ComfyInput(finalLatentsNode, OutType.Latents);
+                // samplerBase.Denoise = img2img ? g.InitStrength : 1.0f;
+                finalLatentsNode = samplerBase;
+                samplerNode = samplerBase;
+            }
+            else
+            {
+                var samplerBase = AddNode<NmkdKSampler>("SamplerBase"); // Sampler Base
+                samplerBase.AddNoise = true;
+                samplerBase.Model = new ComfyInput(finalModelNode, OutType.Model);
+                samplerBase.PositiveCond = new ComfyInput(finalConditioningNode, OutType.Conditioning);
+                samplerBase.NegativeCond = new ComfyInput(encodePromptBase, 1);
+                samplerBase.LatentImage = new ComfyInput(finalLatentsNode, OutType.Latents);
+                samplerBase.SamplerName = GetComfySampler(g.Sampler);
+                samplerBase.Scheduler = GetComfyScheduler(g);
+                samplerBase.Seed = new ComfyInput(g.Seed);
+                samplerBase.StepsTotal = new ComfyInput(g.Steps);
+                samplerBase.Cfg = new ComfyInput(g.Scale);
+                samplerBase.StartStep = new ComfyInput(0);
+                samplerBase.EndStep = new ComfyInput(baseSteps);
+                samplerBase.ReturnLeftoverNoise = refine;
+                samplerBase.Denoise = img2img ? g.InitStrength : 1.0f;
+                finalLatentsNode = samplerBase;
+                samplerNode = samplerBase;
+            }
+
+            if (g.UpscaleMethod == Enums.StableDiffusion.UpscaleMethod.Latent) // Latent upscaling
             {
                 var latentUpscale = AddNode<LatentUpscale>(); // Latent Upscale
                 latentUpscale.Width = g.TargetResolution.Width;
                 latentUpscale.Height = g.TargetResolution.Height;
-                latentUpscale.Latents = new ComfyInput(samplerBase, OutType.Latents);
-
+                latentUpscale.Latents = new ComfyInput(samplerNode, OutType.Latents);
+                
                 var samplerHires = AddNode<NmkdKSampler>("SamplerHires"); // Sampler Hi-Res
                 samplerHires.AddNoise = true;
                 samplerHires.Model = new ComfyInput(finalModelNode, OutType.Model);
@@ -225,33 +252,11 @@ namespace StableDiffusionGui.Implementations
                 samplerHires.NegativeCond = new ComfyInput(encodePromptBase, 1);
                 samplerHires.LatentImage = new ComfyInput(latentUpscale, OutType.Latents);
                 samplerHires.SamplerName = GetComfySampler(g.Sampler);
-                samplerHires.Scheduler = GetComfyScheduler(g);
+                samplerHires.Scheduler = "simple"; // GetComfyScheduler(g);
                 samplerHires.Seed = new ComfyInput(g.Seed);
-                samplerHires.StepsTotal = new ComfyInput(g.Steps);
+                samplerHires.StepsTotal = new ComfyInput((g.Steps * 0.5f).RoundToInt());
                 samplerHires.Cfg = new ComfyInput(g.Scale);
-                samplerHires.StartStep = new ComfyInput(0);
-                samplerHires.EndStep = new ComfyInput(baseSteps);
-                samplerHires.ReturnLeftoverNoise = refine;
                 finalLatentsNode = samplerHires;
-            }
-
-            if (refine)
-            {
-                var samplerRefiner = AddNode<NmkdKSampler>("SamplerRefiner"); // Sampler Refiner
-                samplerRefiner.AddNoise = false;
-                samplerRefiner.Model = new ComfyInput(model2, OutType.Model);
-                samplerRefiner.PositiveCond = new ComfyInput(encodePromptRefiner, 0);
-                samplerRefiner.NegativeCond = new ComfyInput(encodePromptRefiner, 1);
-                samplerRefiner.LatentImage = new ComfyInput(finalLatentsNode, OutType.Latents);
-                samplerRefiner.SamplerName = GetComfySampler(g.Sampler);
-                samplerRefiner.Scheduler = GetComfyScheduler(g);
-                samplerRefiner.Seed = new ComfyInput(g.Seed);
-                samplerRefiner.StepsTotal = new ComfyInput(g.Steps);
-                samplerRefiner.Cfg = new ComfyInput(g.Scale);
-                samplerRefiner.StartStep = new ComfyInput(baseSteps);
-                samplerRefiner.EndStep = new ComfyInput(1000);
-                samplerRefiner.ReturnLeftoverNoise = false;
-                finalLatentsNode = samplerRefiner;
             }
 
             var vaeDecode = AddNode<VAEDecode>(); // Final VAE Decode
@@ -259,6 +264,51 @@ namespace StableDiffusionGui.Implementations
             vaeDecode.Latents = new ComfyInput(finalLatentsNode, OutType.Latents);
 
             INode finalImageNode = vaeDecode; // Keep track of the final image output node to use
+
+            if(g.UpscaleMethod == Enums.StableDiffusion.UpscaleMethod.UltimateSd) // Ultimate SD Upscaler
+            {
+                var upscalerModelNode = model1;
+                var conditioningNode = encodePromptBase;
+
+                if(Config.Instance.ModelSettings.Get(Path.GetFileName(g.Model), new Models.ModelSettings()).Arch == Enums.StableDiffusion.ModelArch.SdXlBase) // Load SD1 model as we can't use XL for USDU yet
+                {
+                    upscalerModelNode = AddNode<NmkdCheckpointLoader>("UpscalingModelSD"); // Base Model Loader
+                    upscalerModelNode.ModelPath = "M:\\Weights\\SD\\SafetensorsNew\\dreamshaper_8.safetensors"; // TODO: Don't hardcode
+                    upscalerModelNode.ClipSkip = Config.Instance.ModelSettings.Get(Path.GetFileName(upscalerModelNode.ModelPath), new Models.ModelSettings()).ClipSkip;
+                    upscalerModelNode.LoadVae = true;
+                    upscalerModelNode.EmbeddingsDir = Io.Paths.ReturnDir(Config.Instance.EmbeddingsDir, true, true);
+
+                    conditioningNode = AddNode<NmkdDualTextEncode>(); // CLIP Encode Prompt Base
+                    conditioningNode.Text1 = g.Prompt;
+                    conditioningNode.Text2 = g.NegativePrompt;
+                    conditioningNode.Clip = new ComfyInput(upscalerModelNode, OutType.Clip);
+                }
+
+                var upscaleMdl = AddNode<NmkdUpscaleModelLoader>(); // Latent Upscale
+                upscaleMdl.UpscaleModelPath = "D:\\AI\\ComfyUI\\ComfyUI\\models\\upscale_models\\realesr-general-x4v3.pth"; // TODO: Don't hardcode
+
+                var tileControlnet = AddNode<NmkdControlNet>("TileControlnetUpscale"); // Tile ControlNet
+                tileControlnet.ModelPath = "M:\\Weights\\SD\\ControlNet\\control_v11f1e_sd15_tile_fp16.safetensors"; // TODO: Don't hardcode
+                tileControlnet.Conditioning = new ComfyInput(conditioningNode, OutType.Conditioning);
+                tileControlnet.Image = new ComfyInput(finalImageNode, OutType.Image);
+                tileControlnet.Model = new ComfyInput(upscalerModelNode, OutType.Model);
+
+                var upscaler = AddNode<UltimateSDUpscale>(); // Ultimate SD Upscale
+                upscaler.Image = new ComfyInput(finalImageNode, OutType.Image);
+                upscaler.Model = new ComfyInput(upscalerModelNode, OutType.Model);
+                upscaler.CondPositive = new ComfyInput(tileControlnet, OutType.Conditioning);
+                upscaler.CondNegative = new ComfyInput(conditioningNode, 1);
+                upscaler.Vae = new ComfyInput(upscalerModelNode, OutType.Vae);
+                upscaler.UpscaleModel = new ComfyInput(upscaleMdl, 0);
+                upscaler.UpscaleFactor = (float)g.TargetResolution.Width / g.BaseResolution.Width;
+                upscaler.Seed = g.Seed;
+                upscaler.Steps = (g.Steps * 0.5f).RoundToInt();
+                upscaler.Scale = g.Scale;
+                upscaler.Sampler = GetComfySampler(g.Sampler);
+                upscaler.Scheduler = GetComfyScheduler(g);
+
+                finalImageNode = upscaler;
+            }
 
             if (inpaint)
             {

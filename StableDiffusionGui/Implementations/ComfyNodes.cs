@@ -210,8 +210,8 @@ namespace StableDiffusionGui.Implementations
             public ComfyInput LatentImage;
             public ComfyInput Seed;
             public ComfyInput StepsTotal;
-            public ComfyInput StartStep;
-            public ComfyInput EndStep;
+            public ComfyInput StartStep = new ComfyInput(0);
+            public ComfyInput EndStep = new ComfyInput(10000);
             public ComfyInput Cfg;
 
             public string DebugString = "";
@@ -241,6 +241,63 @@ namespace StableDiffusionGui.Implementations
                         ["debug_string"] = DebugString
                     },
                     ClassType = nameof(NmkdKSampler),
+                };
+            }
+
+            public override string ToString()
+            {
+                return ToStringNode(this);
+            }
+        }
+
+
+        public class NmkdHybridSampler : Node, INode
+        {
+            public bool AddNoise = true;
+            public long Seed;
+            public int Steps;
+            public int BaseSteps;
+            public float Cfg;
+            public string SamplerName = "dpmpp_2m_sde";
+            public string Scheduler = "karras";
+            public int StartStep = 0;
+            public int EndStep = 10000;
+            public bool ReturnLeftoverNoise = false;
+            public float Denoise = 1f;
+
+            public ComfyInput Model;
+            public ComfyInput ModelRefiner;
+            public ComfyInput PositiveCond;
+            public ComfyInput NegativeCond;
+            public ComfyInput RefinerPositiveCond;
+            public ComfyInput RefinerNegativeCond;
+            public ComfyInput LatentImage;
+
+            public NodeInfo GetNodeInfo()
+            {
+                return new NodeInfo()
+                {
+                    Inputs = {
+                        ["add_noise"] = AddNoise ? "enable" : "disable",
+                        ["noise_seed"] = Seed,
+                        ["steps"] = Steps,
+                        ["refiner_switch_step"] = BaseSteps + 1,
+                        ["cfg"] = Cfg,
+                        ["sampler_name"] = SamplerName,
+                        ["scheduler"] = Scheduler,
+                        ["start_at_step"] = StartStep,
+                        ["end_at_step"] = EndStep,
+                        ["return_with_leftover_noise"] = ReturnLeftoverNoise ? "enable" : "disable",
+                        // ["denoise"] = Denoise,
+                        ["model"] = Model.Get(),
+                        ["refiner_model"] = ModelRefiner.Get(),
+                        ["positive"] = PositiveCond.Get(),
+                        ["negative"] = NegativeCond.Get(),
+                        ["refiner_positive"] = RefinerPositiveCond.Get(),
+                        ["refiner_negative"] = RefinerNegativeCond.Get(),
+                        ["latent_image"] = LatentImage.Get(),
+                    },
+                    ClassType = nameof(NmkdHybridSampler),
                 };
             }
 
@@ -414,11 +471,11 @@ namespace StableDiffusionGui.Implementations
 
         public class NmkdCheckpointLoader : Node, INode
         {
-            public string ModelPath;
-            public int ClipSkip;
-            public bool LoadVae;
-            public string VaePath;
-            public string EmbeddingsDir;
+            public string ModelPath = "";
+            public int ClipSkip = -1;
+            public bool LoadVae = true;
+            public string VaePath = "";
+            public string EmbeddingsDir = "";
 
             public NodeInfo GetNodeInfo()
             {
@@ -512,6 +569,28 @@ namespace StableDiffusionGui.Implementations
                         { "image", Image.Get() },
                     },
                     ClassType = nameof(NmkdImageUpscale)
+                };
+            }
+
+            public override string ToString()
+            {
+                return ToStringNode(this);
+            }
+        }
+
+        public class NmkdUpscaleModelLoader : Node, INode
+        {
+            public string UpscaleModelPath;
+
+            public NodeInfo GetNodeInfo()
+            {
+                return new NodeInfo
+                {
+                    Inputs = new Dictionary<string, object>
+                    {
+                        { "model_path", UpscaleModelPath },
+                    },
+                    ClassType = nameof(NmkdUpscaleModelLoader)
                 };
             }
 
@@ -728,6 +807,64 @@ namespace StableDiffusionGui.Implementations
                 };
 
                 return new NodeInfo { Inputs = dict, ClassType = nameof(NmkdDualTextEncode) };
+            }
+
+            public override string ToString()
+            {
+                return ToStringNode(this);
+            }
+        }
+
+        public class UltimateSDUpscale : Node, INode
+        {
+            public ComfyInput Image;
+            public ComfyInput Model;
+            public ComfyInput CondPositive;
+            public ComfyInput CondNegative;
+            public ComfyInput Vae;
+            public ComfyInput UpscaleModel;
+            public float UpscaleFactor = 1.5f;
+            public long Seed = 0;
+            public int Steps = 20;
+            public float Scale = 7f;
+            public string Sampler = "euler";
+            public string Scheduler = "normal";
+            public float Denoise = 0.5f;
+            public int TileSize = 768;
+
+            public NodeInfo GetNodeInfo()
+            {
+                return new NodeInfo
+                {
+                    Inputs = new Dictionary<string, object>
+                    {
+                        { "image", Image.Get() },
+                        { "model", Model.Get() },
+                        { "positive", CondPositive.Get() },
+                        { "negative", CondNegative.Get() },
+                        { "vae", Vae.Get() },
+                        { "upscale_model", UpscaleModel.Get() },
+                        { "upscale_by", UpscaleFactor },
+                        { "seed", Seed },
+                        { "steps", Steps },
+                        { "cfg", Scale },
+                        { "sampler_name", Sampler },
+                        { "scheduler", Scheduler },
+                        { "denoise", Denoise },
+                        { "mode_type", "Linear" },
+                        { "tile_width", TileSize },
+                        { "tile_height", TileSize },
+                        { "mask_blur", 8 },
+                        { "tile_padding", 32 },
+                        { "seam_fix_mode", "None" },
+                        { "seam_fix_denoise", 1f },
+                        { "seam_fix_width", 64 },
+                        { "seam_fix_mask_blur", 8 },
+                        { "seam_fix_padding", 16 },
+                        { "force_uniform_tiles", "enable" },
+                    },
+                    ClassType = nameof(UltimateSDUpscale)
+                };
             }
 
             public override string ToString()
