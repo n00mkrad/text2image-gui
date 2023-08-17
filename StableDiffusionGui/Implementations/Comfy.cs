@@ -283,36 +283,40 @@ namespace StableDiffusionGui.Implementations
 
             foreach (var genInfo in generations.Where(g => g.Model.IsNotEmpty()))
             {
-                string reqString = "";
+                var prompt = ComfyPrompts.GetMainWorkflowNodes(genInfo);
+                EasyDict<string, object> meta = new EasyDict<string, object> {{ "GenerationInfoJson", genInfo.GetSerializeClone() }};
+                string response = await SendPrompt(prompt, meta);
 
-                try
-                {
-                    var promptItems = ComfyWorkflow.GetPromptInfos(genInfo);
-                    var req = new ComfyWorkflow.PromptRequest() { ClientId = Paths.SessionTimestampUnix.ToString(), Prompt = promptItems };
-                    req.ExtraData.ExtraPnginfo["GenerationInfoJson"] = genInfo.GetSerializeClone();
-                    reqString = req.ToString();
-
-                    if (Program.Debug)
-                        File.WriteAllText(IoUtils.GetAvailablePath(Path.Combine(Paths.GetLogPath(), "req.json")), req.Serialize(true));
-                }
-                catch (Exception ex)
-                {
-                    Logger.Log($"Error creating request: {ex.Message}");
-                    Logger.Log(ex.StackTrace, true);
-                }
-
-                if (reqString.IsEmpty())
-                    continue;
-
-                string resp = await ApiPost(reqString);
-                Logger.Log($"[<-] {resp}", true, filename: Constants.Lognames.Api);
-
-                if (resp.IsEmpty())
+                if (response.IsEmpty())
                     break;
             }
         }
 
         private enum ComfyEndpoint { Prompt, Queue, Interrupt }
+
+        private async Task<string> SendPrompt(EasyDict<string, ComfyWorkflow.NodeInfo> prompt, EasyDict<string, object> pngMetadata = null)
+        {
+            try
+            {
+                var req = new ComfyWorkflow.PromptRequest() { ClientId = Paths.SessionTimestampUnix.ToString(), Prompt = prompt };
+
+                foreach (var pair in pngMetadata)
+                    req.ExtraData.ExtraPnginfo[pair.Key] = pair.Value;
+
+                if (Program.Debug)
+                    File.WriteAllText(IoUtils.GetAvailablePath(Path.Combine(Paths.GetLogPath(), "req.json")), req.Serialize(true));
+
+                string resp = await ApiPost(req.ToString());
+                Logger.Log($"[<-] {resp}", true, filename: Constants.Lognames.Api);
+                return resp;
+            }
+            catch (Exception ex)
+            {
+                Logger.Log($"Error creating request: {ex.Message}");
+                Logger.Log(ex.StackTrace, true);
+                return "";
+            }
+        }
 
         private async Task<string> ApiPost(string data = "", ComfyEndpoint endpoint = ComfyEndpoint.Prompt)
         {
