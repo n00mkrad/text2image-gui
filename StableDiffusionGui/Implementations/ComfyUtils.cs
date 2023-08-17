@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static StableDiffusionGui.Implementations.ComfyData;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
@@ -51,6 +52,15 @@ namespace StableDiffusionGui.Implementations
             }
 
             return ""; // Fallback if arch was not detected. Will error if incompatible, but maybe the author just didn't name the file properly
+        }
+
+        private static readonly Regex _invokeEmbeddingPattern = new Regex(@"<([^>]+)>", RegexOptions.Compiled);
+
+        public static string SanitizePrompt (string prompt)
+        {
+            prompt = _invokeEmbeddingPattern.Replace(prompt, "embedding:$1"); // Change <filename> to embedding:filename
+
+            return prompt;
         }
     }
 }

@@ -293,7 +293,7 @@ namespace StableDiffusionGui.Implementations
                     reqString = req.ToString();
 
                     if (Program.Debug)
-                        File.WriteAllText(IoUtils.GetAvailablePath(Path.Combine(Paths.GetLogPath(), "req.json")), req.ToStringAdvanced(true));
+                        File.WriteAllText(IoUtils.GetAvailablePath(Path.Combine(Paths.GetLogPath(), "req.json")), req.Serialize(true));
                 }
                 catch (Exception ex)
                 {

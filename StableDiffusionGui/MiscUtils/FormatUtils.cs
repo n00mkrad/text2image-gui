@@ -1,4 +1,5 @@
 ﻿using StableDiffusionGui.Implementations;
+using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using System;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
 namespace StableDiffusionGui.MiscUtils
 {
@@ -238,14 +240,32 @@ namespace StableDiffusionGui.MiscUtils
             return GetUnixTime().ToString();
         }
 
-        public static string GetEmbeddingFormat (Enums.StableDiffusion.Implementation imp)
+        public static string GetEmbeddingFormat (Implementation imp)
         {
-            if (imp == Enums.StableDiffusion.Implementation.InvokeAi)
+            if (imp == Implementation.InvokeAi)
                 return new InvokeAi().GetEmbeddingStringFormat();
-            else if (imp == Enums.StableDiffusion.Implementation.Comfy)
+            else if (imp == Implementation.Comfy)
                 return new Comfy().GetEmbeddingStringFormat();
 
             return "";
+        }
+
+        private static readonly Regex _multiSpacePattern = new Regex(@"\s+", RegexOptions.Compiled);
+
+        public static string SanitizePrompt(string prompt, Implementation imp = (Implementation)(-1))
+        {
+            if (imp == (Implementation)(-1))
+                imp = Config.Instance.Implementation;
+
+            prompt = prompt.Remove("\""); // Don't allow "
+            prompt = _multiSpacePattern.Replace(prompt, " "); // Don't allow multiple consecutive spaces
+
+            if (imp == Implementation.InvokeAi)
+                prompt = InvokeAiUtils.ConvertAttentionSyntax(prompt); // Convert old (multi-bracket) emphasis/attention syntax to new one (with +/-)
+            if (imp == Implementation.InvokeAi)
+                prompt = ComfyUtils.SanitizePrompt(prompt); // Convert Invoke embbedding syntax to Comfy (Does not convert attention syntax currently)
+
+            return prompt;
         }
     }
 }

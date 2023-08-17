@@ -121,8 +121,8 @@ namespace StableDiffusionGui.Forms
 
         public void CleanPrompt()
         {
-            textboxPrompt.Text = string.Join(Environment.NewLine, textboxPrompt.Text.SplitIntoLines().Select(x => MainUi.SanitizePrompt(x)));
-            textboxPromptNeg.Text = string.Join(Environment.NewLine, textboxPromptNeg.Text.SplitIntoLines().Select(x => MainUi.SanitizePrompt(x)));
+            textboxPrompt.Text = string.Join(Environment.NewLine, textboxPrompt.Text.SplitIntoLines().Select(x => FormatUtils.SanitizePrompt(x)));
+            textboxPromptNeg.Text = string.Join(Environment.NewLine, textboxPromptNeg.Text.SplitIntoLines().Select(x => FormatUtils.SanitizePrompt(x)));
 
             if (upDownSeed.Text == "")
                 SetSeed();

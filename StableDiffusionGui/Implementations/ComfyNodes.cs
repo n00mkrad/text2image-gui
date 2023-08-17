@@ -831,6 +831,7 @@ namespace StableDiffusionGui.Implementations
             public string Scheduler = "normal";
             public float Denoise = 0.5f;
             public int TileSize = 768;
+            public bool ForceUniformTiles = false;
 
             public NodeInfo GetNodeInfo()
             {
@@ -861,7 +862,7 @@ namespace StableDiffusionGui.Implementations
                         { "seam_fix_width", 64 },
                         { "seam_fix_mask_blur", 8 },
                         { "seam_fix_padding", 16 },
-                        { "force_uniform_tiles", "enable" },
+                        { "force_uniform_tiles", ForceUniformTiles ? "enable" : "disable" },
                     },
                     ClassType = nameof(UltimateSDUpscale)
                 };

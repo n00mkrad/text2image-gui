@@ -325,16 +325,6 @@ namespace StableDiffusionGui.Ui
             }
         }
 
-        public static string SanitizePrompt(string prompt)
-        {
-            prompt = prompt.Remove("\""); // Don't allow "
-
-            if(Config.Instance.Implementation == Implementation.InvokeAi)
-                prompt = InvokeAiUtils.ConvertAttentionSyntax(prompt); // Convert old (multi-bracket) emphasis/attention syntax to new one (with +/-)
-
-            return prompt;
-        }
-
         public static string GetValuesStr(List<float> numbers, bool ignoreSingleValue = true)
         {
             if (numbers == null || numbers.Count <= 0)
