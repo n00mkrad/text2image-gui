@@ -32,9 +32,9 @@ namespace StableDiffusionGui.Forms
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
             this.runBtn = new System.Windows.Forms.Button();
             this.titleLabel = new System.Windows.Forms.Label();
             this.logBox = new StableDiffusionGui.Controls.CustomTextbox();
@@ -149,8 +149,6 @@ namespace StableDiffusionGui.Forms
             this.checkboxLoopback = new System.Windows.Forms.CheckBox();
             this.label16 = new System.Windows.Forms.Label();
             this.panelCollapseDebug = new System.Windows.Forms.Panel();
-            this.panelSymmetry = new System.Windows.Forms.Panel();
-            this.label19 = new System.Windows.Forms.Label();
             this.panelSeamless = new System.Windows.Forms.Panel();
             this.label8 = new System.Windows.Forms.Label();
             this.panelCollapseSymmetry = new System.Windows.Forms.Panel();
@@ -268,7 +266,6 @@ namespace StableDiffusionGui.Forms
             this.panelSettings.SuspendLayout();
             this.panelDebugLoopback.SuspendLayout();
             this.panelCollapseDebug.SuspendLayout();
-            this.panelSymmetry.SuspendLayout();
             this.panelSeamless.SuspendLayout();
             this.panelCollapseSymmetry.SuspendLayout();
             this.panelSampler.SuspendLayout();
@@ -1089,7 +1086,7 @@ namespace StableDiffusionGui.Forms
             this.comboxSymmetry.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.comboxSymmetry.ForeColor = System.Drawing.Color.White;
             this.comboxSymmetry.FormattingEnabled = true;
-            this.comboxSymmetry.Location = new System.Drawing.Point(233, 0);
+            this.comboxSymmetry.Location = new System.Drawing.Point(439, 0);
             this.comboxSymmetry.Name = "comboxSymmetry";
             this.comboxSymmetry.Size = new System.Drawing.Size(200, 21);
             this.comboxSymmetry.TabIndex = 107;
@@ -2063,7 +2060,6 @@ namespace StableDiffusionGui.Forms
             this.panelSettings.AutoScroll = true;
             this.panelSettings.Controls.Add(this.panelDebugLoopback);
             this.panelSettings.Controls.Add(this.panelCollapseDebug);
-            this.panelSettings.Controls.Add(this.panelSymmetry);
             this.panelSettings.Controls.Add(this.panelSeamless);
             this.panelSettings.Controls.Add(this.panelCollapseSymmetry);
             this.panelSettings.Controls.Add(this.panelSampler);
@@ -2106,7 +2102,7 @@ namespace StableDiffusionGui.Forms
             this.panelDebugLoopback.Controls.Add(this.checkboxLoopback);
             this.panelDebugLoopback.Controls.Add(this.label16);
             this.panelDebugLoopback.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelDebugLoopback.Location = new System.Drawing.Point(0, 1130);
+            this.panelDebugLoopback.Location = new System.Drawing.Point(0, 1095);
             this.panelDebugLoopback.Name = "panelDebugLoopback";
             this.panelDebugLoopback.Size = new System.Drawing.Size(651, 35);
             this.panelDebugLoopback.TabIndex = 19;
@@ -2139,35 +2135,14 @@ namespace StableDiffusionGui.Forms
             // 
             this.panelCollapseDebug.Controls.Add(this.btnCollapseDebug);
             this.panelCollapseDebug.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelCollapseDebug.Location = new System.Drawing.Point(0, 1095);
+            this.panelCollapseDebug.Location = new System.Drawing.Point(0, 1060);
             this.panelCollapseDebug.Name = "panelCollapseDebug";
             this.panelCollapseDebug.Size = new System.Drawing.Size(651, 35);
             this.panelCollapseDebug.TabIndex = 117;
             // 
-            // panelSymmetry
-            // 
-            this.panelSymmetry.Controls.Add(this.comboxSymmetry);
-            this.panelSymmetry.Controls.Add(this.label19);
-            this.panelSymmetry.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSymmetry.Location = new System.Drawing.Point(0, 1060);
-            this.panelSymmetry.Name = "panelSymmetry";
-            this.panelSymmetry.Size = new System.Drawing.Size(651, 35);
-            this.panelSymmetry.TabIndex = 111;
-            // 
-            // label19
-            // 
-            this.label19.AutoSize = true;
-            this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label19.ForeColor = System.Drawing.Color.White;
-            this.label19.Location = new System.Drawing.Point(0, 4);
-            this.label19.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(196, 13);
-            this.label19.TabIndex = 105;
-            this.label19.Text = "Generate Symmetric Images (Mirror Axis)";
-            // 
             // panelSeamless
             // 
+            this.panelSeamless.Controls.Add(this.comboxSymmetry);
             this.panelSeamless.Controls.Add(this.comboxSeamless);
             this.panelSeamless.Controls.Add(this.label8);
             this.panelSeamless.Dock = System.Windows.Forms.DockStyle.Top;
@@ -2184,9 +2159,9 @@ namespace StableDiffusionGui.Forms
             this.label8.Location = new System.Drawing.Point(0, 4);
             this.label8.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(182, 13);
+            this.label8.Size = new System.Drawing.Size(224, 13);
             this.label8.TabIndex = 105;
-            this.label8.Text = "Generate Seamless (Tileable) Images";
+            this.label8.Text = "Seamless (Tileable) and Symmetry (Mirror Axis)";
             // 
             // panelCollapseSymmetry
             // 
@@ -2972,38 +2947,38 @@ namespace StableDiffusionGui.Forms
             this.gridLoras.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.gridLoras.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.gridLoras.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.Disable;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.gridLoras.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gridLoras.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
             this.gridLoras.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.gridLoras.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColEnabled,
             this.ColName,
             this.ColWeight});
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.gridLoras.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.gridLoras.DefaultCellStyle = dataGridViewCellStyle8;
             this.gridLoras.Location = new System.Drawing.Point(233, -1);
             this.gridLoras.MultiSelect = false;
             this.gridLoras.Name = "gridLoras";
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.gridLoras.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gridLoras.RowHeadersDefaultCellStyle = dataGridViewCellStyle9;
             this.gridLoras.RowHeadersVisible = false;
             this.gridLoras.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.gridLoras.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -3572,8 +3547,6 @@ namespace StableDiffusionGui.Forms
             this.panelDebugLoopback.ResumeLayout(false);
             this.panelDebugLoopback.PerformLayout();
             this.panelCollapseDebug.ResumeLayout(false);
-            this.panelSymmetry.ResumeLayout(false);
-            this.panelSymmetry.PerformLayout();
             this.panelSeamless.ResumeLayout(false);
             this.panelSeamless.PerformLayout();
             this.panelCollapseSymmetry.ResumeLayout(false);
@@ -3789,9 +3762,7 @@ namespace StableDiffusionGui.Forms
         public HTAlt.WinForms.HTButton btnCollapseSymmetry;
         public HTAlt.WinForms.HTButton btnCollapseRendering;
         public HTAlt.WinForms.HTButton btnCollapseGeneration;
-        public System.Windows.Forms.Panel panelSymmetry;
         public System.Windows.Forms.ComboBox comboxSymmetry;
-        private System.Windows.Forms.Label label19;
         public System.Windows.Forms.Panel panelEmbeddings;
         private System.Windows.Forms.Label label20;
         public System.Windows.Forms.ComboBox comboxEmbeddingList;

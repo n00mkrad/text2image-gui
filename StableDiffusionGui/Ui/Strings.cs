@@ -9,6 +9,7 @@ namespace StableDiffusionGui.Ui
     {
         public static Dictionary<string, string> SeamlessMode = new Dictionary<string, string>
         {
+            { Enums.StableDiffusion.SeamlessMode.Disabled.ToString(), "Not Seamless" },
             { Enums.StableDiffusion.SeamlessMode.SeamlessBoth.ToString(), "Seamless on All Sides" },
             { Enums.StableDiffusion.SeamlessMode.SeamlessHor.ToString(), "Seamless on Left/Right Edges" },
             { Enums.StableDiffusion.SeamlessMode.SeamlessVert.ToString(), "Seamless on Top/Bottom Edges" },
@@ -16,6 +17,7 @@ namespace StableDiffusionGui.Ui
 
         public static Dictionary<string, string> SymmetryMode = new Dictionary<string, string>
         {
+            { Enums.StableDiffusion.SymmetryMode.Disabled.ToString(), "Symmetry Disabled" },
             { Enums.StableDiffusion.SymmetryMode.SymVert.ToString(), "Symmetrical on Vertical Axis" },
             { Enums.StableDiffusion.SymmetryMode.SymHor.ToString(), "Symmetrical on Horizontal Axis" },
             { Enums.StableDiffusion.SymmetryMode.SymBoth.ToString(), "Symmetrical on Both Axes (Cross)" },

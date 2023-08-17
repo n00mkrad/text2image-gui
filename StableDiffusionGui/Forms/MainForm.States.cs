@@ -55,10 +55,7 @@ namespace StableDiffusionGui.Forms
                 return implementation.Supports(Feature.MultipleSamplers);
 
             if (control == panelSeamless)
-                return implementation.Supports(Feature.SeamlessMode) && (!comboxInpaintMode.Visible || ParseUtils.GetEnum<ImgMode>(comboxInpaintMode.Text, stringMap: Strings.InpaintMode) == ImgMode.InitializationImage);
-
-            if (control == panelSymmetry)
-                return implementation.Supports(Feature.SymmetricMode) && (!comboxInpaintMode.Visible || ParseUtils.GetEnum<ImgMode>(comboxInpaintMode.Text, stringMap: Strings.InpaintMode) == ImgMode.InitializationImage);
+                return implementation.Supports(Feature.SeamlessMode) && implementation.Supports(Feature.SymmetricMode) && (!comboxInpaintMode.Visible || ParseUtils.GetEnum<ImgMode>(comboxInpaintMode.Text, stringMap: Strings.InpaintMode) == ImgMode.InitializationImage);
 
             if (control == panelEmbeddings)
                 return implementation.Supports(Feature.Embeddings) && comboxEmbeddingList.Items.Count > 0;

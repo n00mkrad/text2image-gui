@@ -54,7 +54,7 @@ namespace StableDiffusionGui.Forms
             CategoryPanels.Add(btnCollapsePrompt, new List<Panel> { panelPrompt, panelPromptNeg, panelEmbeddings, panelLoras, panelBaseImg });
             CategoryPanels.Add(btnCollapseGeneration, new List<Panel> { panelControlnet, panelInpainting, panelInitImgStrength, panelIterations, panelSteps, panelRefineStart, panelScale, panelScaleImg, panelSeed });
             CategoryPanels.Add(btnCollapseRendering, new List<Panel> { panelRes, panelUpscaling, panelSampler });
-            CategoryPanels.Add(btnCollapseSymmetry, new List<Panel> { panelSeamless, panelSymmetry });
+            CategoryPanels.Add(btnCollapseSymmetry, new List<Panel> { panelSeamless });
             CategoryPanels.Add(btnCollapseDebug, new List<Panel> { panelDebugLoopback });
 
             // Expand default categories
@@ -148,7 +148,7 @@ namespace StableDiffusionGui.Forms
             comboxBackend.Text = Strings.Implementation.Get(imp.ToString());
 
             // Panel visibility
-            SetVisibility(new Control[] { panelBaseImg, panelPromptNeg, panelEmbeddings, panelRefineStart, panelInitImgStrength, panelInpainting, panelScaleImg, panelRes, panelSampler, panelSeamless, panelSymmetry, checkboxHiresFix,
+            SetVisibility(new Control[] { panelBaseImg, panelPromptNeg, panelEmbeddings, panelRefineStart, panelInitImgStrength, panelInpainting, panelScaleImg, panelRes, panelSampler, panelSeamless, checkboxHiresFix,
                 textboxClipsegMask, panelResizeGravity, comboxControlnetSlot, labelResChange, btnResetRes, checkboxShowInitImg, panelModel, panelLoras, panelModel2, panelUpscaling, panelControlnet, panelModelSettings }, imp);
 
             bool adv = Config.Instance.AdvancedUi;
