@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using static StableDiffusionGui.Implementations.ComfyNodes;
 using static StableDiffusionGui.Implementations.ComfyWorkflow;
 
 namespace StableDiffusionGui.Implementations
@@ -41,7 +42,9 @@ namespace StableDiffusionGui.Implementations
         public class ComfyInput
         {
             object Value = null;
-            object[] NodeOutput = new object[0];
+            INode Node = null;
+            int NodeOutIndex = -1;
+            OutType OutType = (OutType)(-1);
 
             public ComfyInput(object value)
             {
@@ -50,21 +53,36 @@ namespace StableDiffusionGui.Implementations
 
             public ComfyInput(INode node, OutType outType = (OutType)(-1))
             {
-                int outputIndex = outType == (OutType)(-1) ? 0 : GetOutIndex(node, outType);
-                NodeOutput = new object[] { node.Id.ToString(), outputIndex };
+                int outIndex = outType == (OutType)(-1) ? 0 : GetOutIndex(node, outType);
+                Node = node;
+                NodeOutIndex = outIndex;
             }
 
             public ComfyInput(INode node, int outIndex = 0)
             {
-                NodeOutput = new object[] { node.Id.ToString(), outIndex };
+                Node = node;
+                NodeOutIndex = outIndex;
             }
 
             public object Get ()
             {
-                if (NodeOutput.Length == 2)
-                    return NodeOutput;
-                else
+                if(Value != null)
                     return Value;
+
+                if (Node == null)
+                    return "";
+
+                if(OutType != (OutType)(-1))
+                {
+                    int outIndex = GetOutIndex(Node, OutType);
+                    return new object[] { Node.Id, outIndex };
+                }
+                else if (NodeOutIndex >= 0)
+                {
+                    return new object[] { Node.Id, NodeOutIndex };
+                }
+
+                return Value;
             }
         }
 
@@ -278,24 +296,24 @@ namespace StableDiffusionGui.Implementations
                 return new NodeInfo()
                 {
                     Inputs = {
-                        ["add_noise"] = AddNoise ? "enable" : "disable",
-                        ["noise_seed"] = Seed,
-                        ["steps"] = Steps,
-                        ["refiner_switch_step"] = BaseSteps + 1,
-                        ["cfg"] = Cfg,
-                        ["sampler_name"] = SamplerName,
-                        ["scheduler"] = Scheduler,
-                        ["start_at_step"] = StartStep,
-                        ["end_at_step"] = EndStep,
-                        ["return_with_leftover_noise"] = ReturnLeftoverNoise ? "enable" : "disable",
-                        // ["denoise"] = Denoise,
-                        ["model"] = Model.Get(),
-                        ["refiner_model"] = ModelRefiner.Get(),
-                        ["positive"] = PositiveCond.Get(),
-                        ["negative"] = NegativeCond.Get(),
-                        ["refiner_positive"] = RefinerPositiveCond.Get(),
-                        ["refiner_negative"] = RefinerNegativeCond.Get(),
-                        ["latent_image"] = LatentImage.Get(),
+                        { "add_noise", AddNoise ? "enable" : "disable" },
+                        { "noise_seed", Seed },
+                        { "steps", Steps },
+                        { "refiner_switch_step", BaseSteps + 1 },
+                        { "cfg", Cfg },
+                        { "sampler_name", SamplerName },
+                        { "scheduler", Scheduler },
+                        { "start_at_step", StartStep },
+                        { "end_at_step", EndStep },
+                        { "return_with_leftover_noise", ReturnLeftoverNoise ? "enable" : "disable" },
+                        { "denoise", Denoise },
+                        { "model", Model.Get() },
+                        { "refiner_model", ModelRefiner.Get() },
+                        { "positive", PositiveCond.Get() },
+                        { "negative", NegativeCond.Get() },
+                        { "refiner_positive", RefinerPositiveCond.Get() },
+                        { "refiner_negative", RefinerNegativeCond.Get() },
+                        { "latent_image", LatentImage.Get() },
                     },
                     ClassType = nameof(NmkdHybridSampler),
                 };

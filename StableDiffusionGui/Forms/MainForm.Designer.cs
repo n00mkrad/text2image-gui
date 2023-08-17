@@ -32,8 +32,9 @@ namespace StableDiffusionGui.Forms
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.runBtn = new System.Windows.Forms.Button();
             this.titleLabel = new System.Windows.Forms.Label();
             this.logBox = new StableDiffusionGui.Controls.CustomTextbox();
@@ -1604,8 +1605,8 @@ namespace StableDiffusionGui.Forms
             0,
             0,
             65536});
-            this.updownUpscaleFactor.Location = new System.Drawing.Point(192, 0);
-            this.updownUpscaleFactor.Margin = new System.Windows.Forms.Padding(0, 0, 6, 3);
+            this.updownUpscaleFactor.Location = new System.Drawing.Point(209, 0);
+            this.updownUpscaleFactor.Margin = new System.Windows.Forms.Padding(0, 0, 3, 3);
             this.updownUpscaleFactor.Maximum = new decimal(new int[] {
             2,
             0,
@@ -1617,7 +1618,7 @@ namespace StableDiffusionGui.Forms
             0,
             65536});
             this.updownUpscaleFactor.Name = "updownUpscaleFactor";
-            this.updownUpscaleFactor.Size = new System.Drawing.Size(57, 20);
+            this.updownUpscaleFactor.Size = new System.Drawing.Size(55, 20);
             this.updownUpscaleFactor.TabIndex = 110;
             this.toolTip.SetToolTip(this.updownUpscaleFactor, "Latent Upscaling Factor");
             this.updownUpscaleFactor.Value = new decimal(new int[] {
@@ -1684,8 +1685,8 @@ namespace StableDiffusionGui.Forms
             0,
             0,
             0});
-            this.updownUpscaleResultW.Location = new System.Drawing.Point(274, 0);
-            this.updownUpscaleResultW.Margin = new System.Windows.Forms.Padding(0, 0, 6, 3);
+            this.updownUpscaleResultW.Location = new System.Drawing.Point(283, 0);
+            this.updownUpscaleResultW.Margin = new System.Windows.Forms.Padding(0, 0, 3, 3);
             this.updownUpscaleResultW.Maximum = new decimal(new int[] {
             4096,
             0,
@@ -1715,8 +1716,8 @@ namespace StableDiffusionGui.Forms
             0,
             0,
             0});
-            this.updownUpscaleResultH.Location = new System.Drawing.Point(348, 0);
-            this.updownUpscaleResultH.Margin = new System.Windows.Forms.Padding(0, 0, 6, 3);
+            this.updownUpscaleResultH.Location = new System.Drawing.Point(351, 0);
+            this.updownUpscaleResultH.Margin = new System.Windows.Forms.Padding(0, 0, 3, 3);
             this.updownUpscaleResultH.Maximum = new decimal(new int[] {
             4096,
             0,
@@ -2275,7 +2276,7 @@ namespace StableDiffusionGui.Forms
             this.comboxUpscaleMode.Location = new System.Drawing.Point(0, 0);
             this.comboxUpscaleMode.Margin = new System.Windows.Forms.Padding(0, 0, 6, 3);
             this.comboxUpscaleMode.Name = "comboxUpscaleMode";
-            this.comboxUpscaleMode.Size = new System.Drawing.Size(140, 21);
+            this.comboxUpscaleMode.Size = new System.Drawing.Size(160, 21);
             this.comboxUpscaleMode.TabIndex = 108;
             // 
             // labelUpscale
@@ -2283,8 +2284,8 @@ namespace StableDiffusionGui.Forms
             this.labelUpscale.AutoSize = true;
             this.labelUpscale.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelUpscale.ForeColor = System.Drawing.Color.White;
-            this.labelUpscale.Location = new System.Drawing.Point(146, 3);
-            this.labelUpscale.Margin = new System.Windows.Forms.Padding(0, 3, 6, 3);
+            this.labelUpscale.Location = new System.Drawing.Point(166, 3);
+            this.labelUpscale.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
             this.labelUpscale.Name = "labelUpscale";
             this.labelUpscale.Size = new System.Drawing.Size(40, 13);
             this.labelUpscale.TabIndex = 109;
@@ -2295,8 +2296,8 @@ namespace StableDiffusionGui.Forms
             this.labelUpscaleEquals.AutoSize = true;
             this.labelUpscaleEquals.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelUpscaleEquals.ForeColor = System.Drawing.Color.White;
-            this.labelUpscaleEquals.Location = new System.Drawing.Point(255, 3);
-            this.labelUpscaleEquals.Margin = new System.Windows.Forms.Padding(0, 3, 6, 3);
+            this.labelUpscaleEquals.Location = new System.Drawing.Point(267, 3);
+            this.labelUpscaleEquals.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
             this.labelUpscaleEquals.Name = "labelUpscaleEquals";
             this.labelUpscaleEquals.Size = new System.Drawing.Size(13, 13);
             this.labelUpscaleEquals.TabIndex = 113;
@@ -2307,8 +2308,8 @@ namespace StableDiffusionGui.Forms
             this.labelUpscaleX.AutoSize = true;
             this.labelUpscaleX.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelUpscaleX.ForeColor = System.Drawing.Color.White;
-            this.labelUpscaleX.Location = new System.Drawing.Point(330, 3);
-            this.labelUpscaleX.Margin = new System.Windows.Forms.Padding(0, 3, 6, 3);
+            this.labelUpscaleX.Location = new System.Drawing.Point(336, 3);
+            this.labelUpscaleX.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
             this.labelUpscaleX.Name = "labelUpscaleX";
             this.labelUpscaleX.Size = new System.Drawing.Size(12, 13);
             this.labelUpscaleX.TabIndex = 98;
@@ -2971,30 +2972,38 @@ namespace StableDiffusionGui.Forms
             this.gridLoras.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.gridLoras.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.gridLoras.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.Disable;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.gridLoras.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gridLoras.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
             this.gridLoras.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.gridLoras.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColEnabled,
             this.ColName,
             this.ColWeight});
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.gridLoras.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.gridLoras.DefaultCellStyle = dataGridViewCellStyle5;
             this.gridLoras.Location = new System.Drawing.Point(233, -1);
             this.gridLoras.MultiSelect = false;
             this.gridLoras.Name = "gridLoras";
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gridLoras.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
             this.gridLoras.RowHeadersVisible = false;
             this.gridLoras.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.gridLoras.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
