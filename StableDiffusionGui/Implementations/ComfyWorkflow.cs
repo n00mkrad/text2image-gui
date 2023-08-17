@@ -49,10 +49,10 @@ namespace StableDiffusionGui.Implementations
 
             public override string ToString()
             {
-                return ToStringAdvanced();
+                return Serialize();
             }
 
-            public string ToStringAdvanced(bool indent = false)
+            public string Serialize(bool indent = false)
             {
                 var format = indent ? Formatting.Indented : Formatting.None;
                 var settings = new JsonSerializerSettings { ContractResolver = new DefaultContractResolver { NamingStrategy = new SnakeCaseNamingStrategy() } };
@@ -267,16 +267,17 @@ namespace StableDiffusionGui.Implementations
 
             if(g.UpscaleMethod == Enums.StableDiffusion.UpscaleMethod.UltimateSd) // Ultimate SD Upscaler
             {
-                var upscalerModelNode = model1;
+                var upscalerModelNode = finalModelNode;
                 var conditioningNode = encodePromptBase;
+                bool xl = Config.Instance.ModelSettings.Get(Path.GetFileName(g.Model), new Models.ModelSettings()).Arch == Enums.StableDiffusion.ModelArch.SdXlBase;
 
-                if(Config.Instance.ModelSettings.Get(Path.GetFileName(g.Model), new Models.ModelSettings()).Arch == Enums.StableDiffusion.ModelArch.SdXlBase) // Load SD1 model as we can't use XL for USDU yet
+                if (xl) // Load SD1 model as we can't use XL for USDU yet
                 {
                     upscalerModelNode = AddNode<NmkdCheckpointLoader>("UpscalingModelSD"); // Base Model Loader
-                    upscalerModelNode.ModelPath = "M:\\Weights\\SD\\SafetensorsNew\\dreamshaper_8.safetensors"; // TODO: Don't hardcode
-                    upscalerModelNode.ClipSkip = Config.Instance.ModelSettings.Get(Path.GetFileName(upscalerModelNode.ModelPath), new Models.ModelSettings()).ClipSkip;
-                    upscalerModelNode.LoadVae = true;
-                    upscalerModelNode.EmbeddingsDir = Io.Paths.ReturnDir(Config.Instance.EmbeddingsDir, true, true);
+                    ((NmkdCheckpointLoader)upscalerModelNode).ModelPath = "M:\\Weights\\SD\\SafetensorsNew\\dreamshaper_8.safetensors"; // TODO: Don't hardcode
+                    ((NmkdCheckpointLoader)upscalerModelNode).ClipSkip = Config.Instance.ModelSettings.Get(Path.GetFileName(((NmkdCheckpointLoader)upscalerModelNode).ModelPath), new Models.ModelSettings()).ClipSkip;
+                    ((NmkdCheckpointLoader)upscalerModelNode).LoadVae = true;
+                    ((NmkdCheckpointLoader)upscalerModelNode).EmbeddingsDir = Io.Paths.ReturnDir(Config.Instance.EmbeddingsDir, true, true);
 
                     conditioningNode = AddNode<NmkdDualTextEncode>(); // CLIP Encode Prompt Base
                     conditioningNode.Text1 = g.Prompt;
@@ -298,7 +299,7 @@ namespace StableDiffusionGui.Implementations
                 upscaler.Model = new ComfyInput(upscalerModelNode, OutType.Model);
                 upscaler.CondPositive = new ComfyInput(tileControlnet, OutType.Conditioning);
                 upscaler.CondNegative = new ComfyInput(conditioningNode, 1);
-                upscaler.Vae = new ComfyInput(upscalerModelNode, OutType.Vae);
+                upscaler.Vae = new ComfyInput(xl ? upscalerModelNode : model1, OutType.Vae);
                 upscaler.UpscaleModel = new ComfyInput(upscaleMdl, 0);
                 upscaler.UpscaleFactor = (float)g.TargetResolution.Width / g.BaseResolution.Width;
                 upscaler.Seed = g.Seed;

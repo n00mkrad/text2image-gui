@@ -307,6 +307,9 @@ namespace StableDiffusionGui.Data
             RefineStrength = gi.RefinerStrength;
             GeneratedResolution = gi.BaseResolution;
             UpscaleResolution = gi.TargetResolution;
+            
+            foreach(var lora in gi.Loras)
+                Loras[lora.Key] = lora.Value;
         }
 
         public void LoadInfoNmkdiffusers(string info)
