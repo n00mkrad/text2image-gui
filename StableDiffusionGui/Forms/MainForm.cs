@@ -409,7 +409,11 @@ namespace StableDiffusionGui.Forms
 
         private async void upscaleToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if(Config.Instance.Implementation == Enums.StableDiffusion.Implementation.InvokeAi)
             await InvokeAi.RunFix(ImageViewer.CurrentImagePath, InvokeAi.FixAction.Upscale.AsList());
+
+            if (Config.Instance.Implementation == Enums.StableDiffusion.Implementation.Comfy)
+                await Comfy.Upscale(ImageViewer.CurrentImagePath);
         }
 
         private async void applyFaceRestorationToolStripMenuItem_Click(object sender, EventArgs e)

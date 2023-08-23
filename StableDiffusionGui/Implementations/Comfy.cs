@@ -233,7 +233,7 @@ namespace StableDiffusionGui.Implementations
                 $"--preview-method none",
                 $"--disable-xformers", // Obselete since Pytorch 2.0
                 $"--cuda-malloc",
-                $"--{GetVramArg()}",
+                $"--{ComfyUtils.GetVramArg()}",
             };
 
             if (Config.Instance.FullPrecision)
@@ -283,8 +283,8 @@ namespace StableDiffusionGui.Implementations
 
             foreach (var genInfo in generations.Where(g => g.Model.IsNotEmpty()))
             {
-                var prompt = ComfyPrompts.GetMainWorkflowNodes(genInfo);
-                EasyDict<string, object> meta = new EasyDict<string, object> {{ "GenerationInfoJson", genInfo.GetSerializeClone() }};
+                var prompt = ComfyPrompts.GetMainWorkflow(genInfo);
+                EasyDict<string, object> meta = new EasyDict<string, object> { { "GenerationInfoJson", genInfo.GetSerializeClone() } };
                 string response = await SendPrompt(prompt, meta);
 
                 if (response.IsEmpty())
@@ -294,13 +294,13 @@ namespace StableDiffusionGui.Implementations
 
         private enum ComfyEndpoint { Prompt, Queue, Interrupt }
 
-        private async Task<string> SendPrompt(EasyDict<string, ComfyWorkflow.NodeInfo> prompt, EasyDict<string, object> pngMetadata = null)
+        private static async Task<string> SendPrompt(EasyDict<string, ComfyWorkflow.NodeInfo> prompt, EasyDict<string, object> pngMetadata = null)
         {
             try
             {
                 var req = new ComfyWorkflow.PromptRequest() { ClientId = Paths.SessionTimestampUnix.ToString(), Prompt = prompt };
 
-                foreach (var pair in pngMetadata)
+                foreach (var pair in (pngMetadata == null ? new EasyDict<string, object>() : pngMetadata))
                     req.ExtraData.ExtraPnginfo[pair.Key] = pair.Value;
 
                 if (Program.Debug)
@@ -318,15 +318,15 @@ namespace StableDiffusionGui.Implementations
             }
         }
 
-        private async Task<string> ApiPost(string data = "", ComfyEndpoint endpoint = ComfyEndpoint.Prompt)
+        private async static Task<string> ApiPost(string data = "", ComfyEndpoint endpoint = ComfyEndpoint.Prompt)
         {
             try
             {
                 System.Net.ServicePointManager.Expect100Continue = false;
                 var stringContent = data.IsEmpty() ? null : new StringContent(data, Encoding.UTF8, "application/json");
                 string baseUrl = $"http://127.0.0.1:{ComfyPort}/{endpoint.ToString().Lower()}";
-                var response = await _webClient.PostAsync(baseUrl, stringContent);
                 Logger.Log($"[->] {baseUrl} - {data.Trunc(150)}", true, filename: Constants.Lognames.Api);
+                var response = await _webClient.PostAsync(baseUrl, stringContent);
                 return await response.Content.ReadAsStringAsync();
             }
             catch (Exception ex)
@@ -361,17 +361,6 @@ namespace StableDiffusionGui.Implementations
             // if (a == OperationOrder.LoopAction.LoraWeight) _loopLoraWeights(a);
         }
 
-        private string GetVramArg()
-        {
-            var preset = ParseUtils.GetEnum<Enums.Comfy.VramPreset>(Config.Instance.ComfyVramPreset.ToString(), true, Strings.ComfyVramPresets);
-            if (preset == Enums.Comfy.VramPreset.GpuOnly) return "gpu-only";
-            if (preset == Enums.Comfy.VramPreset.HighVram) return "highvram";
-            if (preset == Enums.Comfy.VramPreset.NormalVram) return "normalvram";
-            if (preset == Enums.Comfy.VramPreset.LowVram) return "lowvram";
-            if (preset == Enums.Comfy.VramPreset.NoVram) return "novram";
-            return "";
-        }
-
         public async Task Cancel()
         {
             List<string> lastLogLines = Logger.GetLastLines(Constants.Lognames.Sd, 20);
@@ -387,6 +376,35 @@ namespace StableDiffusionGui.Implementations
                 await ApiPost(queueArgs.ToJson(), ComfyEndpoint.Queue);
                 await ApiPost(endpoint: ComfyEndpoint.Interrupt);
             }
+        }
+
+        public static async Task Upscale(string imagePath)
+        {
+            Program.SetState(Program.BusyState.PostProcessing);
+
+            var gi = new GenerationInfo
+            {
+                InitImg = imagePath,
+                Upscaler = Models.GetUpscalers().Where(m => m.Name == Config.Instance.EsrganModel).FirstOrDefault().FullName,
+            };
+
+            var metadata = new EasyDict<string, object>();
+            var meta = IoUtils.GetImageMetadata(imagePath);
+
+            if (meta != null)
+            {
+                string giKey = ImageMetadata.MetadataType.GenerationInfoJson.ToString();
+
+                GenerationInfo metaGi = ImageMetadata.DeserializeGenInfo(meta.AllEntries.Where(e => e.Key == giKey).FirstOrDefault().Value);
+                
+                if (metaGi != null)
+                    metadata[giKey] = metaGi.GetSerializeClone();
+            }
+
+            string savePath = IoUtils.FilenameSuffix(imagePath, ".upscale");
+            savePath = IoUtils.GetAvailablePath(savePath, "{0}");
+            savePath = FormatUtils.NormalizePath(savePath);
+            await SendPrompt(ComfyPrompts.GetUpscaleWorkflow(gi, savePath), metadata);
         }
 
         public void HandleOutput(string line)
@@ -483,6 +501,19 @@ namespace StableDiffusionGui.Implementations
 
                     if (_lastSettings.Res.Width < res.Width && _lastSettings.Res.Height < res.Height)
                         Logger.Log($"Warning: The resolution {_lastSettings.Res.Width}x{_lastSettings.Res.Height} might lead to low quality results, the native resolution of this model is {res.AsString()}.");
+                }
+            }
+
+            // Info: Image saved
+            if (!TextToImage.Canceled && line.Trim().StartsWith("Saved image"))
+            {
+                string pfx = line.Split('\'')[1];
+                string path = string.Join(":", line.Split(':').Skip(1)).Trim();
+
+                if (pfx == "upscale")
+                {
+                    ImageViewer.AppendImage(path, ImageViewer.ImgShowMode.ShowLast, false);
+                    Program.SetState(Program.BusyState.Standby);
                 }
             }
 

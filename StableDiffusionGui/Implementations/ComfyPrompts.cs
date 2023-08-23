@@ -1,6 +1,7 @@
 ﻿using StableDiffusionGui.Data;
 using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
+using StableDiffusionGui.MiscUtils;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,10 +14,9 @@ namespace StableDiffusionGui.Implementations
 {
     internal class ComfyPrompts
     {
-        public static EasyDict<string, NodeInfo> GetMainWorkflowNodes(ComfyData.GenerationInfo g, List<INode> nodes = null)
+        public static EasyDict<string, NodeInfo> GetMainWorkflow(ComfyData.GenerationInfo g)
         {
-            if (nodes == null)
-                nodes = new List<INode>();
+            var nodes = new List<INode>();
 
             var nodeInfos = new EasyDict<string, NodeInfo>();
             bool refine = g.RefinerStrength > 0.001f;
@@ -266,7 +266,7 @@ namespace StableDiffusionGui.Implementations
 
             if (g.Upscaler.IsNotEmpty() && g.SaveOriginalAndUpscale)
             {
-                var saveImageUpscaled = AddNode<SaveImage>(nodes);
+                var saveImageUpscaled = AddNode<NmkdSaveImage>(nodes);
                 saveImageUpscaled.Prefix = $"nmkd_src";
                 saveImageUpscaled.Image = new ComfyInput(finalImageNode, OutType.Image);
             }
@@ -279,8 +279,127 @@ namespace StableDiffusionGui.Implementations
                 finalImageNode = upscaler;
             }
 
-            var saveImage = AddNode<SaveImage>(nodes);
+            var saveImage = AddNode<NmkdSaveImage>(nodes);
             saveImage.Prefix = $"nmkd";
+            saveImage.Image = new ComfyInput(finalImageNode, OutType.Image);
+
+            foreach (INode node in nodes.Where(n => n != null))
+                nodeInfos.Add(node.Id, node.GetNodeInfo());
+
+            return nodeInfos;
+        }
+
+        public static EasyDict<string, NodeInfo> GetUpscaleWorkflow(ComfyData.GenerationInfo g, string savePath = "")
+        {
+            var nodes = new List<INode>();
+            var nodeInfos = new EasyDict<string, NodeInfo>();
+
+            if (savePath.IsEmpty())
+            {
+                savePath = IoUtils.FilenameSuffix(g.InitImg, ".upscale");
+                savePath = IoUtils.GetAvailablePath(savePath, "{0}");
+            }
+
+            var loadInitImg = AddNode<NmkdImageLoader>(nodes, FormatUtils.GetUnixTimestamp()); // Load Init Image
+            loadInitImg.ImagePath = g.InitImg;
+            INode finalImageNode = loadInitImg; // Keep track of the final image output node to use
+
+            // var encodeInitImg = AddNode<NmkdVaeEncode>(nodes); // Encode Init Image (I2I)
+            // encodeInitImg.Image = new ComfyInput(loadInitImg, OutType.Image);
+            // encodeInitImg.Mask = new ComfyInput(loadInitImg, OutType.Mask);
+            // encodeInitImg.Vae = new ComfyInput(model1, OutType.Vae);
+            // encodeInitImg.UseMask = g.MaskPath.IsNotEmpty();
+
+            // if (g.UpscaleMethod == Enums.StableDiffusion.UpscaleMethod.Latent) // Latent upscaling
+            // {
+            //     var latentUpscale = AddNode<LatentUpscale>(nodes); // Latent Upscale
+            //     latentUpscale.Width = g.TargetResolution.Width;
+            //     latentUpscale.Height = g.TargetResolution.Height;
+            //     latentUpscale.Latents = new ComfyInput(samplerNode, OutType.Latents);
+            // 
+            //     var samplerHires = AddNode<NmkdKSampler>(nodes, "SamplerHires"); // Sampler Hi-Res
+            //     samplerHires.AddNoise = true;
+            //     samplerHires.Model = new ComfyInput(finalModelNode, OutType.Model);
+            //     samplerHires.PositiveCond = new ComfyInput(finalConditioningNode, OutType.Conditioning);
+            //     samplerHires.NegativeCond = new ComfyInput(encodePromptBase, 1);
+            //     samplerHires.LatentImage = new ComfyInput(latentUpscale, OutType.Latents);
+            //     samplerHires.SamplerName = GetComfySampler(g.Sampler);
+            //     samplerHires.Scheduler = "simple"; // GetComfyScheduler(g);
+            //     samplerHires.Seed = new ComfyInput(g.Seed);
+            //     samplerHires.StepsTotal = new ComfyInput((g.Steps * 0.5f).RoundToInt());
+            //     samplerHires.Cfg = new ComfyInput(g.Scale);
+            //     finalLatentsNode = samplerHires;
+            // }
+
+            // var vaeDecode = AddNode<VAEDecode>(nodes); // Final VAE Decode
+            // vaeDecode.Vae = new ComfyInput(model1, OutType.Vae);
+            // vaeDecode.Latents = new ComfyInput(finalLatentsNode, OutType.Latents);
+            // finalImageNode = vaeDecode;
+
+            // if (g.UpscaleMethod == Enums.StableDiffusion.UpscaleMethod.UltimateSd) // Ultimate SD Upscaler
+            // {
+            //     var upscalerModelNode = finalModelNode;
+            //     var conditioningNode = encodePromptBase;
+            //     bool xl = Config.Instance.ModelSettings.Get(Path.GetFileName(g.Model), new Models.ModelSettings()).Arch == Enums.StableDiffusion.ModelArch.SdXlBase;
+            // 
+            //     if (xl) // Load SD1 model as we can't use XL for USDU yet
+            //     {
+            //         upscalerModelNode = AddNode<NmkdCheckpointLoader>(nodes, "UpscalingModelSD"); // Base Model Loader
+            //         ((NmkdCheckpointLoader)upscalerModelNode).ModelPath = "M:\\Weights\\SD\\SafetensorsNew\\dreamshaper_8.safetensors"; // TODO: Don't hardcode
+            //         ((NmkdCheckpointLoader)upscalerModelNode).ClipSkip = Config.Instance.ModelSettings.Get(Path.GetFileName(((NmkdCheckpointLoader)upscalerModelNode).ModelPath), new Models.ModelSettings()).ClipSkip;
+            //         ((NmkdCheckpointLoader)upscalerModelNode).LoadVae = true;
+            //         ((NmkdCheckpointLoader)upscalerModelNode).EmbeddingsDir = Io.Paths.ReturnDir(Config.Instance.EmbeddingsDir, true, true);
+            // 
+            //         conditioningNode = AddNode<NmkdDualTextEncode>(nodes); // CLIP Encode Prompt Base
+            //         conditioningNode.Text1 = g.Prompt;
+            //         conditioningNode.Text2 = g.NegativePrompt;
+            //         conditioningNode.Clip = new ComfyInput(upscalerModelNode, OutType.Clip);
+            //     }
+            // 
+            //     var upscaleMdl = AddNode<NmkdUpscaleModelLoader>(nodes); // Latent Upscale
+            //     upscaleMdl.UpscaleModelPath = "D:\\AI\\ComfyUI\\ComfyUI\\models\\upscale_models\\realesr-general-x4v3.pth"; // TODO: Don't hardcode
+            // 
+            //     var tileControlnet = AddNode<NmkdControlNet>(nodes, "TileControlnetUpscale"); // Tile ControlNet
+            //     tileControlnet.ModelPath = "M:\\Weights\\SD\\ControlNet\\control_v11f1e_sd15_tile_fp16.safetensors"; // TODO: Don't hardcode
+            //     tileControlnet.Conditioning = new ComfyInput(conditioningNode, OutType.Conditioning);
+            //     tileControlnet.Image = new ComfyInput(finalImageNode, OutType.Image);
+            //     tileControlnet.Model = new ComfyInput(upscalerModelNode, OutType.Model);
+            // 
+            //     var upscaler = AddNode<UltimateSDUpscale>(nodes); // Ultimate SD Upscale
+            //     upscaler.Image = new ComfyInput(finalImageNode, OutType.Image);
+            //     upscaler.Model = new ComfyInput(upscalerModelNode, OutType.Model);
+            //     upscaler.CondPositive = new ComfyInput(tileControlnet, OutType.Conditioning);
+            //     upscaler.CondNegative = new ComfyInput(conditioningNode, 1);
+            //     upscaler.Vae = new ComfyInput(xl ? upscalerModelNode : model1, OutType.Vae);
+            //     upscaler.UpscaleModel = new ComfyInput(upscaleMdl, 0);
+            //     upscaler.UpscaleFactor = (float)g.TargetResolution.Width / g.BaseResolution.Width;
+            //     upscaler.Seed = g.Seed;
+            //     upscaler.Steps = (g.Steps * 0.5f).RoundToInt();
+            //     upscaler.Scale = g.Scale;
+            //     upscaler.Sampler = GetComfySampler(g.Sampler);
+            //     upscaler.Scheduler = GetComfyScheduler(g);
+            // 
+            //     finalImageNode = upscaler;
+            // }
+
+            if (g.Upscaler.IsNotEmpty())
+            {
+                if (g.SaveOriginalAndUpscale)
+                {
+                    var saveImageUpscaled = AddNode<NmkdSaveImage>(nodes);
+                    saveImageUpscaled.Prefix = "output";
+                    saveImageUpscaled.Image = new ComfyInput(finalImageNode, OutType.Image);
+                }
+
+                var upscaler = AddNode<NmkdImageUpscale>(nodes); // Upscale Image
+                upscaler.UpscaleModelPath = g.Upscaler;
+                upscaler.Image = new ComfyInput(finalImageNode, OutType.Image);
+                finalImageNode = upscaler;
+            }
+
+            var saveImage = AddNode<NmkdSaveImage>(nodes);
+            saveImage.Prefix = "upscale";
+            saveImage.OverridePath = savePath;
             saveImage.Image = new ComfyInput(finalImageNode, OutType.Image);
 
             foreach (INode node in nodes.Where(n => n != null))

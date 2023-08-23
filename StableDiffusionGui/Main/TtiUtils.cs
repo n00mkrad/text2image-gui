@@ -257,14 +257,15 @@ namespace StableDiffusionGui.Main
             return true;
         }
 
-        public static void ExportPostprocessedImage(string sourceImgPath, string processedImgPath)
+        public static void ExportPostprocessedImage(string sourceImgPath, string processedImgPath, string movePath = "")
         {
-            string movePath = "";
-
             try
             {
-                string key = new FileInfo(processedImgPath).Name.Split('.')[0];
-                movePath = IoUtils.GetAvailablePath(InvokeAi.PostProcessMovePaths[key]);
+                if (movePath.IsEmpty())
+                {
+                    string key = new FileInfo(processedImgPath).Name.Split('.')[0];
+                    movePath = IoUtils.GetAvailablePath(InvokeAi.PostProcessMovePaths[key]);
+                }
             }
             catch (Exception ex)
             {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StableDiffusionGui.Main;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -65,6 +66,14 @@ namespace StableDiffusionGui.Data
                 dict.Add(kvp.Key, kvp.Value);
 
             return dict;
+        }
+
+        public void Log ()
+        {
+            Console.WriteLine($"Dictionary Contents {this.Count}:");
+
+            foreach (var kvp in this)
+                Console.WriteLine($"{kvp.Key} | {kvp.Value}");
         }
     }
 }

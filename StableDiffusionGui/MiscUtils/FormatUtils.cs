@@ -267,5 +267,10 @@ namespace StableDiffusionGui.MiscUtils
 
             return prompt;
         }
+
+        public static string NormalizePath (string path)
+        {
+            return path.Replace("/", "\\").Trim().TrimEnd('\\');
+        }
     }
 }

@@ -19,6 +19,7 @@ namespace StableDiffusionGui.Data
         public MetadataType Type = MetadataType.Unknown;
         public string Path = "";
         public string AllText = "";
+        public EasyDict<string, string> AllEntries = new EasyDict<string, string>();
         public string ParsedText = "";
         public string Prompt = "";
         public string NegativePrompt = "";
@@ -74,40 +75,44 @@ namespace StableDiffusionGui.Data
 
                 foreach (var tag in tags)
                 {
+                    string title = tag.Description.Split(':').First();
+                    string text = string.Join(":", tag.Description.Split(':').Skip(1));
+                    AllEntries[title] = text.Trim();
+
                     if (tag.Description.Contains(_tags[MetadataType.InvokeJson]))
                     {
                         LoadInfoInvokeAiJson(tag.Description.Split(_tags[MetadataType.InvokeJson]).Last());
-                        return;
+                        continue;
                     }
 
                     if (tag.Description.Contains(_tags[MetadataType.InvokeDream]) && !tags.Any(t => t.Description.Contains(_tags[MetadataType.InvokeJson])))
                     {
                         LoadInfoInvokeAi(tag.Description.Split(_tags[MetadataType.InvokeDream]).Last());
-                        return;
+                        continue;
                     }
 
                     if (tag.Description.Contains(_tags[MetadataType.Auto1111]))
                     {
                         LoadInfoAuto1111(tag.Description.Split(_tags[MetadataType.Auto1111]).Last());
-                        return;
+                        continue;
                     }
 
                     if (tag.Description.Contains(_tags[MetadataType.Nmkdiffusers]))
                     {
                         LoadInfoNmkdiffusers(tag.Description.Split(_tags[MetadataType.Nmkdiffusers]).Last());
-                        return;
+                        continue;
                     }
 
                     if (tag.Description.Contains(_tags[MetadataType.GenerationInfo]))
                     {
                         LoadInfoNmkdiffusers(tag.Description.Split(_tags[MetadataType.GenerationInfo]).Last());
-                        return;
+                        continue;
                     }
 
                     if (tag.Description.Contains(_tags[MetadataType.GenerationInfoJson]))
                     {
                         LoadGenerationInfo(tag.Description.Split(_tags[MetadataType.GenerationInfoJson]).Last());
-                        return;
+                        continue;
                     }
                 }
             }
@@ -283,13 +288,18 @@ namespace StableDiffusionGui.Data
             }
         }
 
+        public static ComfyData.GenerationInfo DeserializeGenInfo (string text)
+        {
+            bool assumeSnakeCase = text.Contains("negative_prompt");
+            var resolver = assumeSnakeCase ? new DefaultContractResolver { NamingStrategy = new SnakeCaseNamingStrategy { ProcessDictionaryKeys = true } } : null;
+            var gi = text.FromJson<ComfyData.GenerationInfo>(NullValueHandling.Ignore, DefaultValueHandling.Populate, true, true, resolver);
+            return gi;
+        }
+
         public void LoadGenerationInfo (string info)
         {
             ParsedText = info;
-            bool assumeSnakeCase = info.Contains("negative_prompt");
-            var resolver = assumeSnakeCase ? new DefaultContractResolver { NamingStrategy = new SnakeCaseNamingStrategy { ProcessDictionaryKeys = true } } : null;
-
-            var gi = info.FromJson<ComfyData.GenerationInfo>(NullValueHandling.Ignore, DefaultValueHandling.Populate, true, true, resolver);
+            var gi = DeserializeGenInfo(info);
 
             if (gi == null)
                 return;

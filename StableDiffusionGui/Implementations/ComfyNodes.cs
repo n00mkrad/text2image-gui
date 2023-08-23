@@ -461,9 +461,10 @@ namespace StableDiffusionGui.Implementations
             }
         }
 
-        public class SaveImage : Node, INode
+        public class NmkdSaveImage : Node, INode
         {
             public string Prefix = "nmkd";
+            public string OverridePath = "";
             public ComfyInput Image;
 
             public NodeInfo GetNodeInfo()
@@ -474,10 +475,13 @@ namespace StableDiffusionGui.Implementations
                     { "images", Image.Get() }
                 };
 
+                if (OverridePath.IsNotEmpty())
+                    inputs["override_save_path"] = OverridePath;
+
                 return new NodeInfo
                 {
                     Inputs = inputs,
-                    ClassType = nameof(SaveImage)
+                    ClassType = nameof(NmkdSaveImage)
                 };
             }
 

@@ -428,9 +428,10 @@ namespace StableDiffusionGui.Forms
             {
                 if (!string.IsNullOrWhiteSpace(ImageViewer.CurrentImagePath) && File.Exists(ImageViewer.CurrentImagePath))
                 {
+                    bool enablePostProc = new[] { Implementation.InvokeAi, Implementation.Comfy }.Contains(TextToImage.CurrentTaskSettings.Implementation);
                     reGenerateImageWithCurrentSettingsToolStripMenuItem.Visible = !Program.Busy;
                     useAsInitImageToolStripMenuItem.Visible = !Program.Busy;
-                    postProcessImageToolStripMenuItem.Visible = !Program.Busy && TextToImage.CurrentTaskSettings.Implementation == Implementation.InvokeAi;
+                    postProcessImageToolStripMenuItem.Visible = !Program.Busy && enablePostProc;
                     copyImageToClipboardToolStripMenuItem.Visible = pictBoxImgViewer.Image != null;
                     fitWindowSizeToImageSizeToolStripMenuItem.Visible = MainUi.GetPreferredSize() != Size.Empty;
                     copySidebySideComparisonImageToolStripMenuItem.Visible = pictBoxInitImg.Image != null && pictBoxImgViewer.Image != null;

@@ -1,8 +1,11 @@
-﻿using StableDiffusionGui.Ui;
+﻿using StableDiffusionGui.Data;
+using StableDiffusionGui.Io;
+using StableDiffusionGui.Main;
+using StableDiffusionGui.MiscUtils;
+using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static StableDiffusionGui.Implementations.ComfyData;
@@ -12,6 +15,17 @@ namespace StableDiffusionGui.Implementations
 {
     public class ComfyUtils
     {
+        public static string GetVramArg()
+        {
+            var preset = ParseUtils.GetEnum<Enums.Comfy.VramPreset>(Config.Instance.ComfyVramPreset.ToString(), true, Strings.ComfyVramPresets);
+            if (preset == Enums.Comfy.VramPreset.GpuOnly) return "gpu-only";
+            if (preset == Enums.Comfy.VramPreset.HighVram) return "highvram";
+            if (preset == Enums.Comfy.VramPreset.NormalVram) return "normalvram";
+            if (preset == Enums.Comfy.VramPreset.LowVram) return "lowvram";
+            if (preset == Enums.Comfy.VramPreset.NoVram) return "novram";
+            return "";
+        }
+
         public static string ControlnetCompatCheck(List<ControlnetInfo> cnets, ModelArch modelArch)
         {
             ModelArch cnetArch = (ModelArch)(-1);
