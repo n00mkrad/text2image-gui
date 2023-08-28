@@ -1,3 +1,21 @@
+SD GUI 1.12.0 Changelog:
+- New: Support for SDXL via Diffusers (Minimum VRAM untested; might need 16 GB for now)
+- New: Support for SDXL refiner model, with variable refine strength (or use 0 to disable and only use base model)
+- New: Added samplers: DPM++ 2M SDE, DPM++ 2M SDE Karras, UniPC
+- New: Custom samplers now work with all implementations including SDXL, ONNX, InstruxtPix2Pix
+- New: Added download buttons for SD 1.5, SD 1.5 ONNX, and SDXL Base/Refiner in Dev Tools
+- New: Model Converter now supports SDXL Safetensors -> Diffusers conversion
+- New: Interval syntax is supported for LoRA weights, e.g. `0.2 > 1.0 : 0.1` will run 0.2-1.0 in 0.1 steps
+- Improved: You can now type a resolution manually into the dropdowns, it will automatically get rounded to a valid number
+- Improved Model Converter compatibility for certain model types
+- Improved: Image Viewer now also shows LoRA weight of generated image, not just name
+- Improved: Inpainting mask is no longer auto-cleared when a new image is loaded, now only if its size is different
+- Improved: All Diffusers-based implementations can now be canceled without killing the whole process
+- Fixed: HuggingFace model downloader was using an incorrect path
+- Fixed unhandled error when using an invalid LoRA training project name
+- Fixed various bugs
+
+
 SD GUI 1.11.0 Changelog:
 - New: LoRA and LyCORIS support
 - New: LoRA training GUI (replaces Dreambooth, works with 8 GB GPUs)
