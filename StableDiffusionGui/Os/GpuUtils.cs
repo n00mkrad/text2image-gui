@@ -35,10 +35,9 @@ namespace StableDiffusionGui.Os
 
             Process py = OsUtils.NewProcess(true, logAction: (s) => outLines.Add(s));
             py.StartInfo.Arguments = $"/C cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand(true)} && {Constants.Files.VenvActivate} && python {Constants.Dirs.SdRepo}/scripts/check_gpus.py";
-
             Logger.Log("cmd.exe " + py.StartInfo.Arguments, true);
-            py.Start();
 
+            OsUtils.StartProcess(py, killWithParent: true);
             await OsUtils.WaitForProcessExit(py);
 
             CachedGpus = outLines.Where(x => x.MatchesWildcard("* - * - *")).Select(x => new Gpu(x)).ToList();

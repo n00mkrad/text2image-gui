@@ -107,7 +107,7 @@ namespace StableDiffusionGui.Os
             if (waitBeforeStartingMs > 0)
                 await Task.Delay(waitBeforeStartingMs);
 
-            while (p.HasExited)
+            while (!p.HasExited)
                 await Task.Delay(waitInLoopMs);
         }
 
