@@ -326,31 +326,6 @@ namespace StableDiffusionGui.Os
             hitmanProc.Start();
         }
 
-        /// <summary> Uses the python package picklescan to check for malware in a pickled file </summary>
-        /// <returns> If file is safe </returns>
-        public static async Task<bool> ScanPickle(string path)
-        {
-            Process p = NewProcess(true);
-            p.StartInfo.EnvironmentVariables["PATH"] = TtiUtils.GetEnvVarsSd(true, Paths.GetDataPath()).First().Value;
-            p.StartInfo.Arguments = $"/C python -m picklescan -p {path.Wrap(true)}";
-            string output = await Task.Run(() => GetProcStdOut(p, true));
-            bool safe = output.Contains("Infected files: 0") && output.Contains("Dangerous globals: 0");
-            Logger.Log($"Pickle Scanner: '{path}' safe: {safe}", true);
-            return safe;
-        }
-
-        public static async Task<Dictionary<string, bool>> ScanPickles(IEnumerable<string> paths)
-        {
-            var scanResults = new ConcurrentBag<Tuple<string, bool>>();
-
-            await paths.ParallelForEachAsync(async path =>
-            {
-                scanResults.Add(new Tuple<string, bool>(path, await ScanPickle(path)));
-            }, maxDegreeOfParallelism: Environment.ProcessorCount);
-
-            return scanResults.ToDictionary(x => x.Item1, x => x.Item2);
-        }
-
         /// <summary> Checks if a pip package is installed </summary>
         /// <returns> True if pip package was found, False if not </returns>
         public static async Task<bool> HasPythonPackage(string pkg)
