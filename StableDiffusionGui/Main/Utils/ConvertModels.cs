@@ -121,7 +121,7 @@ namespace StableDiffusionGui.Main.Utils
                     if (!quiet)
                         Logger.Log($"Done. Saved converted model to:\n{outPath.Replace(Paths.GetDataPath(), "Data")}");
 
-                    if (deleteInput)
+                    if (deleteInput == true)
                     {
                         bool deleteSuccess = IoUtils.TryDeleteIfExists(model.FullName);
 
