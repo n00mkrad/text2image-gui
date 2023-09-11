@@ -141,7 +141,7 @@ namespace StableDiffusionGui
                 s = " " + s;
 
             if (addSpaceEnd)
-                s = s + " ";
+                s += " ";
 
             if (backslashToSlash)
                 s = s.Replace(@"\", "/");

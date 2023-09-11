@@ -110,7 +110,7 @@ namespace StableDiffusionGui.Os
             while (!p.HasExited)
                 await Task.Delay(waitInLoopMs);
         }
-
+        
         public static void StartProcess(Process p, bool killWithParent, bool beginReadStdout = true)
         {
             p.Start();

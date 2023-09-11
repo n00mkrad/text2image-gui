@@ -18,10 +18,13 @@ namespace StableDiffusionGui.Main.Utils
 
         /// <summary> Converts model weights </summary>
         /// <returns> A model class of the newly created model, or null if it failed </returns>
-        public static async Task<Model> Convert(Format formatIn, Format formatOut, Model model, bool fp16, bool safeDiffusers, string customOutPath = "", bool quiet = false)
+        public static async Task<Model> Convert(Format formatIn, Format formatOut, Model model, bool fp16, bool safeDiffusers, string customOutPath = "", bool quiet = false, bool? deleteInput = null)
         {
             try
             {
+                if (deleteInput == null)
+                    deleteInput = Config.Instance.ConvertModelsDeleteInput;
+
                 if (!quiet)
                 {
                     Logger.ClearLogBox();
@@ -118,7 +121,7 @@ namespace StableDiffusionGui.Main.Utils
                     if (!quiet)
                         Logger.Log($"Done. Saved converted model to:\n{outPath.Replace(Paths.GetDataPath(), "Data")}");
 
-                    if (Config.Instance.ConvertModelsDeleteInput)
+                    if (deleteInput)
                     {
                         bool deleteSuccess = IoUtils.TryDeleteIfExists(model.FullName);
 

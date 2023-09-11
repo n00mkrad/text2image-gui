@@ -22,7 +22,6 @@ namespace StableDiffusionGui.Training
     {
         private static List<string> _currentTempPaths = new List<string>();
         static readonly string[] _validImageExts = new string[] { ".png", ".jpg", ".jpeg", ".jfif", ".bmp" };
-        static readonly bool _useVisibleCmdWindow = false;
         private static string _currentArchivalLogDir = "";
 
         public static async Task<string> TrainLora(Model baseModel, ZlpDirectoryInfo dataDir, string name, string caption, KohyaSettings s, bool verboseFilename, string outDir = "")
@@ -46,7 +45,7 @@ namespace StableDiffusionGui.Training
                 {
                     Logger.Log($"Converting base model...");
                     _currentTempPaths.Add(Path.Combine(Paths.GetSessionDataPath(), $"lorabase{FormatUtils.GetUnixTimestamp()}"));
-                    baseModel = await ConvertModels.Convert(baseModel.Format, Enums.Models.Format.Diffusers, baseModel, true, true, _currentTempPaths.Last(), true);
+                    baseModel = await ConvertModels.Convert(baseModel.Format, Enums.Models.Format.Diffusers, baseModel, true, true, _currentTempPaths.Last(), true, false);
                     Assert.Check(baseModel != null, "Base model conversion failed!");
                 }
 
