@@ -98,7 +98,7 @@ namespace StableDiffusionGui.Io
         {
             MultiPromptsSameSeed = true;
             InitStrength = 0.4f;
-            Steps = 15;
+            Steps = 20;
             Scale = 7.0f;
             OutPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), "SDGUI");
             FavsPath = Path.Combine(OutPath, Constants.Dirs.ImgFavs);
@@ -137,8 +137,7 @@ namespace StableDiffusionGui.Io
             if (ramGb > 22f) ImageCacheMaxSizeMb = 256;
 
             SdXlRefinerStrength = 0.2f;
-            NmkdiffOffload = true;
-            NmkdiffSdXLSequential = false;
+            ComfyVramPreset = Enums.Comfy.VramPreset.NormalVram;
         }
 
         public ConfigInstance Clone()

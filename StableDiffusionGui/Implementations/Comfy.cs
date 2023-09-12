@@ -231,7 +231,7 @@ namespace StableDiffusionGui.Implementations
                 $"--port {ComfyPort}",
                 $"--output-directory {outPath.Wrap(true)}",
                 $"--preview-method none",
-                $"--disable-xformers", // Obselete since Pytorch 2.0
+                $"--disable-xformers", // Obsolete since Pytorch 2.0
                 $"--cuda-malloc",
                 $"--{ComfyUtils.GetVramArg()}",
             };
@@ -252,7 +252,7 @@ namespace StableDiffusionGui.Implementations
                 Process py = OsUtils.NewProcess(true, logAction: HandleOutput);
                 TextToImage.CurrentTask.Processes.Add(py);
 
-                py.StartInfo.Arguments = $"/C cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand()} && {Constants.Files.VenvActivate} && python comfy/comfyui/main.py {string.Join(" ", scriptArgs)}";
+                py.StartInfo.Arguments = $"/C cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand()} && {Constants.Files.VenvActivate} && python repo/comfyui/main.py {string.Join(" ", scriptArgs)}";
                 Logger.Log("cmd.exe " + py.StartInfo.Arguments, true);
 
                 if (TtiProcess.CurrentProcess != null)

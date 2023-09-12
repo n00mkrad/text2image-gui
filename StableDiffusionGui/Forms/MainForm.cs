@@ -567,7 +567,8 @@ namespace StableDiffusionGui.Forms
 
         private void sD15ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DownloadModels.DownloadModel("nmkd/stable-diffusion-1.5-fp16");
+            string url = "https://huggingface.co/nmkd/sd1-safetensors/resolve/main/sd_1.5_fp16.safetensors";
+            DownloadModels.DownloadFile(url, Path.Combine(Paths.GetModelsPath(), "sd_xl_base_1.0_fixvae.safetensors"));
         }
 
         private void sD15ONNXToolStripMenuItem_Click(object sender, EventArgs e)
@@ -577,12 +578,14 @@ namespace StableDiffusionGui.Forms
 
         private void sDXL10ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DownloadModels.DownloadModel("nmkd/stable-diffusion-xl-base-1.0");
+            string url = "https://huggingface.co/bdsqlsz/stable-diffusion-xl-base-1.0_fixvae_fp16/resolve/main/sd_xl_base_1.0_fixvae_V2_fp16.safetensors";
+            DownloadModels.DownloadFile(url, Path.Combine(Paths.GetModelsPath(), "sd_xl_base_1.0_fixvae.safetensors"));
         }
 
         private void sDXL10RefinerToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DownloadModels.DownloadModel("nmkd/stable-diffusion-xl-refiner-1.0");
+            string url = "https://huggingface.co/stabilityai/stable-diffusion-xl-refiner-1.0/resolve/main/sd_xl_refiner_1.0.safetensors";
+            DownloadModels.DownloadFile(url, Path.Combine(Paths.GetModelsPath(), "sd_xl_refiner_1.0.safetensors"));
         }
 
         private void checkboxPreview_CheckedChanged(object sender, EventArgs e)

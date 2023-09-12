@@ -153,7 +153,7 @@ namespace StableDiffusionGui.Ui
 
         public static Dictionary<string, string> ComfyVramPresets = new Dictionary<string, string>
         {
-            { Enums.Comfy.VramPreset.GpuOnly.ToString(), "Max (Keep All Data on Gpu - Not Recommended!)" },
+            { Enums.Comfy.VramPreset.GpuOnly.ToString(), "Max (Keep All Data on GPU - Not Recommended!)" },
             { Enums.Comfy.VramPreset.HighVram.ToString(), "High (Don’t Offload Models to CPU)" },
             { Enums.Comfy.VramPreset.NormalVram.ToString(), "Normal (Dynamically Offload Models to CPU)" },
             { Enums.Comfy.VramPreset.LowVram.ToString(), "Low (Slower)" },

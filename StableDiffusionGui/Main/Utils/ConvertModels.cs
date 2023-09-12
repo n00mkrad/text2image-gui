@@ -233,6 +233,7 @@ namespace StableDiffusionGui.Main.Utils
 
             void PythonLog(string log)
             {
+                if (log == null) return;
                 Logger.Log(log, true, false, Constants.Lognames.Convert);
                 output += $"{log.Trim('\n')}\n";
             }

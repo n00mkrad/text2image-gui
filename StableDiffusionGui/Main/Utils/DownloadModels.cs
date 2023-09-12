@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using static StableDiffusionGui.Main.Constants;
 
 namespace StableDiffusionGui.Main.Utils
 {
@@ -65,6 +66,13 @@ namespace StableDiffusionGui.Main.Utils
             string args = $"/C title Downloading {repoId} - Do not close this window! && cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand(true, Paths.GetDataPath())} && {Constants.Files.VenvActivate} && " +
                 $"python \"{Constants.Dirs.SdRepo}\\scripts\\download_model.py\" -r {repoId.Wrap()} -c {cachePath.Wrap()} -s {savePath.Wrap()} --revision {rev} && timeout 5";
             Logger.Log($"cmd {args}", true);
+            Process.Start("cmd", args);
+        }
+
+        public static void DownloadFile (string url, string savePath)
+        {
+            savePath = IoUtils.GetAvailablePath(savePath, "_{0}");
+            string args = $"/C title Downloading file... && curl -L {url} -o {savePath.Wrap()} && timeout 5";
             Process.Start("cmd", args);
         }
 
