@@ -278,7 +278,7 @@ namespace StableDiffusionGui.Forms
                 panelEmbeddingsPath.SetVisible(CurrImplementation.Supports(ImplementationInfo.Feature.Embeddings));
                 panelLoras.SetVisible(CurrImplementation.Supports(ImplementationInfo.Feature.Lora));
                 panelVae.SetVisible(CurrImplementation.Supports(ImplementationInfo.Feature.CustomVae));
-                panelAdvancedOptsInvoke.SetVisible(CurrImplementation == Implementation.InvokeAi || CurrImplementation == Implementation.Comfy);
+                panelAdvancedOptsInvoke.SetVisible(CurrImplementation == Implementation.InvokeAi);
                 panelModelCaching.SetVisible(CurrImplementation == Implementation.InvokeAi);
                 panelComfyVram.SetVisible(CurrImplementation == Implementation.Comfy);
 
