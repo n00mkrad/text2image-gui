@@ -230,8 +230,8 @@ namespace StableDiffusionGui.Forms
             if (updownUpscaleFactor.Visible)
             {
                 float factor = (float)updownUpscaleFactor.Value;
-                updownUpscaleResultH.Value = (comboxResH.GetInt() * factor).RoundToInt().RoundMod(MainUi.CurrentModulo);
-                updownUpscaleResultW.Value = (comboxResW.GetInt() * factor).RoundToInt().RoundMod(MainUi.CurrentModulo);
+                updownUpscaleResultH.SetValue((comboxResH.GetInt() * factor).RoundToInt().RoundMod(MainUi.CurrentModulo));
+                updownUpscaleResultW.SetValue((comboxResW.GetInt() * factor).RoundToInt().RoundMod(MainUi.CurrentModulo));
             }
         }
 

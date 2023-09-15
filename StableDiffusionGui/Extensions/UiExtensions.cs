@@ -96,7 +96,7 @@ namespace StableDiffusionGui.Extensions
         /// <summary> Sets the visibility of controls while avoiding unnecessary setter calls.  </summary>
         public static void SetVisible(this IEnumerable<Control> c, bool targetState)
         {
-            foreach(var control in c)
+            foreach (var control in c)
                 control.SetVisible(targetState);
         }
 
@@ -256,6 +256,17 @@ namespace StableDiffusionGui.Extensions
             {
                 return null;
             }
+        }
+
+        public static void SetValue(this NumericUpDown upDown, decimal value)
+        {
+            upDown.InvokeIfNeeded(() =>
+            {
+                if (value <= upDown.Maximum && value >= upDown.Minimum)
+                {
+                    upDown.Value = value;
+                }
+            });
         }
 
         public static void SetTextSafe(this Control control, string text)
