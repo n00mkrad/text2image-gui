@@ -1,6 +1,7 @@
 ﻿using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -307,6 +308,7 @@ namespace StableDiffusionGui.Implementations
                         { "end_at_step", EndStep },
                         { "return_with_leftover_noise", ReturnLeftoverNoise ? "enable" : "disable" },
                         { "denoise", Denoise },
+                        { "sharpness", 1.0f },
                         { "model", Model.Get() },
                         { "refiner_model", ModelRefiner.Get() },
                         { "positive", PositiveCond.Get() },
@@ -852,7 +854,7 @@ namespace StableDiffusionGui.Implementations
             public string Sampler = "euler";
             public string Scheduler = "normal";
             public float Denoise = 0.5f;
-            public int TileSize = 768;
+            public Size TileSize = new Size(768, 768);
             public bool ForceUniformTiles = false;
 
             public NodeInfo GetNodeInfo()
@@ -875,8 +877,8 @@ namespace StableDiffusionGui.Implementations
                         { "scheduler", Scheduler },
                         { "denoise", Denoise },
                         { "mode_type", "Linear" },
-                        { "tile_width", TileSize },
-                        { "tile_height", TileSize },
+                        { "tile_width", TileSize.Width },
+                        { "tile_height", TileSize.Height },
                         { "mask_blur", 8 },
                         { "tile_padding", 32 },
                         { "seam_fix_mode", "None" },

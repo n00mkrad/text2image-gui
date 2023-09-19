@@ -93,6 +93,7 @@ namespace StableDiffusionGui.Io
         public float SdXlRefinerStrength;
         public Enums.Comfy.VramPreset ComfyVramPreset;
         public string EsrganModel;
+        public string SdUpscaleModel;
 
         public ConfigInstance()
         {

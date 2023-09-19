@@ -321,5 +321,12 @@ namespace StableDiffusionGui.Extensions
             }, null, milliseconds, System.Threading.Timeout.Infinite);
             control.Tag = timer; // keep a reference to the timer
         }
+
+        /// <summary> Sets ComboBox index to <paramref name="index"/> if it has any items and current index is -1 </summary>
+        public static void InitCombox (this ComboBox c, int index = 0)
+        {
+            if (c.Items.Count > 0 && c.SelectedIndex == -1)
+                c.SelectedIndex = index;
+        }
     }
 }

@@ -98,12 +98,24 @@ namespace StableDiffusionGui.Forms
                 var models = Models.GetModelsAll().Where(m => CurrImplementation.GetInfo().SupportedModelFormats.Contains(m.Format)).ToList();
                 models.ForEach(m => comboxSdModel.Items.Add(m.Name));
                 ConfigParser.LoadGuiElement(comboxSdModel, ref Config.Instance.Model);
+                comboxSdModel.InitCombox();
 
-                if (comboxSdModel.Items.Count > 0 && comboxSdModel.SelectedIndex == -1)
-                    comboxSdModel.SelectedIndex = 0;
+                comboxUsduModel.Items.Clear();
+                GetValidUsduModels(models).ToList().ForEach(m => comboxUsduModel.Items.Add(m.Name));
+                ConfigParser.LoadGuiElement(comboxUsduModel, ref Config.Instance.SdUpscaleModel);
+                comboxUsduModel.InitCombox();
 
                 UpdateComboxStates();
             })).RunWithUiStopped(this, showErrors: true);
+        }
+
+        private IEnumerable<Model> GetValidUsduModels(IEnumerable<Model> models)
+        {
+            models = models.Where(m => new[] { Enums.Models.Format.Safetensors, Enums.Models.Format.Pytorch }.Contains(m.Format)); // Only ST/CKPT Models
+            models = models.Where(m => !(m.Size > 5L * 1024 * 1024 * 1024 && m.Name.Lower().Contains("xl"))); // Roughly filter out XL models based on size/name
+            models = models.Where(m => !(m.Size > 4.5 * 1024 * 1024 * 1024 && m.Name.Lower().Contains("768"))); // Roughly filter out SD2V models based on size/name
+            models = models.Where(m => !(new[] { "inpaint", "refiner" }.Any(s => m.Name.Lower().Contains(s)))); // Filter out inpainting and refiner models based on name
+            return models;
         }
 
         private void LoadVaes()
@@ -117,10 +129,7 @@ namespace StableDiffusionGui.Forms
                 comboxSdModelVae.Items.Add("None");
                 Models.GetVaes().ForEach(m => comboxSdModelVae.Items.Add(m.Name));
                 ConfigParser.LoadGuiElement(comboxSdModelVae, ref Config.Instance.ModelVae);
-
-                if (comboxSdModelVae.Items.Count > 0 && comboxSdModelVae.SelectedIndex == -1)
-                    comboxSdModelVae.SelectedIndex = 0;
-
+                comboxSdModelVae.InitCombox();
                 UpdateComboxStates();
             })).RunWithUiStopped(this, showErrors: true);
         }
@@ -212,6 +221,7 @@ namespace StableDiffusionGui.Forms
             ConfigParser.SaveGuiElement(textboxLorasDir, ref Config.Instance.LorasDir);
             if (!string.IsNullOrWhiteSpace(comboxSdModel.Text)) ConfigParser.SaveGuiElement(comboxSdModel, ref Config.Instance.Model);
             if (!string.IsNullOrWhiteSpace(comboxSdModelVae.Text)) ConfigParser.SaveGuiElement(comboxSdModelVae, ref Config.Instance.ModelVae);
+            if (!string.IsNullOrWhiteSpace(comboxUsduModel.Text)) ConfigParser.SaveGuiElement(comboxUsduModel, ref Config.Instance.SdUpscaleModel);
             if (!comboxCudaDevice.Text.StartsWith("Loading")) ConfigParser.SaveComboxIndex(comboxCudaDevice, ref Config.Instance.CudaDeviceIdx);
             ConfigParser.SaveGuiElement(checkboxModelCaching, ref Config.Instance.InvokeAllowModelCaching);
             ConfigParser.SaveComboxIndex(comboxClipSkip, ref Config.Instance.ClipSkip);
@@ -272,9 +282,10 @@ namespace StableDiffusionGui.Forms
             {
                 Config.Instance.Implementation = CurrImplementation;
                 panelFullPrecision.SetVisible(CurrImplementation.Supports(ImplementationInfo.Feature.HalfPrecisionToggle));
-                panelUnloadModel.SetVisible(false /* CurrImplementation.Supports(ImplementationInfo.Feature.InteractiveCli) */);
+                panelUnloadModel.SetVisible(CurrImplementation == Implementation.InvokeAi);
                 panelCudaDevice.SetVisible(CurrImplementation.Supports(ImplementationInfo.Feature.DeviceSelection));
                 panelSdModel.SetVisible(CurrImplementation.Supports(ImplementationInfo.Feature.CustomModels));
+                panelUsduModel.SetVisible(CurrImplementation == Implementation.Comfy);
                 panelEmbeddingsPath.SetVisible(CurrImplementation.Supports(ImplementationInfo.Feature.Embeddings));
                 panelLoras.SetVisible(CurrImplementation.Supports(ImplementationInfo.Feature.Lora));
                 panelVae.SetVisible(CurrImplementation.Supports(ImplementationInfo.Feature.CustomVae));
@@ -284,17 +295,6 @@ namespace StableDiffusionGui.Forms
 
                 LoadModels();
                 LoadVaes();
-
-                if (_ready && CurrImplementation != Implementation.InvokeAi)
-                {
-                    if (_initialImplementationLoad)
-                    {
-                        _initialImplementationLoad = false;
-                        return; // Supress once, as we only want to show this if the user selects it, not if it's loaded from config
-                    }
-
-                    UiUtils.ShowMessageBox($"Warning: This implementation disables several features.\nOnly use it if you need it due to compatibility or hardware limitations.");
-                }
             })).RunWithUiStopped(this, showErrors: true);
         }
 
@@ -311,6 +311,11 @@ namespace StableDiffusionGui.Forms
 
             if (parentPanel.Padding.Right != newPadding.Right)
                 parentPanel.Padding = newPadding;
+        }
+
+        private void btnRefreshUsduModelsDropdown_Click(object sender, EventArgs e)
+        {
+            LoadModels();
         }
     }
 }

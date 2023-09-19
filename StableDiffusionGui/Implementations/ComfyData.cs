@@ -40,6 +40,7 @@ namespace StableDiffusionGui.Implementations
             public Sampler Sampler;
             public int ClipSkip = -1;
             public bool SaveOriginalAndUpscale;
+            public UltimateSdUpConfig UltimateSdUpConfig;
 
             public GenerationInfo GetSerializeClone ()
             {
@@ -67,6 +68,7 @@ namespace StableDiffusionGui.Implementations
                     Sampler = Sampler,
                     ClipSkip = ClipSkip,
                     SaveOriginalAndUpscale = SaveOriginalAndUpscale,
+                    UltimateSdUpConfig = UltimateSdUpConfig,
                 };
             }
 
@@ -100,6 +102,20 @@ namespace StableDiffusionGui.Implementations
                     { "hypernetworks", Hypernetworks },
                     { "controlnets", Controlnets },
                 };
+            }
+        }
+
+        public class UltimateSdUpConfig
+        {
+            public string ModelPathEsrgan = "";
+            public string ModelPathSd = "";
+            public string ModelPathTileControlnet = "";
+            public int TileSize = 1024;
+            public bool UseTileControlnet = false;
+
+            public bool IsValid ()
+            {
+                return File.Exists(ModelPathEsrgan) && File.Exists(ModelPathSd) && (!UseTileControlnet || (UseTileControlnet && File.Exists(ModelPathTileControlnet)));
             }
         }
     }

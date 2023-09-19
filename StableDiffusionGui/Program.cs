@@ -86,6 +86,13 @@ namespace StableDiffusionGui
 
         static void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
         {
+            // Ignore dispose stuff
+            if (e.Exception.Message.Contains("Dispose() cannot be called while"))
+            {
+                Logger.Log($"{e.Exception.Message}\n{e.Exception.StackTrace}", true);
+                return;
+            }
+
             ShowUnhandledError($"Unhandled Thread Exception!\n\n{e.Exception.Message}\n\nStack Trace:\n{e.Exception.StackTrace}");
         }
 

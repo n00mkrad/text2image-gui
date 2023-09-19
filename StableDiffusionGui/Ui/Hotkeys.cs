@@ -137,12 +137,6 @@ namespace StableDiffusionGui.Ui
                 return;
             }
 
-            if (keys == Keys.F9 && Program.Debug)
-            {
-                new Comfy().Run(Program.MainForm.GetCurrentTtiSettings(), Config.Instance.OutPath);
-                return;
-            }
-
             // if (keys == Keys.F10 && Program.Debug) // Hotkey: UI TEST
             // {
             //     UiConstruction.CreateMainWindowOption();

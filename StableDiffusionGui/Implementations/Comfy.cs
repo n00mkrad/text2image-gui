@@ -84,6 +84,16 @@ namespace StableDiffusionGui.Implementations
                 SaveOriginalAndUpscale = Config.Instance.SaveUnprocessedImages,
             };
 
+            if (currentGeneration.UpscaleMethod == UpscaleMethod.UltimateSd)
+            {
+                currentGeneration.UltimateSdUpConfig = new UltimateSdUpConfig()
+                {
+                    ModelPathEsrgan = Models.GetUpscalers().Where(m => m.Name == Config.Instance.EsrganModel).FirstOrDefault().FullName,
+                    // ModelPathTileControlnet = Models.GetControlNets().Where(m => m.Name.Contains("_tile_") && m.Name.Contains("sd15")).FirstOrDefault().FullName,
+                    ModelPathSd = Models.GetModels(implementation: Implementation.Comfy).Where(m => m.Name == Config.Instance.SdUpscaleModel).FirstOrDefault().FullName,
+                };
+            }
+
             foreach (ControlnetInfo cnet in s.Controlnets.Where(cn => cn != null && cn.Strength > 0.001f && cn.Model != Constants.NoneMdl))
             {
                 var cnetModel = controlnetMdls.Where(m => m.FormatIndependentName == cnet.Model).FirstOrDefault();
@@ -396,7 +406,7 @@ namespace StableDiffusionGui.Implementations
                 string giKey = ImageMetadata.MetadataType.GenerationInfoJson.ToString();
 
                 GenerationInfo metaGi = ImageMetadata.DeserializeGenInfo(meta.AllEntries.Where(e => e.Key == giKey).FirstOrDefault().Value);
-                
+
                 if (metaGi != null)
                     metadata[giKey] = metaGi.GetSerializeClone();
             }

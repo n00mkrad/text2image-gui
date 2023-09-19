@@ -136,6 +136,14 @@
             this.checkboxModelCaching = new System.Windows.Forms.CheckBox();
             this.panel44 = new System.Windows.Forms.Panel();
             this.label21 = new System.Windows.Forms.Label();
+            this.panelUsduModel = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
+            this.panel6 = new System.Windows.Forms.Panel();
+            this.btnRefreshUsduModelsDropdown = new HTAlt.WinForms.HTButton();
+            this.comboxUsduModel = new System.Windows.Forms.ComboBox();
+            this.btnOpenModelsFolderUsdu = new HTAlt.WinForms.HTButton();
+            this.panel36 = new System.Windows.Forms.Panel();
+            this.label8 = new System.Windows.Forms.Label();
             this.panelLoras = new System.Windows.Forms.Panel();
             this.tableLayoutPanel19 = new System.Windows.Forms.TableLayoutPanel();
             this.panel47 = new System.Windows.Forms.Panel();
@@ -245,6 +253,10 @@
             this.tableLayoutPanel17.SuspendLayout();
             this.panel43.SuspendLayout();
             this.panel44.SuspendLayout();
+            this.panelUsduModel.SuspendLayout();
+            this.tableLayoutPanel6.SuspendLayout();
+            this.panel6.SuspendLayout();
+            this.panel36.SuspendLayout();
             this.panelLoras.SuspendLayout();
             this.tableLayoutPanel19.SuspendLayout();
             this.panel47.SuspendLayout();
@@ -307,6 +319,7 @@
             this.parentPanel.Controls.Add(this.panelComfyVram);
             this.parentPanel.Controls.Add(this.panelFullPrecision);
             this.parentPanel.Controls.Add(this.panelModelCaching);
+            this.parentPanel.Controls.Add(this.panelUsduModel);
             this.parentPanel.Controls.Add(this.panelLoras);
             this.parentPanel.Controls.Add(this.panelEmbeddingsPath);
             this.parentPanel.Controls.Add(this.panelVae);
@@ -324,7 +337,7 @@
             // 
             this.panelNotify.Controls.Add(this.notificationPanel);
             this.panelNotify.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelNotify.Location = new System.Drawing.Point(0, 820);
+            this.panelNotify.Location = new System.Drawing.Point(0, 855);
             this.panelNotify.Name = "panelNotify";
             this.panelNotify.Size = new System.Drawing.Size(843, 35);
             this.panelNotify.TabIndex = 22;
@@ -398,7 +411,7 @@
             // 
             this.panelAdvancedMode.Controls.Add(this.tableLayoutPanel4);
             this.panelAdvancedMode.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelAdvancedMode.Location = new System.Drawing.Point(0, 785);
+            this.panelAdvancedMode.Location = new System.Drawing.Point(0, 820);
             this.panelAdvancedMode.Name = "panelAdvancedMode";
             this.panelAdvancedMode.Size = new System.Drawing.Size(843, 35);
             this.panelAdvancedMode.TabIndex = 15;
@@ -464,7 +477,7 @@
             // 
             this.panelInitImageRetainAspectRatio.Controls.Add(this.tableLayoutPanel15);
             this.panelInitImageRetainAspectRatio.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelInitImageRetainAspectRatio.Location = new System.Drawing.Point(0, 750);
+            this.panelInitImageRetainAspectRatio.Location = new System.Drawing.Point(0, 785);
             this.panelInitImageRetainAspectRatio.Name = "panelInitImageRetainAspectRatio";
             this.panelInitImageRetainAspectRatio.Size = new System.Drawing.Size(843, 35);
             this.panelInitImageRetainAspectRatio.TabIndex = 29;
@@ -530,7 +543,7 @@
             // 
             this.panelAutoSetResForInitImg.Controls.Add(this.tableLayoutPanel14);
             this.panelAutoSetResForInitImg.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelAutoSetResForInitImg.Location = new System.Drawing.Point(0, 715);
+            this.panelAutoSetResForInitImg.Location = new System.Drawing.Point(0, 750);
             this.panelAutoSetResForInitImg.Name = "panelAutoSetResForInitImg";
             this.panelAutoSetResForInitImg.Size = new System.Drawing.Size(843, 35);
             this.panelAutoSetResForInitImg.TabIndex = 28;
@@ -596,7 +609,7 @@
             // 
             this.panel1.Controls.Add(this.label17);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Location = new System.Drawing.Point(0, 675);
+            this.panel1.Location = new System.Drawing.Point(0, 710);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(843, 40);
             this.panel1.TabIndex = 27;
@@ -616,7 +629,7 @@
             // 
             this.panelSaveUnprocessedImages.Controls.Add(this.panel29);
             this.panelSaveUnprocessedImages.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSaveUnprocessedImages.Location = new System.Drawing.Point(0, 640);
+            this.panelSaveUnprocessedImages.Location = new System.Drawing.Point(0, 675);
             this.panelSaveUnprocessedImages.Name = "panelSaveUnprocessedImages";
             this.panelSaveUnprocessedImages.Size = new System.Drawing.Size(843, 35);
             this.panelSaveUnprocessedImages.TabIndex = 23;
@@ -700,7 +713,7 @@
             // 
             this.panelImgSaveMode.Controls.Add(this.tableLayoutPanel20);
             this.panelImgSaveMode.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelImgSaveMode.Location = new System.Drawing.Point(0, 605);
+            this.panelImgSaveMode.Location = new System.Drawing.Point(0, 640);
             this.panelImgSaveMode.Name = "panelImgSaveMode";
             this.panelImgSaveMode.Size = new System.Drawing.Size(843, 35);
             this.panelImgSaveMode.TabIndex = 34;
@@ -772,7 +785,7 @@
             // 
             this.panelFavsDir.Controls.Add(this.tableLayoutPanel13);
             this.panelFavsDir.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelFavsDir.Location = new System.Drawing.Point(0, 570);
+            this.panelFavsDir.Location = new System.Drawing.Point(0, 605);
             this.panelFavsDir.Name = "panelFavsDir";
             this.panelFavsDir.Size = new System.Drawing.Size(843, 35);
             this.panelFavsDir.TabIndex = 26;
@@ -863,7 +876,7 @@
             // 
             this.panelPromptInFilename.Controls.Add(this.tableLayoutPanel5);
             this.panelPromptInFilename.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelPromptInFilename.Location = new System.Drawing.Point(0, 535);
+            this.panelPromptInFilename.Location = new System.Drawing.Point(0, 570);
             this.panelPromptInFilename.Name = "panelPromptInFilename";
             this.panelPromptInFilename.Size = new System.Drawing.Size(843, 35);
             this.panelPromptInFilename.TabIndex = 16;
@@ -998,7 +1011,7 @@
             // 
             this.panelPromptSubfolders.Controls.Add(this.tableLayoutPanel2);
             this.panelPromptSubfolders.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelPromptSubfolders.Location = new System.Drawing.Point(0, 500);
+            this.panelPromptSubfolders.Location = new System.Drawing.Point(0, 535);
             this.panelPromptSubfolders.Name = "panelPromptSubfolders";
             this.panelPromptSubfolders.Size = new System.Drawing.Size(843, 35);
             this.panelPromptSubfolders.TabIndex = 12;
@@ -1094,7 +1107,7 @@
             // 
             this.panelOutPath.Controls.Add(this.tableLayoutPanel7);
             this.panelOutPath.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelOutPath.Location = new System.Drawing.Point(0, 465);
+            this.panelOutPath.Location = new System.Drawing.Point(0, 500);
             this.panelOutPath.Name = "panelOutPath";
             this.panelOutPath.Size = new System.Drawing.Size(843, 35);
             this.panelOutPath.TabIndex = 13;
@@ -1185,7 +1198,7 @@
             // 
             this.panel5.Controls.Add(this.label5);
             this.panel5.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel5.Location = new System.Drawing.Point(0, 425);
+            this.panel5.Location = new System.Drawing.Point(0, 460);
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(843, 40);
             this.panel5.TabIndex = 14;
@@ -1205,7 +1218,7 @@
             // 
             this.panelCudaDevice.Controls.Add(this.tableLayoutPanel9);
             this.panelCudaDevice.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelCudaDevice.Location = new System.Drawing.Point(0, 390);
+            this.panelCudaDevice.Location = new System.Drawing.Point(0, 425);
             this.panelCudaDevice.Name = "panelCudaDevice";
             this.panelCudaDevice.Size = new System.Drawing.Size(843, 35);
             this.panelCudaDevice.TabIndex = 21;
@@ -1274,7 +1287,7 @@
             // 
             this.panelAdvancedOptsInvoke.Controls.Add(this.tableLayoutPanel16);
             this.panelAdvancedOptsInvoke.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelAdvancedOptsInvoke.Location = new System.Drawing.Point(0, 355);
+            this.panelAdvancedOptsInvoke.Location = new System.Drawing.Point(0, 390);
             this.panelAdvancedOptsInvoke.Name = "panelAdvancedOptsInvoke";
             this.panelAdvancedOptsInvoke.Size = new System.Drawing.Size(843, 35);
             this.panelAdvancedOptsInvoke.TabIndex = 30;
@@ -1352,7 +1365,7 @@
             this.panelComfyVram.Controls.Add(this.panel18, 0, 0);
             this.panelComfyVram.Controls.Add(this.panel22, 0, 0);
             this.panelComfyVram.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelComfyVram.Location = new System.Drawing.Point(0, 320);
+            this.panelComfyVram.Location = new System.Drawing.Point(0, 355);
             this.panelComfyVram.Name = "panelComfyVram";
             this.panelComfyVram.RowCount = 1;
             this.panelComfyVram.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -1408,7 +1421,7 @@
             // 
             this.panelFullPrecision.Controls.Add(this.tableLayoutPanel1);
             this.panelFullPrecision.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelFullPrecision.Location = new System.Drawing.Point(0, 285);
+            this.panelFullPrecision.Location = new System.Drawing.Point(0, 320);
             this.panelFullPrecision.Name = "panelFullPrecision";
             this.panelFullPrecision.Size = new System.Drawing.Size(843, 35);
             this.panelFullPrecision.TabIndex = 11;
@@ -1473,7 +1486,7 @@
             // 
             this.panelModelCaching.Controls.Add(this.tableLayoutPanel17);
             this.panelModelCaching.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelModelCaching.Location = new System.Drawing.Point(0, 250);
+            this.panelModelCaching.Location = new System.Drawing.Point(0, 285);
             this.panelModelCaching.Name = "panelModelCaching";
             this.panelModelCaching.Size = new System.Drawing.Size(843, 35);
             this.panelModelCaching.TabIndex = 31;
@@ -1533,6 +1546,120 @@
             this.label21.Size = new System.Drawing.Size(152, 13);
             this.label21.TabIndex = 84;
             this.label21.Text = "Cache Loaded Models in RAM";
+            // 
+            // panelUsduModel
+            // 
+            this.panelUsduModel.Controls.Add(this.tableLayoutPanel6);
+            this.panelUsduModel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelUsduModel.Location = new System.Drawing.Point(0, 250);
+            this.panelUsduModel.Name = "panelUsduModel";
+            this.panelUsduModel.Size = new System.Drawing.Size(843, 35);
+            this.panelUsduModel.TabIndex = 37;
+            // 
+            // tableLayoutPanel6
+            // 
+            this.tableLayoutPanel6.ColumnCount = 2;
+            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
+            this.tableLayoutPanel6.Controls.Add(this.panel6, 0, 0);
+            this.tableLayoutPanel6.Controls.Add(this.panel36, 0, 0);
+            this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel6.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel6.Name = "tableLayoutPanel6";
+            this.tableLayoutPanel6.RowCount = 1;
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel6.Size = new System.Drawing.Size(843, 35);
+            this.tableLayoutPanel6.TabIndex = 1;
+            // 
+            // panel6
+            // 
+            this.panel6.Controls.Add(this.btnRefreshUsduModelsDropdown);
+            this.panel6.Controls.Add(this.comboxUsduModel);
+            this.panel6.Controls.Add(this.btnOpenModelsFolderUsdu);
+            this.panel6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel6.Location = new System.Drawing.Point(410, 0);
+            this.panel6.Margin = new System.Windows.Forms.Padding(0);
+            this.panel6.Name = "panel6";
+            this.panel6.Size = new System.Drawing.Size(433, 35);
+            this.panel6.TabIndex = 88;
+            // 
+            // btnRefreshUsduModelsDropdown
+            // 
+            this.btnRefreshUsduModelsDropdown.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.btnRefreshUsduModelsDropdown.AutoColor = true;
+            this.btnRefreshUsduModelsDropdown.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnRefreshUsduModelsDropdown.ButtonImage = null;
+            this.btnRefreshUsduModelsDropdown.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
+            this.btnRefreshUsduModelsDropdown.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
+            this.btnRefreshUsduModelsDropdown.DrawImage = false;
+            this.btnRefreshUsduModelsDropdown.ForeColor = System.Drawing.Color.White;
+            this.btnRefreshUsduModelsDropdown.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
+            this.btnRefreshUsduModelsDropdown.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
+            this.btnRefreshUsduModelsDropdown.Location = new System.Drawing.Point(277, 5);
+            this.btnRefreshUsduModelsDropdown.Name = "btnRefreshUsduModelsDropdown";
+            this.btnRefreshUsduModelsDropdown.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+            this.btnRefreshUsduModelsDropdown.Size = new System.Drawing.Size(75, 23);
+            this.btnRefreshUsduModelsDropdown.TabIndex = 107;
+            this.btnRefreshUsduModelsDropdown.TabStop = false;
+            this.btnRefreshUsduModelsDropdown.Text = "Refresh List";
+            this.btnRefreshUsduModelsDropdown.Click += new System.EventHandler(this.btnRefreshUsduModelsDropdown_Click);
+            // 
+            // comboxUsduModel
+            // 
+            this.comboxUsduModel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboxUsduModel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.comboxUsduModel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboxUsduModel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboxUsduModel.ForeColor = System.Drawing.Color.White;
+            this.comboxUsduModel.FormattingEnabled = true;
+            this.comboxUsduModel.Location = new System.Drawing.Point(0, 7);
+            this.comboxUsduModel.Name = "comboxUsduModel";
+            this.comboxUsduModel.Size = new System.Drawing.Size(271, 21);
+            this.comboxUsduModel.TabIndex = 106;
+            // 
+            // btnOpenModelsFolderUsdu
+            // 
+            this.btnOpenModelsFolderUsdu.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.btnOpenModelsFolderUsdu.AutoColor = true;
+            this.btnOpenModelsFolderUsdu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.btnOpenModelsFolderUsdu.ButtonImage = null;
+            this.btnOpenModelsFolderUsdu.ButtonShape = HTAlt.WinForms.HTButton.ButtonShapes.Rectangle;
+            this.btnOpenModelsFolderUsdu.ClickColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
+            this.btnOpenModelsFolderUsdu.DrawImage = false;
+            this.btnOpenModelsFolderUsdu.ForeColor = System.Drawing.Color.White;
+            this.btnOpenModelsFolderUsdu.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
+            this.btnOpenModelsFolderUsdu.ImageSizeMode = HTAlt.WinForms.HTButton.ButtonImageSizeMode.None;
+            this.btnOpenModelsFolderUsdu.Location = new System.Drawing.Point(358, 5);
+            this.btnOpenModelsFolderUsdu.Name = "btnOpenModelsFolderUsdu";
+            this.btnOpenModelsFolderUsdu.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+            this.btnOpenModelsFolderUsdu.Size = new System.Drawing.Size(75, 23);
+            this.btnOpenModelsFolderUsdu.TabIndex = 4;
+            this.btnOpenModelsFolderUsdu.TabStop = false;
+            this.btnOpenModelsFolderUsdu.Text = "Folders...";
+            this.toolTip.SetToolTip(this.btnOpenModelsFolderUsdu, "Manage Model Folders");
+            this.btnOpenModelsFolderUsdu.Click += new System.EventHandler(this.btnOpenModelsFolder_Click);
+            // 
+            // panel36
+            // 
+            this.panel36.Controls.Add(this.label8);
+            this.panel36.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel36.Location = new System.Drawing.Point(0, 0);
+            this.panel36.Margin = new System.Windows.Forms.Padding(0);
+            this.panel36.Name = "panel36";
+            this.panel36.Size = new System.Drawing.Size(410, 35);
+            this.panel36.TabIndex = 87;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.ForeColor = System.Drawing.Color.White;
+            this.label8.Location = new System.Drawing.Point(2, 11);
+            this.label8.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(316, 13);
+            this.label8.TabIndex = 85;
+            this.label8.Text = "Stable Diffusion Model for Ultimate SD Upscaler (Must be SD 1.X)";
             // 
             // panelLoras
             // 
@@ -2220,6 +2347,11 @@
             this.panel43.PerformLayout();
             this.panel44.ResumeLayout(false);
             this.panel44.PerformLayout();
+            this.panelUsduModel.ResumeLayout(false);
+            this.tableLayoutPanel6.ResumeLayout(false);
+            this.panel6.ResumeLayout(false);
+            this.panel36.ResumeLayout(false);
+            this.panel36.PerformLayout();
             this.panelLoras.ResumeLayout(false);
             this.tableLayoutPanel19.ResumeLayout(false);
             this.panel47.ResumeLayout(false);
@@ -2413,5 +2545,13 @@
         private System.Windows.Forms.ComboBox comboxComfyVram;
         private System.Windows.Forms.Panel panel22;
         private System.Windows.Forms.Label label25;
+        private System.Windows.Forms.Panel panelUsduModel;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
+        private System.Windows.Forms.Panel panel6;
+        private HTAlt.WinForms.HTButton btnRefreshUsduModelsDropdown;
+        private System.Windows.Forms.ComboBox comboxUsduModel;
+        private HTAlt.WinForms.HTButton btnOpenModelsFolderUsdu;
+        private System.Windows.Forms.Panel panel36;
+        private System.Windows.Forms.Label label8;
     }
 }

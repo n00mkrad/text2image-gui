@@ -217,7 +217,7 @@ namespace StableDiffusionGui.Implementations
                 if (xl) // Load SD1 model as we can't use XL for USDU yet
                 {
                     upscalerModelNode = AddNode<NmkdCheckpointLoader>(nodes, "UpscalingModelSD"); // Base Model Loader
-                    ((NmkdCheckpointLoader)upscalerModelNode).ModelPath = "M:\\Weights\\SD\\SafetensorsNew\\dreamshaper_8.safetensors"; // TODO: Don't hardcode
+                    ((NmkdCheckpointLoader)upscalerModelNode).ModelPath = g.UltimateSdUpConfig.ModelPathSd;
                     ((NmkdCheckpointLoader)upscalerModelNode).ClipSkip = Config.Instance.ModelSettings.Get(Path.GetFileName(((NmkdCheckpointLoader)upscalerModelNode).ModelPath), new Models.ModelSettings()).ClipSkip;
                     ((NmkdCheckpointLoader)upscalerModelNode).LoadVae = true;
                     ((NmkdCheckpointLoader)upscalerModelNode).EmbeddingsDir = Io.Paths.ReturnDir(Config.Instance.EmbeddingsDir, true, true);
@@ -229,24 +229,30 @@ namespace StableDiffusionGui.Implementations
                 }
 
                 var upscaleMdl = AddNode<NmkdUpscaleModelLoader>(nodes); // Latent Upscale
-                upscaleMdl.UpscaleModelPath = "D:\\AI\\ComfyUI\\ComfyUI\\models\\upscale_models\\realesr-general-x4v3.pth"; // TODO: Don't hardcode
+                upscaleMdl.UpscaleModelPath = g.UltimateSdUpConfig.ModelPathEsrgan;
 
-                var tileControlnet = AddNode<NmkdControlNet>(nodes, "TileControlnetUpscale"); // Tile ControlNet
-                tileControlnet.ModelPath = "M:\\Weights\\SD\\ControlNet\\control_v11f1e_sd15_tile_fp16.safetensors"; // TODO: Don't hardcode
-                tileControlnet.Conditioning = new ComfyInput(conditioningNode, OutType.Conditioning);
-                tileControlnet.Image = new ComfyInput(finalImageNode, OutType.Image);
-                tileControlnet.Model = new ComfyInput(upscalerModelNode, OutType.Model);
+                NmkdControlNet tileControlnet = null;
+
+                if (g.UltimateSdUpConfig.UseTileControlnet)
+                {
+                    tileControlnet = AddNode<NmkdControlNet>(nodes, "TileControlnetUpscale"); // Tile ControlNet
+                    tileControlnet.ModelPath = g.UltimateSdUpConfig.ModelPathTileControlnet;
+                    tileControlnet.Conditioning = new ComfyInput(conditioningNode, OutType.Conditioning);
+                    tileControlnet.Image = new ComfyInput(finalImageNode, OutType.Image);
+                    tileControlnet.Model = new ComfyInput(upscalerModelNode, OutType.Model);
+                }
 
                 var upscaler = AddNode<UltimateSDUpscale>(nodes); // Ultimate SD Upscale
                 upscaler.Image = new ComfyInput(finalImageNode, OutType.Image);
                 upscaler.Model = new ComfyInput(upscalerModelNode, OutType.Model);
-                upscaler.CondPositive = new ComfyInput(tileControlnet, OutType.Conditioning);
+                upscaler.CondPositive = new ComfyInput(tileControlnet == null ? (INode)conditioningNode : (INode)tileControlnet, OutType.Conditioning);
                 upscaler.CondNegative = new ComfyInput(conditioningNode, 1);
                 upscaler.Vae = new ComfyInput(xl ? upscalerModelNode : model1, OutType.Vae);
                 upscaler.UpscaleModel = new ComfyInput(upscaleMdl, 0);
                 upscaler.UpscaleFactor = (float)g.TargetResolution.Width / g.BaseResolution.Width;
+                upscaler.TileSize = g.BaseResolution;
                 upscaler.Seed = g.Seed;
-                upscaler.Steps = (g.Steps * 0.5f).RoundToInt();
+                upscaler.Steps = (g.Steps * 0.3333f).RoundToInt().Clamp(8, 30);
                 upscaler.Scale = g.Scale;
                 upscaler.Sampler = GetComfySampler(g.Sampler);
                 upscaler.Scheduler = GetComfyScheduler(g);
