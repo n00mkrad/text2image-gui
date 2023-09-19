@@ -309,6 +309,7 @@
     </Compile>
     <Compile Include="Implementations\Comfy.cs" />
     <Compile Include="Implementations\ComfyData.cs" />
+    <Compile Include="Implementations\ComfyLogHandler.cs" />
     <Compile Include="Implementations\ComfyNodes.cs" />
     <Compile Include="Implementations\ComfyPatcher.cs" />
     <Compile Include="Implementations\ComfyPrompts.cs" />

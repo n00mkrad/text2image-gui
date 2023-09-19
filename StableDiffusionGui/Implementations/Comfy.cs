@@ -23,8 +23,6 @@ namespace StableDiffusionGui.Implementations
     {
         public List<string> LastMessages { get => _lastMessages; }
         private List<string> _lastMessages = new List<string>();
-        private static bool _hasErrored = false;
-        private TtiSettings _lastSettings = null;
 
         public static readonly int ComfyPort = 8189;
         private static readonly HttpClient _webClient = new HttpClient();
@@ -43,7 +41,7 @@ namespace StableDiffusionGui.Implementations
 
         public async Task Run(TtiSettings s, string outPath)
         {
-            _lastSettings = s;
+            ComfyLogHandler.LastSettings = s;
             float[] initStrengths = s.InitStrengths.Select(n => 1f - n).ToArray();
             var cachedModels = Models.GetModels((Enums.Models.Type)(-1), Implementation.Comfy);
             var baseModels = cachedModels.Where(m => m.Type == Enums.Models.Type.Normal).ToList();
@@ -271,7 +269,7 @@ namespace StableDiffusionGui.Implementations
                     OsUtils.KillProcessTree(TtiProcess.CurrentProcess.Id);
                 }
 
-                ResetLogger();
+                ComfyLogHandler.ResetLogger();
 
                 Logger.Log($"Loading Stable Diffusion with model {s.Model.Trunc(80).Wrap()}{(refineModel != null ? $" and {s.ModelAux.Trunc(80).Wrap()}" : "")}...");
 
@@ -287,7 +285,7 @@ namespace StableDiffusionGui.Implementations
             }
             else
             {
-                ResetLogger();
+                ComfyLogHandler.ResetLogger();
                 TextToImage.CurrentTask.Processes.Add(TtiProcess.CurrentProcess);
             }
 
@@ -419,162 +417,7 @@ namespace StableDiffusionGui.Implementations
 
         public void HandleOutput(string line)
         {
-            if (TextToImage.CurrentTaskSettings == null || line == null)
-                return;
-
-            if (line.Contains("Setting up MemoryEfficientCrossAttention"))
-                return;
-
-            if (line.Trim().StartsWith("left over keys:"))
-                line = "left over keys: dict_keys([...])";
-
-            if (line.StartsWith("PREVIEW_JPEG:b'")) // Decode base64 encoded JPEG preview
-            {
-                byte[] imageBytes = Convert.FromBase64String(line.Split('\'')[1]);
-                Console.WriteLine($"Received preview {(imageBytes.Length / 1024f).RoundToInt()}k");
-
-                using (var ms = new MemoryStream(imageBytes, 0, imageBytes.Length))
-                {
-                    Image image = Image.FromStream(ms, true);
-                    Program.MainForm.pictBoxPreview.Image = image;
-                }
-
-                return;
-            }
-
-            if (line.StartsWith("PREVIEW_WEBP:b'")) // Decode base64 encoded WEBP preview
-            {
-                Console.WriteLine($"Received WEBP preview {((line.Length * sizeof(Char)) / 1024f).RoundToInt()}k");
-                var magick = ImgUtils.GetMagickImage(line.Split('\'')[1]);
-
-                if (magick != null)
-                    Program.MainForm.pictBoxImgViewer.Image = ImgUtils.ToBitmap(magick);
-
-                return;
-            }
-
-            Logger.Log(line, true, false, Constants.Lognames.Sd);
-            TtiProcessOutputHandler.LastMessages.Insert(0, line);
-
-            if (TextToImage.Canceled)
-                return;
-
-            bool ellipsis = Program.MainForm.LogText.EndsWith("...");
-            string errMsg = "";
-            bool replace = ellipsis || Logger.LastUiLine.MatchesWildcard("*Generated*image*in*");
-            bool lastLineGeneratedText = Logger.LastUiLine.MatchesWildcard("*Generated*image*in*");
-            TextToImage.CancelMode cancelMode = TextToImage.CancelMode.SoftKill;
-
-            if (!TextToImage.Canceled && line.Trim() == "got prompt")
-            {
-                // if (!lastLineGeneratedText)
-                //     Logger.LogIfLastLineDoesNotContainMsg($"Generating...", replaceLastLine: ellipsis);
-
-                ImageExport.TimeSinceLastImage.Restart();
-            }
-
-            if (!TextToImage.Canceled && line.MatchesWildcard("*%|*| *") && !line.Contains("B/s"))
-            {
-                if (!lastLineGeneratedText)
-                    Logger.LogIfLastLineDoesNotContainMsg($"Generating...", replaceLastLine: ellipsis);
-
-                int percent = line.Split("%|")[0].GetInt();
-
-                if (percent >= 0 && percent <= 100)
-                    Program.MainForm.SetProgressImg(percent);
-            }
-
-            // Info: Model type
-            if (!TextToImage.Canceled && line.Trim().StartsWith("MODEL INFO:"))
-            {
-                var split = line.Split('|');
-                string filename = split[0].Split("MODEL INFO:")[1].Trim();
-                string modelType = split[1].Trim();
-                string unetConfigJson = split[2].Trim();
-                var mdlArch = Models.DetectModelType(modelType, unetConfigJson);
-                Config.Instance.ModelSettings.GetPopulate(filename, new Models.ModelSettings()).Arch = mdlArch;
-                Logger.Log($"Loaded '{filename.Trunc(100)}' - {Strings.ModelArch.Get(mdlArch.ToString(), true)}", false, Logger.LastUiLine.Contains(filename));
-
-                string controlnetError = ComfyUtils.ControlnetCompatCheck(_lastSettings.Controlnets, mdlArch);
-
-                if (controlnetError.IsNotEmpty())
-                {
-                    errMsg = controlnetError;
-                    _hasErrored = true;
-                    cancelMode = TextToImage.CancelMode.ForceKill;
-                }
-
-                if (Program.MainForm.comboxModel.GetTextSafe() == filename && mdlArch != ModelArch.SdXlRefine)
-                {
-                    Program.MainForm.comboxModelArch.SetWithText(Config.Instance.ModelSettings[filename].Arch.ToString(), false, Strings.ModelArch);
-                    Size res = Models.GetDefaultRes(mdlArch);
-
-                    if (_lastSettings.Res.Width < res.Width && _lastSettings.Res.Height < res.Height)
-                        Logger.Log($"Warning: The resolution {_lastSettings.Res.Width}x{_lastSettings.Res.Height} might lead to low quality results, the native resolution of this model is {res.AsString()}.");
-                }
-            }
-
-            // Info: Image saved
-            if (!TextToImage.Canceled && line.Trim().StartsWith("Saved image"))
-            {
-                string pfx = line.Split('\'')[1];
-                string path = string.Join(":", line.Split(':').Skip(1)).Trim();
-
-                if (pfx == "upscale")
-                {
-                    ImageViewer.AppendImage(path, ImageViewer.ImgShowMode.ShowLast, false);
-                    Program.SetState(Program.BusyState.Standby);
-                }
-            }
-
-            // Warning: Missing embedding
-            if (!TextToImage.Canceled && line.Trim().StartsWith("warning, embedding:") && line.Trim().EndsWith("does not exist, ignoring"))
-            {
-                string embName = line.Split("embedding:")[1].Split(' ')[0];
-                Logger.Log($"Warning: Embedding '{embName}' not found!");
-            }
-
-            // Warning: Incompatible embedding
-            if (!TextToImage.Canceled && line.Trim().StartsWith("WARNING: shape mismatch when trying to apply embedding"))
-            {
-                Logger.Log($"Warning: One or more embeddings were ignored because they are not compatible with the selected model.");
-            }
-
-            // Warning: Upscaling failure
-            if (!TextToImage.Canceled && line.Contains("Upscaling failed!"))
-            {
-                Logger.Log($"Warning: Image upscaling failed. Maybe your model is incompatible?");
-            }
-
-            // Error: Port in use
-            if (!_hasErrored && !TextToImage.Canceled && line.Trim().StartsWith("OSError: [Errno 10048]"))
-            {
-                errMsg = $"Port is already in use. Are you running ComfyUI on port {ComfyPort}?";
-                _hasErrored = true;
-                cancelMode = TextToImage.CancelMode.ForceKill;
-            }
-
-            // Error: Incompatible model
-            if (!_hasErrored && !TextToImage.Canceled && line.StartsWith("Failed to load model:"))
-            {
-                errMsg = $"{line}\n\nIt might be incompatible.";
-                _hasErrored = true;
-            }
-
-            // Error: Shapes
-            if (!_hasErrored && !TextToImage.Canceled && line.Contains("shapes cannot be multiplied"))
-            {
-                errMsg = $"{line}\n\nThis most likely means that certain models (e.g. LoRAs) are not compatible with the selected Stable Diffusion model.";
-                _hasErrored = true;
-            }
-
-            TtiProcessOutputHandler.HandleLogGeneric(this, line, _hasErrored, cancelMode, errMsg, true);
-        }
-
-        public void ResetLogger()
-        {
-            _hasErrored = false;
-            LastMessages.Clear();
+            ComfyLogHandler.HandleOutput(this, line);
         }
 
         public override string GetEmbeddingStringFormat()
