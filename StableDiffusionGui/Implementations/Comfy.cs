@@ -49,7 +49,6 @@ namespace StableDiffusionGui.Implementations
             Model model = TtiUtils.CheckIfModelExists(s.Model, Implementation.Comfy, baseModels);
             string vaeName = s.Vae.NullToEmpty().Replace(Constants.NoneMdl, ""); // VAE model name
             Model vae = Models.GetModel(Models.GetVaes(), vaeName);
-            List<Model> controlnetMdls = Models.GetControlNets();
 
             if (model == null)
                 return;
@@ -66,41 +65,17 @@ namespace StableDiffusionGui.Implementations
                 return;
 
             var generations = new List<GenerationInfo>() { new GenerationInfo() };
+            GenerationInfo currentGeneration = null;
 
-            var currentGeneration = new GenerationInfo
+            try
             {
-                BaseResolution = s.Res,
-                TargetResolution = s.UpscaleTargetRes,
-                UpscaleMethod = s.UpscaleMethod,
-                NegativePrompt = s.NegativePrompt,
-                Model = model.FullName,
-                ModelRefiner = refineModel == null ? "" : refineModel.FullName,
-                Vae = vae == null ? "" : vae.FullName,
-                Sampler = s.Sampler,
-                Upscaler = Config.Instance.UpscaleEnable ? Models.GetUpscalers().Where(m => m.Name == Config.Instance.EsrganModel).FirstOrDefault().FullName : "",
-                ClipSkip = (Config.Instance.ModelSettings.Get(model.Name, new Models.ModelSettings()).ClipSkip * -1) - 1,
-                SaveOriginalAndUpscale = Config.Instance.SaveUnprocessedImages,
-                Seamless = s.SeamlessMode != SeamlessMode.Disabled,
-            };
-
-            if (currentGeneration.UpscaleMethod == UpscaleMethod.UltimateSd)
-            {
-                currentGeneration.UltimateSdUpConfig = new UltimateSdUpConfig()
-                {
-                    ModelPathEsrgan = Models.GetUpscalers().Where(m => m.Name == Config.Instance.EsrganModel).FirstOrDefault().FullName,
-                    // ModelPathTileControlnet = Models.GetControlNets().Where(m => m.Name.Contains("_tile_") && m.Name.Contains("sd15")).FirstOrDefault().FullName,
-                    ModelPathSd = Models.GetModels(implementation: Implementation.Comfy).Where(m => m.Name == Config.Instance.SdUpscaleModel).FirstOrDefault().FullName,
-                };
+                currentGeneration = new GenerationInfo(s, model, refineModel, vae);
             }
-
-            foreach (ControlnetInfo cnet in s.Controlnets.Where(cn => cn != null && cn.Strength > 0.001f && cn.Model != Constants.NoneMdl))
+            catch(Exception ex)
             {
-                var cnetModel = controlnetMdls.Where(m => m.FormatIndependentName == cnet.Model).FirstOrDefault();
-                if (cnetModel == null) continue;
-                currentGeneration.Controlnets.Add(new ControlnetInfo { Model = cnetModel.FullName, Preprocessor = cnet.Preprocessor, Strength = cnet.Strength });
+                TextToImage.Cancel($"Can't run prompt with current settings.\n\n{ex.Message}", true);
+                return;
             }
-
-            currentGeneration.Loras = s.Loras.Select(lora => new KeyValuePair<string, float>(lora.Key, lora.Value.First())).ToList();
 
             List<string> processedPrompts = null;
             TextToImage.CurrentTaskSettings.ProcessedAndRawPrompts = new EasyDict<string, string>();

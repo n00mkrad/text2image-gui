@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using StableDiffusionGui.Data;
+using StableDiffusionGui.Io;
+using StableDiffusionGui.Main;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -42,6 +45,50 @@ namespace StableDiffusionGui.Implementations
             public bool SaveOriginalAndUpscale;
             public UltimateSdUpConfig UltimateSdUpConfig;
             public bool Seamless = false;
+
+            public GenerationInfo() { }
+
+            public GenerationInfo(TtiSettings s, Model model, Model refineModel, Model vae)
+            {
+                BaseResolution = s.Res;
+                TargetResolution = s.UpscaleTargetRes;
+                UpscaleMethod = s.UpscaleMethod;
+                NegativePrompt = s.NegativePrompt;
+                Model = model.FullName;
+                ModelRefiner = refineModel == null ? "" : refineModel.FullName;
+                Vae = vae == null ? "" : vae.FullName;
+                Sampler = s.Sampler;
+                Upscaler = Config.Instance.UpscaleEnable ? Models.GetUpscalers().Where(m => m.Name == Config.Instance.EsrganModel).FirstOrDefault().FullName : "";
+                ClipSkip = (Config.Instance.ModelSettings.Get(model.Name, new Models.ModelSettings()).ClipSkip * -1) - 1;
+                SaveOriginalAndUpscale = Config.Instance.SaveUnprocessedImages;
+                Seamless = s.SeamlessMode != SeamlessMode.Disabled;
+
+                if (UpscaleMethod == UpscaleMethod.UltimateSd)
+                {
+                    var esrganMdl = Models.GetUpscalers().Where(m => m.Name == Config.Instance.EsrganModel).FirstOrDefault();
+                    var sdMdl = Models.GetModels(implementation: Implementation.Comfy).Where(m => m.Name == Config.Instance.SdUpscaleModel).FirstOrDefault();
+                    var cnetMdl = (Model)null; // Models.GetControlNets().Where(m => m.Name.Contains("_tile_") && m.Name.Contains("sd15")).FirstOrDefault();
+
+                    UltimateSdUpConfig = new UltimateSdUpConfig()
+                    {
+                        ModelPathEsrgan = esrganMdl == null ? "" : esrganMdl.FullName,
+                        ModelPathTileControlnet = cnetMdl == null ? "" : cnetMdl.FullName,
+                        ModelPathSd = sdMdl == null ? "" : sdMdl.FullName,
+                    };
+
+                    if (UltimateSdUpConfig.GetMissingModels(out List<string> missing) && missing.Any())
+                        throw new System.Exception($"Ultimate SD Upscaler is enabled, but the following required models could not be found:\n{string.Join(", ", missing)}");
+                }
+
+                foreach (ControlnetInfo cnet in s.Controlnets.Where(cn => cn != null && cn.Strength > 0.001f && cn.Model != Constants.NoneMdl))
+                {
+                    var cnetModel = Models.GetControlNets().Where(m => m.FormatIndependentName == cnet.Model).FirstOrDefault();
+                    if (cnetModel == null) continue;
+                    Controlnets.Add(new ControlnetInfo { Model = cnetModel.FullName, Preprocessor = cnet.Preprocessor, Strength = cnet.Strength });
+                }
+
+                Loras = s.Loras.Select(lora => new KeyValuePair<string, float>(lora.Key, lora.Value.First())).ToList();
+            }
 
             public GenerationInfo GetSerializeClone()
             {
@@ -124,7 +171,25 @@ namespace StableDiffusionGui.Implementations
 
             public bool IsValid()
             {
-                return File.Exists(ModelPathEsrgan) && File.Exists(ModelPathSd) && (!UseTileControlnet || (UseTileControlnet && File.Exists(ModelPathTileControlnet)));
+                GetMissingModels(out List<string> missing);
+                return !missing.Any();
+            }
+
+            public bool GetMissingModels (out List<string> list)
+            {
+                var missing = new List<string>();
+
+                if (!File.Exists(ModelPathEsrgan))
+                    missing.Add("ESRGAN Upscaling Model");
+
+                if (!File.Exists(ModelPathSd))
+                    missing.Add("Stable Diffusion 1 Model");
+
+                if (UseTileControlnet && !File.Exists(ModelPathTileControlnet))
+                    missing.Add("ControlNet Tile Model");
+
+                list = missing;
+                return list.Any();
             }
         }
     }
