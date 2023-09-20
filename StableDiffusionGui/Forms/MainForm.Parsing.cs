@@ -30,7 +30,7 @@ namespace StableDiffusionGui.Forms
                 sliderScaleImg.ActualValue = (decimal)meta.ScaleImg;
                 comboxResW.Text = meta.GeneratedResolution.Width.ToString();
                 comboxResH.Text = meta.GeneratedResolution.Height.ToString();
-                SetUpscaleRes(meta.UpscaleResolution, meta.GeneratedResolution);
+                SetUpscaleRes(meta.UpscaleResolution, meta.GeneratedResolution, meta.UpscaleMethod);
                 checkboxHiresFix.Checked = meta.HiResFix;
                 sliderRefinerStart.ActualValue = (decimal)meta.RefineStrength;
                 upDownSeed.Value = meta.Seed;
@@ -73,7 +73,7 @@ namespace StableDiffusionGui.Forms
                 MainUi.CurrentInitImgPaths = s.InitImgs.ToList();
                 comboxResW.Text = s.Res.Width.ToString();
                 comboxResH.Text = s.Res.Height.ToString();
-                SetUpscaleRes(s.UpscaleTargetRes, s.Res);
+                SetUpscaleRes(s.UpscaleTargetRes, s.Res, s.UpscaleMethod);
                 upDownSeed.Value = s.Seed;
                 comboxSampler.SetWithText(s.Sampler.ToString(), true, Strings.Samplers);
                 SetSliderValues(s.InitStrengths, false, sliderInitStrength, textboxExtraInitStrengths);
@@ -94,7 +94,7 @@ namespace StableDiffusionGui.Forms
             TryRefreshUiState();
         }
 
-        private void SetUpscaleRes (Size resUpscale, Size resGenerated)
+        private void SetUpscaleRes (Size resUpscale, Size resGenerated, UpscaleMethod method)
         {
             if (resUpscale != resGenerated && resUpscale.Width > resGenerated.Width && resUpscale.Height > resGenerated.Height)
             {
@@ -103,7 +103,7 @@ namespace StableDiffusionGui.Forms
 
                 if (factorW == factorH && factorW.Length <= 4) // Check if factor is the same on both axes & max 4 decimal places
                 {
-                    comboxUpscaleMode.SetWithEnum(UpscaleMode.LatentsFactor, stringMap: Strings.UpscaleModes);
+                    comboxUpscaleMode.SetWithEnum((method == UpscaleMethod.Latent ? UpscaleMode.LatentsFactor : UpscaleMode.UltimeUpsFactor), stringMap: Strings.UpscaleModes);
                     updownUpscaleFactor.Value = (decimal)factorW.GetFloat();
                 }
                 else

@@ -167,6 +167,12 @@ namespace StableDiffusionGui.Ui
             { Enums.StableDiffusion.UpscaleMode.UltimeUpsFactor.ToString(), "Ultimate SD Upscale Factor" },
         };
 
+        public static Dictionary<string, string> UpscaleMethods = new Dictionary<string, string>
+        {
+            { Enums.StableDiffusion.UpscaleMethod.Latent.ToString(), "Latent Upscaling" },
+            { Enums.StableDiffusion.UpscaleMethod.UltimateSd.ToString(), "Ultimate SD Upscale" },
+        };
+
         public static Dictionary<string, string> ImagePreprocessors = new Dictionary<string, string>()
         {
              { Enums.StableDiffusion.ImagePreprocessor.Canny.ToString(), "Edge Detection (Fine - Canny)" },

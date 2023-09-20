@@ -65,7 +65,7 @@ namespace StableDiffusionGui.Forms
                 textboxInfo.Text += $"Resolution: {pictBox.Image.Size.AsString()}{n}";
                 textboxInfo.Text += $"Pixel Format: {pictBox.Image.PixelFormat.AsString()}{n}{n}";
 
-                if (CurrentMetadata.Prompt.IsNotEmpty())    
+                if (CurrentMetadata.Prompt.IsNotEmpty())
                 {
                     textboxInfo.Text += $"{n}Prompt:{n}{CurrentMetadata.Prompt}{n}";
                     textboxInfo.Text += $"{n}Negative Prompt:{n}{CurrentMetadata.NegativePrompt}{n}";
@@ -73,6 +73,13 @@ namespace StableDiffusionGui.Forms
                     textboxInfo.Text += $"{n}Scale:{n}{CurrentMetadata.Scale.ToStringDot("0.00")}{n}";
                     textboxInfo.Text += $"{n}Seed:{n}{CurrentMetadata.Seed}{n}";
                     textboxInfo.Text += $"{n}Generated Resolution:{n}{CurrentMetadata.GeneratedResolution.Width}x{CurrentMetadata.GeneratedResolution.Height}{n}";
+
+                    if (CurrentMetadata.UpscaleMethod != (Enums.StableDiffusion.UpscaleMethod)(-1))
+                    {
+                        string factor = ((float)CurrentMetadata.UpscaleResolution.Width / CurrentMetadata.GeneratedResolution.Width).ToString();
+                        textboxInfo.Text += $"{n}Hi-Res Upscale Method:{n}{Strings.UpscaleMethods.Get(CurrentMetadata.UpscaleMethod.ToString(), true, true)} {(factor.Length < 6 ? factor : "")}x{n}";
+                    }
+
                     textboxInfo.Text += $"{n}Sampler:{n}{Strings.Samplers.Get(CurrentMetadata.Sampler, true, true)}{n}";
 
                     if (CurrentMetadata.RefineStrength > 0.001f)

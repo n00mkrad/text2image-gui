@@ -40,7 +40,7 @@ namespace StableDiffusionGui.Os
             OsUtils.StartProcess(py, killWithParent: true);
             await OsUtils.WaitForProcessExit(py);
 
-            CachedGpus = outLines.Where(x => x.MatchesWildcard("* - * - *")).Select(x => new Gpu(x)).ToList();
+            CachedGpus = new List<string>(outLines).Where(x => x.MatchesWildcard("* - * - *")).Select(x => new Gpu(x)).ToList();
             return CachedGpus;
         }
     }

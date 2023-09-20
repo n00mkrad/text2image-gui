@@ -27,6 +27,7 @@ namespace StableDiffusionGui.Data
         public int BatchSize = 1;
         public Size GeneratedResolution = new Size();
         public Size UpscaleResolution = new Size();
+        public Enums.StableDiffusion.UpscaleMethod UpscaleMethod = (Enums.StableDiffusion.UpscaleMethod)(-1);
         public float Scale = -1;
         public float ScaleImg = -1;
         public string Sampler = "";
@@ -317,6 +318,7 @@ namespace StableDiffusionGui.Data
             RefineStrength = gi.RefinerStrength;
             GeneratedResolution = gi.BaseResolution;
             UpscaleResolution = gi.TargetResolution;
+            UpscaleMethod = gi.UpscaleMethod;
             
             foreach(var lora in gi.Loras)
                 Loras[lora.Key] = lora.Value;
