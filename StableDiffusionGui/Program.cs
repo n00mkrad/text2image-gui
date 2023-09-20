@@ -6,6 +6,7 @@ using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
@@ -36,6 +37,13 @@ namespace StableDiffusionGui
         static void Main(string[] args)
         {
             Logger.Log($"Starting up [{Version}]", true);
+
+            var defaultCulture = new CultureInfo("en-US");
+            Thread.CurrentThread.CurrentCulture = defaultCulture;
+            Thread.CurrentThread.CurrentUICulture = defaultCulture;
+            CultureInfo.DefaultThreadCurrentCulture = defaultCulture;
+            CultureInfo.DefaultThreadCurrentUICulture = defaultCulture;
+
             HandleArgs(args);
             Config.Init();
             Paths.Init();
