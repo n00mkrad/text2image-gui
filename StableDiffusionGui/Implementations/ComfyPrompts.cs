@@ -46,6 +46,15 @@ namespace StableDiffusionGui.Implementations
                 finalModelNode = loraLoader;
             }
 
+            if (g.Seamless)
+            {
+                var conv2D = AddNode<Conv2dSettings>(nodes); // Conv2D Settings Node
+                conv2D.Model = new ComfyInput(finalModelNode, OutType.Model);
+                conv2D.Vae = new ComfyInput(finalModelNode, OutType.Vae);
+                conv2D.Clip = new ComfyInput(finalModelNode, OutType.Clip);
+                finalModelNode = conv2D;
+            }
+
             foreach (var hypernetModelStrength in g.Hypernetworks) // Add hypernetworks
             {
                 var hypernetLoader = AddNode<NmkdHypernetworkLoader>(nodes); // Hypernetwork Loader
@@ -197,7 +206,7 @@ namespace StableDiffusionGui.Implementations
                 samplerHires.SamplerName = GetComfySampler(g.Sampler);
                 samplerHires.Scheduler = "simple"; // GetComfyScheduler(g);
                 samplerHires.Seed = new ComfyInput(g.Seed);
-                samplerHires.StepsTotal = new ComfyInput((g.Steps * 0.5f).RoundToInt());
+                samplerHires.StepsTotal = new ComfyInput((g.Steps * 0.5f).RoundToInt().Clamp(8, 30));
                 samplerHires.Cfg = new ComfyInput(g.Scale);
                 finalLatentsNode = samplerHires;
             }

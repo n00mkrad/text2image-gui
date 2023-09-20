@@ -68,7 +68,7 @@ namespace StableDiffusionGui.Implementations
 
             bool ellipsis = Program.MainForm.LogText.EndsWith("...");
             string errMsg = "";
-            bool replace = ellipsis || Logger.LastUiLine.MatchesWildcard("*Generated*image*in*");
+            // bool replace = ellipsis || Logger.LastUiLine.MatchesWildcard("*Generated*image*in*");
             bool lastLineGeneratedText = Logger.LastUiLine.MatchesWildcard("*Generated*image*in*");
             TextToImage.CancelMode cancelMode = TextToImage.CancelMode.SoftKill;
 

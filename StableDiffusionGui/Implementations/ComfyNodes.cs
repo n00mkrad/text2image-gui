@@ -26,11 +26,13 @@ namespace StableDiffusionGui.Implementations
             if (outType == OutType.Vae)
             {
                 if (nodeClass is NmkdCheckpointLoader) return 2;
+                if (nodeClass is Conv2dSettings) return 1;
             }
             else if (outType == OutType.Clip)
             {
                 if (nodeClass is NmkdCheckpointLoader) return 1;
                 if (nodeClass is NmkdMultiLoraLoader) return 1;
+                if (nodeClass is Conv2dSettings) return 2;
             }
             else if (outType == OutType.Mask)
             {
@@ -890,6 +892,32 @@ namespace StableDiffusionGui.Implementations
                     },
                     ClassType = nameof(UltimateSDUpscale)
                 };
+            }
+
+            public override string ToString()
+            {
+                return ToStringNode(this);
+            }
+        }
+
+        public class Conv2dSettings : Node, INode
+        {
+            public ComfyInput Model;
+            public ComfyInput Vae;
+            public ComfyInput Clip;
+            public string PaddingMode = "circular";
+
+            public NodeInfo GetNodeInfo()
+            {
+                var dict = new Dictionary<string, object>()
+                {
+                    { "model", Model.Get() },
+                    { "vae", Vae.Get() },
+                    { "clip", Clip.Get() },
+                    { "padding_mode", PaddingMode },
+                };
+
+                return new NodeInfo { Inputs = dict, ClassType = nameof(Conv2dSettings) };
             }
 
             public override string ToString()

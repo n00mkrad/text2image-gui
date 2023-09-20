@@ -41,8 +41,9 @@ namespace StableDiffusionGui.Implementations
             public int ClipSkip = -1;
             public bool SaveOriginalAndUpscale;
             public UltimateSdUpConfig UltimateSdUpConfig;
+            public bool Seamless = false;
 
-            public GenerationInfo GetSerializeClone ()
+            public GenerationInfo GetSerializeClone()
             {
                 return new GenerationInfo()
                 {
@@ -68,7 +69,15 @@ namespace StableDiffusionGui.Implementations
                     Sampler = Sampler,
                     ClipSkip = ClipSkip,
                     SaveOriginalAndUpscale = SaveOriginalAndUpscale,
-                    UltimateSdUpConfig = UltimateSdUpConfig,
+                    UltimateSdUpConfig = UpscaleMethod != UpscaleMethod.UltimateSd ? null : new UltimateSdUpConfig
+                    {
+                        ModelPathEsrgan = Path.GetFileName(UltimateSdUpConfig.ModelPathEsrgan),
+                        ModelPathSd = Path.GetFileName(UltimateSdUpConfig.ModelPathSd),
+                        ModelPathTileControlnet = Path.GetFileName(UltimateSdUpConfig.ModelPathTileControlnet),
+                        UseTileControlnet = UltimateSdUpConfig.UseTileControlnet,
+                        TileSize = UltimateSdUpConfig.TileSize,
+                    },
+                    Seamless = Seamless,
                 };
             }
 
@@ -113,7 +122,7 @@ namespace StableDiffusionGui.Implementations
             public int TileSize = 1024;
             public bool UseTileControlnet = false;
 
-            public bool IsValid ()
+            public bool IsValid()
             {
                 return File.Exists(ModelPathEsrgan) && File.Exists(ModelPathSd) && (!UseTileControlnet || (UseTileControlnet && File.Exists(ModelPathTileControlnet)));
             }

@@ -80,6 +80,7 @@ namespace StableDiffusionGui.Implementations
                 Upscaler = Config.Instance.UpscaleEnable ? Models.GetUpscalers().Where(m => m.Name == Config.Instance.EsrganModel).FirstOrDefault().FullName : "",
                 ClipSkip = (Config.Instance.ModelSettings.Get(model.Name, new Models.ModelSettings()).ClipSkip * -1) - 1,
                 SaveOriginalAndUpscale = Config.Instance.SaveUnprocessedImages,
+                Seamless = s.SeamlessMode != SeamlessMode.Disabled,
             };
 
             if (currentGeneration.UpscaleMethod == UpscaleMethod.UltimateSd)
@@ -372,7 +373,7 @@ namespace StableDiffusionGui.Implementations
         public async Task Cancel()
         {
             List<string> lastLogLines = Logger.GetLastLines(Constants.Lognames.Sd, 20);
-            bool startingUp = LastMessages.Any(s => s.Contains("Total VRAM")) && LastMessages.Any(s => !s.Contains("To see the GUI go to:"));
+            bool startingUp = LastMessages.Any(s => s.Contains("Total VRAM")) && !LastMessages.Any(s => s.Contains("To see the GUI go to:"));
 
             if (startingUp)
             {
