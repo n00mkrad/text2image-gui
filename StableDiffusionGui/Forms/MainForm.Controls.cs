@@ -70,6 +70,7 @@ namespace StableDiffusionGui.Forms
             comboxModel.DropDown += (s, e) => ReloadModelsCombox();
             comboxModel.DropDownClosed += (s, e) => panelSettings.Focus();
             comboxModel2.DropDown += (s, e) => ReloadModelsCombox();
+            comboxVae.SelectedIndexChanged += (s, e) => ConfigParser.SaveGuiElement(comboxVae, ref Config.Instance.ModelVae);
             comboxResW.SelectedIndexChanged += (s, e) => ResolutionChanged(); // Resolution change
             comboxResH.SelectedIndexChanged += (s, e) => ResolutionChanged(); // Resolution change
             ImageViewer.OnImageChanged += () => UpdateImgViewerBtns(); // Image change
@@ -519,16 +520,18 @@ namespace StableDiffusionGui.Forms
 
             ReloadModelsCombox(imp);
             comboxModel.Text = Config.Instance.Model;
-
-            if (comboxModel.SelectedIndex < 0 && comboxModel.Items.Count > 0)
-                comboxModel.SelectedIndex = 0;
+            comboxModel.InitCombox(0);
 
             if (comboxModel2.Visible)
             {
                 comboxModel2.Text = Config.Instance.ModelAux;
+                comboxModel2.InitCombox(0);
+            }
 
-                if (comboxModel2.SelectedIndex < 0 && comboxModel2.Items.Count > 0)
-                    comboxModel2.SelectedIndex = 0;
+            if (comboxVae.Visible)
+            {
+                comboxVae.Text = Config.Instance.ModelVae;
+                comboxVae.InitCombox(0);
             }
         }
 
@@ -539,7 +542,7 @@ namespace StableDiffusionGui.Forms
 
             IEnumerable<Model> models = Models.GetModels((Enums.Models.Type)(-1), imp);
             comboxModel.SetItems(models.Where(m => m.Type == Enums.Models.Type.Normal), UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.None);
-            comboxVae.SetItems(new[] { new Model() }.Concat(Models.GetVaes().Where(m => m.Type == Enums.Models.Type.Vae)), UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.First);
+            comboxVae.SetItems(new[] { new Model() }.Concat(Models.GetVaes().Where(m => m.Type == Enums.Models.Type.Vae)), UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.None);
 
             if (imp == Implementation.Comfy)
                 comboxModel2.SetItems(models.Where(m => m.Type == Enums.Models.Type.Refiner), UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.None);

@@ -325,7 +325,7 @@ namespace StableDiffusionGui.Extensions
         /// <summary> Sets ComboBox index to <paramref name="index"/> if it has any items and current index is -1 </summary>
         public static void InitCombox (this ComboBox c, int index = 0)
         {
-            if (c.Items.Count > 0 && c.SelectedIndex == -1)
+            if (c.Items.Count > 0 && c.SelectedIndex < 0)
                 c.SelectedIndex = index;
         }
     }
