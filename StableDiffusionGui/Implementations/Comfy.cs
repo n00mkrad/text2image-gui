@@ -64,6 +64,14 @@ namespace StableDiffusionGui.Implementations
             if (refine && refineModel == null)
                 return;
 
+            bool disableFooocusPatch = s.Controlnets.Any() || s.UpscaleMethod == UpscaleMethod.UltimateSd;
+
+            if (refine && disableFooocusPatch)
+            {
+                TextToImage.Cancel($"Refiner is currently not compatible the following features:\n\n - ControlNet\n- Ultimate SD Upscaler", true);
+                return;
+            }
+
             var generations = new List<GenerationInfo>() { new GenerationInfo() };
             GenerationInfo currentGeneration = null;
 
@@ -223,7 +231,8 @@ namespace StableDiffusionGui.Implementations
             if (Config.Instance.FullPrecision)
                 scriptArgs.Add("--force-fp32");
 
-            string newStartupSettings = $"{string.Join("", scriptArgs)}{Config.Instance.CudaDeviceIdx}";
+            ComfyUtils.SetExtensionEnabled("comfynmkd_foooc", !disableFooocusPatch);
+            string newStartupSettings = $"{string.Join("", scriptArgs)}{Config.Instance.CudaDeviceIdx}{disableFooocusPatch}";
 
             if (!TtiProcess.IsAiProcessRunning || (TtiProcess.IsAiProcessRunning && TtiProcess.LastStartupSettings != newStartupSettings))
             {

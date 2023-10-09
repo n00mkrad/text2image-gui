@@ -5,9 +5,9 @@ using StableDiffusionGui.MiscUtils;
 using StableDiffusionGui.Ui;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using static StableDiffusionGui.Implementations.ComfyData;
 using static StableDiffusionGui.Main.Enums.StableDiffusion;
 
@@ -15,6 +15,23 @@ namespace StableDiffusionGui.Implementations
 {
     public class ComfyUtils
     {
+        public static void SetExtensionEnabled(string customNodeName, bool enable)
+        {
+            Logger.Log($"Comfy: {(enable ? "Enabling" : "Disabling")} {customNodeName}", true);
+            string custNodesRoot = Path.Combine(Paths.GetDataPath(), Constants.Dirs.SdRepo, "ComfyUI", "custom_nodes");
+            string nodePathEnabled = Path.Combine(custNodesRoot, customNodeName);
+            string nodePathDisabled = $"{nodePathEnabled}.disabled";
+
+            if (enable && Directory.Exists(nodePathDisabled))
+            {
+                Directory.Move(nodePathDisabled, nodePathEnabled);
+            }
+            else if (!enable && Directory.Exists(nodePathEnabled))
+            {
+                Directory.Move(nodePathEnabled, nodePathDisabled);
+            }
+        }
+
         public static string GetVramArg()
         {
             var preset = ParseUtils.GetEnum<Enums.Comfy.VramPreset>(Config.Instance.ComfyVramPreset.ToString(), true, Strings.ComfyVramPresets);
@@ -70,7 +87,7 @@ namespace StableDiffusionGui.Implementations
 
         private static readonly Regex _invokeEmbeddingPattern = new Regex(@"<([^>]+)>", RegexOptions.Compiled);
 
-        public static string SanitizePrompt (string prompt)
+        public static string SanitizePrompt(string prompt)
         {
             prompt = _invokeEmbeddingPattern.Replace(prompt, "embedding:$1"); // Change <filename> to embedding:filename
 

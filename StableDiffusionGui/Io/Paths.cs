@@ -9,7 +9,10 @@ namespace StableDiffusionGui.Io
     {
         public static long SessionTimestampUnix;
         public static string SessionTimestamp;
-        public static long SessionClipboardIndex = 0;
+        private static long _sessionClipboardIndex = 0;
+        public static long SessionClipboardIndex { get { long num = _sessionClipboardIndex; _sessionClipboardIndex++;  return num; } }
+        private static long _sessionImportIndex = 0;
+        public static long SessionImportIndex { get { long num = _sessionImportIndex; _sessionImportIndex++; return num; } }
 
         public static void Init()
         {
@@ -108,9 +111,7 @@ namespace StableDiffusionGui.Io
 
         public static string GetClipboardFilename(string extension)
         {
-            string filename = Path.ChangeExtension($"clipboard{SessionClipboardIndex}", extension);
-            SessionClipboardIndex++;
-            return filename;
+            return Path.ChangeExtension($"clipboard{SessionClipboardIndex}", extension);
         }
 
         public static string GetClipboardPath(string extension)

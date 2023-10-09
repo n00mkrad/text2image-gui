@@ -58,7 +58,7 @@ namespace StableDiffusionGui.Main
                     try
                     {
                         Logger.Log($"Init img '{Path.GetFileName(pair.Key)}' has bad dimensions ({img.Width}x{img.Height}), resizing to {targetSize.Width}x{targetSize.Height}.", true);
-                        string resizedImgPath = Path.Combine(initImgsDir, $"{index}.png");
+                        string resizedImgPath = Path.Combine(initImgsDir, $"{Paths.SessionImportIndex}.png");
 
                         if (extendGravity != (Gravity)(-1)) // Extend/Crop
                         {
