@@ -324,7 +324,6 @@
     <Compile Include="Implementations\NmkdiffUtils.cs" />
     <Compile Include="Implementations\OperationOrder.cs" />
     <Compile Include="Implementations\SdOnnx.cs" />
-    <Compile Include="Implementations\SdXl.cs" />
     <Compile Include="Installation\EnabledFeatures.cs" />
     <Compile Include="Installation\InstallationStatus.cs" />
     <Compile Include="Installation\Setup.cs" />
