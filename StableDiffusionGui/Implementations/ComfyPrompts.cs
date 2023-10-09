@@ -165,7 +165,7 @@ namespace StableDiffusionGui.Implementations
                 sampler.RefinerPositiveCond = new ComfyInput(encodePromptRefiner, 0);
                 sampler.RefinerNegativeCond = new ComfyInput(encodePromptRefiner, 1);
                 sampler.LatentImage = new ComfyInput(finalLatentsNode, OutType.Latents);
-                sampler.Denoise = img2img ? g.InitStrength : 1.0f;
+                sampler.Denoise = img2img ? (g.InitStrength / 2f) + 0.5f : 1.0f;
                 finalLatentsNode = sampler;
                 samplerNode = sampler;
             }
@@ -182,10 +182,8 @@ namespace StableDiffusionGui.Implementations
                 sampler.Seed = new ComfyInput(g.Seed);
                 sampler.StepsTotal = new ComfyInput(g.Steps);
                 sampler.Cfg = new ComfyInput(g.Scale);
-                sampler.StartStep = new ComfyInput(0);
-                sampler.EndStep = new ComfyInput(baseSteps);
                 sampler.ReturnLeftoverNoise = refine;
-                sampler.Denoise = img2img ? g.InitStrength : 1.0f;
+                sampler.Denoise = img2img ? (g.InitStrength / 2f) + 0.5f : 1.0f;
                 finalLatentsNode = sampler;
                 samplerNode = sampler;
             }

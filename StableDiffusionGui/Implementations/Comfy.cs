@@ -68,7 +68,7 @@ namespace StableDiffusionGui.Implementations
 
             if (refine && disableFooocusPatch)
             {
-                TextToImage.Cancel($"Refiner is currently not compatible the following features:\n\n - ControlNet\n- Ultimate SD Upscaler", true);
+                TextToImage.Cancel($"Refiner is currently not compatible the following features:\n\n- ControlNet\n- Ultimate SD Upscaler", true);
                 return;
             }
 
