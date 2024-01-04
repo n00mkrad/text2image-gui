@@ -48,7 +48,7 @@ Relies on a slightly customized fork of the InvokeAI Stable Diffusion code: [Cod
   - Syntax Examples: `a green++ tree`, `a (big green)+ tree with orange- leaves (in the woods)++`
 
 - **Wildcards:** Fill in words or phrases from a list into the prompt.
-  - Inline: `photo of a ~car,tree,dog~`.
+  - Inline: `photo of a ~car, tree, dog~`.
   - From File: `photo of a ~objects` for loading texts from `objects.txt` in your `Wildcards` folder in the SD GUI root folder.
   - Order: Use `~` for random/shuffled, `~~` for unchanged order, or `~~~` for sorted (A-Z) mode.
 
