@@ -34,10 +34,11 @@ namespace StableDiffusionGui.Implementations
             OperationOrder.LoopAction.Iteration, 
             /* OperationOrder.LoopAction.LoraWeight, */
             OperationOrder.LoopAction.Scale,
+            OperationOrder.LoopAction.Guidance,
             OperationOrder.LoopAction.RefineStrength,
             OperationOrder.LoopAction.Step,
         });
-        private Action<OperationOrder.LoopAction> _loopIterations, _loopPrompts, _loopScales, _loopSteps, _loopRefinerStrengths, _loopInits, _loopInitStrengths/*, _loopLoraWeights*/;
+        private Action<OperationOrder.LoopAction> _loopIterations, _loopPrompts, _loopScales, _loopGuidances, _loopSteps, _loopRefinerStrengths, _loopInits, _loopInitStrengths/*, _loopLoraWeights*/;
 
         public async Task Run(TtiSettings s, string outPath)
         {
@@ -148,6 +149,15 @@ namespace StableDiffusionGui.Implementations
                 }
             };
 
+            _loopGuidances = (thisAction) =>
+            {
+                foreach (float guidance in s.GuidanceVals)
+                {
+                    currentGeneration.Guidance = guidance.Clamp(0.01f, 1000f);
+                    NextAction(thisAction);
+                }
+            };
+
             _loopSteps = (thisAction) =>
             {
                 foreach (int stepCount in s.Steps)
@@ -218,21 +228,11 @@ namespace StableDiffusionGui.Implementations
             string initsStr = initImages != null ? $" and {initImages.Count} image{(initImages.Count != 1 ? "s" : "")} using {initStrengths.Length} strength{(initStrengths.Length != 1 ? "s" : "")}" : "";
             Logger.Log($"{s.Prompts.Length} prompt{(s.Prompts.Length != 1 ? "s" : "")} * {s.Iterations} image(s) * {s.Steps.Length} step value(s) * {s.ScalesTxt.Length} scale value(s) * {s.RefinerStrengths.Length} refine value(s){initsStr} = {generations.Count - 1} image(s) total.");
 
-            var scriptArgs = new List<string>
-            {
-                $"--port {ComfyPort}",
-                $"--output-directory {outPath.Wrap(true)}",
-                $"--preview-method none",
-                $"--disable-xformers", // Obsolete since Pytorch 2.0
-                $"--cuda-malloc",
-                $"--{ComfyUtils.GetVramArg()}",
-            };
+            string comfyArgs = ComfyUtils.GetStartupArgs(outPath);
 
-            if (Config.Instance.FullPrecision)
-                scriptArgs.Add("--force-fp32");
-
+            disableFooocusPatch = true; // TEMPORARY
             ComfyUtils.SetExtensionEnabled("comfynmkd_foooc", !disableFooocusPatch);
-            string newStartupSettings = $"{string.Join("", scriptArgs)}{Config.Instance.CudaDeviceIdx}{disableFooocusPatch}";
+            string newStartupSettings = $"{comfyArgs}{Config.Instance.CudaDeviceIdx}{disableFooocusPatch}";
 
             if (!TtiProcess.IsAiProcessRunning || (TtiProcess.IsAiProcessRunning && TtiProcess.LastStartupSettings != newStartupSettings))
             {
@@ -245,7 +245,7 @@ namespace StableDiffusionGui.Implementations
                 Process py = OsUtils.NewProcess(true, logAction: HandleOutput);
                 TextToImage.CurrentTask.Processes.Add(py);
 
-                py.StartInfo.Arguments = $"/C cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand()} && {Constants.Files.VenvActivate} && python repo/comfyui/main.py {string.Join(" ", scriptArgs)}";
+                py.StartInfo.Arguments = $"/C cd /D {Paths.GetDataPath().Wrap()} && {TtiUtils.GetEnvVarsSdCommand()} && {Constants.Files.VenvActivate} && python repo/comfyui/main.py {comfyArgs}";
                 Logger.Log("cmd.exe " + py.StartInfo.Arguments, true);
 
                 if (TtiProcess.CurrentProcess != null)
@@ -277,6 +277,7 @@ namespace StableDiffusionGui.Implementations
             foreach (var genInfo in generations.Where(g => g.Model.IsNotEmpty()))
             {
                 var prompt = ComfyPrompts.GetMainWorkflow(genInfo);
+                if(Program.Debug) ComfyWorkflowTools.ReconstructJson(prompt);
                 EasyDict<string, object> meta = new EasyDict<string, object> { { "GenerationInfoJson", genInfo.GetSerializeClone() } };
                 string response = await SendPrompt(prompt, meta);
 
@@ -291,15 +292,15 @@ namespace StableDiffusionGui.Implementations
         {
             try
             {
-                var req = new ComfyWorkflow.PromptRequest() { ClientId = Paths.SessionTimestampUnix.ToString(), Prompt = prompt };
+                var request = new ComfyWorkflow.PromptRequest() { ClientId = Paths.SessionTimestampUnix.ToString(), Prompt = prompt };
 
-                foreach (var pair in (pngMetadata == null ? new EasyDict<string, object>() : pngMetadata))
-                    req.ExtraData.ExtraPnginfo[pair.Key] = pair.Value;
+                foreach (var pair in (pngMetadata ?? new EasyDict<string, object>()))
+                    request.ExtraData.ExtraPnginfo[pair.Key] = pair.Value;
 
                 if (Program.Debug)
-                    File.WriteAllText(IoUtils.GetAvailablePath(Path.Combine(Paths.GetLogPath(), "req.json")), req.Serialize(true));
+                    File.WriteAllText(IoUtils.GetAvailablePath(Path.Combine(Paths.GetLogPath(), "req.json")), request.Serialize(true));
 
-                string resp = await ApiPost(req.ToString());
+                string resp = await ApiPost(request.ToString());
                 Logger.Log($"[<-] {resp}", true, filename: Constants.Lognames.Api);
                 return resp;
             }
@@ -347,6 +348,7 @@ namespace StableDiffusionGui.Implementations
             if (a == OperationOrder.LoopAction.Prompt) _loopPrompts(a);
             if (a == OperationOrder.LoopAction.Iteration) _loopIterations(a);
             if (a == OperationOrder.LoopAction.Scale) _loopScales(a);
+            if (a == OperationOrder.LoopAction.Guidance) _loopGuidances(a);
             if (a == OperationOrder.LoopAction.Step) _loopSteps(a);
             if (a == OperationOrder.LoopAction.RefineStrength) _loopRefinerStrengths(a);
             if (a == OperationOrder.LoopAction.InitImg) _loopInits(a);

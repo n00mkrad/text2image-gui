@@ -272,5 +272,15 @@ namespace StableDiffusionGui.MiscUtils
         {
             return path.Replace("/", "\\").Trim().TrimEnd('\\');
         }
+
+        public static string PrintValues<T>(T[] objs, string format = "{0}", string floatFormat = "0.###")
+        {
+            if (objs == null || objs.Length == 0)
+                return "";
+
+            bool isFloatNum = typeof(T) == typeof(float) || typeof(T) == typeof(double) || typeof(T) == typeof(decimal);
+            string firstVal = isFloatNum ? firstVal = string.Format(format, string.Format("{0:" + floatFormat + "}", objs[0])) : string.Format(format, objs[0]);
+            return objs.Length == 1 ? firstVal : $"{firstVal}...";
+        }
     }
 }

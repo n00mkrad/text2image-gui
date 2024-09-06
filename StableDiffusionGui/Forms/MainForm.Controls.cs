@@ -99,6 +99,7 @@ namespace StableDiffusionGui.Forms
             ConfigParser.LoadGuiElement(sliderSteps, ref Config.Instance.Steps);
             ConfigParser.LoadGuiElement(sliderRefinerStart, ref Config.Instance.SdXlRefinerStrength);
             ConfigParser.LoadGuiElement(sliderScale, ref Config.Instance.Scale);
+            ConfigParser.LoadGuiElement(sliderGuidance, ref Config.Instance.Guidance);
             ConfigParser.LoadGuiElement(comboxResW, ref Config.Instance.ResW);
             ConfigParser.LoadGuiElement(comboxResH, ref Config.Instance.ResH);
             ConfigParser.LoadComboxIndex(comboxSampler, ref Config.Instance.SamplerIdx);
@@ -149,7 +150,7 @@ namespace StableDiffusionGui.Forms
             comboxBackend.Text = Strings.Implementation.Get(imp.ToString());
 
             // Panel visibility
-            SetVisibility(new Control[] { panelBaseImg, panelPromptNeg, panelEmbeddings, panelRefineStart, panelInitImgStrength, panelInpainting, panelScaleImg, panelRes, panelSampler, panelSeamless, checkboxHiresFix,
+            SetVisibility(new Control[] { panelBaseImg, panelPromptNeg, panelEmbeddings, panelRefineStart, panelInitImgStrength, panelInpainting, panelScaleImg, panelGuidance, panelRes, panelSampler, panelSeamless, checkboxHiresFix,
                 textboxClipsegMask, panelResizeGravity, comboxControlnetSlot, labelResChange, btnResetRes, checkboxShowInitImg, panelModel, panelLoras, panelModel2, panelUpscaling, panelControlnet, panelModelSettings }, imp);
 
             bool adv = Config.Instance.AdvancedUi;
@@ -372,7 +373,9 @@ namespace StableDiffusionGui.Forms
             {
                 int gcd = GreatestCommonDivisor(w, h);
                 string ratioText = $"{w / gcd}:{h / gcd}";
-                labelAspectRatio.Text = ratioText.Length <= 5 ? $"Ratio {ratioText.Replace("8:5", "8:5 (16:10)").Replace("7:3", "7:3 (21:9)")}" : "";
+                float megapixels = w * h / 1000000f;
+                string mpStr = $"{megapixels.ToString("0.#")} MP";
+                labelAspectRatio.Text = ratioText.Length <= 5 ? $"{mpStr}, {ratioText.Replace("8:5", "8:5 (16:10)").Replace("7:3", "7:3 (21:9)")}" : mpStr;
             }
 
             RefreshUpscaleUi();

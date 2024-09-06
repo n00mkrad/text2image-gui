@@ -17,6 +17,7 @@ namespace StableDiffusionGui.Io
         public float InitStrength;
         public int Steps;
         public float Scale;
+        public float Guidance;
         public string OutPath = "";
         public string FavsPath = "";
         public int Iterations;
@@ -94,6 +95,7 @@ namespace StableDiffusionGui.Io
         public Enums.Comfy.VramPreset ComfyVramPreset;
         public string EsrganModel;
         public string SdUpscaleModel;
+        public bool ComfyFast;
 
         public ConfigInstance()
         {
@@ -101,6 +103,7 @@ namespace StableDiffusionGui.Io
             InitStrength = 0.4f;
             Steps = 20;
             Scale = 7.0f;
+            Guidance = 3.0f;
             OutPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), "SDGUI");
             FavsPath = Path.Combine(OutPath, Constants.Dirs.ImgFavs);
             Iterations = 5;
@@ -139,6 +142,7 @@ namespace StableDiffusionGui.Io
 
             SdXlRefinerStrength = 0.2f;
             ComfyVramPreset = Enums.Comfy.VramPreset.NormalVram;
+            ComfyFast = true;
         }
 
         public ConfigInstance Clone()

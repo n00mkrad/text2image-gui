@@ -315,6 +315,7 @@
     <Compile Include="Implementations\ComfyPrompts.cs" />
     <Compile Include="Implementations\ComfyUtils.cs" />
     <Compile Include="Implementations\ComfyWorkflow.cs" />
+    <Compile Include="Implementations\ComfyWorkflowTools.cs" />
     <Compile Include="Implementations\IImplementation.cs" />
     <Compile Include="Implementations\IInvokePatcher.cs" />
     <Compile Include="Implementations\ImplementationBase.cs" />

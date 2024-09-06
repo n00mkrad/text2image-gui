@@ -153,6 +153,7 @@ namespace StableDiffusionGui.Forms
                 RefinerStrengths = panelRefineStart.Visible ? MainUi.GetExtraValues(textboxExtraRefinerValues.Text, sliderRefinerStart.ActualValueFloat).ToArray() : new float[1],
                 InitImgs = MainUi.CurrentInitImgPaths.ToArray(),
                 ScalesTxt = MainUi.GetExtraValues(textboxExtraScales.Text, sliderScale.ActualValueFloat).ToArray(),
+                GuidanceVals = panelGuidance.Visible ? MainUi.GetExtraValues(textboxExtraGuidances.Text, sliderGuidance.ActualValueFloat).ToArray() : new float[1],
                 InitStrengths = panelInitImgStrength.Visible ? MainUi.GetExtraValues(textboxExtraInitStrengths.Text, sliderInitStrength.ActualValueFloat).ToArray() : new float[1],
                 Seed = (upDownSeed.Value < 0 ? new Random().Next(0, int.MaxValue) : ((long)upDownSeed.Value)),
                 Sampler = ParseUtils.GetEnum<Sampler>(comboxSampler.Text, true, Strings.Samplers),

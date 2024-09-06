@@ -370,7 +370,8 @@ namespace StableDiffusionGui.Io
 
         public static ModelArch DetectModelType(string modelType, string unetConfigJson)
         {
-
+            if(modelType == "FLUX")
+                return ModelArch.Flux;
 
             JsonSerializerSettings settings = new JsonSerializerSettings
             {

@@ -610,8 +610,14 @@ namespace StableDiffusionGui
         }
         
         // Prettier ToString alternative
-        public static string AsString(this Size s, string delimiter = "x", bool swapWidthHeight = false)
+        public static string AsString(this Size s, string delimiter = "x", bool swapWidthHeight = false, bool returnEmptyIf0x0 = false)
         {
+            if(s == null)
+                return returnEmptyIf0x0 ? "" : "0x0";
+
+            if (returnEmptyIf0x0 && s.IsEmpty)
+                return "";
+
             if (swapWidthHeight)
                 return $"{s.Height}{delimiter}{s.Width}";
             else

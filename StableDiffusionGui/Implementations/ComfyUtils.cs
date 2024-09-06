@@ -32,6 +32,26 @@ namespace StableDiffusionGui.Implementations
             }
         }
 
+        public static string GetStartupArgs (string outPath)
+        {
+            var scriptArgs = new List<string>
+            {
+                $"--port {Comfy.ComfyPort}",
+                $"--output-directory {outPath.Wrap(true)}",
+                $"--preview-method none",
+                $"--disable-xformers", // Obsolete since Pytorch 2.0
+                $"--{GetVramArg()}",
+            };
+
+            if (Config.Instance.FullPrecision)
+                scriptArgs.Add("--force-fp32");
+
+            if (Config.Instance.ComfyFast)
+                scriptArgs.Add("--fast");
+
+            return string.Join(" ", scriptArgs);
+        }
+
         public static string GetVramArg()
         {
             var preset = ParseUtils.GetEnum<Enums.Comfy.VramPreset>(Config.Instance.ComfyVramPreset.ToString(), true, Strings.ComfyVramPresets);

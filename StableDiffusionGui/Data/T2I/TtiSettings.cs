@@ -9,6 +9,7 @@ using System.Drawing;
 using StableDiffusionGui.Ui;
 using static StableDiffusionGui.Serialization.JsonUtils;
 using StableDiffusionGui.Implementations;
+using StableDiffusionGui.MiscUtils;
 
 namespace StableDiffusionGui.Data
 {
@@ -26,6 +27,7 @@ namespace StableDiffusionGui.Data
         public float[] InitStrengthsReverse { get { return InitStrengths.Select(n => 1f - n).ToArray(); } }
         public float[] ScalesTxt { get; set; } = new float[0];
         public float[] ScalesImg { get; set; } = new float[0];
+        public float[] GuidanceVals { get; set; } = new float[0];
         public long Seed { get; set; } = 0;
         public Sampler Sampler { get; set; } = (Sampler)(-1);
         public Size Res { get; set; } = new Size();
@@ -63,12 +65,14 @@ namespace StableDiffusionGui.Data
 
             try
             {
-                int iniImgMult = (InitImgs == null || InitImgs.Length < 1) ? 1 : InitImgs.Length * InitStrengths.Length.Clamp(1, int.MaxValue); // 1 if no inits, otherwise init count
-                int scalesMult = ScalesTxt.Length.Clamp(1, int.MaxValue) * ScalesImg.Length.Clamp(1, int.MaxValue); // Use 1 instead of 0 for empty lists
+                // For empty lists, we need to multiply the image count by 1 instead of 0, so clamp it
+                int iniImgMult = (InitImgs == null || InitImgs.Length < 1) ? 1 : InitImgs.Length * InitStrengths.Length.Clamp(1, int.MaxValue);
+                int scalesMult = ScalesTxt.Length.Clamp(1, int.MaxValue) * ScalesImg.Length.Clamp(1, int.MaxValue);
                 int lorasMult = Loras != null && Loras.Count == 1 ? Loras.First().Value.Count : 1;
                 int refineMult = RefinerStrengths.Length.Clamp(1, int.MaxValue);
+                int guidanceMult = GuidanceVals.Length.Clamp(1, int.MaxValue);
 
-                count = Prompts.Length * Iterations * scalesMult * Steps.Length * iniImgMult * lorasMult * refineMult;
+                count = Prompts.Length * Iterations * scalesMult * Steps.Length * iniImgMult * lorasMult * refineMult * guidanceMult;
 
                 if (ConfigParser.UpscaleAndSaveOriginals(config))
                     count *= 2;
@@ -85,34 +89,37 @@ namespace StableDiffusionGui.Data
         {
             try // New format
             {
-                string init = "";
+                string initImgInfo = "";
 
                 if (InitImgs != null && InitImgs.Length > 0)
                 {
-                    if (InitImgs.Length == 1)
-                        init = " - With Image";
-                    else
-                        init = $" - {InitImgs.Length} Images";
+                    initImgInfo = InitImgs.Length == 1 ? "With Image" : $"{InitImgs.Length} Images";
                 }
 
-                string extraPrompts = Prompts.Length > 1 ? $" (+{Prompts.Length - 1})" : "";
-                return $"\"{Prompts.FirstOrDefault().Trunc(85)}\"{extraPrompts} - {Iterations} Images - {Steps.FirstOrDefault()} Steps - Seed {Seed} - {Res.AsString()} - {Strings.Samplers[Sampler.ToString()]}{init}";
+                //string extraPrompts = Prompts.Length > 1 ? $" (+{Prompts.Length - 1})" : "";
+
+                // Revised version, using lists of values where empty values are ignored at the end when joining into a single colon-separated string:
+                var infos = new List<object>
+                {
+                    $"{Prompts.First().Trunc(85).Wrap()}{(Prompts.Length > 1 ? $" (+{Prompts.Length - 1}" : "")}",
+                    Iterations > 1 ? $"{Iterations} Images" : "",
+                    FormatUtils.PrintValues(Steps, "{0} Steps"),
+                    FormatUtils.PrintValues(ScalesTxt, "CFG {0}"),
+                    FormatUtils.PrintValues(GuidanceVals, "G {0}"),
+                    $"Seed {Seed}",
+                    Res.AsString(),
+                    Strings.Samplers[$"{Sampler}"],
+                    initImgInfo,
+                };
+
+                return string.Join(" - ", infos.Select(o => $"{o}").Where(s => s.IsNotEmpty()));
+
+                //return $"\"{Prompts.FirstOrDefault().Trunc(85)}\"{extraPrompts} - {Iterations} Images - {Steps.FirstOrDefault()} Steps - Seed {Seed} - {Res.AsString()} - {Strings.Samplers[$"{Sampler}"]}{initImgInfo}";
             }
             catch
             {
-                // try // Old format
-                // {
-                //     string init = !string.IsNullOrWhiteSpace(Params.Get("initImg")) ? $" - With Image" : "";
-                //     string extraPrompts = Prompts.Length > 1 ? $" (+{Prompts.Length - 1})" : "";
-                //     return $"\"{Prompts.FirstOrDefault().Trunc(85)}\"{extraPrompts} - {Iterations} Images - {Params.Get("steps")} Steps - Seed {Params.Get("seed")} - {Params.Get("res")} - {Params.Get("sampler")}{init}";
-                // }
-                // catch
-                // {
-                //     return "";
-                // }
+                return "";
             }
-
-            return "";
         }
 
         public bool Equals(TtiSettings other)

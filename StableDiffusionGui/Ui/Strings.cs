@@ -196,6 +196,7 @@ namespace StableDiffusionGui.Ui
             { Enums.StableDiffusion.ModelArch.Sd2V.ToString(), "SD 2.X V (768px)" },
             { Enums.StableDiffusion.ModelArch.SdXlBase.ToString(), "SD XL Base (1024px)" },
             { Enums.StableDiffusion.ModelArch.SdXlRefine.ToString(), "SD XL Refiner (1024px)" },
+            { Enums.StableDiffusion.ModelArch.Flux.ToString(), "FLUX" },
         };
     }
 }

@@ -1,4 +1,5 @@
-﻿using StableDiffusionGui.Io;
+﻿using StableDiffusionGui.Data;
+using StableDiffusionGui.Io;
 using StableDiffusionGui.Main;
 using System.Collections.Generic;
 using System.Drawing;
@@ -12,29 +13,33 @@ namespace StableDiffusionGui.Implementations
 {
     public class ComfyNodes
     {
-        public enum OutType { Model, Vae, Clip, Conditioning, Latents, Image, Mask }
+        public enum ConnectionType { Model, Vae, Clip, Conditioning, Latent, Image, Mask, Upscale_Model }
 
         public interface INode
         {
             string Id { get; set; }
             string Title { get; set; }
+            // List<ConnectionType> InputTypes { get; set; }
+            // List<ConnectionType> OutputTypes { get; set; }
+            // Dictionary<string, object> Inputs { get; set; }
+            // string ClassType { get; set; }
             NodeInfo GetNodeInfo();
         }
 
-        public static int GetOutIndex(INode nodeClass, OutType outType)
+        public static int GetOutIndex(INode nodeClass, ConnectionType outType)
         {
-            if (outType == OutType.Vae)
+            if (outType == ConnectionType.Vae)
             {
                 if (nodeClass is NmkdCheckpointLoader) return 2;
                 if (nodeClass is Conv2dSettings) return 1;
             }
-            else if (outType == OutType.Clip)
+            else if (outType == ConnectionType.Clip)
             {
                 if (nodeClass is NmkdCheckpointLoader) return 1;
                 if (nodeClass is NmkdMultiLoraLoader) return 1;
                 if (nodeClass is Conv2dSettings) return 2;
             }
-            else if (outType == OutType.Mask)
+            else if (outType == ConnectionType.Mask)
             {
                 if (nodeClass is NmkdImageLoader) return 1;
             }
@@ -47,16 +52,16 @@ namespace StableDiffusionGui.Implementations
             object Value = null;
             INode Node = null;
             int NodeOutIndex = -1;
-            OutType OutType = (OutType)(-1);
+            ConnectionType OutType = (ConnectionType)(-1);
 
             public ComfyInput(object value)
             {
                 Value = value;
             }
 
-            public ComfyInput(INode node, OutType outType = (OutType)(-1))
+            public ComfyInput(INode node, ConnectionType outType = (ConnectionType)(-1))
             {
-                int outIndex = outType == (OutType)(-1) ? 0 : GetOutIndex(node, outType);
+                int outIndex = outType == (ConnectionType)(-1) ? 0 : GetOutIndex(node, outType);
                 Node = node;
                 NodeOutIndex = outIndex;
             }
@@ -75,7 +80,7 @@ namespace StableDiffusionGui.Implementations
                 if (Node == null)
                     return "";
 
-                if(OutType != (OutType)(-1))
+                if(OutType != (ConnectionType)(-1))
                 {
                     int outIndex = GetOutIndex(Node, OutType);
                     return new object[] { Node.Id, outIndex };
@@ -167,47 +172,9 @@ namespace StableDiffusionGui.Implementations
             {
                 return new NodeInfo
                 {
-                    Inputs = { ["vae_name"] = VaeName },
+                    Inputs = new Dictionary<string, object> { ["vae_name"] = VaeName },
+                    OutputTypes = new List<ConnectionType> { ConnectionType.Vae },
                     ClassType = nameof(VAELoader)
-                };
-            }
-
-            public override string ToString()
-            {
-                return ToStringNode(this);
-            }
-        }
-
-        public class KSampler : Node, INode
-        {
-            public long Seed;
-            public int Steps;
-            public float Cfg;
-            public string SamplerName = "dpmpp_2m";
-            public string Scheduler = "normal";
-            public float Denoise = 1.0f;
-            public ComfyInput Model;
-            public ComfyInput PosPrompt;
-            public ComfyInput NegPrompt;
-            public ComfyInput LatentImage;
-
-            public NodeInfo GetNodeInfo()
-            {
-                return new NodeInfo()
-                {
-                    Inputs = {
-                        ["seed"] = Seed,
-                        ["steps"] = Steps,
-                        ["cfg"] = Cfg,
-                        ["sampler_name"] = SamplerName,
-                        ["scheduler"] = Scheduler,
-                        ["denoise"] = Denoise,
-                        ["model"] = Model.Get(),
-                        ["positive"] = PosPrompt.Get(),
-                        ["negative"] = NegPrompt.Get(),
-                        ["latent_image"] = LatentImage.Get(),
-                    },
-                    ClassType = "KSamplerAdvanced"
                 };
             }
 
@@ -239,14 +206,15 @@ namespace StableDiffusionGui.Implementations
 
             public NodeInfo GetNodeInfo()
             {
-                if (DebugString.IsEmpty())
-                    DebugString = Title;
+                // if (DebugString.IsEmpty())
+                //     DebugString = Title;
 
                 return new NodeInfo()
                 {
                     Inputs = {
                         ["add_noise"] = AddNoise ? "enable" : "disable",
                         ["noise_seed"] = Seed.Get(),
+                        ["control_after_generate"] = "fixed",
                         ["steps"] = StepsTotal.Get(),
                         ["cfg"] = Cfg.Get(),
                         ["sampler_name"] = SamplerName,
@@ -259,7 +227,18 @@ namespace StableDiffusionGui.Implementations
                         ["positive"] = PositiveCond.Get(),
                         ["negative"] = NegativeCond.Get(),
                         ["latent_image"] = LatentImage.Get(),
-                        ["debug_string"] = DebugString
+                        // ["debug_string"] = DebugString
+                    },
+                    InputTypes = new Dictionary<string, ConnectionType>
+                    {
+                        ["model"] = ConnectionType.Model,
+                        ["positive"] = ConnectionType.Conditioning,
+                        ["negative"] = ConnectionType.Conditioning,
+                        ["latent_image"] = ConnectionType.Latent,
+                    },
+                    OutputTypes = new List<ConnectionType>
+                    {
+                        ConnectionType.Latent,
                     },
                     ClassType = nameof(NmkdKSampler),
                 };
@@ -329,22 +308,59 @@ namespace StableDiffusionGui.Implementations
             }
         }
 
-        public class EmptyLatentImage : Node, INode
+        public class DynamicThresholdingSimple : Node, INode
         {
-            public int Width;
-            public int Height;
-            public int BatchSize = 1;
+            public float MimicScale = 1.0f;
+            public float ThresholdPercentile = 1.0f;
+            public ComfyInput Model;
 
             public NodeInfo GetNodeInfo()
             {
                 return new NodeInfo
                 {
                     Inputs = {
-                        ["width"] = Width,
-                        ["height"] = Height,
-                        ["batch_size"] = BatchSize,
+                        ["mimic_scale"] = MimicScale,
+                        ["threshold_percentile"] = ThresholdPercentile,
+                        ["model"] = Model.Get(),
                     },
-                    ClassType = nameof(EmptyLatentImage)
+                    OutputTypes = new List<ConnectionType> { ConnectionType.Model },
+                    ClassType = nameof(DynamicThresholdingSimple)
+                };
+            }
+
+            public override string ToString()
+            {
+                return ToStringNode(this);
+            }
+        }
+
+        public class DynamicThresholdingFull : Node, INode
+        {
+            public float MimicScale = 1.0f;
+            public float ThresholdPercentile = 1.0f;
+            public float InterpolatePhi = 0.6f;
+            public ComfyInput Model;
+
+            public NodeInfo GetNodeInfo()
+            {
+                return new NodeInfo
+                {
+                    Inputs = {
+                        ["mimic_scale"] = MimicScale,
+                        ["threshold_percentile"] = ThresholdPercentile,
+                        ["mimic_mode"] = "Sawtooth",
+                        ["mimic_scale_min"] = 0,
+                        ["cfg_mode"] = "Constant",
+                        ["cfg_scale_min"] = 0,
+                        ["sched_val"] = 1,
+                        ["separate_feature_channels"] = "enable",
+                        ["scaling_startpoint"] = "ZERO",
+                        ["variability_measure"] = "STD",
+                        ["interpolate_phi"] = InterpolatePhi,
+                        ["model"] = Model.Get(),
+                    },
+                    OutputTypes = new List<ConnectionType> { ConnectionType.Model },
+                    ClassType = nameof(DynamicThresholdingFull)
                 };
             }
 
@@ -373,6 +389,11 @@ namespace StableDiffusionGui.Implementations
                         { "crop", "disabled" },
                         { "samples", Latents.Get() }
                     },
+                    InputTypes = new Dictionary<string, ConnectionType>
+                    {
+                        ["samples"] = ConnectionType.Latent
+                    },
+                    OutputTypes = new List<ConnectionType> { ConnectionType.Latent },
                     ClassType = nameof(LatentUpscale)
                 };
             }
@@ -396,6 +417,7 @@ namespace StableDiffusionGui.Implementations
                         ["text"] = Text.Get(),
                         ["clip"] = Clip.Get(),
                     },
+                    OutputTypes = new List<ConnectionType> { ConnectionType.Clip },
                     ClassType = nameof(CLIPTextEncode)
                 };
             }
@@ -420,6 +442,7 @@ namespace StableDiffusionGui.Implementations
                         ["samples"] = Latents.Get(),
                         ["vae"] = Vae.Get(),
                     },
+                    OutputTypes = new List<ConnectionType> { ConnectionType.Image },
                     ClassType = nameof(VAEDecode)
                 };
             }
@@ -455,6 +478,7 @@ namespace StableDiffusionGui.Implementations
                 return new NodeInfo
                 {
                     Inputs = inputs,
+                    OutputTypes = new List<ConnectionType> { ConnectionType.Latent },
                     ClassType = nameof(NmkdVaeEncode)
                 };
             }
@@ -505,18 +529,22 @@ namespace StableDiffusionGui.Implementations
 
             public NodeInfo GetNodeInfo()
             {
-                var dict = new Dictionary<string, object>()
-                {
-                    { "mdl_path", ModelPath },
-                    { "load_vae", LoadVae ? "enable" : "disable" },
-                    { "vae_path", VaePath },
-                    { "embeddings_dir", EmbeddingsDir },
-                    { "clip_skip", ClipSkip },
-                };
-
                 return new NodeInfo
                 {
-                    Inputs = dict,
+                    Inputs = new Dictionary<string, object>()
+                    {
+                        { "mdl_path", ModelPath },
+                        { "load_vae", LoadVae ? "enable" : "disable" },
+                        { "vae_path", VaePath },
+                        { "embeddings_dir", EmbeddingsDir },
+                        { "clip_skip", ClipSkip },
+                    },
+                    OutputTypes = new List<ConnectionType>
+                    {
+                        ConnectionType.Model,
+                        ConnectionType.Clip,
+                        ConnectionType.Vae,
+                    },
                     ClassType = nameof(NmkdCheckpointLoader)
                 };
             }
@@ -546,6 +574,7 @@ namespace StableDiffusionGui.Implementations
                 return new NodeInfo
                 {
                     Inputs = inputsDict,
+                    OutputTypes = new List<ConnectionType> { ConnectionType.Model, ConnectionType.Clip },
                     ClassType = nameof(NmkdMultiLoraLoader)
                 };
             }
@@ -570,6 +599,7 @@ namespace StableDiffusionGui.Implementations
                 return new NodeInfo
                 {
                     Inputs = dict,
+                    OutputTypes = new List<ConnectionType> { ConnectionType.Image, ConnectionType.Mask },
                     ClassType = nameof(NmkdImageLoader)
                 };
             }
@@ -594,6 +624,7 @@ namespace StableDiffusionGui.Implementations
                         { "model_path", UpscaleModelPath },
                         { "image", Image.Get() },
                     },
+                    OutputTypes = new List<ConnectionType> { ConnectionType.Image },
                     ClassType = nameof(NmkdImageUpscale)
                 };
             }
@@ -616,6 +647,7 @@ namespace StableDiffusionGui.Implementations
                     {
                         { "model_path", UpscaleModelPath },
                     },
+                    OutputTypes = new List<ConnectionType> { ConnectionType.Upscale_Model },
                     ClassType = nameof(NmkdUpscaleModelLoader)
                 };
             }
@@ -642,6 +674,7 @@ namespace StableDiffusionGui.Implementations
                 return new NodeInfo
                 {
                     Inputs = inputs,
+                    OutputTypes = new List<ConnectionType> { ConnectionType.Clip },
                     ClassType = nameof(CLIPSetLastLayer)
                 };
             }
@@ -670,6 +703,12 @@ namespace StableDiffusionGui.Implementations
                 return new NodeInfo
                 {
                     Inputs = inputs,
+                    InputTypes = new Dictionary<string, ConnectionType>
+                    {
+                        ["image_to"] = ConnectionType.Image,
+                        ["image_from"] = ConnectionType.Image,
+                    },
+                    OutputTypes = new List<ConnectionType> { ConnectionType.Image },
                     ClassType = nameof(NmkdImageMaskComposite)
                 };
             }
@@ -706,6 +745,7 @@ namespace StableDiffusionGui.Implementations
                 return new NodeInfo
                 {
                     Inputs = inputs,
+                    OutputTypes = new List<ConnectionType> { ConnectionType.Conditioning },
                     ClassType = nameof(NmkdControlNet)
                 };
             }
@@ -731,7 +771,12 @@ namespace StableDiffusionGui.Implementations
                     { "strength", Strength },
                 };
 
-                return new NodeInfo { Inputs = dict, ClassType = nameof(NmkdHypernetworkLoader) };
+                return new NodeInfo
+                {
+                    Inputs = dict,
+                    OutputTypes = new List<ConnectionType> { ConnectionType.Model },
+                    ClassType = nameof(NmkdHypernetworkLoader)
+                };
             }
 
             public override string ToString()
@@ -747,7 +792,7 @@ namespace StableDiffusionGui.Implementations
 
             public NodeInfo GetNodeInfo()
             {
-                var inputs = new Dictionary<string, object>
+                var dict = new Dictionary<string, object>
                 {
                     { "image", Image.Get() },
                 };
@@ -769,46 +814,51 @@ namespace StableDiffusionGui.Implementations
                 if (Preprocessor == Enums.StableDiffusion.ImagePreprocessor.LineArt)
                 {
                     classType = "LineArtPreprocessor";
-                    inputs["coarse"] = "disable";
+                    dict["coarse"] = "disable";
                 }
 
                 if (Preprocessor == Enums.StableDiffusion.ImagePreprocessor.LineArtHed)
                 {
                     classType = "HEDPreprocessor";
-                    inputs["version"] = "v1.1";
-                    inputs["safe"] = "enable";
+                    dict["version"] = "v1.1";
+                    dict["safe"] = "enable";
                 }
 
                 if (Preprocessor == Enums.StableDiffusion.ImagePreprocessor.Canny)
                 {
                     classType = "Canny";
-                    inputs["low_threshold"] = 0.1f;
-                    inputs["high_threshold"] = 0.2f;
+                    dict["low_threshold"] = 0.1f;
+                    dict["high_threshold"] = 0.2f;
                 }
 
                 if (Preprocessor == Enums.StableDiffusion.ImagePreprocessor.Blur)
                 {
                     classType = "ImageBlur";
-                    inputs["blur_radius"] = 15;
-                    inputs["sigma"] = 1f;
+                    dict["blur_radius"] = 15;
+                    dict["sigma"] = 1f;
                 }
 
                 if (Preprocessor == Enums.StableDiffusion.ImagePreprocessor.Pixelate)
                 {
                     classType = "NmkdColorPreprocessor";
-                    inputs["divisor"] = 64;
+                    dict["divisor"] = 64;
                 }
 
                 if (Preprocessor == Enums.StableDiffusion.ImagePreprocessor.OpenPose)
                 {
                     classType = "OpenposePreprocessor";
-                    inputs["detect_hand"] = "enable";
-                    inputs["detect_body"] = "enable";
-                    inputs["detect_face"] = "disable";
-                    inputs["version"] = "v1.1";
+                    dict["detect_hand"] = "enable";
+                    dict["detect_body"] = "enable";
+                    dict["detect_face"] = "disable";
+                    dict["version"] = "v1.1";
                 }
 
-                return new NodeInfo { Inputs = inputs, ClassType = classType };
+                return new NodeInfo
+                {
+                    Inputs = dict,
+                    OutputTypes = new List<ConnectionType> { ConnectionType.Image },
+                    ClassType = classType
+                };
             }
 
             public override string ToString()
@@ -822,6 +872,7 @@ namespace StableDiffusionGui.Implementations
             public string Text1;
             public string Text2;
             public ComfyInput Clip;
+            public float FluxGuidance;
 
             public NodeInfo GetNodeInfo()
             {
@@ -830,9 +881,44 @@ namespace StableDiffusionGui.Implementations
                     { "text1", Text1 },
                     { "text2", Text2 },
                     { "clip", Clip.Get() },
+                    { "flux_guidance", FluxGuidance },
                 };
 
-                return new NodeInfo { Inputs = dict, ClassType = nameof(NmkdDualTextEncode) };
+                return new NodeInfo
+                {
+                    Inputs = dict,
+                    OutputTypes = new List<ConnectionType> { ConnectionType.Conditioning, ConnectionType.Conditioning },
+                    ClassType = nameof(NmkdDualTextEncode)
+                };
+            }
+
+            public override string ToString()
+            {
+                return ToStringNode(this);
+            }
+        }
+
+        public class NmkdLatentImage : Node, INode
+        {
+            public int Width;
+            public int Height;
+            public bool Sd3Mode;
+
+            public NodeInfo GetNodeInfo()
+            {
+                var dict = new Dictionary<string, object>()
+                {
+                    { "width", Width },
+                    { "height", Height },
+                    { "sd3", Sd3Mode ? "enable" : "disable" },
+                };
+
+                return new NodeInfo
+                {
+                    Inputs = dict,
+                    OutputTypes = new List<ConnectionType> { ConnectionType.Latent },
+                    ClassType = nameof(NmkdLatentImage)
+                };
             }
 
             public override string ToString()
@@ -890,6 +976,13 @@ namespace StableDiffusionGui.Implementations
                         { "seam_fix_padding", 16 },
                         { "force_uniform_tiles", ForceUniformTiles ? "enable" : "disable" },
                     },
+                    InputTypes = new Dictionary<string, ConnectionType>
+                    {
+                        ["positive"] = ConnectionType.Conditioning,
+                        ["negative"] = ConnectionType.Conditioning,
+                        ["upscale_model"] = ConnectionType.Upscale_Model,
+                    },
+                    OutputTypes = new List<ConnectionType> { ConnectionType.Image },
                     ClassType = nameof(UltimateSDUpscale)
                 };
             }
@@ -917,7 +1010,36 @@ namespace StableDiffusionGui.Implementations
                     { "padding_mode", PaddingMode },
                 };
 
-                return new NodeInfo { Inputs = dict, ClassType = nameof(Conv2dSettings) };
+                return new NodeInfo
+                {
+                    Inputs = dict,
+                    OutputTypes = new List<ConnectionType> { ConnectionType.Model, ConnectionType.Vae, ConnectionType.Clip },
+                    ClassType = nameof(Conv2dSettings)
+                };
+            }
+
+            public override string ToString()
+            {
+                return ToStringNode(this);
+            }
+        }
+
+        public class SudoLatentUpscale : Node, INode
+        {
+            public ComfyInput Version = new ComfyInput("DRCT-l_12x6_170k_l1_vaeDecode_l1_fft_xl");
+            public ComfyInput Latents;
+
+            public NodeInfo GetNodeInfo()
+            {
+                return new NodeInfo
+                {
+                    Inputs = {
+                        ["version"] = Version.Get(),
+                        ["latent"] = Latents.Get(),
+                    },
+                    OutputTypes = new List<ConnectionType> { ConnectionType.Latent },
+                    ClassType = nameof(SudoLatentUpscale)
+                };
             }
 
             public override string ToString()

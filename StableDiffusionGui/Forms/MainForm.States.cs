@@ -72,7 +72,7 @@ namespace StableDiffusionGui.Forms
             if (control == checkboxShowInitImg)
                 return AnyInits;
 
-            if(control == panelModel)
+            if (control == panelModel)
                 return implementation.Supports(Feature.CustomModels);
 
             if (control == panelLoras)
@@ -81,19 +81,22 @@ namespace StableDiffusionGui.Forms
             if (control == panelModel2)
                 return Model2Available(implementation);
 
+            if (control == panelGuidance)
+                return GuidanceAvailable(implementation);
+
             if (control == panelRefineStart)
                 return implementation == Implementation.Comfy && ShouldControlBeVisible(panelModel2);
 
             if (control == panelUpscaling)
                 return implementation == Implementation.Comfy && !AnyInits;
 
-            if(control == panelControlnet)
+            if (control == panelControlnet)
                 return ControlnetAvailable(implementation) && ParseUtils.GetEnum<ImgMode>(comboxInpaintMode.Text, stringMap: Strings.InpaintMode) == ImgMode.Controlnet && comboxControlnet.Items.Count > 0;
 
             if (control == panelModelSettings)
                 return new[] { Implementation.InvokeAi, Implementation.Comfy }.Contains(implementation);
 
-            if(control == comboxControlnetSlot)
+            if (control == comboxControlnetSlot)
                 return comboxInpaintMode.Visible && ParseUtils.GetEnum<ImgMode>(comboxInpaintMode.Text, stringMap: Strings.InpaintMode) == ImgMode.Controlnet;
 
             return false;
@@ -163,13 +166,22 @@ namespace StableDiffusionGui.Forms
             return compatible && biggerThan512 && !AnyInits;
         }
 
-        private bool Model2Available (Implementation imp)
+        private bool Model2Available(Implementation imp)
         {
             if (imp != Implementation.Comfy)
                 return false;
 
             var arch = ParseUtils.GetEnum<ModelArch>(comboxModelArch.Text, stringMap: Strings.ModelArch);
             return new[] { ModelArch.SdXlBase }.Contains(arch);
+        }
+
+        private bool GuidanceAvailable(Implementation imp)
+        {
+            if (imp != Implementation.Comfy)
+                return false;
+
+            var arch = ParseUtils.GetEnum<ModelArch>(comboxModelArch.Text, stringMap: Strings.ModelArch);
+            return new[] { ModelArch.Flux }.Contains(arch);
         }
     }
 }

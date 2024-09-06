@@ -30,6 +30,7 @@ namespace StableDiffusionGui.Data
         public Enums.StableDiffusion.UpscaleMethod UpscaleMethod = (Enums.StableDiffusion.UpscaleMethod)(-1);
         public float Scale = -1;
         public float ScaleImg = -1;
+        public float Guidance = -1;
         public string Sampler = "";
         public long Seed = -1;
         public string InitImgName = "";
@@ -314,6 +315,7 @@ namespace StableDiffusionGui.Data
             Seed = gi.Seed;
             Sampler = gi.Sampler.ToString().Lower();
             Scale = gi.Scale;
+            Guidance = gi.Guidance;
             // img scale
             RefineStrength = gi.RefinerStrength;
             GeneratedResolution = gi.BaseResolution;

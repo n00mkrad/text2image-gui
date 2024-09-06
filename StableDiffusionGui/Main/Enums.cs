@@ -23,14 +23,14 @@ namespace StableDiffusionGui.Main
 
         public class StableDiffusion
         {
-            public enum ModelArch { Automatic, Sd1, Sd1Inpaint, Sd2, Sd2Inpaint, Sd2V, SdXlBase, SdXlRefine }
+            public enum ModelArch { Automatic, Sd1, Sd1Inpaint, Sd2, Sd2Inpaint, Sd2V, SdXlBase, SdXlRefine, Flux }
             public enum Implementation { InvokeAi, DiffusersOnnx, InstructPixToPix, Comfy }
             public enum Sampler { K_Dpmpp_2M, Dpmpp_2M, K_Dpmpp_2M_Sde, Dpmpp_2M_Sde, K_Dpmpp_3M_Sde, Dpmpp_3M_Sde, K_Euler, Euler_A, Euler, Ddim, Lms, Heun, Dpm_2, Dpm_2_A, Uni_Pc }
             public enum SeamlessMode { Disabled, SeamlessBoth, SeamlessVert, SeamlessHor }
             public enum SymmetryMode { Disabled, SymVert, SymHor, SymBoth }
             public enum ImgMode { InitializationImage, ImageMask, Outpainting, Controlnet }
             public enum UpscaleMode { Disabled, LatentsFactor, LatentsTargetRes, UltimeUpsFactor }
-            public enum UpscaleMethod { Latent, UltimateSd }
+            public enum UpscaleMethod { Latent, LatentLegacy, UltimateSd }
             public enum ImagePreprocessor { None, Canny, LineArtHed, LineArt, LineArtAnime, LineArtMangaAnime, DepthMap, Blur, Pixelate, OpenPose }
         }
 

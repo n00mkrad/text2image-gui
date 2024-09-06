@@ -33,6 +33,7 @@ namespace StableDiffusionGui.Implementations
             public int Steps;
             public long Seed;
             public float Scale;
+            public float Guidance = 3.0f;
             public float RefinerStrength;
             public string InitImg;
             public float InitStrength;
@@ -106,6 +107,7 @@ namespace StableDiffusionGui.Implementations
                     Steps = Steps,
                     Seed = Seed,
                     Scale = Scale,
+                    Guidance = Guidance,
                     RefinerStrength = RefinerStrength,
                     InitImg = InitImg,
                     InitStrength = InitStrength,
@@ -149,6 +151,7 @@ namespace StableDiffusionGui.Implementations
                     { "steps", Steps },
                     { "seed", Seed },
                     { "scaleTxt", Scale },
+                    { "guidance", Guidance },
                     { "inpaintMask", MaskPath },
                     { "sampler", Sampler.ToString().Lower() },
                     { "refineFrac", (1f - RefinerStrength) },

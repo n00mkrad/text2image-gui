@@ -95,7 +95,7 @@ namespace StableDiffusionGui.Ui
                 infos.Add($"Refine {meta.RefineStrength.ToStringDot("0.###")}");
 
             if (meta.Scale >= 0)
-                infos.Add($"CFG {meta.Scale.ToStringDot("0.###")}");
+                infos.Add((meta.Guidance >= 0 ? $"CFG {meta.Scale.ToStringDot("0.###")}/{meta.Guidance.ToStringDot("0.###")}" : $"CFG {meta.Scale.ToStringDot("0.###")}"));
 
             if (meta.ScaleImg >= 0)
                 infos.Add($"Image CFG {meta.ScaleImg.ToStringDot("0.###")}");

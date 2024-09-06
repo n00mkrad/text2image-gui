@@ -5,8 +5,6 @@ using StableDiffusionGui.Main;
 using System.Collections.Generic;
 using System.Linq;
 using static StableDiffusionGui.Implementations.ComfyNodes;
-using System.IO;
-using StableDiffusionGui.Io;
 using Newtonsoft.Json.Converters;
 
 namespace StableDiffusionGui.Implementations
@@ -60,6 +58,8 @@ namespace StableDiffusionGui.Implementations
         public class NodeInfo
         {
             public Dictionary<string, object> Inputs { get; set; } = new Dictionary<string, object>();
+            public Dictionary<string, ConnectionType> InputTypes { get; set; } = new Dictionary<string, ConnectionType>();
+            public List<ConnectionType> OutputTypes { get; set; } = new List<ConnectionType>();
             public string ClassType { get; set; }
         }
 
