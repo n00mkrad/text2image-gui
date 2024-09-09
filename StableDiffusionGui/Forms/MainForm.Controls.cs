@@ -91,6 +91,7 @@ namespace StableDiffusionGui.Forms
             updownUpscaleFactor.ValueChanged += (s, e) => { ValidateResolution(); };
             comboxControlnetSlot.SelectedIndexChanged += (s, e) => ControlnetSlotChanged();
             comboxModelArch.SelectedIndexChanged += (s, e) => { SetVisibility(new[] { panelModel2, panelRefineStart }, Config.Instance.Implementation); };
+            tbLoraFilter.TextChanged += (s, e) => FilterLoras();
         }
 
         public void LoadControls()
@@ -149,6 +150,9 @@ namespace StableDiffusionGui.Forms
             Implementation imp = Config.Instance.Implementation;
             comboxBackend.Text = Strings.Implementation.Get(imp.ToString());
 
+            UpdateModel();
+            ModelChanged();
+
             // Panel visibility
             SetVisibility(new Control[] { panelBaseImg, panelPromptNeg, panelEmbeddings, panelRefineStart, panelInitImgStrength, panelInpainting, panelScaleImg, panelGuidance, panelRes, panelSampler, panelSeamless, checkboxHiresFix,
                 textboxClipsegMask, panelResizeGravity, comboxControlnetSlot, labelResChange, btnResetRes, checkboxShowInitImg, panelModel, panelLoras, panelModel2, panelUpscaling, panelControlnet, panelModelSettings }, imp);
@@ -162,8 +166,6 @@ namespace StableDiffusionGui.Forms
             comboxResW.SetItems(validResolutions, UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.First);
             comboxResH.SetItems(validResolutions, UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.First);
 
-            #region Init Img & Embeddings Stuff
-
             TtiUtils.CleanInitImageList();
 
             btnInitImgBrowse.Text = AnyInits ? $"Clear Image{(MainUi.CurrentInitImgPaths.Count == 1 ? "" : "s")}" : "Load Image(s)";
@@ -173,15 +175,12 @@ namespace StableDiffusionGui.Forms
             ImageViewer.UpdateInitImgViewer();
             UpdateImgViewerBtns();
             ResolutionChanged();
-            UpdateModel();
-            ModelChanged();
             ReloadLoras();
             ReloadEmbeddings();
             ReloadControlnets();
             RefreshUpscaleUi();
             CategoryPanels.Keys.ToList().ForEach(btn => btn.Parent.SetVisible(CategoryPanels[btn].Any(p => p.Visible))); // Hide collapse buttons if their category has 0 visible panels
-
-            #endregion
+             
 
             if (imp != _lastImplementation)
             {
@@ -305,6 +304,7 @@ namespace StableDiffusionGui.Forms
             if (!loras.Any())
                 return;
 
+            FilterLoras();
             var previousData = gridLoras.Rows.Cast<DataGridViewRow>().Select(row => (bool)row.Cells[0].Value + (string)row.Cells[1].Value + (string)row.Cells[2].Value).ToList();
             var previousLoraList = gridLoras.Rows.Cast<DataGridViewRow>().Select(row => (string)row.Cells[1].Value).ToList();
 
@@ -317,20 +317,23 @@ namespace StableDiffusionGui.Forms
             SetVisibility(panelLoras);
         }
 
+        public void FilterLoras ()
+        {
+            string filter = tbLoraFilter.Text.Lower();
+
+            foreach (DataGridViewRow row in gridLoras.Rows)
+            {
+                row.Visible = row.Cells[1].Value != null && row.Cells[1].Value.ToString().Lower().Contains(filter);
+            }
+        }
+
         public void SortLoras(bool force = false)
         {
-            List<object[]> rowValues = gridLoras.Rows.Cast<DataGridViewRow>().ToList().Select(r => new object[] { r.Cells[0].Value, r.Cells[1].Value, r.Cells[2].Value }).ToList();
-
-            if (rowValues.Count < 2) // No need to sort 1 item
+            if (gridLoras.RowCount < 2)
                 return;
 
-            List<object[]> newRowValues = rowValues.OrderByDescending(row => (bool)row[0]).ThenBy(row => (string)row[1]).ToList();
-
-            if (!force && (rowValues.ToJson() == newRowValues.ToJson())) // Brute-force comparison because SequenceEqual didn't work (?)
-                return; // Skip sort if data is already in correct order
-
-            gridLoras.Rows.Clear();
-            newRowValues.ForEach(row => gridLoras.Rows.Add((bool)row[0], (string)row[1], (string)row[2]));
+            var sortedRows = gridLoras.GetRows().OrderBy(r => $"{!((bool)r.Cells[0].Value)}{r.Cells[1].Value}").ToList();
+            gridLoras.SetRows(sortedRows);
         }
 
         private string _lastControlnets = "";

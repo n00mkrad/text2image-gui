@@ -359,7 +359,7 @@ namespace StableDiffusionGui.Implementations
         public async Task Cancel()
         {
             List<string> lastLogLines = Logger.GetLastLines(Constants.Lognames.Sd, 20);
-            bool startingUp = LastMessages.Any(s => s.Contains("Total VRAM")) && !LastMessages.Any(s => s.Contains("To see the GUI go to:"));
+            bool startingUp = LastMessages.Any(s => s != null && s.Contains("Total VRAM")) && !LastMessages.Any(s => s != null && s.Contains("To see the GUI go to:"));
 
             if (startingUp)
             {

@@ -110,6 +110,9 @@ namespace StableDiffusionGui.Forms
             this.comboxControlnet = new System.Windows.Forms.ComboBox();
             this.comboxPreprocessor = new System.Windows.Forms.ComboBox();
             this.comboxClipSkip = new System.Windows.Forms.ComboBox();
+            this.sliderGuidance = new StableDiffusionGui.Controls.CustomSlider();
+            this.textboxSliderGuidance = new System.Windows.Forms.TextBox();
+            this.textboxExtraGuidances = new StableDiffusionGui.Controls.CustomTextbox();
             this.updownUpscaleResultW = new StableDiffusionGui.Controls.CustomUpDown();
             this.updownUpscaleResultH = new StableDiffusionGui.Controls.CustomUpDown();
             this.btnCollapseDebug = new HTAlt.WinForms.HTButton();
@@ -171,6 +174,9 @@ namespace StableDiffusionGui.Forms
             this.panelCollapseRendering = new System.Windows.Forms.Panel();
             this.panelSeed = new System.Windows.Forms.Panel();
             this.label5 = new System.Windows.Forms.Label();
+            this.panelGuidance = new System.Windows.Forms.Panel();
+            this.label19 = new System.Windows.Forms.Label();
+            this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.panelScaleImg = new System.Windows.Forms.Panel();
             this.label17 = new System.Windows.Forms.Label();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
@@ -251,12 +257,7 @@ namespace StableDiffusionGui.Forms
             this.flowPanelImgButtons = new System.Windows.Forms.FlowLayoutPanel();
             this.btnSaveMode = new System.Windows.Forms.Button();
             this.separator = new System.Windows.Forms.Button();
-            this.panelGuidance = new System.Windows.Forms.Panel();
-            this.label19 = new System.Windows.Forms.Label();
-            this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
-            this.textboxSliderGuidance = new System.Windows.Forms.TextBox();
-            this.sliderGuidance = new StableDiffusionGui.Controls.CustomSlider();
-            this.textboxExtraGuidances = new StableDiffusionGui.Controls.CustomTextbox();
+            this.tbLoraFilter = new System.Windows.Forms.TextBox();
             this.menuStripOutputImg.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.upDownSeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
@@ -280,6 +281,8 @@ namespace StableDiffusionGui.Forms
             this.panelRes.SuspendLayout();
             this.panelCollapseRendering.SuspendLayout();
             this.panelSeed.SuspendLayout();
+            this.panelGuidance.SuspendLayout();
+            this.tableLayoutPanel5.SuspendLayout();
             this.panelScaleImg.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.panelScale.SuspendLayout();
@@ -316,8 +319,6 @@ namespace StableDiffusionGui.Forms
             this.menuStripInstall.SuspendLayout();
             this.menuStripOpenFolder.SuspendLayout();
             this.flowPanelImgButtons.SuspendLayout();
-            this.panelGuidance.SuspendLayout();
-            this.tableLayoutPanel5.SuspendLayout();
             this.SuspendLayout();
             // 
             // runBtn
@@ -704,7 +705,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderScale.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScale.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScale.Location = new System.Drawing.Point(308, 2);
+            this.textboxSliderScale.Location = new System.Drawing.Point(308, 4);
             this.textboxSliderScale.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScale.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScale.Name = "textboxSliderScale";
@@ -848,7 +849,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderInitStrength.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderInitStrength.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderInitStrength.Location = new System.Drawing.Point(308, 2);
+            this.textboxSliderInitStrength.Location = new System.Drawing.Point(308, 4);
             this.textboxSliderInitStrength.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderInitStrength.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderInitStrength.Name = "textboxSliderInitStrength";
@@ -1043,7 +1044,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderScaleImg.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScaleImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScaleImg.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScaleImg.Location = new System.Drawing.Point(308, 2);
+            this.textboxSliderScaleImg.Location = new System.Drawing.Point(308, 4);
             this.textboxSliderScaleImg.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScaleImg.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScaleImg.Name = "textboxSliderScaleImg";
@@ -1381,7 +1382,7 @@ namespace StableDiffusionGui.Forms
             this.btnExpandLoras.Location = new System.Drawing.Point(628, -1);
             this.btnExpandLoras.Margin = new System.Windows.Forms.Padding(0);
             this.btnExpandLoras.Name = "btnExpandLoras";
-            this.btnExpandLoras.Size = new System.Drawing.Size(20, 57);
+            this.btnExpandLoras.Size = new System.Drawing.Size(20, 92);
             this.btnExpandLoras.TabIndex = 107;
             this.btnExpandLoras.TabStop = false;
             this.toolTip.SetToolTip(this.btnExpandLoras, "Expand/Collapse LoRA Table");
@@ -1592,7 +1593,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderRefineStart.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderRefineStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderRefineStart.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderRefineStart.Location = new System.Drawing.Point(308, 2);
+            this.textboxSliderRefineStart.Location = new System.Drawing.Point(308, 4);
             this.textboxSliderRefineStart.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderRefineStart.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderRefineStart.Name = "textboxSliderRefineStart";
@@ -1680,6 +1681,83 @@ namespace StableDiffusionGui.Forms
             this.comboxClipSkip.TabIndex = 111;
             this.toolTip.SetToolTip(this.comboxClipSkip, "Select how the model should be loaded. This is not necessary for Diffusers models" +
         ".");
+            // 
+            // sliderGuidance
+            // 
+            this.sliderGuidance.ActualMaximum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            65536});
+            this.sliderGuidance.ActualMinimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.sliderGuidance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            this.sliderGuidance.BorderRoundRectSize = new System.Drawing.Size(12, 12);
+            this.sliderGuidance.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sliderGuidance.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
+            this.sliderGuidance.ForeColor = System.Drawing.Color.Black;
+            this.sliderGuidance.InitValue = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
+            this.sliderGuidance.LargeChange = ((uint)(5u));
+            this.sliderGuidance.Location = new System.Drawing.Point(0, 0);
+            this.sliderGuidance.Margin = new System.Windows.Forms.Padding(0);
+            this.sliderGuidance.Maximum = 20;
+            this.sliderGuidance.Name = "sliderGuidance";
+            this.sliderGuidance.OverlayColor = System.Drawing.Color.White;
+            this.sliderGuidance.Size = new System.Drawing.Size(308, 25);
+            this.sliderGuidance.SmallChange = ((uint)(1u));
+            this.sliderGuidance.TabIndex = 4;
+            this.sliderGuidance.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
+            this.sliderGuidance.ThumbSize = new System.Drawing.Size(14, 14);
+            this.toolTip.SetToolTip(this.sliderGuidance, "Higher tries to match your prompt better, but can get chaotic. 7-12 is a safe ran" +
+        "ge in most cases.");
+            this.sliderGuidance.Value = 0;
+            this.sliderGuidance.ValueBox = this.textboxSliderGuidance;
+            this.sliderGuidance.ValueStep = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            // 
+            // textboxSliderGuidance
+            // 
+            this.textboxSliderGuidance.AllowDrop = true;
+            this.textboxSliderGuidance.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.textboxSliderGuidance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            this.textboxSliderGuidance.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textboxSliderGuidance.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textboxSliderGuidance.ForeColor = System.Drawing.Color.Silver;
+            this.textboxSliderGuidance.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderGuidance.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
+            this.textboxSliderGuidance.MinimumSize = new System.Drawing.Size(4, 21);
+            this.textboxSliderGuidance.Name = "textboxSliderGuidance";
+            this.textboxSliderGuidance.Size = new System.Drawing.Size(35, 21);
+            this.textboxSliderGuidance.TabIndex = 93;
+            this.textboxSliderGuidance.Text = "0";
+            // 
+            // textboxExtraGuidances
+            // 
+            this.textboxExtraGuidances.AllowDrop = true;
+            this.textboxExtraGuidances.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.textboxExtraGuidances.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textboxExtraGuidances.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textboxExtraGuidances.DisableUnfocusedInput = true;
+            this.textboxExtraGuidances.ForeColor = System.Drawing.Color.White;
+            this.textboxExtraGuidances.Location = new System.Drawing.Point(346, 3);
+            this.textboxExtraGuidances.MaxTextZoomFactor = 1F;
+            this.textboxExtraGuidances.MinimumSize = new System.Drawing.Size(4, 21);
+            this.textboxExtraGuidances.Name = "textboxExtraGuidances";
+            this.textboxExtraGuidances.Placeholder = "";
+            this.textboxExtraGuidances.PlaceholderTextColor = System.Drawing.Color.Silver;
+            this.textboxExtraGuidances.Size = new System.Drawing.Size(69, 21);
+            this.textboxExtraGuidances.TabIndex = 3;
+            this.toolTip.SetToolTip(this.textboxExtraGuidances, resources.GetString("textboxExtraGuidances.ToolTip"));
             // 
             // updownUpscaleResultW
             // 
@@ -2112,7 +2190,7 @@ namespace StableDiffusionGui.Forms
             this.panelDebugLoopback.Controls.Add(this.checkboxLoopback);
             this.panelDebugLoopback.Controls.Add(this.label16);
             this.panelDebugLoopback.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelDebugLoopback.Location = new System.Drawing.Point(0, 1130);
+            this.panelDebugLoopback.Location = new System.Drawing.Point(0, 1165);
             this.panelDebugLoopback.Name = "panelDebugLoopback";
             this.panelDebugLoopback.Size = new System.Drawing.Size(651, 35);
             this.panelDebugLoopback.TabIndex = 19;
@@ -2145,7 +2223,7 @@ namespace StableDiffusionGui.Forms
             // 
             this.panelCollapseDebug.Controls.Add(this.btnCollapseDebug);
             this.panelCollapseDebug.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelCollapseDebug.Location = new System.Drawing.Point(0, 1095);
+            this.panelCollapseDebug.Location = new System.Drawing.Point(0, 1130);
             this.panelCollapseDebug.Name = "panelCollapseDebug";
             this.panelCollapseDebug.Size = new System.Drawing.Size(651, 35);
             this.panelCollapseDebug.TabIndex = 117;
@@ -2156,7 +2234,7 @@ namespace StableDiffusionGui.Forms
             this.panelSeamless.Controls.Add(this.comboxSeamless);
             this.panelSeamless.Controls.Add(this.label8);
             this.panelSeamless.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSeamless.Location = new System.Drawing.Point(0, 1060);
+            this.panelSeamless.Location = new System.Drawing.Point(0, 1095);
             this.panelSeamless.Name = "panelSeamless";
             this.panelSeamless.Size = new System.Drawing.Size(651, 35);
             this.panelSeamless.TabIndex = 9;
@@ -2177,7 +2255,7 @@ namespace StableDiffusionGui.Forms
             // 
             this.panelCollapseSymmetry.Controls.Add(this.btnCollapseSymmetry);
             this.panelCollapseSymmetry.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelCollapseSymmetry.Location = new System.Drawing.Point(0, 1025);
+            this.panelCollapseSymmetry.Location = new System.Drawing.Point(0, 1060);
             this.panelCollapseSymmetry.Name = "panelCollapseSymmetry";
             this.panelCollapseSymmetry.Size = new System.Drawing.Size(651, 35);
             this.panelCollapseSymmetry.TabIndex = 118;
@@ -2187,7 +2265,7 @@ namespace StableDiffusionGui.Forms
             this.panelSampler.Controls.Add(this.label7);
             this.panelSampler.Controls.Add(this.comboxSampler);
             this.panelSampler.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSampler.Location = new System.Drawing.Point(0, 990);
+            this.panelSampler.Location = new System.Drawing.Point(0, 1025);
             this.panelSampler.Name = "panelSampler";
             this.panelSampler.Size = new System.Drawing.Size(651, 35);
             this.panelSampler.TabIndex = 6;
@@ -2212,7 +2290,7 @@ namespace StableDiffusionGui.Forms
             this.panelUpscaling.Controls.Add(this.label27, 0, 0);
             this.panelUpscaling.Controls.Add(this.flowLayoutPanel1, 1, 0);
             this.panelUpscaling.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelUpscaling.Location = new System.Drawing.Point(0, 955);
+            this.panelUpscaling.Location = new System.Drawing.Point(0, 990);
             this.panelUpscaling.Margin = new System.Windows.Forms.Padding(0);
             this.panelUpscaling.Name = "panelUpscaling";
             this.panelUpscaling.RowCount = 1;
@@ -2311,7 +2389,7 @@ namespace StableDiffusionGui.Forms
             this.panelRes.Controls.Add(this.label6);
             this.panelRes.Controls.Add(this.label9);
             this.panelRes.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelRes.Location = new System.Drawing.Point(0, 920);
+            this.panelRes.Location = new System.Drawing.Point(0, 955);
             this.panelRes.Name = "panelRes";
             this.panelRes.Size = new System.Drawing.Size(651, 35);
             this.panelRes.TabIndex = 5;
@@ -2391,7 +2469,7 @@ namespace StableDiffusionGui.Forms
             // 
             this.panelCollapseRendering.Controls.Add(this.btnCollapseRendering);
             this.panelCollapseRendering.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelCollapseRendering.Location = new System.Drawing.Point(0, 885);
+            this.panelCollapseRendering.Location = new System.Drawing.Point(0, 920);
             this.panelCollapseRendering.Name = "panelCollapseRendering";
             this.panelCollapseRendering.Size = new System.Drawing.Size(651, 35);
             this.panelCollapseRendering.TabIndex = 119;
@@ -2404,7 +2482,7 @@ namespace StableDiffusionGui.Forms
             this.panelSeed.Controls.Add(this.label5);
             this.panelSeed.Controls.Add(this.upDownSeed);
             this.panelSeed.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSeed.Location = new System.Drawing.Point(0, 850);
+            this.panelSeed.Location = new System.Drawing.Point(0, 885);
             this.panelSeed.Name = "panelSeed";
             this.panelSeed.Size = new System.Drawing.Size(651, 35);
             this.panelSeed.TabIndex = 4;
@@ -2421,12 +2499,53 @@ namespace StableDiffusionGui.Forms
             this.label5.TabIndex = 92;
             this.label5.Text = "Seed (Empty = Random)";
             // 
+            // panelGuidance
+            // 
+            this.panelGuidance.Controls.Add(this.label19);
+            this.panelGuidance.Controls.Add(this.tableLayoutPanel5);
+            this.panelGuidance.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelGuidance.Location = new System.Drawing.Point(0, 850);
+            this.panelGuidance.Name = "panelGuidance";
+            this.panelGuidance.Size = new System.Drawing.Size(651, 35);
+            this.panelGuidance.TabIndex = 128;
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label19.ForeColor = System.Drawing.Color.White;
+            this.label19.Location = new System.Drawing.Point(0, 4);
+            this.label19.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(117, 13);
+            this.label19.TabIndex = 90;
+            this.label19.Text = "Prompt Guidance (Flux)";
+            // 
+            // tableLayoutPanel5
+            // 
+            this.tableLayoutPanel5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel5.ColumnCount = 3;
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 75F));
+            this.tableLayoutPanel5.Controls.Add(this.textboxSliderGuidance, 0, 0);
+            this.tableLayoutPanel5.Controls.Add(this.sliderGuidance, 0, 0);
+            this.tableLayoutPanel5.Controls.Add(this.textboxExtraGuidances, 2, 0);
+            this.tableLayoutPanel5.Location = new System.Drawing.Point(233, 0);
+            this.tableLayoutPanel5.Margin = new System.Windows.Forms.Padding(0);
+            this.tableLayoutPanel5.Name = "tableLayoutPanel5";
+            this.tableLayoutPanel5.RowCount = 1;
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(418, 25);
+            this.tableLayoutPanel5.TabIndex = 91;
+            // 
             // panelScaleImg
             // 
             this.panelScaleImg.Controls.Add(this.label17);
             this.panelScaleImg.Controls.Add(this.tableLayoutPanel2);
             this.panelScaleImg.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelScaleImg.Location = new System.Drawing.Point(0, 780);
+            this.panelScaleImg.Location = new System.Drawing.Point(0, 815);
             this.panelScaleImg.Name = "panelScaleImg";
             this.panelScaleImg.Size = new System.Drawing.Size(651, 35);
             this.panelScaleImg.TabIndex = 20;
@@ -2467,7 +2586,7 @@ namespace StableDiffusionGui.Forms
             this.panelScale.Controls.Add(this.label4);
             this.panelScale.Controls.Add(this.tableLayoutPanel1);
             this.panelScale.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelScale.Location = new System.Drawing.Point(0, 745);
+            this.panelScale.Location = new System.Drawing.Point(0, 780);
             this.panelScale.Name = "panelScale";
             this.panelScale.Size = new System.Drawing.Size(651, 35);
             this.panelScale.TabIndex = 3;
@@ -2508,7 +2627,7 @@ namespace StableDiffusionGui.Forms
             this.panelRefineStart.Controls.Add(this.label25);
             this.panelRefineStart.Controls.Add(this.tableLayoutPanel3);
             this.panelRefineStart.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelRefineStart.Location = new System.Drawing.Point(0, 710);
+            this.panelRefineStart.Location = new System.Drawing.Point(0, 745);
             this.panelRefineStart.Name = "panelRefineStart";
             this.panelRefineStart.Size = new System.Drawing.Size(651, 35);
             this.panelRefineStart.TabIndex = 124;
@@ -2550,7 +2669,7 @@ namespace StableDiffusionGui.Forms
             this.panelSteps.Controls.Add(this.label3);
             this.panelSteps.Controls.Add(this.tableLayoutPanel6);
             this.panelSteps.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSteps.Location = new System.Drawing.Point(0, 675);
+            this.panelSteps.Location = new System.Drawing.Point(0, 710);
             this.panelSteps.Name = "panelSteps";
             this.panelSteps.Size = new System.Drawing.Size(651, 35);
             this.panelSteps.TabIndex = 2;
@@ -2593,7 +2712,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderSteps.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderSteps.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderSteps.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderSteps.Location = new System.Drawing.Point(308, 2);
+            this.textboxSliderSteps.Location = new System.Drawing.Point(308, 4);
             this.textboxSliderSteps.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderSteps.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderSteps.Name = "textboxSliderSteps";
@@ -2650,7 +2769,7 @@ namespace StableDiffusionGui.Forms
             this.panelIterations.Controls.Add(this.label1);
             this.panelIterations.Controls.Add(this.upDownIterations);
             this.panelIterations.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelIterations.Location = new System.Drawing.Point(0, 640);
+            this.panelIterations.Location = new System.Drawing.Point(0, 675);
             this.panelIterations.Name = "panelIterations";
             this.panelIterations.Size = new System.Drawing.Size(651, 35);
             this.panelIterations.TabIndex = 1;
@@ -2691,7 +2810,7 @@ namespace StableDiffusionGui.Forms
             this.panelControlnet.Controls.Add(this.comboxControlnet);
             this.panelControlnet.Controls.Add(this.label28);
             this.panelControlnet.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelControlnet.Location = new System.Drawing.Point(0, 570);
+            this.panelControlnet.Location = new System.Drawing.Point(0, 605);
             this.panelControlnet.Name = "panelControlnet";
             this.panelControlnet.Size = new System.Drawing.Size(651, 70);
             this.panelControlnet.TabIndex = 126;
@@ -2775,7 +2894,7 @@ namespace StableDiffusionGui.Forms
             this.panelInitImgStrength.Controls.Add(this.label11);
             this.panelInitImgStrength.Controls.Add(this.tableLayoutPanel4);
             this.panelInitImgStrength.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelInitImgStrength.Location = new System.Drawing.Point(0, 535);
+            this.panelInitImgStrength.Location = new System.Drawing.Point(0, 570);
             this.panelInitImgStrength.Name = "panelInitImgStrength";
             this.panelInitImgStrength.Size = new System.Drawing.Size(651, 35);
             this.panelInitImgStrength.TabIndex = 8;
@@ -2822,7 +2941,7 @@ namespace StableDiffusionGui.Forms
             this.panelInpainting.Controls.Add(this.btnResetMask);
             this.panelInpainting.Controls.Add(this.label10);
             this.panelInpainting.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelInpainting.Location = new System.Drawing.Point(0, 500);
+            this.panelInpainting.Location = new System.Drawing.Point(0, 535);
             this.panelInpainting.Name = "panelInpainting";
             this.panelInpainting.Size = new System.Drawing.Size(651, 35);
             this.panelInpainting.TabIndex = 12;
@@ -2892,7 +3011,7 @@ namespace StableDiffusionGui.Forms
             // 
             this.panelCollapseGeneration.Controls.Add(this.btnCollapseGeneration);
             this.panelCollapseGeneration.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelCollapseGeneration.Location = new System.Drawing.Point(0, 465);
+            this.panelCollapseGeneration.Location = new System.Drawing.Point(0, 500);
             this.panelCollapseGeneration.Name = "panelCollapseGeneration";
             this.panelCollapseGeneration.Size = new System.Drawing.Size(651, 35);
             this.panelCollapseGeneration.TabIndex = 120;
@@ -2904,7 +3023,7 @@ namespace StableDiffusionGui.Forms
             this.panelBaseImg.Controls.Add(this.labelCurrentImage);
             this.panelBaseImg.Controls.Add(this.btnInitImgBrowse);
             this.panelBaseImg.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelBaseImg.Location = new System.Drawing.Point(0, 430);
+            this.panelBaseImg.Location = new System.Drawing.Point(0, 465);
             this.panelBaseImg.Name = "panelBaseImg";
             this.panelBaseImg.Size = new System.Drawing.Size(651, 35);
             this.panelBaseImg.TabIndex = 17;
@@ -2936,13 +3055,14 @@ namespace StableDiffusionGui.Forms
             // 
             // panelLoras
             // 
+            this.panelLoras.Controls.Add(this.tbLoraFilter);
             this.panelLoras.Controls.Add(this.btnExpandLoras);
             this.panelLoras.Controls.Add(this.gridLoras);
             this.panelLoras.Controls.Add(this.label24);
             this.panelLoras.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelLoras.Location = new System.Drawing.Point(0, 360);
             this.panelLoras.Name = "panelLoras";
-            this.panelLoras.Size = new System.Drawing.Size(651, 70);
+            this.panelLoras.Size = new System.Drawing.Size(651, 105);
             this.panelLoras.TabIndex = 123;
             // 
             // gridLoras
@@ -2978,7 +3098,8 @@ namespace StableDiffusionGui.Forms
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.gridLoras.DefaultCellStyle = dataGridViewCellStyle2;
-            this.gridLoras.Location = new System.Drawing.Point(233, -1);
+            this.gridLoras.Location = new System.Drawing.Point(233, 20);
+            this.gridLoras.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
             this.gridLoras.MultiSelect = false;
             this.gridLoras.Name = "gridLoras";
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -2992,7 +3113,7 @@ namespace StableDiffusionGui.Forms
             this.gridLoras.RowHeadersVisible = false;
             this.gridLoras.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.gridLoras.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.gridLoras.Size = new System.Drawing.Size(395, 57);
+            this.gridLoras.Size = new System.Drawing.Size(395, 71);
             this.gridLoras.TabIndex = 106;
             // 
             // ColEnabled
@@ -3500,123 +3621,18 @@ namespace StableDiffusionGui.Forms
             this.separator.TabStop = false;
             this.separator.UseVisualStyleBackColor = false;
             // 
-            // panelGuidance
+            // tbLoraFilter
             // 
-            this.panelGuidance.Controls.Add(this.label19);
-            this.panelGuidance.Controls.Add(this.tableLayoutPanel5);
-            this.panelGuidance.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelGuidance.Location = new System.Drawing.Point(0, 815);
-            this.panelGuidance.Name = "panelGuidance";
-            this.panelGuidance.Size = new System.Drawing.Size(651, 35);
-            this.panelGuidance.TabIndex = 128;
-            // 
-            // label19
-            // 
-            this.label19.AutoSize = true;
-            this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label19.ForeColor = System.Drawing.Color.White;
-            this.label19.Location = new System.Drawing.Point(0, 4);
-            this.label19.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(117, 13);
-            this.label19.TabIndex = 90;
-            this.label19.Text = "Prompt Guidance (Flux)";
-            // 
-            // tableLayoutPanel5
-            // 
-            this.tableLayoutPanel5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.tbLoraFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel5.ColumnCount = 3;
-            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 75F));
-            this.tableLayoutPanel5.Controls.Add(this.textboxSliderGuidance, 0, 0);
-            this.tableLayoutPanel5.Controls.Add(this.sliderGuidance, 0, 0);
-            this.tableLayoutPanel5.Controls.Add(this.textboxExtraGuidances, 2, 0);
-            this.tableLayoutPanel5.Location = new System.Drawing.Point(233, 0);
-            this.tableLayoutPanel5.Margin = new System.Windows.Forms.Padding(0);
-            this.tableLayoutPanel5.Name = "tableLayoutPanel5";
-            this.tableLayoutPanel5.RowCount = 1;
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(418, 25);
-            this.tableLayoutPanel5.TabIndex = 91;
-            // 
-            // textboxSliderGuidance
-            // 
-            this.textboxSliderGuidance.AllowDrop = true;
-            this.textboxSliderGuidance.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.textboxSliderGuidance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.textboxSliderGuidance.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textboxSliderGuidance.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textboxSliderGuidance.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderGuidance.Location = new System.Drawing.Point(308, 2);
-            this.textboxSliderGuidance.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
-            this.textboxSliderGuidance.MinimumSize = new System.Drawing.Size(4, 21);
-            this.textboxSliderGuidance.Name = "textboxSliderGuidance";
-            this.textboxSliderGuidance.Size = new System.Drawing.Size(35, 21);
-            this.textboxSliderGuidance.TabIndex = 93;
-            this.textboxSliderGuidance.Text = "0";
-            // 
-            // sliderGuidance
-            // 
-            this.sliderGuidance.ActualMaximum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            65536});
-            this.sliderGuidance.ActualMinimum = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.sliderGuidance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.sliderGuidance.BorderRoundRectSize = new System.Drawing.Size(12, 12);
-            this.sliderGuidance.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.sliderGuidance.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
-            this.sliderGuidance.ForeColor = System.Drawing.Color.Black;
-            this.sliderGuidance.InitValue = new decimal(new int[] {
-            1,
-            0,
-            0,
-            -2147483648});
-            this.sliderGuidance.LargeChange = ((uint)(5u));
-            this.sliderGuidance.Location = new System.Drawing.Point(0, 0);
-            this.sliderGuidance.Margin = new System.Windows.Forms.Padding(0);
-            this.sliderGuidance.Maximum = 20;
-            this.sliderGuidance.Name = "sliderGuidance";
-            this.sliderGuidance.OverlayColor = System.Drawing.Color.White;
-            this.sliderGuidance.Size = new System.Drawing.Size(308, 25);
-            this.sliderGuidance.SmallChange = ((uint)(1u));
-            this.sliderGuidance.TabIndex = 4;
-            this.sliderGuidance.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
-            this.sliderGuidance.ThumbSize = new System.Drawing.Size(14, 14);
-            this.toolTip.SetToolTip(this.sliderGuidance, "Higher tries to match your prompt better, but can get chaotic. 7-12 is a safe ran" +
-        "ge in most cases.");
-            this.sliderGuidance.Value = 0;
-            this.sliderGuidance.ValueBox = this.textboxSliderGuidance;
-            this.sliderGuidance.ValueStep = new decimal(new int[] {
-            5,
-            0,
-            0,
-            65536});
-            // 
-            // textboxExtraGuidances
-            // 
-            this.textboxExtraGuidances.AllowDrop = true;
-            this.textboxExtraGuidances.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.textboxExtraGuidances.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.textboxExtraGuidances.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textboxExtraGuidances.DisableUnfocusedInput = true;
-            this.textboxExtraGuidances.ForeColor = System.Drawing.Color.White;
-            this.textboxExtraGuidances.Location = new System.Drawing.Point(346, 3);
-            this.textboxExtraGuidances.MaxTextZoomFactor = 1F;
-            this.textboxExtraGuidances.MinimumSize = new System.Drawing.Size(4, 21);
-            this.textboxExtraGuidances.Name = "textboxExtraGuidances";
-            this.textboxExtraGuidances.Placeholder = "";
-            this.textboxExtraGuidances.PlaceholderTextColor = System.Drawing.Color.Silver;
-            this.textboxExtraGuidances.Size = new System.Drawing.Size(69, 21);
-            this.textboxExtraGuidances.TabIndex = 3;
-            this.toolTip.SetToolTip(this.textboxExtraGuidances, resources.GetString("textboxExtraGuidances.ToolTip"));
+            this.tbLoraFilter.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.tbLoraFilter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tbLoraFilter.ForeColor = System.Drawing.Color.White;
+            this.tbLoraFilter.Location = new System.Drawing.Point(233, 0);
+            this.tbLoraFilter.Margin = new System.Windows.Forms.Padding(0);
+            this.tbLoraFilter.Name = "tbLoraFilter";
+            this.tbLoraFilter.Size = new System.Drawing.Size(395, 20);
+            this.tbLoraFilter.TabIndex = 108;
             // 
             // MainForm
             // 
@@ -3689,6 +3705,10 @@ namespace StableDiffusionGui.Forms
             this.panelCollapseRendering.ResumeLayout(false);
             this.panelSeed.ResumeLayout(false);
             this.panelSeed.PerformLayout();
+            this.panelGuidance.ResumeLayout(false);
+            this.panelGuidance.PerformLayout();
+            this.tableLayoutPanel5.ResumeLayout(false);
+            this.tableLayoutPanel5.PerformLayout();
             this.panelScaleImg.ResumeLayout(false);
             this.panelScaleImg.PerformLayout();
             this.tableLayoutPanel2.ResumeLayout(false);
@@ -3748,10 +3768,6 @@ namespace StableDiffusionGui.Forms
             this.menuStripInstall.ResumeLayout(false);
             this.menuStripOpenFolder.ResumeLayout(false);
             this.flowPanelImgButtons.ResumeLayout(false);
-            this.panelGuidance.ResumeLayout(false);
-            this.panelGuidance.PerformLayout();
-            this.tableLayoutPanel5.ResumeLayout(false);
-            this.tableLayoutPanel5.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -3980,6 +3996,7 @@ namespace StableDiffusionGui.Forms
         private System.Windows.Forms.TextBox textboxSliderGuidance;
         public CustomSlider sliderGuidance;
         public CustomTextbox textboxExtraGuidances;
+        private System.Windows.Forms.TextBox tbLoraFilter;
     }
 }
 

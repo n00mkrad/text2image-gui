@@ -204,7 +204,9 @@ namespace StableDiffusionGui.Forms
             }
 
             if (checkLoras)
-                BeginInvoke(new MethodInvoker(() => { SortLoras(true); }));
+            {
+                SortLoras();
+            }
         }
 
         private EasyDict<string, List<float>> GetLoras(bool onlyEnabled = true)

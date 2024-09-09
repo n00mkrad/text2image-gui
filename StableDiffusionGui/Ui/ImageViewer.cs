@@ -116,11 +116,11 @@ namespace StableDiffusionGui.Ui
             string prompt = meta.Prompt;
 
             if (meta.Loras.Any())
-                prompt += $" (With {string.Join(", ", meta.Loras.Select(l => $"{l.Key} at {l.Value.ToStringDot("0.###")}"))})";
+                prompt += $" (With {string.Join(", ", meta.Loras.Select(l => $"{l.Key}{(l.Value == 1.0f ? "" : $" at {l.Value.ToStringDot("0.###")}")}"))})";
 
             Program.MainForm.labelImgInfo.SetTextSafe($"Image {_currIndex + 1}/{_currentImages.Length} {(infos.Count > 0 ? $" - {string.Join(" - ", infos)}" : "")}");
             Program.MainForm.labelImgPrompt.SetTextSafe(prompt.IsNotEmpty() ? prompt : _strNoPrompt);
-            Program.MainForm.labelImgPromptNeg.SetTextSafe(!string.IsNullOrWhiteSpace(meta.NegativePrompt) ? meta.NegativePrompt : _strNoPromptNeg);
+            Program.MainForm.labelImgPromptNeg.SetTextSafe(meta.NegativePrompt.IsNotEmpty() ? meta.NegativePrompt : _strNoPromptNeg);
             Program.MainForm.toolTip.SetTooltipSafe(Program.MainForm.labelImgPrompt, $"{Program.MainForm.labelImgPrompt.Text}\n\nClick to copy.");
             Program.MainForm.toolTip.SetTooltipSafe(Program.MainForm.labelImgPromptNeg, $"{Program.MainForm.labelImgPromptNeg.Text}\n\nClick to copy.");
             UpdatePromptLabelColors();

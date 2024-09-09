@@ -1,7 +1,9 @@
 ﻿using StableDiffusionGui.Main;
+using StableDiffusionGui.MiscUtils;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -327,6 +329,29 @@ namespace StableDiffusionGui.Extensions
         {
             if (c.Items.Count > 0 && c.SelectedIndex < 0)
                 c.SelectedIndex = index;
+        }
+
+        public static void SetRows(this DataGridView grid, List<DataGridViewRow> rows, bool validate = true)
+        {
+            if(grid == null || rows.Count == 0)
+                return;
+
+            if (validate)
+            {
+                string rowStrOld = string.Join("", grid.GetRows().Select(row => string.Join("", row.Cells.Cast<DataGridViewCell>().Select(cell => $"{cell.Value}"))));
+                string rowStrNew = string.Join("", rows.Select(row => string.Join("", row.Cells.Cast<DataGridViewCell>().Select(cell => $"{cell.Value}"))));
+
+                if (rowStrOld == rowStrNew)
+                    return;
+            }
+
+            grid.Rows.Clear();
+            grid.Rows.AddRange(rows.ToArray());
+        }
+
+        public static IEnumerable<DataGridViewRow> GetRows(this DataGridView grid)
+        {
+            return grid.Rows.Cast<DataGridViewRow>().Where(r => !r.IsNewRow);
         }
     }
 }
