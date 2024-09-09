@@ -385,29 +385,33 @@ namespace StableDiffusionGui.Ui
             return values;
         }
 
-        public enum PromptFieldSizeMode { Expand, Collapse, Toggle }
+        public enum PanelSizeMode { Expand, Collapse, Toggle }
+        public static Dictionary<Control, int[]> PanelSizes { get; private set; } = new Dictionary<Control, int[]>();
 
-        public static void SetPromptFieldSize(PromptFieldSizeMode sizeMode = PromptFieldSizeMode.Toggle, bool negativePromptField = false)
+        public static void SetPanelSize(Control panel, Button btn, PanelSizeMode sizeMode = PanelSizeMode.Toggle, int heightMultiplier = 2)
         {
+            if (!PanelSizes.ContainsKey(panel))
+            {
+                PanelSizes.Add(panel, new int[] { panel.Height, panel.Height * heightMultiplier });
+            }
+
+            int smallHeight = PanelSizes[panel][0];
+            int largeHeight = PanelSizes[panel][1];
+
+            if (panel.Height == 0)
+                return;
+
             ((Action)(() =>
             {
-                var panel = negativePromptField ? Program.MainForm.textboxPromptNeg.Parent : Program.MainForm.textboxPrompt.Parent;
-                var btn = negativePromptField ? Program.MainForm.btnExpandPromptNegField : Program.MainForm.btnExpandPromptField;
-                int smallHeight = negativePromptField ? 45 : 70;
+                if (sizeMode == PanelSizeMode.Toggle)
+                    sizeMode = panel.Height == smallHeight ? PanelSizeMode.Expand : PanelSizeMode.Collapse;
 
-                if (panel.Height == 0)
-                    return;
-
-                if (sizeMode == PromptFieldSizeMode.Toggle)
-                    sizeMode = panel.Height == smallHeight ? PromptFieldSizeMode.Expand : PromptFieldSizeMode.Collapse;
-
-                if (sizeMode == PromptFieldSizeMode.Expand)
+                if (sizeMode == PanelSizeMode.Expand)
                 {
                     btn.BackgroundImage = Resources.upArrowIcon;
                     panel.Height = smallHeight * 4;
                 }
-
-                if (sizeMode == PromptFieldSizeMode.Collapse)
+                else if (sizeMode == PanelSizeMode.Collapse)
                 {
                     btn.BackgroundImage = Resources.downArrowIcon;
                     panel.Height = smallHeight;

@@ -374,6 +374,7 @@ namespace StableDiffusionGui.Forms
 
             if (labelAspectRatio.Visible)
             {
+                int GreatestCommonDivisor(int a, int b) => b == 0 ? a : GreatestCommonDivisor(b, a % b);
                 int gcd = GreatestCommonDivisor(w, h);
                 string ratioText = $"{w / gcd}:{h / gcd}";
                 float megapixels = w * h / 1000000f;
@@ -382,11 +383,6 @@ namespace StableDiffusionGui.Forms
             }
 
             RefreshUpscaleUi();
-        }
-
-        private int GreatestCommonDivisor(int a, int b)
-        {
-            return b == 0 ? a : GreatestCommonDivisor(b, a % b);
         }
 
         public void UpdateInpaintUi()
@@ -552,34 +548,6 @@ namespace StableDiffusionGui.Forms
 
             if (imp == Implementation.Comfy)
                 comboxModel2.SetItems(models.Where(m => m.Type == Enums.Models.Type.Refiner), UiExtensions.SelectMode.Retain, UiExtensions.SelectMode.None);
-        }
-
-        private void SetLoraPanelSize(PromptFieldSizeMode sizeMode = PromptFieldSizeMode.Toggle)
-        {
-            ((Action)(() =>
-            {
-                int smallHeight = 70;
-
-                if (panelLoras.Height == 0)
-                    return;
-
-                if (sizeMode == PromptFieldSizeMode.Toggle)
-                    sizeMode = panelLoras.Height == smallHeight ? PromptFieldSizeMode.Expand : PromptFieldSizeMode.Collapse;
-
-                if (sizeMode == PromptFieldSizeMode.Expand)
-                {
-                    btnExpandLoras.BackgroundImage = Resources.upArrowIcon;
-                    panelLoras.Height = smallHeight * 4;
-                }
-
-                if (sizeMode == PromptFieldSizeMode.Collapse)
-                {
-                    btnExpandLoras.BackgroundImage = Resources.downArrowIcon;
-                    panelLoras.Height = smallHeight;
-                }
-
-                Program.MainForm.panelSettings.Focus();
-            })).RunWithUiStopped(Program.MainForm);
         }
 
         private void GridMoveUp(DataGridView grid)

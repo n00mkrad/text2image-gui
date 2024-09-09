@@ -270,14 +270,14 @@ namespace StableDiffusionGui.Forms
             TryOpenPostProcessingSettings();
         }
 
-        private void btnExpandPromptField_Click(object sender, EventArgs e)
+        public void btnExpandPromptField_Click(object sender, EventArgs e)
         {
-            MainUi.SetPromptFieldSize(MainUi.PromptFieldSizeMode.Toggle, false);
+            MainUi.SetPanelSize(panelPrompt, btnExpandPromptField, MainUi.PanelSizeMode.Toggle);
         }
 
-        private void btnExpandPromptNegField_Click(object sender, EventArgs e)
+        public void btnExpandPromptNegField_Click(object sender, EventArgs e)
         {
-            MainUi.SetPromptFieldSize(MainUi.PromptFieldSizeMode.Toggle, true);
+            MainUi.SetPanelSize(panelPromptNeg, btnExpandPromptNegField, MainUi.PanelSizeMode.Toggle);
         }
 
         private void btnSeedUsePrevious_Click(object sender, EventArgs e)
@@ -540,7 +540,7 @@ namespace StableDiffusionGui.Forms
 
         private void btnExpandLoras_Click(object sender, EventArgs e)
         {
-            SetLoraPanelSize(MainUi.PromptFieldSizeMode.Toggle);
+            MainUi.SetPanelSize(panelLoras, btnExpandLoras, MainUi.PanelSizeMode.Toggle, heightMultiplier: 3);
         }
 
         private void openOutputFolderToolStripMenuItem1_Click(object sender, EventArgs e)

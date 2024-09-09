@@ -50,13 +50,13 @@ namespace StableDiffusionGui.Ui
 
             if (keys == (Keys.Control | Keys.Add) || keys == (Keys.Control | Keys.Oemplus)) // Hotkey: Toggle prompt field size
             {
-                MainUi.SetPromptFieldSize(MainUi.PromptFieldSizeMode.Toggle, false);
+                Program.MainForm.InvokeIfNeeded(() => Program.MainForm.btnExpandPromptField_Click(null, null));
                 return;
             }
 
             if (keys == (Keys.Control | Keys.Shift | Keys.Add) || keys == (Keys.Control | Keys.Shift | Keys.Oemplus)) // Hotkey: Toggle negative prompt field size
             {
-                MainUi.SetPromptFieldSize(MainUi.PromptFieldSizeMode.Toggle, true);
+                Program.MainForm.InvokeIfNeeded(() => Program.MainForm.btnExpandPromptNegField_Click(null, null));
                 return;
             }
 

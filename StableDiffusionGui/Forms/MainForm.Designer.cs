@@ -214,6 +214,7 @@ namespace StableDiffusionGui.Forms
             this.checkboxShowInitImg = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.panelLoras = new System.Windows.Forms.Panel();
+            this.tbLoraFilter = new System.Windows.Forms.TextBox();
             this.gridLoras = new System.Windows.Forms.DataGridView();
             this.ColEnabled = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.ColName = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -257,7 +258,6 @@ namespace StableDiffusionGui.Forms
             this.flowPanelImgButtons = new System.Windows.Forms.FlowLayoutPanel();
             this.btnSaveMode = new System.Windows.Forms.Button();
             this.separator = new System.Windows.Forms.Button();
-            this.tbLoraFilter = new System.Windows.Forms.TextBox();
             this.menuStripOutputImg.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.upDownSeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.upDownIterations)).BeginInit();
@@ -705,7 +705,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderScale.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScale.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScale.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderScale.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderScale.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScale.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScale.Name = "textboxSliderScale";
@@ -849,7 +849,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderInitStrength.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderInitStrength.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderInitStrength.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderInitStrength.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderInitStrength.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderInitStrength.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderInitStrength.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderInitStrength.Name = "textboxSliderInitStrength";
@@ -1044,7 +1044,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderScaleImg.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderScaleImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderScaleImg.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderScaleImg.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderScaleImg.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderScaleImg.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderScaleImg.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderScaleImg.Name = "textboxSliderScaleImg";
@@ -1593,7 +1593,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderRefineStart.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderRefineStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderRefineStart.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderRefineStart.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderRefineStart.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderRefineStart.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderRefineStart.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderRefineStart.Name = "textboxSliderRefineStart";
@@ -1733,7 +1733,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderGuidance.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderGuidance.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderGuidance.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderGuidance.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderGuidance.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderGuidance.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderGuidance.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderGuidance.Name = "textboxSliderGuidance";
@@ -2712,7 +2712,7 @@ namespace StableDiffusionGui.Forms
             this.textboxSliderSteps.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textboxSliderSteps.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textboxSliderSteps.ForeColor = System.Drawing.Color.Silver;
-            this.textboxSliderSteps.Location = new System.Drawing.Point(308, 4);
+            this.textboxSliderSteps.Location = new System.Drawing.Point(308, 2);
             this.textboxSliderSteps.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.textboxSliderSteps.MinimumSize = new System.Drawing.Size(4, 21);
             this.textboxSliderSteps.Name = "textboxSliderSteps";
@@ -3064,6 +3064,19 @@ namespace StableDiffusionGui.Forms
             this.panelLoras.Name = "panelLoras";
             this.panelLoras.Size = new System.Drawing.Size(651, 105);
             this.panelLoras.TabIndex = 123;
+            // 
+            // tbLoraFilter
+            // 
+            this.tbLoraFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbLoraFilter.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.tbLoraFilter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tbLoraFilter.ForeColor = System.Drawing.Color.White;
+            this.tbLoraFilter.Location = new System.Drawing.Point(233, 0);
+            this.tbLoraFilter.Margin = new System.Windows.Forms.Padding(0);
+            this.tbLoraFilter.Name = "tbLoraFilter";
+            this.tbLoraFilter.Size = new System.Drawing.Size(395, 20);
+            this.tbLoraFilter.TabIndex = 108;
             // 
             // gridLoras
             // 
@@ -3620,19 +3633,6 @@ namespace StableDiffusionGui.Forms
             this.separator.TabIndex = 75;
             this.separator.TabStop = false;
             this.separator.UseVisualStyleBackColor = false;
-            // 
-            // tbLoraFilter
-            // 
-            this.tbLoraFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbLoraFilter.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.tbLoraFilter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tbLoraFilter.ForeColor = System.Drawing.Color.White;
-            this.tbLoraFilter.Location = new System.Drawing.Point(233, 0);
-            this.tbLoraFilter.Margin = new System.Windows.Forms.Padding(0);
-            this.tbLoraFilter.Name = "tbLoraFilter";
-            this.tbLoraFilter.Size = new System.Drawing.Size(395, 20);
-            this.tbLoraFilter.TabIndex = 108;
             // 
             // MainForm
             // 
